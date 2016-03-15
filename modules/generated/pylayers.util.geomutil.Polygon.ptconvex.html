@@ -217,26 +217,26 @@ Nx is the number of convex points and Nc the number of concav points</p>
 <p>We have Nx &gt;= Nc</p>
 <p>If a point is common to two parallel segments, the cross product is = 0</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tcc</span><span class="p">,</span><span class="n">n</span>   <span class="o">=</span> <span class="n">polyg</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#k = 0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#for p in points:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#  if tcc[k] == 1 :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;red&#39;,alpha=1)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#  else:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;blue&#39;,alpha=0.3)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#  k = k+1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#polyg.plot()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#plt.figure()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#poly    = Polygon(points)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#tcc,n   = polyg.ptconvex()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#poly.plot()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#k = 0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#for p in points:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  if tcc[k] == 1 :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;red&#39;,alpha=1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  else:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;blue&#39;,alpha=0.3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  k = k+1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#polyg.plot()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#plt.figure()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#poly    = Polygon(points)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#tcc,n   = polyg.ptconvex()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#poly.plot()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-ptconvex-1.py">Source code</a>)</p>
@@ -255,8 +255,8 @@ Nx is the number of convex points and Nc the number of concav points</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on mars 05, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.geomutil.Polygon.ptconvex.txt"
 	    rel="nofollow">Show this page source</a>

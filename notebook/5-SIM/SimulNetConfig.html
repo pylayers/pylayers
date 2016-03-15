@@ -137,7 +137,7 @@
             
   <div class="section" id="network-simulation-configuration">
 <h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">ConfigParser</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
@@ -158,10 +158,10 @@ level <code class="docutils literal"><span class="pre">PyLayers</span></code> si
 <p>This file is assumed to be located in <code class="docutils literal"><span class="pre">$BASENAME/ini</span></code>. As the format
 of this file is not stable yet. Refer to the comment in the file below
 for obtaining the inforamtion about the format.</p>
-<div class="code python highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/simulnet.ini
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/simulnet.ini
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[Mysql]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[Mysql]
 host = localhost
 user = root
 passwd = sqlsql
@@ -241,48 +241,48 @@ seed = 1
 verbose = False
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cp</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-<span class="n">Cp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Cp</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">Cp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s1">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s1">&#39;ini&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;/home/uguen/Bureau/P1/ini/simulnet.ini&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;/home/uguen/Bureau/P1/ini/simulnet.ini&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Current version of <code class="docutils literal"><span class="pre">Simulnet.ini</span></code> contains the following sections</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cp</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Cp</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;Mysql&#39;</span><span class="p">,</span>
- <span class="s">&#39;Save&#39;</span><span class="p">,</span>
- <span class="s">&#39;Layout&#39;</span><span class="p">,</span>
- <span class="s">&#39;Mechanics&#39;</span><span class="p">,</span>
- <span class="s">&#39;Network&#39;</span><span class="p">,</span>
- <span class="s">&#39;Localization&#39;</span><span class="p">,</span>
- <span class="s">&#39;Simulation&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;Mysql&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Save&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Layout&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Mechanics&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Network&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Localization&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Simulation&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="section" id="save-section">
 <h3>Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h3>
 <p>The save section handles the output files of the simulation.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Save&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="s">&#39;[]&#39;</span><span class="p">,</span> <span class="s">&#39;savep&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">,</span> <span class="s">&#39;savepd&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;save&#39;</span><span class="p">:</span> <span class="s1">&#39;[]&#39;</span><span class="p">,</span> <span class="s1">&#39;savep&#39;</span><span class="p">:</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="s1">&#39;savepd&#39;</span><span class="p">:</span> <span class="s1">&#39;True&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal"><span class="pre">savep</span></code> boolean enable/disable saving of the simulation.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))[</span><span class="s">&#39;savep&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Save&#39;</span><span class="p">))[</span><span class="s1">&#39;savep&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;True&#39;</span>
 </pre></div>
 </div>
 <p>The log file which contains all traces from the simulated dynamics are
 in <code class="docutils literal"><span class="pre">$BASENAME/netsave</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre>!ls $BASENAME/netsave/*
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>!ls $BASENAME/netsave/*
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1/netsave/save
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/netsave/save
 /home/uguen/Bureau/P1/netsave/save.mat
 /home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5
 /home/uguen/Bureau/P1/netsave/traj_nicta.h5
@@ -293,47 +293,47 @@ in <code class="docutils literal"><span class="pre">$BASENAME/netsave</span></co
 <h3>Layout section<a class="headerlink" href="#layout-section" title="Permalink to this headline">¶</a></h3>
 <p>This section specifies the layout parameter and spatial dimension of the
 simulation</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Layout&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;filename&#39;</span><span class="p">:</span> <span class="s">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;the_world_height&#39;</span><span class="p">:</span> <span class="s">&#39;20&#39;</span><span class="p">,</span>
- <span class="s">&#39;the_world_scale&#39;</span><span class="p">:</span> <span class="s">&#39;20&#39;</span><span class="p">,</span>
- <span class="s">&#39;the_world_width&#39;</span><span class="p">:</span> <span class="s">&#39;65&#39;</span><span class="p">,</span>
- <span class="s">&#39;x_offset&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
- <span class="s">&#39;y_offset&#39;</span><span class="p">:</span> <span class="s">&#39;2&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;the_world_height&#39;</span><span class="p">:</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;the_world_scale&#39;</span><span class="p">:</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;the_world_width&#39;</span><span class="p">:</span> <span class="s1">&#39;65&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;x_offset&#39;</span><span class="p">:</span> <span class="s1">&#39;30&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;y_offset&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Choose the used Layout for simulation</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))[</span><span class="s">&#39;filename&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Layout&#39;</span><span class="p">))[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;TA-Office.ini&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;TA-Office.ini&#39;</span>
 </pre></div>
 </div>
 <p>Setup an offset for defining the coordinate system origin</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))[</span><span class="s">&#39;x_offset&#39;</span><span class="p">]</span>
-<span class="k">print</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))[</span><span class="s">&#39;y_offset&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Layout&#39;</span><span class="p">))[</span><span class="s1">&#39;x_offset&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Layout&#39;</span><span class="p">))[</span><span class="s1">&#39;y_offset&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">30</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">30</span>
 <span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="network-section">
 <h3>Network section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Network&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;communication_mode&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;autonomous&#39;&quot;</span><span class="p">,</span>
- <span class="s">&#39;dispinfo&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;ipython_nb_show&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;network&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">,</span>
- <span class="s">&#39;network_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;0.1&#39;</span><span class="p">,</span>
- <span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;show_sg&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;show_table&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;communication_mode&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;autonomous&#39;&quot;</span><span class="p">,</span>
+ <span class="s1">&#39;dispinfo&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;ipython_nb_show&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;network&#39;</span><span class="p">:</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;network_update_time&#39;</span><span class="p">:</span> <span class="s1">&#39;0.1&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;show&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;show_sg&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;show_table&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Setup communication mode between node:</p>
@@ -345,38 +345,38 @@ state</li>
 <li><code class="docutils literal"><span class="pre">&quot;synchro&quot;</span></code> : the data exchange between nodes is periodic. LDPs are
 periodically refreshed at the <code class="docutils literal"><span class="pre">network_update_time</span></code></li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;communication_mode&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Network&#39;</span><span class="p">))[</span><span class="s1">&#39;communication_mode&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;&#39;autonomous&#39;&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;&#39;autonomous&#39;&quot;</span>
 </pre></div>
 </div>
 <p>Time step for the refresh network information</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;network_update_time&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Network&#39;</span><span class="p">))[</span><span class="s1">&#39;network_update_time&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;0.1&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;0.1&#39;</span>
 </pre></div>
 </div>
 <p>Vizualization of the simulation using matplotlib</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;show&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Network&#39;</span><span class="p">))[</span><span class="s1">&#39;show&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;False&#39;</span>
 </pre></div>
 </div>
 <p>Vizualization of a table summing up the data exchange of the nodes</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;show_table&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Network&#39;</span><span class="p">))[</span><span class="s1">&#39;show_table&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;False&#39;</span>
 </pre></div>
 </div>
 <p>Vizualization of the simulation inside ipython notebook</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;ipython_nb_show&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Network&#39;</span><span class="p">))[</span><span class="s1">&#39;ipython_nb_show&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;False&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -384,12 +384,12 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 <div class="section" id="mechanics">
 <h2>Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
 <p>This section specifies agents dynamic during simulation</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Mechanics&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;choose_destination&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;random&#39;&quot;</span><span class="p">,</span>
- <span class="s">&#39;mecanic_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;0.2&#39;</span><span class="p">,</span>
- <span class="s">&#39;pdshow&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;choose_destination&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;random&#39;&quot;</span><span class="p">,</span>
+ <span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">:</span> <span class="s1">&#39;0.2&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;pdshow&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Setup how agent choose their target:</p>
@@ -398,35 +398,35 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 <li><code class="docutils literal"><span class="pre">&quot;file&quot;</span></code> : the agent follow the sequence specified in
 <code class="docutils literal"><span class="pre">&lt;project_dir&gt;/nodes_destination.ini</span></code></li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s">&#39;choose_destination&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s1">&#39;choose_destination&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;&#39;random&#39;&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;&#39;random&#39;&quot;</span>
 </pre></div>
 </div>
 <p>Time step for refreshing the mechanical layer (ground truth position)</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;0.2&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;0.2&#39;</span>
 </pre></div>
 </div>
 <div class="section" id="localization-section">
 <h3>Localization section<a class="headerlink" href="#localization-section" title="Permalink to this headline">¶</a></h3>
 <p>Setup Localization algorithms</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Localization&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;localization&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;localization_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;1.0&#39;</span><span class="p">,</span>
- <span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="s">&quot;[&#39;geo&#39;]&quot;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;localization&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;localization_update_time&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="s2">&quot;[&#39;geo&#39;]&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>enable/disable localizaiton of the agents</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;localization&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Localization&#39;</span><span class="p">))[</span><span class="s1">&#39;localization&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;False&#39;</span>
 </pre></div>
 </div>
 <p>Select localization methods :</p>
@@ -434,60 +434,60 @@ periodically refreshed at the <code class="docutils literal"><span class="pre">n
 <li>Algebraic : htrogeneous localization algorithm</li>
 <li>Geometric : RGPA</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Localization&#39;</span><span class="p">))[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;[&#39;geo&#39;]&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;[&#39;geo&#39;]&quot;</span>
 </pre></div>
 </div>
 <p>Time step for localization update</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;localization_update_time&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Localization&#39;</span><span class="p">))[</span><span class="s1">&#39;localization_update_time&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;1.0&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;1.0&#39;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="simulation-section">
 <h3>Simulation section<a class="headerlink" href="#simulation-section" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Simulation&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;duration&#39;</span><span class="p">:</span> <span class="s">&#39;120.0&#39;</span><span class="p">,</span>
- <span class="s">&#39;filename&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;simulnet&#39;&quot;</span><span class="p">,</span>
- <span class="s">&#39;seed&#39;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
- <span class="s">&#39;show_interval&#39;</span><span class="p">:</span> <span class="s">&#39;0.5&#39;</span><span class="p">,</span>
- <span class="s">&#39;showtk&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;speedratio&#39;</span><span class="p">:</span> <span class="s">&#39;50.&#39;</span><span class="p">,</span>
- <span class="s">&#39;verbose&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="s1">&#39;120.0&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s2">&quot;&#39;simulnet&#39;&quot;</span><span class="p">,</span>
+ <span class="s1">&#39;seed&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;show_interval&#39;</span><span class="p">:</span> <span class="s1">&#39;0.5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;showtk&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;speedratio&#39;</span><span class="p">:</span> <span class="s1">&#39;50.&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Setup simulation duration in second</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;120.0&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;120.0&#39;</span>
 </pre></div>
 </div>
 <p>Setup random seed for simulation</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;seed&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s1">&#39;seed&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;1&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;1&#39;</span>
 </pre></div>
 </div>
 <p>Display messages during simulation</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;verbose&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;False&#39;</span>
 </pre></div>
 </div>
 <p>See Also</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">FileLink</span><span class="p">(</span><span class="s">&#39;../4-MOB/Mobility.ipynb&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">FileLink</span><span class="p">(</span><span class="s1">&#39;../4-MOB/Mobility.ipynb&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -513,8 +513,8 @@ NameError: name &#39;FileLink&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/SimulNetConfig.txt"
 	    rel="nofollow">Show this page source</a>

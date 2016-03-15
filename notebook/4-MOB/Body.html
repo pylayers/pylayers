@@ -143,7 +143,7 @@
             
   <div class="section" id="handling-body-description-and-mobility">
 <h1>Handling Body Description and Mobility<a class="headerlink" href="#handling-body-description-and-mobility" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.mobility.ban.body import *
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.mobility.ban.body import *
 from pylayers.mobility.trajectory import Trajectory
 from IPython.display import Image
 from matplotlib.pyplot import *
@@ -151,7 +151,7 @@ import pylayers.util.mayautil as mau
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
 <p>The body mobility is imported from motion capture files. This is the
@@ -168,31 +168,31 @@ the human motion. Two kind of files exist :</p>
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for our modeling.</p>
 <p>The body model is a restriction of key body segments which are
-transformed into <img src="../../_images/mathmpl/math-b43c97c188.png" style="position: relative; bottom: -3px"/> cylinders of radius <img src="../../_images/mathmpl/math-32ed7041d6.png" style="position: relative; bottom: -7px"/>.</p>
+transformed into <img src="../../_images/mathmpl/math-b43c97c188.png" style="position: relative; bottom: -3px"/> cylinders of radius <img src="../../_images/mathmpl/math-32ed7041d6.png" style="position: relative; bottom: -6px"/>.</p>
 <p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
 two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
 trunk and 1 cylinder for the head.</p>
 <p>The body cylinder model is handled by the dedicated Python class call
 <code class="docutils literal"><span class="pre">Body</span></code></p>
 <p>To create a void body, simply instantiate a Body object from the class</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+<div class="highlight-python"><div class="highlight"><pre><span></span>**** Processor coding : Intel-PC
 </pre></div>
 </div>
 <p>which is equivalent to :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;cm&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s1">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s1">&#39;07_01.c3d&#39;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+<div class="highlight-python"><div class="highlight"><pre><span></span>**** Processor coding : Intel-PC
 </pre></div>
 </div>
 <p>The default body filename is John.ini and the default motion capture
 filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading a
 <code class="docutils literal"><span class="pre">_filebody</span></code> and a <code class="docutils literal"><span class="pre">_filemocap</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
-<span class="n">mau</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;John&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+<span class="n">mau</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Body_15_0.png" src="../../_images/Body_15_0.png" />
@@ -206,7 +206,7 @@ with 4 sections.</p>
 </ul>
 <p>This section associates a node number to a c3d fils conventional node
 number</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">NodeId</span> <span class="o">=</span> <span class="n">C3DNODE</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">NodeId</span> <span class="o">=</span> <span class="n">C3DNODE</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -214,7 +214,7 @@ number</p>
 </ul>
 <p>This section associates a cylinder Id to a dictionnary wich contains
 cylinder tail head and radius information</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CylId</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">NodeId1</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class="n">NodeId2</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="nb">float</span> <span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="s">&#39;name&#39;</span><span class="p">,}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">CylId</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">,</span><span class="n">NodeId1</span><span class="p">,</span><span class="s1">&#39;h&#39;</span><span class="p">,</span><span class="n">NodeId2</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="nb">float</span> <span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="s1">&#39;name&#39;</span><span class="p">,}</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -222,7 +222,7 @@ cylinder tail head and radius information</p>
 </ul>
 <p>This section associates a device name to a dictionnary wich contains
 cylinder device related information</p>
-<div class="highlight-python"><div class="highlight"><pre>DevId = {&#39;typ&#39; : {static|mobile}
+<div class="highlight-python"><div class="highlight"><pre><span></span>DevId = {&#39;typ&#39; : {static|mobile}
           &#39;cyl&#39;: CylId
           &#39;l&#39;  : length coordinate in ccs,
           &#39;h&#39;  : height coordinate in ccs,
@@ -234,7 +234,7 @@ cylinder device related information</p>
 </div>
 <div class="section" id="example-of-a-body-file">
 <h2>Example of a Body file<a class="headerlink" href="#example-of-a-body-file" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre>[nodes]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[nodes]
 0 = [STRN,T10]
 1 = [CLAV,C7]
 2 = [RFHD,LFHD,LBHD,RBHD]
@@ -284,10 +284,10 @@ unit = mm
 nframes = -1
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Bernard</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Bernard.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;serie_017.c3d&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Bernard</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s1">&#39;Bernard.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s1">&#39;serie_017.c3d&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : DEC-VAX
+<div class="highlight-python"><div class="highlight"><pre><span></span>**** Processor coding : DEC-VAX
 </pre></div>
 </div>
 </div>
@@ -300,26 +300,26 @@ load.</p>
 <strong>``d``</strong> variable member.</p>
 <p>It is possible to get the information from the C3D header by using the
 verbose option of the <code class="docutils literal"><span class="pre">read_c3d</span></code> function</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Video Frame Rate</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Video Frame Rate</span>
 <span class="n">Vrate</span> <span class="o">=</span> <span class="mi">120</span>
-<span class="c"># Inter Frame</span>
+<span class="c1"># Inter Frame</span>
 <span class="n">Tframe</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">120</span>
-<span class="c"># select a number of frame</span>
+<span class="c1"># select a number of frame</span>
 <span class="n">nframes</span> <span class="o">=</span> <span class="mi">300</span>
-<span class="c"># Time duration of the whole selected frame sequence</span>
+<span class="c1"># Time duration of the whole selected frame sequence</span>
 <span class="n">Tfseq</span> <span class="o">=</span> <span class="n">Tframe</span><span class="o">*</span><span class="n">nframes</span>
-<span class="c">#</span>
-<span class="c"># load a .c3dmotion capture file</span>
-<span class="c"># this update the g.pos</span>
-<span class="c">#</span>
-<span class="c">#bc.loadC3D(filename=&#39;07_01.c3d&#39;,nframes=nframes,centered=True)</span>
+<span class="c1">#</span>
+<span class="c1"># load a .c3dmotion capture file</span>
+<span class="c1"># this update the g.pos</span>
+<span class="c1">#</span>
+<span class="c1">#bc.loadC3D(filename=&#39;07_01.c3d&#39;,nframes=nframes,centered=True)</span>
 </pre></div>
 </div>
 <p>The duration of the capture is</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Duration of the motion capture sequence&quot;</span><span class="p">,</span> <span class="n">Tfseq</span><span class="p">,</span><span class="s">&quot; seconds&quot;</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="s2">&quot;Duration of the motion capture sequence&quot;</span><span class="p">,</span> <span class="n">Tfseq</span><span class="p">,</span><span class="s2">&quot; seconds&quot;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Duration of the motion capture sequence 2.5  seconds
+<div class="highlight-python"><div class="highlight"><pre><span></span>Duration of the motion capture sequence 2.5  seconds
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">d</span></code> is a MDA of shape <code class="docutils literal"><span class="pre">(3,npoint,nframe)</span></code>. It contains all the
@@ -329,10 +329,10 @@ instantiate the body configuration anywhere else in space in a given
 trajectory.</p>
 <p>A specific space-time configuration of the body is called a
 <strong>``topos``</strong>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Bernard</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Bernard</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">11213</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">11213</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -343,20 +343,20 @@ trajectory.</p>
 <li>derives from a pandas <code class="docutils literal"><span class="pre">DataFrame</span></code></li>
 <li>is a container for time,position,velocity and acceleration.</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>To define a default trajectory :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">traj</span><span class="o">.</span><span class="n">columns</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">traj</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Index</span><span class="p">([</span><span class="s">u&#39;x&#39;</span><span class="p">,</span> <span class="s">u&#39;y&#39;</span><span class="p">,</span> <span class="s">u&#39;z&#39;</span><span class="p">,</span> <span class="s">u&#39;vx&#39;</span><span class="p">,</span> <span class="s">u&#39;vy&#39;</span><span class="p">,</span> <span class="s">u&#39;vz&#39;</span><span class="p">,</span> <span class="s">u&#39;ax&#39;</span><span class="p">,</span> <span class="s">u&#39;ay&#39;</span><span class="p">,</span> <span class="s">u&#39;az&#39;</span><span class="p">,</span> <span class="s">u&#39;s&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;object&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Index</span><span class="p">([</span><span class="s1">u&#39;x&#39;</span><span class="p">,</span> <span class="s1">u&#39;y&#39;</span><span class="p">,</span> <span class="s1">u&#39;z&#39;</span><span class="p">,</span> <span class="s1">u&#39;vx&#39;</span><span class="p">,</span> <span class="s1">u&#39;vy&#39;</span><span class="p">,</span> <span class="s1">u&#39;vz&#39;</span><span class="p">,</span> <span class="s1">u&#39;ax&#39;</span><span class="p">,</span> <span class="s1">u&#39;ay&#39;</span><span class="p">,</span> <span class="s1">u&#39;az&#39;</span><span class="p">,</span> <span class="s1">u&#39;s&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 <div>
@@ -444,7 +444,7 @@ trajectory.</p>
     </tr>
   </tbody>
 </table>
-</div><div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</div><div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Body_48_0.png" src="../../_images/Body_48_0.png" />
@@ -458,27 +458,27 @@ the position corresponding to any time of the trajectory with the
 <li>A trajectory</li>
 <li>A time index</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">traj</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
 </pre></div>
 </div>
 <pre class="literal-block">
 'Trajectory of agent MyNameIsNoBody with ID 1n--------------------------------------------nt (s) : 0.00 : 0.20 : 9.59ndtot (m) : 9.79nVmoy (m/s) : 1.02n                                   x         y         z        vx  vy  \n1970-01-01 00:00:00.000000  0.000000  0.000000 -0.119779  0.299813   1   n1970-01-01 00:00:00.204082  0.061186  0.204082  0.430119  0.298689   1   nn                                 vz        ax  ay         az         s  n1970-01-01 00:00:00.000000  2.69450 -0.005505   0   4.195088  0.000000  n1970-01-01 00:00:00.204082  3.55064 -0.010989   0 -26.724612  0.213056  n'
 </pre>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">tmin</span><span class="o">+</span><span class="mf">0.4</span><span class="p">,</span><span class="n">traj</span><span class="o">.</span><span class="n">tmax</span><span class="p">,</span><span class="mf">0.5</span><span class="p">):</span>
     <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-    <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">plane</span><span class="o">=</span><span class="s">&#39;yz&#39;</span><span class="p">,</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">plane</span><span class="o">=</span><span class="s1">&#39;yz&#39;</span><span class="p">,</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Body_55_0.png" src="../../_images/Body_55_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>My name is : John
+<div class="highlight-python"><div class="highlight"><pre><span></span>My name is : John
 
 I have a Galaxy Gear device with id #1 on the left forearm witn antenna defant.vsh3
 I have a cardio device with id #0 on the upper part of trunk witn antenna defant.vsh3
@@ -493,14 +493,14 @@ Centered : True
 Mocap Speed : 13.649 m/s
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Francois</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Francois.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Francois</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s1">&#39;Francois.ini&#39;</span><span class="p">)</span>
 <span class="n">Francois</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+<div class="highlight-python"><div class="highlight"><pre><span></span>**** Processor coding : Intel-PC
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>My name is : Francois
+<div class="highlight-python"><div class="highlight"><pre><span></span>My name is : Francois
 
 I have a Galaxy Gear device with id #1 on the left forearm witn antenna defant.vsh3
 I have a cardio device with id #0 on the upper part of trunk witn antenna defant.vsh3
@@ -514,11 +514,11 @@ Centered : True
 Mocap Speed : 13.702 m/s
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Francois</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Francois</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">Francois</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>My name is : Francois
+<div class="highlight-python"><div class="highlight"><pre><span></span>My name is : Francois
 
 I have a Galaxy Gear device with id #1 on the left forearm witn antenna defant.vsh3
 I have a cardio device with id #0 on the upper part of trunk witn antenna defant.vsh3
@@ -544,10 +544,10 @@ nodes.</p>
 </div>
 <div class="section" id="centering-the-motion">
 <h2>Centering the motion<a class="headerlink" href="#centering-the-motion" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">centered</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">centered</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">True</span>
 </pre></div>
 </div>
 <p>In order to translate the motion in any point in space-time, a
@@ -555,112 +555,112 @@ distinction is made between the real motion or topos and the centered
 motion capture which acts as a virtual motion.</p>
 <p>Let <img src="../../_images/mathmpl/math-a17f99bd79.png" style="position: relative; bottom: -7px"/> denotes the center of gravity of the body in
 the (O,x,y) plane</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p><img src="../../_images/mathmpl/math-d9d9cee03b.png" style="position: relative; bottom: -10px"/> is the velocity vector of the gravity center of the
+<p><img src="../../_images/mathmpl/math-d9d9cee03b.png" style="position: relative; bottom: -9px"/> is the velocity vector of the gravity center of the
 body.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
 <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">145</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">145</span><span class="p">]</span>
 <span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">298</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[ 0.11498696 -0.00263353  0.        ]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[ 0.11498696 -0.00263353  0.        ]
 [ 0.10812351  0.00072441  0.        ]
 </pre></div>
 </div>
 <p>At that point the body structure is centered.</p>
 <p>The frame is centered in the xy plane by substracting from the
 configuration of points the projection of the body in the xy plane.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">npoints</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">npoints</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">16</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">16</span>
 </pre></div>
 </div>
 <p>Each frame is centered above the origin. For example for a walk motion
 the effect of the centering is just like if the body was still walking
 but not moving forward exactly in the same manner as a walk on a
 conveyor belt.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pgc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">pgc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span>
 <span class="n">pg0</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">print</span> <span class="s">&quot;True center of gravity&quot;</span><span class="p">,</span> <span class="n">pg0</span>
-<span class="k">print</span> <span class="s">&quot;Center of gravity of the centered frame&quot;</span><span class="p">,</span><span class="n">pgc</span>
+<span class="k">print</span> <span class="s2">&quot;True center of gravity&quot;</span><span class="p">,</span> <span class="n">pg0</span>
+<span class="k">print</span> <span class="s2">&quot;Center of gravity of the centered frame&quot;</span><span class="p">,</span><span class="n">pgc</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>True center of gravity [-17.42515686   4.93730766   0.        ]
+<div class="highlight-python"><div class="highlight"><pre><span></span>True center of gravity [-17.42515686   4.93730766   0.        ]
 Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.94887349e+00]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The current file contains 300 frames</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tframe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">nframes</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tframe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">nframes</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">xg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">xg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
 <span class="n">yg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
 <span class="n">zg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
 <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">xg</span><span class="p">)</span>
-<span class="n">title</span><span class="p">(</span><span class="s">&#39;x component&#39;</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
 <span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
-<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
-<span class="n">title</span><span class="p">(</span><span class="s">&#39;y component&#39;</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">yg</span><span class="p">)</span>
 <span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
-<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
-<span class="n">title</span><span class="p">(</span><span class="s">&#39;Motion capture centroid trajectory&#39;</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">xg</span><span class="p">,</span><span class="n">yg</span><span class="p">,</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">xg</span><span class="p">,</span><span class="n">yg</span><span class="p">,</span><span class="s1">&#39;.b&#39;</span><span class="p">)</span>
 
 <span class="n">d</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">smocap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
 
 <span class="n">Vmocap</span> <span class="o">=</span> <span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">Tfseq</span>
-<span class="n">title</span><span class="p">(</span><span class="s">&#39;Length = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; V = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Vmocap</span><span class="o">*</span><span class="mf">3.6</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; km/h&#39;</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Length = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; V = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Vmocap</span><span class="o">*</span><span class="mf">3.6</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; km/h&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Body_80_0.png" src="../../_images/Body_80_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">smocap</span><span class="p">)</span>
-<span class="n">title</span><span class="p">(</span><span class="s">&#39;evolution of curvilinear abscisse from motion capture centroid trajectory&#39;</span><span class="p">)</span>
-<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">smocap</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;evolution of curvilinear abscisse from motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b8487d5d090&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b8487d5d090&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Body_81_1.png" src="../../_images/Body_81_1.png" />
@@ -669,14 +669,14 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 <h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
 <p>A large scale trajectory is defined in the <img src="../../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
 <p><code class="docutils literal"><span class="pre">traj</span></code> is a data structure (Npt,2)</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
-<span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
+<span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s2">&quot;Kmph&quot;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>51.5920052862 Kmph
+<div class="highlight-python"><div class="highlight"><pre><span></span>51.5920052862 Kmph
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># time in seconds</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1"># time in seconds</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">time</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
@@ -686,10 +686,10 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 <span class="n">traj</span><span class="o">.</span><span class="n">tmax</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mf">9.591837</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">9.591837</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -789,8 +789,8 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 following parameters</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">traj</span></code> a plane trajectory object.</li>
-<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
-<li><img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
+<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -6px"/> time for evaluation of topos</li>
+<li><img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -9px"/> duration of the periodic motion frame sequence</li>
 </ul>
 <p>and returns</p>
 <ul class="simple">
@@ -798,37 +798,37 @@ following parameters</p>
 <img src="../../_images/mathmpl/math-fa8df6427f.png" /></li>
 <li>the trajectory index <img src="../../_images/mathmpl/math-bd16204c95.png" style="position: relative; bottom: -7px"/></li>
 <li>velocity unitary vector along motion capture frame
-<img src="../../_images/mathmpl/math-3925c359b0.png" style="position: relative; bottom: -17px"/></li>
+<img src="../../_images/mathmpl/math-3925c359b0.png" style="position: relative; bottom: -15px"/></li>
 <li>:math:<a href="#id9"><span class="problematic" id="id10">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
 <li>velocity unitary vector along trajectory
-<img src="../../_images/mathmpl/math-bbc160cffd.png" style="position: relative; bottom: -17px"/></li>
+<img src="../../_images/mathmpl/math-bbc160cffd.png" style="position: relative; bottom: -16px"/></li>
 <li>:math:<a href="#id11"><span class="problematic" id="id12">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
 </ul>
 <p><img src="../../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
 period, it is equal to the whole duration of the motion sequence
-<img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
+<img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -9px"/> divided by the number of frames</p>
 <p><code class="docutils literal"><span class="pre">settopos</span></code> is a method which takes as argument :</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">traj</span></code> a plane trajectory (Npt,2)</li>
-<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
+<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -6px"/> time for evaluation of topos</li>
 </ul>
 <p>In further version of the class, this function will be modified to avoid
 passing the whole trajectory.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>There is now a new data structure in the Body objet. This data structure
 is called a <code class="docutils literal"><span class="pre">topos</span></code>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">topos</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">topos</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span>  <span class="mf">0.74198686</span><span class="p">,</span>   <span class="mf">0.76931593</span><span class="p">,</span>   <span class="mf">1.80846633</span><span class="p">,</span>   <span class="mf">2.26719915</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span>  <span class="mf">0.74198686</span><span class="p">,</span>   <span class="mf">0.76931593</span><span class="p">,</span>   <span class="mf">1.80846633</span><span class="p">,</span>   <span class="mf">2.26719915</span><span class="p">,</span>
          <span class="o">-</span><span class="mf">0.91675363</span><span class="p">,</span>   <span class="mf">3.25586636</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.86053098</span><span class="p">,</span>   <span class="mf">3.82194596</span><span class="p">,</span>
          <span class="o">-</span><span class="mf">2.06245933</span><span class="p">,</span>   <span class="mf">2.15021298</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.55180885</span><span class="p">,</span>   <span class="mf">2.02586803</span><span class="p">,</span>
          <span class="o">-</span><span class="mf">0.94510502</span><span class="p">,</span>   <span class="mf">1.36586716</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.57366714</span><span class="p">,</span>   <span class="mf">0.79920206</span><span class="p">],</span>
@@ -842,19 +842,19 @@ is called a <code class="docutils literal"><span class="pre">topos</span></code>
           <span class="mf">4.54000305</span><span class="p">,</span>   <span class="mf">0.44698982</span><span class="p">,</span>   <span class="mf">1.7794635</span> <span class="p">,</span>   <span class="mf">9.25912567</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#87CEEB&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;#87CEEB&#39;</span><span class="p">)</span>
 <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#7EC0EE&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;#7EC0EE&#39;</span><span class="p">)</span>
 <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#6A5ACD&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;#6A5ACD&#39;</span><span class="p">)</span>
 <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#7A67EE&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;#7A67EE&#39;</span><span class="p">)</span>
 <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#473C8B&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;#473C8B&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b84a0e12390&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b84a0e12390&gt;,
  &lt;matplotlib.axes._subplots.Axes3DSubplot at 0x2b84a0eef490&gt;)
 </pre></div>
 </div>
@@ -880,26 +880,26 @@ application. The localization application will define the BLCS from the
 position of radiating devices placed on the body surface.</p>
 <p>Each basis is constructed with the function from
 <code class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></code> : orthonormal bases from axes. This function
-takes 2 sets of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
-<img src="../../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
+takes 2 sets of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -8px"/> and
+<img src="../../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -8px"/> as input and provides an orthonormal basis as
 output.</p>
 <p>3 unitary vectors are constructed :</p>
-<img src="../../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
+<img src="../../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -9px"/> is the unit velocity vector along
 actual trajectory.</p>
 <p>The outpout of <code class="docutils literal"><span class="pre">geomutil.onbframe</span></code> is an MDA
 <img src="../../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
 along axis 1</p>
 <img src="../../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
-<span class="k">print</span> <span class="s">&quot;ccs dimensions : &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
+<span class="k">print</span> <span class="s2">&quot;ccs dimensions : &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span>
-<span class="k">print</span> <span class="s">&quot;Check determinant : &quot;</span><span class="p">,</span> <span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:])</span>
+<span class="k">print</span> <span class="s2">&quot;Check determinant : &quot;</span><span class="p">,</span> <span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>ccs dimensions :  (11, 3, 3)
+<div class="highlight-python"><div class="highlight"><pre><span></span>ccs dimensions :  (11, 3, 3)
 [[ 0.94678656  0.05306765 -0.31745715]
  [-0.06834689  0.99696857 -0.03718026]
  [ 0.31452173  0.05689898  0.94754345]]
@@ -918,52 +918,52 @@ Check determinant :  1.0
 <li>h : height above cylinder generatrix</li>
 <li>alpha : angle from front direction (degrees)</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Id</span> <span class="o">=</span> <span class="mi">4</span> <span class="c"># 4 Left Arm</span>
-<span class="n">l</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="c"># Longitudinal coordinates</span>
-<span class="n">h</span>  <span class="o">=</span> <span class="mf">0.03</span> <span class="c"># height</span>
-<span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span> <span class="c"># angle degrees</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Id</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># 4 Left Arm</span>
+<span class="n">l</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Longitudinal coordinates</span>
+<span class="n">h</span>  <span class="o">=</span> <span class="mf">0.03</span> <span class="c1"># height</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span> <span class="c1"># angle degrees</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
- <span class="s">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
- <span class="s">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
- <span class="s">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
- <span class="s">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
- <span class="s">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
- <span class="s">&#39;headu&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
- <span class="s">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
- <span class="s">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s1">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s1">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s1">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s1">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s1">&#39;headu&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s1">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s1">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s1">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Rotate Matrix around z</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
- <span class="s">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
- <span class="s">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
- <span class="s">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
- <span class="s">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
- <span class="s">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
- <span class="s">&#39;headu&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
- <span class="s">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
- <span class="s">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s1">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s1">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s1">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s1">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s1">&#39;headu&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s1">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s1">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s1">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">dcs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">dcs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -980,8 +980,8 @@ Check determinant :  1.0
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/4-MOB/Body.txt"
 	    rel="nofollow">Show this page source</a>

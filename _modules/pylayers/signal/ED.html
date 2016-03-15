@@ -137,8 +137,8 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.signal.ED</h1><div class="highlight"><pre>
-<span class="c">#!/usr/bin/python</span>
-<span class="c">#-*- coding:Utf-8 -*-</span>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1">#-*- coding:Utf-8 -*-</span>
 <span class="sd">r&quot;&quot;&quot;&quot;</span>
 <span class="sd">.. currentmodule:: pylayers.signal.ED</span>
 
@@ -219,74 +219,74 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;fsGHz&#39;</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span>
-                    <span class="s">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.4928</span><span class="p">,</span>
-                    <span class="s">&#39;Tns&#39;</span><span class="p">:</span><span class="mi">64</span><span class="p">,</span>
-                    <span class="s">&#39;pfa&#39;</span><span class="p">:</span><span class="mf">0.01</span><span class="p">,</span>
-                    <span class="s">&#39;beta&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="s">&#39;wt&#39;</span><span class="p">:</span><span class="mf">0.01</span><span class="p">,</span>
-                    <span class="s">&#39;gpass&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span>
-                    <span class="s">&#39;gstop&#39;</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span>
-                    <span class="s">&#39;NF&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="s">&#39;R&#39;</span><span class="p">:</span><span class="mi">50</span><span class="p">}</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fsGHz&#39;</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span>
+                    <span class="s1">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.4928</span><span class="p">,</span>
+                    <span class="s1">&#39;Tns&#39;</span><span class="p">:</span><span class="mi">64</span><span class="p">,</span>
+                    <span class="s1">&#39;pfa&#39;</span><span class="p">:</span><span class="mf">0.01</span><span class="p">,</span>
+                    <span class="s1">&#39;beta&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;wt&#39;</span><span class="p">:</span><span class="mf">0.01</span><span class="p">,</span>
+                    <span class="s1">&#39;gpass&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="s1">&#39;gstop&#39;</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span>
+                    <span class="s1">&#39;NF&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;R&#39;</span><span class="p">:</span><span class="mi">50</span><span class="p">}</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fsGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fsGHz&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;R&#39;</span><span class="p">]</span>
-        <span class="n">BGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;BGHz&#39;</span><span class="p">]</span>
-        <span class="n">Tns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;Tns&#39;</span><span class="p">]</span>
-        <span class="n">wt</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;wt&#39;</span><span class="p">]</span>
-        <span class="c">#</span>
-        <span class="c"># Filter B : Input Band Pass Filter</span>
-        <span class="c">#</span>
-        <span class="c"># Elliptic filter</span>
-        <span class="c">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fsGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fsGHz&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
+        <span class="n">BGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;BGHz&#39;</span><span class="p">]</span>
+        <span class="n">Tns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Tns&#39;</span><span class="p">]</span>
+        <span class="n">wt</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;wt&#39;</span><span class="p">]</span>
+        <span class="c1">#</span>
+        <span class="c1"># Filter B : Input Band Pass Filter</span>
+        <span class="c1">#</span>
+        <span class="c1"># Elliptic filter</span>
+        <span class="c1">#</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">ts</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">fsGHz</span>
-        <span class="c">#fN  = self.fsGHz/2.</span>
-        <span class="c">#w1  = (self.fcGHz-BGHz/2.)/fN</span>
-        <span class="c">#w2  = (self.fcGHz+BGHz/2.)/fN</span>
-        <span class="c">#wp  = [w1,w2]</span>
-        <span class="c">#ws  = [w1-wt,w2+wt]</span>
+        <span class="c1">#fN  = self.fsGHz/2.</span>
+        <span class="c1">#w1  = (self.fcGHz-BGHz/2.)/fN</span>
+        <span class="c1">#w2  = (self.fcGHz+BGHz/2.)/fN</span>
+        <span class="c1">#wp  = [w1,w2]</span>
+        <span class="c1">#ws  = [w1-wt,w2+wt]</span>
 
-        <span class="c">#self.filterB  = DF()</span>
-        <span class="c">#self.filterB.ellip_bp(wp,ws,kwargs[&#39;gpass&#39;],kwargs[&#39;gstop&#39;])</span>
-        <span class="c">#self.filterB.butter(order=6,w=wp,typ=&#39;bandpass&#39;)</span>
+        <span class="c1">#self.filterB  = DF()</span>
+        <span class="c1">#self.filterB.ellip_bp(wp,ws,kwargs[&#39;gpass&#39;],kwargs[&#39;gstop&#39;])</span>
+        <span class="c1">#self.filterB.butter(order=6,w=wp,typ=&#39;bandpass&#39;)</span>
 
-        <span class="c">#</span>
-        <span class="c"># Filter T : Time Averaging Filter (Integrator)  (Tns =&gt; N samples)</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># Filter T : Time Averaging Filter (Integrator)  (Tns =&gt; N samples)</span>
+        <span class="c1">#</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Tns</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="p">)</span>
-        <span class="c">#b  = (Tns*1e-9/self.N)*ones(self.N)</span>
-        <span class="c">#self.NfilterT = len(b)</span>
-        <span class="c">#a  = array([1])</span>
-        <span class="c">#self.filterT = DF(b,a)</span>
+        <span class="c1">#b  = (Tns*1e-9/self.N)*ones(self.N)</span>
+        <span class="c1">#self.NfilterT = len(b)</span>
+        <span class="c1">#a  = array([1])</span>
+        <span class="c1">#self.filterT = DF(b,a)</span>
 
-        <span class="c">#</span>
-        <span class="c">#</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">BGHz</span>  <span class="o">=</span> <span class="n">BGHz</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Tns</span>   <span class="o">=</span> <span class="n">Tns</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;beta&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pfa</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pfa&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">NF</span>    <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;NF&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;beta&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pfa</span>   <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pfa&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NF</span>    <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;NF&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c">#</span>
-        <span class="c"># calculates ED moments, order and scale</span>
-        <span class="c">#</span>
-        <span class="c"># self.moment(typ=&#39;struc&#39;)</span>
-        <span class="c"># kB = 1,3806488  10-23</span>
+        <span class="c1">#</span>
+        <span class="c1"># calculates ED moments, order and scale</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.moment(typ=&#39;struc&#39;)</span>
+        <span class="c1"># kB = 1,3806488  10-23</span>
         <span class="n">kB</span> <span class="o">=</span> <span class="mf">1.3806488e-23</span>
-        <span class="c"># TB : Noise temperature</span>
+        <span class="c1"># TB : Noise temperature</span>
         <span class="n">TB</span>  <span class="o">=</span> <span class="mi">290</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NF</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N0</span>  <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">TB</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">BGHz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Tns</span>
@@ -296,21 +296,21 @@
 
 <div class="viewcode-block" id="ED.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.__repr__.html#pylayers.signal.ED.ED.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;Energy Detector&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;---------------&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Center frequency : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; GHz</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Bandwidth : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BGHz</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; GHz </span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Integration Time : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tns</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; ns </span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Resistance : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; Ohms</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Mean (y) : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">muy</span><span class="o">/</span><span class="mf">1e-9</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; nJ </span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Std (y) : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span><span class="p">)</span><span class="o">/</span><span class="mf">1e-9</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; nJ </span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Order (df) : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;  </span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Scale : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;  </span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;2BT : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">BGHz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Tns</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;Energy Detector&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;---------------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Center frequency : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; GHz</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Bandwidth : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BGHz</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; GHz </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Integration Time : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tns</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; ns </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Resistance : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; Ohms</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Mean (y) : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">muy</span><span class="o">/</span><span class="mf">1e-9</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; nJ </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Std (y) : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span><span class="p">)</span><span class="o">/</span><span class="mf">1e-9</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; nJ </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Order (df) : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;  </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;Scale : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;  </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;2BT : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">BGHz</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Tns</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; </span><span class="se">\n</span><span class="s1">&#39;</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="ED.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.apply.html#pylayers.signal.ED.ED.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;ideal&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ED.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.apply.html#pylayers.signal.ED.ED.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;ideal&#39;</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -327,12 +327,12 @@
 <span class="sd">            :math:`F{x}` means a filtering of x with filter :math:`F`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;real&#39;</span><span class="p">:</span>
-            <span class="c"># B filtering</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;real&#39;</span><span class="p">:</span>
+            <span class="c1"># B filtering</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">xf1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filterB</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;ideal&#39;</span><span class="p">:</span>
-            <span class="c"># B filtering  --&gt; FH signal</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;ideal&#39;</span><span class="p">:</span>
+            <span class="c1"># B filtering  --&gt; FH signal</span>
             <span class="n">S</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
@@ -345,16 +345,16 @@
             <span class="n">S</span><span class="o">.</span><span class="n">y</span>  <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gate</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">xf1</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span><span class="o">.</span><span class="n">y</span>
 
-        <span class="c"># quadrator and scaling</span>
+        <span class="c1"># quadrator and scaling</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xq</span>  <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xf1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">xf1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span>
-        <span class="c"># T filtering</span>
-        <span class="c">#xfq = self.filterT.filter(self.xq)</span>
+        <span class="c1"># T filtering</span>
+        <span class="c1">#xfq = self.filterT.filter(self.xq)</span>
         <span class="n">xfq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">rolling_mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xq</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">*</span><span class="mf">1e-9</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:],</span><span class="n">xfq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:])</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="ED.moment"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.moment.html#pylayers.signal.ED.ED.moment">[docs]</a>    <span class="k">def</span> <span class="nf">moment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;struc&#39;</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ED.moment"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.moment.html#pylayers.signal.ED.ED.moment">[docs]</a>    <span class="k">def</span> <span class="nf">moment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;struc&#39;</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; evaluate mean and variance of output signal y</span>
 
 <span class="sd">        Parameters</span>
@@ -373,21 +373,21 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="c"># filterB bandpass filter</span>
+        <span class="c1"># filterB bandpass filter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filterB</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="c"># filterT time integration (=low pass filter)</span>
+        <span class="c1"># filterT time integration (=low pass filter)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filterT</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">Noise</span><span class="p">(</span><span class="n">fsGHz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fsGHz</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;struc&#39;</span><span class="p">:</span>
-            <span class="c"># ACF of filter B</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;struc&#39;</span><span class="p">:</span>
+            <span class="c1"># ACF of filter B</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">RB</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filterB</span><span class="o">.</span><span class="n">wnxcorr</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">var</span><span class="p">)</span>
-            <span class="c"># F.de Coulom T&amp;T signal eq 8.148</span>
-            <span class="c"># ACF of xq</span>
+            <span class="c1"># F.de Coulom T&amp;T signal eq 8.148</span>
+            <span class="c1"># ACF of xq</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Rx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">RB</span><span class="o">*</span><span class="mi">2</span>
-            <span class="c"># Power of xq</span>
+            <span class="c1"># Power of xq</span>
             <span class="n">RB0</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RB</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c">#</span>
+            <span class="c1">#</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Rx</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Rx</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">RB0</span><span class="o">**</span><span class="mi">2</span>
 
             <span class="n">Phix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Rx</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
@@ -397,13 +397,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">muy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RB</span><span class="o">.</span><span class="n">max</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Phiy</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;emp&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;emp&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">muy</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">NfilterT</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">NfilterT</span><span class="p">:]</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">muy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vary</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="ED.pdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.pdf.html#pylayers.signal.ED.ED.pdf">[docs]</a>    <span class="k">def</span> <span class="nf">pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates decision problem densities under H0 and H1</span>
 
@@ -426,25 +426,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="n">E</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ei</span> <span class="o">=</span> <span class="n">Ei</span>
 
-        <span class="c"># H0 : Noise only (no interferer)</span>
-        <span class="c"># central chi square</span>
+        <span class="c1"># H0 : Noise only (no interferer)</span>
+        <span class="c1"># central chi square</span>
         <span class="k">if</span> <span class="n">Ei</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pH0</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">chi2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                                <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-        <span class="c"># H0 : Noise + interference</span>
-        <span class="c"># non central chi square</span>
+        <span class="c1"># H0 : Noise + interference</span>
+        <span class="c1"># non central chi square</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pH0</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">ncx2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                                <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span>
                                <span class="n">nc</span><span class="o">=</span><span class="n">Ei</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span>
 
-        <span class="c"># H1 : Signal + interference + Noise</span>
-        <span class="c"># non central chi square</span>
+        <span class="c1"># H1 : Signal + interference + Noise</span>
+        <span class="c1"># non central chi square</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pH1</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">ncx2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                            <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span>
-                           <span class="n">nc</span><span class="o">=</span><span class="p">(</span><span class="n">E</span><span class="o">+</span><span class="n">Ei</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="ED.errprob"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.errprob.html#pylayers.signal.ED.ED.errprob">[docs]</a>    <span class="k">def</span> <span class="nf">errprob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">thresh</span><span class="o">=</span><span class="mf">2e-9</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;thresh&#39;</span><span class="p">):</span>
+                           <span class="n">nc</span><span class="o">=</span><span class="p">(</span><span class="n">E</span><span class="o">+</span><span class="n">Ei</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ED.errprob"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.errprob.html#pylayers.signal.ED.ED.errprob">[docs]</a>    <span class="k">def</span> <span class="nf">errprob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">thresh</span><span class="o">=</span><span class="mf">2e-9</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;thresh&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates error probability</span>
 
 <span class="sd">        Parameters</span>
@@ -478,19 +478,19 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">Ei</span><span class="o">=</span><span class="n">Ei</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;thresh&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;thresh&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p10</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pH0</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">thresh</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p01</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pH1</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">thresh</span><span class="p">)</span>
             <span class="n">errp</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p10</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">p01</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;scale&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;scale&#39;</span><span class="p">:</span>
             <span class="n">ncf</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">ncf</span><span class="p">(</span><span class="n">dfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                          <span class="n">dfd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                          <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                          <span class="n">nc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
             <span class="n">errp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ncf</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;both&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;both&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p10</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pH0</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">thresh</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p01</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pH1</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">thresh</span><span class="p">)</span>
             <span class="n">pe1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p10</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">p01</span><span class="p">)</span>
@@ -501,8 +501,8 @@
             <span class="n">pe2</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ncf</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">errp</span> <span class="o">=</span><span class="p">(</span><span class="n">pe1</span><span class="p">,</span><span class="n">pe2</span><span class="p">)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">errp</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="n">errp</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ED.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.plot.html#pylayers.signal.ED.ED.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot decision problem densities</span>
 
@@ -518,12 +518,12 @@
         <span class="n">e</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">muy</span><span class="o">*</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">),</span><span class="mi">200</span><span class="p">)</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pH0</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="n">p1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pH1</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        <span class="c">#plt.plot(10*np.log10(E),p0,&#39;b&#39;,linewidth=4)</span>
-        <span class="c">#plt.plot(10*np.log10(E),p1,&#39;r&#39;,linewidth=4)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">p0</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="ED.roc"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.roc.html#pylayers.signal.ED.ED.roc">[docs]</a>    <span class="k">def</span> <span class="nf">roc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;thresh&#39;</span><span class="p">):</span>
+        <span class="c1">#plt.plot(10*np.log10(E),p0,&#39;b&#39;,linewidth=4)</span>
+        <span class="c1">#plt.plot(10*np.log10(E),p1,&#39;r&#39;,linewidth=4)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">p0</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ED.roc"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.ED.ED.roc.html#pylayers.signal.ED.ED.roc">[docs]</a>    <span class="k">def</span> <span class="nf">roc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;thresh&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; determines receiver operating curve</span>
 
 <span class="sd">        Parameters</span>
@@ -575,11 +575,11 @@
         <span class="n">tpfa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tpfa</span><span class="p">)</span>
         <span class="n">tpd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tpd</span><span class="p">)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">terr</span><span class="p">,</span><span class="n">tpfa</span><span class="p">,</span><span class="n">tpd</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">terr</span><span class="p">,</span><span class="n">tpfa</span><span class="p">,</span><span class="n">tpd</span><span class="p">)</span></div>
 
 
-</div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
@@ -594,8 +594,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on mars 05, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

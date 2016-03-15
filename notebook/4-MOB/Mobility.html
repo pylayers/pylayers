@@ -124,7 +124,7 @@
             
   <div class="section" id="trajectory-and-network-simulation">
 <h1>Trajectory and Network simulation<a class="headerlink" href="#trajectory-and-network-simulation" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre>from IPython.display import Image, HTML, Latex, YouTubeVideo
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>from IPython.display import Image, HTML, Latex, YouTubeVideo
 import numpy as np
 import pylayers.mobility.trajectory as traj
 from pylayers.mobility.ban.body import *
@@ -132,10 +132,10 @@ from pylayers.gis.layout import *
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">YouTubeVideo</span><span class="p">(</span><span class="s">&#39;1Qa6xLpU5-M&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">YouTubeVideo</span><span class="p">(</span><span class="s1">&#39;1Qa6xLpU5-M&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <iframe
@@ -145,41 +145,41 @@ from pylayers.gis.layout import *
     frameborder="0"
     allowfullscreen
 ></iframe><p>Trajectories can be generated using simulnet.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">S</span><span class="o">=</span><span class="n">Simul</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
+<div class="highlight-python"><div class="highlight"><pre><span></span>Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># set simulation duration</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1"># set simulation duration</span>
 
-<span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;100&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;100&#39;</span>
 
-<span class="n">S</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.1</span>
+<span class="n">S</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.1</span>
 
-<span class="c"># turn on network simulation</span>
-<span class="n">S</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+<span class="c1"># turn on network simulation</span>
+<span class="n">S</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># run mechanical simulation</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1"># run mechanical simulation</span>
 <span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>trajectories can be imported from a simulnet simulation with the
 <code class="docutils literal"><span class="pre">importh5</span></code> method</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">str1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">])</span>
-<span class="n">str2</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="c"># the save filename is composed of simulation filename and layout filename</span>
-<span class="n">save_filename</span> <span class="o">=</span> <span class="n">str1</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">str2</span> <span class="o">+</span><span class="s">&#39;.h5&#39;</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">str1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">])</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># the save filename is composed of simulation filename and layout filename</span>
+<span class="n">save_filename</span> <span class="o">=</span> <span class="n">str1</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">str2</span> <span class="o">+</span><span class="s1">&#39;.h5&#39;</span>
 
 <span class="n">list_traj</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">traj</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">list_traj</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">list_traj</span>
 </pre></div>
 </div>
 <pre class="literal-block">
@@ -239,13 +239,13 @@ t
 </pre>
 <p>The 2 following trajectories have been calculated with
 <code class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">t</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">t</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 IndexError                                Traceback (most recent call last)
 
@@ -256,23 +256,23 @@ IndexError                                Traceback (most recent call last)
 IndexError: list index out of range
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">nodes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Mobility_14_0.png" src="../../_images/Mobility_14_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">4989</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">4989</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Simulation information
+<div class="highlight-python"><div class="highlight"><pre><span></span>Simulation information
 ----------------------
 Layout: TA-Office.ini
 Simulation duration: 100
@@ -302,30 +302,30 @@ Localization enable: False
 Postion estimation methods: [&#39;geo&#39;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">t</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">t</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">Rss18</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;8&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Rss12</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Rss17</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;7&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Rss16</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;6&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Rss28</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;8&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Rss27</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;7&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">Rss26</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;6&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss18</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-8&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss12</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-2&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss17</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-7&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss16</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-6&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss28</span><span class="p">,</span><span class="s">&#39;b--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-8&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss27</span><span class="p">,</span><span class="s">&#39;g--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-7&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss26</span><span class="p">,</span><span class="s">&#39;c--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-6&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;RSS (dBm)&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">Rss18</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">][</span><span class="s1">&#39;8&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss12</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">][</span><span class="s1">&#39;2&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss17</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">][</span><span class="s1">&#39;7&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss16</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">][</span><span class="s1">&#39;6&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss28</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">][</span><span class="s1">&#39;8&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss27</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">][</span><span class="s1">&#39;7&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss26</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">][</span><span class="s1">&#39;6&#39;</span><span class="p">][</span><span class="s1">&#39;rat1&#39;</span><span class="p">][</span><span class="s1">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss18</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;1-8&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss12</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;1-2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss17</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;1-7&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss16</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;1-6&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss28</span><span class="p">,</span><span class="s1">&#39;b--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;2-8&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss27</span><span class="p">,</span><span class="s1">&#39;g--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;2-7&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss26</span><span class="p">,</span><span class="s1">&#39;c--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;2-6&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;RSS (dBm)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2b5d58032b50&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x2b5d58032b50&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Mobility_18_1.png" src="../../_images/Mobility_18_1.png" />
@@ -342,8 +342,8 @@ Postion estimation methods: [&#39;geo&#39;]
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/4-MOB/Mobility.txt"
 	    rel="nofollow">Show this page source</a>

@@ -137,7 +137,7 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.util.cone</h1><div class="highlight"><pre>
-<span class="c">#-*- coding:Utf-8 -*-</span>
+<span></span><span class="c1">#-*- coding:Utf-8 -*-</span>
 <span class="sd">r&quot;&quot;&quot;</span>
 
 <span class="sd">Class Cone</span>
@@ -196,7 +196,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">=</span> <span class="n">apex</span>
-        <span class="c"># normalizing cone vectors </span>
+        <span class="c1"># normalizing cone vectors </span>
         <span class="n">an</span> <span class="o">=</span> <span class="n">a</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="p">))</span>
         <span class="n">bn</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
 
@@ -207,7 +207,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">bn</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">an</span>
         
-        <span class="c"># -1 &lt; gamma &lt; 1</span>
+        <span class="c1"># -1 &lt; gamma &lt; 1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cross</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
 
@@ -216,19 +216,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">degenerated</span> <span class="o">=</span> <span class="bp">True</span>    
 
-        <span class="c"># update cone angle and probability</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span>
+        <span class="c1"># update cone angle and probability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span></div>
         
-</div>
+
 <div class="viewcode-block" id="Cone.upd_angle"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.upd_angle.html#pylayers.util.cone.Cone.upd_angle">[docs]</a>    <span class="k">def</span> <span class="nf">upd_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;update cone angle attribute </span>
 <span class="sd">           and associated probability of the Cone object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pcone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cone.belong_seg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.belong_seg.html#pylayers.util.cone.Cone.belong_seg">[docs]</a>    <span class="k">def</span> <span class="nf">belong_seg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">,</span><span class="n">prob</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; test if segment belong to cone</span>
 
@@ -262,10 +262,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">vc</span>  <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-        <span class="c">#vcn = vc/np.sqrt(np.dot(vc,vc))</span>
+        <span class="c1">#vcn = vc/np.sqrt(np.dot(vc,vc))</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">vc</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vc</span><span class="p">,</span><span class="n">vc</span><span class="p">))</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c">#w  = np.array([vcn[1],-vcn[0]])</span>
+        <span class="c1">#w  = np.array([vcn[1],-vcn[0]])</span>
 
         <span class="n">ptama</span> <span class="o">=</span> <span class="n">pta</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">phema</span> <span class="o">=</span> <span class="n">phe</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -275,43 +275,43 @@
 
         <span class="n">blta</span> <span class="o">=</span> <span class="p">(</span><span class="n">dtaw</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">blhe</span> <span class="o">=</span> <span class="p">(</span><span class="n">dhew</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
-        <span class="c">#if &#39;seg1&#39; in self.__dict__:</span>
-        <span class="c">#    pa =  self.seg1[:,0].reshape(2,1)</span>
-        <span class="c">#    pb = (self.seg1[:,0]+w).reshape(2,1)</span>
-        <span class="c">#else:</span>
-        <span class="c">#    pa = self.apex.reshape(2,1)</span>
-        <span class="c">#    pb = pa+w.reshape(2,1)</span>
-        <span class="c">#blta = geu.isleft(pa,pb,pta)</span>
-        <span class="c">#blhe = geu.isleft(pa,pb,phe)</span>
-        <span class="c"># segment candidate for being above segment 1 (,Nseg)</span>
+        <span class="c1">#if &#39;seg1&#39; in self.__dict__:</span>
+        <span class="c1">#    pa =  self.seg1[:,0].reshape(2,1)</span>
+        <span class="c1">#    pb = (self.seg1[:,0]+w).reshape(2,1)</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    pa = self.apex.reshape(2,1)</span>
+        <span class="c1">#    pb = pa+w.reshape(2,1)</span>
+        <span class="c1">#blta = geu.isleft(pa,pb,pta)</span>
+        <span class="c1">#blhe = geu.isleft(pa,pb,phe)</span>
+        <span class="c1"># segment candidate for being above segment 1 (,Nseg)</span>
         <span class="n">boup</span> <span class="o">=</span> <span class="n">blta</span> <span class="o">&amp;</span> <span class="n">blhe</span>
-        <span class="c"># type of segment</span>
+        <span class="c1"># type of segment</span>
         <span class="k">if</span> <span class="n">prob</span><span class="p">:</span>
             <span class="n">proba</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pta</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="n">proba</span> <span class="o">=</span><span class="p">[]</span>
         <span class="n">typ</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pta</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="c"># is tail out ? bo1 | bo2  </span>
-        <span class="c"># btaol : boolean tail out left </span>
-        <span class="c"># btaor : boolean tail out right </span>
-        <span class="c"># bheol : boolean head out left </span>
-        <span class="c"># bheor : boolean head out right #</span>
-        <span class="c"># among upper segment check position wrt cone</span>
-        <span class="c">#btaol,btaor = self.outside_point(pta)</span>
-        <span class="c">#bheol,bheor = self.outside_point(phe)</span>
+        <span class="c1"># is tail out ? bo1 | bo2  </span>
+        <span class="c1"># btaol : boolean tail out left </span>
+        <span class="c1"># btaor : boolean tail out right </span>
+        <span class="c1"># bheol : boolean head out left </span>
+        <span class="c1"># bheor : boolean head out right #</span>
+        <span class="c1"># among upper segment check position wrt cone</span>
+        <span class="c1">#btaol,btaor = self.outside_point(pta)</span>
+        <span class="c1">#bheol,bheor = self.outside_point(phe)</span>
         <span class="n">btaor</span><span class="p">,</span><span class="n">btaol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outside_point</span><span class="p">(</span><span class="n">pta</span><span class="p">)</span>
         <span class="n">bheor</span><span class="p">,</span><span class="n">bheol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outside_point</span><span class="p">(</span><span class="n">phe</span><span class="p">)</span>
-        <span class="c"># tail and head are they out cone on the same side ? </span>
-        <span class="c"># if the two termination points are not on the same side of the cone</span>
-        <span class="c"># --&gt; segment is in.</span>
-        <span class="c"># boin = (~((btaol&amp;bheol)|(btaor&amp;bheor)))&amp;boup</span>
-        <span class="c"># full interception (proba to reach = 1) </span>
+        <span class="c1"># tail and head are they out cone on the same side ? </span>
+        <span class="c1"># if the two termination points are not on the same side of the cone</span>
+        <span class="c1"># --&gt; segment is in.</span>
+        <span class="c1"># boin = (~((btaol&amp;bheol)|(btaor&amp;bheor)))&amp;boup</span>
+        <span class="c1"># full interception (proba to reach = 1) </span>
         <span class="n">bfull</span> <span class="o">=</span> <span class="p">((</span><span class="n">btaol</span><span class="o">&amp;</span><span class="n">bheor</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">btaor</span><span class="o">&amp;</span><span class="n">bheol</span><span class="p">))</span><span class="o">&amp;</span><span class="n">boup</span>
         <span class="k">if</span> <span class="n">prob</span> <span class="p">:</span>
             <span class="n">proba</span><span class="p">[</span><span class="n">bfull</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">typ</span><span class="p">[</span><span class="n">bfull</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="c">#(he-apex).v</span>
+        <span class="c1">#(he-apex).v</span>
         <span class="n">btalhein</span>  <span class="o">=</span> <span class="p">(</span><span class="n">btaol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bheol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bheor</span><span class="p">)</span><span class="o">&amp;</span><span class="n">boup</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">prob</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">btalhein</span><span class="o">==</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()):</span>
             <span class="n">v2</span>  <span class="o">=</span> <span class="n">phe</span><span class="p">[:,</span><span class="n">btalhein</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -323,7 +323,7 @@
             <span class="n">proba</span><span class="p">[</span><span class="n">btalhein</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr2</span>
         <span class="n">typ</span><span class="p">[</span><span class="n">btalhein</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 
-        <span class="c">#(tai-apex).v</span>
+        <span class="c1">#(tai-apex).v</span>
         <span class="n">bheltain</span>  <span class="o">=</span> <span class="p">(</span><span class="n">bheol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">btaol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">btaor</span><span class="p">)</span><span class="o">&amp;</span><span class="n">boup</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">prob</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">bheltain</span><span class="o">==</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()):</span>
             <span class="n">v3</span>  <span class="o">=</span> <span class="n">pta</span><span class="p">[:,</span><span class="n">bheltain</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -335,7 +335,7 @@
             <span class="n">proba</span><span class="p">[</span><span class="n">bheltain</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr3</span>
         <span class="n">typ</span><span class="p">[</span><span class="n">bheltain</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
 
-        <span class="c">#ta.u</span>
+        <span class="c1">#ta.u</span>
         <span class="n">bhertain</span>  <span class="o">=</span> <span class="p">(</span><span class="n">bheor</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">btaol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">btaor</span><span class="p">)</span><span class="o">&amp;</span><span class="n">boup</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">prob</span> <span class="ow">and</span> <span class="ow">not</span><span class="p">(</span><span class="n">bhertain</span><span class="o">==</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()):</span>
             <span class="n">v4</span>  <span class="o">=</span> <span class="n">pta</span><span class="p">[:,</span><span class="n">bhertain</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -347,7 +347,7 @@
             <span class="n">proba</span><span class="p">[</span><span class="n">bhertain</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr4</span>
         <span class="n">typ</span><span class="p">[</span><span class="n">bhertain</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
 
-        <span class="c">#he.u</span>
+        <span class="c1">#he.u</span>
         <span class="n">btarhein</span>  <span class="o">=</span> <span class="p">(</span><span class="n">btaor</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bheol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bheor</span><span class="p">)</span><span class="o">&amp;</span><span class="n">boup</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">prob</span> <span class="ow">and</span> <span class="ow">not</span><span class="p">(</span><span class="n">btarhein</span><span class="o">==</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()):</span>
             <span class="n">v5</span>  <span class="o">=</span> <span class="n">phe</span><span class="p">[:,</span><span class="n">btarhein</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -359,7 +359,7 @@
             <span class="n">proba</span><span class="p">[</span><span class="n">btarhein</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr5</span>
         <span class="n">typ</span><span class="p">[</span><span class="n">btarhein</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
 
-        <span class="c">#ta.he</span>
+        <span class="c1">#ta.he</span>
         <span class="n">btainhein</span>  <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">btaol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">btaor</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bheol</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bheor</span><span class="p">)</span><span class="o">&amp;</span><span class="n">boup</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">prob</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">btainhein</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()):</span>
             <span class="n">va</span>  <span class="o">=</span> <span class="n">pta</span><span class="p">[:,</span><span class="n">btainhein</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -373,8 +373,8 @@
             <span class="n">proba</span><span class="p">[</span><span class="n">btainhein</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr6</span>
         <span class="n">typ</span><span class="p">[</span><span class="n">btainhein</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span><span class="n">proba</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span><span class="n">proba</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cone.aboveseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.aboveseg.html#pylayers.util.cone.Cone.aboveseg">[docs]</a>    <span class="k">def</span> <span class="nf">aboveseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -382,8 +382,8 @@
         <span class="n">vcn</span> <span class="o">=</span> <span class="n">vc</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">vc</span><span class="p">,</span><span class="n">vc</span><span class="p">))</span>
         <span class="n">w</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vcn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">vcn</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  
-        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cone.outside_point"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.outside_point.html#pylayers.util.cone.Cone.outside_point">[docs]</a>    <span class="k">def</span> <span class="nf">outside_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check if p is outside cone</span>
 
@@ -429,8 +429,8 @@
         <span class="n">lu</span> <span class="o">=</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p1a1</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p0a0</span> <span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span>
         <span class="n">lv</span> <span class="o">=</span> <span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p1a1</span> <span class="o">-</span> <span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p0a0</span> <span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="o">~</span><span class="n">lu</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">lv</span> <span class="p">,</span> <span class="n">lu</span> <span class="o">&amp;</span> <span class="n">lv</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="o">~</span><span class="n">lu</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">lv</span> <span class="p">,</span> <span class="n">lu</span> <span class="o">&amp;</span> <span class="n">lv</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cone.belong_point2"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.belong_point2.html#pylayers.util.cone.Cone.belong_point2">[docs]</a>    <span class="k">def</span> <span class="nf">belong_point2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -444,8 +444,8 @@
         <span class="n">b1</span> <span class="o">=</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p1a1</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p0a0</span> <span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span>
         <span class="n">b2</span> <span class="o">=</span> <span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p1a1</span> <span class="o">-</span> <span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span> <span class="n">p0a0</span> <span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">b1</span><span class="o">^</span><span class="n">b2</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="n">b1</span><span class="o">^</span><span class="n">b2</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cone.belong_point"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.belong_point.html#pylayers.util.cone.Cone.belong_point">[docs]</a>    <span class="k">def</span> <span class="nf">belong_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; test if p belongs to Cone</span>
 
@@ -461,13 +461,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c"># Ndim x Npoints</span>
+        <span class="c1"># Ndim x Npoints</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">degenerated</span><span class="p">:</span>
             <span class="n">pt</span>  <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-            <span class="c">#puv = np.sum(self.bv[:,:,np.newaxis]*pt[:,np.newaxis,:],axis=0)</span>
+            <span class="c1">#puv = np.sum(self.bv[:,:,np.newaxis]*pt[:,np.newaxis,:],axis=0)</span>
 
-            <span class="c">#alpha = puv[0,:]-self.gamma*puv[1,:]</span>
-            <span class="c">#beta  = puv[1,:]-self.gamma*puv[0,:]</span>
+            <span class="c1">#alpha = puv[0,:]-self.gamma*puv[1,:]</span>
+            <span class="c1">#beta  = puv[1,:]-self.gamma*puv[0,:]</span>
             <span class="n">pu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">pv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -486,8 +486,8 @@
                 <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">&gt;</span> <span class="n">slope</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span> <span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">&lt;</span><span class="n">slope</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">+</span><span class="nb">max</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span> <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">&gt;</span>  <span class="nb">min</span><span class="p">(</span><span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cone.above"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.above.html#pylayers.util.cone.Cone.above">[docs]</a>    <span class="k">def</span> <span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check if above</span>
 <span class="sd">        Parameters</span>
@@ -504,8 +504,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">bo2</span> <span class="o">=</span> <span class="n">pb</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">bo1</span><span class="p">,</span><span class="n">bo2</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="n">bo1</span><span class="p">,</span><span class="n">bo2</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cone.fromptseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.fromptseg.html#pylayers.util.cone.Cone.fromptseg">[docs]</a>    <span class="k">def</span> <span class="nf">fromptseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pt</span><span class="p">,</span><span class="n">seg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates a Cone from one point and one segment</span>
 
@@ -541,8 +541,8 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cross</span> <span class="o">&lt;</span> <span class="mf">1e-15</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">degenerated</span><span class="o">=</span><span class="bp">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Cone.from2segs"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.from2segs.html#pylayers.util.cone.Cone.from2segs">[docs]</a>    <span class="k">def</span> <span class="nf">from2segs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seg0</span><span class="p">,</span><span class="n">seg1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates a Cone from 2 segments</span>
 
@@ -565,7 +565,7 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># bv : (4,1)</span>
+        <span class="c1"># bv : (4,1)</span>
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span> <span class="o">=</span> <span class="n">seg0</span>
@@ -576,11 +576,11 @@
         <span class="n">a1</span> <span class="o">=</span> <span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">b1</span> <span class="o">=</span> <span class="n">seg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="c"># check for connected segments (This could be determined earlier) </span>
-        <span class="c"># a0 = a1 | b1</span>
-        <span class="c"># b0 = a1 | b1 </span>
+        <span class="c1"># check for connected segments (This could be determined earlier) </span>
+        <span class="c1"># a0 = a1 | b1</span>
+        <span class="c1"># b0 = a1 | b1 </span>
 
-        <span class="c"># check segment orientation (crossing)</span>
+        <span class="c1"># check segment orientation (crossing)</span>
       
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span><span class="n">b0</span><span class="p">,</span><span class="n">b1</span><span class="p">)</span> <span class="o">^</span>
                 <span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">a1</span><span class="p">)</span> <span class="p">):</span>
@@ -605,17 +605,17 @@
             <span class="n">inversion</span> <span class="o">=</span> <span class="bp">True</span> 
         
         <span class="k">if</span>  <span class="p">(</span><span class="ow">not</span> <span class="n">twisted</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">inversion</span><span class="p">)</span> <span class="p">:</span>
-            <span class="c">#reverse seg1</span>
-            <span class="c">#print &quot;reverse seg1&quot;</span>
+            <span class="c1">#reverse seg1</span>
+            <span class="c1">#print &quot;reverse seg1&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">inversion</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">twisted</span><span class="p">):</span>
-            <span class="c">#reverse seg0 </span>
-            <span class="c">#print &quot;reverse seg0&quot;</span>
+            <span class="c1">#reverse seg0 </span>
+            <span class="c1">#print &quot;reverse seg0&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">twisted</span> <span class="o">&amp;</span> <span class="n">inversion</span><span class="p">:</span>
-            <span class="c">#reverse seg0 and seg1   </span>
-            <span class="c">#print &quot;reverse seg0&quot;</span>
-            <span class="c">#print &quot;reverse seg1&quot;</span>
+            <span class="c1">#reverse seg0 and seg1   </span>
+            <span class="c1">#print &quot;reverse seg0&quot;</span>
+            <span class="c1">#print &quot;reverse seg1&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>      
             <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -632,8 +632,8 @@
 
             <span class="n">kb</span>  <span class="o">=</span> <span class="p">((</span><span class="n">b0v</span><span class="o">-</span><span class="n">a0v</span><span class="p">)</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">*</span><span class="p">(</span><span class="n">b0u</span><span class="o">-</span><span class="n">a0u</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">kb</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Cone.from2csegs"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.from2csegs.html#pylayers.util.cone.Cone.from2csegs">[docs]</a>    <span class="k">def</span> <span class="nf">from2csegs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seg0</span><span class="p">,</span><span class="n">seg1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates a Cone from 2 connected segments</span>
 
@@ -650,7 +650,7 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># bv : (4,1)</span>
+        <span class="c1"># bv : (4,1)</span>
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span> <span class="o">=</span> <span class="n">seg0</span>
@@ -661,7 +661,7 @@
         <span class="n">a1</span> <span class="o">=</span> <span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">b1</span> <span class="o">=</span> <span class="n">seg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="c"># determine common point</span>
+        <span class="c1"># determine common point</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a0</span><span class="o">-</span><span class="n">a1</span><span class="p">,</span><span class="n">a0</span><span class="o">-</span><span class="n">a1</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span><span class="p">):</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">a0</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">b1</span><span class="o">-</span><span class="n">p</span>
@@ -683,7 +683,7 @@
             <span class="n">u</span> <span class="o">=</span> <span class="n">a1</span><span class="o">-</span><span class="n">p</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">a0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;segment are not connected&#39;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;segment are not connected&#39;</span><span class="p">)</span>
             <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">=</span> <span class="n">p</span>
@@ -696,9 +696,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cross</span> <span class="o">&lt;</span> <span class="mf">1e-15</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">degenerated</span><span class="o">=</span><span class="bp">True</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upd_angle</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cone.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.show.html#pylayers.util.cone.Cone.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show cone</span>
 
@@ -709,15 +709,15 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;length&#39;</span><span class="p">:</span> <span class="mf">15.</span><span class="p">}</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="mf">15.</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="s">&#39;seg1&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>    
+        <span class="k">if</span> <span class="s1">&#39;seg1&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>    
             <span class="n">verts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">),</span>
-                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span>
-                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">),</span>
+                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span>
+                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">),</span>
                      <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">)</span>
                     <span class="p">]</span>
             <span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="o">.</span><span class="n">MOVETO</span><span class="p">,</span>
@@ -729,7 +729,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">a1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">b1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="s">&#39;seg0&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>    
+            <span class="k">if</span> <span class="s1">&#39;seg0&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>    
                 <span class="n">a0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span>
                 <span class="n">b0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span>
             <span class="k">else</span><span class="p">:</span>
@@ -737,14 +737,14 @@
                 <span class="n">b0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg0</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degenerated</span><span class="p">):</span>
-                <span class="c">#verts = [tuple(self.apex),</span>
-                <span class="c">#         tuple(a1),</span>
-                <span class="c">#         tuple(b1),</span>
-                <span class="c">#         tuple(self.apex)</span>
-                <span class="c">#        ]</span>
+                <span class="c1">#verts = [tuple(self.apex),</span>
+                <span class="c1">#         tuple(a1),</span>
+                <span class="c1">#         tuple(b1),</span>
+                <span class="c1">#         tuple(self.apex)</span>
+                <span class="c1">#        ]</span>
                 <span class="n">verts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">),</span>
-                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span>
-                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">),</span>
+                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span>
+                     <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">),</span>
                      <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">)</span>
                     <span class="p">]</span>
                 <span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="o">.</span><span class="n">MOVETO</span><span class="p">,</span>
@@ -780,28 +780,28 @@
 
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">verts</span><span class="p">,</span> <span class="n">codes</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s">&#39;ax&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>    
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;ax&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>    
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s">&#39;seg0&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b0</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">a0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b0</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s">&#39;seg1&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">a1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;seg0&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b0</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">a0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b0</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;seg1&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">a1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
-        <span class="c"># ax.set_xlim(-2,2)</span>
-        <span class="c"># ax.set_ylim(-2,2)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="c1"># ax.set_xlim(-2,2)</span>
+        <span class="c1"># ax.set_ylim(-2,2)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 </pre></div>
@@ -816,8 +816,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on mars 05, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

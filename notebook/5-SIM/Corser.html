@@ -175,11 +175,11 @@
 </ol>
 </li>
 </ol>
-<div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>%matplotlib inline
 import  pylayers.util.mayautil as myu
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
 <div class="section" id="cormoran-measurement-campaign">
@@ -246,10 +246,10 @@ is ready to be used.</p>
 CorSer (which stands for Cormoran Series). Once PyLayers has been
 installed, it is possible to directly access to the class by importing
 it.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   &lt;matplotlib.figure.Figure at 0x2b2c34a62790&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>   &lt;matplotlib.figure.Figure at 0x2b2c34a62790&gt;
 
 
 Get information on the Series
@@ -264,10 +264,10 @@ available measurements series using <em>cor_log()</em>. Then for each
 <li>The radio technology</li>
 <li>A short description of the serie</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cor_log</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">cor_log</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   ---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>   ---------------------------------------------------------------------------
 
    UnicodeDecodeError                        Traceback (most recent call last)
 
@@ -348,10 +348,10 @@ Load Serie
 <hr class="docutils" />
 <p>As an example, serie 6 from day 11 can be loaded using the following
 command:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">CorSer</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">=</span><span class="n">CorSer</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>load infrastructure node position: **** Processor coding : Intel-PC
+<div class="highlight-python"><div class="highlight"><pre><span></span>load infrastructure node position: **** Processor coding : Intel-PC
 
 load  Nicolas  body: **** Processor coding : Intel-PC
 
@@ -365,10 +365,10 @@ Create distance Dataframe... OK
 </div>
 <p>Once loaded information about the serie (date, type, ...) can be
 obtained just by calling the object itself:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   Filename: Sc20_S6_R2_HKBS
+<div class="highlight-python"><div class="highlight"><pre><span></span>   Filename: Sc20_S6_R2_HKBS
    Day : 11/06/2014
    Serie : 6
    Scenario : 20
@@ -406,7 +406,7 @@ are available:</p>
 <p>In the example serie chosen, only HiKoB and Bespoon are available.</p>
 <p>Here is an example of the RSS values obtained by the HKB sensors for the
 120 available links and the 5 first available timestamp :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
    <div style="max-height:1000px;max-width:1500px;overflow:auto;">
@@ -576,7 +576,7 @@ of the devices at any time stamps</li>
 distances between the different radio links.</li>
 </ul>
 <p>Here is the 5 last data of the device data frame...</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">devdf</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">devdf</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <div style="max-height:1000px;max-width:1500px;overflow:auto;">
@@ -683,7 +683,7 @@ distances between the different radio links.</li>
   </tbody>
 </table>
 </div><p>... and the 5 last data of the distance data frame:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">distdf</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">distdf</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
    <div style="max-height:1000px;max-width:1500px;overflow:auto;">
@@ -852,10 +852,10 @@ involved in the serie and:</p>
 <li>At wich Subject the device is related.</li>
 </ul>
 <p>Infrastrucure access point obviously don&#8217;t have related Subject.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">dev</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">dev</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   Name in Dataframe     | Real Id | Body Id  | Subject
+<div class="highlight-python"><div class="highlight"><pre><span></span>   Name in Dataframe     | Real Id | Body Id  | Subject
    ========================================================
    AP4                   |       4 | HKB:4    |
    AP1                   |       1 | HKB:1    |
@@ -901,7 +901,7 @@ given, the position for all time stamps are provided</li>
 </ul>
 <p>Hence, It is possible to get the positions of the HKB radio node 11 (Hip
 Right), between 5.0 seconds and 5.2 seconds with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Positions</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Positions</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
 <span class="n">Positions</span>
 </pre></div>
 </div>
@@ -1040,7 +1040,7 @@ Right), between 5.0 seconds and 5.2 seconds with:</p>
 </table>
 </div><p><strong>NOTE : You may also obtain a classical numpy array instead of this
 Pandas object by using the &#8220;*values*&#8221; method :</strong></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Positions</span><span class="o">.</span><span class="n">values</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Positions</span><span class="o">.</span><span class="n">values</span>
 </pre></div>
 </div>
 <pre class="literal-block">
@@ -1083,7 +1083,7 @@ given, the position for all time stamps are provided</li>
 <p>Hence, It is possible to get the HKB values between radio node 11 (Hip
 Right) and node 16 (Ankle Right) , between 5 seconds and 5.2 seconds
 with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Values</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Values</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
 <span class="n">Values</span>
 </pre></div>
 </div>
@@ -1128,11 +1128,11 @@ given, the position for all time stamps are provided</li>
 <p>Hence, It is possible to get the HKB values between radio node 11 (Hip
 Right) and node 16 (Ankle Right) , between 5 seconds and 5.2 seconds
 with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Distances</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlinkd</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Distances</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlinkd</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
 <span class="n">Distances</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   5.000480    0.845013
+<div class="highlight-python"><div class="highlight"><pre><span></span>   5.000480    0.845013
    5.010481    0.845034
    5.020482    0.845045
    5.030483    0.845068
@@ -1168,19 +1168,19 @@ vizualization method are directly available. Most of them can be found
 here : <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/visualization.html">http://pandas.pydata.org/pandas-docs/stable/visualization.html</a></p>
 <p>As an example, it is possbile tthe previous obtained values and distance
 with :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Ploting</span>
-<span class="n">ax</span><span class="o">=</span><span class="n">Values</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span> <span class="c">#plot values</span>
-<span class="n">l</span><span class="o">=</span><span class="n">Distances</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">secondary_y</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c"># plot distances on the right side</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Ploting</span>
+<span class="n">ax</span><span class="o">=</span><span class="n">Values</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span> <span class="c1">#plot values</span>
+<span class="n">l</span><span class="o">=</span><span class="n">Distances</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">secondary_y</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c1"># plot distances on the right side</span>
 
-<span class="c">##Labelling</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> <span class="c"># add legend box</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;RSS Values (dBm)&#39;</span><span class="p">)</span> <span class="c">#set left ylabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">right_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Distances (m)&#39;</span><span class="p">)</span> <span class="c">#set right ylabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span> <span class="c"># set xlabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;RSS and distance as a function of time&#39;</span><span class="p">)</span>
+<span class="c1">##Labelling</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> <span class="c1"># add legend box</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RSS Values (dBm)&#39;</span><span class="p">)</span> <span class="c1">#set left ylabel</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">right_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Distances (m)&#39;</span><span class="p">)</span> <span class="c1">#set right ylabel</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span> <span class="c1"># set xlabel</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;RSS and distance as a function of time&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2c3bf51090&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b2c3bf51090&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Corser_75_1.png" src="../../_images/Corser_75_1.png" />
@@ -1206,10 +1206,10 @@ more information</p>
 <p>Continuying with the same example, it is possible to plot the HKB values
 between radio node 11 (Hip Right) and node 16 (Ankle Right) , between 5
 seconds and 5.2 seconds with:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c37140150&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b2c37140150&gt;,
  &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c06fe50&gt;)
 </pre></div>
 </div>
@@ -1218,29 +1218,29 @@ seconds and 5.2 seconds with:</p>
 <h4>Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
 <p>As well, it is possible to plot the distance using the <em>distance</em>
 parameter</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c066150&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b2c3c066150&gt;,
  &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c0d6790&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Corser_85_1.png" src="../../_images/Corser_85_1.png" />
 <p>It is also possible to get the same result than with the Pandas
 procedure with the following code :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#plot value</span>
-<span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#plot value</span>
+<span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-<span class="c"># create right axis</span>
+<span class="c1"># create right axis</span>
 <span class="n">ax2</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
 
-<span class="c"># plot distance</span>
-<span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="c1"># plot distance</span>
+<span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
        <span class="n">distance</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
        <span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c1e65d0&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b2c3c1e65d0&gt;,
  &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c1e66d0&gt;)
 </pre></div>
 </div>
@@ -1255,39 +1255,39 @@ interpretation.</p>
 the plot visibility (<em>S.pltvisi</em>) method is used. The <strong>hatched</strong> area
 denoted <strong>NLOS</strong> wheras <strong>clear</strong> area denotes <strong>LOS</strong>.</p>
 <p>Parameters are the same than those the <em>plot</em> method:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">pltvisi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c1ef590&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b2c3c1ef590&gt;,
  &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c1fabd0&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
 <p>As well it is possible to determine and indicate whether the subject is
 static or not by using the plot mobility method (<em>S.pltmob</em>). The
-succession of Static and Mobile sequences are denoted <img src="../../_images/mathmpl/math-6a62933770.png" style="position: relative; bottom: -7px"/> and
-<img src="../../_images/mathmpl/math-f0be7cf7e8.png" style="position: relative; bottom: -7px"/> resplectively, where <img src="../../_images/mathmpl/math-4e155c67a6.png" style="position: relative; bottom: -3px"/> is an index of the sequence.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+succession of Static and Mobile sequences are denoted <img src="../../_images/mathmpl/math-6a62933770.png" style="position: relative; bottom: -6px"/> and
+<img src="../../_images/mathmpl/math-f0be7cf7e8.png" style="position: relative; bottom: -6px"/> resplectively, where <img src="../../_images/mathmpl/math-4e155c67a6.png" style="position: relative; bottom: -3px"/> is an index of the sequence.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c389110&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b2c3c389110&gt;,
  &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c37f890&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Corser_96_1.png" src="../../_images/Corser_96_1.png" />
 <p>The 2 upmentionned methods can also be used simultaneously as shown in
 the following example :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># plot data in green)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1"># plot data in green)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">plthkb</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="c"># plot optical occultation (hatched lines)</span>
+<span class="c1"># plot optical occultation (hatched lines)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">pltvisi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="c"># plot subject mobility (grey areas)</span>
+<span class="c1"># plot subject mobility (grey areas)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">showvel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2c3c3f8690&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b2c3c3f8690&gt;,
  &lt;matplotlib.axes.AxesSubplot at 0x2b2c3c55bc10&gt;)
 </pre></div>
 </div>
@@ -1304,10 +1304,10 @@ the infrastructure.</li>
 </ul>
 <p>By default, the use of the *S._show3* method display the complete
 scene with body(ies) and associated devices at 4 different timestamp</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig1&#39;</span><span class="p">)</span>
+<span class="c1">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s1">&#39;fig1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <pre class="literal-block">
@@ -1323,20 +1323,20 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 <em>bodytime</em> can be used</p>
 <p>Example: to show the body position at <img src="../../_images/mathmpl/math-43536b6479.png" style="position: relative; bottom: -3px"/>, <img src="../../_images/mathmpl/math-5be1d21f70.png" style="position: relative; bottom: -3px"/> and
 <img src="../../_images/mathmpl/math-7cf25ba665.png" style="position: relative; bottom: -3px"/>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig2&#39;</span><span class="p">)</span>
+<span class="c1">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s1">&#39;fig2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Corser_107_0.png" src="../../_images/Corser_107_0.png" />
 </div>
 <div class="section" id="display-trajectory-trajectory-parameter">
 <h3>display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">trajectory</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">trajectory</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig3&#39;</span><span class="p">)</span>
+<span class="c1">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s1">&#39;fig3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1344,10 +1344,10 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 window incluying a slider acting like a jog shuttle, to choose the
 timestamp to vizualize.</p>
 <p>Note : This function is note available in the notebook</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span> <span class="c">#t=35 is an initialization value</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">_show3i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span> <span class="c1">#t=35 is an initialization value</span>
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig4&#39;</span><span class="p">)</span>
+<span class="c1">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s1">&#39;fig4&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <pre class="literal-block">
@@ -1361,13 +1361,13 @@ timestamp to vizualize.</p>
 time the vizualization is called. The following code displays the
 tisibility matrix and associated 3D scene at the inital time
 <img src="../../_images/mathmpl/math-0ff5bef1b9.png" style="position: relative; bottom: -3px"/></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">imshowvisibility_i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">imshowvisibility_i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
 
-<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
-<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig5&#39;</span><span class="p">)</span>
+<span class="c1">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s1">&#39;fig5&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Visibility is computed only once, Please wait
+<div class="highlight-python"><div class="highlight"><pre><span></span>Visibility is computed only once, Please wait
 
 processing shadowing from  Nicolas
 </pre></div>
@@ -1380,10 +1380,10 @@ processing shadowing from  Nicolas
 <div class="section" id="using-pylayers-ray-tracing-with-corser-data">
 <h1>Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
 <p>Coming soon, work in progress</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#ST=st.Simul(S)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#ST=st.Simul(S)</span>
 </pre></div>
 </div>
 </div>
@@ -1399,8 +1399,8 @@ processing shadowing from  Nicolas
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/Corser.txt"
 	    rel="nofollow">Show this page source</a>

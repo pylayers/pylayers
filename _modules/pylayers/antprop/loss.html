@@ -137,8 +137,8 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.antprop.loss</h1><div class="highlight"><pre>
-<span class="c"># -*- coding:Utf-8 -*-</span>
-<span class="c">#from numpy import *</span>
+<span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
+<span class="c1">#from numpy import *</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">.. currentmodule:: pylayers.antprop.loss</span>
@@ -194,7 +194,7 @@
 <span class="sd">    GrdB: float</span>
 <span class="sd">          receiving antenna gain dB (default 0 dB)</span>
 <span class="sd">    R   : float</span>
-<span class="sd">        distance in m ( because f is in GHz)</span>
+<span class="sd">        distance in m</span>
 
 
 <span class="sd">    Returns</span>
@@ -223,8 +223,8 @@
     <span class="n">ld</span>  <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
     <span class="n">PL0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ld</span><span class="o">/</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">R</span><span class="p">))</span><span class="o">-</span><span class="n">GtdB</span><span class="o">-</span><span class="n">GrdB</span>
 
-    <span class="k">return</span> <span class="n">PL0</span>
-</div>
+    <span class="k">return</span> <span class="n">PL0</span></div>
+
 <div class="viewcode-block" id="Dgrid_points"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Dgrid_points.html#pylayers.antprop.loss.Dgrid_points">[docs]</a><span class="k">def</span> <span class="nf">Dgrid_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">Px</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; distance point to grid</span>
 
@@ -244,8 +244,8 @@
 
     <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">Dx</span><span class="o">*</span><span class="n">Dx</span> <span class="o">+</span> <span class="n">Dy</span><span class="o">*</span><span class="n">Dy</span> <span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">D</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Dgrid_zone"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Dgrid_zone.html#pylayers.antprop.loss.Dgrid_zone">[docs]</a><span class="k">def</span> <span class="nf">Dgrid_zone</span><span class="p">(</span><span class="n">zone</span><span class="p">,</span><span class="n">Px</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Distance point to zone</span>
 
@@ -270,8 +270,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;xmin&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;xmax&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;Nx&#39;</span><span class="p">])</span>
-    <span class="n">ry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;ymin&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;ymax&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;Ny&#39;</span><span class="p">])</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s1">&#39;Nx&#39;</span><span class="p">])</span>
+    <span class="n">ry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s1">&#39;Ny&#39;</span><span class="p">])</span>
 
     <span class="n">R_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ry</span><span class="p">)),</span><span class="n">rx</span><span class="p">)</span>
     <span class="n">R_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">ry</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">)))</span>
@@ -279,8 +279,8 @@
     <span class="n">Dx</span> <span class="o">=</span> <span class="n">R_x</span> <span class="o">-</span> <span class="n">Px</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">Dy</span> <span class="o">=</span> <span class="n">R_y</span> <span class="o">-</span> <span class="n">Px</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">Dx</span><span class="o">+</span><span class="n">Dy</span><span class="o">*</span><span class="n">Dy</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">D</span><span class="p">)</span>
-</div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">D</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="OneSlopeMdl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.OneSlopeMdl.html#pylayers.antprop.loss.OneSlopeMdl">[docs]</a><span class="k">def</span> <span class="nf">OneSlopeMdl</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; one slope model</span>
 
@@ -304,9 +304,9 @@
 
     <span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="cost231"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.cost231.html#pylayers.antprop.loss.cost231">[docs]</a><span class="k">def</span> <span class="nf">cost231</span><span class="p">(</span><span class="n">pBS</span><span class="p">,</span><span class="n">pMS</span><span class="p">,</span><span class="n">hroof</span><span class="p">,</span><span class="n">phir</span><span class="p">,</span><span class="n">wr</span><span class="p">,</span><span class="n">fMHz</span><span class="p">,</span><span class="n">wb</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">city</span><span class="o">=</span><span class="s">&#39;medium&#39;</span><span class="p">):</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cost231"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.cost231.html#pylayers.antprop.loss.cost231">[docs]</a><span class="k">def</span> <span class="nf">cost231</span><span class="p">(</span><span class="n">pBS</span><span class="p">,</span><span class="n">pMS</span><span class="p">,</span><span class="n">hroof</span><span class="p">,</span><span class="n">phir</span><span class="p">,</span><span class="n">wr</span><span class="p">,</span><span class="n">fMHz</span><span class="p">,</span><span class="n">wb</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">city</span><span class="o">=</span><span class="s1">&#39;medium&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Walfish Ikegami model (COST 231)</span>
 
 <span class="sd">    Parameters</span>
@@ -385,12 +385,12 @@
     <span class="n">u5590</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">phir</span><span class="o">&gt;=</span><span class="mi">55</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phir</span><span class="o">&lt;</span><span class="mi">90</span><span class="p">))</span>
 
     <span class="n">plori</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Nlink</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-    <span class="c"># path loss due to orientation w.r.t road</span>
+    <span class="c1"># path loss due to orientation w.r.t road</span>
     <span class="n">plori</span><span class="p">[</span><span class="n">u035</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="o">+</span><span class="mf">0.354</span><span class="o">*</span><span class="n">phir</span><span class="p">[</span><span class="n">u035</span><span class="p">]</span>
     <span class="n">plori</span><span class="p">[</span><span class="n">u3555</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.5</span><span class="o">+</span><span class="mf">0.075</span><span class="o">*</span><span class="n">phir</span><span class="p">[</span><span class="n">u3555</span><span class="p">]</span>
     <span class="n">plori</span><span class="p">[</span><span class="n">u5590</span><span class="p">]</span> <span class="o">=</span> <span class="mf">4.0</span><span class="o">-</span><span class="mf">0.114</span><span class="o">*</span><span class="p">(</span><span class="n">phir</span><span class="p">[</span><span class="n">u5590</span><span class="p">]</span><span class="o">-</span><span class="mi">55</span><span class="p">)</span>
 
-    <span class="c"># rooftop to street</span>
+    <span class="c1"># rooftop to street</span>
     <span class="n">plrts</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.9</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">wr</span><span class="p">)</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fMHz</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">hroof</span><span class="o">-</span><span class="n">hMS</span><span class="p">)</span><span class="o">+</span><span class="n">plori</span>
     <span class="n">uroofsupBS</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hBS</span><span class="o">&gt;</span><span class="n">hroof</span><span class="p">)</span>
     <span class="n">uroofinfBS</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hBS</span><span class="o">&lt;=</span><span class="n">hroof</span><span class="p">)</span>
@@ -407,7 +407,7 @@
     <span class="n">kd</span>  <span class="o">=</span> <span class="mi">18</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nlink</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
     <span class="n">kd</span><span class="p">[</span><span class="n">uroofinfBS</span><span class="p">]</span> <span class="o">=</span> <span class="n">kd</span><span class="p">[</span><span class="n">uroofinfBS</span><span class="p">]</span><span class="o">-</span><span class="mi">15</span><span class="o">*</span><span class="n">delta_base</span><span class="p">[</span><span class="n">uroofinfBS</span><span class="p">]</span><span class="o">/</span><span class="n">hroof</span><span class="p">[</span><span class="n">uroofinfBS</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">city</span><span class="o">==</span><span class="s">&#39;medium&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">city</span><span class="o">==</span><span class="s1">&#39;medium&#39;</span><span class="p">:</span>
         <span class="n">kf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">+</span><span class="mf">0.7</span><span class="o">*</span><span class="p">(</span><span class="n">fMHz</span><span class="o">/</span><span class="mf">925.</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">kf</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">+</span><span class="mf">1.5</span><span class="o">*</span><span class="p">(</span><span class="n">fMHz</span><span class="o">/</span><span class="mf">925.</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -422,8 +422,8 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
         <span class="n">pl</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">pl</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="cost259"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.cost259.html#pylayers.antprop.loss.cost259">[docs]</a><span class="k">def</span> <span class="nf">cost259</span><span class="p">(</span><span class="n">pMS</span><span class="p">,</span><span class="n">pBS</span><span class="p">,</span><span class="n">fMHz</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; cost259 model </span>
 
@@ -447,8 +447,8 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
         <span class="n">pl</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">pl</span><span class="o">/</span><span class="mf">20.</span><span class="p">);</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span></div>
+
 <span class="k">def</span> <span class="nf">hata</span><span class="p">(</span><span class="n">pMS</span><span class="p">,</span><span class="n">pBS</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">hMS</span><span class="p">,</span><span class="n">hBS</span><span class="p">,</span><span class="n">typ</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Hata Path loss model</span>
 
@@ -491,12 +491,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">pBS</span><span class="o">-</span><span class="n">pMS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">pBS</span><span class="o">-</span><span class="n">pMS</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="s">&#39;small&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;small&#39;</span><span class="p">):</span>
        <span class="n">CH</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fGHz</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">-</span><span class="mf">0.7</span><span class="p">)</span><span class="o">*</span><span class="n">hMS</span><span class="o">-</span><span class="p">(</span><span class="mf">1.56</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fGHz</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">-</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="s">&#39;big&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;big&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fGHz</span><span class="o">&lt;</span><span class="mf">0.2</span><span class="p">:</span>
             <span class="n">CH</span> <span class="o">=</span> <span class="mf">8.29</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.54</span><span class="o">*</span><span class="n">hMS</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mf">1.1</span>
-        <span class="k">else</span><span class="p">:</span><span class="c"># valid until 1.5GHz</span>
+        <span class="k">else</span><span class="p">:</span><span class="c1"># valid until 1.5GHz</span>
             <span class="n">CH</span> <span class="o">=</span> <span class="mf">3.2</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">11.75</span><span class="o">*</span><span class="n">hMS</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mf">4.97</span>
 
     <span class="n">L</span> <span class="o">=</span> <span class="mf">69.55</span><span class="o">+</span><span class="mf">26.16</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fGHz</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">-</span><span class="mf">13.82</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">hBS</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="mf">44.9</span><span class="o">-</span><span class="mf">6.55</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">hBS</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dm</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span><span class="o">-</span><span class="n">CH</span>
@@ -516,15 +516,15 @@
 <span class="sd">    dB : boolean</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># distance (meters)</span>
+    <span class="c1"># distance (meters)</span>
     <span class="n">dm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">pBS</span><span class="o">-</span><span class="n">pMS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">pBS</span><span class="o">-</span><span class="n">pMS</span><span class="p">))</span>
     <span class="n">pl0</span> <span class="o">=</span> <span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
     <span class="n">pld</span> <span class="o">=</span> <span class="n">nfloor</span><span class="o">*</span><span class="mi">30</span>
     <span class="n">pl</span>  <span class="o">=</span> <span class="n">pl0</span><span class="o">+</span><span class="n">pld</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
         <span class="n">pl</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">pl</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="PL"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.PL.html#pylayers.antprop.loss.PL">[docs]</a><span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">pts</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; calculate Free Space Path Loss</span>
 
@@ -551,19 +551,19 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">shp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-    <span class="c"># assert(shp[0]==2)</span>
+    <span class="c1"># assert(shp[0]==2)</span>
 
     <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pts</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-    <span class="c"># f x grid x ap</span>
-    <span class="c">#PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]</span>
+    <span class="c1"># f x grid x ap</span>
+    <span class="c1">#PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]</span>
 
     <span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">d0</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="o">/</span><span class="n">d0</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
         <span class="n">PL</span><span class="o">=</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">PL</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Losst.html#pylayers.antprop.loss.Losst">[docs]</a><span class="k">def</span> <span class="nf">Losst</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  calculate Losses between links p1 p2</span>
 
@@ -625,11 +625,11 @@
     <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>
         <span class="n">Nlink</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="c"># determine incidence angles on segment crossing p1-p2 segment</span>
+    <span class="c1"># determine incidence angles on segment crossing p1-p2 segment</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
 
-    <span class="c"># as many slabs as segments</span>
-    <span class="n">slabs</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">]]</span>
+    <span class="c1"># as many slabs as segments</span>
+    <span class="n">slabs</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]]</span>
 
     <span class="n">cslab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">slabs</span><span class="p">)</span>
 
@@ -639,28 +639,28 @@
     <span class="n">EdWallp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="n">Nlink</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">slname</span> <span class="ow">in</span> <span class="n">cslab</span><span class="p">:</span>
-        <span class="c"># u index of slabs of name slname</span>
-        <span class="c"># data[&#39;a&#39;][u] angle</span>
-        <span class="c"># data[&#39;s&#39;][u] segment number including subsegment</span>
+        <span class="c1"># u index of slabs of name slname</span>
+        <span class="c1"># data[&#39;a&#39;][u] angle</span>
+        <span class="c1"># data[&#39;s&#39;][u] segment number including subsegment</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">slabs</span><span class="o">==</span><span class="n">slname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c">#</span>
-        <span class="c"># calculate Loss for slab slname</span>
-        <span class="c">#</span>
-        <span class="n">lko</span><span class="p">,</span><span class="n">lkp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slname</span><span class="p">]</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">])</span>
-        <span class="c">#</span>
-        <span class="c"># calculate Excess delay for slab slname</span>
-        <span class="c">#</span>
-        <span class="n">do</span> <span class="p">,</span> <span class="n">dp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slname</span><span class="p">]</span><span class="o">.</span><span class="n">excess_grdelay</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">])</span>
-        <span class="c"># data[&#39;i&#39;][u] links number</span>
-        <span class="n">indexu</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">]</span>
-        <span class="c"># reduce to involved links</span>
+        <span class="c1">#</span>
+        <span class="c1"># calculate Loss for slab slname</span>
+        <span class="c1">#</span>
+        <span class="n">lko</span><span class="p">,</span><span class="n">lkp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slname</span><span class="p">]</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">])</span>
+        <span class="c1">#</span>
+        <span class="c1"># calculate Excess delay for slab slname</span>
+        <span class="c1">#</span>
+        <span class="n">do</span> <span class="p">,</span> <span class="n">dp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slname</span><span class="p">]</span><span class="o">.</span><span class="n">excess_grdelay</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">])</span>
+        <span class="c1"># data[&#39;i&#39;][u] links number</span>
+        <span class="n">indexu</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">]</span>
+        <span class="c1"># reduce to involved links</span>
         <span class="n">involved_links</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">indexu</span><span class="p">,</span><span class="n">return_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">indicep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">indexu</span><span class="p">)])))</span>
-        <span class="c"># range on involved links</span>
+        <span class="c1"># range on involved links</span>
         <span class="n">irange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">involved_links</span><span class="p">))</span>
-        <span class="c">#</span>
-        <span class="c"># sum contribution of slab of a same link</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># sum contribution of slab of a same link</span>
+        <span class="c1">#</span>
         <span class="n">Wallo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lko</span><span class="p">[:,</span><span class="n">indices</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span><span class="n">indicep</span><span class="p">[</span><span class="n">x</span><span class="p">]],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">irange</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
         <span class="n">Wallp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lkp</span><span class="p">[:,</span><span class="n">indices</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span><span class="n">indicep</span><span class="p">[</span><span class="n">x</span><span class="p">]],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">irange</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
 
@@ -677,8 +677,8 @@
         <span class="n">LossWallo</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">LossWallo</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">LossWallp</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">LossWallp</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">LossWallo</span><span class="p">,</span><span class="n">LossWallp</span><span class="p">,</span><span class="n">EdWallo</span><span class="p">,</span><span class="n">EdWallp</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">LossWallo</span><span class="p">,</span><span class="n">LossWallp</span><span class="p">,</span><span class="n">EdWallo</span><span class="p">,</span><span class="n">EdWallp</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Loss0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Loss0.html#pylayers.antprop.loss.Loss0">[docs]</a><span class="k">def</span> <span class="nf">Loss0</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">ry</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; calculate Loss through Layers for theta=0 deg</span>
 
@@ -711,8 +711,8 @@
             <span class="n">Lw</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Loss</span>
             <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">Lw</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">Lw</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Loss_diff"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Loss_diff.html#pylayers.antprop.loss.Loss_diff">[docs]</a><span class="k">def</span> <span class="nf">Loss_diff</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; calculate Path Loss of the diffraction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -723,8 +723,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Ld</span> <span class="o">=</span> <span class="mf">6.9</span> <span class="o">+</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">u</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">u</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">Ld</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">Ld</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="calnu"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.calnu.html#pylayers.antprop.loss.calnu">[docs]</a><span class="k">def</span> <span class="nf">calnu</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot; Calculate the diffraction Fresnel parameter</span>
 
@@ -746,18 +746,18 @@
     <span class="n">ld</span>  <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
     <span class="n">nu</span>  <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">d1</span><span class="o">+</span><span class="n">d2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ld</span><span class="o">*</span><span class="n">d1</span><span class="o">*</span><span class="n">d2</span><span class="p">))</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span></div>
+
 <span class="k">def</span> <span class="nf">showfurniture</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; show furniture (not the good module) </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c">#R1_A.show(fig,ax)</span>
-    <span class="c">#R1_B1.show(fig,ax)</span>
-    <span class="c">#R1_B2.show(fig,ax)</span>
-    <span class="c">#R2_A.show(fig,ax)</span>
-    <span class="c">#R6_A.show(fig,ax)</span>
-    <span class="c">#R6_B.show(fig,ax)</span>
-    <span class="c">#R6_C.show(fig,ax)</span>
+    <span class="c1">#R1_A.show(fig,ax)</span>
+    <span class="c1">#R1_B1.show(fig,ax)</span>
+    <span class="c1">#R1_B2.show(fig,ax)</span>
+    <span class="c1">#R2_A.show(fig,ax)</span>
+    <span class="c1">#R6_A.show(fig,ax)</span>
+    <span class="c1">#R6_B.show(fig,ax)</span>
+    <span class="c1">#R6_C.show(fig,ax)</span>
     <span class="n">R6_D</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R6_E</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R6_F</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
@@ -771,43 +771,42 @@
     <span class="n">R13_C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R12_A1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R12_A2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="c">#R12_B.show(fig,ax)</span>
-    <span class="c">#R12_C1.show(fig,ax)</span>
-    <span class="c">#R12_C2.show(fig,ax)</span>
+    <span class="c1">#R12_B.show(fig,ax)</span>
+    <span class="c1">#R12_C1.show(fig,ax)</span>
+    <span class="c1">#R12_C2.show(fig,ax)</span>
     <span class="n">R12_D</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="c">#R7_A1.show(fig,ax)</span>
-    <span class="c">#R7_A2.show(fig,ax)</span>
-    <span class="c">#R7_B.show(fig,ax)</span>
+    <span class="c1">#R7_A1.show(fig,ax)</span>
+    <span class="c1">#R7_A2.show(fig,ax)</span>
+    <span class="c1">#R7_B.show(fig,ax)</span>
     <span class="n">R7_C1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R7_C2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R7_D</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="c">#R10_A.show(fig,ax)</span>
-    <span class="c">#R10_B.show(fig,ax)</span>
+    <span class="c1">#R10_A.show(fig,ax)</span>
+    <span class="c1">#R10_B.show(fig,ax)</span>
     <span class="n">R10_C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R10_D</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="c">#R11_A.show(fig,ax)</span>
-    <span class="c">#R11_B.show(fig,ax)</span>
+    <span class="c1">#R11_A.show(fig,ax)</span>
+    <span class="c1">#R11_B.show(fig,ax)</span>
     <span class="n">R11_C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R11_D1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R11_D2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R11_E1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R11_E2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R11_F</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="c">#R8_A.show(fig,ax)</span>
-    <span class="c">#R8_B.show(fig,ax)</span>
-    <span class="c">#R9_A1.show(fig,ax)</span>
-    <span class="c">#R9_A2.show(fig,ax)</span>
+    <span class="c1">#R8_A.show(fig,ax)</span>
+    <span class="c1">#R8_B.show(fig,ax)</span>
+    <span class="c1">#R9_A1.show(fig,ax)</span>
+    <span class="c1">#R9_A2.show(fig,ax)</span>
     <span class="n">R9_B1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_B2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_B3</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="c">#R9_C.show(fig,ax)</span>
+    <span class="c1">#R9_C.show(fig,ax)</span>
     <span class="n">R9_D</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_E1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_E2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_F</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_G</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
-
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">two_rays_flatearth</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -881,32 +880,32 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;GtdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="s">&#39;GrdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>
-                 <span class="s">&#39;pol&#39;</span><span class="p">:</span><span class="s">&#39;v&#39;</span><span class="p">,</span>
-                 <span class="s">&#39;eps&#39;</span> <span class="p">:[],</span>
-                 <span class="s">&#39;sig&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="s">&#39;dB&#39;</span><span class="p">:</span><span class="bp">True</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;GtdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;GrdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>
+                 <span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;v&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;eps&#39;</span> <span class="p">:[],</span>
+                 <span class="s1">&#39;sig&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;dB&#39;</span><span class="p">:</span><span class="bp">True</span>
                <span class="p">}</span>
 
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
            <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-    <span class="n">GtdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;GtdB&#39;</span><span class="p">)</span>
-    <span class="n">GrdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;GrdB&#39;</span><span class="p">)</span>
+    <span class="n">GtdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;GtdB&#39;</span><span class="p">)</span>
+    <span class="n">GrdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;GrdB&#39;</span><span class="p">)</span>
 
     <span class="n">Gt</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">1.</span><span class="o">*</span><span class="n">GtdB</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
     <span class="n">Gr</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">1.</span><span class="o">*</span><span class="n">GrdB</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
-    <span class="n">gamma</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
-    <span class="n">pol</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;pol&#39;</span><span class="p">)</span>
-    <span class="n">eps</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;eps&#39;</span><span class="p">)</span>
-    <span class="n">sig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;sig&#39;</span><span class="p">)</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gamma&#39;</span><span class="p">)</span>
+    <span class="n">pol</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pol&#39;</span><span class="p">)</span>
+    <span class="n">eps</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;eps&#39;</span><span class="p">)</span>
+    <span class="n">sig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sig&#39;</span><span class="p">)</span>
 
 
-    <span class="k">assert</span> <span class="n">p0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;p0 is not 3D&#39;</span>
-    <span class="k">assert</span> <span class="n">p1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;p1 is not 3D&#39;</span>
+    <span class="k">assert</span> <span class="n">p0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;p0 is not 3D&#39;</span>
+    <span class="k">assert</span> <span class="n">p1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;p1 is not 3D&#39;</span>
 
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -923,17 +922,17 @@
     <span class="n">ht</span> <span class="o">=</span> <span class="n">p0</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
     <span class="n">hr</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
 
-    <span class="n">dloss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">p0</span><span class="o">-</span><span class="n">p1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="c">#l0</span>
-    <span class="n">d0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">dloss</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">ht</span><span class="o">-</span><span class="n">hr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="c"># d0</span>
-    <span class="n">dref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d0</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">ht</span><span class="o">+</span><span class="n">hr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c">#l0&#39;</span>
+    <span class="n">dloss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">p0</span><span class="o">-</span><span class="n">p1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="c1">#l0</span>
+    <span class="n">d0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">dloss</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">ht</span><span class="o">-</span><span class="n">hr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="c1"># d0</span>
+    <span class="n">dref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d0</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">ht</span><span class="o">+</span><span class="n">hr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#l0&#39;</span>
 
 
     <span class="k">if</span> <span class="n">eps</span> <span class="o">!=</span> <span class="p">[]:</span>
         <span class="n">psy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">((</span><span class="n">ht</span><span class="o">+</span><span class="n">hr</span><span class="p">)</span><span class="o">/</span><span class="n">dref</span><span class="p">)</span>
         <span class="n">er</span> <span class="o">=</span> <span class="n">eps</span>  <span class="o">-</span> <span class="mf">60.j</span><span class="o">*</span><span class="n">sig</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
-        <span class="k">if</span> <span class="n">pol</span> <span class="o">==</span> <span class="s">&#39;v&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pol</span> <span class="o">==</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span>
             <span class="n">Z</span><span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">er</span><span class="p">)</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">er</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">pol</span> <span class="o">==</span> <span class="s">&#39;h&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">pol</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span><span class="p">:</span>
             <span class="n">Z</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">er</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">-</span><span class="n">Z</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">+</span><span class="n">Z</span><span class="p">))</span>
@@ -945,13 +944,12 @@
     <span class="n">E</span><span class="o">=</span> <span class="p">(</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Gt</span><span class="o">*</span><span class="n">Gr</span><span class="p">)</span><span class="o">/</span><span class="n">dloss</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Gr</span><span class="o">*</span><span class="n">Gr</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.j</span><span class="o">*</span><span class="n">deltaphi</span><span class="p">))</span><span class="o">/</span><span class="n">dref</span><span class="p">)</span>
     <span class="n">P</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
 
-    <span class="c"># import ipdb</span>
-    <span class="c"># ipdb.set_trace()</span>
-    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dB&#39;</span><span class="p">]</span> <span class="p">:</span>
+    <span class="c1"># import ipdb</span>
+    <span class="c1"># ipdb.set_trace()</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]</span> <span class="p">:</span>
         <span class="k">return</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">P</span>
-
 
 <span class="k">def</span> <span class="nf">lossref_compute</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -999,63 +997,63 @@
 
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="nb">int</span><span class="p">)</span> <span class="p">:</span>
-        <span class="c">#P is a distance</span>
+        <span class="c1">#P is a distance</span>
         <span class="n">r</span><span class="o">=</span><span class="n">P</span>
-        <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;dist&#39;</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;dist&#39;</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="c">#P is a distance</span>
+            <span class="c1">#P is a distance</span>
             <span class="n">r</span><span class="o">=</span><span class="n">P</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;dist&#39;</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;dist&#39;</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="c">#P is a lonlat</span>
+            <span class="c1">#P is a lonlat</span>
             <span class="n">lat0</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">lon0</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">lat1</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
             <span class="n">lon1</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;lonlat&#39;</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;lonlat&#39;</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;P must be a list [lat0,lon0,lat1,lon0] or a distance&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;P must be a list [lat0,lon0,lat1,lon0] or a distance&#39;</span><span class="p">)</span>
     <span class="k">else</span> <span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Invalid P format ( list |ndarray )&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Invalid P format ( list |ndarray )&#39;</span><span class="p">)</span>
 
 
-    <span class="c"># if h0&lt;h1:</span>
-    <span class="c">#     h1,h0 = h0,h1</span>
+    <span class="c1"># if h0&lt;h1:</span>
+    <span class="c1">#     h1,h0 = h0,h1</span>
 
-    <span class="n">r0</span> <span class="o">=</span> <span class="mf">6371.e3</span> <span class="c"># earth radius</span>
-    <span class="n">re</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">r0</span> <span class="c"># telecom earth radius</span>
+    <span class="n">r0</span> <span class="o">=</span> <span class="mf">6371.e3</span> <span class="c1"># earth radius</span>
+    <span class="n">re</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">r0</span> <span class="c1"># telecom earth radius</span>
 
 
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;lonlat&#39;</span><span class="p">:</span>
-        <span class="c"># r = distance curvilignenp.arcsin((h1/R1)-R1/(2.*re)) entre TXetRX / geodesic</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;lonlat&#39;</span><span class="p">:</span>
+        <span class="c1"># r = distance curvilignenp.arcsin((h1/R1)-R1/(2.*re)) entre TXetRX / geodesic</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">gu</span><span class="o">.</span><span class="n">distance_on_earth</span><span class="p">(</span><span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon1</span><span class="p">)</span>
     <span class="k">else</span> <span class="p">:</span>
         <span class="n">r</span><span class="o">=</span><span class="n">P</span>
 
     <span class="n">r</span><span class="o">=</span><span class="mf">1.</span><span class="o">*</span><span class="n">r</span>
 
-    <span class="c"># import ipdb</span>
-    <span class="c"># ipdb.set_trace()</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">re</span><span class="o">*</span><span class="p">(</span><span class="n">h0</span><span class="o">+</span><span class="n">h1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">4.</span><span class="p">))</span> <span class="c">#eq 8.45</span>
-    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">h1</span><span class="o">-</span><span class="n">h0</span><span class="p">)</span><span class="o">/</span><span class="n">p</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="c"># eq 8.46</span>
+    <span class="c1"># import ipdb</span>
+    <span class="c1"># ipdb.set_trace()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">re</span><span class="o">*</span><span class="p">(</span><span class="n">h0</span><span class="o">+</span><span class="n">h1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">4.</span><span class="p">))</span> <span class="c1">#eq 8.45</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">h1</span><span class="o">-</span><span class="n">h0</span><span class="p">)</span><span class="o">/</span><span class="n">p</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># eq 8.46</span>
 
 
 
-    <span class="c">#distance of reflection on curved earth</span>
-    <span class="n">r1</span> <span class="o">=</span> <span class="n">r</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">p</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">eps</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="c">#eq 8.44</span>
+    <span class="c1">#distance of reflection on curved earth</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">r</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">p</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">eps</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#eq 8.44</span>
 
     <span class="n">r2</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span><span class="n">r1</span>
 
-    <span class="n">phi1</span> <span class="o">=</span> <span class="n">r1</span><span class="o">/</span><span class="n">re</span> <span class="c">#8.47</span>
-    <span class="n">phi2</span> <span class="o">=</span> <span class="n">r2</span><span class="o">/</span><span class="n">re</span> <span class="c"># 8.48</span>
+    <span class="n">phi1</span> <span class="o">=</span> <span class="n">r1</span><span class="o">/</span><span class="n">re</span> <span class="c1">#8.47</span>
+    <span class="n">phi2</span> <span class="o">=</span> <span class="n">r2</span><span class="o">/</span><span class="n">re</span> <span class="c1"># 8.48</span>
 
-    <span class="n">R1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h0</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c"># 8.51</span>
-    <span class="n">R2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c">#8.52</span>
+    <span class="n">R1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h0</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 8.51</span>
+    <span class="n">R2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#8.52</span>
 
-    <span class="n">Rd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">h1</span><span class="o">-</span><span class="n">h0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">phi1</span><span class="o">+</span><span class="n">phi2</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c"># 8.53</span>
-    <span class="c"># tangente angle on earth</span>
-    <span class="n">psy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">((</span><span class="n">h1</span><span class="o">/</span><span class="n">R1</span><span class="p">)</span><span class="o">-</span><span class="n">R1</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">re</span><span class="p">))</span> <span class="c">#eq 8.55</span>
+    <span class="n">Rd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">h1</span><span class="o">-</span><span class="n">h0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">re</span><span class="o">+</span><span class="n">h0</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">phi1</span><span class="o">+</span><span class="n">phi2</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 8.53</span>
+    <span class="c1"># tangente angle on earth</span>
+    <span class="n">psy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">((</span><span class="n">h1</span><span class="o">/</span><span class="n">R1</span><span class="p">)</span><span class="o">-</span><span class="n">R1</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">re</span><span class="p">))</span> <span class="c1">#eq 8.55</span>
     <span class="n">deltaR</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">R1</span><span class="o">*</span><span class="n">R2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">R1</span><span class="o">+</span><span class="n">R2</span><span class="o">+</span><span class="n">Rd</span><span class="p">)</span>
 
     <span class="n">dloss</span> <span class="o">=</span> <span class="n">Rd</span>
@@ -1127,52 +1125,56 @@
 <span class="sd">    .. plot::</span>
 <span class="sd">        :include-source:</span>
 <span class="sd">        </span>
-<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.loss import *</span>
-<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            &gt;&gt;&gt; fGHz=2.4</span>
-<span class="sd">            &gt;&gt;&gt; p0=np.array(([0,0,20]))</span>
-<span class="sd">            &gt;&gt;&gt; p1=np.array(([0,1,20]))</span>
-<span class="sd">            &gt;&gt;&gt; p0=p0.reshape(3,1)</span>
-<span class="sd">            &gt;&gt;&gt; p1=p1.reshape(3,1)</span>
-<span class="sd">            &gt;&gt;&gt; TRF = [] #Two Ray model on flat earth</span>
-<span class="sd">            &gt;&gt;&gt; TRC = [] #Two Ray model on curved earth</span>
-<span class="sd">            &gt;&gt;&gt; for d in np.arange(1,10000,1):</span>
-<span class="sd">            &gt;&gt;&gt;     p1[1,:]=d</span>
-<span class="sd">            &gt;&gt;&gt;     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))</span>
-<span class="sd">            &gt;&gt;&gt;     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))</span>
-<span class="sd">            &gt;&gt;&gt; plt.semilogx(TRF,label=&#39;two-ray model flat earth&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.semilogx(TRC,label=&#39;two-ray model curved earth&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.legend()</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.antprop.loss import *</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; fGHz=2.4</span>
+<span class="sd">        &gt;&gt;&gt; p0=np.array(([0,0,20]))</span>
+<span class="sd">        &gt;&gt;&gt; p1=np.array(([0,1,20]))</span>
+<span class="sd">        &gt;&gt;&gt; p0=p0.reshape(3,1)</span>
+<span class="sd">        &gt;&gt;&gt; p1=p1.reshape(3,1)</span>
+<span class="sd">        &gt;&gt;&gt; TRF = [] #Two Ray model on flat earth</span>
+<span class="sd">        &gt;&gt;&gt; TRC = [] #Two Ray model on curved earth</span>
+<span class="sd">        &gt;&gt;&gt; PLoss=[]</span>
+<span class="sd">        &gt;&gt;&gt; for d in np.arange(1,10000,1):</span>
+<span class="sd">        &gt;&gt;&gt;     p1[1,:]=d</span>
+<span class="sd">        &gt;&gt;&gt;     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))</span>
+<span class="sd">        &gt;&gt;&gt;     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))</span>
+<span class="sd">        &gt;&gt;&gt;     PLoss.append(PL(fGHz, p0[:,0],p1[:,0], n=2.0, dB=True, d0=np.array([1])))</span>
+<span class="sd">        &gt;&gt;&gt; PLoss=np.array(PLoss)[:,0,0]</span>
+<span class="sd">        &gt;&gt;&gt; plt.semilogx(TRF,label=&#39;two-ray model flat earth&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.semilogx(TRC,label=&#39;two-ray model curved earth&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.semilogx(-PLoss,label=&#39;Path Loss&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.legend()</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;GtdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="s">&#39;GrdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="s">&#39;k&#39;</span><span class="p">:</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span>
-                 <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>
-                 <span class="s">&#39;pol&#39;</span><span class="p">:</span><span class="s">&#39;v&#39;</span><span class="p">,</span>
-                 <span class="s">&#39;eps&#39;</span> <span class="p">:[],</span>
-                 <span class="s">&#39;sig&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="s">&#39;mode&#39;</span><span class="p">:</span><span class="s">&#39;PL&#39;</span><span class="p">,</span>
-                 <span class="s">&#39;dB&#39;</span><span class="p">:</span><span class="bp">True</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;GtdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;GrdB&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;k&#39;</span><span class="p">:</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span>
+                 <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.</span><span class="o">+</span><span class="mf">0.j</span><span class="p">,</span>
+                 <span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;v&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;eps&#39;</span> <span class="p">:[],</span>
+                 <span class="s1">&#39;sig&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="s1">&#39;PL&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;dB&#39;</span><span class="p">:</span><span class="bp">True</span>
                <span class="p">}</span>
 
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-    <span class="n">GtdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;GtdB&#39;</span><span class="p">)</span>
-    <span class="n">GrdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;GrdB&#39;</span><span class="p">)</span>
+    <span class="n">GtdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;GtdB&#39;</span><span class="p">)</span>
+    <span class="n">GrdB</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;GrdB&#39;</span><span class="p">)</span>
 
     <span class="n">Gt</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">1.</span><span class="o">*</span><span class="n">GtdB</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
     <span class="n">Gr</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">1.</span><span class="o">*</span><span class="n">GrdB</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
-    <span class="n">k</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
-    <span class="n">gamma</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;gamma&#39;</span><span class="p">)</span>
-    <span class="n">pol</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;pol&#39;</span><span class="p">)</span>
-    <span class="n">eps</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;eps&#39;</span><span class="p">)</span>
-    <span class="n">sig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;sig&#39;</span><span class="p">)</span>
+    <span class="n">k</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gamma&#39;</span><span class="p">)</span>
+    <span class="n">pol</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pol&#39;</span><span class="p">)</span>
+    <span class="n">eps</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;eps&#39;</span><span class="p">)</span>
+    <span class="n">sig</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sig&#39;</span><span class="p">)</span>
 
 
     <span class="n">h0</span><span class="o">=</span><span class="mf">1.</span><span class="o">*</span><span class="n">h0</span>
@@ -1182,9 +1184,9 @@
 
     <span class="k">if</span> <span class="n">eps</span> <span class="o">!=</span> <span class="p">[]:</span>
         <span class="n">er</span> <span class="o">=</span> <span class="n">eps</span>  <span class="o">-</span> <span class="mf">60.j</span><span class="o">*</span><span class="n">sig</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
-        <span class="k">if</span> <span class="n">pol</span> <span class="o">==</span> <span class="s">&#39;v&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pol</span> <span class="o">==</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span>
             <span class="n">Z</span><span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">er</span><span class="p">)</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">er</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">pol</span> <span class="o">==</span> <span class="s">&#39;h&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">pol</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span><span class="p">:</span>
             <span class="n">Z</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">er</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">-</span><span class="n">Z</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psy</span><span class="p">)</span><span class="o">+</span><span class="n">Z</span><span class="p">))</span>
@@ -1194,15 +1196,15 @@
     <span class="n">E</span><span class="o">=</span> <span class="p">(</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Gt</span><span class="o">*</span><span class="n">Gr</span><span class="p">)</span><span class="o">/</span><span class="n">dloss</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Gr</span><span class="o">*</span><span class="n">Gr</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.j</span><span class="o">*</span><span class="n">deltaphi</span><span class="p">))</span><span class="o">/</span><span class="n">dref</span><span class="p">)</span>
     <span class="n">P</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
 
-    <span class="c"># import ipdb</span>
-    <span class="c"># ipdb.set_trace()</span>
-    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dB&#39;</span><span class="p">]</span> <span class="p">:</span>
+    <span class="c1"># import ipdb</span>
+    <span class="c1"># ipdb.set_trace()</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]</span> <span class="p">:</span>
         <span class="k">return</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">P</span>
 
 
-<div class="viewcode-block" id="visuPts"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.visuPts.html#pylayers.antprop.loss.visuPts">[docs]</a><span class="k">def</span> <span class="nf">visuPts</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">nd</span><span class="p">,</span><span class="n">Pts</span><span class="p">,</span><span class="n">Values</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">sp</span><span class="o">=</span><span class="p">[],</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="n">tit</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span><span class="n">colbar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">xticks</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="visuPts"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.visuPts.html#pylayers.antprop.loss.visuPts">[docs]</a><span class="k">def</span> <span class="nf">visuPts</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">nd</span><span class="p">,</span><span class="n">Pts</span><span class="p">,</span><span class="n">Values</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">sp</span><span class="o">=</span><span class="p">[],</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">tit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span><span class="n">colbar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">xticks</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; visuPt  : Visualization of values a given points</span>
 
 <span class="sd">    Parameters</span>
@@ -1221,75 +1223,75 @@
     <span class="n">vyd</span> <span class="o">=</span> <span class="n">Pts</span><span class="p">[</span><span class="n">nd</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">vmax</span><span class="o">&lt;</span><span class="n">vmin</span><span class="p">:</span>
-        <span class="c">#vmin = min(Values)</span>
+        <span class="c1">#vmin = min(Values)</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">150</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Values</span><span class="p">)</span>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">xticks</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">spine</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-              <span class="k">if</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;left&#39;</span><span class="p">,</span><span class="s">&#39;bottom&#39;</span><span class="p">]:</span>
-                <span class="n">spine</span><span class="o">.</span><span class="n">set_position</span><span class="p">((</span><span class="s">&#39;outward&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span> <span class="c"># outward by 10 points</span>
-                <span class="n">sp</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
-                <span class="n">sp</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s">&#39;bottom&#39;</span><span class="p">)</span>
-              <span class="k">elif</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;right&#39;</span><span class="p">,</span><span class="s">&#39;top&#39;</span><span class="p">]:</span>
-                 <span class="n">spine</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s">&#39;none&#39;</span><span class="p">)</span> <span class="c"># don&#39;t draw spine</span>
+              <span class="k">if</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="s1">&#39;bottom&#39;</span><span class="p">]:</span>
+                <span class="n">spine</span><span class="o">.</span><span class="n">set_position</span><span class="p">((</span><span class="s1">&#39;outward&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span> <span class="c1"># outward by 10 points</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+              <span class="k">elif</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">,</span><span class="s1">&#39;top&#39;</span><span class="p">]:</span>
+                 <span class="n">spine</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t draw spine</span>
               <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown spine location: </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="n">loc</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;unknown spine location: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">loc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">spine</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-              <span class="k">if</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;left&#39;</span><span class="p">]:</span>
-                <span class="n">spine</span><span class="o">.</span><span class="n">set_position</span><span class="p">((</span><span class="s">&#39;outward&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span> <span class="c"># outward by 10 points</span>
-                <span class="n">sp</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
-              <span class="k">elif</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;right&#39;</span><span class="p">,</span><span class="s">&#39;top&#39;</span><span class="p">,</span><span class="s">&#39;bottom&#39;</span><span class="p">]:</span>
-                 <span class="n">spine</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s">&#39;none&#39;</span><span class="p">)</span> <span class="c"># don&#39;t draw spine</span>
+              <span class="k">if</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]:</span>
+                <span class="n">spine</span><span class="o">.</span><span class="n">set_position</span><span class="p">((</span><span class="s1">&#39;outward&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span> <span class="c1"># outward by 10 points</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+              <span class="k">elif</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">,</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;bottom&#39;</span><span class="p">]:</span>
+                 <span class="n">spine</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span> <span class="c1"># don&#39;t draw spine</span>
                  <span class="n">sp</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">([])</span>
               <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown spine location: </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="n">loc</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;unknown spine location: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">loc</span><span class="p">)</span>
 
 
 
-        <span class="c"># no xaxis ticks</span>
-        <span class="c">#ax.xaxis.set_ticks([])</span>
-    <span class="c">#sp.spines[&#39;left&#39;].set_position(&#39;center&#39;)</span>
-        <span class="c">#sp.spines[&#39;left&#39;].set_color(&#39;none&#39;)</span>
-    <span class="c">#sp.spines[&#39;right&#39;].set_position(&#39;center&#39;)</span>
-        <span class="c">#sp.spines[&#39;right&#39;].set_color(&#39;none&#39;)</span>
-    <span class="c">#sp.spines[&#39;bottom&#39;].set_position(&#39;center&#39;)</span>
-    <span class="c">#sp.xaxis.set_ticks_position(&#39;bottom&#39;)</span>
-    <span class="c">#sp.yaxis.set_ticks_position(&#39;left&#39;)</span>
-        <span class="c">#sp.spines[&#39;bottom&#39;].set_color(&#39;none&#39;)</span>
-    <span class="c">#sp.spines[&#39;top&#39;].set_position(&#39;center&#39;)</span>
-        <span class="c">#sp.spines[&#39;top&#39;].set_color(&#39;none&#39;)</span>
-    <span class="c">#</span>
-    <span class="c"># Rooms annotation</span>
-    <span class="c">#</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 8&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">19</span><span class="p">,</span><span class="mf">14.1</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 9&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">24.5</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 14&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 10&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">16.5</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 7&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">10.5</span><span class="p">,</span><span class="mf">14.1</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 11&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">13.5</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 12&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">8.7</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 13&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">14.5</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 1&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 2&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">13.8</span><span class="p">))</span>
-    <span class="n">annotate</span><span class="p">(</span><span class="s">&#39;R 6&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">3.6</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
+        <span class="c1"># no xaxis ticks</span>
+        <span class="c1">#ax.xaxis.set_ticks([])</span>
+    <span class="c1">#sp.spines[&#39;left&#39;].set_position(&#39;center&#39;)</span>
+        <span class="c1">#sp.spines[&#39;left&#39;].set_color(&#39;none&#39;)</span>
+    <span class="c1">#sp.spines[&#39;right&#39;].set_position(&#39;center&#39;)</span>
+        <span class="c1">#sp.spines[&#39;right&#39;].set_color(&#39;none&#39;)</span>
+    <span class="c1">#sp.spines[&#39;bottom&#39;].set_position(&#39;center&#39;)</span>
+    <span class="c1">#sp.xaxis.set_ticks_position(&#39;bottom&#39;)</span>
+    <span class="c1">#sp.yaxis.set_ticks_position(&#39;left&#39;)</span>
+        <span class="c1">#sp.spines[&#39;bottom&#39;].set_color(&#39;none&#39;)</span>
+    <span class="c1">#sp.spines[&#39;top&#39;].set_position(&#39;center&#39;)</span>
+        <span class="c1">#sp.spines[&#39;top&#39;].set_color(&#39;none&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1"># Rooms annotation</span>
+    <span class="c1">#</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 8&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">19</span><span class="p">,</span><span class="mf">14.1</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 9&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">24.5</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 14&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 10&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">16.5</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 7&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">10.5</span><span class="p">,</span><span class="mf">14.1</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 11&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">13.5</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 12&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">8.7</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 13&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">14.5</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 1&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 2&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">13.8</span><span class="p">))</span>
+    <span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;R 6&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">3.6</span><span class="p">,</span><span class="mf">6.5</span><span class="p">))</span>
 
 
-    <span class="n">n</span><span class="o">=</span><span class="n">scatter</span><span class="p">(</span><span class="n">vx</span><span class="p">,</span><span class="n">vy</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">Values</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
-    <span class="n">n</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s">&#39;face&#39;</span><span class="p">)</span>
-<span class="c">#    m=scatter(vxd,vyd,marker=&#39;o&#39;,c=&#39;k&#39;,s=size)</span>
-<span class="c">#    m.set_edgecolor(&#39;face&#39;)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">scatter</span><span class="p">(</span><span class="n">vx</span><span class="p">,</span><span class="n">vy</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">Values</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+    <span class="n">n</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">)</span>
+<span class="c1">#    m=scatter(vxd,vyd,marker=&#39;o&#39;,c=&#39;k&#39;,s=size)</span>
+<span class="c1">#    m.set_edgecolor(&#39;face&#39;)</span>
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
     <span class="n">title</span><span class="p">(</span><span class="n">tit</span><span class="p">)</span>
-    <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;meters&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;meters&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">xticks</span><span class="p">:</span>
-        <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;meters&#39;</span><span class="p">)</span>
+        <span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;meters&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">colbar</span><span class="p">:</span>
-        <span class="n">cbar</span><span class="o">=</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s">&#39;vertical&#39;</span><span class="p">)</span>
-        <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="cdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.cdf.html#pylayers.antprop.loss.cdf">[docs]</a><span class="k">def</span> <span class="nf">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">colsym</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="n">lab</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">cbar</span><span class="o">=</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+        <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.cdf.html#pylayers.antprop.loss.cdf">[docs]</a><span class="k">def</span> <span class="nf">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">colsym</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">lab</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot the cumulative density function</span>
 
 <span class="sd">    Parameters</span>
@@ -1307,20 +1309,20 @@
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.fontsize&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">20</span>
-    <span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">20</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">20</span>
+    <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">20</span>
 
     <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">n</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">colsym</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">lab</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Ranging Error[m]&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Cumulative Probability&#39;</span><span class="p">)</span>
-</div>
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Ranging Error[m]&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cumulative Probability&#39;</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
@@ -1334,8 +1336,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on mars 05, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     
