@@ -19,6 +19,7 @@ import networkx as nx
 import copy
 
 
+
 class SelectL2(object):
     """ Associates a Layout and a figure
 
@@ -102,8 +103,10 @@ class SelectL2(object):
 
         plt.title(self.statename[self.state])
 
-        self.undoGs=[]
-        self.bundo=False
+        self.undoGs=[L.Gs.copy()]
+        self.undoGt=[L.Gt.copy()]
+        
+        # self.bundo=False
 
         self.gridOn=False
         self.snapgridOn=False
@@ -535,14 +538,21 @@ class SelectL2(object):
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
 
             # check not move in another cycle
-            Pt = sh.Point(x,y)
-            # point can be moved only if they remain in their original polygon
-            cond = [self.L.Gt.node[p]['polyg'].contains(Pt) 
-                    for p in self.L.Gt.nodes()
-                    if self.nsel not in self.L.Gt.node[p]['polyg'].vnodes]
+            
+            # provide moving point move connected segments and cross a polygon
+            # 1 get connected seg
+            segs = self.L.Gs[self.nsel].keys()
+            # get points connected to seg
+            upts = [self.L.Gs[s].keys() for s in segs]
+            [u.remove(self.nsel) for u in upts]
+            # create new lines with the current poitn position
+            lines = [sh.LineString([(x,y),self.L.Gs.pos[l[0]]]) for l in upts ]
+
+            # check that all segs link to the points 
+            # are not crossing any seg of the layout
+            cond = [[l.crosses(i[1]) for i in self.L._shseg.items() if i[0] not in segs] for l in lines]
             if not np.any(cond):
                 self.L.Gs.pos[self.nsel]=(x,y)
-                segs = self.L.Gs[self.nsel]
                 # UPDATE SEGS
                 for s in segs:
                     n1,n2=self.L.Gs[s].keys()
@@ -561,6 +571,8 @@ class SelectL2(object):
                         self.L.Gt.node[c]['polyg'] = geu.Polygon(pts)
                         self.L.Gt.node[c]['polyg'].setvnodes(self.L)
                         self.L.Gt.pos[c] = np.array(self.L.Gt.node[c]['polyg'].centroid.xy)[:,0] 
+                    # update sh segments
+                    self.L._shseg.update({segs[i]:lines[i] for i in range(len(segs))})
                 self.L.g2npy()
                 self.modeIni()
                 self.new_state()
@@ -604,10 +616,19 @@ class SelectL2(object):
         # fig = plt.gcf()
         # ax = plt.gca()
         print self.state
-        if not self.bundo:
+
+        # manage undo by checking if Layout has been modifyed
+        if len (self.undoGs) >0:
+            if self.undoGs[-1].pos != self.L.Gs.pos:
+            # if not self.bundo:
+                self.undoGs.append(self.L.Gs.copy())
+                self.undoGt.append(self.L.Gt.copy())
+                if len(self.undoGs) > 50:
+                    self.undoGs.pop(0)
+                    self.undoGt.pop(0)
+        else:
             self.undoGs.append(self.L.Gs.copy())
-            if len(self.undoGs) > 50:
-                self.undoGs.pop(0)
+            self.undoGt.append(self.L.Gt.copy())
 
         self.ax.format_coord=self.format_coord
 
@@ -858,16 +879,17 @@ class SelectL2(object):
     def undo(self):
         """ self.evt==ctrl+z
         """
-        self.bundo=True
-        print len(self.L.Gs)
-        if len (self.undoGs) >2:
-            oGs=self.undoGs.pop(-1)
-            oGs=self.undoGs.pop(-1)
-            self.L.Gs=oGs
+        # self.bundo=True
+        if len (self.undoGs) >0:
+            print "undo"
+            self.undoGs.pop(-1)
+            self.undoGt.pop(-1)
+            self.L.Gs=self.undoGs.pop(-1)
+            self.L.Gt=self.undoGt.pop(-1)
             self.L.g2npy()
         self.fig.canvas.draw()
+        # self.bundo=False
         self.update_state()
-        self.bundo=False
         self.refresh()
 
     def toggle(self):

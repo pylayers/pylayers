@@ -5778,7 +5778,7 @@ class Layout(PyLayers):
             pol = nx.get_node_attributes(self.Gt,'polyg').values()
             for p in pol:
                 fig,ax = p.plot(fig=fig,ax=ax,alpha=0.3)
-
+            nx.draw_networkx_labels(self.Gt,self.Gt.pos,fig=fig,ax=ax)
         for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']
             fig,ax=self.Gt.node[ncy]['polyg'].plot(fig=fig,ax=ax)
