@@ -78,6 +78,7 @@ class SelectL2(object):
                 'SP1':'Select Point 1',
                 'SP2':'Select Point 2, Click Again for Creating Segment',
                 'SS':'Select Segment',
+                'SC':'Select Cycle',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
@@ -85,11 +86,12 @@ class SelectL2(object):
                 'SMS': 'Multiple Segments Selection'
                 }
         self.help={'':'',
-                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments properties',
+                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments/Cycles properties',
                 'CP':'Create Segments, + CTRL same x, + SHIFT same y',
                 'SP1':'Select Point. Move Selected Point maintaing Left Clic',
                 'SP2':'Click Again for Creating Segment',
                 'SS':'F3: Edit Segment(s) properties',
+                'SC':'F3: Edit Cycle properties',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
@@ -213,7 +215,7 @@ class SelectL2(object):
 
         if len(lcy)>0:
             for c in lcy:
-                self.L.Gt.node[cy]['polyg'].plot(fig=self.fig,
+                self.L.Gt.node[c]['polyg'].plot(fig=self.fig,
                                                  ax=self.ax,
                                                  color=color,
                                                  alpha=alpha)
@@ -327,7 +329,15 @@ class SelectL2(object):
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 50)
-            print self.nsel
+
+            shpt = sh.Point(x,y)
+            
+            ucy =np.where([self.L.Gt.node[c]['polyg'].contains(shpt) for c in self.L.Gt.nodes()])[0]
+            if len(ucy)!=0:
+                self.ncy = self.L.Gt.nodes()[ucy]
+            else:
+                self.ncy=0
+
             if self.selected_pt1==self.nsel and self.nsel != 0 and not 'SM' in self.state :
                 self.ptmove=True
             else :
@@ -394,16 +404,12 @@ class SelectL2(object):
                     # print 'sel pt'
                     self.selpt1()
                     return
-                # elif self.ncy >0:
-                #     # check if a cycle has been clicked
-                #     pt = sh.Point(x2,y2)
-                #     ucy =np.where([self.L.Gt.node[i]['polyg'].contains(pt) for i in self.L.Gt.nodes()])[0]
-                #     if len(ucy)>0:
-                #         self.plotselcy(ucy)
-                #         self.nsel=ucy
-                #         self.state='SC'
-                #         self.update_state()
-                #     #otherwise return to init mode
+                elif self.ncy >0:
+                    # check if a cycle has been clicked
+                    self.plotselcy(self.ncy)
+                    self.state='SC'
+                    self.update_state()
+                    #otherwise return to init mode
                 else:
                     self.modeIni()
 
@@ -425,6 +431,28 @@ class SelectL2(object):
                     self.selpt1()
                 else :
                     self.modeIni()
+
+
+            #select a segment
+            if self.state=='SC':
+                self.modeIni()
+                if self.nsel > 0:
+                    # print 'sel seg'
+                    self.selseg()
+                    return
+                elif self.nsel < 0:
+                    # print 'sel pt'
+                    self.selpt1()
+                    return
+                elif self.ncy >0:
+                    # check if a cycle has been clicked
+                    self.plotselcy(self.ncy)
+                    self.state='SC'
+                    self.update_state()
+                    #otherwise return to init mode
+                else:
+                    self.modeIni()
+
             #select a point
             if self.state=='SP1':
                 if self.nsel >0:

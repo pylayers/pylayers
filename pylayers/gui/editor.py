@@ -23,10 +23,11 @@ import sys
 
 
 
-class SubSegWin(QDialog):    # any super class is okay
+class SubSegWin(QDialog):
     def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
+        self.setWindowTitle('Edit Sub-Segment(s) Properties')
         self.gparent=parent.parent
         self.parent=parent
         # mulsti segment selection indicator
@@ -262,10 +263,62 @@ class SubSegWin(QDialog):    # any super class is okay
     def cancel(self):
         self.close()
 
+class PropertiesCycle(QDialog):
+    """ Edit cycle properties
+    """
+    def __init__(self,Nss=0,ss_slab=['CEIL','FLOOR'],parent=None):
+        super(PropertiesCycle, self).__init__(parent)
+        #
+        self.parent=parent
+        # dictionnary to pass subseg data
+        self.Nss=Nss
+
+        # self._autocalc_height_val()
+        # self._init_subseg_prop()
+        self._init_layout()
+
+    def _init_layout(self):
+
+        self.buttonBox = QDialogButtonBox(self)
+        self.buttonBox.setGeometry(QRect(110, 210, 161, 32))
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName("buttonBox")
+        self.label = QLabel('Ceil')
+        self.label.setGeometry(QRect(20, 30, 66, 17))
+        self.label.setObjectName("ceil")
+        self.label_2 = QLabel("Floor")
+        self.label_2.setGeometry(QRect(20, 160, 66, 17))
+        self.label_2.setObjectName("floor")
+        self.comboBox = QComboBox(self)
+        self.comboBox.setGeometry(QRect(90, 20, 181, 27))
+        self.comboBox.setObjectName("slabceil")
+        self.label_3 = QLabel("Sub-Segs")
+        self.label_3.setGeometry(QRect(20, 100, 66, 17))
+        self.label_3.setObjectName("label_3")
+        self.comboBox_2 = QComboBox(self)
+        self.comboBox_2.setGeometry(QRect(90, 160, 181, 27))
+        self.comboBox_2.setObjectName("slabfloor")
+        self.spinBox = QSpinBox(self)
+        self.spinBox.setGeometry(QRect(90, 90, 60, 27))
+        self.spinBox.setObjectName("spinBox")
+        self.edit = QPushButton(self)
+        self.edit.setGeometry(QRect(170, 90, 98, 27))
+        self.edit.setObjectName("Edit")
+        self.edit.setText("Edit")
+        
+        QObject.connect(self.buttonBox, SIGNAL("accepted()"), self.accept)
+        QObject.connect(self.buttonBox, SIGNAL("rejected()"), self.reject)
+        QMetaObject.connectSlotsByName(self)
+
+
+
+
 
 class PropertiesWin(QDialog):    # any super class is okay
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
+        self.setWindowTitle('Edit Segment(s) Properties')
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
         # determine if multiple se gments are selected
@@ -1091,6 +1144,15 @@ class AppForm(QMainWindow):
             self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
 
+
+    def edit_cycles(self):
+        """ edit cycles properties
+        """
+
+        if (self.selectl.state == 'SC') :
+            self.propcy = PropertiesCycle(parent=self)
+            self.propcy.show()
+
         # self.on_draw()
 
     def editgrid(self):
@@ -1166,7 +1228,7 @@ class AppForm(QMainWindow):
 
          F1 : Select mode
          F2 : New segment with current active Layer
-         F3 : Edit segment properties
+         F3 : Edit segment/cycles properties
 
          g : toggle grid
          ctrl+g : choose grid properties
@@ -1372,6 +1434,8 @@ class AppForm(QMainWindow):
             shortcut="F10", tip="Refresh the application")
         properties= self.create_action("&Properties", slot=self.edit_properties,
             shortcut="F3", tip="Edit Wall properties")
+        cyproperties= self.create_action("&Cycles Properties", slot=self.edit_cycles,
+            shortcut="F4", tip="Edit Cycles properties")
         # show3= self.create_action("&Properties", slot=self.edit_properties,
         #     shortcut="F9", tip="3D show")
 
@@ -1403,7 +1467,7 @@ class AppForm(QMainWindow):
             ( new_action,new_overlay,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
+            ( select_action,draw_action,properties,cyproperties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
         self.add_actions(self.view_menu, (view3D_action,chgoverlay_action,toggleover_action))
 
