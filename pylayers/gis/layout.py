@@ -1280,8 +1280,9 @@ class Layout(PyLayers):
             d={}
             vnodes = self.Gt.node[c]['polyg'].vnodes
             d['vnodes']=vnodes
-            d['ceil']=self.Gt.node[c]['ceil']
-            d['floor']=self.Gt.node[c]['floor']
+            d['ss_slab']=[]
+            d['ss_slab'].append(self.Gt.node[c]['ss_slab'][0])
+            d['ss_slab'].append(self.Gt.node[c]['ss_slab'][-1])
             config.set("cycles",str(c),d)
         config.set("files",'materials',self.filematini)
         config.set("files",'slab',self.fileslabini)
@@ -1458,8 +1459,9 @@ class Layout(PyLayers):
                 if n>0:
                     self.Gs.node[n]['ncycles']=[]
             for p in self.Gt.nodes():
-                self.Gt.node[p]['ceil']='CEIL'
-                self.Gt.node[p]['floor']='FLOOR'
+                self.Gt.node[p]['ss_slab']=[]
+                self.Gt.node[p]['ss_slab'].append('FLOOR')
+                self.Gt.node[p]['ss_slab'].append('CEIL')
                 vn = self.Gt.node[p]['polyg'].vnodes
                 [self.Gs.node[i]['ncycles'].append(p) for i in vn if i >0]
 
@@ -2431,7 +2433,7 @@ class Layout(PyLayers):
 
         
 
-    def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0,ceil='CEIL',floor='FLOOR'):
+    def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0,ss_slab=['FLOOR','CEIL']):
         """  add segment between node n1 and node n2
 
         Parameters
@@ -2590,7 +2592,7 @@ class Layout(PyLayers):
                 # CREATE Pol
                 else :
                     for p in pnew:
-                        self._createGtpol(p,ceil=ceil,floor=floor)
+                        self._createGtpol(p,ss_slab=ss_slab)
                     
                     # self._create_Gtpol(NP) # to be written
                         # for p in NP:
@@ -2630,7 +2632,7 @@ class Layout(PyLayers):
                 print "this segment already exists"
 
 
-    def _createGtpol(self,p,ceil='CEIL',floor='FLOOR'):
+    def _createGtpol(self,p,ss_slab=['FLOOR','CEIL']):
         """ add polygon to Gt
         """
         # manage numbering
@@ -2653,7 +2655,7 @@ class Layout(PyLayers):
             P=p
         seg = P.vnodes[P.vnodes>0]
         [self.Gs.node[s]['ncycles'].append(pid) for s in seg if pid not in self.Gs.node[s]['ncycles']]
-        self.Gt.add_node(pid,polyg=P,ceil=ceil,floor=floor)
+        self.Gt.add_node(pid,polyg=P,ss_slab=ss_slab)
         self.Gt.pos[pid]=np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
 
     def pltpoly(self,poly,fig=[],ax=[]):
@@ -3246,8 +3248,8 @@ class Layout(PyLayers):
                 # no cycle to merge
                 if len(ncye) == 2:
                     # take 1st deil/floor information
-                    ceil = self.Gt.node[ncye[0]]['ceil']
-                    floor = self.Gt.node[ncye[0]]['floor']
+                    ceil = self.Gt.node[ncye[0]]['ss_slab'][-1]
+                    floor = self.Gt.node[ncye[0]]['ss_slab'][0]
                     p0 = copy.copy(self.Gt.node[ncye[0]]['polyg'])
                     p1 = copy.copy(self.Gt.node[ncye[1]]['polyg'])
                     p0.setvnodes(self)
@@ -3274,7 +3276,7 @@ class Layout(PyLayers):
                     if len(intersec) == 0:
                         poly = p0+p1
                         poly.setvnodes(self)
-                        self._createGtpol(poly,ceil=ceil,floor=floor)
+                        self._createGtpol(poly,ss_slab=[ceil,floor])
                         # polygons will be merged
                         # pol = p0+p1
                         # pol.set_vnodes(self)

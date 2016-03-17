@@ -198,6 +198,27 @@ class SelectL2(object):
 
         return(self.fig,self.ax)
 
+    def plotselcy(self,lcy,color='y',alpha=0.4):
+        """ plot selected cycle
+
+        Parameters
+        ----------
+
+            pt : list
+            list of points or segmetns to plot
+        """
+
+        if not isinstance(lcy,list):
+            lcy=[lcy]
+
+        if len(lcy)>0:
+            for c in lcy:
+                self.L.Gt.node[cy]['polyg'].plot(fig=self.fig,
+                                                 ax=self.ax,
+                                                 color=color,
+                                                 alpha=alpha)
+            self.fig.canvas.draw()
+        return self.fig,self.ax
 
     def plotselptseg(self,pt,color='y',alpha=0.4,ms=10):
         """ plot selected point or segments
@@ -373,6 +394,16 @@ class SelectL2(object):
                     # print 'sel pt'
                     self.selpt1()
                     return
+                # elif self.ncy >0:
+                #     # check if a cycle has been clicked
+                #     pt = sh.Point(x2,y2)
+                #     ucy =np.where([self.L.Gt.node[i]['polyg'].contains(pt) for i in self.L.Gt.nodes()])[0]
+                #     if len(ucy)>0:
+                #         self.plotselcy(ucy)
+                #         self.nsel=ucy
+                #         self.state='SC'
+                #         self.update_state()
+                #     #otherwise return to init mode
                 else:
                     self.modeIni()
 
@@ -1523,6 +1554,7 @@ class SelectL2(object):
                     [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
                     [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
             except:
+                # if no point has been selected
                 if len(self.selectpt) == 0:
                     self.modeIni()
                     self.update_state()
