@@ -1387,6 +1387,8 @@ class DLink(Link):
         else :
             #if not hasattr(R,'I'):
             # Ctilde...
+            # Find an other criteria in order to decide whether the R has
+            # already been evaluated
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
