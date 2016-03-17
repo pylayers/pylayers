@@ -2275,8 +2275,6 @@ class Tchannel(bs.FUsignal):
 
         if typ == 'energy':
             E = self.eprfl()
-            import ipdb
-            ipdb.set_trace()
             u = np.argsort(E,axis=0)[::-1]
             u = u[:,0,0]
 
@@ -2744,12 +2742,6 @@ class Tchannel(bs.FUsignal):
         si.translate(tau[k])
         r = r + si
         return r
-
-    def cir(self,fGHzmin=0,fGHzmax=1000):
-        """
-        """
-        u = (self.x>fGHzmin) & (self.y<fGHzmax)
-        cir = sum(self.y)
 
 
     def plot3d(self,fig=[],ax=[]):

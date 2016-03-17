@@ -350,7 +350,7 @@ class DLink(Link):
                    'Ab':[],
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':[],
+                   'fGHz':np.array([2.4,2.5]),
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
@@ -463,7 +463,7 @@ class DLink(Link):
        
         ###########
         # init freq
-        # TODO Check where it is used redundant with fGHz
+        # TODO Check where it is used redocdundant with fGHz
         ###########
         #self.fmin  = self.fGHz[0]
         #self.fmax  = self.fGHz[-1]
