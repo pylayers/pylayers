@@ -278,41 +278,106 @@ class PropertiesCycle(QDialog):
         self._init_layout()
 
     def _init_layout(self):
+        vbox = QVBoxLayout()
 
-        self.buttonBox = QDialogButtonBox(self)
-        self.buttonBox.setGeometry(QRect(110, 210, 161, 32))
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName("buttonBox")
-        self.label = QLabel('Ceil')
-        self.label.setGeometry(QRect(20, 30, 66, 17))
-        self.label.setObjectName("ceil")
-        self.label_2 = QLabel("Floor")
-        self.label_2.setGeometry(QRect(20, 160, 66, 17))
-        self.label_2.setObjectName("floor")
+        # Indicate Ceil
+        top = QHBoxLayout()
+        ceillabel = QLabel('Ceil')
+        ceillabel.setStyleSheet("font: bold 14px;")
+
         self.comboBox = QComboBox(self)
         self.comboBox.setGeometry(QRect(90, 20, 181, 27))
         self.comboBox.setObjectName("slabceil")
-        self.label_3 = QLabel("Sub-Segs")
-        self.label_3.setGeometry(QRect(20, 100, 66, 17))
-        self.label_3.setObjectName("label_3")
-        self.comboBox_2 = QComboBox(self)
-        self.comboBox_2.setGeometry(QRect(90, 160, 181, 27))
-        self.comboBox_2.setObjectName("slabfloor")
+
+
+        top.addWidget(ceillabel)
+        top.addWidget(self.comboBox)
+        vbox.addLayout(top)
+
+
+
+
+
+
+        middle = QHBoxLayout()
+        sseg = QLabel('Subsegs')
+        sseg.setStyleSheet("font: bold 14px;")
+
         self.spinBox = QSpinBox(self)
-        self.spinBox.setGeometry(QRect(90, 90, 60, 27))
-        self.spinBox.setObjectName("spinBox")
+
         self.edit = QPushButton(self)
-        self.edit.setGeometry(QRect(170, 90, 98, 27))
-        self.edit.setObjectName("Edit")
         self.edit.setText("Edit")
-        
-        QObject.connect(self.buttonBox, SIGNAL("accepted()"), self.accept)
-        QObject.connect(self.buttonBox, SIGNAL("rejected()"), self.reject)
-        QMetaObject.connectSlotsByName(self)
+
+        middle.addWidget(sseg)
+        middle.addWidget(self.spinBox )
+        middle.addWidget(self.edit)
+
+        vbox.addLayout(middle)
+
+
+        bottom =  QHBoxLayout()
+        floorlabel = QLabel('Floor')
+        floorlabel.setStyleSheet("font: bold 14px;")
+
+        self.comboBoxf = QComboBox(self)
+        self.comboBoxf.setGeometry(QRect(90, 20, 181, 27))
+        self.comboBoxf.setObjectName("slabfloor")
+
+        bottom.addWidget(floorlabel)
+        bottom.addWidget(self.comboBoxf)
+        vbox.addLayout(bottom)
 
 
 
+
+        # self.buttonBox = QDialogButtonBox(self)
+        # self.buttonBox.setGeometry(QRect(110, 210, 161, 32))
+        # self.buttonBox.setOrientation(Qt.Horizontal)
+        # self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        # self.buttonBox.setObjectName("buttonBox")
+
+        # self.label = QLabel('Ceil')
+        # self.label.setStyleSheet("font: bold 14px;")
+        # # self.label.setText("Ceil")
+        # # self.label.setGeometry(QRect(20, 30, 66, 17))
+        # # self.label.setObjectName("ceil")
+
+        # self.label_2 = QLabel("Floor")
+        # self.label_2.setText("Floor")
+        # self.label_2.setGeometry(QRect(20, 160, 66, 17))
+        # self.label_2.setObjectName("floor")
+
+
+
+        # self.label_3 = QLabel("Sub-Segs")
+        # self.label_3.setGeometry(QRect(20, 100, 66, 17))
+        # self.label_3.setObjectName("label_3")
+
+        # self.comboBox_2 = QComboBox(self)
+        # self.comboBox_2.setGeometry(QRect(90, 160, 181, 27))
+        # self.comboBox_2.setObjectName("slabfloor")
+
+        # self.spinBox = QSpinBox(self)
+        # self.spinBox.setGeometry(QRect(90, 90, 60, 27))
+        # self.spinBox.setObjectName("spinBox")
+
+        # # self.edit = QPushButton(self)
+        # # self.edit.setGeometry(QRect(170, 90, 98, 27))
+        # # self.edit.setObjectName("Edit")
+        # # self.edit.setText("Edit")
+        # # self.gridLayoutWidget = QWidget(self)
+        # # self.gridLayoutWidget.setGeometry(QRect(10, 10, 271, 231))
+        # # self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        # # self.gridLayout = QGridLayout(self.gridLayoutWidget)
+        # # self.gridLayout.setContentsMargins(-1, 0, -1, -1)
+        # # self.gridLayout.setObjectName("gridLayout")
+        # # QObject.connect(self.buttonBox, SIGNAL("accepted()"), self.accept)
+        # # QObject.connect(self.buttonBox, SIGNAL("rejected()"), self.reject)
+        # # QMetaObject.connectSlotsByName(self)
+
+
+
+        self.setLayout(vbox)
 
 
 class PropertiesWin(QDialog):    # any super class is okay
