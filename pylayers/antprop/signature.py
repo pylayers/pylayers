@@ -630,7 +630,6 @@ class Signatures(PyLayers,dict):
         except:
             fh5.close()
             raise NameError('Signature: issue when reading h5py file')
-
         self.L=layout.Layout(Lname)
         try:
             self.L.dumpr()

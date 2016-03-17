@@ -5518,7 +5518,7 @@ class Layout(PyLayers):
                                 logging.warning('dumpr : a segment cannot relate more than 2 cycles')
         # if ncycles is a list with only one element the other cycle is the
         # outside region (cycle -1)
-        for k in sebuildGtlf.Gs.node:
+        for k in self.Gs.node:
             if k>0:
                 if len(self.Gs.node[k]['ncycles'])==1:
                     self.Gs.node[k]['ncycles'].append(-1)
