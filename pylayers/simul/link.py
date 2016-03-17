@@ -1387,9 +1387,9 @@ class DLink(Link):
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
-            if not hasattr(R,'I'):
+            # if not hasattr(R,'I'):
             # Ctilde...
-                C = R.eval(self.fGHz)
+            C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
