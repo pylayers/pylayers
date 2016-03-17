@@ -13,6 +13,7 @@ import time
 import pdb
 import pickle
 import numpy as np
+import pylayers.signal.waveform as wvf
 #import matplotlib.pyplot as plt
 
 # Set the frequency range
@@ -22,4 +23,18 @@ L = Layout('DLR2.ini')
 # Create a link for the Layout
 S = DLink(L=L,fGHz=fGHz)
 ak,tauk=S.eval(force=['Ct','H'])
-S._show3()
+#S._show3()
+S.H.plot()
+wav = wvf.Waveform(fcGHz=4,bandGHz=4)
+h  = S.H.totime()
+# applyu waveform
+hw = S.H.apply(wav)
+rir =
+
+Nray = h.y.shape[0]
+ir = 0
+it = 0
+plt.figure()
+for k in range(Nray):
+    Ek = np.sum(h.y[k,ir,it,:]*h.y[k,ir,it,:])
+    plt.plot(h.x,h.y[k,ir,it,:]+0.001*k,'k',alpha=10000*Ek)

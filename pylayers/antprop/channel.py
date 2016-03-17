@@ -138,10 +138,12 @@ class TBchannel(bs.TBsignal):
 
         #cdf, vary = self.ecdf()
 
-        cdf = np.cumsum(self.y,axis=1)
+        cdf = np.cumsum(self.y,axis=-1)
         cdf = cdf/cdf[:,-1][:,None]
 
+        pdb.set_trace()
         pdf = np.diff(cdf.y)
+
 
         u = np.nonzero(cdf.y > alpha)[0]
         v = np.nonzero(cdf.y < 1 - alpha)[0]
@@ -1193,7 +1195,9 @@ class TUDchannel(TUchannel):
         self.taue = taue
 
     def __repr__(self):
+        s1 = "Time domain channel with delay \n"
         s = TUchannel.__repr__(self)
+        s = s1+s
         return(s)
 
     def fig(self, N):
@@ -2301,7 +2305,7 @@ class Tchannel(bs.FUsignal):
 
         htap = self.tap(**kwargs)
         # sum over time m
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=i-1))/Nm
         # sum over s
         Er_htap = np.sum(htap,axis=1)/Ns
         corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))

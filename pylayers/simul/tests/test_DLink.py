@@ -1,4 +1,5 @@
 from pylayers.simul.link import *
+import pylayers.signal.waveform as wvf
 import pdb
 
 DL=DLink(L=Layout('defstr.ini'))
@@ -16,3 +17,4 @@ if DL.R.los:
     lak0 = 20* np.log10(ak0)
     Friss= 20*np.log10(2.4)+20*np.log10(dist_a_b) + 32.4
     assert np.allclose(-lak0,Friss,0.1), 'issue in Friss'
+

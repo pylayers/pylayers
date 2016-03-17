@@ -27,7 +27,6 @@ wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 #
 # Dans un sens
 #
-tic = time.time()
 Si1 = Signatures(S.L,Ctx,Crx)
 #Si1.run4(cutoff=5,algo='old')
 Si1.run5(diffraction=False)
