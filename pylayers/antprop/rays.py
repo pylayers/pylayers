@@ -2466,13 +2466,13 @@ class Rays(PyLayers,dict):
         """
         return self._ray2nbi[r]
 
-    def ray2iidx(self,r):
+    def ray2iidx(self,ir):
         """ Get interactions index of a given ray
 
         Parameters
         ----------
 
-        r : integer
+        ir : integer
             ray index
 
         Returns
@@ -2481,17 +2481,17 @@ class Rays(PyLayers,dict):
         iidx : array
             interaction index 
         """
-        unbi = self.ray2nbi(r)
-        ur = np.where(self[unbi]['rayidx']==r)[0]
+        unbi = self.ray2nbi(ir)
+        ur = np.where(self[unbi]['rayidx']==ir)[0]
         return self[unbi]['rays'][:,ur]
 
-    def slab_nb(self, r):
+    def slab_nb(self, ir):
         """ returns the slab numbers of r
 
         Parameters
         ----------
 
-        r : integer
+        ir : integer
             ray index
 
         Returns
@@ -2502,27 +2502,32 @@ class Rays(PyLayers,dict):
 
         """
 
-        raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
-        return(self[self._ray2nbi[r]]['sig'][0,1:-1,raypos[0]])
+        raypos = np.nonzero(self[self._ray2nbi[ir]]['rayidx'] == ir)[0]
+        return(self[self._ray2nbi[ir]]['sig'][0,1:-1,raypos[0]])
 
 
-    def typ(self, r,fromR=True):
+    def typ(self, ir,fromR=True):
         """ returns interactions list type of a given ray
 
         Parameters
         ----------
 
-        r : integer
+        ir : integer
             ray index
         fromR : bool
             True : get information from signature in R
-            False: get inforation in R.I
+            False: get information in R.I
 
         """
+        #
+        # In this function we can see that teh ceil and floor 
+        # are hard coded as reflection. This is going to evolve 
+        # for implementation of multi floor 
+        #
         if fromR:
             di = {0:'L',1:'D',2:'R',3:'T',4:'R',5:'R'}
-            nbi = self._ray2nbi[r]
-            raypos = np.nonzero(self[nbi]['rayidx'] == r)[0]
+            nbi = self._ray2nbi[ir]
+            raypos = np.nonzero(self[nbi]['rayidx'] == ir)[0]
             inter = self[nbi]['sig'][1,1:-1,raypos][0]
             return [di[i] for i in inter]
         else:
