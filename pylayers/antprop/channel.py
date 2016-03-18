@@ -2667,11 +2667,17 @@ class Tchannel(bs.FUsignal):
         taumax = max(tau)
         dtau = (taumax-taumin)
         self.s = self.ift(Nz, ffts)
-
+        t0 = self.s.x[0]
+        te = self.s.x[-1]
+        # pdb.set_trace()
 
         shy = self.s.y.shape
         dx = self.s.x[1]-self.s.x[0]
+        # Delta Tau + Npoints
         N  = np.ceil(dtau/dx)+shy[-1]
+
+        # convert tau in an integer offset
+        # taumin ray is not shifted
         itau = np.floor((tau-taumin)/dx).astype(int)
         
         U = np.ones((shy[0],shy[-1]),dtype=int)
@@ -2683,7 +2689,7 @@ class Tchannel(bs.FUsignal):
         index = np.vstack((col1,col2)).T
     
         rir[index[:,0],index[:,1]] = self.s.y.ravel()
-        t = np.linspace(taumin,taumax,N)
+        t = np.linspace(t0+taumin,te+dtau,N)
         return bs.TUsignal(x=t, y=rir)
 
 
