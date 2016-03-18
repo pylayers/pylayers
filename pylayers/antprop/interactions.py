@@ -855,7 +855,7 @@ class IntD(Inter):
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
         Inter.__init__(self, data=data, idx=idx, typ=1)
-
+        self.dusl = {}
     def __repr__(self):
         s = 'number of D interaction :' + str(np.shape(self.data)[0])
         return s

@@ -463,38 +463,116 @@ class Rays(PyLayers,dict):
         """
         u = np.argsort(self.dis)
 
-    def extract(self,ni,nr,L):
-        """ Extract a single ray
 
+    def extract(self,nr,L):
+        """ Extract a single ray
         Parameters
         ----------
-
         ni : group of interactions
         nr : ray index in group of interactions
         L  : Layout
-
         """
 
 
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
-       
-        r[ni] = {}
+        
+        
+        ni = self._ray2nbi[nr]
+        ur = np.where(self[ni]['rayidx']==nr)[0][0]
 
+        if 'D' in self.typ(nr):
+            diff=True
+        else:
+            diff=False
+
+        if self[ni].has_key('diffvect'):
+            # check if the ray has diffraction interaction
+            inter = self.ray2iidx(nr)[:,0]
+            uD = np.where([i in inter for i in self[ni]['diffidx']])[0]
+        else:
+            uD=[]
+        
+        diffkey = ['diffvect','diffidx','diffslabs']
+
+        r[ni] = {}
         for k in self[ni].keys():
             if k not in ['nbrays','rayidx','dis','nstrwall','nstrswall']:
                 tab  = self[ni][k]
-                if type(tab)==np.ndarray:
-                    #print k,tab.shape
-                    r[ni][k] = tab[...,nr][...,np.newaxis]
+                if type(tab)==np.ndarray and k not in diffkey:
+                        r[ni][k] = tab[...,ur][...,np.newaxis]
+                if diff : 
+                    if k in diffkey :
+                        if k != 'diffslabs':
+                            r[ni][k]=tab[...,uD][...,np.newaxis]
+                        else:
+                            if len(uD)>0 :
+                                r[ni][k]=tab[uD]
+                            else:
+                                r[ni][k]=[]
+                    
+
         r[ni]['nrays']=1 # keep only one ray
         r.nray = 1
         #r[ni]['rayidx']=np.array([self[ni]['rayidx'][nr]]) # ray index in the whole structure
         r[ni]['rayidx']=np.array([0])
-        r[ni]['dis']=np.array([self[ni]['dis'][nr]])
+        r[ni]['dis']=np.array([self[ni]['dis'][ur]])
         r.locbas(L)
         r.fillinter(L)
         return(r)
+
+    # def extract(self,nr):
+    #     """ Extract a single ray
+
+    #     Parameters
+    #     ----------
+
+    #     nr : ray index in group of interactions
+
+    #     """
+
+
+    #     r = Rays(self.pTx,self.pRx)
+    #     r.is3d = self.is3D
+
+    #     nbi = self._ray2nbi[nr]
+    #     ur = np.where(self[nbi]['rayidx']==nr)[0]
+
+    #     #check if there if diffraction the group
+    #     if self[nbi].has_key('diffvect'):
+    #         diff = True
+    #         # check if the ray has diffraction interaction
+    #         inter = self.ray2iidx(nr)[:,0]
+    #         uD = np.where([i in (self[nbi]['diffidx']) for i in inter])[0]
+    #         if len(uD) ==0:
+    #             diff =False
+    #     else : 
+    #         diff =False
+
+
+    #     r[nbi]={}
+
+    #     for k in self[nbi].keys():
+
+    #         tab  = self[nbi][k]
+    #         if type(tab)==np.ndarray and k != 'nbrays':
+    #             if 'diff' in k:
+    #                 if diff :
+    #                     r[nbi][k] = tab[...,uD][...,np.newaxis]
+    #                 else:
+    #                     pass
+    #             else:
+    #                 r[nbi][k] = tab[...,ur][...,np.newaxis]
+
+    #         # manage diffslab which is a list
+    #         if diff and k =='diffslabs':
+    #             r[nbi]['diffslabs']=[self[nbi][k][uD]]
+    #             # r[nbi]['diffslabs']=[uD]
+                
+    #     r[nbi]['nbrays']=1
+
+    #     print diff
+    #     return(r)
 
     def show(self,**kwargs):
         """  plot 2D rays within the simulated environment
@@ -1330,8 +1408,8 @@ class Rays(PyLayers,dict):
                 ufloor= np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
-                nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls without subsegment
-                nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls with subsegment
+                nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls
+                nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls
 
                 self[k]['nstrwall']  = nstrwall    # store nstr without subsegment
                 self[k]['nstrswall'] = nstrswall   # store nstr with subsegment
@@ -1897,7 +1975,8 @@ class Rays(PyLayers,dict):
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         #to be specified and limited to used wedges
-        D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
+        if self.has_key('_luw'):
+            D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
 
         # transmission/reflection slab array
         tsl = np.array(())
@@ -2179,6 +2258,7 @@ class Rays(PyLayers,dict):
 
         for l in ib:
             # ir : ray index
+
             ir = self[l]['rayidx']
             aoa[:,ir]=self[l]['aoa']
             aod[:,ir]=self[l]['aod']
@@ -2345,6 +2425,9 @@ class Rays(PyLayers,dict):
         self.evaluated = True
 
         return(Cn)
+
+
+
 
 
     def ray(self, r):
