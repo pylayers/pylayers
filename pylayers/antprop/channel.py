@@ -1063,6 +1063,12 @@ class TUchannel(TBchannel,bs.TUsignal):
 
     def readuwb(self, _filename):
         """ read  Waveform from Matlab file
+
+        Parameters
+        ----------
+
+        _filename : file name with extension (.mat)
+
         """
         outdir = 'output/'+outdir
         filename = getlong(_filename, outdir)
@@ -2283,6 +2289,7 @@ class Tchannel(bs.FUsignal):
         self.doa = self.doa[u]
         self.dod = self.dod[u]
         self.y = self.y[u,...]
+        return(u)
 
     def showtap(self,**kwargs):
         """ show tap
@@ -2573,8 +2580,10 @@ class Tchannel(bs.FUsignal):
         """
         Nray = len(self.taud)
         s = self.ift(Nz, ffts)
-        h = TUDchannel(s.x, fft.fftshift(s.y), self.taud,self.taue)
+        sy_shifted = fft.fftshift(s.y,axes=-1)
+        h = TUDchannel(s.x, sy_shifted, self.taud,self.taue)
         return(h)
+
 
 
     def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):

@@ -27,23 +27,23 @@ ak,tauk=S.eval(force=['Ct','H'])
 S.H.plot()
 wav = wvf.Waveform(fcGHz=4,bandGHz=4)
 h  = S.H.totime()
-# applyu waveform
-hw = S.H.applywav(wav.sfg)
-
-Nray = h.y.shape[0]
-ir = 0
-it = 0
-plt.figure()
-tEk1 = []
-tEk2 = []
-for k in range(Nray):
-    Ek = np.sum(h.y[k,ir,it,:]*h.y[k,ir,it,:])
-    tEk1.append(Ek)
-alpha=np.sqrt(tEk1)/max(np.sqrt(tEk1))
-for k in range(Nray):
-    plt.plot(h.x,h.y[k,ir,it,:]+0.001*k,'k',alpha=alpha[k])
-plt.figure()
-for k in range(Nray):
-    Ek = np.sum(hw.y[k,:]*hw.y[k,:])
-    tEk2.append(Ek)
-    plt.plot(hw.x,hw.y[k,:],'k',alpha=alpha[k])
+## applyu waveform
+#hw = S.H.applywav(wav.sfg)
+#
+#Nray = h.y.shape[0]
+#ir = 0
+#it = 0
+#plt.figure()
+#tEk1 = []
+#tEk2 = []
+#for k in range(Nray):
+#    Ek = np.sum(h.y[k,ir,it,:]*h.y[k,ir,it,:])
+#    tEk1.append(Ek)
+#alpha=np.sqrt(tEk1)/max(np.sqrt(tEk1))
+#for k in range(Nray):
+#    plt.plot(h.x,h.y[k,ir,it,:]+0.001*k,'k',alpha=alpha[k])
+#plt.figure()
+#for k in range(Nray):
+#    Ek = np.sum(hw.y[k,:]*hw.y[k,:])
+#    tEk2.append(Ek)
+#    plt.plot(hw.x,hw.y[k,:],'k',alpha=alpha[k])
