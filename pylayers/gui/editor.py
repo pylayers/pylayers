@@ -266,13 +266,16 @@ class SubSegWin(QDialog):
 class PropertiesCycle(QDialog):
     """ Edit cycle properties
     """
-    def __init__(self,Nss=0,ss_slab=['CEIL','FLOOR'],parent=None):
+    def __init__(self,Nss=0,cy=1,ss_slab=['CEIL','FLOOR'],parent=None):
         super(PropertiesCycle, self).__init__(parent)
         #
+        self.setWindowTitle('Edit Cycle Properties')
+
         self.parent=parent
         # dictionnary to pass subseg data
         self.Nss=Nss
-
+        self.cy = cy
+        self.segdata=[]
         # self._autocalc_height_val()
         # self._init_subseg_prop()
         self._init_layout()
@@ -285,13 +288,18 @@ class PropertiesCycle(QDialog):
         ceillabel = QLabel('Ceil')
         ceillabel.setStyleSheet("font: bold 14px;")
 
-        self.comboBox = QComboBox(self)
-        self.comboBox.setGeometry(QRect(90, 20, 181, 27))
-        self.comboBox.setObjectName("slabceil")
+        self.comboceil = QComboBox(self)
+        self.comboceil.setGeometry(QRect(90, 20, 181, 27))
+        self.comboceil.setObjectName("slabceil")
+        for s in self.parent.L.sl.keys():
+                self.comboceil.addItem(s)
+        idx=self.comboceil.findText(self.parent.L.Gt.node[self.cy]['ss_slab'][-1])
+        self.comboceil.setCurrentIndex(idx)
+
 
 
         top.addWidget(ceillabel)
-        top.addWidget(self.comboBox)
+        top.addWidget(self.comboceil)
         vbox.addLayout(top)
 
 
@@ -307,6 +315,9 @@ class PropertiesCycle(QDialog):
 
         self.edit = QPushButton(self)
         self.edit.setText("Edit")
+        self.edit.clicked.connect(self.editsegments)
+
+
 
         middle.addWidget(sseg)
         middle.addWidget(self.spinBox )
@@ -318,66 +329,66 @@ class PropertiesCycle(QDialog):
         bottom =  QHBoxLayout()
         floorlabel = QLabel('Floor')
         floorlabel.setStyleSheet("font: bold 14px;")
+        print self.parent.L.Gt.node[self.cy]['ss_slab']
+        self.combofloor = QComboBox(self)
+        self.combofloor.setGeometry(QRect(90, 20, 181, 27))
+        self.combofloor.setObjectName("slabfloor")
+        for s in self.parent.L.sl.keys():
+                self.combofloor.addItem(s)
+        idx=self.combofloor.findText(self.parent.L.Gt.node[self.cy]['ss_slab'][0])
+        self.combofloor.setCurrentIndex(idx)
 
-        self.comboBoxf = QComboBox(self)
-        self.comboBoxf.setGeometry(QRect(90, 20, 181, 27))
-        self.comboBoxf.setObjectName("slabfloor")
+
 
         bottom.addWidget(floorlabel)
-        bottom.addWidget(self.comboBoxf)
+        bottom.addWidget(self.combofloor)
         vbox.addLayout(bottom)
 
 
 
+        # validation
+        buttono=QPushButton("OK")
+        buttonc=QPushButton("Cancel")
+        buttono.clicked.connect(self.valide)
+        buttonc.clicked.connect(self.cancel)
 
-        # self.buttonBox = QDialogButtonBox(self)
-        # self.buttonBox.setGeometry(QRect(110, 210, 161, 32))
-        # self.buttonBox.setOrientation(Qt.Horizontal)
-        # self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
-        # self.buttonBox.setObjectName("buttonBox")
-
-        # self.label = QLabel('Ceil')
-        # self.label.setStyleSheet("font: bold 14px;")
-        # # self.label.setText("Ceil")
-        # # self.label.setGeometry(QRect(20, 30, 66, 17))
-        # # self.label.setObjectName("ceil")
-
-        # self.label_2 = QLabel("Floor")
-        # self.label_2.setText("Floor")
-        # self.label_2.setGeometry(QRect(20, 160, 66, 17))
-        # self.label_2.setObjectName("floor")
+        hboxDial = QHBoxLayout()
+        hboxDial.addWidget(buttonc)
+        hboxDial.addWidget(buttono)
 
 
 
-        # self.label_3 = QLabel("Sub-Segs")
-        # self.label_3.setGeometry(QRect(20, 100, 66, 17))
-        # self.label_3.setObjectName("label_3")
-
-        # self.comboBox_2 = QComboBox(self)
-        # self.comboBox_2.setGeometry(QRect(90, 160, 181, 27))
-        # self.comboBox_2.setObjectName("slabfloor")
-
-        # self.spinBox = QSpinBox(self)
-        # self.spinBox.setGeometry(QRect(90, 90, 60, 27))
-        # self.spinBox.setObjectName("spinBox")
-
-        # # self.edit = QPushButton(self)
-        # # self.edit.setGeometry(QRect(170, 90, 98, 27))
-        # # self.edit.setObjectName("Edit")
-        # # self.edit.setText("Edit")
-        # # self.gridLayoutWidget = QWidget(self)
-        # # self.gridLayoutWidget.setGeometry(QRect(10, 10, 271, 231))
-        # # self.gridLayoutWidget.setObjectName("gridLayoutWidget")
-        # # self.gridLayout = QGridLayout(self.gridLayoutWidget)
-        # # self.gridLayout.setContentsMargins(-1, 0, -1, -1)
-        # # self.gridLayout.setObjectName("gridLayout")
-        # # QObject.connect(self.buttonBox, SIGNAL("accepted()"), self.accept)
-        # # QObject.connect(self.buttonBox, SIGNAL("rejected()"), self.reject)
-        # # QMetaObject.connectSlotsByName(self)
+        # create Layout
+        vbox.addLayout(hboxDial)
 
 
 
         self.setLayout(vbox)
+
+
+    def editsegments(self):
+        # laucnh cycle sement editor 
+        # not yey implemented
+        pass
+
+    def valide(self):
+        ceil = str(self.comboceil.currentText())
+        floor = str(self.combofloor.currentText())
+
+        lslab = []
+        lslab.append(floor)
+        if len(self.segdata) != 0:
+            print "do something to update segments"
+        lslab.append(ceil)
+
+        self.parent.selectl.L._updateGtslab(self.cy,lslab)
+
+
+        self.close()
+
+    def cancel(self):
+        self.close()
+
 
 
 class PropertiesWin(QDialog):    # any super class is okay
@@ -1208,15 +1219,11 @@ class AppForm(QMainWindow):
             self.selectl.toggle()
             self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
-
-
-    def edit_cycles(self):
-        """ edit cycles properties
-        """
-
-        if (self.selectl.state == 'SC') :
-            self.propcy = PropertiesCycle(parent=self)
+        elif (self.selectl.state == 'SC') :
+            self.propcy = PropertiesCycle(parent=self,cy=self.selectl.ncy)
             self.propcy.show()
+
+
 
         # self.on_draw()
 
@@ -1497,10 +1504,8 @@ class AppForm(QMainWindow):
 
         refresh = self.create_action("&Refresh", slot=self.on_draw,
             shortcut="F10", tip="Refresh the application")
-        properties= self.create_action("&Properties", slot=self.edit_properties,
+        properties= self.create_action("&Segments/Cycles Properties", slot=self.edit_properties,
             shortcut="F3", tip="Edit Wall properties")
-        cyproperties= self.create_action("&Cycles Properties", slot=self.edit_cycles,
-            shortcut="F4", tip="Edit Cycles properties")
         # show3= self.create_action("&Properties", slot=self.edit_properties,
         #     shortcut="F9", tip="3D show")
 
@@ -1532,7 +1537,7 @@ class AppForm(QMainWindow):
             ( new_action,new_overlay,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( select_action,draw_action,properties,cyproperties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
+            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
         self.add_actions(self.view_menu, (view3D_action,chgoverlay_action,toggleover_action))
 
