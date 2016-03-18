@@ -192,6 +192,8 @@ class SelectL2(object):
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
+        self.L.display['nodes'] = True
+
         self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True,polyg=True)
         if self.gridOn:
             self.setgrid()

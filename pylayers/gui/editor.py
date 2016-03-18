@@ -22,11 +22,21 @@ import os
 import sys
 
 
+try:
+    _encoding = QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QApplication.translate(context, text, disambig)
+
 
 class SubSegWin(QDialog):
     def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
+        self.setModal(True) # interaction only with the current window
+
         self.setWindowTitle('Edit Sub-Segment(s) Properties')
         self.gparent=parent.parent
         self.parent=parent
@@ -263,6 +273,73 @@ class SubSegWin(QDialog):
     def cancel(self):
         self.close()
 
+
+class CycleSubseg(QDialog):
+
+    def __init__(self,parent=None):
+        super(CycleSubseg, self).__init__(parent)
+        self.setupUi(self)
+        self.setModal(True) # interaction only with the current window
+
+
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(308, 250)
+        self.buttonBox = QDialogButtonBox(Dialog)
+        self.buttonBox.setGeometry(QRect(110, 210, 161, 32))
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName("buttonBox")
+        self.label = QLabel(Dialog)
+        self.label.setGeometry(QRect(20, 30, 31, 17))
+        self.label.setMouseTracking(False)
+        self.label.setObjectName("label")
+        self.label_2 = QLabel(Dialog)
+        self.label_2.setGeometry(QRect(20, 160, 41, 17))
+        self.label_2.setObjectName("label_2")
+        self.comboBox = QComboBox(Dialog)
+        self.comboBox.setGeometry(QRect(90, 20, 181, 27))
+        self.comboBox.setFocusPolicy(Qt.WheelFocus)
+        self.comboBox.setEditable(False)
+        self.comboBox.setObjectName("comboBox")
+        self.label_3 = QLabel(Dialog)
+        self.label_3.setGeometry(QRect(20, 100, 66, 17))
+        self.label_3.setObjectName("label_3")
+        self.comboBox_2 = QComboBox(Dialog)
+        self.comboBox_2.setGeometry(QRect(90, 160, 181, 27))
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.spinBox = QSpinBox(Dialog)
+        self.spinBox.setGeometry(QRect(90, 90, 60, 27))
+        self.spinBox.setObjectName("spinBox")
+        self.edit = QPushButton(Dialog)
+        self.edit.setGeometry(QRect(170, 90, 98, 27))
+        self.edit.setObjectName("edit")
+        self.gridLayoutWidget = QWidget(Dialog)
+        self.gridLayoutWidget.setGeometry(QRect(10, 10, 271, 231))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.gridLayout = QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setContentsMargins(-1, 0, -1, -1)
+        self.gridLayout.setObjectName("gridLayout")
+
+        self.retranslateUi(Dialog)
+        QObject.connect(self.buttonBox, SIGNAL("accepted()"), Dialog.accept)
+        QObject.connect(self.buttonBox, SIGNAL("rejected()"), Dialog.reject)
+        QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        # Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
+        # self.label.setText(_translate("Dialog", "Ceil", None))
+        # self.label_2.setText(_translate("Dialog", "Floor", None))
+        # self.label_3.setText(_translate("Dialog", "Sub-segs", None))
+        # self.edit.setText(_translate("Dialog", "Edit", None))
+
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
+        self.label.setText(_translate("Dialog", "Not", None))
+        self.label_2.setText(_translate("Dialog", "Implemented", None))
+        self.label_3.setText(_translate("Dialog", "Yet", None))
+        self.edit.setText(_translate("Dialog", "Edit", None))
+
+
 class PropertiesCycle(QDialog):
     """ Edit cycle properties
     """
@@ -270,6 +347,7 @@ class PropertiesCycle(QDialog):
         super(PropertiesCycle, self).__init__(parent)
         #
         self.setWindowTitle('Edit Cycle Properties')
+        self.setModal(True) # interaction only with the current window
 
         self.parent=parent
         # dictionnary to pass subseg data
@@ -329,7 +407,6 @@ class PropertiesCycle(QDialog):
         bottom =  QHBoxLayout()
         floorlabel = QLabel('Floor')
         floorlabel.setStyleSheet("font: bold 14px;")
-        print self.parent.L.Gt.node[self.cy]['ss_slab']
         self.combofloor = QComboBox(self)
         self.combofloor.setGeometry(QRect(90, 20, 181, 27))
         self.combofloor.setObjectName("slabfloor")
@@ -369,6 +446,8 @@ class PropertiesCycle(QDialog):
     def editsegments(self):
         # laucnh cycle sement editor 
         # not yey implemented
+        test = CycleSubseg(parent=self)
+        test.show()
         pass
 
     def valide(self):
@@ -391,9 +470,12 @@ class PropertiesCycle(QDialog):
 
 
 
+
+
 class PropertiesWin(QDialog):    # any super class is okay
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
         self.setWindowTitle('Edit Segment(s) Properties')
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
@@ -481,10 +563,13 @@ class PropertiesWin(QDialog):    # any super class is okay
             self.nbsubseg.setValue(len(self.segdata['ss_name']))
         except:
             self.nbsubseg.setValue(0.)
+        self.connect(self.nbsubseg, SIGNAL('valueChanged(int)'), self.enableQpush)
+
+
 
         self.editssbutton = QPushButton("Edit Sub-Segments")
         self.editssbutton.clicked.connect(self.editsubseg)
-
+        self.editssbutton.setEnabled(False)
 
 
         self.heightmin.setMinimumWidth(5)
@@ -544,6 +629,13 @@ class PropertiesWin(QDialog):    # any super class is okay
         vbox.addLayout(hboxDial)
 
         self.setLayout(vbox)
+
+    def enableQpush(self):
+        if self.nbsubseg.value() == 0:
+            self.editssbutton.setEnabled(False)
+        else:
+            self.editssbutton.setEnabled(True)
+
 
     def editsubseg(self):
         """ open a edit subseg window
@@ -611,6 +703,8 @@ class PropertiesWin(QDialog):    # any super class is okay
 class SaveQuitWin(QDialog):    # any super class is okay
     def __init__(self,exit=False,parent=None):
         super(SaveQuitWin, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
+
         self.setWindowTitle('Do you want to save?')
         self.parent=parent
         self.exit=exit
@@ -665,6 +759,8 @@ class SaveQuitWin(QDialog):    # any super class is okay
 class NewLayout(QDialog):    # any super class is okay
     def __init__(self,parent=None,overlay={}):
         super(NewLayout, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
+
         self.parent=parent
         self.doverlay=overlay
         if self.doverlay == {}:
@@ -775,6 +871,7 @@ class NewLayout(QDialog):    # any super class is okay
 class Overset(QMainWindow):
     def __init__(self,parent=None):
         super(Overset, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
         self.setWindowTitle('Set Overlay')
         self.x0=np.array([0,0])
         self.x0selected=False
@@ -1031,6 +1128,7 @@ class Overset(QMainWindow):
 class GridSet(QDialog):    # any super class is okay
     def __init__(self,parent=None):
         super(GridSet, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
         self.setWindowTitle('Set Grid')
         self.parent=parent
         self._init_choices()
