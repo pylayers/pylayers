@@ -2451,13 +2451,13 @@ class Rays(PyLayers,dict):
             a = self.ray(r)
             return(self.I.typ[a])
 
-    def info(self, r,ifGHz=0,B=True,matrix=False):
+    def info(self,ir,ifGHz=0,B=True,matrix=False):
         """ provides information for a given ray r
 
         Parameters
         ----------
 
-        r : int
+        ir : int
             ray index
         ifGHz : int
             frequency index
@@ -2469,12 +2469,12 @@ class Rays(PyLayers,dict):
 
         if self.evaluated:
             print '-------------------------'
-            print 'Informations of ray #', r
+            print 'Informations of ray #', ir
             print '-------------------------\n'
 
-            ray = self.ray(r)
-            typ = self.typ(r)
-            slabnb = self.slab_nb(r)
+            ray = self.ray(ir)
+            typ = self.typ(ir)
+            slabnb = self.slab_nb(ir)
             # if there is a diffraction, phi0, phi, beta are shown
             if 'D' in typ:
                 diff =True
@@ -2500,7 +2500,7 @@ class Rays(PyLayers,dict):
                         'alpha',
                         'gamma2')
             print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
-                  .format(r, 'B0','-', '-', '-', '-', '-')
+                  .format(ir, 'B0','-', '-', '-', '-', '-')
 
             for iidx, i in enumerate(typ):
                 # import ipdb
@@ -2542,11 +2542,11 @@ class Rays(PyLayers,dict):
 
             if matrix:
                 print '\n----------------------------------------'
-                print ' Matrix of ray #', r, 'at f=', self.I.fGHz[ifGHz]
+                print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
                 print '----------------------------------------'
                 if B:
                     print 'rotation matrix#', 'type: B0'
-                    print self.B0.data[r,:,:]
+                    print self.B0.data[ir,:,:]
                 for iidx, i in enumerate(typ):
                     print 'interaction #', ray[iidx], 'type:', i
                     # f x l x 2 x 2

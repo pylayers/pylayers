@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pdb
 def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     """ Luebbers Diffration coefficient
-    for Ray tracing 
+    for Ray tracing
 
 
 
@@ -27,18 +27,18 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     beta : np.array (Nb)
         skew incidence angle (rad)
     mode : str ( 'tab','exact')
-        if 'tab': the Fresnel function is interpolated 
+        if 'tab': the Fresnel function is interpolated
         ( increase speed)
-        if 'exact': the Fresnel function is computed for each values 
+        if 'exact': the Fresnel function is computed for each values
         ( increase accuracy)
         (see FreF)
 
     Return
     ------
 
-    Ds : numpy array 
+    Ds : numpy array
         Diffraction soft
-    Dh : numpy array 
+    Dh : numpy array
         Diffraction hard
 
     Examples
@@ -145,11 +145,14 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     # 0 < KLA < 2*k*L
     klamax = 2*np.max(k)*np.max(L)
     if mode == 'tab':
-        xF0 = np.logspace(-6,-2,1000)
-        xF1 = np.logspace(-2,np.log10(klamax),1000)
-        xF = np.hstack((xF0,xF1))
+        #xF0 = np.logspace(-6,-2,1000)
+        #xF1 = np.logspace(-2,np.log10(klamax),1000)
+        #xF = np.hstack((xF0,xF1))
+        #pdb.set_trace()
         # xF = np.logspace(-6,np.log10(klamax),1000)
-        F = FreF(xF)[0]
+        xF =  np.linspace(-8,np.log10(klamax),2000)
+        pxF = 10**xF
+        F = FreF(pxF)[0]
     else :
         xF = []
         F=[]
@@ -296,7 +299,7 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     F : array
         Values of Fresnel function in regard of support
         if F =[], fresnel function is computed
-        otherwise the pass interpolation F is used.
+        otherwise the passed interpolation F is used.
     Reference
     ---------
 
@@ -333,13 +336,18 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     tan   = np.tan(angle)
 
     Di = np.empty(KLA.shape)
+    
     if F == []:
         Fkla,ys,yL = FreF(KLA)
-    else : 
-        uF = (np.abs(KLA[:,:]-xF[:,None,None])).argmin(axis=0)
-        Fkla = F[uF]
-        if np.max(Fkla) > 1:
-            Warning('diffRT : Fkla tab probably wrong')
+    else :
+        #pxF = 10**xF
+        #uF = (np.abs(KLA[:,:]-pxF[:,None,None])).argmin(axis=0)
+        uF2 = len(F)*(np.log10(np.abs(KLA))-xF[0,None,None])/(xF[-1,None,None]-xF[0,None,None])
+        uF2_int = np.floor(uF2).astype('int')
+        #pdb.set_trace()
+        Fkla = F[uF2_int]
+        #if np.max(Fkla) > 1:
+        #    Warning('diffRT : Fkla tab probably wrong')
     # 4.56 Mac Namara
     Di = -cste*Fkla/tan
 

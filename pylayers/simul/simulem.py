@@ -1520,8 +1520,8 @@ class Simul(PyLayers):
 
             Parameters
             -----------
-            itx        : list of tx indexes
-            irx        : list of rx indexes
+            itx        : list of tx indices
+            irx        : list of rx indices
             furniture  : boolean for METALIC furniture display
             s          : scale fir scatter plot  (default 8)
             c          : color for scatter plot  (default 'b')
@@ -1555,7 +1555,7 @@ class Simul(PyLayers):
             ax = fig.gca()
 
         #self.L.display['scaled']=False
-        fig,ax=self.L.showGs(fig=fig,ax=ax, show=False)
+        fig,ax=self.L.showG('s',fig=fig,ax=ax, aw=True)
         #
         if furniture:
             if 'lfur' in self.L.__dict__:
@@ -1584,11 +1584,6 @@ class Simul(PyLayers):
         if itx[0] == -1:
             ax.scatter(self.tx.position[0,:],
                        self.tx.position[1,:], c='r', s=s)
-            if num:
-                for k in range(302):
-                    ax.text(self.tx.position[0,k - 1],
-                            self.tx.position[1,k - 1],
-                            str(k), color='black')
         else:
             if traj:
                 cpt = 1

@@ -1475,6 +1475,7 @@ class DLink(Link):
                    'col':'k',
                    'dB':False,
                    'labels':False,
+                   'aw':True,
                    'dyn':70}
 
         for key in defaults:
@@ -1484,7 +1485,7 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'])
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'])
         plt.axis('off')
         #
         # Point A

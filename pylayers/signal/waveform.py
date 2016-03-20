@@ -95,10 +95,10 @@ class Waveform(dict):
 
         self.st       = st
         self.sf       = sf
-        self.f        = self.sf.x
+        self.fGHz     = self.sf.x
 
-        ygamma        = -1j*0.3/(4*np.pi*self.f)
-        self.gamm     = bs.FUsignal(x=self.f,y=ygamma)
+        ygamma        = -1j*0.3/(4*np.pi*self.fGHz)
+        self.gamm     = bs.FUsignal(x=self.fGHz,y=ygamma)
         self.sfg      = self.sf*self.gamm
         self.sfgh     = self.sfg.symH(0)
         self.stgh     = self.sfgh.ifft(1)
@@ -313,6 +313,21 @@ class Waveform(dict):
 
         self.eval()
 
+    def bandwidth(self,th_ratio=10000,Npt=100):
+        """ Determine effective bandwidth of the waveform. 
+        
+        Parameters
+        ----------
+
+        th_ratio : threshold ratio   threshold = max(abs())/th_ratio
+        Npt : Number of points 
+        """
+        u=np.where(np.abs(self.sf.y)>np.max(np.abs(self.sf.y))/th_ratio)
+        #fGHz = self.sf.x[u[1]]
+        fGHz_start = self.sf.x[u[1]][0]
+        fGHz_stop = self.sf.x[u[1]][-1]
+        fGHz = np.linspace(fGHz_start,fGHz_stop,Npt)
+        return fGHz
 
     def gui(self):
         """
@@ -347,7 +362,13 @@ class Waveform(dict):
             show()
 
     def show(self,fig=[]):
-        """
+        """ show waveform in time and frequency domain
+
+        Parameters
+        ----------
+
+        fig : figure
+
         """
         # title construction
         if fig ==[]:

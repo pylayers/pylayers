@@ -2667,9 +2667,10 @@ class Tchannel(bs.FUsignal):
         taumax = max(tau)
         dtau = (taumax-taumin)
         self.s = self.ift(Nz, ffts)
+
         t0 = self.s.x[0]
         te = self.s.x[-1]
-        # pdb.set_trace()
+       
 
         shy = self.s.y.shape
         dx = self.s.x[1]-self.s.x[0]
@@ -2689,7 +2690,7 @@ class Tchannel(bs.FUsignal):
         index = np.vstack((col1,col2)).T
     
         rir[index[:,0],index[:,1]] = self.s.y.ravel()
-        t = np.linspace(t0+taumin,te+dtau,N)
+        t = np.linspace(t0+taumin,te+taumax,N)
         return bs.TUsignal(x=t, y=rir)
 
 
