@@ -692,17 +692,24 @@ class MatInterface(Interface):
         self.Rp = Rp
 
         epd = np.exp(1j * deltai)
-        emd = np.exp(-1j * deltai)
+        emd = np.conj(epd)
+        #emd = np.exp(-1j * deltai)
 
-        self.Ip[:, :, 0, 0] = epd / Tp
-        self.Ip[:, :, 0, 1] = Rp * emd / Tp
-        self.Ip[:, :, 1, 0] = Rp * epd / Tp
-        self.Ip[:, :, 1, 1] = emd / Tp
+        epdoTp = epd/Tp
+        emdoTp = emd/Tp 
 
-        self.Io[:, :, 0, 0] = epd / To
-        self.Io[:, :, 0, 1] = Ro * emd / To
-        self.Io[:, :, 1, 0] = Ro * epd / To
-        self.Io[:, :, 1, 1] = emd / To
+        self.Ip[:, :, 0, 0] = epdoTp
+        self.Ip[:, :, 0, 1] = Rp * emdoTp
+        self.Ip[:, :, 1, 0] = Rp * epdoTp
+        self.Ip[:, :, 1, 1] = emdoTp
+        
+        epdoTo = epd/To
+        emdoTo = emd/To 
+
+        self.Io[:, :, 0, 0] = epdoTo
+        self.Io[:, :, 0, 1] = Ro * emdoTo
+        self.Io[:, :, 1, 0] = Ro * epdoTo
+        self.Io[:, :, 1, 1] = emdoTo
 
         #print 'Slab MatInterface Ip00',self.Ip[15,31,0,0]
         #print 'Slab MatInterface Ip01',self.Ip[15,31,0,1]
@@ -1537,7 +1544,7 @@ class Slab(Interface,dict):
         # fix this problem in MLAYER need thickness 0 for last medium
         #
         #self.thick.append(0.0)
-
+   
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
         """ evaluation of the Slab
 
@@ -1593,9 +1600,9 @@ class Slab(Interface,dict):
         Cp = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Cp[:, :, 0, 0] = 1
         Cp[:, :, 1, 1] = 1
-# _Cp = np.eye(2,dtype=complex)
+        # _Cp = np.eye(2,dtype=complex)
         #
-        # Boucle sur les n-1 matriaux
+        # loop over the s n-1 materials 
         # lmat[0] est toujours l'air ( modifier)
         #
         for i in range(self.n - 1):
@@ -1622,7 +1629,7 @@ class Slab(Interface,dict):
                 else:
                     II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
-            # chains the angle , theta can be complex
+            # chains the angle, theta can be complex
             #
                 theta = II.theta
             #
@@ -1653,8 +1660,8 @@ class Slab(Interface,dict):
 
 
             ### array broadcasing version , new increased speed in regard of einsum
-            Co=np.sum(Co[...,:,:,np.newaxis]*Io[...,np.newaxis,:,:], axis=3)
-            Cp=np.sum(Cp[...,:,:,np.newaxis]*Ip[...,np.newaxis,:,:], axis=3)
+            Co = np.sum(Co[...,:,:,None]*Io[...,None,:,:], axis=3)
+            Cp = np.sum(Cp[...,:,:,None]*Ip[...,None,:,:], axis=3)
 
 
             if mr['name'] == 'METAL':
