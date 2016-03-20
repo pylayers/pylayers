@@ -440,6 +440,7 @@ whereas Transmission rays found')
 
         if len(self.D.data)!=0:
             try:
+                pdb.set_trace()
                 self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
                 self.sout[self.D.idx] = self.D.sout
                 self.si0[self.D.idx] = self.D.si0

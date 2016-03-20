@@ -32,6 +32,12 @@ This modules contains Rays class
     Rays.check_reciprocity
 
 """
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 import pdb
 import os
 import copy
@@ -52,12 +58,6 @@ from pylayers.antprop.channel import Ctilde
 from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
 import h5py
-try:
-    from tvtk.api import tvtk
-    from mayavi.sources.vtk_data_source import VTKDataSource
-    from mayavi import mlab
-except:
-    print 'Layout:Mayavi is not installed'
 
 class Rays(PyLayers,dict):
     """ A set of rays
