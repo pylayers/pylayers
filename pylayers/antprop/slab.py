@@ -691,20 +691,20 @@ class MatInterface(Interface):
         self.Ro = Ro
         self.Rp = Rp
 
-        epd = np.exp(1j * deltai)
-        emd = np.conj(epd)
-        #emd = np.exp(-1j * deltai)
+        jdeltai = 1j*deltai
+        epd = np.exp(jdeltai)
+        emd = np.exp(-jdeltai)
 
         epdoTp = epd/Tp
-        emdoTp = emd/Tp 
+        emdoTp = emd/Tp
 
         self.Ip[:, :, 0, 0] = epdoTp
         self.Ip[:, :, 0, 1] = Rp * emdoTp
         self.Ip[:, :, 1, 0] = Rp * epdoTp
         self.Ip[:, :, 1, 1] = emdoTp
-        
+
         epdoTo = epd/To
-        emdoTo = emd/To 
+        emdoTo = emd/To
 
         self.Io[:, :, 0, 0] = epdoTo
         self.Io[:, :, 0, 1] = Ro * emdoTo
