@@ -1362,8 +1362,10 @@ class DLink(Link):
             R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
+            pdb.set_trace()
             R.fillinter(self.L)
-            C=Ctilde()
+
+            C = Ctilde()
             C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 

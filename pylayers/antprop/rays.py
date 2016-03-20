@@ -1663,8 +1663,9 @@ class Rays(PyLayers,dict):
                 self.raypt = self.raypt + self[k]['nbrays']
 
                 #################################
-                # Start of diffraction specifc process
+                # Start of diffraction specific process
                 ##############################
+                
                 if len(udiff[0]) != 0 :
                     Z=np.where(ityp.T==1)
                     udiff=Z[1],Z[0]
@@ -1673,7 +1674,7 @@ class Rays(PyLayers,dict):
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
                     ptdiff = L.pt[:,L.iupnt[-diffupt]]
-                    self[k]['diffidx']=idx[udiff[0],udiff[1]]
+                    self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
                     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
                                          nx.neighbors(L.Gs,x)),
@@ -1975,7 +1976,8 @@ class Rays(PyLayers,dict):
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         #to be specified and limited to used wedges
-        if self.has_key('_luw'):
+        
+        if hasattr(self,'_luw'):
             D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
 
         # transmission/reflection slab array
