@@ -346,7 +346,6 @@ for d in dr:
     TRFV.append(two_rays_flatearth(p0[:,0],p1[:,0],GtdB=Gt,GrdB=Gr,eps=80.2,sig=5,pol='v',fGHz=fGHz))
     TRFH.append(two_rays_flatearth(p0[:,0],p1[:,0],GtdB=Gt,GrdB=Gr,eps=80.2,sig=1,pol='h',fGHz=fGHz))
     # P2=two_rays_flatearth(p0[:,0],p1[:,0],GtdB=Gt,GrdB=Gr,fGHz=fGHz)
-    
     # TRF2.append(P2)
 
 # plt.semilogx(TRF+PL0(fGHz),label='two-ray model flat earth')

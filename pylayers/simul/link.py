@@ -1317,7 +1317,6 @@ class DLink(Link):
                         print "algo 7 , si_mt"
                 else :
                     Si.run7(cutoff=kwargs['cutoff'],
-                        algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])

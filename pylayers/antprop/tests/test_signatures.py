@@ -93,12 +93,9 @@ print "eval ..."
 #(ak,tauk)= link.eval( force=['sig','R','Ct','H'],si_algo='new',alg='5',ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False)
 tic5 = time.clock()
 #print "Algo 5 (new procone) :",tic5-tic4,len(link.Si),len(link.Si.keys())
-(ak,tauk)= link.eval( force=['sig','R','Ct','H'],si_algo='old',alg=7,ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False)
+(ak,tauk)= link.eval( force=['sig','R','Ct','H'],alg=7,ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False)
 tic6 = time.clock()
-print "Algo 7 (old propaths) :",tic6-tic5,len(link.Si),len(link.Si.keys())
-(ak,tauk)= link.eval( force=['sig','R','Ct','H'],si_algo='new',alg=7,ra_ceil_height_meter=3,ra_number_mirror_cf=1,verbose=False)
-tic7 = time.clock()
-print "Algo 7 (new procone) :",tic7-tic6,len(link.Si),len(link.Si.keys())
+print "Algo 7  :",tic6-tic5,len(link.Si),len(link.Si.keys())
 #print "apply ..."
 #ciro = link.H.applywav(wav.sfg)
 #
