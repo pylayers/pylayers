@@ -1168,14 +1168,12 @@ class DLink(Link):
          Apply waveform to H
         force : list
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
-        si_algo : str ('old'|'new')
+        alg : 1|'old'|'exp'|'exp2'
+            version of run for signature
+        si_algo : str ('old'|'new') Only for alg 2
             signature.run algo type
             'old' : call propaths2
             'new' : call procone2
-        alg : 5|7
-            version of run for signature
-        si_mt: boolean
-            Multi thread version of algo version 7
         si_progress: bollean ( False)
             display progression bar for signatures
         diffraction : boolean (False)
@@ -1236,14 +1234,13 @@ class DLink(Link):
 
         defaults={ 'applywav':True,
                    'si_algo':'old',
-                   'si_mt':False,
                    'si_progress':False,
                    'diffraction':True,
                    'ra_vectorized':True,
                    'ra_ceil_H':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
-                   'alg':7,
+                   'alg':1,
                    'si_reverb':4,
                    'threshold':0.1,
                    'verbose':[],
@@ -1288,41 +1285,34 @@ class DLink(Link):
             if self.verbose :
                 print "load signature"
         else :
-            if kwargs['alg']==2015:
-                TMP=Si.run2015(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
+            if kwargs['alg']==1:
+                Si.run(cutoff=kwargs['cutoff'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
                 if self.verbose :
-                    print "algo 2015"
-            if kwargs['alg']==20152:
-                TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
-                if self.verbose :
-                    print "algo 20152"
+                    print "algo 2 ( ex 7)"
 
-            if kwargs['alg']==5:
-                Si.run5(cutoff=kwargs['cutoff'],
+            if kwargs['alg']=='old':
+                Si.run_old(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         progress=kwargs['si_progress'])
                 if self.verbose :
-                    print "algo 5"
-            if kwargs['alg']==7:
-                if kwargs['si_mt']==7:
-                    Si.run7mt(cutoff=kwargs['cutoff'],
-                        algo=kwargs['si_algo'],
-                        diffraction=kwargs['diffraction'],
-                        threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'])
-                    if self.verbose :
-                        print "algo 7 , si_mt"
-                else :
-                    Si.run7(cutoff=kwargs['cutoff'],
-                        algo=kwargs['si_algo'],
-                        diffraction=kwargs['diffraction'],
-                        threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'])
-                    if self.verbose :
-                        print "algo 7"
+                    print "algo 2 (ex 5)"
+
+            if kwargs['alg']=='exp':
+                TMP=Si.run_exp(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+                if self.verbose :
+                    print "experimental (ex 2015)"
+
+            if kwargs['alg']=='exp2':
+                TMP=Si.run_exp2(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+                if self.verbose :
+                    print "algo exp2 ( ex 20152)"
+
 
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
