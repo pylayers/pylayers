@@ -6929,13 +6929,35 @@ class Layout(PyLayers):
             Gv = nx.Graph()
             #
             # in convex case :
-            #    i)  all segments see all segments
+            #    i)  every non colinear segment see each other
             #    ii) all non adjascent valid diffraction points see each other
             #    iii) all valid diffraction points see non adjascent
             #    segments
             #
+            import numpy
             for nk in combinations(nseg, 2):
-                Gv.add_edge(nk[0],nk[1])
+                nk0 = self.tgs[nk[0]]
+                nk1 = self.tgs[nk[1]]
+                tahe0 = self.tahe[:,nk0]
+                tahe1 = self.tahe[:,nk1]
+
+                pta0 = self.pt[:,tahe0[0]]
+                phe0 = self.pt[:,tahe0[1]]
+                pta1 = self.pt[:,tahe1[0]]
+                phe1 = self.pt[:,tahe1[1]]
+                
+                
+                A0 = numpy.vstack((pta0,phe0,pta1))
+                A0 = numpy.hstack((A0,numpy.ones((3,1))))
+
+                A1 = numpy.vstack((pta0,phe0,phe1))
+                A1 = numpy.hstack((A1,numpy.ones((3,1))))
+
+                d0 = numpy.linalg.det(A0)
+                d1 = numpy.linalg.det(A1)
+
+                if not ((abs(d0)<1e-3) & (abs(d1)<1e-3)):
+                    Gv.add_edge(nk[0],nk[1])
 
             #
             # Handle diffraction point
@@ -7358,6 +7380,14 @@ class Layout(PyLayers):
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
+
+        Notes
+        -----
+
+        This method is called at the beginning of signature evaluation in order 
+        to get the starting and ending interaction. It exploits the information 
+        contained in teh graph Gi.
+
         """
 
         # list of interactions

@@ -3608,8 +3608,8 @@ class Signature(object):
 
     seq : list  of interaction point (edges (>0)  or vertices (<0) [int]
     typ : list of interaction type 1-R 2-T 3-D  [int]
-    pa  : tail point of interaction segmenti (2xN) ndarray
-    pb  : head point of interaction segment  (2xN) ndarray
+    pa  : tail point of interaction segment (2xN) ndarray
+    pb  : head point of interaction segment (2xN) ndarray
     pc  : center point of interaction segment (2xN) ndarray
 
     """
