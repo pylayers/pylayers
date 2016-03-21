@@ -291,6 +291,7 @@ def edgeout2(L,g):
         g.add_edge(i0,i1,output=output)
 
     return(g)
+
 def edgeout(L,g):
     """ filter authorized Gi edges output
 
@@ -1735,6 +1736,7 @@ class Signatures(PyLayers,dict):
         This function makes use of graph Gc. Graph of meged cycles.
 
         """
+        print "Run 2015"
         if source == -1:
             source = self.source
         if target == -1:
@@ -2058,7 +2060,7 @@ class Signatures(PyLayers,dict):
 
         """
 
-
+        print "run2015_2"
         if source == -1:
             source = self.source
         if target == -1:
@@ -2492,7 +2494,7 @@ class Signatures(PyLayers,dict):
 
         """
 
-        # cycles on the LOS
+        # cycles on the Tx-Rx direct line
         lcil=self.L.cycleinline(self.source,self.target)
 
         if len(lcil) <= 2:
@@ -2873,7 +2875,7 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-
+        print "run 5"
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
@@ -2998,7 +3000,7 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-
+        print "run7 mt"
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
@@ -3169,13 +3171,7 @@ class Signatures(PyLayers,dict):
                         #print "non existing : ",len(path)
                         self[1]=np.vstack((nstr,typ))
 
-
-
-
-
-
-
-
+    @profile                    
     def run7(self,cutoff=2,algo='old',bt=False,progress=False,diffraction=True,threshold=0.1):
         """ get signatures (in one list of arrays) between tx and rx
 
@@ -3206,7 +3202,7 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-
+        print "run 7"
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
@@ -3391,7 +3387,7 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-
+        print "run 6"
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         # list of interactions visible from source
