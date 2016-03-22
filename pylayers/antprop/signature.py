@@ -101,6 +101,8 @@ import pylayers.util.plotutil as plu
 from pylayers.antprop.rays import Rays
 from pylayers.util.project import *
 import heapq
+import shapely.geometry as sh
+
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -148,6 +150,8 @@ def gidl(g):
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
     return(gr)
+
+
 
 class Signatures(PyLayers,dict):
     """ set of Signature given 2 Gt cycle (convex) indices
@@ -2520,6 +2524,9 @@ class Signatures(PyLayers,dict):
 
                                 stack.append(iter(nexti))
                                 #stack.append(iter(G[visited[-1]][child]['output']))
+
+                                # import ipdb
+                                # ipdb.set_trace()
 
                                 visited.append(child)
                                 # check if child (current segment) is an airwall

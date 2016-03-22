@@ -4276,6 +4276,7 @@ class Layout(PyLayers):
 
         if not isinstance(aseg,np.ndarray):
             aseg = np.array([aseg])
+
         assert(len(np.where(aseg<0)[0])==0)
         utahe = self.tgs[aseg]
         tahe =  self.tahe[:,utahe]
