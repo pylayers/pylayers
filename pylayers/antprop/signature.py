@@ -152,6 +152,71 @@ def gidl(g):
     return(gr)
 
 
+def unfold(lsig,L):
+    """ unfold a given signature
+
+    returns 2 np.ndarray of pta and phe "aligned"
+    reflexion interactions are mirrored
+
+    Returns
+    -------
+
+    pta : np.array
+    phe : np.array
+
+    """
+
+    lensi = lsig.shape[1]
+    pta = np.empty((2,lensi))
+    phe = np.empty((2,lensi))
+
+    tahe = L.seg2pts(lsig[0,:])
+    
+    pta[:,0]=tahe[:2,0]
+    phe[:,0]=tahe[2:,0]
+
+    pa = tahe[:2,:]
+    pb = tahe[2:,:]
+
+    typ = lsig[1,:]
+
+
+    mirror=[]
+
+    for i in range(1,lensi):
+        pam = pa[:,i]
+        pbm = pb[:,i]
+        
+        if typ[i] == 2: # R
+            for m in mirror:
+                pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
+            pta[:,i] = pam
+            phe[:,i] = pbm
+            mirror.append(i)
+
+        elif typ[i] == 3 : # T
+            for m in mirror:
+                pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
+            pta[:,i] = pam
+            phe[:,i] = pbm
+
+        elif typ[i] == 1 : # D
+            pass
+            # TODO not implemented yet
+
+    import ipdb
+    ipdb.set_trace()
+    s0 = sh.LineString((pta[:,0],phe[:,-1]))
+    s1 = sh.LineString((pta[:,-1],phe[:,0]))
+    if not s0.crosses(s1):
+        s0 = sh.LineString((pta[:,0],pta[:,-1]))
+        s1 = sh.LineString((phe[:,0],phe[:,-1]))
+
+    return pta,phe
+
+
 
 class Signatures(PyLayers,dict):
     """ set of Signature given 2 Gt cycle (convex) indices
