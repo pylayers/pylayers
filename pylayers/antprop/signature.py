@@ -2525,6 +2525,7 @@ class Signatures(PyLayers,dict):
 
                                 stack.append(iter(nexti))
                                 #stack.append(iter(G[visited[-1]][child]['output']))
+
                                 visited.append(child)
                                 # check if child (current segment) is an airwall
                                 # warning not efficient if many airwalls
