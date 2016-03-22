@@ -8617,7 +8617,7 @@ class Layout(PyLayers):
             self.Gt.node[root]['merged'] = root
             self.Gc.remove_node(child)
             # self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
-            self.Gc.pos[root]=tuple(np.array(self.Gc.node[1]['polyg'].centroid.xy)[:,0])
+            self.Gc.pos[root]=tuple(np.array(self.Gc.node[root]['polyg'].centroid.xy)[:,0])
 
 
         for Ga in lGa:
