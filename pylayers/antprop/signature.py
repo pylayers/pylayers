@@ -31,14 +31,9 @@ Class Signatures
     Signatures.run2015_2
     Signatures.dido
     Signatures.run
-    Signatures.run1
-    Signatures.run2
-    Signatures.run3
-    Signatures.run4
-    Signatures.run5
-    Signatures.run6
-    Signatures.run7
-    Signatures.run7mt
+    Signatures.run_old
+    Signatures.run_exp
+    Signatures.run_exp2
     Signatures.meta
     Signatures.lineofcycle
     Signatures.cones
@@ -3614,8 +3609,8 @@ class Signature(object):
 
     seq : list  of interaction point (edges (>0)  or vertices (<0) [int]
     typ : list of interaction type 1-R 2-T 3-D  [int]
-    pa  : tail point of interaction segmenti (2xN) ndarray
-    pb  : head point of interaction segment  (2xN) ndarray
+    pa  : tail point of interaction segment (2xN) ndarray
+    pb  : head point of interaction segment (2xN) ndarray
     pc  : center point of interaction segment (2xN) ndarray
 
     """
