@@ -254,7 +254,7 @@ def valid(lsig,L):
 
 
     mirror=[]
-    lines = [L._shseg[seq[0]]]
+    # lines = [L._shseg[seq[0]]]
     for i in range(1,lensi):
         # pam = pa[:,i].reshape(2,1)
         # pbm = pb[:,i].reshape(2,1)
@@ -278,8 +278,6 @@ def valid(lsig,L):
         elif typ[i] == 1 : # D
             pta[:,i] = pam.reshape(2)
             phe[:,i] = pbm.reshape(2)
-            # TODO not implemented yet
-        lines.append(sh.LineString((pta[:,i],phe[:,i])))
 
     # if not (geu.ccw(a0,b0,b1) ^
     #         geu.ccw(b0,b1,a1) ):
@@ -298,15 +296,15 @@ def valid(lsig,L):
         vl = ( pta[:,0],pta[:,-1])
         vr = ( phe[:,0],phe[:,-1])
 
-        twisted = True
-        lef = sh.LineString((pta[:,0],pta[:,-1]))
-        rig = sh.LineString((phe[:,0],phe[:,-1]))
+        # twisted = True
+        # lef = sh.LineString((pta[:,0],pta[:,-1]))
+        # rig = sh.LineString((phe[:,0],phe[:,-1]))
     else:    
         vl = ( pta[:,0], phe[:,-1])
         vr = ( phe[:,0],pta[:,-1])
-        twisted = False
-        lef = sh.LineString((pta[:,0],phe[:,-1]))
-        rig = sh.LineString((pta[:,-1],phe[:,0]))
+        # twisted = False
+        # lef = sh.LineString((pta[:,0],phe[:,-1]))
+        # rig = sh.LineString((pta[:,-1],phe[:,0]))
         
        
 
