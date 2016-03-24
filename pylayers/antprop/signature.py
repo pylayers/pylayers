@@ -209,7 +209,13 @@ def valid(lsig,L):
     if lensi<=3:
         return True
 
-    lsig = np.array([(i[0],len(i)) for i in lsig])
+    if lensi == 4:
+        if np.all(lsig == np.array([[ 5,  2, 67, 58],[ 2,  2,  3,  2]]).T):
+            import ipdb
+            ipdb.set_trace()
+
+    if isinstance(lsig,list):
+        lsig = np.array([(i[0],len(i)) for i in lsig])
 
     pta = np.empty((2,lensi))
     phe = np.empty((2,lensi))
@@ -289,6 +295,7 @@ def valid(lsig,L):
     try:
         poly=poly.next()
     except:
+
         return False
 
     
@@ -309,6 +316,7 @@ def valid(lsig,L):
     #     plt.draw()
     #     import ipdb
     #     ipdb.set_trace()
+
     return np.all(cr)
     
 
@@ -452,6 +460,7 @@ class Signatures(PyLayers,dict):
                         OK[i]=sig
                         pass
                 else :
+
                     try :
                         KO[i]=np.vstack((KO[i],sig))
                     except:
@@ -2842,7 +2851,8 @@ class Signatures(PyLayers,dict):
     def pltunfold(self,L,i=0,s=0):
         import shapely.ops as sho
         from descartes.patch import PolygonPatch
-
+        plt.ion()
+        plt.gcf()
         def plot_lines(ax, ob, color = []):
             for ii,line in enumerate(ob):
                 if color == []:
