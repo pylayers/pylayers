@@ -101,6 +101,8 @@ import pylayers.util.plotutil as plu
 from pylayers.antprop.rays import Rays
 from pylayers.util.project import *
 import heapq
+import shapely.geometry as sh
+
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -148,6 +150,102 @@ def gidl(g):
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
     return(gr)
+
+def shLtmp(L):
+    seg_connect = {x:L.Gs.edge[x].keys() for x in L.Gs.nodes() if x >0}
+
+    dpts = {x[0]:(L.Gs.pos[x[1][0]],L.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+    L._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+
+
+def valid(lsig,L):
+    """ unfold a given signature
+
+    returns 2 np.ndarray of pta and phe "aligned"
+    reflexion interactions are mirrored
+
+    Returns
+    -------
+
+    pta : np.array
+    phe : np.array
+
+    """
+
+
+    lsig = np.array([(i[0],len(i)) for i in lsig])
+
+    lensi = len(lsig)
+    pta = np.empty((2,lensi))
+    phe = np.empty((2,lensi))
+
+    seq = lsig[:,0]
+    upos = np.where(seq>0)[0]
+    uneg = np.where(seq<0)[0]
+    
+    tahep = L.seg2pts(seq[upos])
+    tahen = np.array([L.Gs.pos[i] for i in seq[uneg]]).T
+    tahen = np.vstack((tahen,tahen))
+    tahe = np.empty((4,lensi))
+    tahe[:,upos]=tahep
+    try:
+        tahe[:,uneg]=tahen
+    except:
+        pass
+    
+    pta[:,0]=tahe[:2,0]
+    phe[:,0]=tahe[2:,0]
+
+    pa = tahe[:2,:]
+    pb = tahe[2:,:]
+
+    typ = lsig[:,1]
+
+
+    mirror=[]
+
+    for i in range(1,lensi):
+        pam = pa[:,i].reshape(2,1)
+        pbm = pb[:,i].reshape(2,1)
+
+        if typ[i] == 2: # R
+            for m in mirror:
+                pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
+            pta[:,i] = pam.reshape(2)
+            phe[:,i] = pbm.reshape(2)
+            mirror.append(i)
+
+        elif typ[i] == 3 : # T
+            for m in mirror:
+                pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
+            pta[:,i] = pam.reshape(2)
+            phe[:,i] = pbm.reshape(2)
+
+        elif typ[i] == 1 : # D
+            pta[:,i] = pam.reshape(2)
+            phe[:,i] = pbm.reshape(2)
+            # TODO not implemented yet
+
+    import ipdb
+    ipdb.set_trace()
+    s0 = sh.LineString((pta[:,0],phe[:,-1]))
+    s1 = sh.LineString((pta[:,-1],phe[:,0]))
+    if not s0.crosses(s1):
+        s0 = sh.LineString((pta[:,0],pta[:,-1]))
+        s1 = sh.LineString((phe[:,0],phe[:,-1]))
+
+    cr = [(s0.crosses(L._shseg[s]) or s0.touches(L._shseg[s])) and 
+          (s1.crosses(L._shseg[s]) or s1.touches(L._shseg[s])) for s in seq[1:-1] ]
+
+    # if len(seq) >2:
+    #     import ipdb
+    #     ipdb.set_trace()
+    return np.all(cr)
+    
+
+
 
 class Signatures(PyLayers,dict):
     """ set of Signature given 2 Gt cycle (convex) indices
@@ -2508,6 +2606,7 @@ class Signatures(PyLayers,dict):
                             elif (child not in visited) or (bt): # else visit other node
                                 # only visit output nodes except if bt
                                 #pdb.set_trace()
+                                
                                 try:
                                     nexti  = Gi[visited[-1]][child]['output'].keys()
                                     # keyprob  = Gi[visited[-1]][child]['output'].items()
@@ -2518,16 +2617,23 @@ class Signatures(PyLayers,dict):
                                 except:
                                     nexti = []
 
-                                stack.append(iter(nexti))
-                                #stack.append(iter(G[visited[-1]][child]['output']))
                                 visited.append(child)
-                                # check if child (current segment) is an airwall
-                                # warning not efficient if many airwalls
+                                # if valid(visited,self.L):
+                                stack.append(iter(nexti))
+                                    #stack.append(iter(G[visited[-1]][child]['output']))
+
+                                    # import ipdb
+                                    # ipdb.set_trace()
+
+
+                                    # check if child (current segment) is an airwall
+                                    # warning not efficient if many airwalls
                                 if child[0] in self.L.name['AIR']:
                                     lawp.append(1)
                                 else:
                                     lawp.append(0)
-
+                                # else:
+                                #     visited.pop(-1)
 
 
                         else: #len(visited) == cutoff (visited list is too long)
@@ -2635,8 +2741,54 @@ class Signatures(PyLayers,dict):
         si = Signature(self[i][(2*s):(2*s)+2])
         si.ev(L)
         pta,phe = si.unfold()
-
+        
+        
         return pta,phe
+
+    def pltunfold(self,L,i=0,s=0):
+        import shapely.ops as sho
+        from descartes.patch import PolygonPatch
+
+        def plot_lines(ax, ob, color = []):
+            for ii,line in enumerate(ob):
+                if color == []:
+                    if ii ==0 : 
+                        c ='g'
+                    elif ii == len(ob)-1:
+                        c ='r'
+                    else:
+                        c= 'k'
+                else:
+                    c=color
+
+                x, y = line.xy
+                
+                ax.plot(x, y, color=c, alpha=0.7, linewidth=3, solid_capstyle='round', zorder=2)
+            return ax
+        def plot_poly(ax, ob, color = []):
+            for ii,poly in enumerate(ob):
+                
+                pp = PolygonPatch(poly,alpha=0.3)
+                ax.add_patch(pp)
+
+            return ax
+        pta,phe=self.unfold(L=L,i=i,s=s)
+
+        ML =sh.MultiLineString([((pta[0][i],pta[1][i]),(phe[0][i],phe[1][i])) for i in range(pta.shape[1])])
+        fig=plt.gcf()
+        ax=plt.gca()
+        ax = plot_lines(ax,ML)
+
+        s0=sh.LineString([(pta[0,0],pta[1,0]),(phe[0,-1],phe[1,-1])])
+        s1=sh.LineString([(phe[0,0],phe[1,0]),(pta[0,-1],pta[1,-1])])
+        if s0.crosses(s1):
+            s0=sh.LineString([(pta[0,0],pta[1,0]),(pta[0,-1],pta[1,-1])])
+            s1=sh.LineString([(phe[0,0],phe[1,0]),(phe[0,-1],phe[1,-1])])
+        cross = sh.MultiLineString([s0,s1,ML[0],ML[-1]])
+
+        poly=sho.polygonize(cross)
+        # ax = plot_lines(ax,cross,color='b')
+        ax = plot_poly(ax,poly)
 
     def show(self,L,**kwargs):
         """  plot signatures within the simulated environment

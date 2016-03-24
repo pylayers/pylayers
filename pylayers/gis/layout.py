@@ -4276,6 +4276,7 @@ class Layout(PyLayers):
 
         if not isinstance(aseg,np.ndarray):
             aseg = np.array([aseg])
+
         assert(len(np.where(aseg<0)[0])==0)
         utahe = self.tgs[aseg]
         tahe =  self.tahe[:,utahe]
@@ -8616,7 +8617,7 @@ class Layout(PyLayers):
             self.Gt.node[root]['merged'] = root
             self.Gc.remove_node(child)
             # self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
-            self.Gc.pos[root]=tuple(np.array(self.Gc.node[1]['polyg'].centroid.xy)[:,0])
+            self.Gc.pos[root]=tuple(np.array(self.Gc.node[root]['polyg'].centroid.xy)[:,0])
 
 
         for Ga in lGa:
