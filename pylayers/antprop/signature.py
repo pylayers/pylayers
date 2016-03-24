@@ -209,10 +209,11 @@ def valid(lsig,L):
     if lensi<=3:
         return True
 
-    if lensi == 4:
-        if np.all(lsig == np.array([[ 5,  2, 67, 58],[ 2,  2,  3,  2]]).T):
-            import ipdb
-            ipdb.set_trace()
+    # DEBUG
+    # if lensi == 4:
+    #     if np.all(lsig == np.array([[ 5,  2, 67, 58],[ 2,  2,  3,  2]]).T):
+    #         import ipdb
+    #         ipdb.set_trace()
 
     if isinstance(lsig,list):
         lsig = np.array([(i[0],len(i)) for i in lsig])
@@ -280,44 +281,109 @@ def valid(lsig,L):
             # TODO not implemented yet
         lines.append(sh.LineString((pta[:,i],phe[:,i])))
 
+    # if not (geu.ccw(a0,b0,b1) ^
+    #         geu.ccw(b0,b1,a1) ):
+    #     v0 = (b1 - a0)
+    #     v1 = (a1 - b0)
+    #     twisted = True
+    # else:    
+    #     v0 = (a1 - a0)
+    #     v1 = (b1 - b0)
+    #     twisted = False
 
-    # create lines relying 1st and last seg
-    s0 = sh.LineString((pta[:,0],phe[:,-1]))
-    s1 = sh.LineString((pta[:,-1],phe[:,0]))
+    # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
+    # vl and vr are 2 director vector lying on the polygon side.
+    if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
+            geu.ccw(phe[:,0],phe[:,-1],pta[:,-1]) ):
+        vl = ( pta[:,0],pta[:,-1])
+        vr = ( phe[:,0],phe[:,-1])
 
-    if s0.touches(s1):
-        s0 = sh.LineString((pta[:,0],pta[:,-1]))
-        s1 = sh.LineString((phe[:,0],phe[:,-1]))
+        twisted = True
+        lef = sh.LineString((pta[:,0],pta[:,-1]))
+        rig = sh.LineString((phe[:,0],phe[:,-1]))
+    else:    
+        vl = ( pta[:,0], phe[:,-1])
+        vr = ( phe[:,0],pta[:,-1])
+        twisted = False
+        lef = sh.LineString((pta[:,0],phe[:,-1]))
+        rig = sh.LineString((pta[:,-1],phe[:,0]))
+        
+       
+
+
+    # looking situation where Tail and head are not inside the polygon
+    # => both tahe are left of vr and vl
+    # =>   both tahe are right of vr and vl
+    lta = geu.isleft(pta[:,1:-1],vl[0][:,None],vl[1][:,None])
+    rta = geu.isleft(pta[:,1:-1],vr[0][:,None],vr[1][:,None])
+    lhe =  geu.isleft(phe[:,1:-1],vl[0][:,None],vl[1][:,None])
+    rhe = geu.isleft(phe[:,1:-1],vr[0][:,None],vr[1][:,None])
+
+    out = (lta & lhe ) | (~rta & ~rhe)
+    inside = ~out
+
+
+    return np.all(inside)
+
+
+
+
+    # # create lines relying 1st and last seg
+    # s0 = sh.LineString((pta[:,0],phe[:,-1]))
+    # s1 = sh.LineString((pta[:,-1],phe[:,0]))
+
+    # if s0.touches(s1):
+    #     s0 = sh.LineString((pta[:,0],pta[:,-1]))
+    #     s1 = sh.LineString((phe[:,0],phe[:,-1]))
+
+
+    # plt.ion()
+    # plt.gcf()
+    # plt.title(str(cond))
+    # plot_lines(ax=plt.gca(),ob=lines)
+    # # plot_lines(ax=plt.gca(),ob=[lef],color='g')
+    # # plot_lines(ax=plt.gca(),ob=[rig],color='r')
+    # # plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
+    # # plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
+    # plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
+    # plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
+    # plt.legend()
+
+    # plt.draw()
+    # import ipdb
+    # ipdb.set_trace()
+
+
+
+    # plt.clf()
+    # poly=sho.polygonize([s0,s1,lines[0],lines[-1]])
+
+    # try:
+    #     poly=poly.next()
+    # except:
+
+    #     return False
 
     
-    poly=sho.polygonize([s0,s1,lines[0],lines[-1]])
 
-    try:
-        poly=poly.next()
-    except:
+    # # cr = [(s0.crosses(L._shseg[s]) or s0.touches(L._shseg[s])) and 
+    # #       (s1.crosses(L._shseg[s]) or s1.touches(L._shseg[s])) for s in seq[1:-1] ]
+    # cr = [(poly.contains(l) or (l.intersects(poly) and not l.touches(poly)) ) for l in lines[1:-1]]
+    # # if len(seq) >4:
+    # #     import ipdb
+    # #     ipdb.set_trace()
+    # # if len(seq) >2:
+    # #     plt.cla()
+    # #     ax=plt.gca()
+    # #     plot_lines(ax=ax,ob=lines)
+    # #     plot_lines(ax=ax,ob=[s0,s1],color='b')
+    # #     plot_poly(ax=ax,ob=[poly])
+    # #     plt.title(str(cr))
+    # #     plt.draw()
+    # #     import ipdb
+    # #     ipdb.set_trace()
 
-        return False
-
-    
-
-    # cr = [(s0.crosses(L._shseg[s]) or s0.touches(L._shseg[s])) and 
-    #       (s1.crosses(L._shseg[s]) or s1.touches(L._shseg[s])) for s in seq[1:-1] ]
-    cr = [(poly.contains(l) or (l.intersects(poly) and not l.touches(poly)) ) for l in lines[1:-1]]
-    # if len(seq) >4:
-    #     import ipdb
-    #     ipdb.set_trace()
-    # if len(seq) >2:
-    #     plt.cla()
-    #     ax=plt.gca()
-    #     plot_lines(ax=ax,ob=lines)
-    #     plot_lines(ax=ax,ob=[s0,s1],color='b')
-    #     plot_poly(ax=ax,ob=[poly])
-    #     plt.title(str(cr))
-    #     plt.draw()
-    #     import ipdb
-    #     ipdb.set_trace()
-
-    return np.all(cr)
+    # return np.all(cr)
     
 
 
@@ -2853,6 +2919,7 @@ class Signatures(PyLayers,dict):
         from descartes.patch import PolygonPatch
         plt.ion()
         plt.gcf()
+        plt.clf()
         def plot_lines(ax, ob, color = []):
             for ii,line in enumerate(ob):
                 if color == []:
