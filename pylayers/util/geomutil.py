@@ -4280,12 +4280,15 @@ def mirror(p,pa,pb):
     >>> from pylayers.util.plotutil import *
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
-    >>> p = np.random.randn(2,1000)
-    >>> pa  = np.array([0,0])
-    >>> pb  = np.array([0,1])
+    >>> p = np.random.randn(2,10)
+    >>> pa  = np.array([-0.5,1])
+    >>> pb  = np.array([0,0])
     >>> M = mirror(p,pa,pb)
     >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
     >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
+    >>> displot(p,M,alpha=0.2)
+    >>> axis = np.vstack((pa,pb))
+    >>> plt.plot(axis[:,0],axis[:,1])
 
     """
 
