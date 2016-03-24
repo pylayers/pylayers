@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.signature" href="../pylayers.antprop.signature.html" />
-    <link rel="next" title="pylayers.antprop.signature.Signatures.run7mt" href="pylayers.antprop.signature.Signatures.run7mt.html" />
-    <link rel="prev" title="pylayers.antprop.signature.Signatures.run6" href="pylayers.antprop.signature.Signatures.run6.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -82,44 +79,10 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.signature.Signatures.run6.html" title="pylayers.antprop.signature.Signatures.run6"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.signature.Signatures.run6
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.signature.Signatures.run7mt.html" title="pylayers.antprop.signature.Signatures.run7mt"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.signature.Signatures.run7mt
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -134,22 +97,6 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.signature.html" title="pylayers.antprop.signature" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.signature
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -177,44 +124,6 @@
             
   <div class="section" id="pylayers-antprop-signature-signatures-run7">
 <h1>pylayers.antprop.signature.Signatures.run7<a class="headerlink" href="#pylayers-antprop-signature-signatures-run7" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run7">
-<code class="descclassname">Signatures.</code><code class="descname">run7</code><span class="sig-paren">(</span><em>cutoff=2</em>, <em>algo='old'</em>, <em>bt=False</em>, <em>progress=False</em>, <em>diffraction=True</em>, <em>threshold=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signatures.run7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run7" title="Permalink to this definition">¶</a></dt>
-<dd><p>get signatures (in one list of arrays) between tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cutoff</strong> : int</p>
-<blockquote>
-<div><p>limit the exploration of all_simple_path</p>
-</div></blockquote>
-<p><strong>algo: string</strong> :</p>
-<blockquote>
-<div><p>&#8216;old&#8217; : call propaths2
-&#8216;new&#8217; : call procone2</p>
-</div></blockquote>
-<p><strong>bt</strong> : bool</p>
-<blockquote>
-<div><p>backtrace (allow to visit already visited nodes in simple path algorithm)</p>
-</div></blockquote>
-<p><strong>progress</strong> : bool</p>
-<blockquote>
-<div><p>display the time passed in the loop</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sigslist</strong> :  numpy.ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.link.Dlink.eval</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature.Signatures.propath2</span></code>, <a class="reference internal" href="pylayers.antprop.signature.Signatures.procone2.html#pylayers.antprop.signature.Signatures.procone2" title="pylayers.antprop.signature.Signatures.procone2"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature.Signatures.procone2</span></code></a></p>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -228,25 +137,15 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.signature.Signatures.run7.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.signature.Signatures.run6.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.signature.Signatures.run7mt.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous

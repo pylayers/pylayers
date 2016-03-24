@@ -1050,14 +1050,9 @@
 <span class="sd">            &gt;&gt;&gt; F  = M.fdd</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; F.plot(&#39;moddB&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.tight_layout()</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; F.plot(&#39;mod&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.tight_layout()</span>
-<span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; F.plot(&#39;ang&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.tight_layout()</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1128,29 +1123,13 @@
 <span class="sd">        display the 4 channels</span>
 <span class="sd">    show_span(delay,wide)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Tdd.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.__init__.html#pylayers.measures.mesuwb.Tdd.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="k">if</span> <span class="n">d</span> <span class="o">!=</span> <span class="p">[]:</span>
-            <span class="c1">#t = d.Time[0]*1e9</span>
-            <span class="c1">#self.ch1  = bs.TUsignal(t,d.CH1[0])</span>
-            <span class="c1">#self.ch2  = bs.TUsignal(t,d.CH2[0])</span>
-            <span class="c1">#self.ch3  = bs.TUsignal(t,d.CH3[0])</span>
-            <span class="c1">#self.ch4  = bs.TUsignal(t,d.CH4[0])</span>
-            <span class="c1">#self.tx   = bs.TUsignal(t,d.TX)</span>
-            <span class="c1">#self.tx   = bs.TUsignal(t,d.TX[0])</span>
-            <span class="c1">#####</span>
-            <span class="c1">##### Definitely not obvious , but</span>
-            <span class="c1">##### this order is the corect one regarding</span>
-            <span class="c1">##### dhe measurements !!</span>
-            <span class="c1">#####</span>
-            <span class="n">t</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e9</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="c1">#self.tx   = bs.TUsignal(t,d.TX)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">pass</span></div>
+<div class="viewcode-block" id="Tdd.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.__init__.html#pylayers.measures.mesuwb.Tdd.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e9</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Tdd.PL"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.PL.html#pylayers.measures.mesuwb.Tdd.PL">[docs]</a>    <span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  Calculate NB Path Loss on a given UWB frequency band</span>
@@ -1740,7 +1719,7 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.measures.mesuwb import *</span>
 <span class="sd">            &gt;&gt;&gt; M1 = UWBMeasure(1)</span>
-<span class="sd">            &gt;&gt;&gt; M1.show()</span>
+<span class="sd">            &gt;&gt;&gt; f,a = M1.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">UWBMeasure</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
@@ -2432,7 +2411,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 05, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

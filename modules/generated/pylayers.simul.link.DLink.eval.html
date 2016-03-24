@@ -193,19 +193,15 @@
 <blockquote>
 <div><p>Force the computation ([&#8216;sig&#8217;,&#8217;ray&#8217;,&#8217;Ct&#8217;,&#8217;H&#8217;]) AND save (replace previous computations)</p>
 </div></blockquote>
-<p><strong>si_algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;)</p>
+<p><strong>alg</strong> : 1|&#8217;old&#8217;|&#8217;exp&#8217;|&#8217;exp2&#8217;</p>
+<blockquote>
+<div><p>version of run for signature</p>
+</div></blockquote>
+<p><strong>si_algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;) Only for alg 2</p>
 <blockquote>
 <div><p>signature.run algo type
 &#8216;old&#8217; : call propaths2
 &#8216;new&#8217; : call procone2</p>
-</div></blockquote>
-<p><strong>alg</strong> : 5|7</p>
-<blockquote>
-<div><p>version of run for signature</p>
-</div></blockquote>
-<p><strong>si_mt: boolean</strong> :</p>
-<blockquote>
-<div><p>Multi thread version of algo version 7</p>
 </div></blockquote>
 <p><strong>si_progress: bollean ( False)</strong> :</p>
 <blockquote>
@@ -279,7 +275,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.eval.txt"

@@ -133,9 +133,6 @@
 <div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b1c1cffef10&gt;
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">(</span><span class="s1">&#39;cnes.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -148,11 +145,11 @@ NoSectionError                            Traceback (most recent call last)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/coverage.pyc in __init__(self, _fileini)
-    100         self.config.read(pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;]))
-    101
---&gt; 102         self.layoutopt = dict(self.config.items(&#39;layout&#39;))
-    103         self.gridopt   = dict(self.config.items(&#39;grid&#39;))
-    104         self.apopt     = dict(self.config.items(&#39;ap&#39;))
+    102         self.config.read(pyu.getlong(_fileini,pstruc[&#39;DIRSIMUL&#39;]))
+    103
+--&gt; 104         self.layoutopt = dict(self.config.items(&#39;layout&#39;))
+    105         self.gridopt   = dict(self.config.items(&#39;grid&#39;))
+    106         self.apopt     = dict(self.config.items(&#39;ap&#39;))
 
 
 /home/uguen/anaconda/lib/python2.7/ConfigParser.pyc in items(self, section, raw, vars)
@@ -375,7 +372,7 @@ NameError: name &#39;C&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/CNES.txt"

@@ -146,9 +146,6 @@
 <div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2aceefa36290&gt;
-</pre></div>
-</div>
 <p>We start by constructing a propagation channel with the dedicated class
 <code class="docutils literal"><span class="pre">DLink</span></code>. We specify a Layout as well as the two extremities of the
 link. Antennas are also specified.</p>
@@ -160,38 +157,7 @@ link. Antennas are also specified.</p>
 <span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>new file defstr3.ini
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-ValueError                                Traceback (most recent call last)
-
-&lt;ipython-input-3-91cfa8829b69&gt; in &lt;module&gt;()
-----&gt; 1 L = Layout(&#39;defstr3.ini&#39;)
-      2 L.Gs.node[1][&#39;ss_name&#39;]=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;METAL&#39;]
-      3 L.build()
-      4 tx=array([759,1114,1.0])
-      5 rx=array([761,1114,1.5])
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
-    410         # check layout integrity (default)
-    411         if check:
---&gt; 412             self.check()
-    413         #self.boundary()
-    414
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
-    709         #
-    710         degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
---&gt; 711         degmin = min(degpnt)
-    712         degmax = max(degpnt)
-    713
-
-
-ValueError: min() arg is an empty sequence
+<div class="highlight-python"><div class="highlight"><pre><span></span>check len(ncycles) == 2 passed
 </pre></div>
 </div>
 <p>The full evaluation and hdf5 storage of the channel is done with the
@@ -200,49 +166,37 @@ whatever what has been previously calculated.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-4-93695eef2a3c&gt; in &lt;module&gt;()
-----&gt; 1 ak,tauk=Lk.eval()
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>checkh5
+Start Signatures
+run
+algo 2 ( ex 7)
+Signatures&#39;&gt; from 2_2_3 saved
+Stop signature 0.098562002182
+Start Rays
+Rays&#39;&gt; from 3_2_3 saved
+Stop rays 0.330257892609
+Ctilde&#39;&gt; from 2_3_1 saved
+Tchannel&#39;&gt; from 2_3_1_0_0_0_0 saved
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;l20&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-5-b4eee5c9d035&gt; in &lt;module&gt;()
-      1 f = plt.figure(figsize=(15,15))
-----&gt; 2 f,a=Lk.C.show(cmap=&#39;jet&#39;,typ=&#39;l20&#39;,fig=f,vmin=-100,vmax=-20,fontsize=22)
-
-
-NameError: name &#39;Lk&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2aceefca62d0&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Channel_7_0.png" src="../../_images/Channel_7_0.png" />
 <p>The transmission channel is stored in <code class="docutils literal"><span class="pre">H</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-6-345dfe201bf5&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
+-----------------------------------------------------
+freq : 2.4 2.4 1
+shape  : (1216, 1, 1, 1)
+tau (min, max) : 6.87184270936 92.947720014
+dist (min,max) : 2.06155281281 27.8843160042
+Friis factor -j c/(4 pi f) has been applied
+ calibrated : No
+ windowed : No
 </pre></div>
 </div>
 <p>Once the channel has been calculated, we define an IR-UWB waveform.</p>
@@ -259,44 +213,30 @@ propagation channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-9-bfee3ded1758&gt; in &lt;module&gt;()
-----&gt; 1 Lk.show()
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ae159523250&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2ae155c45550&gt;)
 </pre></div>
 </div>
+<img alt="../../_images/Channel_14_1.png" src="../../_images/Channel_14_1.png" />
 <p>The <code class="docutils literal"><span class="pre">Ctilde</span></code> channel can be sorted with respect to delay</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-10-345dfe201bf5&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
+-----------------------------------------------------
+freq : 2.4 2.4 1
+shape  : (1216, 1, 1, 1)
+tau (min, max) : 6.87184270936 92.947720014
+dist (min,max) : 2.06155281281 27.8843160042
+Friis factor -j c/(4 pi f) has been applied
+ calibrated : No
+ windowed : No
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-11-00ef4b2c8627&gt; in &lt;module&gt;()
-----&gt; 1 len(Lk.fGHz)
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">2</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -305,19 +245,41 @@ NameError: name &#39;Lk&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+IndexError                                Traceback (most recent call last)
 
 &lt;ipython-input-12-f5a32547e4dd&gt; in &lt;module&gt;()
       1 f = plt.figure(figsize=(20,10))
 ----&gt; 2 f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in show(self, **kwargs)
+   3220
+   3221         ax1 = fig.add_subplot(121)
+-&gt; 3222         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
+   3223         ax2 = fig.add_subplot(122)
+   3224         if &#39;vmin&#39; in kwargs:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in imshow(self, **kwargs)
+    727
+    728         if self.y.ndim&gt;1:
+--&gt; 729             dt,ylabels = self.cformat(**kwargs)
+    730
+    731             if &#39;vmin&#39; not in kwargs:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in cformat(self, **kwargs)
+    603             # whole range
+    604             vs = 0
+--&gt; 605             vf = shy[ax[1]]
+    606         else:
+    607             # subset of values
+
+
+IndexError: tuple index out of range
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2acef2bc9a50&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Channel_18_1.png" src="../../_images/Channel_18_1.png" />
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
@@ -329,15 +291,15 @@ evaluated with the Friis factor. This can be checked at the end of the
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-13-345dfe201bf5&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
+-----------------------------------------------------
+freq : 2.4 2.4 1
+shape  : (1216, 1, 1, 1)
+tau (min, max) : 6.87184270936 92.947720014
+dist (min,max) : 2.06155281281 27.8843160042
+Friis factor -j c/(4 pi f) has been applied
+ calibrated : No
+ windowed : No
 </pre></div>
 </div>
 <p>If this factor has already been applied the energy function should be
@@ -351,17 +313,33 @@ called with the option <code class="docutils literal"><span class="pre">Friis</s
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+IndexError                                Traceback (most recent call last)
 
 &lt;ipython-input-14-2c8aff483b42&gt; in &lt;module&gt;()
-----&gt; 1 Emean=Lk.H.energy(Friis=False,mode=&#39;mean&#39;)
-      2 Eint=Lk.H.energy(Friis=False,mode=&#39;integ&#39;)
+      1 Emean=Lk.H.energy(Friis=False,mode=&#39;mean&#39;)
+----&gt; 2 Eint=Lk.H.energy(Friis=False,mode=&#39;integ&#39;)
       3 Ecenter=Lk.H.energy(Friis=False,mode=&#39;center&#39;)
       4 Efirst=Lk.H.energy(Friis=False,mode=&#39;first&#39;)
       5 Elast=Lk.H.energy(Friis=False,mode=&#39;last&#39;)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in energy(self, mode, Friis, sumray)
+   2129         #  axis 1 : frequency
+   2130         #
+-&gt; 2131         Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
+   2132         if sumray:
+   2133             Etot = np.sum(Etot,axis=0)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in energy(self, axis, Friis, mode)
+   2829
+   2830         if mode==&#39;integ&#39;:
+-&gt; 2831             EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
+   2832
+   2833         if mode==&#39;center&#39;:
+
+
+IndexError: index 1 is out of bounds for axis 0 with size 1
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -387,15 +365,7 @@ level.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-16-3fd9ccc926f4&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.y.shape
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1216</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span>
@@ -432,10 +402,10 @@ NameError                                 Traceback (most recent call last)
       7 a = plt.semilogx(Lk.H.taud,10*np.log10(Elast),&#39;.g&#39;,label=&#39;f=10GHz&#39;)
 
 
-NameError: name &#39;Lk&#39; is not defined
+NameError: name &#39;Efirst&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2aceefe9ebd0&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ae15626f150&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
@@ -446,7 +416,7 @@ NameError: name &#39;Lk&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+ValueError                                Traceback (most recent call last)
 
 &lt;ipython-input-18-79fa43f184e0&gt; in &lt;module&gt;()
 ----&gt; 1 a = plt.semilogx(Lk.H.taud,10*np.log10(Emean),&#39;.b&#39;,label=&#39;mean&#39;)
@@ -455,9 +425,66 @@ NameError                                 Traceback (most recent call last)
       4 plt.legend()
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in semilogx(*args, **kwargs)
+   3266         ax.hold(hold)
+   3267     try:
+-&gt; 3268         ret = ax.semilogx(*args, **kwargs)
+   3269     finally:
+   3270         ax.hold(washold)
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in semilogx(self, *args, **kwargs)
+   1614         b = self._hold
+   1615         self._hold = True  # we&#39;ve already processed the hold
+-&gt; 1616         l = self.plot(*args, **kwargs)
+   1617         self._hold = b  # restore the hold
+   1618         return l
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.pyc in inner(ax, *args, **kwargs)
+   1810                     warnings.warn(msg % (label_namer, func.__name__),
+   1811                                   RuntimeWarning, stacklevel=2)
+-&gt; 1812             return func(ax, *args, **kwargs)
+   1813         pre_doc = inner.__doc__
+   1814         if pre_doc is None:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in plot(self, *args, **kwargs)
+   1422             kwargs[&#39;color&#39;] = c
+   1423
+-&gt; 1424         for line in self._get_lines(*args, **kwargs):
+   1425             self.add_line(line)
+   1426             lines.append(line)
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _grab_next_args(self, *args, **kwargs)
+    384                 return
+    385             if len(remaining) &lt;= 3:
+--&gt; 386                 for seg in self._plot_args(remaining, kwargs):
+    387                     yield seg
+    388                 return
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _plot_args(self, tup, kwargs)
+    362             x, y = index_of(tup[-1])
+    363
+--&gt; 364         x, y = self._xy_from_xy(x, y)
+    365
+    366         if self.command == &#39;plot&#39;:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _xy_from_xy(self, x, y)
+    223             raise ValueError(&quot;x and y must have same first dimension&quot;)
+    224         if x.ndim &gt; 2 or y.ndim &gt; 2:
+--&gt; 225             raise ValueError(&quot;x and y can be no greater than 2-D&quot;)
+    226
+    227         if x.ndim == 1:
+
+
+ValueError: x and y can be no greater than 2-D
 </pre></div>
 </div>
+<img alt="../../_images/Channel_29_1.png" src="../../_images/Channel_29_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">CIR</span><span class="o">=</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
 <span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
 <span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
@@ -466,16 +493,16 @@ NameError: name &#39;Lk&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+AttributeError                            Traceback (most recent call last)
 
 &lt;ipython-input-19-e688100b13ed&gt; in &lt;module&gt;()
-----&gt; 1 CIR=bs.TUsignal(tauk,np.zeros(len(tauk)))
-      2 CIR.aggcir(ak,tauk)
+      1 CIR=bs.TUsignal(tauk,np.zeros(len(tauk)))
+----&gt; 2 CIR.aggcir(ak,tauk)
       3 CIR.stem()
       4 plt.title(&#39;Infinite bandwidth CIR&#39;)
 
 
-NameError: name &#39;tauk&#39; is not defined
+AttributeError: &#39;TUsignal&#39; object has no attribute &#39;aggcir&#39;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">MeanDelay</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
@@ -485,7 +512,7 @@ NameError: name &#39;tauk&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+AttributeError                            Traceback (most recent call last)
 
 &lt;ipython-input-20-6f04a248436b&gt; in &lt;module&gt;()
 ----&gt; 1 MeanDelay = CIR.tau_moy()
@@ -493,7 +520,7 @@ NameError                                 Traceback (most recent call last)
       3 print MeanDelay,DelaySpread
 
 
-NameError: name &#39;CIR&#39; is not defined
+AttributeError: &#39;TUsignal&#39; object has no attribute &#39;tau_moy&#39;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -502,33 +529,44 @@ NameError: name &#39;CIR&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+IndexError                                Traceback (most recent call last)
 
 &lt;ipython-input-21-61834b1cbc3e&gt; in &lt;module&gt;()
       1 f = plt.figure(figsize=(20,10))
 ----&gt; 2 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in show(self, **kwargs)
+   3220
+   3221         ax1 = fig.add_subplot(121)
+-&gt; 3222         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
+   3223         ax2 = fig.add_subplot(122)
+   3224         if &#39;vmin&#39; in kwargs:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in imshow(self, **kwargs)
+    727
+    728         if self.y.ndim&gt;1:
+--&gt; 729             dt,ylabels = self.cformat(**kwargs)
+    730
+    731             if &#39;vmin&#39; not in kwargs:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in cformat(self, **kwargs)
+    603             # whole range
+    604             vs = 0
+--&gt; 605             vf = shy[ax[1]]
+    606         else:
+    607             # subset of values
+
+
+IndexError: tuple index out of range
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ace73d89450&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Channel_32_1.png" src="../../_images/Channel_32_1.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-22-c50272a814d0&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.cut()
-
-
-NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -537,19 +575,41 @@ NameError: name &#39;Lk&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+IndexError                                Traceback (most recent call last)
 
 &lt;ipython-input-23-61834b1cbc3e&gt; in &lt;module&gt;()
       1 f = plt.figure(figsize=(20,10))
 ----&gt; 2 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in show(self, **kwargs)
+   3220
+   3221         ax1 = fig.add_subplot(121)
+-&gt; 3222         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
+   3223         ax2 = fig.add_subplot(122)
+   3224         if &#39;vmin&#39; in kwargs:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in imshow(self, **kwargs)
+    727
+    728         if self.y.ndim&gt;1:
+--&gt; 729             dt,ylabels = self.cformat(**kwargs)
+    730
+    731             if &#39;vmin&#39; not in kwargs:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in cformat(self, **kwargs)
+    603             # whole range
+    604             vs = 0
+--&gt; 605             vf = shy[ax[1]]
+    606         else:
+    607             # subset of values
+
+
+IndexError: tuple index out of range
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2aceefec6790&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Channel_35_1.png" src="../../_images/Channel_35_1.png" />
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
@@ -580,13 +640,21 @@ number of time samples <img src="../../_images/mathmpl/math-a4285baa0e.png" styl
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+ValueError                                Traceback (most recent call last)
 
 &lt;ipython-input-25-1e46705dbeb0&gt; in &lt;module&gt;()
 ----&gt; 1 htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in tap(self, **kwargs)
+   2464
+   2465         # f x s  x m x tap
+-&gt; 2466         htap  = htap.reshape(Nf,Ns,Nm,Ntap)
+   2467         Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+   2468         Er_htap = np.sum(htap,axis=1)/Ns
+
+
+ValueError: total size of new array must be unchanged
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">htap</span><span class="p">)</span>
@@ -691,7 +759,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2aceeff73890&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ae158e6a550&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>
@@ -798,7 +866,7 @@ NameError: name &#39;H&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Channel.txt"

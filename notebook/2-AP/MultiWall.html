@@ -144,7 +144,11 @@ from pylayers.network.model import *
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>Layout:Mayavi is not installed
+mayavi not installed
+Layout:Mayavi is not installed
+Layout:Mayavi is not installed
+mayavi not installed
 </pre></div>
 </div>
 <p>The layout is loaded from an ini file. If the graphs are not available,
@@ -182,13 +186,7 @@ coordinates described as 1x2 <code class="docutils literal"><span class="pre">nu
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
-  if self._edgecolors_original != str(&#39;face&#39;):
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
-  if self._edgecolors == str(&#39;face&#39;):
-</pre></div>
-</div>
-<img alt="../../_images/MultiWall_11_1.png" src="../../_images/MultiWall_11_1.png" />
+<img alt="../../_images/MultiWall_11_0.png" src="../../_images/MultiWall_11_0.png" />
 <div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
 <p>The function <code class="docutils literal"><span class="pre">angleonlink</span></code> returns the list of intersected segments
@@ -248,10 +246,10 @@ Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)
 ----------------
 
 Number of points  : 71
-Number of segments  : 87
+Number of segments  : 91
 Number of sub segments  : 16
-Number of cycles  : 18
-Number of rooms  : 17
+Number of cycles  : 22
+Number of rooms  : 19
 degree 0 : []
 degree 1 : []
 number of node point of degree 2 : 39
@@ -294,7 +292,7 @@ file</p>
 <span class="k">print</span> <span class="s1">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Coverage performed in  1.69438505173 s
+<div class="highlight-python"><div class="highlight"><pre><span></span>Coverage performed in  1.81702399254 s
 </pre></div>
 </div>
 <p>For Orthogonal polarization</p>
@@ -323,7 +321,7 @@ file</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/MultiWall.txt"

@@ -485,11 +485,11 @@
         <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="n">Layout</span><span class="p">(),</span>
                    <span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
                    <span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
-                   <span class="s1">&#39;Aa&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">),</span>
-                   <span class="s1">&#39;Ab&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">),</span>
+                   <span class="s1">&#39;Aa&#39;</span><span class="p">:[],</span>
+                   <span class="s1">&#39;Ab&#39;</span><span class="p">:[],</span>
                    <span class="s1">&#39;Ta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
                    <span class="s1">&#39;Tb&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-                   <span class="s1">&#39;fGHz&#39;</span><span class="p">:[],</span>
+                   <span class="s1">&#39;fGHz&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">2.5</span><span class="p">]),</span>
                    <span class="s1">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
                    <span class="s1">&#39;cutoff&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
                    <span class="s1">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
@@ -513,38 +513,35 @@
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">specset</span> <span class="p">:</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
+    
         <span class="n">force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_create</span>
         <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;force_create&#39;</span><span class="p">)</span>
+
+       
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        
+
+        <span class="c1"># The frequency range is dependent from the antenna frequency range</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">initfreq</span><span class="p">()</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">pass</span>
 
+
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">.</span><span class="n">filename</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">.</span><span class="n">filename</span>
-
-        <span class="c1">###########</span>
-        <span class="c1"># Transmitter and Receiver positions</span>
-        <span class="c1">###########</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                            <span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;tx&#39;</span><span class="p">,</span>
-                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s1">&#39;radiotx.ini&#39;</span><span class="p">,</span>
-                            <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                            <span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span>
-                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s1">&#39;radiorx.ini&#39;</span><span class="p">,</span>
-                            <span class="p">)</span>
-
-
+    
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;Links_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">+</span> <span class="s1">&#39;.h5&#39;</span>
         <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRLNK&#39;</span><span class="p">])</span>
@@ -560,8 +557,6 @@
                      <span class="s1">&#39;Ct&#39;</span><span class="p">:{</span><span class="s1">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s1">&#39;grpname&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">},</span>
                      <span class="s1">&#39;H&#39;</span><span class="p">:{</span><span class="s1">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s1">&#39;grpname&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
                     <span class="p">}</span>
-
-
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
@@ -604,9 +599,10 @@
             <span class="c1"># self.cb = self.L.pt2cy(self.b)</span>
 
 
+       
         <span class="c1">###########</span>
         <span class="c1"># init freq</span>
-        <span class="c1"># TODO Check where it is used redundant with fGHz</span>
+        <span class="c1"># TODO Check where it is used redocdundant with fGHz</span>
         <span class="c1">###########</span>
         <span class="c1">#self.fmin  = self.fGHz[0]</span>
         <span class="c1">#self.fmax  = self.fGHz[-1]</span>
@@ -689,7 +685,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        
 
     <span class="nd">@b.setter</span>
     <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">position</span><span class="p">):</span>
@@ -698,7 +694,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+        
 
     <span class="nd">@ca.setter</span>
     <span class="k">def</span> <span class="nf">ca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cycle</span><span class="p">):</span>
@@ -717,29 +713,21 @@
 
     <span class="nd">@Aa.setter</span>
     <span class="k">def</span> <span class="nf">Aa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ant</span><span class="p">):</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+       
         <span class="n">rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                            <span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;tx&#39;</span><span class="p">,</span>
-                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s1">&#39;radiotx.ini&#39;</span><span class="p">,</span>
-                            <span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">_Aa</span> <span class="o">=</span> <span class="n">Ant</span>
-        <span class="c1">#to be removed when radionode will be updated</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">position</span>
+       
         <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span> <span class="o">=</span> <span class="n">rot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initfreq</span><span class="p">()</span>
 
     <span class="nd">@Ab.setter</span>
     <span class="k">def</span> <span class="nf">Ab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ant</span><span class="p">):</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+       
         <span class="n">rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                            <span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span>
-                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s1">&#39;radiorx.ini&#39;</span><span class="p">,</span>
-                            <span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">_Ab</span> <span class="o">=</span> <span class="n">Ant</span>
-        <span class="c1">#to be removed when radionode will be updated</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">position</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span> <span class="o">=</span> <span class="n">rot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initfreq</span><span class="p">()</span>
 
@@ -747,22 +735,22 @@
     <span class="nd">@Ta.setter</span>
     <span class="k">def</span> <span class="nf">Ta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">orientation</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Ta</span> <span class="o">=</span> <span class="n">orientation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+        
 
     <span class="nd">@Tb.setter</span>
     <span class="k">def</span> <span class="nf">Tb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">orientation</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Tb</span> <span class="o">=</span> <span class="n">orientation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+        
 
     <span class="nd">@fGHz.setter</span>
     <span class="k">def</span> <span class="nf">fGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">freq</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fGHz</span> <span class="o">=</span> <span class="n">freq</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;Omni&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;Omni&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
+        <span class="c1"># if self.Aa.typ == &#39;Omni&#39;:</span>
+        <span class="c1">#     self.Aa.fGHz = self.fGHz</span>
+        <span class="c1"># if self.Ab.typ == &#39;Omni&#39;:</span>
+        <span class="c1">#     self.Ab.fGHz = self.fGHz</span>
         <span class="c1">#if len(freq)&gt;1:</span>
         <span class="c1">#    self.fmin = freq[0]</span>
         <span class="c1">#    self.fmax = freq[-1]</span>
@@ -825,26 +813,36 @@
         <span class="sd">&quot;&quot;&quot; Automatic freq determination from</span>
 <span class="sd">            Antennas</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">fGHz</span>
-        <span class="n">fb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">fGHz</span>
-    
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fa</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Incompatible frequency range in Antenna. Consider change Dlink.fGHz&quot;</span><span class="p">)</span> 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span> <span class="c1">#single frequency</span>
-            <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="p">,</span><span class="s1">&#39;fGHz&#39;</span><span class="p">):</span>
+            <span class="n">fa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">fGHz</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fa</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Incompatible frequency range in Antenna. Consider change Dlink.fGHz&quot;</span><span class="p">)</span> 
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># step frequecy </span>
+            <span class="k">except</span><span class="p">:</span> <span class="c1">#single frequency</span>
+                <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># step</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">minfa</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span>
+            <span class="n">maxfa</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span>
+            <span class="n">sf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minfa</span><span class="p">,</span><span class="n">maxfa</span><span class="o">+</span><span class="n">sf</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
 
-        <span class="n">minf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
-        <span class="n">maxf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="p">,</span><span class="s1">&#39;fGHz&#39;</span><span class="p">):</span>
+            <span class="n">fb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">fGHz</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Incompatible frequency range in Antenna. Consider change Dlink.fGHz&quot;</span><span class="p">)</span>
+        
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># step frequency </span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">sf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span><span class="n">sb</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minf</span><span class="p">,</span><span class="n">maxf</span><span class="o">+</span><span class="n">sf</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
+            <span class="n">minfb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+            <span class="n">maxfb</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+
+            <span class="n">sf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span><span class="n">sb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minfb</span><span class="p">,</span><span class="n">maxfb</span><span class="o">+</span><span class="n">sf</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.reset_config.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1309,14 +1307,12 @@
 <span class="sd">         Apply waveform to H</span>
 <span class="sd">        force : list</span>
 <span class="sd">            Force the computation ([&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;]) AND save (replace previous computations)</span>
-<span class="sd">        si_algo : str (&#39;old&#39;|&#39;new&#39;)</span>
+<span class="sd">        alg : 1|&#39;old&#39;|&#39;exp&#39;|&#39;exp2&#39;</span>
+<span class="sd">            version of run for signature</span>
+<span class="sd">        si_algo : str (&#39;old&#39;|&#39;new&#39;) Only for alg 2</span>
 <span class="sd">            signature.run algo type</span>
 <span class="sd">            &#39;old&#39; : call propaths2</span>
 <span class="sd">            &#39;new&#39; : call procone2</span>
-<span class="sd">        alg : 5|7</span>
-<span class="sd">            version of run for signature</span>
-<span class="sd">        si_mt: boolean</span>
-<span class="sd">            Multi thread version of algo version 7</span>
 <span class="sd">        si_progress: bollean ( False)</span>
 <span class="sd">            display progression bar for signatures</span>
 <span class="sd">        diffraction : boolean (False)</span>
@@ -1377,14 +1373,13 @@
 
         <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s1">&#39;applywav&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                    <span class="s1">&#39;si_algo&#39;</span><span class="p">:</span><span class="s1">&#39;old&#39;</span><span class="p">,</span>
-                   <span class="s1">&#39;si_mt&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;si_progress&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;diffraction&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                    <span class="s1">&#39;ra_vectorized&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                    <span class="s1">&#39;ra_ceil_H&#39;</span><span class="p">:[],</span>
                    <span class="s1">&#39;ra_number_mirror_cf&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s1">&#39;force&#39;</span><span class="p">:[],</span>
-                   <span class="s1">&#39;alg&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span>
+                   <span class="s1">&#39;alg&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s1">&#39;si_reverb&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span>
                    <span class="s1">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
                    <span class="s1">&#39;verbose&#39;</span><span class="p">:[],</span>
@@ -1429,41 +1424,34 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
                 <span class="k">print</span> <span class="s2">&quot;load signature&quot;</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">2015</span><span class="p">:</span>
-                <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
-                        <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_reverb&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">Si</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">],</span>
+                        <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">],</span>
+                        <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_progress&#39;</span><span class="p">])</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;algo 2015&quot;</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">20152</span><span class="p">:</span>
-                <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015_2</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
-                        <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_reverb&#39;</span><span class="p">])</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;algo 20152&quot;</span>
+                    <span class="k">print</span> <span class="s2">&quot;algo 2 ( ex 7)&quot;</span>
 
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
-                <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;old&#39;</span><span class="p">:</span>
+                <span class="n">Si</span><span class="o">.</span><span class="n">run_old</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_algo&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_progress&#39;</span><span class="p">])</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;algo 5&quot;</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_mt&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
-                    <span class="n">Si</span><span class="o">.</span><span class="n">run7mt</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
-                        <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_algo&#39;</span><span class="p">],</span>
-                        <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">],</span>
-                        <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">],</span>
-                        <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_progress&#39;</span><span class="p">])</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
-                        <span class="k">print</span> <span class="s2">&quot;algo 7 , si_mt&quot;</span>
-                <span class="k">else</span> <span class="p">:</span>
-                    <span class="n">Si</span><span class="o">.</span><span class="n">run7</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
-                        <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_algo&#39;</span><span class="p">],</span>
-                        <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">],</span>
-                        <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">],</span>
-                        <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_progress&#39;</span><span class="p">])</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
-                        <span class="k">print</span> <span class="s2">&quot;algo 7&quot;</span>
+                    <span class="k">print</span> <span class="s2">&quot;algo 2 (ex 5)&quot;</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;exp&#39;</span><span class="p">:</span>
+                <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run_exp</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_reverb&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                    <span class="k">print</span> <span class="s2">&quot;experimental (ex 2015)&quot;</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;exp2&#39;</span><span class="p">:</span>
+                <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run_exp2</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;si_reverb&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                    <span class="k">print</span> <span class="s2">&quot;algo exp2 ( ex 20152)&quot;</span>
+
 
         <span class="c1">#Si.run6(diffraction=kwargs[&#39;diffraction&#39;])</span>
         <span class="c1"># save sig</span>
@@ -1504,7 +1492,8 @@
             <span class="n">R</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
             <span class="c1"># ...and save</span>
             <span class="n">R</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-            <span class="n">C</span><span class="o">=</span><span class="n">Ctilde</span><span class="p">()</span>
+
+            <span class="n">C</span> <span class="o">=</span> <span class="n">Ctilde</span><span class="p">()</span>
             <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s1">&#39;ray&#39;</span><span class="p">][</span><span class="s1">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;force&#39;</span><span class="p">])</span>
 
@@ -1526,9 +1515,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s1">&#39;Ct&#39;</span><span class="p">][</span><span class="s1">&#39;grpname&#39;</span><span class="p">])</span>
 
         <span class="k">else</span> <span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="s1">&#39;I&#39;</span><span class="p">):</span>
+            <span class="c1">#if not hasattr(R,&#39;I&#39;):</span>
             <span class="c1"># Ctilde...</span>
-                <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="c1"># Find an other criteria in order to decide whether the R has</span>
+            <span class="c1"># already been evaluated</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
             <span class="c1"># ...save Ct</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s1">&#39;Ct&#39;</span><span class="p">][</span><span class="s1">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;force&#39;</span><span class="p">])</span>
 
@@ -1614,6 +1605,7 @@
                    <span class="s1">&#39;col&#39;</span><span class="p">:</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
                    <span class="s1">&#39;dB&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;labels&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s1">&#39;aw&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                    <span class="s1">&#39;dyn&#39;</span><span class="p">:</span><span class="mi">70</span><span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
@@ -1623,7 +1615,7 @@
         <span class="c1">#</span>
         <span class="c1"># Layout</span>
         <span class="c1">#</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">])</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span><span class="n">aw</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;aw&#39;</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
         <span class="c1">#</span>
         <span class="c1"># Point A</span>
@@ -1745,17 +1737,17 @@
 
 
         <span class="k">if</span> <span class="n">centered</span> <span class="p">:</span>
-            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="o">-</span><span class="n">pg</span>
-            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="o">-</span><span class="n">pg</span>
+            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="n">pg</span>
+            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">-</span><span class="n">pg</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
-            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
 
         <span class="k">if</span> <span class="n">ant</span> <span class="p">:</span>
             <span class="n">Atx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span>
             <span class="n">Arx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span>
-            <span class="n">Ttx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span>
-            <span class="n">Trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span>
+            <span class="n">Ttx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span>
+            <span class="n">Trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span>
 
             <span class="c1"># evaluate antenna if required</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">Atx</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
@@ -1813,7 +1805,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 05, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

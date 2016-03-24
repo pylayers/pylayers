@@ -830,18 +830,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ro</span> <span class="o">=</span> <span class="n">Ro</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Rp</span> <span class="o">=</span> <span class="n">Rp</span>
 
-        <span class="n">epd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">deltai</span><span class="p">)</span>
-        <span class="n">emd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">deltai</span><span class="p">)</span>
+        <span class="n">jdeltai</span> <span class="o">=</span> <span class="mi">1j</span><span class="o">*</span><span class="n">deltai</span>
+        <span class="n">epd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jdeltai</span><span class="p">)</span>
+        <span class="n">emd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">jdeltai</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">epd</span> <span class="o">/</span> <span class="n">Tp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Rp</span> <span class="o">*</span> <span class="n">emd</span> <span class="o">/</span> <span class="n">Tp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Rp</span> <span class="o">*</span> <span class="n">epd</span> <span class="o">/</span> <span class="n">Tp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">emd</span> <span class="o">/</span> <span class="n">Tp</span>
+        <span class="n">epdoTp</span> <span class="o">=</span> <span class="n">epd</span><span class="o">/</span><span class="n">Tp</span>
+        <span class="n">emdoTp</span> <span class="o">=</span> <span class="n">emd</span><span class="o">/</span><span class="n">Tp</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">epd</span> <span class="o">/</span> <span class="n">To</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ro</span> <span class="o">*</span> <span class="n">emd</span> <span class="o">/</span> <span class="n">To</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ro</span> <span class="o">*</span> <span class="n">epd</span> <span class="o">/</span> <span class="n">To</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">emd</span> <span class="o">/</span> <span class="n">To</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">epdoTp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Rp</span> <span class="o">*</span> <span class="n">emdoTp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Rp</span> <span class="o">*</span> <span class="n">epdoTp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">emdoTp</span>
+
+        <span class="n">epdoTo</span> <span class="o">=</span> <span class="n">epd</span><span class="o">/</span><span class="n">To</span>
+        <span class="n">emdoTo</span> <span class="o">=</span> <span class="n">emd</span><span class="o">/</span><span class="n">To</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">epdoTo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ro</span> <span class="o">*</span> <span class="n">emdoTo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ro</span> <span class="o">*</span> <span class="n">epdoTo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">emdoTo</span></div>
 
         <span class="c1">#print &#39;Slab MatInterface Ip00&#39;,self.Ip[15,31,0,0]</span>
         <span class="c1">#print &#39;Slab MatInterface Ip01&#39;,self.Ip[15,31,0,1]</span>
@@ -1676,7 +1683,7 @@
         <span class="c1"># fix this problem in MLAYER need thickness 0 for last medium</span>
         <span class="c1">#</span>
         <span class="c1">#self.thick.append(0.0)</span>
-
+   
 <div class="viewcode-block" id="Slab.ev"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.ev.html#pylayers.antprop.slab.Slab.ev">[docs]</a>    <span class="k">def</span> <span class="nf">ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s1">&#39;RT&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluation of the Slab</span>
 
@@ -1732,9 +1739,9 @@
         <span class="n">Cp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
         <span class="n">Cp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">Cp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="c1"># _Cp = np.eye(2,dtype=complex)</span>
+        <span class="c1"># _Cp = np.eye(2,dtype=complex)</span>
         <span class="c1">#</span>
-        <span class="c1"># Boucle sur les n-1 matriaux</span>
+        <span class="c1"># loop over the s n-1 materials </span>
         <span class="c1"># lmat[0] est toujours l&#39;air ( modifier)</span>
         <span class="c1">#</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -1761,7 +1768,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">ml</span><span class="p">,</span> <span class="n">mr</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="c1">#</span>
-            <span class="c1"># chains the angle , theta can be complex</span>
+            <span class="c1"># chains the angle, theta can be complex</span>
             <span class="c1">#</span>
                 <span class="n">theta</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">theta</span>
             <span class="c1">#</span>
@@ -1792,8 +1799,8 @@
 
 
             <span class="c1">### array broadcasing version , new increased speed in regard of einsum</span>
-            <span class="n">Co</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Co</span><span class="p">[</span><span class="o">...</span><span class="p">,:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">Io</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-            <span class="n">Cp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Cp</span><span class="p">[</span><span class="o">...</span><span class="p">,:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">Ip</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">Co</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Co</span><span class="p">[</span><span class="o">...</span><span class="p">,:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">Io</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">Cp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Cp</span><span class="p">[</span><span class="o">...</span><span class="p">,:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">Ip</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 
             <span class="k">if</span> <span class="n">mr</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;METAL&#39;</span><span class="p">:</span>
@@ -2762,7 +2769,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 05, 2016.
+      Last updated on mars 24, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
