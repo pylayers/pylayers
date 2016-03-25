@@ -2833,8 +2833,9 @@ class Signatures(PyLayers,dict):
                                     else:
                                         lawp.append(0)
                                 else:
-                                    visited.pop(-1)
-                                    tahe.pop(-1)
+                                    visited.pop()
+                                    tahe.pop()
+                                    R.pop()
 
                         else: #len(visited) == cutoff (visited list is too long)
                             if child == t or t in children:
