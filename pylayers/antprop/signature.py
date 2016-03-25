@@ -189,23 +189,32 @@ def shLtmp(L):
     L._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
 
-def valid(lsig,L):
-    """ unfold a given signature
+def valid(lsig,L,tahe=[]):
+    """ 
+    Check if a signature is valid .
+    if a segmetn of a given signature is not in or touvches the polygon
+    descibed by the 1st and last segment , the signature is not valid
 
-    returns 2 np.ndarray of pta and phe "aligned"
-    reflexion interactions are mirrored
+
+    Parameters
+    ----------
+
+    lsig : list of tuple from run  | signatures
+    L : layout
+    tahe : 
+        lensig , ta|he , x,y
 
     Returns
     -------
 
-    pta : np.array
-    phe : np.array
+    inside : boolean
+        is the signature valid ?
+
 
     """
 
 
     lensi = len(lsig)
-
     if lensi<=3:
         return True
 
@@ -215,6 +224,8 @@ def valid(lsig,L):
     #         import ipdb
     #         ipdb.set_trace()
 
+    # ensure compatibility with Signautre.run where
+    # lsig is a list of tuple
     if isinstance(lsig,list):
         lsig = np.array([(i[0],len(i)) for i in lsig])
 
@@ -235,59 +246,90 @@ def valid(lsig,L):
     # except:
     #     pass
     # pts = [k for i in seq for k in [L.Gs[i].keys()[0],L.Gs[i].keys()[1]]]
-    pts = [L.Gs[i].keys() for i in seq]
+    # if tahe ==[]:
+    # print 'run tahe\n',np.array(tahe)
+    if tahe == []:
+        pts = [L.Gs[i].keys() for i in seq]
+        tahe = np.array([[L.Gs.pos[p[0]],L.Gs.pos[p[1]]] for p in pts])
+
+        pta[:,0] = tahe[0,0,:]
+        phe[:,0] = tahe[0,1,:]
+
+        typ = lsig[:,1]
+        mirror=[]
+        # lines = [L._shseg[seq[0]]]
+        for i in range(1,lensi):
+            # pam = pa[:,i].reshape(2,1)
+            # pbm = pb[:,i].reshape(2,1)
+            pam = tahe[i,0,:].reshape(2,1)
+            pbm = tahe[i,1,:].reshape(2,1)
+            if typ[i] == 2: # R
+                for m in mirror:
+                    pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+                mirror.append(i)
+
+            elif typ[i] == 3 : # T
+                for m in mirror:
+                    pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+            elif typ[i] == 1 : # D
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+
+    else:
+
+        tahe=np.array(tahe)
+        pta = tahe[:,0,:]
+        phe = tahe[:,1,:]
+
+
+
+
+    # ### ONLY FOR TEST TO BE DELETED
+    # pts = [L.Gs[i].keys() for i in seq]
+    # tahetest = np.array([[L.Gs.pos[p[0]],L.Gs.pos[p[1]]] for p in pts])
+    # ptat = np.empty((2,lensi))
+    # phet = np.empty((2,lensi))
+    # ptat[:,0] = tahetest[0,0,:]
+    # phet[:,0] = tahetest[0,1,:]
+
+    # typ = lsig[:,1]
+    # mirror=[]
+    # # lines = [L._shseg[seq[0]]]
+    # for i in range(1,lensi):
+    #     # pam = pa[:,i].reshape(2,1)
+    #     # pbm = pb[:,i].reshape(2,1)
+    #     pam = tahetest[i,0,:].reshape(2,1)
+    #     pbm = tahetest[i,1,:].reshape(2,1)
+    #     if typ[i] == 2: # R
+    #         for m in mirror:
+    #             pam = geu.mirror(pam,ptat[:,m],phet[:,m])
+    #             pbm = geu.mirror(pbm,ptat[:,m],phet[:,m])
+    #         ptat[:,i] = pam.reshape(2)
+    #         phet[:,i] = pbm.reshape(2)
+    #         mirror.append(i)
+
+    #     elif typ[i] == 3 : # T
+    #         for m in mirror:
+    #             pam = geu.mirror(pam,ptat[:,m],phet[:,m])
+    #             pbm = geu.mirror(pbm,ptat[:,m],phet[:,m])
+    #         ptat[:,i] = pam.reshape(2)
+    #         phet[:,i] = pbm.reshape(2)
+    #     elif typ[i] == 1 : # D
+    #         ptat[:,i] = pam.reshape(2)
+    #         phet[:,i] = pbm.reshape(2)
+
+    # tahetest = np.dstack((ptat.T,phet.T)).swapaxes(1,2)
+    # if np.sum(tahe-tahetest) != 0:
+    #     import ipdb
+    #     ipdb.set_trace()
     
-    tahe = np.array([[L.Gs.pos[p[0]],L.Gs.pos[p[1]]] for p in pts])
 
-    # tahe (lensig,ta,he)
-    pta[:,0] = tahe[0,0,:]
-    phe[:,0] = tahe[0,1,:]
-
-
-    # pta[:,0]=tahe[:2,0]
-    # phe[:,0]=tahe[2:,0]
-
-    # pa = tahe[:2,:]
-    # pb = tahe[2:,:]
-
-    typ = lsig[:,1]
-
-
-    mirror=[]
-    # lines = [L._shseg[seq[0]]]
-    for i in range(1,lensi):
-        # pam = pa[:,i].reshape(2,1)
-        # pbm = pb[:,i].reshape(2,1)
-        pam = tahe[i,0,:].reshape(2,1)
-        pbm = tahe[i,1,:].reshape(2,1)
-        if typ[i] == 2: # R
-            for m in mirror:
-                pam = geu.mirror(pam,pta[:,m],phe[:,m])
-                pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
-            pta[:,i] = pam.reshape(2)
-            phe[:,i] = pbm.reshape(2)
-            mirror.append(i)
-
-        elif typ[i] == 3 : # T
-            for m in mirror:
-                pam = geu.mirror(pam,pta[:,m],phe[:,m])
-                pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
-            pta[:,i] = pam.reshape(2)
-            phe[:,i] = pbm.reshape(2)
-
-        elif typ[i] == 1 : # D
-            pta[:,i] = pam.reshape(2)
-            phe[:,i] = pbm.reshape(2)
-
-    # if not (geu.ccw(a0,b0,b1) ^
-    #         geu.ccw(b0,b1,a1) ):
-    #     v0 = (b1 - a0)
-    #     v1 = (a1 - b0)
-    #     twisted = True
-    # else:    
-    #     v0 = (a1 - a0)
-    #     v1 = (b1 - b0)
-    #     twisted = False
 
     # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
     # vl and vr are 2 director vector lying on the polygon side.
@@ -320,21 +362,7 @@ def valid(lsig,L):
     out = (lta & lhe ) | (~rta & ~rhe)
     inside = ~out
 
-
-    return np.all(inside)
-
-
-
-
-    # # create lines relying 1st and last seg
-    # s0 = sh.LineString((pta[:,0],phe[:,-1]))
-    # s1 = sh.LineString((pta[:,-1],phe[:,0]))
-
-    # if s0.touches(s1):
-    #     s0 = sh.LineString((pta[:,0],pta[:,-1]))
-    #     s1 = sh.LineString((phe[:,0],phe[:,-1]))
-
-
+    # debug
     # plt.ion()
     # plt.gcf()
     # plt.title(str(cond))
@@ -347,42 +375,10 @@ def valid(lsig,L):
     # plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
     # plt.legend()
 
-    # plt.draw()
-    # import ipdb
-    # ipdb.set_trace()
+    return np.all(inside)
 
 
 
-    # plt.clf()
-    # poly=sho.polygonize([s0,s1,lines[0],lines[-1]])
-
-    # try:
-    #     poly=poly.next()
-    # except:
-
-    #     return False
-
-    
-
-    # # cr = [(s0.crosses(L._shseg[s]) or s0.touches(L._shseg[s])) and 
-    # #       (s1.crosses(L._shseg[s]) or s1.touches(L._shseg[s])) for s in seq[1:-1] ]
-    # cr = [(poly.contains(l) or (l.intersects(poly) and not l.touches(poly)) ) for l in lines[1:-1]]
-    # # if len(seq) >4:
-    # #     import ipdb
-    # #     ipdb.set_trace()
-    # # if len(seq) >2:
-    # #     plt.cla()
-    # #     ax=plt.gca()
-    # #     plot_lines(ax=ax,ob=lines)
-    # #     plot_lines(ax=ax,ob=[s0,s1],color='b')
-    # #     plot_poly(ax=ax,ob=[poly])
-    # #     plt.title(str(cr))
-    # #     plt.draw()
-    # #     import ipdb
-    # #     ipdb.set_trace()
-
-    # return np.all(cr)
-    
 
 
 
@@ -2725,6 +2721,12 @@ class Signatures(PyLayers,dict):
                 # if source and target interaction are different
                 # and R | T
                 #if ((type(eval(s))==tuple) & (s != t)):
+                pts = self.L.Gs[s[0]].keys()
+                tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
+                # R is a list which contains reflextion matrices(Sn) and translation matrices(vn)
+                # for mirror
+                # R=[[S0,v0],[S1,v1],...]
+                R=[(np.eye(2),np.array([0,0]))]
                 if (s != t):
 
                     visited = [s]
@@ -2747,6 +2749,8 @@ class Signatures(PyLayers,dict):
                         if child is None  : # if no more child
                             stack.pop()   # remove last iterator
                             visited.pop() # remove from visited list
+                            tahe.pop()
+                            R.pop()
                             try:
                                 lawp.pop()
                             except:
@@ -2784,24 +2788,53 @@ class Signatures(PyLayers,dict):
                                 except:
                                     nexti = []
 
+
                                 visited.append(child)
-                                # if valid(visited,self.L):
-                                stack.append(iter(nexti))
-                                #stack.append(iter(G[visited[-1]][child]['output']))
+                                seg = visited[-1][0]
 
-                                # import ipdb
-                                # ipdb.set_trace()
+                                # diff
+                                if len(visited[-2]) == 1:
+                                    th = L.Gs.pos[seg]
+                                    th = np.array([th,th])
+                                    R.append((np.eye(2),np.array([0,0])))
+
+                                # refl
+                                if len(visited[-2])==2 and len(visited)> 2:
+
+                                    pts = self.L.Gs[seg].keys()
+                                    # th (xy,Npt)
+                                    th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+                                    R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
+  
+                                # trans
+                                else : 
+                                    pts = self.L.Gs[seg].keys()
+                                    th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+                                    R.append((np.eye(2),np.array([0,0])))
+
+                                # apply symmetry
+                                for r in R: 
+                                    th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                                tahe.append(th)
+
+                                v = valid(visited,self.L,tahe) 
+                                if v:
+                                    stack.append(iter(nexti))
+                                
+
+                                    # import ipdb
+                                    # ipdb.set_trace()
 
 
-                                # check if child (current segment) is an airwall
-                                # warning not efficient if many airwalls
-                                if child[0] in self.L.name['AIR']:
-                                    lawp.append(1)
+                                    # check if child (current segment) is an airwall
+                                    # warning not efficient if many airwalls
+                                    if child[0] in self.L.name['AIR']:
+                                        lawp.append(1)
+                                    else:
+                                        lawp.append(0)
                                 else:
-                                    lawp.append(0)
-                                # else:
-                                #     visited.pop(-1)
-
+                                    visited.pop(-1)
+                                    tahe.pop(-1)
 
                         else: #len(visited) == cutoff (visited list is too long)
                             if child == t or t in children:
@@ -2818,6 +2851,8 @@ class Signatures(PyLayers,dict):
 
                             stack.pop()
                             visited.pop()
+                            tahe.pop()
+                            R.pop()
                             try:
                                 lawp.pop()
                             except:
