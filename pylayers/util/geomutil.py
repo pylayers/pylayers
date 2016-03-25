@@ -2373,7 +2373,8 @@ def angular(p1, p2):
 
 
     """
-    print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong')
+    #print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going
+    #                         deprecated  because wrong')
     if p1[0] < p2[0] and p1[1] < p2[1]:
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
     elif p1[0] > p2[0] and p1[1] < p2[1]:

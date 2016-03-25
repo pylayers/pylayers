@@ -141,7 +141,7 @@ class TBchannel(bs.TBsignal):
         cdf = np.cumsum(self.y,axis=-1)
         cdf = cdf/cdf[:,-1][:,None]
 
-        pdb.set_trace()
+        #pdb.set_trace()
         pdf = np.diff(cdf.y)
 
 

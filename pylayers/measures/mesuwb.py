@@ -911,14 +911,9 @@ class Fdd(PyLayers):
             >>> F  = M.fdd
             >>> fig = plt.figure()
             >>> F.plot('moddB')
-            >>> plt.tight_layout()
             >>> fig = plt.figure()
             >>> F.plot('mod')
-            >>> plt.tight_layout()
-            >>> fig = plt.figure()
             >>> F.plot('ang')
-            >>> plt.tight_layout()
-            >>> plt.show()
 
         """
 
@@ -989,29 +984,13 @@ class Tdd(PyLayers):
         display the 4 channels
     show_span(delay,wide)
     """
-    def __init__(self, d=[]):
-        if d != []:
-            #t = d.Time[0]*1e9
-            #self.ch1  = bs.TUsignal(t,d.CH1[0])
-            #self.ch2  = bs.TUsignal(t,d.CH2[0])
-            #self.ch3  = bs.TUsignal(t,d.CH3[0])
-            #self.ch4  = bs.TUsignal(t,d.CH4[0])
-            #self.tx   = bs.TUsignal(t,d.TX)
-            #self.tx   = bs.TUsignal(t,d.TX[0])
-            #####
-            ##### Definitely not obvious , but
-            ##### this order is the corect one regarding
-            ##### dhe measurements !!
-            #####
-            t = d[0][0] * 1e9
-            self.ch3 = ch.TUchannel(x=t, y=d[1][0])
-            self.ch4 = ch.TUchannel(x=t, y=d[2][0])
-            self.ch1 = ch.TUchannel(x=t, y=d[3][0])
-            self.ch2 = ch.TUchannel(x=t, y=d[4][0])
-            #self.tx   = bs.TUsignal(t,d.TX)
-            self.tx = ch.TUchannel(t, d[5][0])
-        else:
-            pass
+    def __init__(self,d):
+        t = d[0][0] * 1e9
+        self.ch3 = ch.TUchannel(x=t, y=d[1][0])
+        self.ch4 = ch.TUchannel(x=t, y=d[2][0])
+        self.ch1 = ch.TUchannel(x=t, y=d[3][0])
+        self.ch2 = ch.TUchannel(x=t, y=d[4][0])
+        self.tx = ch.TUchannel(t, d[5][0])
 
     def PL(self, fmin, fmax, B):
         """  Calculate NB Path Loss on a given UWB frequency band
@@ -1601,7 +1580,7 @@ class UWBMeasure(PyLayers):
 
             >>> from pylayers.measures.mesuwb import *
             >>> M1 = UWBMeasure(1)
-            >>> M1.show()
+            >>> f,a = M1.show()
 
         """
         super(UWBMeasure,self).__init__()
