@@ -18,11 +18,8 @@ import pdb
 import os
 
 
-
-
 class Save(Process):
     """
-
     Save all variables of a simulnet simulation.
     Save process can be setup with the save.ini file from /<project>/ini
 
