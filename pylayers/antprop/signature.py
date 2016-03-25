@@ -284,9 +284,8 @@ def valid(lsig,L,tahe=[]):
     else:
 
         tahe=np.array(tahe)
-        pta = tahe[:,0,:]
-        phe = tahe[:,1,:]
-
+        pta = tahe[:,0,:].T
+        phe = tahe[:,1,:].T
 
 
 
@@ -358,7 +357,8 @@ def valid(lsig,L,tahe=[]):
     rta = geu.isleft(pta[:,1:-1],vr[0][:,None],vr[1][:,None])
     lhe =  geu.isleft(phe[:,1:-1],vl[0][:,None],vl[1][:,None])
     rhe = geu.isleft(phe[:,1:-1],vr[0][:,None],vr[1][:,None])
-
+    # import ipdb
+    # ipdb.set_trace()
     out = (lta & lhe ) | (~rta & ~rhe)
     inside = ~out
 
@@ -374,7 +374,6 @@ def valid(lsig,L,tahe=[]):
     # plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
     # plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
     # plt.legend()
-
     return np.all(inside)
 
 
