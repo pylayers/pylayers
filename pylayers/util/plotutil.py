@@ -577,8 +577,8 @@ def displot(pt, ph, arrow=False, **kwargs ):
     ax.plot(vertices[0, :], vertices[1, :],**args)
     # display arrows at both sides
     if arrow:
-        ax.scatter(pt[0,:],pt[1,:],marker='s',color='k')
-        ax.scatter(ph[0,:],ph[1,:],marker='^',color='k')
+        ax.scatter(pt[0,:],pt[1,:],marker='s',color='k',s=50)
+        ax.scatter(ph[0,:],ph[1,:],marker='^',color='k',s=50)
 
     return fig, ax
 

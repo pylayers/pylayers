@@ -83,7 +83,7 @@ class Cone(PyLayers):
 
     def upd_angle(self):
         """update cone angle attribute 
-           and associated probability of the Cone object
+           and associated probabilitydd of the Cone object
         """
         
         self.angle = np.arccos(self.dot)

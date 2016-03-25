@@ -2373,8 +2373,7 @@ def angular(p1, p2):
 
 
     """
-    #print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going
-    #                         deprecated  because wrong')
+    print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong')
     if p1[0] < p2[0] and p1[1] < p2[1]:
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
     elif p1[0] > p2[0] and p1[1] < p2[1]:
@@ -4324,86 +4323,6 @@ def mirror(p,pa,pb):
     v0 = np.dot(-S, p) + vc0
     x = la.solve(A, v0)
     return x
-
-
-def axmat(pa,pb):
-    """ Compute the image of p wrt the segment pa pb
-
-    Parameters
-    ----------
-
-
-    pa : numpy.ndarray
-        segment tail
-    pb : numpy.ndarray
-        segment head
-
-    Returns
-    -------
-
-    S : numpy.ndarray
-        symmetry matrix
-    v : numpy.ndarray
-        translatrion vector
-
-    Notes
-    -----
-
-    fir x is corrdiante of the point to mirror, 
-    the mirrored point x' from pa and pb  can be obtain with :
-
-    x' = np.dot(x,S) + v
-
-
-
-    Examples
-    --------
-
-    .. plot::
-        :include-source:
-
-    >>> from pylayers.util.geomutil import *
-    >>> from pylayers.util.plotutil import *
-    >>> import matplotlib.pyplot as plt
-    >>> import numpy as np
-    >>> p = np.random.randn(2,10)
-    >>> pa  = np.array([-0.5,1])
-    >>> pb  = np.array([0,0])
-    >>> S,v = axmat(pa,pb)
-    >>> M = np.dot(p,S) + v
-    >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
-    >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
-    >>> displot(p,M,alpha=0.2)
-    >>> axis = np.vstack((pa,pb))
-    >>> plt.plot(axis[:,0],axis[:,1])
-
-    """
-
-    if np.shape(pa)==(2,):
-        pa = pa.reshape(2,1)
-    if np.shape(pb)==(2,):
-        pb = pb.reshape(2,1)
-
-    pab = pb - pa
-    alpha = np.sum(pab * pab, axis=0)
-    zalpha = np.where(alpha == 0.)
-    alpha[zalpha] = 1.
-
-    a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
-    b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
-    c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
-                        pa[1, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
-    d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
-                        pa[0, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
-
-    N = 1
-    S = np.array([[a[0],-b[0]],[-b[0],-a[0]]])
-    vc0 = np.array([c[0], d[0]])
-    # v0 = np.dot(-S, p) + vc0
-    return S,vc0
-
 
 def distseg(a,b,c,d,alpha,beta):
     """ distance to segments
