@@ -2768,6 +2768,7 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)]=np.vstack((self[len(typ)],nstr,typ))
                                 except:
                                     self[len(typ)]=np.vstack((nstr,typ))
+                                #print "O",
                                 #try:
                                 #    dout[len(path)].append([[p[0],len(p)] for p in path])
                                 #except:
@@ -2790,11 +2791,18 @@ class Signatures(PyLayers,dict):
 
 
                                 visited.append(child)
+
                                 seg = visited[-1][0]
+
+
+                                # Testing the type of interaction at rank -2 
+                                # R is a list which contains a rotation matrix 
+                                # and a translation vector for doing the mirroring 
+                                # operation
 
                                 # diff
                                 if len(visited[-2]) == 1:
-                                    th = L.Gs.pos[seg]
+                                    th = self.L.Gs.pos[seg]
                                     th = np.array([th,th])
                                     R.append((np.eye(2),np.array([0,0])))
 
@@ -2810,9 +2818,13 @@ class Signatures(PyLayers,dict):
                                 else : 
                                     pts = self.L.Gs[seg].keys()
                                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+                                    # for uniformity purpose 
+                                    # dummy mirroring (no effect)
                                     R.append((np.eye(2),np.array([0,0])))
 
                                 # apply symmetry
+                                # th are current segment tail-head coordinates
+                                # tahe is a list of well mirrored tail-head coordinates
                                 for r in R: 
                                     th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                                 tahe.append(th)
@@ -2833,6 +2845,7 @@ class Signatures(PyLayers,dict):
                                     else:
                                         lawp.append(0)
                                 else:
+                                    #print  "X",
                                     visited.pop()
                                     tahe.pop()
                                     R.pop()
@@ -2849,7 +2862,9 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)]=np.vstack((nstr,typ))
                                 #print visited + [target]
                                 #yield visited + [target]
-
+                            else:
+                                pass
+                                #print  "C",
                             stack.pop()
                             visited.pop()
                             tahe.pop()
@@ -2858,6 +2873,7 @@ class Signatures(PyLayers,dict):
                                 lawp.pop()
                             except:
                                 pass
+
 
                 else: # s==t
                     nstr = np.array([s[0]])
