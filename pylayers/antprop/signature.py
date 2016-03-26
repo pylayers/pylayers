@@ -191,9 +191,9 @@ def shLtmp(L):
 
 def valid(lsig,L,tahe=[]):
     """ 
-    Check if a signature is valid .
-    if a segmetn of a given signature is not in or touvches the polygon
-    descibed by the 1st and last segment , the signature is not valid
+    Check if a signature is valid.
+    if a segment of a given signature is not in or touches the polygon
+    described by the 1st and last segment, the signature is not valid
 
 
     Parameters
@@ -284,8 +284,9 @@ def valid(lsig,L,tahe=[]):
     else:
 
         tahe=np.array(tahe)
-        pta = tahe[:,0,:].T
-        phe = tahe[:,1,:].T
+        pta = tahe[:,0,:]
+        phe = tahe[:,1,:]
+
 
 
 
@@ -334,15 +335,15 @@ def valid(lsig,L,tahe=[]):
     # vl and vr are 2 director vector lying on the polygon side.
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
             geu.ccw(phe[:,0],phe[:,-1],pta[:,-1]) ):
-        vl = ( pta[:,0],pta[:,-1])
-        vr = ( phe[:,0],phe[:,-1])
+        vr = ( pta[:,0],pta[:,-1])
+        vl = ( phe[:,0],phe[:,-1])
 
         # twisted = True
         # lef = sh.LineString((pta[:,0],pta[:,-1]))
         # rig = sh.LineString((phe[:,0],phe[:,-1]))
     else:    
-        vl = ( pta[:,0], phe[:,-1])
-        vr = ( phe[:,0],pta[:,-1])
+        vr = ( pta[:,0], phe[:,-1])
+        vl = ( phe[:,0],pta[:,-1])
         # twisted = False
         # lef = sh.LineString((pta[:,0],phe[:,-1]))
         # rig = sh.LineString((pta[:,-1],phe[:,0]))
@@ -357,8 +358,7 @@ def valid(lsig,L,tahe=[]):
     rta = geu.isleft(pta[:,1:-1],vr[0][:,None],vr[1][:,None])
     lhe =  geu.isleft(phe[:,1:-1],vl[0][:,None],vl[1][:,None])
     rhe = geu.isleft(phe[:,1:-1],vr[0][:,None],vr[1][:,None])
-    # import ipdb
-    # ipdb.set_trace()
+
     out = (lta & lhe ) | (~rta & ~rhe)
     inside = ~out
 
@@ -374,6 +374,7 @@ def valid(lsig,L,tahe=[]):
     # plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
     # plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
     # plt.legend()
+
     return np.all(inside)
 
 
