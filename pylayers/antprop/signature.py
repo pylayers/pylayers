@@ -337,14 +337,14 @@ def valid(lsig,L,tahe=[]):
         vl = ( phe[:,0],phe[:,-1])
 
         # twisted = True
-        lef = sh.LineString((pta[:,0],pta[:,-1]))
-        rig = sh.LineString((phe[:,0],phe[:,-1]))
+        #lef = sh.LineString((pta[:,0],pta[:,-1]))
+        #rig = sh.LineString((phe[:,0],phe[:,-1]))
     else:    
         vr = ( pta[:,0], phe[:,-1])
         vl = ( phe[:,0],pta[:,-1])
         # twisted = False
-        lef = sh.LineString((pta[:,0],phe[:,-1]))
-        rig = sh.LineString((pta[:,-1],phe[:,0]))
+        #lef = sh.LineString((pta[:,0],phe[:,-1]))
+        #rig = sh.LineString((pta[:,-1],phe[:,0]))
         
        
 
@@ -2871,7 +2871,7 @@ class Signatures(PyLayers,dict):
                                 path = visited + [t]
                                 nstr = np.array(map(lambda x: x[0],path))
                                 typ  = np.array(map(lambda x: len(x),path))
-                                cptsig +=1
+                                cptsig += 1
                                 #print path,cptsig
                                 try:
                                     self[len(typ)]=np.vstack((self[len(path)],nstr,typ))
@@ -3069,24 +3069,18 @@ class Signatures(PyLayers,dict):
             
                             # sequence is valid and last interaction is in the list of targets   
                             if interaction in lit:
-                                nstr = np.array(map(lambda x: x[0],visited))
+                                anstr = np.array(map(lambda x: x[0],visited))
                                 typ  = np.array(map(lambda x: len(x),visited))
                                 try:
-                                    self[len(typ)] = np.vstack((self[len(typ)],nstr,typ))
+                                    self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                                 except:
-                                    self[len(typ)] = np.vstack((nstr,typ))
+                                    self[len(typ)] = np.vstack((anstr,typ))
                                 cptsig +=1
-                                #print visited,len(stack),cptsig
-                                # go back 
-                                visited.pop()
-                                tahe.pop()
-                                R.pop()
-                                lawp.pop()
-                            else:
-                                # move forward
-                                #print " nexti : ",visited[-2],interaction
-                                nexti  = [it for it in Gi[visited[-2]][interaction]['output'].keys() if it[0]>0]
-                                stack.append(iter(nexti))
+                                #print visited,len(stack),cptsig  
+                            # move forward
+                            #print " nexti : ",visited[-2],interaction
+                            nexti  = [it for it in Gi[visited[-2]][interaction]['output'].keys() if it[0]>0]
+                            stack.append(iter(nexti))
                         else:
                             # go back
                             visited.pop()
@@ -3103,7 +3097,131 @@ class Signatures(PyLayers,dict):
                     except:
                         pass
                     stack.pop()
+
+        # for us,s in enumerate(lit):
+        #     print us,'/',len(lit)
+        #     # us counter
+        #     # s : interaction 
+        #     # s[0] : point or segment
+        #     # pts : list of neighbour nodes
+        #     if s[0]>0:
+        #         pts = self.L.Gs[s[0]].keys()
+        #         tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
+        #     else:
+        #         tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
+        #     # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
+        #     # for mirroring 
+        #     # R=[[S0,v0],[S1,v1],...]
+        #     R = [(np.eye(2),np.array([0,0]))]
+
+        #     visited = [s]
+        #     # stack is a list of iterators
+        #     stack = [iter(Gi[s])]
+        #     # lawp = list of airwall position in visited
+        #     lawp = []
+        #     # while the list of iterators is not void
+        #     # import ipdb
+        #     # ipdb.set_trace()
+        #     while stack: #
+        #         # iter_on_interactions is the last iterator in the stack
+        #         iter_on_interactions = stack[-1]
                 
+        #         # next interaction child
+        #         interaction = next(iter_on_interactions, None)
+            
+        #         cond1 = interaction is None
+        #         # test whether the interaction has already been visited (reverberation)
+        #         cond2 = (interaction in visited) or bt
+        #         # test if the cutoff condition
+        #         cond3 = len(visited) > (cutoff + sum(lawp))
+        #         #print cond1,cond2,cond3
+        #         #print "vis :",visited,interaction
+        #         if (not cond1):
+        #             if (not cond2) and (not cond3):
+        #                 visited.append(interaction)
+        #                 #print visited,len(stack)
+        #                 if interaction[0] in self.L.name['AIR']:
+        #                     lawp.append(1)
+        #                 else:
+        #                     lawp.append(0)
+
+        #                 # update number of useful segments
+        #                 # if there is airwall in visited
+        #                 nstr = interaction[0]
+        #                 # Testing the type of interaction at rank -2 
+        #                 # R is a list which contains a rotation matrix 
+        #                 # and a translation vector for doing the mirroring 
+        #                 # operation
+
+        #                 # diffraction 
+                           
+        #                 if len(visited[-2]) == 1:
+        #                     th = self.L.Gs.pos[nstr]
+        #                     th = np.array([th,th])
+        #                     R.append((np.eye(2),np.array([0,0])))
+
+        #                 # reflexion
+        #                 if len(visited[-2])==2 and len(visited)> 2:
+
+        #                     pts = self.L.Gs[nstr].keys()
+        #                     # th (Npt x xy)
+        #                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+        #                     R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
+
+        #                 # transmission
+        #                 else : 
+        #                     pts = self.L.Gs[nstr].keys()
+        #                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+        #                     # for uniformity purpose 
+        #                     # dummy mirroring (no effect)
+        #                     R.append((np.eye(2),np.array([0,0])))
+
+        #                 # apply current chain of symmetries
+        #                 # th are current segment tail-head coordinates
+        #                 # tahe is a list of well mirrored tail-head coordinates
+        #                 for r in R: 
+        #                     th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                        
+        #                 tahe.append(th)
+
+        #                 if valid(visited,self.L,tahe):
+            
+        #                     # sequence is valid and last interaction is in the list of targets   
+        #                     if interaction in lis:
+        #                         nstr = np.array(map(lambda x: x[0],visited))
+        #                         typ  = np.array(map(lambda x: len(x),visited))
+        #                         try:
+        #                             self[len(typ)] = np.vstack((self[len(typ)],nstr,typ))[::-1]
+        #                         except:
+        #                             self[len(typ)] = np.vstack((nstr,typ))[::-1]
+        #                         cptsig +=1
+        #                         #print visited,len(stack),cptsig
+        #                         # go back 
+        #                         visited.pop()
+        #                         tahe.pop()
+        #                         R.pop()
+        #                         lawp.pop()
+        #                     else:
+        #                         # move forward
+        #                         #print " nexti : ",visited[-2],interaction
+        #                         nexti  = [it for it in Gi[visited[-2]][interaction]['output'].keys() if it[0]>0]
+        #                         stack.append(iter(nexti))
+        #                 else:
+        #                     # go back
+        #                     visited.pop()
+        #                     tahe.pop()
+        #                     R.pop()
+        #                     lawp.pop()
+
+        #         else:
+        #             visited.pop()
+        #             tahe.pop()
+        #             R.pop()
+        #             try:
+        #                 lawp.pop()
+        #             except:
+        #                 pass
+        #             stack.pop()               
              
 
     def plot_cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):

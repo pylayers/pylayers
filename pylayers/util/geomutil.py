@@ -4328,7 +4328,6 @@ def mirror(p,pa,pb):
     x = la.solve(A, v0)
     return x
 
-
 def axmat(pa,pb):
     """ Compute the image of p wrt the segment pa pb
 
@@ -4392,14 +4391,24 @@ def axmat(pa,pb):
     zalpha = np.where(alpha == 0.)
     alpha[zalpha] = 1.
 
-    a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
-    b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
-    c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
-                        pa[1, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
-    d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
-                        pa[0, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
+    dsal = (2. / alpha)
+    pampby = pa[1, :] - pb[1, :]
+    pbmpax = pb[0, :] - pa[0, :]
+    prod = pbmpax * pampby
+
+    a = 1 - dsal * (pampby ** 2)
+    b = dsal * prod
+    c = dsal * (pa[0, :] * (pampby ** 2) + pa[1, :] * prod)                   
+    d = dsal * (pa[1, :] * (pbmpax ** 2) + pa[0, :] * prod) 
+                        
+    # a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+    # b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+    # c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+    #                     pa[1, :] * (pa[1, :] - pb[1, :]) *
+    #                     (pb[0, :] - pa[0, :]))
+    # d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+    #                     pa[0, :] * (pa[1, :] - pb[1, :]) *
+    #                     (pb[0, :] - pa[0, :]))
 
     N = 1
     S = np.array([[a[0],-b[0]],[-b[0],-a[0]]])
