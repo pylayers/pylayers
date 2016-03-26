@@ -1286,7 +1286,7 @@ class DLink(Link):
                 print "load signature"
         else :
             if kwargs['alg']==1:
-                Si.run(cutoff=kwargs['cutoff'],
+                Si.runt(cutoff=kwargs['cutoff'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])

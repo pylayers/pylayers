@@ -283,9 +283,9 @@ def valid(lsig,L,tahe=[]):
 
     else:
 
-        tahe=np.array(tahe)
-        pta = tahe[:,0,:]
-        phe = tahe[:,1,:]
+        tahe = np.array(tahe) # Nseg x tahe x xy 
+        pta = tahe[:,0,:].T  # 2 x Nseg
+        phe = tahe[:,1,:].T  # 2 x Nseg 
 
 
 
@@ -329,8 +329,6 @@ def valid(lsig,L,tahe=[]):
     #     import ipdb
     #     ipdb.set_trace()
     
-
-
     # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
     # vl and vr are 2 director vector lying on the polygon side.
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
@@ -362,18 +360,18 @@ def valid(lsig,L,tahe=[]):
     out = (lta & lhe ) | (~rta & ~rhe)
     inside = ~out
 
-    # debug
-    plt.ion()
-    plt.gcf()
-    #plt.title(str(cond))
-    #plot_lines(ax=plt.gca(),ob=lines)
-    plot_lines(ax=plt.gca(),ob=[lef],color='g')
-    plot_lines(ax=plt.gca(),ob=[rig],color='r')
-    plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
-    plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
-    plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
-    plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
-    plt.legend()
+    # # debug
+    # plt.ion()
+    # plt.gcf()
+    # #plt.title(str(cond))
+    # #Ok plot_lines(ax=plt.gca(),ob=lines)
+    # plot_lines(ax=plt.gca(),ob=[lef],color='g')
+    # plot_lines(ax=plt.gca(),ob=[rig],color='r')
+    # plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
+    # plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
+    # plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
+    # plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
+    # plt.legend()
 
     return np.all(inside)
 
@@ -2632,7 +2630,7 @@ class Signatures(PyLayers,dict):
 
 
     # @profile                    
-    def run(self,cutoff=2,bt=False,progress=False,diffraction=True,threshold=0.1):
+    def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -2775,7 +2773,7 @@ class Signatures(PyLayers,dict):
                                 except:
                                     self[len(typ)]=np.vstack((nstr,typ))
                                 cptsig +=1
-                                print path,cptsig
+                                #print path,cptsig
                                 #print "O",
                                 #try:
                                 #    dout[len(path)].append([[p[0],len(p)] for p in path])
@@ -2799,7 +2797,7 @@ class Signatures(PyLayers,dict):
 
 
                                 visited.append(child)
-                                print visited
+                                #print visited
 
                                 seg = visited[-1][0]
 
@@ -2840,10 +2838,10 @@ class Signatures(PyLayers,dict):
                                 tahe.append(th)
 
                                 if len(visited)>3:
-                                    import ipdb
-                                    ipdb.set_trace()    
+                                    # import ipdb
+                                    # ipdb.set_trace()    
                                     v = valid(visited,self.L,tahe) 
-                                    print v
+                                    #print v
                                 else: 
                                     v = True
                                     # signature of length 3 are necessarily valid
@@ -2874,7 +2872,7 @@ class Signatures(PyLayers,dict):
                                 nstr = np.array(map(lambda x: x[0],path))
                                 typ  = np.array(map(lambda x: len(x),path))
                                 cptsig +=1
-                                print path,cptsig
+                                #print path,cptsig
                                 try:
                                     self[len(typ)]=np.vstack((self[len(path)],nstr,typ))
                                 except:
@@ -2884,7 +2882,7 @@ class Signatures(PyLayers,dict):
                                 #yield visited + [target]
                             else:
                                 pass
-                                print "Cutoff ",visited
+                                #print "Cutoff ",visited
                                 #print  "C",
                             stack.pop()
                             visited.pop()
@@ -2906,7 +2904,207 @@ class Signatures(PyLayers,dict):
                         self[1]=np.vstack((nstr,typ))
 
 
+    # @profile                    
+    def runt(self,cutoff=2,bt=False,progress=False,diffraction=True,threshold=0.1):
+        """ get signatures (in one list of arrays) between tx and rx
 
+        Parameters
+        ----------
+
+        cutoff : int
+            limit the exploration of all_simple_path
+        algo: string
+            'old' : call propaths2
+            'new' : call procone2
+        bt : bool
+            backtrace (allow to visit already visited nodes in simple path algorithm)
+        progress : bool
+            display the time passed in the loop
+
+
+        Returns
+        -------
+
+        sigslist :  numpy.ndarray
+
+        See Also
+        --------
+
+        pylayers.simul.link.Dlink.eval
+        pylayers.antprop.signature.Signatures.propath2
+        pylayers.antprop.signature.Signatures.procone2
+
+        """
+        print "run"
+        self.cutoff   = cutoff
+        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+
+        # list of interactions visible from source
+        lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
+        if diffraction:
+            lis  = lisT + lisR + lisD
+        else:
+            lis  = lisT + lisR
+
+        # list of interactions visible from target
+        litT,litR,litD = self.L.intercy(self.target,typ='target')
+
+        if diffraction:
+           lit  = litT + litR + litD
+        else:
+           lit  = litT + litR
+        #print "source,lis :",self.source,lis
+        #print "target,lit :",self.target,lit
+        for u in lit: 
+            print u
+        print "-------------"
+
+        Gi = self.L.Gi
+        Gi.pos = self.L.Gi.pos
+        #
+        # remove diffractions from Gi
+        if not diffraction:
+            Gi = gidl(Gi)
+
+        # initialize dout dictionnary
+        dout = {}
+
+        # progresss stuff...
+        lmax = len(lis)*len(lit)
+        pe = 0
+        tic = time.time()
+        tic0 = tic
+        #for interaction source  in list of source interactions
+
+        # signature counter
+        cptsig = 0
+        
+        for us,s in enumerate(lis):
+            print us,'/',len(lis)
+            # us counter
+            # s : interaction 
+            # s[0] : point or segment
+            # pts : list of neighbour nodes
+            if s[0]>0:
+                pts = self.L.Gs[s[0]].keys()
+                tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
+            else:
+                tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
+            # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
+            # for mirroring 
+            # R=[[S0,v0],[S1,v1],...]
+            R = [(np.eye(2),np.array([0,0]))]
+
+            visited = [s]
+            # stack is a list of iterators
+            stack = [iter(Gi[s])]
+            # lawp = list of airwall position in visited
+            lawp = []
+            # while the list of iterators is not void
+            # import ipdb
+            # ipdb.set_trace()
+            while stack: #
+                # iter_on_interactions is the last iterator in the stack
+                iter_on_interactions = stack[-1]
+                
+                # next interaction child
+                interaction = next(iter_on_interactions, None)
+            
+                cond1 = interaction is None
+                # test whether the interaction has already been visited (reverberation)
+                cond2 = (interaction in visited) or bt
+                # test if the cutoff condition
+                cond3 = len(visited) > (cutoff + sum(lawp))
+                #print cond1,cond2,cond3
+                #print "vis :",visited,interaction
+                if (not cond1):
+                    if (not cond2) and (not cond3):
+                        visited.append(interaction)
+                        #print visited,len(stack)
+                        if interaction[0] in self.L.name['AIR']:
+                            lawp.append(1)
+                        else:
+                            lawp.append(0)
+
+                        # update number of useful segments
+                        # if there is airwall in visited
+                        nstr = interaction[0]
+                        # Testing the type of interaction at rank -2 
+                        # R is a list which contains a rotation matrix 
+                        # and a translation vector for doing the mirroring 
+                        # operation
+
+                        # diffraction 
+                           
+                        if len(visited[-2]) == 1:
+                            th = self.L.Gs.pos[nstr]
+                            th = np.array([th,th])
+                            R.append((np.eye(2),np.array([0,0])))
+
+                        # reflexion
+                        if len(visited[-2])==2 and len(visited)> 2:
+
+                            pts = self.L.Gs[nstr].keys()
+                            # th (Npt x xy)
+                            th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+                            R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
+
+                        # transmission
+                        else : 
+                            pts = self.L.Gs[nstr].keys()
+                            th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
+                            # for uniformity purpose 
+                            # dummy mirroring (no effect)
+                            R.append((np.eye(2),np.array([0,0])))
+
+                        # apply current chain of symmetries
+                        # th are current segment tail-head coordinates
+                        # tahe is a list of well mirrored tail-head coordinates
+                        for r in R: 
+                            th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                        
+                        tahe.append(th)
+
+                        if valid(visited,self.L,tahe):
+            
+                            # sequence is valid and last interaction is in the list of targets   
+                            if interaction in lit:
+                                nstr = np.array(map(lambda x: x[0],visited))
+                                typ  = np.array(map(lambda x: len(x),visited))
+                                try:
+                                    self[len(typ)] = np.vstack((self[len(typ)],nstr,typ))
+                                except:
+                                    self[len(typ)] = np.vstack((nstr,typ))
+                                cptsig +=1
+                                #print visited,len(stack),cptsig
+                                # go back 
+                                visited.pop()
+                                tahe.pop()
+                                R.pop()
+                                lawp.pop()
+                            else:
+                                # move forward
+                                #print " nexti : ",visited[-2],interaction
+                                nexti  = [it for it in Gi[visited[-2]][interaction]['output'].keys() if it[0]>0]
+                                stack.append(iter(nexti))
+                        else:
+                            # go back
+                            visited.pop()
+                            tahe.pop()
+                            R.pop()
+                            lawp.pop()
+
+                else:
+                    visited.pop()
+                    tahe.pop()
+                    R.pop()
+                    try:
+                        lawp.pop()
+                    except:
+                        pass
+                    stack.pop()
+                
+             
 
     def plot_cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):
         """ display cones of an unfolded signature
