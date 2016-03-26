@@ -224,7 +224,7 @@ def valid(lsig,L,tahe=[]):
     #         import ipdb
     #         ipdb.set_trace()
 
-    # ensure compatibility with Signautre.run where
+    # ensure compatibility with Signature.run where
     # lsig is a list of tuple
     if isinstance(lsig,list):
         lsig = np.array([(i[0],len(i)) for i in lsig])
@@ -300,7 +300,7 @@ def valid(lsig,L,tahe=[]):
 
     # typ = lsig[:,1]
     # mirror=[]
-    # # lines = [L._shseg[seq[0]]]
+    #lines = [L._shseg[seq[0]]]
     # for i in range(1,lensi):
     #     # pam = pa[:,i].reshape(2,1)
     #     # pbm = pb[:,i].reshape(2,1)
@@ -339,14 +339,14 @@ def valid(lsig,L,tahe=[]):
         vl = ( phe[:,0],phe[:,-1])
 
         # twisted = True
-        # lef = sh.LineString((pta[:,0],pta[:,-1]))
-        # rig = sh.LineString((phe[:,0],phe[:,-1]))
+        lef = sh.LineString((pta[:,0],pta[:,-1]))
+        rig = sh.LineString((phe[:,0],phe[:,-1]))
     else:    
         vr = ( pta[:,0], phe[:,-1])
         vl = ( phe[:,0],pta[:,-1])
         # twisted = False
-        # lef = sh.LineString((pta[:,0],phe[:,-1]))
-        # rig = sh.LineString((pta[:,-1],phe[:,0]))
+        lef = sh.LineString((pta[:,0],phe[:,-1]))
+        rig = sh.LineString((pta[:,-1],phe[:,0]))
         
        
 
@@ -356,24 +356,24 @@ def valid(lsig,L,tahe=[]):
     # =>   both tahe are right of vr and vl
     lta = geu.isleft(pta[:,1:-1],vl[0][:,None],vl[1][:,None])
     rta = geu.isleft(pta[:,1:-1],vr[0][:,None],vr[1][:,None])
-    lhe =  geu.isleft(phe[:,1:-1],vl[0][:,None],vl[1][:,None])
+    lhe = geu.isleft(phe[:,1:-1],vl[0][:,None],vl[1][:,None])
     rhe = geu.isleft(phe[:,1:-1],vr[0][:,None],vr[1][:,None])
 
     out = (lta & lhe ) | (~rta & ~rhe)
     inside = ~out
 
     # debug
-    # plt.ion()
-    # plt.gcf()
-    # plt.title(str(cond))
-    # plot_lines(ax=plt.gca(),ob=lines)
-    # # plot_lines(ax=plt.gca(),ob=[lef],color='g')
-    # # plot_lines(ax=plt.gca(),ob=[rig],color='r')
-    # # plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
-    # # plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
-    # plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
-    # plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
-    # plt.legend()
+    plt.ion()
+    plt.gcf()
+    #plt.title(str(cond))
+    #plot_lines(ax=plt.gca(),ob=lines)
+    plot_lines(ax=plt.gca(),ob=[lef],color='g')
+    plot_lines(ax=plt.gca(),ob=[rig],color='r')
+    plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
+    plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
+    plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
+    plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
+    plt.legend()
 
     return np.all(inside)
 
@@ -2700,6 +2700,10 @@ class Signatures(PyLayers,dict):
         tic = time.time()
         tic0 = tic
         #for interaction source  in list of source interactions
+
+        # signature counter
+        cptsig = 0
+        
         for us,s in enumerate(lis):
             #for target interaction in list of target interactions
             #print "---> ",s
@@ -2727,6 +2731,7 @@ class Signatures(PyLayers,dict):
                 # for mirror
                 # R=[[S0,v0],[S1,v1],...]
                 R=[(np.eye(2),np.array([0,0]))]
+
                 if (s != t):
 
                     visited = [s]
@@ -2740,6 +2745,7 @@ class Signatures(PyLayers,dict):
                     while stack: #
                         # children is the last iterator of stack
                         children = stack[-1]
+                        
                         # next child
 
                         child = next(children, None)
@@ -2768,6 +2774,8 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)]=np.vstack((self[len(typ)],nstr,typ))
                                 except:
                                     self[len(typ)]=np.vstack((nstr,typ))
+                                cptsig +=1
+                                print path,cptsig
                                 #print "O",
                                 #try:
                                 #    dout[len(path)].append([[p[0],len(p)] for p in path])
@@ -2791,6 +2799,7 @@ class Signatures(PyLayers,dict):
 
 
                                 visited.append(child)
+                                print visited
 
                                 seg = visited[-1][0]
 
@@ -2801,6 +2810,7 @@ class Signatures(PyLayers,dict):
                                 # operation
 
                                 # diff
+                               
                                 if len(visited[-2]) == 1:
                                     th = self.L.Gs.pos[seg]
                                     th = np.array([th,th])
@@ -2810,7 +2820,7 @@ class Signatures(PyLayers,dict):
                                 if len(visited[-2])==2 and len(visited)> 2:
 
                                     pts = self.L.Gs[seg].keys()
-                                    # th (xy,Npt)
+                                    # th (Npt x xy)
                                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
                                     R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
   
@@ -2829,7 +2839,15 @@ class Signatures(PyLayers,dict):
                                     th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                                 tahe.append(th)
 
-                                v = valid(visited,self.L,tahe) 
+                                if len(visited)>3:
+                                    import ipdb
+                                    ipdb.set_trace()    
+                                    v = valid(visited,self.L,tahe) 
+                                    print v
+                                else: 
+                                    v = True
+                                    # signature of length 3 are necessarily valid
+
                                 if v:
                                     stack.append(iter(nexti))
                                 
@@ -2855,6 +2873,8 @@ class Signatures(PyLayers,dict):
                                 path = visited + [t]
                                 nstr = np.array(map(lambda x: x[0],path))
                                 typ  = np.array(map(lambda x: len(x),path))
+                                cptsig +=1
+                                print path,cptsig
                                 try:
                                     self[len(typ)]=np.vstack((self[len(path)],nstr,typ))
                                 except:
@@ -2864,6 +2884,7 @@ class Signatures(PyLayers,dict):
                                 #yield visited + [target]
                             else:
                                 pass
+                                print "Cutoff ",visited
                                 #print  "C",
                             stack.pop()
                             visited.pop()
@@ -2875,7 +2896,7 @@ class Signatures(PyLayers,dict):
                                 pass
 
 
-                else: # s==t
+                else: # s==t  (Same source and target)vi
                     nstr = np.array([s[0]])
                     typ  = np.array([len(s)])
                     try:
