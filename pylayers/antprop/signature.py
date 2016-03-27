@@ -191,22 +191,41 @@ def shLtmp(L):
 def showsig2(lsig,L,tahe):
     if isinstance(lsig,list):
         lsig = np.array([(i[0],len(i)) for i in lsig])
+
+    for k in lsig:
+        k0 = k[0]
+        k1 = k[1]
+        if k0>0:
+            npt = L.Gs[k0].keys()
+            pta = np.array(L.Gs.pos[npt[0]])
+            phe = np.array(L.Gs.pos[npt[1]])
+            if k1==2:
+                plu.displot(pta.reshape(2,1),phe.reshape(2,1),color='r',linewidth=2)
+            if k1 ==3:
+                plu.displot(pta.reshape(2,1),phe.reshape(2,1),color='g',linewidth=2)
+
+    for th in tahe:
+        ta = th[0]
+        he = th[1]
+        plu.displot(ta.reshape(2,1),he.reshape(2,1),color='k',linewidth=1)
+                      
+
     tahe = np.array(tahe) # Nseg x tahe x xy 
     pta = tahe[:,0,:].T  # 2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
     seq = lsig[:,0]
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
             geu.ccw(phe[:,0],phe[:,-1],pta[:,-1]) ):
+        vr = ( pta[:,0],phe[:,-1])
+        vl = ( phe[:,0],pta[:,-1])
+        # twisted = True
+        lef = sh.LineString((pta[:,0],phe[:,-1]))
+        rig = sh.LineString((phe[:,0],pta[:,-1]))
+    else:    
         vr = ( pta[:,0],pta[:,-1])
         vl = ( phe[:,0],phe[:,-1])
-        # twisted = True
         lef = sh.LineString((pta[:,0],pta[:,-1]))
         rig = sh.LineString((phe[:,0],phe[:,-1]))
-    else:    
-        vr = ( pta[:,0], phe[:,-1])
-        vl = ( phe[:,0],pta[:,-1])
-        lef = sh.LineString((pta[:,0],phe[:,-1]))
-        rig = sh.LineString((pta[:,-1],phe[:,0]))
     plt.ion()
     plt.gcf()
     #L.showG('s',labels=True)
@@ -217,8 +236,8 @@ def showsig2(lsig,L,tahe):
     plot_lines(ax=plt.gca(),ob=[rig],color='r')
     plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
     plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
-    plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
-    plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
+    #plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
+    #plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
     plt.axis('auto')
     plt.legend()
 #@profile
@@ -368,13 +387,16 @@ def valid(lsig,L,tahe=[]):
             geu.ccw(phe[:,0],phe[:,-1],pta[:,-1]) ):
         vr = ( pta[:,0],pta[:,-1])
         vl = ( phe[:,0],phe[:,-1])
-
+        # vr = ( pta[:,0],phe[:,-1])
+        # vl = ( phe[:,0],pta[:,-1])
         # twisted = True
         #lef = sh.LineString((pta[:,0],pta[:,-1]))
         #rig = sh.LineString((phe[:,0],phe[:,-1]))
     else:    
         vr = ( pta[:,0], phe[:,-1])
         vl = ( phe[:,0],pta[:,-1])
+        # vr = ( pta[:,0],pta[:,-1])
+        # vl = ( phe[:,0],phe[:,-1])
         # twisted = False
         #lef = sh.LineString((pta[:,0],phe[:,-1]))
         #rig = sh.LineString((pta[:,-1],phe[:,0]))
@@ -2938,7 +2960,7 @@ class Signatures(PyLayers,dict):
 
 
     # @profile                    
-    def runt(self,cutoff=2,bt=False,progress=False,diffraction=True,threshold=0.1):
+    def runt(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -3091,7 +3113,7 @@ class Signatures(PyLayers,dict):
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
                         #pdb.set_trace()
-                        for r in R[::-1]: 
+                        for r in R: 
                         #for r in R:
                             th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                         #pdb.set_trace()
@@ -3104,6 +3126,7 @@ class Signatures(PyLayers,dict):
                         #vlp vrpdb.set_trace()
                         if len(tahe)<2:
                             tahe.append(th)
+                            valid_bool = True
                         else:
                             pta0 = tahe[0][0]   # tail first segment
                             phe0 = tahe[0][1]   # head first segment
@@ -3111,31 +3134,59 @@ class Signatures(PyLayers,dict):
                             phe_ = tahe[-1][1]  # head last segment 
                             if not (geu.ccw(pta0,phe0,phe_) ^
                                     geu.ccw(phe0,phe_,pta_) ):
-                                vr = (pta0,pta_)
-                                vl = (phe0,phe_)
-                            else:  # twisted case  
+                                # vr = (pta0,pta_)
+                                # vl = (phe0,phe_)
                                 vr = (pta0,phe_)
                                 vl = (phe0,pta_)
+                            else:  # twisted case  
+                                # vr = (pta0,phe_)
+                                # vl = (phe0,pta_)
+                                vr = (pta0,pta_)
+                                vl = (phe0,phe_)
 
-                            lta = geu.isleft(th[0][:,None],vl[0][:,None],vl[1][:,None])
-                            rta = geu.isleft(th[0][:,None],vr[0][:,None],vr[1][:,None])
-                            lhe = geu.isleft(th[1][:,None],vl[0][:,None],vl[1][:,None])
-                            rhe = geu.isleft(th[1][:,None],vr[0][:,None],vr[1][:,None])
+                            # lta = geu.isleft(th[0][:,None],vl[0][:,None],vl[1][:,None])
+                            # rta = geu.isleft(th[0][:,None],vr[0][:,None],vr[1][:,None])
+                            # lhe = geu.isleft(th[1][:,None],vl[0][:,None],vl[1][:,None])
+                            # rhe = geu.isleft(th[1][:,None],vr[0][:,None],vr[1][:,None])
 
-                            out = (lta & lhe ) | (~rta & ~rhe)
-                            inside = ~out
-                            if inside:
-                                intersect_left = geu.intersect(th[0][:,None],
-                                                           th[1][:,None],
-                                                           vl[0][:,None],
-                                                           vl[1][:,None])
-                                intersect_right = geu.intersect(th[0][:,None],
-                                                           th[1][:,None],
-                                                           vr[0][:,None],
-                                                           vr[1][:,None])
-                                pdb.set_trace()
-                       
-                        if valid(visited,self.L,tahe):
+                            # out = (lta & lhe ) | (~rta & ~rhe)
+                            # inside = ~out
+                            #if inside:   # new segment is inside the beam
+                            
+                            linel = (vl[0],vl[1]-vl[0])
+                            liner = (vr[0],vr[1]-vr[0])
+                            seg   = (th[0],th[1])
+                            #pdb.set_trace()
+                            kl,p_int_left  = geu.intersect_line_seg(linel,seg)
+                            kr,p_int_right = geu.intersect_line_seg(liner,seg)
+                            valid_bool = True
+                            if ((abs(kl)>=1) & (abs(kr)>=1)): # 0 intersection points 
+                                if (kl*kr)<0:
+                                    tha = th
+                                    tahe.append(tha)
+                                else: # outside cone
+                                    valid_bool = False
+                            if ((abs(kl)<1) & (abs(kr)<1)): # 2 intersection points 
+                                tha = np.vstack((p_int_left,p_int_right))
+                                tahe.append(tha)
+                            if ((abs(kl)<1) & (abs(kr)>=1)):
+                                if kr<kl:
+                                    tha = np.vstack((th[0],p_int_left))
+                                else:
+                                    tha = np.vstack((p_int_left,th[1]))
+                                tahe.append(tha)
+                            if ((abs(kr)<1) & (abs(kl)>=1)):
+                                if kl<kr:
+                                    tha = np.vstack((th[0],p_int_right))
+                                else:
+                                    tha = np.vstack((p_int_right,th[1]))
+                                tahe.append(tha)
+                                
+                            
+                             
+                        if valid_bool:
+                            #showsig2(visited,self.L,tahe)
+                            #pdb.set_trace()  
             
                             # sequence is valid and last interaction is in the list of targets   
                             if interaction in lit:
@@ -3155,6 +3206,9 @@ class Signatures(PyLayers,dict):
                             nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
                             stack.append(iter(nexti))
                         else:
+                            #ltahe = tahe+[th]
+                            #showsig2(visited,self.L,ltahe)
+                            #pdb.set_trace()  
                             # go back
                             #pdb.set_trace()
                             #print visited
@@ -3162,7 +3216,7 @@ class Signatures(PyLayers,dict):
                                 if len(visited[-2])==2:
                                     R.pop()
                             last = visited.pop()
-                            tahe.pop()
+                            #tahe.pop()
                             
                             #R.pop()
                             lawp.pop()
@@ -3181,130 +3235,7 @@ class Signatures(PyLayers,dict):
                         pass
                     stack.pop()
 
-        # for us,s in enumerate(lit):
-        #     print us,'/',len(lit)
-        #     # us counter
-        #     # s : interaction 
-        #     # s[0] : point or segment
-        #     # pts : list of neighbour nodes
-        #     if s[0]>0:
-        #         pts = self.L.Gs[s[0]].keys()
-        #         tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
-        #     else:
-        #         tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
-        #     # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-        #     # for mirroring 
-        #     # R=[[S0,v0],[S1,v1],...]
-        #     R = [(np.eye(2),np.array([0,0]))]
-
-        #     visited = [s]
-        #     # stack is a list of iterators
-        #     stack = [iter(Gi[s])]
-        #     # lawp = list of airwall position in visited
-        #     lawp = []
-        #     # while the list of iterators is not void
-        #     # import ipdb
-        #     # ipdb.set_trace()
-        #     while stack: #
-        #         # iter_on_interactions is the last iterator in the stack
-        #         iter_on_interactions = stack[-1]
-                
-        #         # next interaction child
-        #         interaction = next(iter_on_interactions, None)
             
-        #         cond1 = interaction is None
-        #         # test whether the interaction has already been visited (reverberation)
-        #         cond2 = (interaction in visited) or bt
-        #         # test if the cutoff condition
-        #         cond3 = len(visited) > (cutoff + sum(lawp))
-        #         #print cond1,cond2,cond3
-        #         #print "vis :",visited,interaction
-        #         if (not cond1):
-        #             if (not cond2) and (not cond3):
-        #                 visited.append(interaction)
-        #                 #print visited,len(stack)
-        #                 if interaction[0] in self.L.name['AIR']:
-        #                     lawp.append(1)
-        #                 else:
-        #                     lawp.append(0)
-
-        #                 # update number of useful segments
-        #                 # if there is airwall in visited
-        #                 nstr = interaction[0]
-        #                 # Testing the type of interaction at rank -2 
-        #                 # R is a list which contains a rotation matrix 
-        #                 # and a translation vector for doing the mirroring 
-        #                 # operation
-
-        #                 # diffraction 
-                           
-        #                 if len(visited[-2]) == 1:
-        #                     th = self.L.Gs.pos[nstr]
-        #                     th = np.array([th,th])
-        #                     R.append((np.eye(2),np.array([0,0])))
-
-        #                 # reflexion
-        #                 if len(visited[-2])==2 and len(visited)> 2:
-
-        #                     pts = self.L.Gs[nstr].keys()
-        #                     # th (Npt x xy)
-        #                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-        #                     R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
-
-        #                 # transmission
-        #                 else : 
-        #                     pts = self.L.Gs[nstr].keys()
-        #                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-        #                     # for uniformity purpose 
-        #                     # dummy mirroring (no effect)
-        #                     R.append((np.eye(2),np.array([0,0])))
-
-        #                 # apply current chain of symmetries
-        #                 # th are current segment tail-head coordinates
-        #                 # tahe is a list of well mirrored tail-head coordinates
-        #                 for r in R: 
-        #                     th = np.einsum('ki,ij->kj',th,r[0])+r[1]
-                        
-        #                 tahe.append(th)
-
-        #                 if valid(visited,self.L,tahe):
-            
-        #                     # sequence is valid and last interaction is in the list of targets   
-        #                     if interaction in lis:
-        #                         nstr = np.array(map(lambda x: x[0],visited))
-        #                         typ  = np.array(map(lambda x: len(x),visited))
-        #                         try:
-        #                             self[len(typ)] = np.vstack((self[len(typ)],nstr,typ))[::-1]
-        #                         except:
-        #                             self[len(typ)] = np.vstack((nstr,typ))[::-1]
-        #                         cptsig +=1
-        #                         #print visited,len(stack),cptsig
-        #                         # go back 
-        #                         visited.pop()
-        #                         tahe.pop()
-        #                         R.pop()
-        #                         lawp.pop()
-        #                     else:
-        #                         # move forward
-        #                         #print " nexti : ",visited[-2],interaction
-        #                         nexti  = [it for it in Gi[visited[-2]][interaction]['output'].keys() if it[0]>0]
-        #                         stack.append(iter(nexti))
-        #                 else:
-        #                     # go back
-        #                     visited.pop()
-        #                     tahe.pop()
-        #                     R.pop()
-        #                     lawp.pop()
-
-        #         else:
-        #             visited.pop()
-        #             tahe.pop()
-        #             R.pop()
-        #             try:
-        #                 lawp.pop()
-        #             except:
-        #                 pass
-        #             stack.pop()               
              
 
     def plot_cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):

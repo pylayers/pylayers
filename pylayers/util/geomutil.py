@@ -3033,6 +3033,36 @@ def ccw(a, b, c):
     return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) >
            (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
+def intersect_line_seg(line,seg):
+    """ intersect a line and a segment
+    
+    Parameters 
+    ----------
+    
+    line : (point,vec)
+    seg :  (pta,phe)
+    
+    Returns
+    -------
+    
+    k : intersection parameter (0<k<1 if intersection)
+    M : intersection point 
+    
+    """
+    pt, v = line
+    pta,phe = seg
+    vseg = phe-pta
+    xht = phe[0]-pta[0]
+    yth = pta[1]-phe[1]
+    num = -(v[1]*(pta[0]-pt[0])+v[0]*(pt[1]-pta[1]))
+    den = (v[1]*xht+v[0]*yth)
+    if (abs(den) > 0):
+        k = num/den
+    else:
+        k = 2
+    M = pta+k*vseg
+    return(k,M)
+
 
 def intersect(a, b, c, d):
     """ check if segment AB intersects segment CD
