@@ -188,6 +188,39 @@ def shLtmp(L):
     dpts = {x[0]:(L.Gs.pos[x[1][0]],L.Gs.pos[x[1][1]]) for x in seg_connect.items() }
     L._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
+def showsig2(lsig,L,tahe):
+    if isinstance(lsig,list):
+        lsig = np.array([(i[0],len(i)) for i in lsig])
+    tahe = np.array(tahe) # Nseg x tahe x xy 
+    pta = tahe[:,0,:].T  # 2 x Nseg
+    phe = tahe[:,1,:].T  # 2 x Nseg 
+    seq = lsig[:,0]
+    if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
+            geu.ccw(phe[:,0],phe[:,-1],pta[:,-1]) ):
+        vr = ( pta[:,0],pta[:,-1])
+        vl = ( phe[:,0],phe[:,-1])
+        # twisted = True
+        lef = sh.LineString((pta[:,0],pta[:,-1]))
+        rig = sh.LineString((phe[:,0],phe[:,-1]))
+    else:    
+        vr = ( pta[:,0], phe[:,-1])
+        vl = ( phe[:,0],pta[:,-1])
+        lef = sh.LineString((pta[:,0],phe[:,-1]))
+        rig = sh.LineString((pta[:,-1],phe[:,0]))
+    plt.ion()
+    plt.gcf()
+    #L.showG('s',labels=True)
+    lines = [L._shseg[seq[0]]]
+    plt.title(str(lsig))
+    plot_lines(ax=plt.gca(),ob=lines)
+    plot_lines(ax=plt.gca(),ob=[lef],color='g')
+    plot_lines(ax=plt.gca(),ob=[rig],color='r')
+    plt.scatter(pta[0,:],pta[1,:],marker='d',s=70,label='tail')
+    plt.scatter(phe[0,:],phe[1,:],marker='s',s=70,label='head')
+    plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)
+    plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)
+    plt.axis('auto')
+    plt.legend()
 #@profile
 def valid(lsig,L,tahe=[]):
     """ 
@@ -3041,9 +3074,7 @@ class Signatures(PyLayers,dict):
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
                             #R.append((np.eye(2),np.array([0,0])))
-
-                        # reflexion
-                        #if len(visited[-2])==2 and len(visited)> 2:
+                            
                         if len(visited[-2])==2:
 
                             pts = self.L.Gs[nstr].keys()
@@ -3051,23 +3082,59 @@ class Signatures(PyLayers,dict):
                             th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
                             R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
 
-                        # transmission (retrieve a segment)
                         else : 
                             pts = self.L.Gs[nstr].keys()
                             th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-                            # for uniformity purpose 
-                            # dummy mirroring (no effect)
-                            #R.append((np.eye(2),np.array([0,0])))
+                            
 
                         # apply current chain of symmetries
-                        # th are current segment tail-head coordinates
+                        # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
                         #pdb.set_trace()
-                        for r in R: 
+                        for r in R[::-1]: 
+                        #for r in R:
                             th = np.einsum('ki,ij->kj',th,r[0])+r[1]
-                        
-                        tahe.append(th)
                         #pdb.set_trace()
+                        # ik = 1
+                        # r = R[-ik]
+                        # while np.any(r[0]!=np.eye(2)):     
+                        #     th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                        #     ik = ik + 1
+                        #     r  = R[-ik]
+                        #vlp vrpdb.set_trace()
+                        if len(tahe)<2:
+                            tahe.append(th)
+                        else:
+                            pta0 = tahe[0][0]   # tail first segment
+                            phe0 = tahe[0][1]   # head first segment
+                            pta_ = tahe[-1][0]  # tail last segment
+                            phe_ = tahe[-1][1]  # head last segment 
+                            if not (geu.ccw(pta0,phe0,phe_) ^
+                                    geu.ccw(phe0,phe_,pta_) ):
+                                vr = (pta0,pta_)
+                                vl = (phe0,phe_)
+                            else:  # twisted case  
+                                vr = (pta0,phe_)
+                                vl = (phe0,pta_)
+
+                            lta = geu.isleft(th[0][:,None],vl[0][:,None],vl[1][:,None])
+                            rta = geu.isleft(th[0][:,None],vr[0][:,None],vr[1][:,None])
+                            lhe = geu.isleft(th[1][:,None],vl[0][:,None],vl[1][:,None])
+                            rhe = geu.isleft(th[1][:,None],vr[0][:,None],vr[1][:,None])
+
+                            out = (lta & lhe ) | (~rta & ~rhe)
+                            inside = ~out
+                            if inside:
+                                intersect_left = geu.intersect(th[0][:,None],
+                                                           th[1][:,None],
+                                                           vl[0][:,None],
+                                                           vl[1][:,None])
+                                intersect_right = geu.intersect(th[0][:,None],
+                                                           th[1][:,None],
+                                                           vr[0][:,None],
+                                                           vr[1][:,None])
+                                pdb.set_trace()
+                       
                         if valid(visited,self.L,tahe):
             
                             # sequence is valid and last interaction is in the list of targets   
