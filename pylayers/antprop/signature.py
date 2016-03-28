@@ -2685,7 +2685,7 @@ class Signatures(PyLayers,dict):
 
 
     # @profile                    
-    def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
+    def run_old1(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -2960,7 +2960,7 @@ class Signatures(PyLayers,dict):
 
 
     # @profile                    
-    def runt(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
+    def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -3056,9 +3056,7 @@ class Signatures(PyLayers,dict):
             stack = [iter(Gi[s])]
             # lawp = list of airwall position in visited
             lawp = []
-            # while the list of iterators is not void
-            # import ipdb
-            # ipdb.set_trace()
+            # while the stack of iterators is not void
             while stack: #
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
@@ -3095,15 +3093,23 @@ class Signatures(PyLayers,dict):
                         if len(visited[-2]) == 1:
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
-                            #R.append((np.eye(2),np.array([0,0])))
-                            
+                            R.append((np.eye(2),np.array([0,0])))
+                        
+                        # reflexion 
                         if len(visited[-2])==2:
 
                             pts = self.L.Gs[nstr].keys()
                             # th (Npt x xy)
-                            th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-                            R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
-
+                            th = np.array([self.L.Gs.pos[pts[0]],
+                                           self.L.Gs.pos[pts[1]]])
+                            # reverse order
+                            pts2 = self.L.Gs[visited[-2][0]].keys()
+                            ta_seg = np.array(self.L.Gs.pos[pts2[0]])
+                            he_seg = np.array(self.L.Gs.pos[pts2[1]])
+                            R.append(geu.axmat(ta_seg,he_seg))
+                            # direct order
+                            #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
+                        # transmission
                         else : 
                             pts = self.L.Gs[nstr].keys()
                             th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
@@ -3113,16 +3119,16 @@ class Signatures(PyLayers,dict):
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
                         #pdb.set_trace()
-                        for r in R: 
+                        #for r in R[::-1]: 
                         #for r in R:
-                            th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                        #    th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                         #pdb.set_trace()
-                        # ik = 1
-                        # r = R[-ik]
-                        # while np.any(r[0]!=np.eye(2)):     
-                        #     th = np.einsum('ki,ij->kj',th,r[0])+r[1]
-                        #     ik = ik + 1
-                        #     r  = R[-ik]
+                        ik = 1
+                        r = R[-ik]
+                        while np.any(r[0]!=np.eye(2)):     
+                            th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                            ik = ik + 1
+                            r  = R[-ik]
                         #vlp vrpdb.set_trace()
                         if len(tahe)<2:
                             tahe.append(th)
@@ -3203,7 +3209,8 @@ class Signatures(PyLayers,dict):
                             
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
-                            nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
+                            #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
+                            nexti  = [it for k,it in enumerate(outint) if (proint[k]>threshold)]
                             stack.append(iter(nexti))
                         else:
                             #ltahe = tahe+[th]
