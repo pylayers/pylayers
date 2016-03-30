@@ -184,7 +184,8 @@ class SCPI(PyLayers):
     def close(self):
         """ close socket
         """
-        self.s.close()
+        if not self.emulated:
+            self.s.close()
 
     def _read(self):
         if self.s is None:
@@ -499,6 +500,13 @@ class SCPI(PyLayers):
         Nmeas   : number of measures
         chan    : int
                   channel number
+        Nr      : Number of receiver (used only when calibration ==True)
+        Nt      : Number of transmitter (used only when calibration ==True)
+        Nmeas   : Number of measurements 
+        calibration : boolean (used only for emulation)
+            if True the measurement correspond to a dataset for calibration purpose
+        seed    : In emulated mode the data are produced from random number. seed is 
+            for reproducibility of random experiments.
 
         Examples
         --------
@@ -879,6 +887,7 @@ class SCPI(PyLayers):
                         cal[k].attrs['nt']        = Nt
                         cal[k].attrs['nr']        = Nr
                         cal[k].attrs['nmeas']     = dcal[k]['nmeas']
+                        
                         if typ=='single':
                             cal[k].attrs['_filecalh5'] =_filecalh5 
                             cal[k].attrs['gcalm']= gcalm
@@ -887,7 +896,7 @@ class SCPI(PyLayers):
                     cal[k].attrs['nf']        = self.Nf
                     cal[k].attrs['ifbhz']     = self.ifbHz
                     cal[k].attrs['navrg']     = self.navrg
-            
+                    cal[k].attrs['power']     = self.power
 
                     t2 =  time.time()
                     print "duration set up (s) :",t2-t1
@@ -1001,7 +1010,7 @@ class SCPI(PyLayers):
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz']
         self.Nf = di['stimulus']['nf']
-        self.power           = di['stimulus']['power']
+        self.power = di['stimulus']['power']
 
         # section : response
         self.param   = di['response']['param']

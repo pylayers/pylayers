@@ -1273,7 +1273,7 @@ class Mchannel(bs.FUsignal):
             ax = plt.gca()
         
         if mode=='time':
-            cir = self.ift()
+            cir = self.ift(ffts=1)
             y = cir.y
             x = cir.x 
         else:

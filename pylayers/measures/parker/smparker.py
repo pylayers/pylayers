@@ -1534,6 +1534,7 @@ class Scanner(PyLayers):
         switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
         # load the file containing the calibration data
+        
         Dh5 = Mesh5(_fileh5)
 
         # open - sdata analysis
@@ -1561,7 +1562,7 @@ class Scanner(PyLayers):
         Dh5.saveini(ical=ical)
         # end of read and save
         # initialization of vna
-        vna = SCPI()
+        vna = SCPI(emulated=self.emulated)
         vna.load_config_vna()
 
         Npoint = A.p.shape[1]
@@ -1584,10 +1585,13 @@ class Scanner(PyLayers):
         except:
             ldataset = []
 
+        
         lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
         imes = [eval(k.replace('mes','')) for k in lmes]
-        mesname = 'mes'+str((max(imes)+1))
-        
+        if len(imes)>0:
+            mesname = 'mes'+str((max(imes)+1))
+        else:
+            mesname = 'mes1'
 
         mes = Dh5.f.create_group(mesname)
 
