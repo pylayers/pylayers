@@ -3010,9 +3010,9 @@ class Signatures(PyLayers,dict):
            lit  = litT + litR
         #print "source,lis :",self.source,lis
         #print "target,lit :",self.target,lit
-        for u in lit: 
-            print u
-        print "-------------"
+        # for u in lit: 
+        #     print u
+        # print "-------------"
 
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
@@ -3035,8 +3035,8 @@ class Signatures(PyLayers,dict):
         cptsig = 0
         
         for us,s in enumerate(lis):
-            if (us%20)==0:
-                print us,'/',len(lis)
+            # if (us%20)==0:
+            #     print us,'/',len(lis)
             # us counter
             # s : interaction 
             # s[0] : point or segment

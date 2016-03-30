@@ -88,7 +88,7 @@ class MIMO(object):
         if self.Aat == []:
             self.Aat = AntArray(N=[4,1,1])
 
-        
+
         self.Nf  = Nf
         self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
         self.rep = rep

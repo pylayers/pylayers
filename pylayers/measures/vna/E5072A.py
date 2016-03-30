@@ -84,21 +84,22 @@ class SCPI(PyLayers):
         else:
             print "VNA IP not defined"
             exit
-        try:
-            self.host = host
-            self._verbose = verbose
-            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            if timeout is not None:
-                self.s.settimout(timeout)
-                self._timeout = timeout
+        if not self.emulated:
+            try:
+                self.host = host
+                self._verbose = verbose
+                self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                if timeout is not None:
+                    self.s.settimout(timeout)
+                    self._timeout = timeout
 
-            self.s.connect((host, port))
-        except socket.error as e:
-            if self._verbose:
-                print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
-            else:
-                pass
-                #self.emulated = True
+                self.s.connect((host, port))
+            except socket.error as e:
+                if self._verbose:
+                    print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
+                else:
+                    pass
+                    #self.emulated = True
 
 
         self.Nf   = 201
@@ -110,6 +111,7 @@ class SCPI(PyLayers):
         self.parS()
         self.avrg()
         self.ifband()
+        self.power_level()
 
         #self.getdata()
 
@@ -138,6 +140,7 @@ class SCPI(PyLayers):
         st = st + "Avering            : " + self.b + '\n'
         st = st + "Nbr of averages    : " + str(self.navrg)+'\n'
         st = st + "IF Bandwidth (Hz)  : " + str(self.ifbHz)+'\n'
+        st = st + "Power level (dBm)  : " + str(self.power)+'\n'
         st = st + "Nbr of measures    : " + str(self.nmeas)+'\n'
         return(st)
 
@@ -391,6 +394,41 @@ class SCPI(PyLayers):
                 if echo:
                     print coms
                 self.write(coms)
+
+    def power_level(self,chan=1,cmd='get',power=10):
+        """ allows 'get' | 'set' the the power level transmitted. 
+
+        Parameters
+        ----------
+
+        chan   : number of the channel
+        pow    : int power level transmitted
+        cmd     : 'get'|'set'
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.vna.E5072A import *
+        >>> vna = SCPI()
+        >>> vna.power_level(cmd='set',power=10)
+        >>> vna.close()
+
+        """
+        self.power   = power
+        
+        if not self.emulated:
+            if cmd == 'get':
+                self.read("SOUR"+str(chan)+":POW?\n")
+                
+            if cmd == 'set':
+                if power < 18:
+                    co  = "SOUR"+str(chan)+":POW"
+                    com = co +' '+str(power)
+                    # assert(npow > 17)," power level must not exceed 17dBm "
+                    com = com+"\n"
+                    self.s.send(com)
+                else:
+                    raise IOError('power level must not exceed 17dBm')
 
     def freq(self, sens=1, fminGHz=1.8, fmaxGHz=2.2, cmd='get'):
         """ get | set frequency ramp
@@ -657,29 +695,42 @@ class SCPI(PyLayers):
                 com = com+"\n"
                 self.s.send(com)
 
-
-    def sweep_mode(self,sens=1,cmd='get'):
-        """ iactivate sweep mode
+    def stepped_mode(self,sens=1,mode='STEP'):
+        """ activate sweep mode
 
         Parameters
         ----------
 
         sens : int
-        cmd  : string
-            'get' | 'set'
+        mode : 'stepped'
+        STEPped : source frequency is CONSTANT during measurement of eah displayed point. \
+                  More accurate than ANALog. Dwell time can be set in this mode.
+        """
+        self.mode = mode
+        if not self.emulated:
+                com  = ":SENS"+str(sens)+":SWE:GEN"+' '+mode
+                self.read(com)
+
+    def swept_mode(self,sens=1):
+        """ activate sweep mode
+
+        Parameters
+        ----------
+
+        sens : int
+
+        ANALog : source frequency is continuously RAMPING during measurement of each \ 
+                 displayed point. Faster than STEPped. Sweep time (not dwell time) can be \ 
+                 set in this mode.
         """
         if not self.emulated:
-            if cmd == 'get':
-                com  = ":SENS"+str(sens)+":SWE:GEN?"
-                self.s.send(com)
+                self.read(":SENS"+str(sens)+":SWE:GEN ANAL")
 
-            # if cmd == 'set':
-            #     com = com+"\n"
-            #     self.s.send(com)
+
 
     def calibh5(self,
-                 Nr = 8,
-                 Nt = 4,
+                 Nr = 4,
+                 Nt = 8,
                  _filemesh5 = 'measures',
                  _filecalh5 = 'mcalib',
                  _filecal = 'cal_config.ini',
@@ -721,7 +772,8 @@ class SCPI(PyLayers):
         switch = sw.get_adapter()
         if not switch:
             raise Exception("No device found")
-        switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) #set the NI USB mode in order to use
+        switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
+        #set the NI USB mode in order to use
 
 
         # store calibration vector in a hdf5 file
@@ -741,11 +793,13 @@ class SCPI(PyLayers):
 
         Mr = Nr
         Mt = Nt
+        # SISO case
         if (Nr==1) and (Nt==1):
             fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
             self.load_config_vna(_filename=_filevna)
             dcal = self.load_calconfig(_filename=_filecal)
         else:
+        # MIMO case
             if typ=='full':
                 fileh5w = pyu.getlong(_filecalh5, pstruc['DIRMES'])+'.h5'
                 self.load_config_vna(_filename=_filevna)
@@ -798,7 +852,11 @@ class SCPI(PyLayers):
                         if k2=='ifbhz':
                             self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
                             print "set number of ifbHz   :",dcal[k]['ifbhz']
-                        
+                        if k2=='navrg':
+                            self.avrg(b='ON',navrg=dcal[k]['navrg'], cmd='setavrg')
+                        if k2=='power':
+                            self.power_level(cmd='set',power=dcal[k]['power'])
+
                     #print "activation of the trigger via the BUS"
                     #get Nmeas calibration vector
 
@@ -943,6 +1001,7 @@ class SCPI(PyLayers):
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz']
         self.Nf = di['stimulus']['nf']
+        self.power           = di['stimulus']['power']
 
         # section : response
         self.param   = di['response']['param']
@@ -953,10 +1012,11 @@ class SCPI(PyLayers):
         
         self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
         self.points(self.Nf, cmd='set')
+        self.power_level(cmd='set',power=self.power)
         self.parS(param=self.param, cmd='set')
         self.ifband(ifbHz=self.ifbHz, cmd='set')
         self.avrg(b='ON',navrg=self.navrg,cmd='setavrg')
-
+        self.autoscale()
 
         #toc_freq = time.time()
         #print "time measurement for frequency set up (s) :", tic-toc_freq

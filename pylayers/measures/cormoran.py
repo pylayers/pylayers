@@ -147,7 +147,7 @@ distdf : distance between radio nodes (122 columns)
 devdf  : device data frame
 
 """
-
+#import mayavi.mlab as mlabc
 import os
 import pdb
 import sys
@@ -157,7 +157,6 @@ import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from pylayers.util.pyutil import *
-#import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
 import pylayers.antprop.antenna as antenna

@@ -43,6 +43,7 @@ Miscelianous Functions
     Global_Trajectory
 
 """
+#import mayavi.mlab as mlab
 import numpy as np
 import scipy.stats as sp
 import ConfigParser
@@ -64,12 +65,15 @@ import pylayers.mobility.ban.DeuxSeg as seg
 import doctest
 import itertools as itt
 from pylayers.util.project import *
-try:
-    from mayavi import mlab
-    from tvtk.tools import visual
 
-except:
-    print 'mayavi not installed'
+
+
+# try:
+#     from mayavi import mlab
+#     from tvtk.tools import visual
+
+# except:
+#     print 'mayavi not installed'
 
 
 class Body(PyLayers):
@@ -1549,7 +1553,7 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
-    @mlab.animate(delay=100)
+    #@mlab.animate(delay=100)
     def anim(self):
         """ animate body
 
@@ -1618,7 +1622,7 @@ class Body(PyLayers):
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
                     yield
 
-    @mlab.animate(delay=10)
+    #@mlab.animate(delay=10)
     def animc3d(self):
         """ animate c3d file
 
@@ -3090,7 +3094,7 @@ class Cylinder(object):
                               scale_factor=2e2*self._unit)
 
 
-    @mlab.animate(delay=100)
+    #@mlab.animate(delay=100)
     def anim(self):
         """ animate cylinder
 

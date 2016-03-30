@@ -1236,6 +1236,90 @@ class TUDchannel(TUchannel):
            #    yi = self.y[i+1,:] + (N1-i)*ecmax
            #    r.lines(x,yi,col='black')
 
+class Mchannel(bs.FUsignal):
+    """ Handle the measured channel
+
+    """
+    def __init__(self,
+                x ,
+                y ,
+                label = ''):
+        """ class constructor
+
+        Parameters
+        ----------
+
+        x  :  , nfreq
+            frequency GHz
+        y  :  Nm x Nr x Nt x Nf 
+            measured channel 
+
+        """
+       
+        self.label = label
+        self.calibrated = False
+        sh = y.shape
+        self.Nm = sh[0]
+        self.Nr = sh[1]
+        self.Nt = sh[2]
+        self.Nf = sh[3]
+        bs.FUsignal.__init__(self,x=x,y=y,label='Mchannel')
+
+    def plot(self,fig=[],ax=[],mode='time'):
+        
+        if fig ==[]:
+            fig = plt.gcf()  
+        if ax ==[]:
+            ax = plt.gca()
+        
+        if mode=='time':
+            cir = self.ift()
+            y = cir.y
+            x = cir.x 
+        else:
+            y = self.y
+            x = self.x    
+
+        my = np.mean(np.abs(y),axis=0)
+        yc = np.abs(y)-my[None,...] # TD centered      ; TDc.shape : (85, 4, 8, 801)
+
+        yc2 = np.abs(yc)**2 # square of TD centered     ; TDc2.shape : (85, 4, 8, 801)
+        vary = np.mean(yc2,axis=0) #variance of TD  ; varTD.shape : (4, 8, 801)
+        
+        
+
+        cpt = 0
+        for r in range(self.Nr):
+            for t in range(self.Nt):
+                #cpt=cpt+1
+                #ax = plt.subplot(self.Nr,self.Nt,cpt)
+                #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),color='k',linewidth=1,alpha=1)
+                #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),linewidth=1,alpha=1)
+                #l2, = ax.plot(self.x,my[r,t,:],color='r',linewidth=1,alpha=1)
+                l2, = ax.plot(x,my[r,t,:],linewidth=1,alpha=1)
+                
+                ticksx = ax.axes.get_xticklabels()
+                ticksy = ax.axes.get_yticklabels()
+                plt.setp(ticksx, visible=True)
+                plt.setp(ticksy, visible=True)
+
+                if (r == 0) & (t==1):
+                    #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),color='k',label='sd',linewidth=1,alpha=1)
+                    l2, = ax.plot(x,np.abs(my[r,t,:]),color='r',label='mean',linewidth=1,alpha=1)
+                if (r == 3) & (t==0):
+                    plt.setp(ticksx, visible=True)
+                    ax.axes.set_xticks(np.arange(x[0],x[-1],0.2))
+                    plt.setp(ticksy, visible=True)
+                if (r == 0) & (t==3):
+                    plt.title(r'Evolution of the mean and the standard deviation of $\mathbf{H}(f)$',fontsize=12)
+                if (r == 1) & (t==0):
+                    ax.axes.set_ylabel('Amplitude (linear scale $\in [0,1]$)',fontsize=15)
+                if (r == 3) & (t == 3):
+                    ax.axes.set_xlabel('Frequency (GHz)',fontsize=15)
+
+                
+
+
 class Tchannel(bs.FUsignal):
     """ Handle the transmission channel
 
@@ -1851,7 +1935,7 @@ class Tchannel(bs.FUsignal):
         kwargs['c'] = col
         if len(col) != len(di):
             print "len(col):", len(col)
-            print "len(di):", len(dir)
+            print "len(di):", len(di)
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
         if reverse :
