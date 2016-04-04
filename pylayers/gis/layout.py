@@ -6557,6 +6557,19 @@ class Layout(PyLayers):
 
 
 
+
+        # for n in self.Gt.node:
+        #     p = self.Gt.node[n]['polyg']
+        #     if not p.isconvex():
+        #         import ipdb
+        #         ipdb.set_trace()
+        #         X = self._delaunay(p)
+        
+
+
+
+
+
         segma = self.macvx.vnodes[self.macvx.vnodes>0]
 
         # update Gt ndoe infomation :

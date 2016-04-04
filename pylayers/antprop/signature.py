@@ -3053,7 +3053,11 @@ class Signatures(PyLayers,dict):
 
             visited = [s]
             # stack is a list of iterators
-            stack = [iter(Gi[s])]
+            try:
+                stack = [iter(Gi[s])]
+            except:
+                import ipdb
+                ipdb.set_trace()
             # lawp = list of airwall position in visited
             lawp = []
             # while the stack of iterators is not void
