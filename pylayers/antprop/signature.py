@@ -1397,11 +1397,10 @@ class Signatures(PyLayers,dict):
                     path = visited + [target]
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
-                        
 
                     if Mmap !=[]:
                         M[Mmap[path[-2][0]],Mmap[path[-1][0]],Mmap[out]]=True
-                    else: 
+                    else:
                         M[path[-2][0],path[-1][0],out]=True
                     try:
                         dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')))
@@ -2959,7 +2958,7 @@ class Signatures(PyLayers,dict):
                         self[1]=np.vstack((nstr,typ))
 
 
-    # @profile                    
+    # @profile
     def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
         """ get signatures (in one list of arrays) between tx and rx
 
@@ -3033,7 +3032,6 @@ class Signatures(PyLayers,dict):
 
         # signature counter
         cptsig = 0
-        
         for us,s in enumerate(lis):
             # if (us%20)==0:
             #     print us,'/',len(lis)
@@ -3060,10 +3058,8 @@ class Signatures(PyLayers,dict):
             while stack: #
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
-                
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
-            
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
                 cond2 = (interaction in visited) and bt
@@ -3089,12 +3085,10 @@ class Signatures(PyLayers,dict):
                         # operation
 
                         # diffraction (retrieve a point)
-                           
                         if len(visited[-2]) == 1:
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
                             R.append((np.eye(2),np.array([0,0])))
-                        
                         # reflexion 
                         if len(visited[-2])==2:
 
@@ -3113,7 +3107,6 @@ class Signatures(PyLayers,dict):
                         else : 
                             pts = self.L.Gs[nstr].keys()
                             th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-                            
 
                         # apply current chain of symmetries
                         # th is the current segment tail-head coordinates
@@ -3144,7 +3137,7 @@ class Signatures(PyLayers,dict):
                                 # vl = (phe0,phe_)
                                 vr = (pta0,phe_)
                                 vl = (phe0,pta_)
-                            else:  # twisted case  
+                            else:  # twisted case
                                 # vr = (pta0,phe_)
                                 # vl = (phe0,pta_)
                                 vr = (pta0,pta_)
@@ -3158,7 +3151,6 @@ class Signatures(PyLayers,dict):
                             # out = (lta & lhe ) | (~rta & ~rhe)
                             # inside = ~out
                             #if inside:   # new segment is inside the beam
-                            
                             linel = (vl[0],vl[1]-vl[0])
                             liner = (vr[0],vr[1]-vr[0])
                             seg   = (th[0],th[1])
@@ -3187,13 +3179,9 @@ class Signatures(PyLayers,dict):
                                 else:
                                     tha = np.vstack((p_int_right,th[1]))
                                 tahe.append(tha)
-                                
-                            
-                             
                         if valid_bool:
                             #showsig2(visited,self.L,tahe)
                             #pdb.set_trace()  
-            
                             # sequence is valid and last interaction is in the list of targets   
                             if interaction in lit:
                                 anstr = np.array(map(lambda x: x[0],visited))
@@ -3206,7 +3194,6 @@ class Signatures(PyLayers,dict):
                                 #print visited,len(stack),cptsig  
 
                             # move forward even when arrived in the target cycle
-                            
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
@@ -3224,7 +3211,6 @@ class Signatures(PyLayers,dict):
                                     R.pop()
                             last = visited.pop()
                             #tahe.pop()
-                            
                             #R.pop()
                             lawp.pop()
 
