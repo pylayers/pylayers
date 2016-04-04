@@ -6320,6 +6320,8 @@ class Layout(PyLayers):
             plt.draw()
 
 
+        # The following is kept because some code is useful to manage inner hole polygon.
+        # This must be re-implemtened in a future version.
 
 
         # # I. get cycle bais
@@ -6533,13 +6535,9 @@ class Layout(PyLayers):
         ma = geu.Polygon(ma)
         ma.setvnodes(self)
         self.ma=ma
-        
         # if mask is not convex , determine convex hull
         if not self.ma.isconvex():
-            macvx = ma.convex_hull
-            macvx = geu.Polygon(macvx)
-            macvx.setvnodes(self)
-            self.macvx=macvx
+            self._convex_hull()
         else:
             # else determine the non convex mask
             self.macvx=self.ma
@@ -6556,12 +6554,12 @@ class Layout(PyLayers):
 
 
 
+        segma = self.macvx.vnodes[self.macvx.vnodes>0]
 
-
-
-
-        segma = self.ma.vnodes[self.ma.vnodes>0]
-
+        # update Gt ndoe infomation :
+        # - cycle
+        # - open
+        # - indoor
         for n in self.Gt.node:
             p = self.Gt.node[n]['polyg']
             S = nx.subgraph(self.Gs,p.vnodes)
@@ -6579,8 +6577,8 @@ class Layout(PyLayers):
             seg = p.vnodes[p.vnodes>0]
             lair = [x in self.name['AIR'] for x in seg]
             outdoor = False
-            if sum(lair)>0:
 
+            if sum(lair)>0:
                 isopen = True
                 aseg = seg[np.where(lair)]
                 outdoor = np.any([s in segma for s in aseg])
@@ -6592,8 +6590,7 @@ class Layout(PyLayers):
 
             self.Gt.add_node(n,cycle=cycle,isopen=isopen,indoor= not outdoor)
 
-
-        # IV 2. get edges
+        # Manage Gt connection ( edges)
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
                 if n1!= n2:
@@ -6604,89 +6601,11 @@ class Layout(PyLayers):
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
 
-                            # try:
-                            #     [self.Gs.node[s]['ncycles'].append([n1,n2]) for s in seg]
-                            # except:
-                            #     import ipdb
-                            #     ipdb.set_trace()
-        #  V update Gs
-        #   V 1.Update graph Gs segment with their 2 cycles information
+        #   add outside cycle (absorbant region index 0 )
+        #   - cycle 0 to Gt
         #
-        #   initialize a void list 'ncycles' for each segment of Gs
-        #
-        self._updGsncy()
-        # make a convex hull of layout
-        # get segments of the mask ( equivalent to thoose connected to 0)
-        # seg0 = [i for i in self.ma.vnodes if i >0]
-        # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
 
         self._addoutcy(check)
-
-        #   V 2. add outside cycle (absorbant region index 0 )
-        #   if ncycles is a list which has only one element then the adjascent cycle is the
-        #   outside region (cycle 0)
-
-
-        # VI  add node 0
-        #     add cycle <0 outside polygon
-        #
-        #   This shapely polygon has an interior ( TODO add hole vizualization
-        #   in Polygon object)
-        #
-        #    Cycles < 0 are outdoor
-        #    Cycles > 0 are indoor
-        #    Cycles = 0 exterior cycle (assumed outdoor)
-        S = nx.subgraph(self.Gs,self.ma.vnodes)
-        S.pos={}
-        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
-        cycle = cycl.Cycle(S,self.ma.vnodes)
-        # in my comprehension, polygon associated to cycle 0 should be Layout.ma (layout mask)
-        # previosu code prefers a non valid polygon based on boundaries of axes
-        # with vnodes of the layout mask.
-        # For the moment I kept the previosu solution but the following comment line should be better
-        # self.Gt.add_node(0,polyg=self.ma,cycle=cycle,indoor=False,isopen=True)
-        boundary = geu.Polygon(tuple(self.ax),delta=5)
-        boundary.vnodes = self.ma.vnodes
-        self.Gt.add_node(0,polyg=self.ma,cycle=cycle,indoor=False,isopen=True)
-
-        self.Gt.pos[0]=(self.ax[0],self.ax[2])
-
-        #
-        #   VII - Connect cycle -1 to each cycle connected to the layout
-        #   boundary
-        #
-
-        # all segments of the Layout boundary
-        nseg = filter(lambda x : x >0 , boundary.vnodes)
-        # air segments of the Layout boundary
-        nsegair = filter(lambda x : x in self.name['AIR'],nseg)
-        # wall segments of the Layout boundary
-        nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
-
-        #
-        # ldiffin  : list of indoor diffraction points
-        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
-        #
-
-        # self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
-        # self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
-
-        #
-        # boundary adjascent cycles
-        #
-
-        adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],nsegair)))
-        adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],nsegwall)))
-
-        for cy in adjcyair:
-            self.Gt.node[cy]['indoor'] = False
-            self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(0,cy)
-
-        for cy in adjcwall:
-            self.Gt.add_edge(0,cy)
 
         #
         #   VIII -  Construct the list of interactions associated to each cycle
@@ -6702,6 +6621,8 @@ class Layout(PyLayers):
         #   The diffraction points are not known yet
         #
         self._interlist()
+
+        self.g2npy()
 
     def _updGsncy(self):
         """ update Gs ncycles using Gt information
@@ -6740,22 +6661,58 @@ class Layout(PyLayers):
 
     def _addoutcy(self,check=False):
         """ add outside cycle (absorbant region index 0 )
-        #   if ncycles is a list which has only one element then the adjascent
-        #   cycle is the  outside region (cycle 0)
+            1- add cycle 0 to Gt
+            2- add correct edges 0,cycle to Gt with the attribute 'segment'
+              to determine which segemnent separate cycle cy to 0 : self.Gt[cy][0]['segment']
+            3- update 'ncycles' key in Gs nodes (to determine which cycles are separated by
+              segment s) : self.Gs.node[s]['ncycles']
+
+
+
         """
-        seg0 = [i for i in self.macvx.vnodes if i >0]
-        [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
+
+        # 1 add cycle 0
+        S = nx.subgraph(self.Gs,self.macvx.vnodes)
+        S.pos={}
+        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+        cycle = cycl.Cycle(S,self.macvx.vnodes)
+
+        self.Gt.add_node(0,polyg=self.macvx,cycle=cycle,indoor=False,isopen=True)
+        self.Gt.pos[0]=(self.ax[0],self.ax[2])
+
+
+        # 2 add segments in Gt.edges
+        segma=self.macvx.vnodes[self.macvx.vnodes>0]
+        for s in segma:
+            cy = self.Gs.node[s]['ncycles'][0]
+            if self.Gt[cy].has_key(0):
+                if not s in self.Gt[cy][0]['segment']:
+                    self.Gt[cy][0]['segment']=np.hstack([self.Gt[cy][0]['segment'],s])
+            else:
+                self.Gt.add_edge(cy,0,segment=np.array([s]))
+
+
+        # 3 add cycle 0 to ncycles in Gs segments
+        [self.Gs.node[i]['ncycles'].append(0) for i in segma if 0 not in self.Gs.node[i]['ncycles']]
+
 
         if check :
-            print "check len(ncycles) == 2",
+            print "check len(ncycles) == 2 ...",
             nodes = [i for i in self.Gs.nodes() if i>0]
             cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy<2)[0]
             ucncym = np.where(cncy>2)[0]
             assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
             assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
-            print "passed"
+            print "passed !"
 
+
+            print "check x,y = Gs.node[seg]['ncycles'] ; seg in Gt[x][y]['segment'] ...",
+            for s in self.Gs.nodes():
+                if s>0:
+                    lcy = self.Gs.node[s]['ncycles']
+                    assert(s in self.Gt[lcy[0]][lcy[1]]['segment'])
+            print "passed !"
 
     def _interlist(self,nodelist=[]):
         """ Construct the list of interactions associated to each cycle
