@@ -172,6 +172,8 @@ from   scipy.linalg import toeplitz, triu
 from   pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.graphutil as gru
+import pylayers.util.pyutil as pyu
+
 #from antenna import *
 import shapely.geometry as shg
 import shapely.ops as sho

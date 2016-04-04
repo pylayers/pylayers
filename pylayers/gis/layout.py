@@ -1280,9 +1280,10 @@ class Layout(PyLayers):
             d={}
             vnodes = self.Gt.node[c]['polyg'].vnodes
             d['vnodes']=vnodes
-            d['ss_slab']=[]
-            d['ss_slab'].append(self.Gt.node[c]['ss_slab'][0])
-            d['ss_slab'].append(self.Gt.node[c]['ss_slab'][-1])
+            if c>0:
+                d['ss_slab']=[]
+                d['ss_slab'].append(self.Gt.node[c]['ss_slab'][0])
+                d['ss_slab'].append(self.Gt.node[c]['ss_slab'][-1])
             config.set("cycles",str(c),d)
         config.set("files",'materials',self.filematini)
         config.set("files",'slab',self.fileslabini)
@@ -1487,6 +1488,9 @@ class Layout(PyLayers):
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
+
+
+        self.buildGt()
 
         # 
 
@@ -5801,7 +5805,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False):
+    def build(self, graph='cvirw',verbose=False):
         """ build graphs
 
         Parameters
@@ -5824,23 +5828,23 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-        if 't' in graph:
-            if verbose:
-                print "Gt"
-            self.buildGt()
-            # if convexify :
-            #     #Make the layout convex the outddor
-            #     self._convex_hull()
-            #     # Ensure convexity of all cycles
-            #     self._convexify()
-            #     # # re-attach new cycles
-            #     # complete rebuild is not the best option
-            #     # but the partial rebuild coded & comment at the end in _convexify
-            #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
-            #     #
-            #     # self.buildGt()
+        # if 't' in graph:
+        #     if verbose:
+        #         print "Gt"
+        #     self.buildGt()
+        #     # if convexify :
+        #     #     #Make the layout convex the outddor
+        #     #     self._convex_hull()
+        #     #     # Ensure convexity of all cycles
+        #     #     self._convexify()
+        #     #     # # re-attach new cycles
+        #     #     # complete rebuild is not the best option
+        #     #     # but the partial rebuild coded & comment at the end in _convexify
+        #     #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
+        #     #     #
+        #     #     # self.buildGt()
 
-            self.lbltg.extend('t')
+        #     self.lbltg.extend('t')
 
         if 'c' in graph:
             if verbose:
@@ -5934,7 +5938,7 @@ class Layout(PyLayers):
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        if 't' in self.lbltg:
+        if 'c' in self.lbltg:
             write_gpickle(getattr(self,'ldiffin'),os.path.join(path,'ldiffin.gpickle'))
             write_gpickle(getattr(self,'ldiffout'),os.path.join(path,'ldiffout.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
@@ -5961,7 +5965,7 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['t','c','v','i','r','w']
+        graphs=['c','v','i','r','w']
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
@@ -5976,36 +5980,36 @@ class Layout(PyLayers):
                 pass
                 #print 'G',g,' not saved'
 
-        #
-        # fixing bug #136
-        # update ncycles attributes of Gs from information in Gt
-        #
-        for k in self.Gs.node:
-            if k>0:
-                self.Gs.node[k]['ncycles']=[]
+        # #
+        # # fixing bug #136
+        # # update ncycles attributes of Gs from information in Gt
+        # #
+        # for k in self.Gs.node:
+        #     if k>0:
+        #         self.Gs.node[k]['ncycles']=[]
 
-        for k in self.Gt.node:
-            if k != 0:
-                vnodes = self.Gt.node[k]['cycle'].cycle
-                if vnodes[0]<0:
-                    self.Gt.node[k]['polyg'].vnodes = vnodes
-                else:
-                    self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
-                for inode in vnodes:
-                    if inode > 0:   # segments
-                        if k not in self.Gs.node[inode]['ncycles']:
-                            self.Gs.node[inode]['ncycles'].append(k)
-                            if len(self.Gs.node[inode]['ncycles'])>2:
-                                print inode,self.Gs.node[inode]['ncycles']
-                                logging.warning('dumpr : a segment cannot relate more than 2 cycles')
-        # if ncycles is a list with only one element the other cycle is the
-        # outside region (cycle -1)
-        for k in self.Gs.node:
-            if k>0:
-                if len(self.Gs.node[k]['ncycles'])==1:
-                    self.Gs.node[k]['ncycles'].append(-1)
+        # for k in self.Gt.node:
+        #     if k != 0:
+        #         vnodes = self.Gt.node[k]['cycle'].cycle
+        #         if vnodes[0]<0:
+        #             self.Gt.node[k]['polyg'].vnodes = vnodes
+        #         else:
+        #             self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
+        #         for inode in vnodes:
+        #             if inode > 0:   # segments
+        #                 if k not in self.Gs.node[inode]['ncycles']:
+        #                     self.Gs.node[inode]['ncycles'].append(k)
+        #                     if len(self.Gs.node[inode]['ncycles'])>2:
+        #                         print inode,self.Gs.node[inode]['ncycles']
+        #                         logging.warning('dumpr : a segment cannot relate more than 2 cycles')
+        # # if ncycles is a list with only one element the other cycle is the
+        # # outside region (cycle -1)
+        # for k in self.Gs.node:
+        #     if k>0:
+        #         if len(self.Gs.node[k]['ncycles'])==1:
+        #             self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
-        if 't' in graphs :
+        if 'c' in graphs :
             setattr(self,'ldiffin', read_gpickle(os.path.join(path,'ldiffin.gpickle')))
             setattr(self,'ldiffout', read_gpickle(os.path.join(path,'ldiffout.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
@@ -6319,188 +6323,255 @@ class Layout(PyLayers):
             plt.draw()
 
 
+        # The following is kept because some code is useful to manage inner hole polygon.
+        # This must be re-implemtened in a future version.
 
 
-        # I. get cycle bais
-        C = nx.algorithms.cycles.cycle_basis(self.Gs)
-        if C==[]:
-            C = [self.Gs]
+        # # I. get cycle bais
+        # C = nx.algorithms.cycles.cycle_basis(self.Gs)
+        # if C==[]:
+        #     C = [self.Gs]
 
-        # II. create the hull of the layout by merging all polygons 
-        # corresponding to cycles basis
-        poly=[]
-        for k,lnode in enumerate(C):
-            npoints = filter(lambda x : x <0 ,lnode)
-            coords  = map(lambda x : self.Gs.pos[x],npoints)
-            poly.append(sh.Polygon(coords))
-        # union all polygons
-        ma = sho.cascaded_union(poly)
+        # # II. create the hull of the layout by merging all polygons 
+        # # corresponding to cycles basis
+        # poly=[]
+        # for k,lnode in enumerate(C):
+        #     npoints = filter(lambda x : x <0 ,lnode)
+        #     coords  = map(lambda x : self.Gs.pos[x],npoints)
+        #     poly.append(sh.Polygon(coords))
+        # # union all polygons
+        # ma = sho.cascaded_union(poly)
 
-        # transform into geomutil polygon
-        # if  polygon is a layout
-        if not isinstance(ma,sh.MultiPolygon):
-            ma = geu.Polygon(ma)
-            ma.setvnodes(self)
+        # # transform into geomutil polygon
+        # # if  polygon is a layout
+        # if not isinstance(ma,sh.MultiPolygon):
+        #     ma = geu.Polygon(ma)
+        #     ma.setvnodes(self)
 
-        else :
-            # This is a fix wfor non enclosed layouts 
-            # with multiple non joint polygons (a.k.a. a city)
-            # raise AttributeError('this is a city')
-            macvx = ma.convex_hull
+        # else :
+        #     # This is a fix wfor non enclosed layouts 
+        #     # with multiple non joint polygons (a.k.a. a city)
+        #     # raise AttributeError('this is a city')
+        #     macvx = ma.convex_hull
 
-            streets = geu.Polygon(macvx.difference(ma))
-            streets.setvnodes(self)
-
-
-            # add air walls where to close the street & ma polygon
-            uaw = np.where(streets.vnodes == 0)[0]
-            lvn = len(streets.vnodes)
-            for i in uaw:
-                #keep trace of created airwalls, because some
-                #of them will be destroyed in step 3.
-                self.add_segment(
-                           streets.vnodes[np.mod(i-1,lvn)],
-                           streets.vnodes[np.mod(i+1,lvn)]
-                           ,name='AIR')
+        #     streets = geu.Polygon(macvx.difference(ma))
+        #     streets.setvnodes(self)
 
 
-            ma= self.polysh2geu(macvx)
-            ma.setvnodes(self)
-            streets.setvnodes(self)
-            ma.setvnodes(self)
+        #     # add air walls where to close the street & ma polygon
+        #     uaw = np.where(streets.vnodes == 0)[0]
+        #     lvn = len(streets.vnodes)
+        #     for i in uaw:
+        #         #keep trace of created airwalls, because some
+        #         #of them will be destroyed in step 3.
+        #         self.add_segment(
+        #                    streets.vnodes[np.mod(i-1,lvn)],
+        #                    streets.vnodes[np.mod(i+1,lvn)]
+        #                    ,name='AIR')
 
 
-        self.ma = ma
-
-        ###### III .FIND POLYGONS
-        ###
-        # polygons of each cycle are found by finding the interesection between 
-        # all segments of the layout and the layout hull.
-        # The shapely diff return a multipolygon where all polygons corresponds to 
-        # a cycle
-        #
-
-        # get connected points from segments
-        connect = [self.Gs.node[i]['connect'] for i in self.Gs.nodes() if i>0]
-        # get their coordinates
-        lpos = np.array([(self.Gs.pos[i[0]],self.Gs.pos[i[1]]) for i in connect])
-        pp=[]
-        lines = []
-        for l in lpos:
-            line = sh.LineString([l[0], l[1]])
-            lines.append(line)
-        # create associated multilines (to the points)
-        ml = sh.MultiLineString(lines)
-        # increase buffer size ( width of polyline) to create a multipolygon
-        R= []
-        buffersize = 1e-9
-        while  not isinstance(R ,sh.MultiPolygon) and buffersize<1e-3  :
-            # create polygon from multiline by given a width to lines
-            mlp = ml.buffer(buffersize)
-            # difference between hull and linepolygones returns desired multipolygon
-            R=self.ma.difference(mlp)
-            # increase size of the buffer
-            buffersize = buffersize*10
-
-        if isinstance(R,sh.Polygon):
-            R=sh.MultiPolygon([R])
-
-        # assert isinstance(R,sh.MultiPolygon), "Shapely.MultiPolygon decomposition Failed"
+        #     ma= self.polysh2geu(macvx)
+        #     ma.setvnodes(self)
+        #     streets.setvnodes(self)
+        #     ma.setvnodes(self)
 
 
-        ####################
-        #### Manage inner hole in polygons
-        #### ------------------------------
-        ### This part manage layout not well described, where 
-        ### polygons remains in the middle of others
-        ######
-        # if !=0 it means some polygons are inside of others
-        # which is not allowed. some Layout modification will be perofmed
-        Rgeu = []
-        contain={}
-        for ur,r in enumerate(R):
-            try:
-                Rgeu.append(self.polysh2geu(r))
-            except:
-                import ipdb
-                ipdb.set_trace()
-            # if area are not the same, it means that there is inner holes in r
-            if not np.allclose(Rgeu[ur].area,r.area):
-                # detect inclusion
-                uc = np.where([Rgeu[ur].contains(i) for i in R])[0]
-                contain[ur]=[c for c in uc if c != ur]
+        # self.ma = ma
 
-        # split polygone with holes into several polygons without holes
-        for k in contain:
-            polyholes=[Rgeu[i] for i in contain[k]]
-            ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
-            Rgeu.pop(k)
-            Rgeu.extend(ncpol)
+        # ###### III .FIND POLYGONS
+        # ###
+        # # polygons of each cycle are found by finding the interesection between 
+        # # all segments of the layout and the layout hull.
+        # # The shapely diff return a multipolygon where all polygons corresponds to 
+        # # a cycle
+        # #
+
+        # # get connected points from segments
+        # connect = [self.Gs.node[i]['connect'] for i in self.Gs.nodes() if i>0]
+        # # get their coordinates
+        # lpos = np.array([(self.Gs.pos[i[0]],self.Gs.pos[i[1]]) for i in connect])
+        # pp=[]
+        # lines = []
+        # for l in lpos:
+        #     line = sh.LineString([l[0], l[1]])
+        #     lines.append(line)
+        # # create associated multilines (to the points)
+        # ml = sh.MultiLineString(lines)
+        # # increase buffer size ( width of polyline) to create a multipolygon
+        # R= []
+        # buffersize = 1e-9
+        # while  not isinstance(R ,sh.MultiPolygon) and buffersize<1e-3  :
+        #     # create polygon from multiline by given a width to lines
+        #     mlp = ml.buffer(buffersize)
+        #     # difference between hull and linepolygones returns desired multipolygon
+        #     R=self.ma.difference(mlp)
+        #     # increase size of the buffer
+        #     buffersize = buffersize*10
+
+        # if isinstance(R,sh.Polygon):
+        #     R=sh.MultiPolygon([R])
+
+        # # assert isinstance(R,sh.MultiPolygon), "Shapely.MultiPolygon decomposition Failed"
 
 
-        ####################
-        #### Manage  convex hull of the layout
-        #### -------------------
-        polys = self._convex_hull()
-        Rgeu.extend(polys)
+        # ####################
+        # #### Manage inner hole in polygons
+        # #### ------------------------------
+        # ### This part manage layout not well described, where 
+        # ### polygons remains in the middle of others
+        # ######
+        # # if !=0 it means some polygons are inside of others
+        # # which is not allowed. some Layout modification will be perofmed
+        # Rgeu = []
+        # contain={}
+        # for ur,r in enumerate(R):
+        #     try:
+        #         Rgeu.append(self.polysh2geu(r))
+        #     except:
+        #         import ipdb
+        #         ipdb.set_trace()
+        #     # if area are not the same, it means that there is inner holes in r
+        #     if not np.allclose(Rgeu[ur].area,r.area):
+        #         # detect inclusion
+        #         uc = np.where([Rgeu[ur].contains(i) for i in R])[0]
+        #         contain[ur]=[c for c in uc if c != ur]
 
-        ####################
-        #### Manage Non convex polygons
-        #### -------------------
-        #### 1 . determine which polygons are not convex
-        #### 2 . apply a delaunay and tranform a single non convexpolygon
-        ###      into several convex ( self.delaunay)
-        ###  3. remove old non convex polygon and readd new convex ones.
-        ncpol={}
-        for ur,r in enumerate(Rgeu):
-            if not r.isconvex():
-                ncpol[ur] = self._delaunay(r)
-        Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
-        [Rgeu.extend(ncpol[k]) for k in ncpol]
+        # # split polygone with holes into several polygons without holes
+        # for k in contain:
+        #     polyholes=[Rgeu[i] for i in contain[k]]
+        #     ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
+        #     Rgeu.pop(k)
+        #     Rgeu.extend(ncpol)
+
+
+        # ####################
+        # #### Manage  convex hull of the layout
+        # #### -------------------
+        # polys = self._convex_hull()
+        # Rgeu.extend(polys)
+
+        # ####################
+        # #### Manage Non convex polygons
+        # #### -------------------
+        # #### 1 . determine which polygons are not convex
+        # #### 2 . apply a delaunay and tranform a single non convexpolygon
+        # ###      into several convex ( self.delaunay)
+        # ###  3. remove old non convex polygon and readd new convex ones.
+        # ncpol={}
+        # for ur,r in enumerate(Rgeu):
+        #     if not r.isconvex():
+        #         ncpol[ur] = self._delaunay(r)
+        # Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
+        # [Rgeu.extend(ncpol[k]) for k in ncpol]
         
 
 
 
 
-        self.Gt=nx.Graph()
-        self.Gt.pos={}
+        # self.Gt=nx.Graph()
+        # self.Gt.pos={}
 
 
-        #### IV FIND VNODES and FINAL POLYGONS
+        # #### IV FIND VNODES and FINAL POLYGONS
 
-        for n in self.Gs.node:
-            if n>0:
-                self.Gs.node[n]['ncycles']=[]
+        # for n in self.Gs.node:
+        #     if n>0:
+        #         self.Gs.node[n]['ncycles']=[]
 
 
-        ncyid = -1
-        sma = self.ma.vnodes[self.ma.vnodes>0]
-        smac = self.macvx.vnodes[self.macvx.vnodes>0]
-        segma = np.unique(np.concatenate((sma,smac)))
-        # IV 1 get nodes and vnodes
-        for ui,p in enumerate(Rgeu):
-            cyid=ui+1
-            outdoor = False
-            # # IV 1.a get vnode associated to the polygon
-            # # get vnodes not in the correct order
-            # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
-            # vnodes = Gsnodes[uvn]
+        # ncyid = -1
+        # sma = self.ma.vnodes[self.ma.vnodes>0]
+        # smac = self.macvx.vnodes[self.macvx.vnodes>0]
+        # segma = np.unique(np.concatenate((sma,smac)))
+        # # IV 1 get nodes and vnodes
+        # for ui,p in enumerate(Rgeu):
+        #     cyid=ui+1
+        #     outdoor = False
+            #     # # IV 1.a get vnode associated to the polygon
+        #     # # get vnodes not in the correct order
+        #     # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
+        #     # vnodes = Gsnodes[uvn]
 
-            # # IV 1.b transform vnodes to an ordered cycle with Cycle class 
-            # # NOTE ! Using class cycle is MANDATORY
-            # # because, some extra vnodes can be pickup during the contain 
-            # # process before
+        #     # # IV 1.b transform vnodes to an ordered cycle with Cycle class 
+        #     # # NOTE ! Using class cycle is MANDATORY
+        #     # # because, some extra vnodes can be pickup during the contain 
+        #     # # process before
+        #     S = nx.subgraph(self.Gs,p.vnodes)
+        #     S.pos={}
+        #     S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+
+        #     cycle = cycl.Cycle(S)
+
+        #     # IV 1.c create a new polygon with correct vnodes and correct points
+        #     # P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
+        #     # import ipdb
+        #     # ipdb.set_trace()
+        #     # IV 1.d add node to Gt + position
+        #     # By default a Layout cycle is defined as indoor
+        #     # unless it is separated from the outside cycle by an airwall
+        #     #
+        #     # The user should be able to set this boolean to false for a patio
+        #     #
+        #     # An outdoor cycle has no ceil reflection
+        #     seg = p.vnodes[p.vnodes>0]
+        #     lair = [x in self.name['AIR'] for x in seg]
+
+        #     if sum(lair)>0:
+        #         isopen = True
+        #         aseg = seg[np.where(lair)]
+        #         outdoor = np.any([s in segma for s in aseg])
+        #         if outdoor :
+        #             cyid = ncyid
+        #             ncyid = ncyid -1
+        #     else:
+        #         isopen = False
+        #     # IV 1.e add node to Gt + position
+        #     # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
+        #     self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor= not outdoor)
+        #     self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
+
+
+
+        # find mask
+        ma = sho.cascaded_union([self.Gt.node[x]['polyg'] for x in self.Gt.nodes()])
+        # turn shapely into geu
+        ma = geu.Polygon(ma)
+        ma.setvnodes(self)
+        self.ma=ma
+        # if mask is not convex , determine convex hull
+        if not self.ma.isconvex():
+            self._convex_hull()
+        else:
+            # else determine the non convex mask
+            self.macvx=self.ma
+            segma = self.ma.vnodes[self.ma.vnodes>0]
+
+            # find airwalls in the convex hull
+            saw = [s  for s in segma if (s in self.name['AIR'])]
+            cy = [self.Gs.node[s]['ncycles'][0] for s in saw]
+            lp = sh.MultiPolygon([self.Gt.node[n]['polyg'] for n in cy])
+            ma=self.ma.symmetric_difference(lp)
+            ma = geu.Polygon(ma)
+            ma.setvnodes(self)
+            self.ma=ma
+
+
+
+        segma = self.macvx.vnodes[self.macvx.vnodes>0]
+
+        # update Gt ndoe infomation :
+        # - cycle
+        # - open
+        # - indoor
+        for n in self.Gt.node:
+            p = self.Gt.node[n]['polyg']
             S = nx.subgraph(self.Gs,p.vnodes)
             S.pos={}
             S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
-
             cycle = cycl.Cycle(S)
 
-            # IV 1.c create a new polygon with correct vnodes and correct points
-            # P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
-            # import ipdb
-            # ipdb.set_trace()
-            # IV 1.d add node to Gt + position
+
+             # IV 1.d add node to Gt + position
             # By default a Layout cycle is defined as indoor
             # unless it is separated from the outside cycle by an airwall
             #
@@ -6509,22 +6580,21 @@ class Layout(PyLayers):
             # An outdoor cycle has no ceil reflection
             seg = p.vnodes[p.vnodes>0]
             lair = [x in self.name['AIR'] for x in seg]
+            outdoor = False
 
             if sum(lair)>0:
                 isopen = True
                 aseg = seg[np.where(lair)]
                 outdoor = np.any([s in segma for s in aseg])
-                if outdoor :
-                    cyid = ncyid
-                    ncyid = ncyid -1
+                # if outdoor :
+                #     cyid = ncyid
+                #     ncyid = ncyid -1
             else:
                 isopen = False
-            # IV 1.e add node to Gt + position
-            # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
-            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor= not outdoor)
-            self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
-        # IV 2. get edges
+            self.Gt.add_node(n,cycle=cycle,isopen=isopen,indoor= not outdoor)
+
+        # Manage Gt connection ( edges)
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
                 if n1!= n2:
@@ -6535,90 +6605,11 @@ class Layout(PyLayers):
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
 
-                            # try:
-                            #     [self.Gs.node[s]['ncycles'].append([n1,n2]) for s in seg]
-                            # except:
-                            #     import ipdb
-                            #     ipdb.set_trace()
-
-        #  V update Gs
-        #   V 1.Update graph Gs segment with their 2 cycles information
+        #   add outside cycle (absorbant region index 0 )
+        #   - cycle 0 to Gt
         #
-        #   initialize a void list 'ncycles' for each segment of Gs
-        #
-        self._updGsncy()
-        # make a convex hull of layout
-        # get segments of the mask ( equivalent to thoose connected to 0)
-        # seg0 = [i for i in self.ma.vnodes if i >0]
-        # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
 
         self._addoutcy(check)
-
-        #   V 2. add outside cycle (absorbant region index 0 )
-        #   if ncycles is a list which has only one element then the adjascent cycle is the
-        #   outside region (cycle 0)
-
-
-        # VI  add node 0
-        #     add cycle <0 outside polygon
-        #
-        #   This shapely polygon has an interior ( TODO add hole vizualization
-        #   in Polygon object)
-        #
-        #    Cycles < 0 are outdoor
-        #    Cycles > 0 are indoor
-        #    Cycles = 0 exterior cycle (assumed outdoor)
-        S = nx.subgraph(self.Gs,self.ma.vnodes)
-        S.pos={}
-        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
-        cycle = cycl.Cycle(S,self.ma.vnodes)
-        # in my comprehension, polygon associated to cycle 0 should be Layout.ma (layout mask)
-        # previosu code prefers a non valid polygon based on boundaries of axes
-        # with vnodes of the layout mask.
-        # For the moment I kept the previosu solution but the following comment line should be better
-        # self.Gt.add_node(0,polyg=self.ma,cycle=cycle,indoor=False,isopen=True)
-        boundary = geu.Polygon(tuple(self.ax),delta=5)
-        boundary.vnodes = self.ma.vnodes
-        self.Gt.add_node(0,polyg=self.ma,cycle=cycle,indoor=False,isopen=True)
-
-        self.Gt.pos[0]=(self.ax[0],self.ax[2])
-
-        #
-        #   VII - Connect cycle -1 to each cycle connected to the layout
-        #   boundary
-        #
-
-        # all segments of the Layout boundary
-        nseg = filter(lambda x : x >0 , boundary.vnodes)
-        # air segments of the Layout boundary
-        nsegair = filter(lambda x : x in self.name['AIR'],nseg)
-        # wall segments of the Layout boundary
-        nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
-
-        #
-        # ldiffin  : list of indoor diffraction points
-        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
-        #
-
-        # self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
-        # self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
-
-        #
-        # boundary adjascent cycles
-        #
-
-        adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],nsegair)))
-        adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],nsegwall)))
-
-        for cy in adjcyair:
-            self.Gt.node[cy]['indoor'] = False
-            self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(0,cy)
-
-        for cy in adjcwall:
-            self.Gt.add_edge(0,cy)
 
         #
         #   VIII -  Construct the list of interactions associated to each cycle
@@ -6634,6 +6625,8 @@ class Layout(PyLayers):
         #   The diffraction points are not known yet
         #
         self._interlist()
+
+        self.g2npy()
 
     def _updGsncy(self):
         """ update Gs ncycles using Gt information
@@ -6672,22 +6665,59 @@ class Layout(PyLayers):
 
     def _addoutcy(self,check=False):
         """ add outside cycle (absorbant region index 0 )
-        #   if ncycles is a list which has only one element then the adjascent
-        #   cycle is the  outside region (cycle 0)
+            1- add cycle 0 to Gt
+            2- add correct edges 0,cycle to Gt with the attribute 'segment'
+              to determine which segemnent separate cycle cy to 0 : self.Gt[cy][0]['segment']
+            3- update 'ncycles' key in Gs nodes (to determine which cycles are separated by
+              segment s) : self.Gs.node[s]['ncycles']
+
+
+
         """
-        seg0 = [i for i in self.macvx.vnodes if i >0]
-        [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
+
+        # 1 add cycle 0
+        S = nx.subgraph(self.Gs,self.macvx.vnodes)
+        S.pos={}
+        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+        cycle = cycl.Cycle(S,self.macvx.vnodes)
+
+        self.Gt.add_node(0,polyg=self.macvx,cycle=cycle,indoor=False,isopen=True)
+        self.Gt.pos[0]=(self.ax[0],self.ax[2])
+
+
+        # 2 add segments in Gt.edges
+        segma=self.macvx.vnodes[self.macvx.vnodes>0]
+
+        for s in segma:
+            cy = self.Gs.node[s]['ncycles'][0]
+            if self.Gt[cy].has_key(0):
+                if not s in self.Gt[cy][0]['segment']:
+                    self.Gt[cy][0]['segment']=np.hstack([self.Gt[cy][0]['segment'],s])
+            else:
+                self.Gt.add_edge(cy,0,segment=np.array([s]))
+
+
+        # 3 add cycle 0 to ncycles in Gs segments
+        [self.Gs.node[i]['ncycles'].append(0) for i in segma if 0 not in self.Gs.node[i]['ncycles']]
+
 
         if check :
-            print "check len(ncycles) == 2",
+            print "check len(ncycles) == 2 ...",
             nodes = [i for i in self.Gs.nodes() if i>0]
             cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy<2)[0]
             ucncym = np.where(cncy>2)[0]
             assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
             assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
-            print "passed"
+            print "passed !"
 
+
+            print "check x,y = Gs.node[seg]['ncycles'] ; seg in Gt[x][y]['segment'] ...",
+            for s in self.Gs.nodes():
+                if s>0:
+                    lcy = self.Gs.node[s]['ncycles']
+                    assert(s in self.Gt[lcy[0]][lcy[1]]['segment'])
+            print "passed !"
 
     def _interlist(self,nodelist=[]):
         """ Construct the list of interactions associated to each cycle
