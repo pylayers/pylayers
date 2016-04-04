@@ -1489,6 +1489,9 @@ class Layout(PyLayers):
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
 
+
+        self.buildGt()
+
         # 
 
 
@@ -5802,7 +5805,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False):
+    def build(self, graph='cvirw',verbose=False):
         """ build graphs
 
         Parameters
@@ -5825,23 +5828,23 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-        if 't' in graph:
-            if verbose:
-                print "Gt"
-            self.buildGt()
-            # if convexify :
-            #     #Make the layout convex the outddor
-            #     self._convex_hull()
-            #     # Ensure convexity of all cycles
-            #     self._convexify()
-            #     # # re-attach new cycles
-            #     # complete rebuild is not the best option
-            #     # but the partial rebuild coded & comment at the end in _convexify
-            #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
-            #     #
-            #     # self.buildGt()
+        # if 't' in graph:
+        #     if verbose:
+        #         print "Gt"
+        #     self.buildGt()
+        #     # if convexify :
+        #     #     #Make the layout convex the outddor
+        #     #     self._convex_hull()
+        #     #     # Ensure convexity of all cycles
+        #     #     self._convexify()
+        #     #     # # re-attach new cycles
+        #     #     # complete rebuild is not the best option
+        #     #     # but the partial rebuild coded & comment at the end in _convexify
+        #     #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
+        #     #     #
+        #     #     # self.buildGt()
 
-            self.lbltg.extend('t')
+        #     self.lbltg.extend('t')
 
         if 'c' in graph:
             if verbose:
@@ -5935,7 +5938,7 @@ class Layout(PyLayers):
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        if 't' in self.lbltg:
+        if 'c' in self.lbltg:
             write_gpickle(getattr(self,'ldiffin'),os.path.join(path,'ldiffin.gpickle'))
             write_gpickle(getattr(self,'ldiffout'),os.path.join(path,'ldiffout.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
@@ -5962,7 +5965,7 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['t','c','v','i','r','w']
+        graphs=['c','v','i','r','w']
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
@@ -5977,36 +5980,36 @@ class Layout(PyLayers):
                 pass
                 #print 'G',g,' not saved'
 
-        #
-        # fixing bug #136
-        # update ncycles attributes of Gs from information in Gt
-        #
-        for k in self.Gs.node:
-            if k>0:
-                self.Gs.node[k]['ncycles']=[]
+        # #
+        # # fixing bug #136
+        # # update ncycles attributes of Gs from information in Gt
+        # #
+        # for k in self.Gs.node:
+        #     if k>0:
+        #         self.Gs.node[k]['ncycles']=[]
 
-        for k in self.Gt.node:
-            if k != 0:
-                vnodes = self.Gt.node[k]['cycle'].cycle
-                if vnodes[0]<0:
-                    self.Gt.node[k]['polyg'].vnodes = vnodes
-                else:
-                    self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
-                for inode in vnodes:
-                    if inode > 0:   # segments
-                        if k not in self.Gs.node[inode]['ncycles']:
-                            self.Gs.node[inode]['ncycles'].append(k)
-                            if len(self.Gs.node[inode]['ncycles'])>2:
-                                print inode,self.Gs.node[inode]['ncycles']
-                                logging.warning('dumpr : a segment cannot relate more than 2 cycles')
-        # if ncycles is a list with only one element the other cycle is the
-        # outside region (cycle -1)
-        for k in self.Gs.node:
-            if k>0:
-                if len(self.Gs.node[k]['ncycles'])==1:
-                    self.Gs.node[k]['ncycles'].append(-1)
+        # for k in self.Gt.node:
+        #     if k != 0:
+        #         vnodes = self.Gt.node[k]['cycle'].cycle
+        #         if vnodes[0]<0:
+        #             self.Gt.node[k]['polyg'].vnodes = vnodes
+        #         else:
+        #             self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
+        #         for inode in vnodes:
+        #             if inode > 0:   # segments
+        #                 if k not in self.Gs.node[inode]['ncycles']:
+        #                     self.Gs.node[inode]['ncycles'].append(k)
+        #                     if len(self.Gs.node[inode]['ncycles'])>2:
+        #                         print inode,self.Gs.node[inode]['ncycles']
+        #                         logging.warning('dumpr : a segment cannot relate more than 2 cycles')
+        # # if ncycles is a list with only one element the other cycle is the
+        # # outside region (cycle -1)
+        # for k in self.Gs.node:
+        #     if k>0:
+        #         if len(self.Gs.node[k]['ncycles'])==1:
+        #             self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
-        if 't' in graphs :
+        if 'c' in graphs :
             setattr(self,'ldiffin', read_gpickle(os.path.join(path,'ldiffin.gpickle')))
             setattr(self,'ldiffout', read_gpickle(os.path.join(path,'ldiffout.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
@@ -6567,6 +6570,7 @@ class Layout(PyLayers):
             S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
             cycle = cycl.Cycle(S)
 
+
              # IV 1.d add node to Gt + position
             # By default a Layout cycle is defined as indoor
             # unless it is separated from the outside cycle by an airwall
@@ -6683,6 +6687,7 @@ class Layout(PyLayers):
 
         # 2 add segments in Gt.edges
         segma=self.macvx.vnodes[self.macvx.vnodes>0]
+
         for s in segma:
             cy = self.Gs.node[s]['ncycles'][0]
             if self.Gt[cy].has_key(0):
