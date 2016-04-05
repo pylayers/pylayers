@@ -1490,7 +1490,7 @@ class Layout(PyLayers):
         self.g2npy()
 
 
-        self.buildGt()
+        
 
         # 
 
@@ -2555,9 +2555,10 @@ class Layout(PyLayers):
             if len(polsnew)  > len(self.polcold):
 
                 # find if line split existing polygon
-                gtnodes = np.array(self.Gt.nodes())
+                gtnodes = np.array(self.Gt.nodes()) 
                 u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
                 uu = np.where(u)[0]
+                uu=uu[uu>0]
 
                 # seg is inside a polygon => need to 
                 # # SPLIT Pol
@@ -2608,6 +2609,7 @@ class Layout(PyLayers):
                 gtnodes = np.array(self.Gt.nodes())
                 u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
                 uu = np.where(u)[0]
+                uu=uu[uu>0]
 
                 if len(uu)>0:
                     ucy = gtnodes[uu[0]]
@@ -2658,6 +2660,8 @@ class Layout(PyLayers):
         else:
             P=p
         seg = P.vnodes[P.vnodes>0]
+        import ipdb
+        ipdb.set_trace()
         [self.Gs.node[s]['ncycles'].append(pid) for s in seg if pid not in self.Gs.node[s]['ncycles']]
         self.Gt.add_node(pid,polyg=P,ss_slab=ss_slab)
         self.Gt.pos[pid]=np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
@@ -5805,7 +5809,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='cvirw',verbose=False):
+    def build(self, graph='tcvirw',verbose=False):
         """ build graphs
 
         Parameters
@@ -5828,10 +5832,10 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-        # if 't' in graph:
-        #     if verbose:
-        #         print "Gt"
-        #     self.buildGt()
+        if 't' in graph:
+            if verbose:
+                print "Gt"
+            self.buildGt()
         #     # if convexify :
         #     #     #Make the layout convex the outddor
         #     #     self._convex_hull()
@@ -6700,14 +6704,14 @@ class Layout(PyLayers):
 
         # 2 add segments in Gt.edges
         segma=self.macvx.vnodes[self.macvx.vnodes>0]
-
         for s in segma:
-            cy = self.Gs.node[s]['ncycles'][0]
-            if self.Gt[cy].has_key(0):
-                if not s in self.Gt[cy][0]['segment']:
-                    self.Gt[cy][0]['segment']=np.hstack([self.Gt[cy][0]['segment'],s])
-            else:
-                self.Gt.add_edge(cy,0,segment=np.array([s]))
+            cy = self.Gs.node[s]['ncycles']
+            for c in cy:
+                if self.Gt[c].has_key(0):
+                    if not s in self.Gt[c][0]['segment']:
+                        self.Gt[c][0]['segment']=np.hstack([self.Gt[c][0]['segment'],s])
+                else:
+                    self.Gt.add_edge(c,0,segment=np.array([s]))
 
 
         # 3 add cycle 0 to ncycles in Gs segments
