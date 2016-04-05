@@ -1490,7 +1490,7 @@ class Layout(PyLayers):
         self.g2npy()
 
 
-        
+        self.buildGt()
 
         # 
 
@@ -2660,8 +2660,6 @@ class Layout(PyLayers):
         else:
             P=p
         seg = P.vnodes[P.vnodes>0]
-        import ipdb
-        ipdb.set_trace()
         [self.Gs.node[s]['ncycles'].append(pid) for s in seg if pid not in self.Gs.node[s]['ncycles']]
         self.Gt.add_node(pid,polyg=P,ss_slab=ss_slab)
         self.Gt.pos[pid]=np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
@@ -3290,26 +3288,6 @@ class Layout(PyLayers):
                         poly = p0+p1
                         poly.setvnodes(self)
                         self._createGtpol(poly,ss_slab=[ceil,floor])
-                        # polygons will be merged
-                        # pol = p0+p1
-                        # pol.set_vnodes(self)
-                        # self.Gt.remove_node(cye)
-                        # self.Gt.pos.pop(cye)
-                        # import ipdb
-                        # ipdb.set_trace()
-                        # pass
-                        
-
-                # cycles have to be merged
-                
-
-                    #self._del_Gtpol(NP)
-                    #do somthing 
-                
-
-
-
-
 
             self.g2npy()
             # self._updateGt()
@@ -6559,16 +6537,14 @@ class Layout(PyLayers):
             ma.setvnodes(self)
             self.ma=ma
 
-
-
-
-        # for n in self.Gt.node:
-        #     p = self.Gt.node[n]['polyg']
-        #     if not p.isconvex():
-        #         import ipdb
-        #         ipdb.set_trace()
-        #         X = self._delaunay(p)
-        
+        n=0
+        # manage non convex regions
+        while n != self.Gt.nodes()[-1]:
+            for n in self.Gt.nodes():
+                p = self.Gt.node[n]['polyg']
+                if not p.isconvex():
+                    X = self._delaunay(p)
+                    break
 
 
 
@@ -7433,7 +7409,7 @@ class Layout(PyLayers):
 
         for icycle in self.Gt.node:
             #print "cycle : ",icycle
-            #indoor = self.Gt.node[icycle]['indoor']
+            indoor = self.Gt.node[icycle]['indoor']
             isopen = self.Gt.node[icycle]['isopen']
 
             polyg = self.Gt.node[icycle]['polyg']
@@ -7444,11 +7420,16 @@ class Layout(PyLayers):
 
             airwalls = filter(lambda x : x in self.name['AIR'],nseg)
             # indoor (cycles >0)
-            if icycle>0:
+
+            # if icycle>0
+            if indoor:
                 ndiff = filter(lambda x : x in self.ldiffin,npt)
+
             # indoor (cycles <0)
-            if icycle<=0:
+            # if icycle<=0:
+            if not indoor:
                 ndiff = filter(lambda x : x in self.ldiffout,npt)
+
             #
             # Create a graph
             #
@@ -7489,6 +7470,7 @@ class Layout(PyLayers):
             # Handle diffraction point
             #
             #if isopen:
+
             ndiffvalid = filter(lambda x :
                                 filter(lambda y : y in airwalls
                                      ,nx.neighbors(self.Gs,x)),ndiff)
