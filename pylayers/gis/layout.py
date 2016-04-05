@@ -1433,7 +1433,8 @@ class Layout(PyLayers):
 
             dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
             self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
-
+            X=sho.polygonize(self._shseg.values())
+            self.polcold = sh.MultiPolygon(list(X))
         else :
             # This part manage old .ini file without cycles
             seg_connect = {x:self.Gs.edge[x].keys() for x in self.Gs.nodes() if x >0}
@@ -1441,8 +1442,10 @@ class Layout(PyLayers):
             dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
             self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
             X=sho.polygonize(self._shseg.values())
+            self.polcold = sh.MultiPolygon(list(X))
+
             # create geu polygons
-            P=[geu.Polygon(x) for x in X]
+            P=[geu.Polygon(x) for x in self.polcold]
             [x.setvnodes(self) for x in P]
 
 
@@ -2436,7 +2439,7 @@ class Layout(PyLayers):
         #     [self.Gs.node[s]['ncycles'].append(c) for s in seg if c not in self.Gs.node[s]['ncycles']]
 
         
-
+    # @profile
     def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0,ss_slab=['FLOOR','CEIL']):
         """  add segment between node n1 and node n2
 
@@ -2527,9 +2530,11 @@ class Layout(PyLayers):
             self.Gs.add_edge(n2, num)
             self.Ns = self.Ns + 1
 
-            # manage line list of shapely        
-            X=sho.polygonize(self._shseg.values())
-            self.polcold = sh.MultiPolygon(list(X))
+            # # manage line list of shapely        
+            # X=sho.polygonize(self._shseg.values())
+            # import ipdb
+            # ipdb.set_trace()
+            # self.polcold = sh.MultiPolygon(list(X))
             self._shseg[num]=line
             # check line inside an existing polygon
 
@@ -2542,12 +2547,7 @@ class Layout(PyLayers):
 
 
 
-            previous = sh.MultiPolygon(nx.get_node_attributes(self.Gt,'polyg').values())
-            # p = previous.symmetric_difference(polsnew)
-            pnew=[]
-            for pp in polsnew:
-                if not pp.centroid.xy in [z.centroid.xy for z in previous]: 
-                    pnew.append(pp)
+
 
 
 
@@ -2563,7 +2563,7 @@ class Layout(PyLayers):
                 # seg is inside a polygon => need to 
                 # # SPLIT Pol
                 if len(uu)>0:
-                    print "split"
+                    # print "split"
                     ucy = gtnodes[uu[0]]
                     vn = self.Gt.node[ucy]['polyg'].vnodes
                     pt = vn[vn<0]
@@ -2596,6 +2596,15 @@ class Layout(PyLayers):
             
                 # CREATE Pol
                 else :
+                    # previous = sh.MultiPolygon(nx.get_node_attributes(self.Gt,'polyg').values())
+                    previous = self.polcold
+                    # p = previous.symmetric_difference(polsnew)
+                    pnew=[]
+                    centro = [z.centroid.xy for z in previous]
+                    for pp in polsnew:
+                        if not pp.centroid.xy in centro: 
+                            pnew.append(pp)
+
                     for p in pnew:
                         self._createGtpol(p,ss_slab=ss_slab)
                     
@@ -2620,6 +2629,8 @@ class Layout(PyLayers):
                     self.Gt.pos.pop(ucy)
                     # remove Gt node in involved segmensncycles 
                     [self.Gs.node[s]['ncycles'].remove(ucy) for s in seg if (ucy in self.Gs.node[s]['ncycles'])]
+
+            self.polcold = polsnew
 
             # update slab name <-> edge number dictionnary
             try:
@@ -3241,9 +3252,9 @@ class Layout(PyLayers):
             # delete subseg if required
 
 
-            # manage line list of shapely        
-            X=sho.polygonize(self._shseg.values())
-            self.polcold = sh.MultiPolygon(list(X))
+            # # manage line list of shapely        
+            # X=sho.polygonize(self._shseg.values())
+            # self.polcold = sh.MultiPolygon(list(X))
 
             self._shseg.pop(e)
 
@@ -3288,7 +3299,7 @@ class Layout(PyLayers):
                         poly = p0+p1
                         poly.setvnodes(self)
                         self._createGtpol(poly,ss_slab=[ceil,floor])
-
+            self.polcold = polsnew
             self.g2npy()
             # self._updateGt()
 
@@ -5810,10 +5821,10 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-        if 't' in graph:
-            if verbose:
-                print "Gt"
-            self.buildGt()
+        # if 't' in graph:
+        #     if verbose:
+        #         print "Gt"
+        #     self.buildGt()
         #     # if convexify :
         #     #     #Make the layout convex the outddor
         #     #     self._convex_hull()
@@ -5923,7 +5934,8 @@ class Layout(PyLayers):
         if 'c' in self.lbltg:
             write_gpickle(getattr(self,'ldiffin'),os.path.join(path,'ldiffin.gpickle'))
             write_gpickle(getattr(self,'ldiffout'),os.path.join(path,'ldiffout.gpickle'))
-        write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
+        if hasattr(self,'dca'):
+            write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
 
         root,ext = os.path.splitext(self.filename)
@@ -5994,7 +6006,8 @@ class Layout(PyLayers):
         if 'c' in graphs :
             setattr(self,'ldiffin', read_gpickle(os.path.join(path,'ldiffin.gpickle')))
             setattr(self,'ldiffout', read_gpickle(os.path.join(path,'ldiffout.gpickle')))
-        setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
+        if os.path.exists(os.path.join(path,'dca.gpickle')):
+            setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
 
 
@@ -6104,7 +6117,6 @@ class Layout(PyLayers):
         elif unit == 'rad':
             return upt,ang
             # atan2(cross(a,b)), dot(a,b))
-
 
     def _delaunay(self,poly,polyholes=[]):
         """ make a delaunay paritioning on poly.
@@ -6282,7 +6294,7 @@ class Layout(PyLayers):
                 self.del_segment(d,verbose=False)
         return ncpol
 
-    def buildGt(self,check=True):
+    def buildGt(self,check=True,verbose=False):
 
         def pltpoly(poly,fig=[],ax=[]):
             if fig == []:
@@ -6537,14 +6549,21 @@ class Layout(PyLayers):
             ma.setvnodes(self)
             self.ma=ma
 
-        n=0
-        # manage non convex regions
+        n=1
+        # manage non convex cycles
+        if verbose:
+            print "make layout convex",
         while n != self.Gt.nodes()[-1]:
+            if verbose:
+                print ".",
             for n in self.Gt.nodes():
-                p = self.Gt.node[n]['polyg']
-                if not p.isconvex():
-                    X = self._delaunay(p)
-                    break
+                if n>0:
+                    p = self.Gt.node[n]['polyg']
+                    if not p.isconvex():
+                        X = self._delaunay(p)
+                        break
+        if verbose:
+            print "done"
 
 
 
@@ -6556,6 +6575,9 @@ class Layout(PyLayers):
         # - cycle
         # - open
         # - indoor
+        if verbose :
+            print "connect Gt nodes",
+
         for n in self.Gt.node:
             p = self.Gt.node[n]['polyg']
             S = nx.subgraph(self.Gs,p.vnodes)
@@ -6601,6 +6623,8 @@ class Layout(PyLayers):
         #   add outside cycle (absorbant region index 0 )
         #   - cycle 0 to Gt
         #
+        if verbose:
+            print 'done'
 
         self._addoutcy(check)
 
@@ -7470,7 +7494,6 @@ class Layout(PyLayers):
             # Handle diffraction point
             #
             #if isopen:
-
             ndiffvalid = filter(lambda x :
                                 filter(lambda y : y in airwalls
                                      ,nx.neighbors(self.Gs,x)),ndiff)
