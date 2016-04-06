@@ -3165,9 +3165,42 @@
 <span class="sd">    &gt;&gt;&gt; u = ccw(a,b,c)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span>
     <span class="c1">#return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) &gt; (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))</span>
     <span class="k">return</span><span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">&gt;</span>
            <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span></div>
+
+<span class="k">def</span> <span class="nf">intersect_line_seg</span><span class="p">(</span><span class="n">line</span><span class="p">,</span><span class="n">seg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; intersect a line and a segment</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    line : (point,vec)</span>
+<span class="sd">    seg :  (pta,phe)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    </span>
+<span class="sd">    k : intersection parameter (0&lt;k&lt;1 if intersection)</span>
+<span class="sd">    M : intersection point </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">line</span>
+    <span class="n">pta</span><span class="p">,</span><span class="n">phe</span> <span class="o">=</span> <span class="n">seg</span>
+    <span class="n">vseg</span> <span class="o">=</span> <span class="n">phe</span><span class="o">-</span><span class="n">pta</span>
+    <span class="n">xht</span> <span class="o">=</span> <span class="n">phe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">yth</span> <span class="o">=</span> <span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">xht</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">yth</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">den</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">num</span><span class="o">/</span><span class="n">den</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">vseg</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="intersect"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.intersect.html#pylayers.util.geomutil.intersect">[docs]</a><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
@@ -4420,12 +4453,15 @@
 <span class="sd">    &gt;&gt;&gt; from pylayers.util.plotutil import *</span>
 <span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; p = np.random.randn(2,1000)</span>
-<span class="sd">    &gt;&gt;&gt; pa  = np.array([0,0])</span>
-<span class="sd">    &gt;&gt;&gt; pb  = np.array([0,1])</span>
+<span class="sd">    &gt;&gt;&gt; p = np.random.randn(2,10)</span>
+<span class="sd">    &gt;&gt;&gt; pa  = np.array([-0.5,1])</span>
+<span class="sd">    &gt;&gt;&gt; pb  = np.array([0,0])</span>
 <span class="sd">    &gt;&gt;&gt; M = mirror(p,pa,pb)</span>
 <span class="sd">    &gt;&gt;&gt; plt.plot(p[0,:],p[1,:],&#39;or&#39;,alpha=0.2)</span>
 <span class="sd">    &gt;&gt;&gt; plt.plot(M[0,:],M[1,:],&#39;ob&#39;,alpha=0.2)</span>
+<span class="sd">    &gt;&gt;&gt; displot(p,M,alpha=0.2)</span>
+<span class="sd">    &gt;&gt;&gt; axis = np.vstack((pa,pb))</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(axis[:,0],axis[:,1])</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -4460,6 +4496,95 @@
     <span class="n">v0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">S</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">vc0</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span></div>
+
+<span class="k">def</span> <span class="nf">axmat</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Compute the image of p wrt the segment pa pb</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+
+<span class="sd">    pa : numpy.ndarray</span>
+<span class="sd">        segment tail</span>
+<span class="sd">    pb : numpy.ndarray</span>
+<span class="sd">        segment head</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    S : numpy.ndarray</span>
+<span class="sd">        symmetry matrix</span>
+<span class="sd">    v : numpy.ndarray</span>
+<span class="sd">        translatrion vector</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    fir x is corrdiante of the point to mirror, </span>
+<span class="sd">    the mirrored point x&#39; from pa and pb  can be obtain with :</span>
+
+<span class="sd">    x&#39; = np.dot(x,S) + v</span>
+
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :include-source:</span>
+
+<span class="sd">    &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
+<span class="sd">    &gt;&gt;&gt; from pylayers.util.plotutil import *</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; p = np.random.randn(2,10)</span>
+<span class="sd">    &gt;&gt;&gt; pa  = np.array([-0.5,1])</span>
+<span class="sd">    &gt;&gt;&gt; pb  = np.array([0,0])</span>
+<span class="sd">    &gt;&gt;&gt; S,v = axmat(pa,pb)</span>
+<span class="sd">    &gt;&gt;&gt; M = np.dot(p,S) + v</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(p[0,:],p[1,:],&#39;or&#39;,alpha=0.2)</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(M[0,:],M[1,:],&#39;ob&#39;,alpha=0.2)</span>
+<span class="sd">    &gt;&gt;&gt; displot(p,M,alpha=0.2)</span>
+<span class="sd">    &gt;&gt;&gt; axis = np.vstack((pa,pb))</span>
+<span class="sd">    &gt;&gt;&gt; plt.plot(axis[:,0],axis[:,1])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
+        <span class="n">pa</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
+        <span class="n">pb</span> <span class="o">=</span> <span class="n">pb</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">pab</span> <span class="o">=</span> <span class="n">pb</span> <span class="o">-</span> <span class="n">pa</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pab</span> <span class="o">*</span> <span class="n">pab</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">zalpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">alpha</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">alpha</span><span class="p">[</span><span class="n">zalpha</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+
+    <span class="n">dsal</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">pampby</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">pb</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">pbmpax</span> <span class="o">=</span> <span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">prod</span> <span class="o">=</span> <span class="n">pbmpax</span> <span class="o">*</span> <span class="n">pampby</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">dsal</span> <span class="o">*</span> <span class="p">(</span><span class="n">pampby</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">dsal</span> <span class="o">*</span> <span class="n">prod</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">dsal</span> <span class="o">*</span> <span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">pampby</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">prod</span><span class="p">)</span>                   
+    <span class="n">d</span> <span class="o">=</span> <span class="n">dsal</span> <span class="o">*</span> <span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">pbmpax</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">prod</span><span class="p">)</span> 
+                        
+    <span class="c1"># a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2</span>
+    <span class="c1"># b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])</span>
+    <span class="c1"># c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +</span>
+    <span class="c1">#                     pa[1, :] * (pa[1, :] - pb[1, :]) *</span>
+    <span class="c1">#                     (pb[0, :] - pa[0, :]))</span>
+    <span class="c1"># d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +</span>
+    <span class="c1">#                     pa[0, :] * (pa[1, :] - pb[1, :]) *</span>
+    <span class="c1">#                     (pb[0, :] - pa[0, :]))</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+    <span class="n">vc0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="c1"># v0 = np.dot(-S, p) + vc0</span>
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span><span class="n">vc0</span>
+
 
 <div class="viewcode-block" id="distseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.distseg.html#pylayers.util.geomutil.distseg">[docs]</a><span class="k">def</span> <span class="nf">distseg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; distance to segments</span>
@@ -4769,7 +4894,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 24, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

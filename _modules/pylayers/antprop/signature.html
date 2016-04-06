@@ -241,8 +241,39 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">heapq</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">sh</span>
-
+<span class="kn">import</span> <span class="nn">shapely.ops</span> <span class="kn">as</span> <span class="nn">sho</span>
 <span class="c1">#from numba import autojit</span>
+
+
+<span class="k">def</span> <span class="nf">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
+
+    <span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ob</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">if</span> <span class="n">ii</span> <span class="o">==</span><span class="mi">0</span> <span class="p">:</span> 
+                <span class="n">c</span> <span class="o">=</span><span class="s1">&#39;g&#39;</span>
+            <span class="k">elif</span> <span class="n">ii</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span><span class="s1">&#39;r&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;k&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">color</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">xy</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">solid_capstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
+<span class="k">def</span> <span class="nf">plot_poly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
+    
+    <span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">poly</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ob</span><span class="p">):</span>
+        
+        <span class="n">pp</span> <span class="o">=</span> <span class="n">PolygonPatch</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span>
+
+
 
 <div class="viewcode-block" id="showsig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.showsig.html#pylayers.antprop.signature.showsig">[docs]</a><span class="k">def</span> <span class="nf">showsig</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="p">[],</span><span class="n">rx</span><span class="o">=</span><span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot; show signature</span>
@@ -296,93 +327,250 @@
     <span class="n">dpts</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg_connect</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">}</span>
     <span class="n">L</span><span class="o">.</span><span class="n">_shseg</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dpts</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
+<span class="k">def</span> <span class="nf">showsig2</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+        <span class="n">lsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">])</span>
 
-<span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; unfold a given signature</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">:</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">k1</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">k0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">npt</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">k0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="k">if</span> <span class="n">k1</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">plu</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">phe</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k1</span> <span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                <span class="n">plu</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">phe</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="sd">    returns 2 np.ndarray of pta and phe &quot;aligned&quot;</span>
-<span class="sd">    reflexion interactions are mirrored</span>
+    <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">tahe</span><span class="p">:</span>
+        <span class="n">ta</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">he</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">plu</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">he</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                      
+
+    <span class="n">tahe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span> <span class="c1"># Nseg x tahe x xy </span>
+    <span class="n">pta</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># 2 x Nseg</span>
+    <span class="n">phe</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># 2 x Nseg </span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">lsig</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">^</span>
+            <span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">):</span>
+        <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span> <span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span> <span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># twisted = True</span>
+        <span class="n">lef</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">rig</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>    
+        <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span> <span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span> <span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">lef</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">rig</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="c1">#L.showG(&#39;s&#39;,labels=True)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">_shseg</span><span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lsig</span><span class="p">))</span>
+    <span class="n">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span><span class="n">ob</span><span class="o">=</span><span class="n">lines</span><span class="p">)</span>
+    <span class="n">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span><span class="n">ob</span><span class="o">=</span><span class="p">[</span><span class="n">lef</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span><span class="n">ob</span><span class="o">=</span><span class="p">[</span><span class="n">rig</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;tail&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">phe</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;head&#39;</span><span class="p">)</span>
+    <span class="c1">#plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)</span>
+    <span class="c1">#plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1">#@profile</span>
+<span class="k">def</span> <span class="nf">valid</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Check if a signature is valid.</span>
+<span class="sd">    if a segment of a given signature is not in or touches the polygon</span>
+<span class="sd">    described by the 1st and last segment, the signature is not valid</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    lsig : list of tuple from run  | signatures</span>
+<span class="sd">    L : layout</span>
+<span class="sd">    tahe : </span>
+<span class="sd">        lensig , ta|he , x,y</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    pta : np.array</span>
-<span class="sd">    phe : np.array</span>
+<span class="sd">    inside : boolean</span>
+<span class="sd">        is the signature valid ?</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-    <span class="n">lsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">])</span>
-
     <span class="n">lensi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lsig</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lensi</span><span class="o">&lt;=</span><span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="c1"># DEBUG</span>
+    <span class="c1"># if lensi == 4:</span>
+    <span class="c1">#     if np.all(lsig == np.array([[ 5,  2, 67, 58],[ 2,  2,  3,  2]]).T):</span>
+    <span class="c1">#         import ipdb</span>
+    <span class="c1">#         ipdb.set_trace()</span>
+
+    <span class="c1"># ensure compatibility with Signature.run where</span>
+    <span class="c1"># lsig is a list of tuple</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lsig</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+        <span class="n">lsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">])</span>
+
     <span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="n">lensi</span><span class="p">))</span>
     <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="n">lensi</span><span class="p">))</span>
 
     <span class="n">seq</span> <span class="o">=</span> <span class="n">lsig</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">upos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">seq</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">uneg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">seq</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># upos = np.where(seq&gt;0)[0]</span>
+    <span class="c1"># uneg = np.where(seq&lt;0)[0]</span>
     
-    <span class="n">tahep</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">upos</span><span class="p">])</span>
-    <span class="n">tahen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">[</span><span class="n">uneg</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">tahen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">tahen</span><span class="p">,</span><span class="n">tahen</span><span class="p">))</span>
-    <span class="n">tahe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="n">lensi</span><span class="p">))</span>
-    <span class="n">tahe</span><span class="p">[:,</span><span class="n">upos</span><span class="p">]</span><span class="o">=</span><span class="n">tahep</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">tahe</span><span class="p">[:,</span><span class="n">uneg</span><span class="p">]</span><span class="o">=</span><span class="n">tahen</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">pass</span>
-    
-    <span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">tahe</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">tahe</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># tahep = L.seg2pts(seq[upos])</span>
+    <span class="c1"># tahen = np.array([L.Gs.pos[i] for i in seq[uneg]]).T</span>
+    <span class="c1"># tahen = np.vstack((tahen,tahen))</span>
+    <span class="c1"># tahe = np.empty((4,lensi))</span>
+    <span class="c1"># tahe[:,upos]=tahep</span>
+    <span class="c1"># try:</span>
+    <span class="c1">#     tahe[:,uneg]=tahen</span>
+    <span class="c1"># except:</span>
+    <span class="c1">#     pass</span>
+    <span class="c1"># pts = [k for i in seq for k in [L.Gs[i].keys()[0],L.Gs[i].keys()[1]]]</span>
+    <span class="c1"># if tahe ==[]:</span>
+    <span class="c1"># print &#39;run tahe\n&#39;,np.array(tahe)</span>
+    <span class="c1"># if tahe == []:</span>
+    <span class="c1">#     pts = [L.Gs[i].keys() for i in seq]</span>
+    <span class="c1">#     tahe = np.array([[L.Gs.pos[p[0]],L.Gs.pos[p[1]]] for p in pts])</span>
 
-    <span class="n">pa</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:]</span>
-    <span class="n">pb</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:]</span>
+    <span class="c1">#     pta[:,0] = tahe[0,0,:]</span>
+    <span class="c1">#     phe[:,0] = tahe[0,1,:]</span>
 
-    <span class="n">typ</span> <span class="o">=</span> <span class="n">lsig</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1">#     typ = lsig[:,1]</span>
+    <span class="c1">#     mirror=[]</span>
+    <span class="c1">#     # lines = [L._shseg[seq[0]]]</span>
+    <span class="c1">#     for i in range(1,lensi):</span>
+    <span class="c1">#         # pam = pa[:,i].reshape(2,1)</span>
+    <span class="c1">#         # pbm = pb[:,i].reshape(2,1)</span>
+    <span class="c1">#         pam = tahe[i,0,:].reshape(2,1)</span>
+    <span class="c1">#         pbm = tahe[i,1,:].reshape(2,1)</span>
+    <span class="c1">#         if typ[i] == 2: # R</span>
+    <span class="c1">#             for m in mirror:</span>
+    <span class="c1">#                 pam = geu.mirror(pam,pta[:,m],phe[:,m])</span>
+    <span class="c1">#                 pbm = geu.mirror(pbm,pta[:,m],phe[:,m])</span>
+    <span class="c1">#             pta[:,i] = pam.reshape(2)</span>
+    <span class="c1">#             phe[:,i] = pbm.reshape(2)</span>
+    <span class="c1">#             mirror.append(i)</span>
+
+    <span class="c1">#         elif typ[i] == 3 : # T</span>
+    <span class="c1">#             for m in mirror:</span>
+    <span class="c1">#                 pam = geu.mirror(pam,pta[:,m],phe[:,m])</span>
+    <span class="c1">#                 pbm = geu.mirror(pbm,pta[:,m],phe[:,m])</span>
+    <span class="c1">#             pta[:,i] = pam.reshape(2)</span>
+    <span class="c1">#             phe[:,i] = pbm.reshape(2)</span>
+    <span class="c1">#         elif typ[i] == 1 : # D</span>
+    <span class="c1">#             pta[:,i] = pam.reshape(2)</span>
+    <span class="c1">#             phe[:,i] = pbm.reshape(2)</span>
+
+    <span class="c1"># else:</span>
+
+    <span class="n">tahe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span> <span class="c1"># Nseg x tahe x xy </span>
+    <span class="n">pta</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># 2 x Nseg</span>
+    <span class="n">phe</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># 2 x Nseg </span>
 
 
-    <span class="n">mirror</span><span class="o">=</span><span class="p">[]</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">lensi</span><span class="p">):</span>
-        <span class="n">pam</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">pbm</span> <span class="o">=</span> <span class="n">pb</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># R</span>
-            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mirror</span><span class="p">:</span>
-                <span class="n">pam</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pam</span><span class="p">,</span><span class="n">pta</span><span class="p">[:,</span><span class="n">m</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">m</span><span class="p">])</span>
-                <span class="n">pbm</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pbm</span><span class="p">,</span><span class="n">pta</span><span class="p">[:,</span><span class="n">m</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">m</span><span class="p">])</span>
-            <span class="n">pta</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">phe</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pbm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">mirror</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="c1"># ### ONLY FOR TEST TO BE DELETED</span>
+    <span class="c1"># pts = [L.Gs[i].keys() for i in seq]</span>
+    <span class="c1"># tahetest = np.array([[L.Gs.pos[p[0]],L.Gs.pos[p[1]]] for p in pts])</span>
+    <span class="c1"># ptat = np.empty((2,lensi))</span>
+    <span class="c1"># phet = np.empty((2,lensi))</span>
+    <span class="c1"># ptat[:,0] = tahetest[0,0,:]</span>
+    <span class="c1"># phet[:,0] = tahetest[0,1,:]</span>
 
-        <span class="k">elif</span> <span class="n">typ</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">:</span> <span class="c1"># T</span>
-            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mirror</span><span class="p">:</span>
-                <span class="n">pam</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pam</span><span class="p">,</span><span class="n">pta</span><span class="p">[:,</span><span class="n">m</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">m</span><span class="p">])</span>
-                <span class="n">pbm</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pbm</span><span class="p">,</span><span class="n">pta</span><span class="p">[:,</span><span class="n">m</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">m</span><span class="p">])</span>
-            <span class="n">pta</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">phe</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pbm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># typ = lsig[:,1]</span>
+    <span class="c1"># mirror=[]</span>
+    <span class="c1">#lines = [L._shseg[seq[0]]]</span>
+    <span class="c1"># for i in range(1,lensi):</span>
+    <span class="c1">#     # pam = pa[:,i].reshape(2,1)</span>
+    <span class="c1">#     # pbm = pb[:,i].reshape(2,1)</span>
+    <span class="c1">#     pam = tahetest[i,0,:].reshape(2,1)</span>
+    <span class="c1">#     pbm = tahetest[i,1,:].reshape(2,1)</span>
+    <span class="c1">#     if typ[i] == 2: # R</span>
+    <span class="c1">#         for m in mirror:</span>
+    <span class="c1">#             pam = geu.mirror(pam,ptat[:,m],phet[:,m])</span>
+    <span class="c1">#             pbm = geu.mirror(pbm,ptat[:,m],phet[:,m])</span>
+    <span class="c1">#         ptat[:,i] = pam.reshape(2)</span>
+    <span class="c1">#         phet[:,i] = pbm.reshape(2)</span>
+    <span class="c1">#         mirror.append(i)</span>
 
-        <span class="k">elif</span> <span class="n">typ</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> <span class="c1"># D</span>
-            <span class="n">pta</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">phe</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pbm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-            <span class="c1"># TODO not implemented yet</span>
+    <span class="c1">#     elif typ[i] == 3 : # T</span>
+    <span class="c1">#         for m in mirror:</span>
+    <span class="c1">#             pam = geu.mirror(pam,ptat[:,m],phet[:,m])</span>
+    <span class="c1">#             pbm = geu.mirror(pbm,ptat[:,m],phet[:,m])</span>
+    <span class="c1">#         ptat[:,i] = pam.reshape(2)</span>
+    <span class="c1">#         phet[:,i] = pbm.reshape(2)</span>
+    <span class="c1">#     elif typ[i] == 1 : # D</span>
+    <span class="c1">#         ptat[:,i] = pam.reshape(2)</span>
+    <span class="c1">#         phet[:,i] = pbm.reshape(2)</span>
 
-    <span class="kn">import</span> <span class="nn">ipdb</span>
-    <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
-    <span class="n">s0</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">s1</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">s0</span><span class="o">.</span><span class="n">crosses</span><span class="p">(</span><span class="n">s1</span><span class="p">):</span>
-        <span class="n">s0</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="n">s1</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
-
-    <span class="n">cr</span> <span class="o">=</span> <span class="p">[(</span><span class="n">s0</span><span class="o">.</span><span class="n">crosses</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">_shseg</span><span class="p">[</span><span class="n">s</span><span class="p">])</span> <span class="ow">or</span> <span class="n">s0</span><span class="o">.</span><span class="n">touches</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">_shseg</span><span class="p">[</span><span class="n">s</span><span class="p">]))</span> <span class="ow">and</span> 
-          <span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">crosses</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">_shseg</span><span class="p">[</span><span class="n">s</span><span class="p">])</span> <span class="ow">or</span> <span class="n">s1</span><span class="o">.</span><span class="n">touches</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">_shseg</span><span class="p">[</span><span class="n">s</span><span class="p">]))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span>
-
-    <span class="c1"># if len(seq) &gt;2:</span>
+    <span class="c1"># tahetest = np.dstack((ptat.T,phet.T)).swapaxes(1,2)</span>
+    <span class="c1"># if np.sum(tahe-tahetest) != 0:</span>
     <span class="c1">#     import ipdb</span>
     <span class="c1">#     ipdb.set_trace()</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
     
+    <span class="c1"># determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])</span>
+    <span class="c1"># vl and vr are 2 director vector lying on the polygon side.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">^</span>
+            <span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">):</span>
+        <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span> <span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span> <span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># vr = ( pta[:,0],phe[:,-1])</span>
+        <span class="c1"># vl = ( phe[:,0],pta[:,-1])</span>
+        <span class="c1"># twisted = True</span>
+        <span class="c1">#lef = sh.LineString((pta[:,0],pta[:,-1]))</span>
+        <span class="c1">#rig = sh.LineString((phe[:,0],phe[:,-1]))</span>
+    <span class="k">else</span><span class="p">:</span>    
+        <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span> <span class="n">pta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">phe</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span> <span class="n">phe</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># vr = ( pta[:,0],pta[:,-1])</span>
+        <span class="c1"># vl = ( phe[:,0],phe[:,-1])</span>
+        <span class="c1"># twisted = False</span>
+        <span class="c1">#lef = sh.LineString((pta[:,0],phe[:,-1]))</span>
+        <span class="c1">#rig = sh.LineString((pta[:,-1],phe[:,0]))</span>
+        
+       
+
+
+    <span class="c1"># looking situation where Tail and head are not inside the polygon</span>
+    <span class="c1"># =&gt; both tahe are left of vr and vl</span>
+    <span class="c1"># =&gt;   both tahe are right of vr and vl</span>
+    <span class="n">lta</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">isleft</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="bp">None</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="bp">None</span><span class="p">])</span>
+    <span class="n">rta</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">isleft</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="bp">None</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="bp">None</span><span class="p">])</span>
+    <span class="n">lhe</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">isleft</span><span class="p">(</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="bp">None</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="bp">None</span><span class="p">])</span>
+    <span class="n">rhe</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">isleft</span><span class="p">(</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="bp">None</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="bp">None</span><span class="p">])</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">lta</span> <span class="o">&amp;</span> <span class="n">lhe</span> <span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="o">~</span><span class="n">rta</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">rhe</span><span class="p">)</span>
+    <span class="n">inside</span> <span class="o">=</span> <span class="o">~</span><span class="n">out</span>
+
+    <span class="c1"># # debug</span>
+    <span class="c1"># plt.ion()</span>
+    <span class="c1"># plt.gcf()</span>
+    <span class="c1"># #plt.title(str(cond))</span>
+    <span class="c1"># #Ok plot_lines(ax=plt.gca(),ob=lines)</span>
+    <span class="c1"># plot_lines(ax=plt.gca(),ob=[lef],color=&#39;g&#39;)</span>
+    <span class="c1"># plot_lines(ax=plt.gca(),ob=[rig],color=&#39;r&#39;)</span>
+    <span class="c1"># plt.scatter(pta[0,:],pta[1,:],marker=&#39;d&#39;,s=70,label=&#39;tail&#39;)</span>
+    <span class="c1"># plt.scatter(phe[0,:],phe[1,:],marker=&#39;s&#39;,s=70,label=&#39;head&#39;)</span>
+    <span class="c1"># plu.displot(vl[0].reshape(2,1),vl[1].reshape(2,1),arrow=True)</span>
+    <span class="c1"># plu.displot(vr[0].reshape(2,1),vr[1].reshape(2,1),arrow=True)</span>
+    <span class="c1"># plt.legend()</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">inside</span><span class="p">)</span>
+
+
+
 
 
 
@@ -504,6 +692,34 @@
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,0,:]) + &#39;\n&#39;</span>
 
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,1,:]) + &#39;\n&#39;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">OK</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">KO</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+        
+            <span class="n">sigs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sigs</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">sig</span> <span class="o">=</span> <span class="n">sigs</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="o">+</span><span class="mi">2</span><span class="p">,:]</span>
+
+                <span class="n">ok</span> <span class="o">=</span> <span class="n">valid</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ok</span> <span class="p">:</span>
+                    <span class="k">try</span> <span class="p">:</span>
+                        <span class="n">OK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">OK</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">sig</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">OK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+                        <span class="n">OK</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">sig</span>
+                        <span class="k">pass</span>
+                <span class="k">else</span> <span class="p">:</span>
+
+                    <span class="k">try</span> <span class="p">:</span>
+                        <span class="n">KO</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">KO</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">sig</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">KO</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+                        <span class="n">KO</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">sig</span>
+                        <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">OK</span><span class="p">,</span><span class="n">KO</span>
 
 <div class="viewcode-block" id="Signatures.saveh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.saveh5.html#pylayers.antprop.signature.Signatures.saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save signatures in hdf5 format</span>
@@ -2608,7 +2824,7 @@
 
 
     <span class="c1"># @profile                    </span>
-<div class="viewcode-block" id="Signatures.run"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run_old1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
 <span class="sd">        Parameters</span>
@@ -2676,6 +2892,10 @@
         <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">tic0</span> <span class="o">=</span> <span class="n">tic</span>
         <span class="c1">#for interaction source  in list of source interactions</span>
+
+        <span class="c1"># signature counter</span>
+        <span class="n">cptsig</span> <span class="o">=</span> <span class="mi">0</span>
+        
         <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
             <span class="c1">#for target interaction in list of target interactions</span>
             <span class="c1">#print &quot;---&gt; &quot;,s</span>
@@ -2697,6 +2917,13 @@
                 <span class="c1"># if source and target interaction are different</span>
                 <span class="c1"># and R | T</span>
                 <span class="c1">#if ((type(eval(s))==tuple) &amp; (s != t)):</span>
+                <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])]</span>
+                <span class="c1"># R is a list which contains reflextion matrices(Sn) and translation matrices(vn)</span>
+                <span class="c1"># for mirror</span>
+                <span class="c1"># R=[[S0,v0],[S1,v1],...]</span>
+                <span class="n">R</span><span class="o">=</span><span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))]</span>
+
                 <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="n">t</span><span class="p">):</span>
 
                     <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">]</span>
@@ -2710,6 +2937,7 @@
                     <span class="k">while</span> <span class="n">stack</span><span class="p">:</span> <span class="c1">#</span>
                         <span class="c1"># children is the last iterator of stack</span>
                         <span class="n">children</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        
                         <span class="c1"># next child</span>
 
                         <span class="n">child</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
@@ -2719,6 +2947,8 @@
                         <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="p">:</span> <span class="c1"># if no more child</span>
                             <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>   <span class="c1"># remove last iterator</span>
                             <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="c1"># remove from visited list</span>
+                            <span class="n">tahe</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="k">try</span><span class="p">:</span>
                                 <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="k">except</span><span class="p">:</span>
@@ -2736,6 +2966,9 @@
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
                                 <span class="k">except</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="n">cptsig</span> <span class="o">+=</span><span class="mi">1</span>
+                                <span class="c1">#print path,cptsig</span>
+                                <span class="c1">#print &quot;O&quot;,</span>
                                 <span class="c1">#try:</span>
                                 <span class="c1">#    dout[len(path)].append([[p[0],len(p)] for p in path])</span>
                                 <span class="c1">#except:</span>
@@ -2756,10 +2989,60 @@
                                 <span class="k">except</span><span class="p">:</span>
                                     <span class="n">nexti</span> <span class="o">=</span> <span class="p">[]</span>
 
+
                                 <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
-                                <span class="c1"># if valid(visited,self.L):</span>
-                                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">nexti</span><span class="p">))</span>
-                                    <span class="c1">#stack.append(iter(G[visited[-1]][child][&#39;output&#39;]))</span>
+                                <span class="c1">#print visited</span>
+
+                                <span class="n">seg</span> <span class="o">=</span> <span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+
+                                <span class="c1"># Testing the type of interaction at rank -2 </span>
+                                <span class="c1"># R is a list which contains a rotation matrix </span>
+                                <span class="c1"># and a translation vector for doing the mirroring </span>
+                                <span class="c1"># operation</span>
+
+                                <span class="c1"># diff</span>
+                               
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">seg</span><span class="p">]</span>
+                                    <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">th</span><span class="p">,</span><span class="n">th</span><span class="p">])</span>
+                                    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
+
+                                <span class="c1"># refl</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span><span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+
+                                    <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">seg</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                                    <span class="c1"># th (Npt x xy)</span>
+                                    <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+                                    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">axmat</span><span class="p">(</span><span class="n">tahe</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">tahe</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+  
+                                <span class="c1"># trans</span>
+                                <span class="k">else</span> <span class="p">:</span> 
+                                    <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">seg</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                                    <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+                                    <span class="c1"># for uniformity purpose </span>
+                                    <span class="c1"># dummy mirroring (no effect)</span>
+                                    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
+
+                                <span class="c1"># apply symmetry</span>
+                                <span class="c1"># th are current segment tail-head coordinates</span>
+                                <span class="c1"># tahe is a list of well mirrored tail-head coordinates</span>
+                                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">R</span><span class="p">:</span> 
+                                    <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ki,ij-&gt;kj&#39;</span><span class="p">,</span><span class="n">th</span><span class="p">,</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">:</span>
+                                    <span class="c1"># import ipdb</span>
+                                    <span class="c1"># ipdb.set_trace()    </span>
+                                    <span class="n">v</span> <span class="o">=</span> <span class="n">valid</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">tahe</span><span class="p">)</span> 
+                                    <span class="c1">#print v</span>
+                                <span class="k">else</span><span class="p">:</span> 
+                                    <span class="n">v</span> <span class="o">=</span> <span class="bp">True</span>
+                                    <span class="c1"># signature of length 3 are necessarily valid</span>
+
+                                <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+                                    <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">nexti</span><span class="p">))</span>
+                                
 
                                     <span class="c1"># import ipdb</span>
                                     <span class="c1"># ipdb.set_trace()</span>
@@ -2767,19 +3050,23 @@
 
                                     <span class="c1"># check if child (current segment) is an airwall</span>
                                     <span class="c1"># warning not efficient if many airwalls</span>
-                                <span class="k">if</span> <span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]:</span>
-                                    <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]:</span>
+                                        <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                                 <span class="k">else</span><span class="p">:</span>
-                                    <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                                <span class="c1"># else:</span>
-                                <span class="c1">#     visited.pop(-1)</span>
-
+                                    <span class="c1">#print  &quot;X&quot;,</span>
+                                    <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                                    <span class="n">tahe</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                                    <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
                         <span class="k">else</span><span class="p">:</span> <span class="c1">#len(visited) == cutoff (visited list is too long)</span>
                             <span class="k">if</span> <span class="n">child</span> <span class="o">==</span> <span class="n">t</span> <span class="ow">or</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
                                 <span class="n">path</span> <span class="o">=</span> <span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
                                 <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">path</span><span class="p">))</span>
                                 <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">path</span><span class="p">))</span>
+                                <span class="n">cptsig</span> <span class="o">+=</span> <span class="mi">1</span>
+                                <span class="c1">#print path,cptsig</span>
                                 <span class="k">try</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
                                 <span class="k">except</span><span class="p">:</span>
@@ -2787,25 +3074,315 @@
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
                                 <span class="c1">#print visited + [target]</span>
                                 <span class="c1">#yield visited + [target]</span>
-
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">pass</span>
+                                <span class="c1">#print &quot;Cutoff &quot;,visited</span>
+                                <span class="c1">#print  &quot;C&quot;,</span>
                             <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="n">tahe</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="k">try</span><span class="p">:</span>
                                 <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="k">except</span><span class="p">:</span>
                                 <span class="k">pass</span>
 
-                <span class="k">else</span><span class="p">:</span> <span class="c1"># s==t</span>
+
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># s==t  (Same source and target)vi</span>
                     <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
                     <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)])</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="c1">#print &quot;non existing : &quot;,len(path)</span>
-                        <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span></div>
+                        <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
 
 
+    <span class="c1"># @profile                    </span>
+<div class="viewcode-block" id="Signatures.run"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        cutoff : int</span>
+<span class="sd">            limit the exploration of all_simple_path</span>
+<span class="sd">        algo: string</span>
+<span class="sd">            &#39;old&#39; : call propaths2</span>
+<span class="sd">            &#39;new&#39; : call procone2</span>
+<span class="sd">        bt : bool</span>
+<span class="sd">            backtrace (allow to visit already visited nodes in simple path algorithm)</span>
+<span class="sd">        progress : bool</span>
+<span class="sd">            display the time passed in the loop</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        sigslist :  numpy.ndarray</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.simul.link.Dlink.eval</span>
+<span class="sd">        pylayers.antprop.signature.Signatures.propath2</span>
+<span class="sd">        pylayers.antprop.signature.Signatures.procone2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s2">&quot;run&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>   <span class="o">=</span> <span class="n">cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span>
+
+        <span class="c1"># list of interactions visible from source</span>
+        <span class="n">lisT</span><span class="p">,</span><span class="n">lisR</span><span class="p">,</span><span class="n">lisD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span> <span class="o">+</span> <span class="n">lisD</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span>
+
+        <span class="c1"># list of interactions visible from target</span>
+        <span class="n">litT</span><span class="p">,</span><span class="n">litR</span><span class="p">,</span><span class="n">litD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
+           <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span> <span class="o">+</span> <span class="n">litD</span>
+        <span class="k">else</span><span class="p">:</span>
+           <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span>
+        <span class="c1">#print &quot;source,lis :&quot;,self.source,lis</span>
+        <span class="c1">#print &quot;target,lit :&quot;,self.target,lit</span>
+        <span class="c1"># for u in lit: </span>
+        <span class="c1">#     print u</span>
+        <span class="c1"># print &quot;-------------&quot;</span>
+
+        <span class="n">Gi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span>
+        <span class="n">Gi</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span>
+        <span class="c1">#</span>
+        <span class="c1"># remove diffractions from Gi</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">diffraction</span><span class="p">:</span>
+            <span class="n">Gi</span> <span class="o">=</span> <span class="n">gidl</span><span class="p">(</span><span class="n">Gi</span><span class="p">)</span>
+
+        <span class="c1"># initialize dout dictionnary</span>
+        <span class="n">dout</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># progresss stuff...</span>
+        <span class="n">lmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lis</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">lit</span><span class="p">)</span>
+        <span class="n">pe</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">tic0</span> <span class="o">=</span> <span class="n">tic</span>
+        <span class="c1">#for interaction source  in list of source interactions</span>
+
+        <span class="c1"># signature counter</span>
+        <span class="n">cptsig</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
+            <span class="c1"># if (us%20)==0:</span>
+            <span class="c1">#     print us,&#39;/&#39;,len(lis)</span>
+            <span class="c1"># us counter</span>
+            <span class="c1"># s : interaction </span>
+            <span class="c1"># s[0] : point or segment</span>
+            <span class="c1"># pts : list of neighbour nodes</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])]</span>
+            <span class="c1"># R is a list which contains reflexion matrices (Sn) and translation matrices(vn)</span>
+            <span class="c1"># for mirroring </span>
+            <span class="c1"># R=[[S0,v0],[S1,v1],...]</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))]</span>
+
+            <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">]</span>
+            <span class="c1"># stack is a list of iterators</span>
+            <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">Gi</span><span class="p">[</span><span class="n">s</span><span class="p">])]</span>
+            <span class="c1"># lawp = list of airwall position in visited</span>
+            <span class="n">lawp</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># while the stack of iterators is not void</span>
+            <span class="k">while</span> <span class="n">stack</span><span class="p">:</span> <span class="c1">#</span>
+                <span class="c1"># iter_on_interactions is the last iterator in the stack</span>
+                <span class="n">iter_on_interactions</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                
+                <span class="c1"># next interaction child</span>
+                <span class="n">interaction</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iter_on_interactions</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            
+                <span class="n">cond1</span> <span class="o">=</span> <span class="n">interaction</span> <span class="ow">is</span> <span class="bp">None</span>
+                <span class="c1"># test whether the interaction has already been visited (reverberation)</span>
+                <span class="n">cond2</span> <span class="o">=</span> <span class="p">(</span><span class="n">interaction</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bt</span>
+                <span class="c1"># test the cutoff condition</span>
+                <span class="n">cond3</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">cutoff</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lawp</span><span class="p">))</span>
+                <span class="c1">#print cond1,cond2,cond3</span>
+                <span class="c1">#print &quot;vis :&quot;,visited,interaction</span>
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond1</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond3</span><span class="p">):</span>
+                        <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interaction</span><span class="p">)</span>
+                        <span class="c1">#print visited,len(stack)</span>
+                        <span class="k">if</span> <span class="n">interaction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]:</span>
+                            <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                        <span class="c1"># update number of useful segments</span>
+                        <span class="c1"># if there is airwall in visited</span>
+                        <span class="n">nstr</span> <span class="o">=</span> <span class="n">interaction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="c1"># Testing the type of interaction at rank -2 </span>
+                        <span class="c1"># R is a list which contains a rotation matrix </span>
+                        <span class="c1"># and a translation vector for doing the mirroring </span>
+                        <span class="c1"># operation</span>
+
+                        <span class="c1"># diffraction (retrieve a point)</span>
+                           
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span>
+                            <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">th</span><span class="p">,</span><span class="n">th</span><span class="p">])</span>
+                            <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
+                        
+                        <span class="c1"># reflexion </span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+
+                            <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                            <span class="c1"># th (Npt x xy)</span>
+                            <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+                            <span class="c1"># reverse order</span>
+                            <span class="n">pts2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                            <span class="n">ta_seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts2</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                            <span class="n">he_seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                            <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">axmat</span><span class="p">(</span><span class="n">ta_seg</span><span class="p">,</span><span class="n">he_seg</span><span class="p">))</span>
+                            <span class="c1"># direct order</span>
+                            <span class="c1">#R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))</span>
+                        <span class="c1"># transmission</span>
+                        <span class="k">else</span> <span class="p">:</span> 
+                            <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                            <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+                            
+
+                        <span class="c1"># apply current chain of symmetries</span>
+                        <span class="c1"># th is the current segment tail-head coordinates</span>
+                        <span class="c1"># tahe is a list of well mirrored tail-head coordinates</span>
+                        <span class="c1">#pdb.set_trace()</span>
+                        <span class="c1">#for r in R[::-1]: </span>
+                        <span class="c1">#for r in R:</span>
+                        <span class="c1">#    th = np.einsum(&#39;ki,ij-&gt;kj&#39;,th,r[0])+r[1]</span>
+                        <span class="c1">#pdb.set_trace()</span>
+                        <span class="n">ik</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="n">r</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">-</span><span class="n">ik</span><span class="p">]</span>
+                        <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>     
+                            <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ki,ij-&gt;kj&#39;</span><span class="p">,</span><span class="n">th</span><span class="p">,</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">ik</span> <span class="o">=</span> <span class="n">ik</span> <span class="o">+</span> <span class="mi">1</span>
+                            <span class="n">r</span>  <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">-</span><span class="n">ik</span><span class="p">]</span>
+                        <span class="c1">#vlp vrpdb.set_trace()</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">:</span>
+                            <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+                            <span class="n">valid_bool</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">pta0</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>   <span class="c1"># tail first segment</span>
+                            <span class="n">phe0</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># head first segment</span>
+                            <span class="n">pta_</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># tail last segment</span>
+                            <span class="n">phe_</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># head last segment </span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span> <span class="o">^</span>
+                                    <span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span> <span class="p">):</span>
+                                <span class="c1"># vr = (pta0,pta_)</span>
+                                <span class="c1"># vl = (phe0,phe_)</span>
+                                <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
+                                <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>  <span class="c1"># twisted case  </span>
+                                <span class="c1"># vr = (pta0,phe_)</span>
+                                <span class="c1"># vl = (phe0,pta_)</span>
+                                <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
+                                <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
+
+                            <span class="c1"># lta = geu.isleft(th[0][:,None],vl[0][:,None],vl[1][:,None])</span>
+                            <span class="c1"># rta = geu.isleft(th[0][:,None],vr[0][:,None],vr[1][:,None])</span>
+                            <span class="c1"># lhe = geu.isleft(th[1][:,None],vl[0][:,None],vl[1][:,None])</span>
+                            <span class="c1"># rhe = geu.isleft(th[1][:,None],vr[0][:,None],vr[1][:,None])</span>
+
+                            <span class="c1"># out = (lta &amp; lhe ) | (~rta &amp; ~rhe)</span>
+                            <span class="c1"># inside = ~out</span>
+                            <span class="c1">#if inside:   # new segment is inside the beam</span>
+                            
+                            <span class="n">linel</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">liner</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">seg</span>   <span class="o">=</span> <span class="p">(</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="c1">#pdb.set_trace()</span>
+                            <span class="n">kl</span><span class="p">,</span><span class="n">p_int_left</span>  <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">linel</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
+                            <span class="n">kr</span><span class="p">,</span><span class="n">p_int_right</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">liner</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
+                            <span class="n">valid_bool</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 0 intersection points </span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">kl</span><span class="o">*</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">th</span>
+                                    <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span> <span class="c1"># outside cone</span>
+                                    <span class="n">valid_bool</span> <span class="o">=</span> <span class="bp">False</span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 2 intersection points </span>
+                                <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_left</span><span class="p">,</span><span class="n">p_int_right</span><span class="p">))</span>
+                                <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)):</span>
+                                <span class="k">if</span> <span class="n">kr</span><span class="o">&lt;</span><span class="n">kl</span><span class="p">:</span>
+                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p_int_left</span><span class="p">))</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_left</span><span class="p">,</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                                <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)):</span>
+                                <span class="k">if</span> <span class="n">kl</span><span class="o">&lt;</span><span class="n">kr</span><span class="p">:</span>
+                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p_int_right</span><span class="p">))</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_right</span><span class="p">,</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                                <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
+                                
+                            
+                             
+                        <span class="k">if</span> <span class="n">valid_bool</span><span class="p">:</span>
+                            <span class="c1">#showsig2(visited,self.L,tahe)</span>
+                            <span class="c1">#pdb.set_trace()  </span>
+            
+                            <span class="c1"># sequence is valid and last interaction is in the list of targets   </span>
+                            <span class="k">if</span> <span class="n">interaction</span> <span class="ow">in</span> <span class="n">lit</span><span class="p">:</span>
+                                <span class="n">anstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">visited</span><span class="p">))</span>
+                                <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">visited</span><span class="p">))</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">anstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">anstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="n">cptsig</span> <span class="o">+=</span><span class="mi">1</span>
+                                <span class="c1">#print visited,len(stack),cptsig  </span>
+
+                            <span class="c1"># move forward even when arrived in the target cycle</span>
+                            
+                            <span class="n">outint</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]][</span><span class="n">interaction</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                            <span class="n">proint</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]][</span><span class="n">interaction</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                            <span class="c1">#nexti  = [it for k,it in enumerate(outint) if ((it[0]&gt;0) and (proint[k]&gt;threshold))]</span>
+                            <span class="n">nexti</span>  <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">it</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outint</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">proint</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">&gt;</span><span class="n">threshold</span><span class="p">)]</span>
+                            <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">nexti</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1">#ltahe = tahe+[th]</span>
+                            <span class="c1">#showsig2(visited,self.L,ltahe)</span>
+                            <span class="c1">#pdb.set_trace()  </span>
+                            <span class="c1"># go back</span>
+                            <span class="c1">#pdb.set_trace()</span>
+                            <span class="c1">#print visited</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                                    <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="n">last</span> <span class="o">=</span> <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="c1">#tahe.pop()</span>
+                            
+                            <span class="c1">#R.pop()</span>
+                            <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1">#print visited</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                            <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                    <span class="n">tahe</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                    <span class="c1">#R.pop()</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+            
+             
 
     <span class="k">def</span> <span class="nf">plot_cones</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; display cones of an unfolded signature</span>
@@ -2887,7 +3464,9 @@
     <span class="k">def</span> <span class="nf">pltunfold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">shapely.ops</span> <span class="kn">as</span> <span class="nn">sho</span>
         <span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
-
+        <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
         <span class="k">def</span> <span class="nf">plot_lines</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[]):</span>
             <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ob</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="p">[]:</span>
@@ -2927,6 +3506,7 @@
 
         <span class="n">poly</span><span class="o">=</span><span class="n">sho</span><span class="o">.</span><span class="n">polygonize</span><span class="p">(</span><span class="n">cross</span><span class="p">)</span>
         <span class="c1"># ax = plot_lines(ax,cross,color=&#39;b&#39;)</span>
+
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_poly</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">poly</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Signatures.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.show.html#pylayers.antprop.signature.Signatures.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -4435,7 +5015,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 24, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
