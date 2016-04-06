@@ -215,12 +215,7 @@ from pylayers.util.project import *
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.py:872: UserWarning: axes.color_cycle is deprecated and replaced with axes.prop_cycle; please use the latter.
-  warnings.warn(self.msg_depr % (key, alt_key))
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Warning : OSM Parser seems to be not installed
+<div class="highlight-python"><div class="highlight"><pre><span></span>Layout:Mayavi is not installed
 </pre></div>
 </div>
 </div>
@@ -285,6 +280,7 @@ in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Jimmy</span><span class="o">.</span><span class="n">osm</span>
+<span class="n">nonconvex</span><span class="o">.</span><span class="n">osm</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>%%bash
@@ -322,7 +318,7 @@ number of Segments : 124
 number of Sub-Segments : 30
 Gs Nodes :  229
 Gs Edges :  248
-Gt Nodes :  0
+Gt Nodes :  20
 Gt Edges :  0
 vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
 poly = Gt.node[Nc][&#39;cycle&#39;].polyg
@@ -335,22 +331,37 @@ Nc  = Gr.node[nroom][&#39;cycles&#39;]
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:root:punctual contact detected proceed in reverse order
-CRITICAL:root:contact detected reconsider the layout description
-WARNING:root:punctual contact detected proceed in reverse order
-CRITICAL:root:contact detected reconsider the layout description
-CRITICAL:root:second decompose run failed
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span>split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+split
+check len(ncycles) == 2 passed
 </pre></div>
 </div>
 <p>The topological graph <img src="../../_images/mathmpl/math-3604bc74d1.png" style="position: relative; bottom: -6px"/> or graph of non overlapping
@@ -409,11 +420,11 @@ number of Sub-Segments : 30
 Gs Nodes :  238
 Gs Edges :  266
 Gt Nodes :  30
-Gt Edges :  75
+Gt Edges :  76
 vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
 poly = Gt.node[Nc][&#39;cycle&#39;].polyg
-Gr Nodes    : 23
-Gr Edges    : 22
+Gr Nodes    : 24
+Gr Edges    : 21
 Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </pre></div>
 </div>
@@ -578,11 +589,11 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b5273dfca10&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b5273dc2090&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2abeff449690&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2abeff549990&gt;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b5273dfca90&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2abeff54e4d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LayoutEditor_77_2.png" src="../../_images/LayoutEditor_77_2.png" />
@@ -658,7 +669,7 @@ a segment (wall,door,window,...).</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/LayoutEditor.txt"

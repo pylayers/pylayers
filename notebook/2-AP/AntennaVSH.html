@@ -136,27 +136,6 @@ from pylayers.antprop.antvsh import *
 <div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-ImportError                               Traceback (most recent call last)
-
-&lt;ipython-input-1-8b1bd9b086f4&gt; in &lt;module&gt;()
-      1 from pylayers.antprop.antenna import *
-----&gt; 2 from pylayers.antprop.antvsh import *
-      3 get_ipython().magic(u&#39;matplotlib inline&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antvsh.py in &lt;module&gt;()
-     12 import pylayers.antprop.antenna as ant
-     13 from pylayers.antprop.spharm import *
----&gt; 14 from sphere import spherepack, Wrapec, mathtogeo
-     15 import numpy as np
-     16
-
-
-ImportError: No module named sphere
-</pre></div>
-</div>
 <p>Loading an Antenna from a Matlab file</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;S2R2.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s1">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
 </pre></div>
@@ -205,9 +184,11 @@ in <img src="../../_images/mathmpl/math-2af81ea4e1.png" style="position: relativ
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;f index&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b4a0af26250&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b9288417090&gt;
 </pre></div>
 </div>
+<img alt="../../_images/AntennaVSH_13_1.png" src="../../_images/AntennaVSH_13_1.png" />
+<img alt="../../_images/AntennaVSH_13_2.png" src="../../_images/AntennaVSH_13_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tau</span><span class="o">=</span><span class="mf">4.185</span>
 <span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
 </pre></div>
@@ -220,9 +201,11 @@ in <img src="../../_images/mathmpl/math-2af81ea4e1.png" style="position: relativ
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">,:])))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x2b4a0b0d4790&gt;]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x2b928843b8d0&gt;]
 </pre></div>
 </div>
+<img alt="../../_images/AntennaVSH_15_1.png" src="../../_images/AntennaVSH_15_1.png" />
+<img alt="../../_images/AntennaVSH_15_2.png" src="../../_images/AntennaVSH_15_2.png" />
 <div class="section" id="display-of-the-radiation-pattern-for-all-frequencies">
 <h2>Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -230,6 +213,7 @@ in <img src="../../_images/mathmpl/math-2af81ea4e1.png" style="position: relativ
     <span class="n">plt</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[</span><span class="mi">45</span><span class="p">,:,</span><span class="n">nf</span><span class="p">]))</span>
 </pre></div>
 </div>
+<img alt="../../_images/AntennaVSH_17_0.png" src="../../_images/AntennaVSH_17_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -256,17 +240,6 @@ No vsh coefficient calculated yet
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">=</span><span class="n">vsh</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-13-aab26d118494&gt; in &lt;module&gt;()
-----&gt; 1 A=vsh(A)
-
-
-NameError: name &#39;vsh&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -288,73 +261,80 @@ No vsh coefficient calculated yet
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-15-98aa5dfbfef3&gt; in &lt;module&gt;()
-----&gt; 1 A.C.s1tos2(30)
-
-
-AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>Br
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 
-AttributeError                            Traceback (most recent call last)
+Bi
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 
-&lt;ipython-input-16-ea02b37ef526&gt; in &lt;module&gt;()
-----&gt; 1 A.C
+Cr
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 
-
-AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
+Ci
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-17-a2dac715dfe4&gt; in &lt;module&gt;()
-      1 fig = plt.figure(figsize=(8,8))
-----&gt; 2 A.C.show(&#39;s2&#39;,k=300)
-
-
-AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
-</pre></div>
-</div>
+<img alt="../../_images/AntennaVSH_25_0.png" src="../../_images/AntennaVSH_25_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-18-34ddad199ddd&gt; in &lt;module&gt;()
-----&gt; 1 A.C.s2tos3()
-
-
-AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>Br
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 
-AttributeError                            Traceback (most recent call last)
+Bi
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 
-&lt;ipython-input-19-ea02b37ef526&gt; in &lt;module&gt;()
-----&gt; 1 A.C
+Cr
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 
-
-AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
+Ci
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
@@ -362,19 +342,7 @@ AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-20-627adf1c1577&gt; in &lt;module&gt;()
-      1 fig = plt.figure(figsize=(8,8))
-----&gt; 2 A.C.show(&#39;s3&#39;)
-      3 plt.tight_layout()
-
-
-AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
-</pre></div>
-</div>
+<img alt="../../_images/AntennaVSH_28_0.png" src="../../_images/AntennaVSH_28_0.png" />
 </div>
 
 
@@ -388,7 +356,7 @@ AttributeError: &#39;Antenna&#39; object has no attribute &#39;C&#39;
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 24, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/AntennaVSH.txt"

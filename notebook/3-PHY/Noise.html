@@ -153,9 +153,9 @@ DSP : -174 dBm/Hz
 -------------
 Noise Figure : 0 dB
 Vrms : 9.97631157484e-05 Volts
-Variance : 9.94012046425e-09 V^2
+Variance : 9.51113272612e-09 V^2
 Power (dBm) /50 Ohms : -157.010299957 dBm
-Power realized /50 Ohms : -157.015783567 dBm
+Power realized /50 Ohms : -157.207377621 dBm
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
@@ -181,29 +181,13 @@ AttributeError: &#39;Noise&#39; object has no attribute &#39;psd&#39;
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-IndexError                                Traceback (most recent call last)
+TypeError                                 Traceback (most recent call last)
 
 &lt;ipython-input-6-0901d96562a6&gt; in &lt;module&gt;()
 ----&gt; 1 w2 = w.fgating(fcGHz=4,BGHz=3)
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in fgating(self, fcGHz, BGHz, window)
-   3616         else:
-   3617             parity = 1
--&gt; 3618         U = N.unrex()
-   3619         f = U.x
-   3620         f1 = fcGHz - BGHz / 2.
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in unrex(self)
-   3411         if np.mod(N, 2) == 0:
-   3412             xu = self.x[1:(N + 2) / 2]
--&gt; 3413             yu = self.y[:,1:(N + 2) / 2]
-   3414         # odd case
-   3415         else:
-
-
-IndexError: too many indices for array
+TypeError: fgating() got an unexpected keyword argument &#39;BGHz&#39;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">W2</span><span class="o">=</span><span class="n">w2</span><span class="o">.</span><span class="n">psd</span><span class="p">()</span>
@@ -225,8 +209,8 @@ NameError: name &#39;w2&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">w</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9921022f10&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9920ede390&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6ba4843090&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b6ba486b250&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/Noise_10_1.png" src="../../_images/Noise_10_1.png" />
@@ -282,7 +266,7 @@ NameError: name &#39;ip&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Noise.txt"

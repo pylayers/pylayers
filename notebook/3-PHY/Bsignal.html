@@ -109,7 +109,7 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">Handling time and frequency domain signals : <code class="docutils literal"><span class="pre">Bsignal</span></code> Class</a><ul>
-<li><a class="reference internal" href="#fhsignal-for-in-cir-mode">FHsignal for in CIR mode</a></li>
+<li><a class="reference internal" href="#fhsignal-in-cir-mode">FHsignal in CIR mode</a></li>
 </ul>
 </li>
 </ul>
@@ -142,153 +142,52 @@ be either in time domain or frequency domain.</p>
 <p>As a first example, let construct an impulse signal normalized in
 energy. To do so there exist a specialized function :
 <code class="docutils literal"><span class="pre">`EnImpulse</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo">http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo</a>&gt;`__</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">=</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">fe</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-3-aa7406c5738b&gt; in &lt;module&gt;()
-----&gt; 1 E=EnImpulse(fe=40)
-
-
-NameError: name &#39;EnImpulse&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">E</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-4-8dbb63703b88&gt; in &lt;module&gt;()
-----&gt; 1 print E.energy()
-
-
-NameError: name &#39;E&#39; is not defined
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">=</span><span class="n">TUsignal</span><span class="p">()</span>
+<span class="n">E</span><span class="o">.</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">feGHz</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-5-9f7a16f65703&gt; in &lt;module&gt;()
-----&gt; 1 E.plot(typ=&#39;v&#39;)
-
-
-NameError: name &#39;E&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d0558e790&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d055a12d0&gt;]], dtype=object))
 </pre></div>
 </div>
+<img alt="../../_images/Bsignal_7_1.png" src="../../_images/Bsignal_7_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-6-0fd52b52ad32&gt; in &lt;module&gt;()
-----&gt; 1 E.energy()
-
-
-NameError: name &#39;E&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000008</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>The Fourier transform of this signal has the hermitian Symmetry.</p>
+<p>The Fourier transform of this signal exhibits the Hermitian Symmetry.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
 <span class="n">F</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-7-d6500b4ff58a&gt; in &lt;module&gt;()
-----&gt; 1 F = E.fft()
-      2 F.plot(typ=&#39;m&#39;)
-
-
-NameError: name &#39;E&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d07c0f410&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d07c87f10&gt;]], dtype=object))
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-8-a3ec08f56226&gt; in &lt;module&gt;()
-----&gt; 1 F.y[0]
-
-
-NameError: name &#39;F&#39; is not defined
-</pre></div>
-</div>
+<img alt="../../_images/Bsignal_10_1.png" src="../../_images/Bsignal_10_1.png" />
 <p>We then extract the non redundant part of the signal with the <code class="docutils literal"><span class="pre">ft</span></code>
 method</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">G</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">ft</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-9-d4e4ca97ebda&gt; in &lt;module&gt;()
-----&gt; 1 G=E.ft()
-
-
-NameError: name &#39;E&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">GH</span><span class="o">=</span><span class="n">G</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;extract&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-10-e9dc0e1ba8d8&gt; in &lt;module&gt;()
-----&gt; 1 GH=G.symHz(100,scale=&#39;extract&#39;)
-
-
-NameError: name &#39;G&#39; is not defined
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">GH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">GH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">GH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">GH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">0.0014441784194</span><span class="o">-</span><span class="mf">4.88037298122e-05j</span><span class="p">)</span>
+<span class="p">(</span><span class="o">-</span><span class="mf">0.0014441784194</span><span class="o">+</span><span class="mf">4.88037298122e-05j</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-11-93f5cb675c6d&gt; in &lt;module&gt;()
-----&gt; 1 print GH.y[1]
-      2 print GH.y[-1]
-
-
-NameError: name &#39;GH&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ip</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
-<span class="n">ip2</span><span class="o">=</span><span class="n">GH</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-12-a11b54673c68&gt; in &lt;module&gt;()
-----&gt; 1 ip=F.ifft()
-      2 ip2=GH.ifft()
-
-
-NameError: name &#39;F&#39; is not defined
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ip</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
+<span class="n">ip2</span><span class="o">=</span> <span class="n">GH</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">])</span>
@@ -297,83 +196,44 @@ NameError: name &#39;F&#39; is not defined
 <span class="n">title</span><span class="p">(</span><span class="s1">&#39;extract mode&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-13-883c18d72357&gt; in &lt;module&gt;()
-----&gt; 1 f,a=E.plot(typ=&#39;v&#39;,labels=[&#39;original&#39;])
-      2 f,a=ip.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;no zero padding&#39;])
-      3 f,a=ip2.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;zero padding&#39;])
-      4 title(&#39;extract mode&#39;)
-
-
-NameError: name &#39;E&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b9d07de6710&gt;
 </pre></div>
 </div>
+<img alt="../../_images/Bsignal_16_1.png" src="../../_images/Bsignal_16_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ip</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-14-381d0b727c74&gt; in &lt;module&gt;()
-----&gt; 1 ip.energy()
-
-
-NameError: name &#39;ip&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000008</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ip2</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-15-78dac4d4a6c8&gt; in &lt;module&gt;()
-----&gt; 1 ip2.energy()
-
-
-NameError: name &#39;ip2&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">3.18478273</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Y</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-16-67b72beeca17&gt; in &lt;module&gt;()
-----&gt; 1 Y=E.esd()
-
-
-NameError: name &#39;E&#39; is not defined
-</pre></div>
-</div>
-<div class="section" id="fhsignal-for-in-cir-mode">
-<h2>FHsignal for in CIR mode<a class="headerlink" href="#fhsignal-for-in-cir-mode" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fhsignal-in-cir-mode">
+<h2>FHsignal in CIR mode<a class="headerlink" href="#fhsignal-in-cir-mode" title="Permalink to this headline">¶</a></h2>
 <p>We create a Fusignal which corresponds to the signal</p>
-<img src="../../_images/mathmpl/math-1b7ffcc130.png" class="center" /><img src="../../_images/mathmpl/math-68d5044302.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<span class="n">Hu</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">N</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">800</span>
+<img src="../../_images/mathmpl/math-1b7ffcc130.png" class="center" /><img src="../../_images/mathmpl/math-68d5044302.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
+<span class="n">Hu</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">Hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b78e57acdd0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b78e580cc10&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d07d09d10&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d083a92d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_27_1.png" src="../../_images/Bsignal_27_1.png" />
+<img alt="../../_images/Bsignal_25_1.png" src="../../_images/Bsignal_25_1.png" />
+<img alt="../../_images/Bsignal_25_2.png" src="../../_images/Bsignal_25_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">hu</span> <span class="o">=</span> <span class="n">Hu</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -382,75 +242,15 @@ NameError: name &#39;E&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b78e58e3650&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b78e5862850&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d07d6a590&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d07cfed50&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_30_1.png" src="../../_images/Bsignal_30_1.png" />
+<img alt="../../_images/Bsignal_28_1.png" src="../../_images/Bsignal_28_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">real</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">tau</span> <span class="o">=</span> <span class="n">hu</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
-<span class="k">print</span> <span class="n">alpha</span><span class="p">,</span><span class="n">tau</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[[  4.27928449e-14   4.45602724e-14   4.66296795e-14 ...,   3.83028329e-14
-    3.93775414e-14   4.10699754e-14]
- [  4.27928449e-14   4.45602724e-14   4.66296795e-14 ...,   3.83028329e-14
-    3.93775414e-14   4.10699754e-14]
- [  4.27928449e-14   4.45602724e-14   4.66296795e-14 ...,   3.83028329e-14
-    3.93775414e-14   4.10699754e-14]
- ...,
- [  4.27928449e-14   4.45602724e-14   4.66296795e-14 ...,   3.83028329e-14
-    3.93775414e-14   4.10699754e-14]
- [  4.27928449e-14   4.45602724e-14   4.66296795e-14 ...,   3.83028329e-14
-    3.93775414e-14   4.10699754e-14]
- [  4.27928449e-14   4.45602724e-14   4.66296795e-14 ...,   3.83028329e-14
-    3.93775414e-14   4.10699754e-14]] [ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.
-  0.  0.  0.  0.  0.  0.  0.  0.]
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">Hu</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;cir&#39;</span><span class="p">)</span>
@@ -459,72 +259,49 @@ NameError: name &#39;E&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b78e59613d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b78e5ad04d0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d084c7810&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d08477390&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_33_1.png" src="../../_images/Bsignal_33_1.png" />
+<img alt="../../_images/Bsignal_31_1.png" src="../../_images/Bsignal_31_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b78e5a34d10&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b78e5a8ac90&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d085f3cd0&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d08535590&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_35_1.png" src="../../_images/Bsignal_35_1.png" />
+<img alt="../../_images/Bsignal_33_1.png" src="../../_images/Bsignal_33_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">real</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">tau</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
-<span class="k">print</span> <span class="n">alpha</span><span class="p">,</span><span class="n">tau</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[[  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- ...,
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]] [-49.97728305 -49.97728305 -49.97728305 ..., -49.97728305 -49.97728305
- -49.97728305]
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="o">-</span><span class="mf">1.93565190e-15</span> <span class="o">-</span><span class="mf">1.70240923e-19j</span><span class="p">,</span>
-          <span class="mf">2.62295322e-04</span> <span class="o">-</span><span class="mf">3.27871407e-19j</span><span class="p">,</span>
-          <span class="mf">8.73458329e-04</span> <span class="o">-</span><span class="mf">4.09839258e-20j</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
-         <span class="o">-</span><span class="mf">1.06670199e-04</span> <span class="o">+</span><span class="mf">2.90350482e-19j</span><span class="p">,</span>
-         <span class="o">-</span><span class="mf">8.69428086e-04</span> <span class="o">-</span><span class="mf">1.58117458e-18j</span><span class="p">,</span>
-         <span class="o">-</span><span class="mf">5.31550980e-05</span> <span class="o">-</span><span class="mf">2.71727936e-20j</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="o">-</span><span class="mf">1.50593859e-15</span> <span class="o">-</span><span class="mf">6.41964563e-20j</span><span class="p">,</span>
+          <span class="mf">1.22745263e-04</span> <span class="o">-</span><span class="mf">1.36427337e-19j</span><span class="p">,</span>
+          <span class="mf">8.94216494e-05</span> <span class="o">-</span><span class="mf">1.03247967e-19j</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
+          <span class="mf">1.05839739e-05</span> <span class="o">+</span><span class="mf">7.80645228e-20j</span><span class="p">,</span>
+         <span class="o">-</span><span class="mf">1.37135712e-04</span> <span class="o">-</span><span class="mf">1.94405223e-19j</span><span class="p">,</span>
+          <span class="mf">8.17123442e-05</span> <span class="o">+</span><span class="mf">3.02799103e-19j</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">203</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">203</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">203</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="o">-</span><span class="mi">203</span><span class="p">]</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-IndexError                                Traceback (most recent call last)
-
-&lt;ipython-input-28-4b5e7dcf9b6a&gt; in &lt;module&gt;()
-----&gt; 1 print H.y[203]
-      2 print H.y[-203]
-      3 len(H.y)
-
-
-IndexError: index 203 is out of bounds for axis 0 with size 1
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">0.10108118</span><span class="o">-</span><span class="mf">0.07343977j</span><span class="p">]</span>
+<span class="p">[</span><span class="o">-</span><span class="mf">0.10108118</span><span class="o">+</span><span class="mf">0.07343977j</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">1</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Y</span><span class="o">=</span><span class="n">h</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
@@ -533,11 +310,11 @@ IndexError: index 203 is out of bounds for axis 0 with size 1
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b78e5c57ad0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b78e5c57110&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b9d086b7050&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b9d086919d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_40_1.png" src="../../_images/Bsignal_40_1.png" />
+<img alt="../../_images/Bsignal_38_1.png" src="../../_images/Bsignal_38_1.png" />
 </div>
 </div>
 
@@ -552,7 +329,7 @@ IndexError: index 203 is out of bounds for axis 0 with size 1
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Bsignal.txt"

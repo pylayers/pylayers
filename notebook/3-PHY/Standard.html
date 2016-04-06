@@ -133,7 +133,7 @@ class which handles wireless standards is <code class="docutils literal"><span c
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ws1</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ieee80211g</span> <span class="p">,</span>  <span class="n">ieee80211b</span> <span class="p">,</span>  <span class="n">ieee80211a</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class3</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class2</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class1</span> <span class="p">,</span>  <span class="n">ieee80211ah</span> <span class="p">,</span>  <span class="n">ieee802116UWB</span> <span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ieee80211g</span> <span class="p">,</span>  <span class="n">ieee80211b</span> <span class="p">,</span>  <span class="n">ieee80211a</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class3</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class2</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class1</span> <span class="p">,</span>  <span class="n">ieee80211ah</span> <span class="p">,</span>  <span class="n">ieee802154</span> <span class="p">,</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">wifi</span><span class="o">=</span> <span class="n">ws1</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;ieee80211b&#39;</span><span class="p">)</span>
@@ -165,24 +165,45 @@ class which handles wireless standards is <code class="docutils literal"><span c
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ws2</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s1">&#39;ieee80211g&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-7-c21d9b04bd47&gt; in &lt;module&gt;()
+----&gt; 1 ws2 = std.Wstandard(&#39;ieee80211g&#39;)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/standard.pyc in __init__(self, stdname, _filejson)
+    227         self.name = stdname
+    228         if stdname != &#39;&#39;:
+--&gt; 229             self.load(stdname)
+    230
+    231     def __repr__(self):
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/standard.pyc in load(self, stdname, _fileini)
+    272                 for k in chan:
+    273                     bandname = k
+--&gt; 274                     fstart=chan[k][&#39;fstart&#39;]
+    275                     fstop =chan[k][&#39;fstop&#39;]
+    276                     smhz =chan[k][&#39;smhz&#39;]
+
+
+TypeError: &#39;int&#39; object has no attribute &#39;__getitem__&#39;
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ws2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>ieee80211g
--------------------------
-1 :  2.412 : [2.401,2.423]
-2 :  2.417 : [2.406,2.428]
-3 :  2.422 : [2.411,2.433]
-4 :  2.427 : [2.416,2.438]
-5 :  2.432 : [2.421,2.443]
-6 :  2.437 : [2.426,2.448]
-7 :  2.442 : [2.431,2.453]
-8 :  2.447 : [2.436,2.458]
-9 :  2.452 : [2.441,2.463]
-10 :  2.457 : [2.446,2.468]
-11 :  2.462 : [2.451,2.473]
-12 :  2.467 : [2.456,2.478]
-13 :  2.472 : [2.461,2.483]
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-8-8be99413ae52&gt; in &lt;module&gt;()
+----&gt; 1 ws2
+
+
+NameError: name &#39;ws2&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ws3</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s1">&#39;ieee80211a&#39;</span><span class="p">)</span>
@@ -293,7 +314,7 @@ class which handles wireless standards is <code class="docutils literal"><span c
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Standard.txt"
