@@ -1,5 +1,5 @@
 # PyLayers 
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/logo.png" width="150">
+<img src="https://github.com/pylayers/doc/tree/master/_static/logo.png" width="150">
 
 
 PyLayers an Open Source Site Specific Radio Channel Simulator for 
