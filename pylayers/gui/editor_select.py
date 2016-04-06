@@ -334,9 +334,10 @@ class SelectL2(object):
 
             shpt = sh.Point(x,y)
             
-            ucy =np.where([self.L.Gt.node[c]['polyg'].contains(shpt) for c in self.L.Gt.nodes()])[0]
+            ucy =np.where([self.L.Gt.node[c]['polyg'].contains(shpt) for c in self.L.Gt.nodes() if c >0])[0]
             if len(ucy)!=0:
-                self.ncy = self.L.Gt.nodes()[ucy]
+
+                self.ncy = self.L.Gt.nodes()[ucy+1]
             else:
                 self.ncy=0
 

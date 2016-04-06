@@ -1336,6 +1336,7 @@ class DLink(Link):
             self.load(R,self.dexist['ray']['grpname'])
 
         else :
+
             # perform computation ...
             # ... with vetorized ray evaluation approach
             if kwargs['ra_vectorized']:
