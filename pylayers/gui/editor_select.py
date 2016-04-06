@@ -217,10 +217,11 @@ class SelectL2(object):
 
         if len(lcy)>0:
             for c in lcy:
-                self.L.Gt.node[c]['polyg'].plot(fig=self.fig,
-                                                 ax=self.ax,
-                                                 color=color,
-                                                 alpha=alpha)
+                if c >0:
+                    self.L.Gt.node[c]['polyg'].plot(fig=self.fig,
+                                                     ax=self.ax,
+                                                     color=color,
+                                                     alpha=alpha)
             self.fig.canvas.draw()
         return self.fig,self.ax
 
@@ -336,8 +337,10 @@ class SelectL2(object):
             
             ucy =np.where([self.L.Gt.node[c]['polyg'].contains(shpt) for c in self.L.Gt.nodes() if c >0])[0]
             if len(ucy)!=0:
-
-                self.ncy = self.L.Gt.nodes()[ucy+1]
+                if 0 in self.L.Gs.nodes():
+                    self.ncy = self.L.Gt.nodes()[ucy+1]
+                else:
+                    self.ncy = self.L.Gt.nodes()[ucy]
             else:
                 self.ncy=0
 
