@@ -193,7 +193,7 @@ cross(u,v) 0.707106781187
 <span class="c1">#plt.axis(&#39;off&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b7e9bad8550&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2b8da2271f50&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Cone_13_1.png" src="../../_images/Cone_13_1.png" />
@@ -226,8 +226,8 @@ cross(u,v) 0.707106781187
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b7e75926a50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b7e9b47e590&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b8d9fdfed90&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b8d721e64d0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Cone_20_1.png" src="../../_images/Cone_20_1.png" />
@@ -251,7 +251,7 @@ cross(u,v) 0.707106781187
 <span class="c1">#plt.axis(&#39;off&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Cone_24_1.png" src="../../_images/Cone_24_1.png" />
@@ -268,7 +268,8 @@ cross(u,v) 0.707106781187
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>%timeit b=Cs.belong_point(p)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>10000 loops, best of 3: 109 µs per loop
+<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 6.43 times longer than the fastest. This could mean that an intermediate result is being cached.
+10000 loops, best of 3: 106 µs per loop
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#nb = np.array(map(lambda x: not x,bo))</span>
@@ -301,7 +302,7 @@ implemented in the method <code class="docutils literal"><span class="pre">Cone.
 <span class="c1">#plt.axis(&#39;off&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Cone_31_1.png" src="../../_images/Cone_31_1.png" />
@@ -316,8 +317,8 @@ Une signature et un point donne un <code class="docutils literal"><span class="p
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b7e9bbbf4d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b7e9bccaf90&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b8da250c750&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b8da2416790&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Cone_34_1.png" src="../../_images/Cone_34_1.png" />
@@ -347,8 +348,8 @@ Une signature et un point donne un <code class="docutils literal"><span class="p
 <span class="c1">#displot(pta[:,bs],phe[:,bs],color=&#39;blue&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b7e9bccae10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b7e9bc78ed0&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b8da31815d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b8da313b050&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Cone_37_1.png" src="../../_images/Cone_37_1.png" />
@@ -398,8 +399,8 @@ yet.</p>
 <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b7e9c62ba50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b7e9c5c5410&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b8da2420d10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b8da313b210&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Cone_47_1.png" src="../../_images/Cone_47_1.png" />
@@ -411,22 +412,22 @@ yet.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>%timeit a/np.sqrt(np.dot(a,a))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 11.13 times longer than the fastest. This could mean that an intermediate result is being cached
-100000 loops, best of 3: 5.4 µs per loop
+<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 8.16 times longer than the fastest. This could mean that an intermediate result is being cached.
+100000 loops, best of 3: 4.88 µs per loop
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>%timeit a/sp.linalg.norm(a)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 6.31 times longer than the fastest. This could mean that an intermediate result is being cached
-100000 loops, best of 3: 11.4 µs per loop
+<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 6.72 times longer than the fastest. This could mean that an intermediate result is being cached.
+100000 loops, best of 3: 9.65 µs per loop
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>%timeit a/np.sqrt(np.sum(a*a,axis=0))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 5.81 times longer than the fastest. This could mean that an intermediate result is being cached
-100000 loops, best of 3: 10 µs per loop
+<div class="highlight-python"><div class="highlight"><pre><span></span>The slowest run took 4.93 times longer than the fastest. This could mean that an intermediate result is being cached.
+100000 loops, best of 3: 9.54 µs per loop
 </pre></div>
 </div>
 </div>
@@ -517,94 +518,94 @@ NameError: name &#39;array&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">proba</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.51645277</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.01724752</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.10498244</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.12834388</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.98328489</span><span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.64126028</span><span class="p">,</span>  <span class="mf">0.80601937</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.60711101</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.13061152</span><span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.37654316</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.48573254</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.07459957</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.84382463</span><span class="p">,</span>  <span class="mf">0.42148211</span><span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.12860128</span><span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.88727616</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.61624254</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.30597098</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.59967647</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.97801319</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.07398923</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.63906749</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.01383698</span><span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.18847182</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.05744027</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.76873907</span><span class="p">,</span>  <span class="mf">0.1480276</span> <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.59913756</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.70409614</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.53280277</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.75685669</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.02961765</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.3281306</span> <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.46962126</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.70174533</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.2693165</span> <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.36991486</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.57617797</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.81490267</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.0097277</span> <span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.19071273</span><span class="p">,</span>
         <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.07068713</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">])</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">cn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bn</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bn</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b7e9bd74d10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b7e9bcce450&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b8da3357450&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b8da3489850&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Cone_63_1.png" src="../../_images/Cone_63_1.png" />
@@ -616,8 +617,8 @@ NameError: name &#39;array&#39; is not defined
 <span class="n">displot</span><span class="p">(</span><span class="n">pta1</span><span class="p">,</span><span class="n">phe1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b7e9bc782d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b7e9c7db3d0&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b8da3587d10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b8da3591bd0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Cone_65_1.png" src="../../_images/Cone_65_1.png" />
@@ -636,10 +637,10 @@ NameError: name &#39;array&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">M</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.98407061</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.81500137</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.50360835</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.92555712</span><span class="p">,</span>
-        <span class="o">-</span><span class="mf">1.38898374</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.69642201</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">0.46293585</span><span class="p">,</span>  <span class="mf">1.2273525</span> <span class="p">,</span> <span class="o">-</span><span class="mf">1.55776842</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">0.19543448</span><span class="p">,</span>
-        <span class="o">-</span><span class="mf">1.1149496</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.30172968</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.95213575</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.92663038</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.41836739</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.86016358</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">1.68726104</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.11654995</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.34091807</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.31914793</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.18926891</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">0.86315627</span><span class="p">,</span>
+         <span class="mf">0.83181209</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.46015444</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
@@ -720,7 +721,8 @@ which is subtended by the intercepted segment.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>[ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
   1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
   1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
-  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
 </pre></div>
 </div>
 <img alt="../../_images/Cone_78_1.png" src="../../_images/Cone_78_1.png" />
@@ -733,14 +735,11 @@ which is subtended by the intercepted segment.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u2</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[ 0.35931122  0.66487653  0.80910189  0.2761296   0.5302222   0.31605905
-  0.74379588  0.15018657  0.0439594   0.18826348  0.65478869  0.93385052
-  0.56248801  0.33953615  0.48321161  0.83959321  0.57764768  0.54249469
-  0.90529419  0.95450292  0.08875145  0.10296546  0.66082788  0.35349847
-  0.56633997  0.13556597  0.09221017  0.75130472  0.84101854  0.28394335
-  0.72937929  0.175058    0.21434325  0.90355325  0.89456945  0.92610559
-  0.15410348  0.23334137  0.60070738  0.06296431  0.00264978  0.20111354
-  0.74485869  0.06285293  0.07243683  0.45004652  0.74941045  0.05868338]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[ 0.09765695  0.7471172   0.37631341  0.09134127  0.8107929   0.02740472
+  0.01155886  0.43371337  0.57482972  0.81665712  0.09720132  0.96918426
+  0.32940117  0.19930752  0.22127924  0.33946677  0.72901486  0.28132239
+  0.24382297  0.09193293  0.83508063  0.55212659  0.0847907   0.25187003
+  0.60830125  0.88909621  0.11755991  0.96715141  0.06429485]
 </pre></div>
 </div>
 <img alt="../../_images/Cone_79_1.png" src="../../_images/Cone_79_1.png" />
@@ -752,11 +751,12 @@ which is subtended by the intercepted segment.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u3</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[ 0.23363207  0.82863008  0.23262161  0.05314741  0.68904939  0.60259803
-  0.21984     0.44048058  0.94248177  0.9621069   0.03803966  0.60541124
-  0.96234325  0.43372256  0.85988477  0.70098066  0.0031827   0.48202015
-  0.25224966  0.70601304  0.18365038  0.45407095  0.84410062  0.8145836
-  0.34256545  0.21309208  0.78909572  0.00165233  0.30628545  0.06123   ]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[ 0.24390893  0.91534494  0.38011268  0.93977795  0.49295148  0.6531122
+  0.77907516  0.09083322  0.81165485  0.03616402  0.29557555  0.86111473
+  0.8210745   0.13908704  0.19076096  0.06951564  0.64362376  0.28828787
+  0.66350535  0.57403557  0.79200419  0.68915284  0.97868987  0.36929148
+  0.30572578  0.5364374   0.44502893  0.55027637  0.06697602  0.01464838
+  0.63885564  0.2872956   0.75582834  0.58048507]
 </pre></div>
 </div>
 <img alt="../../_images/Cone_80_1.png" src="../../_images/Cone_80_1.png" />
@@ -768,10 +768,9 @@ which is subtended by the intercepted segment.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u4</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[ 0.8110369   0.79940319  0.07248906  0.0703959   0.97561353  0.36718292
-  0.28886207  0.42983429  0.37259248  0.95470214  0.63287892  0.18140387
-  0.11312643  0.28030864  0.33089179  0.02813643  0.78225577  0.08365481
-  0.58881765  0.53255908  0.95454359]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[  7.56335012e-01   6.41774363e-01   7.40926394e-01   3.33228564e-02
+   7.92943111e-03   2.72642928e-04   7.36840265e-01   9.33150163e-01
+   9.83228643e-01   6.67982410e-01   6.65751859e-01   3.26300612e-01]
 </pre></div>
 </div>
 <img alt="../../_images/Cone_81_1.png" src="../../_images/Cone_81_1.png" />
@@ -805,7 +804,7 @@ which is subtended by the intercepted segment.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/8-MISC/Cone.txt"

@@ -149,7 +149,10 @@ import matplotlib.pyplot as plt
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>Layout:Mayavi is not installed
+mayavi not installed
+Layout:Mayavi is not installed
+Layout:Mayavi is not installed
 </pre></div>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
@@ -183,7 +186,7 @@ run a full simulation and returns a list of channel impulse response.</p>
     <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
     <span class="k">for</span> <span class="n">kr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrx</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mod</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
             <span class="k">print</span> <span class="n">kr</span><span class="o">+</span><span class="mi">1</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
@@ -219,7 +222,8 @@ run a full simulation and returns a list of channel impulse response.</p>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>new file WHERE1.str
+<div class="highlight-python"><div class="highlight"><pre><span></span>check len(ncycles) == 2 ... passed !
+check x,y = Gs.node[seg][&#39;ncycles&#39;] ; seg in Gt[x][y][&#39;segment&#39;] ... passed !
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
@@ -272,7 +276,7 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x2b378de56a10&gt;]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x2b4c94771d90&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/DLR-WHERE2_13_1.png" src="../../_images/DLR-WHERE2_13_1.png" />
@@ -295,8 +299,8 @@ along direction <code class="docutils literal"><span class="pre">vec</span></cod
 <div class="highlight-python"><div class="highlight"><pre><span></span>Warning : no furniture file loaded
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b378dad5350&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b378de86550&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b4c944617d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b4c944ca850&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/DLR-WHERE2_18_2.png" src="../../_images/DLR-WHERE2_18_2.png" />
@@ -307,7 +311,29 @@ along direction <code class="docutils literal"><span class="pre">vec</span></cod
 </div>
 <img alt="../../_images/DLR-WHERE2_20_0.png" src="../../_images/DLR-WHERE2_20_0.png" />
 <p>running the simulation</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#tcir = evalcir(S,wav,cutoff=4)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-12-efbe84644bc4&gt; in &lt;module&gt;()
+----&gt; 1 tcir = evalcir(S,wav,cutoff=4)
+
+
+&lt;ipython-input-2-3dd30752409b&gt; in evalcir(S, wav, cutoff)
+     36             ctxp = ctx
+     37             crxp = crx
+---&gt; 38             Si.run5(cutoff=cutoff,algo
+     39 =&#39;old&#39;)
+     40         r2d = Si.rays(t,r)
+
+
+AttributeError: &#39;Signatures&#39; object has no attribute &#39;run5&#39;
 </pre></div>
 </div>
 <p>Saving the data in pickle format</p>
@@ -362,8 +388,8 @@ along direction <code class="docutils literal"><span class="pre">vec</span></cod
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b378e71ac90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b378de92790&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b4c97873850&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b4c97873ad0&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/DLR-WHERE2_30_1.png" src="../../_images/DLR-WHERE2_30_1.png" />
@@ -389,7 +415,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b378df08510&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b4c9437ca10&gt;
 </pre></div>
 </div>
 <img alt="../../_images/DLR-WHERE2_31_2.png" src="../../_images/DLR-WHERE2_31_2.png" />
@@ -428,7 +454,7 @@ NameError: name &#39;xlabel&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/DLR-WHERE2.txt"

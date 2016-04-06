@@ -204,10 +204,37 @@ environement.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-5-f276c4ba72a7&gt; in &lt;module&gt;()
+      2 points  = shg.MultiPoint([(0, 0), (0, 1), (2.5,1), (2.5, 2),                                           (2.8,2), (2.8, 1.1), (3.2, 1.1),                                           (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+      3 polyg   = Polygon(points)
+----&gt; 4 Gv      = polyg.buildGv(show=True)
+      5 plt.axis(&#39;off&#39;)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/geomutil.pyc in buildGv(self, **kwargs)
+   1274         #
+   1275         if kwargs[&#39;show&#39;]:
+-&gt; 1276             points1 = shg.MultiPoint(lring)
+   1277             for k, pt in enumerate(points1):
+   1278                 if k in uconvex:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/shapely/geometry/multipoint.pyc in __init__(self, points)
+     54         super(MultiPoint, self).__init__()
+     55
+---&gt; 56         if points is None or len(points) == 0:
+     57             # allow creation of empty multipoints, to support unpickling
+     58             pass
+
+
+TypeError: object of type &#39;LinearRing&#39; has no len()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ad1e7e74f90&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b26da7698d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Geomutil_12_2.png" src="../../_images/Geomutil_12_2.png" />
@@ -402,7 +429,7 @@ index in the ndarray.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">b1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="bp">False</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">pt1</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
@@ -420,17 +447,48 @@ index in the ndarray.</p>
 <span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;test intersect&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Geomutil_54_0.png" src="../../_images/Geomutil_54_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-25-468d44e91345&gt; in &lt;module&gt;()
+      7 pt4 = C[:,(1-b1).astype(bool)]
+      8 ph4 = D[:,(1-b1).astype(bool)]
+----&gt; 9 f1,a1 = displot(pt1,ph1,&#39;r&#39;)
+     10 f2,a2 = displot(pt2,ph2,&#39;b&#39;)
+     11 f3,a3 = displot(pt3,ph3,&#39;c&#39;)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/plotutil.pyc in displot(pt, ph, arrow, **kwargs)
+    571
+    572     m1   = np.array([0, 0, 1])
+--&gt; 573     mask = np.kron(np.ones((2, Nseg)), m1)
+    574     # 2 x 3*2*Np
+    575     pzz = pz[1:, :].T
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/numpy/lib/shape_base.pyc in kron(a, b)
+    782     axis = nd-1
+    783     for _ in range(nd):
+--&gt; 784         result = concatenate(result, axis=axis)
+    785     wrapper = get_array_prepare(a, b)
+    786     if wrapper is not None:
+
+
+ValueError: need at least one array to concatenate
+</pre></div>
+</div>
+<img alt="../../_images/Geomutil_54_1.png" src="../../_images/Geomutil_54_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">b1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="bp">False</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">b1</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
@@ -442,7 +500,7 @@ index in the ndarray.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">b1</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">False</span>
 </pre></div>
 </div>
 </div>
@@ -493,7 +551,7 @@ index in the ndarray.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on févr. 23, 2016.
+      Last updated on avril 06, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/8-MISC/Geomutil.txt"

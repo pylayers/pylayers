@@ -1536,11 +1536,10 @@
                     <span class="n">path</span> <span class="o">=</span> <span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">target</span><span class="p">]</span>
                     <span class="c1"># M = np.zeros((1,NGs),dtype=&#39;bool&#39;)</span>
                     <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">target</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-                        
 
                     <span class="k">if</span> <span class="n">Mmap</span> <span class="o">!=</span><span class="p">[]:</span>
                         <span class="n">M</span><span class="p">[</span><span class="n">Mmap</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">Mmap</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">Mmap</span><span class="p">[</span><span class="n">out</span><span class="p">]]</span><span class="o">=</span><span class="bp">True</span>
-                    <span class="k">else</span><span class="p">:</span> 
+                    <span class="k">else</span><span class="p">:</span>
                         <span class="n">M</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">out</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">dout</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">dout</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)],</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path</span><span class="p">],</span><span class="n">ndmin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int16&#39;</span><span class="p">)))</span>
@@ -3098,7 +3097,7 @@
                         <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
 
 
-    <span class="c1"># @profile                    </span>
+    <span class="c1"># @profile</span>
 <div class="viewcode-block" id="Signatures.run"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
@@ -3172,7 +3171,6 @@
 
         <span class="c1"># signature counter</span>
         <span class="n">cptsig</span> <span class="o">=</span> <span class="mi">0</span>
-        
         <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
             <span class="c1"># if (us%20)==0:</span>
             <span class="c1">#     print us,&#39;/&#39;,len(lis)</span>
@@ -3192,17 +3190,19 @@
 
             <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">]</span>
             <span class="c1"># stack is a list of iterators</span>
-            <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">Gi</span><span class="p">[</span><span class="n">s</span><span class="p">])]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">Gi</span><span class="p">[</span><span class="n">s</span><span class="p">])]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">ipdb</span>
+                <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
             <span class="c1"># lawp = list of airwall position in visited</span>
             <span class="n">lawp</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="c1"># while the stack of iterators is not void</span>
             <span class="k">while</span> <span class="n">stack</span><span class="p">:</span> <span class="c1">#</span>
                 <span class="c1"># iter_on_interactions is the last iterator in the stack</span>
                 <span class="n">iter_on_interactions</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                
                 <span class="c1"># next interaction child</span>
                 <span class="n">interaction</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iter_on_interactions</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-            
                 <span class="n">cond1</span> <span class="o">=</span> <span class="n">interaction</span> <span class="ow">is</span> <span class="bp">None</span>
                 <span class="c1"># test whether the interaction has already been visited (reverberation)</span>
                 <span class="n">cond2</span> <span class="o">=</span> <span class="p">(</span><span class="n">interaction</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bt</span>
@@ -3228,12 +3228,10 @@
                         <span class="c1"># operation</span>
 
                         <span class="c1"># diffraction (retrieve a point)</span>
-                           
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                             <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span>
                             <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">th</span><span class="p">,</span><span class="n">th</span><span class="p">])</span>
                             <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
-                        
                         <span class="c1"># reflexion </span>
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
 
@@ -3252,7 +3250,6 @@
                         <span class="k">else</span> <span class="p">:</span> 
                             <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                             <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
-                            
 
                         <span class="c1"># apply current chain of symmetries</span>
                         <span class="c1"># th is the current segment tail-head coordinates</span>
@@ -3283,7 +3280,7 @@
                                 <span class="c1"># vl = (phe0,phe_)</span>
                                 <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
                                 <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
-                            <span class="k">else</span><span class="p">:</span>  <span class="c1"># twisted case  </span>
+                            <span class="k">else</span><span class="p">:</span>  <span class="c1"># twisted case</span>
                                 <span class="c1"># vr = (pta0,phe_)</span>
                                 <span class="c1"># vl = (phe0,pta_)</span>
                                 <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
@@ -3297,7 +3294,6 @@
                             <span class="c1"># out = (lta &amp; lhe ) | (~rta &amp; ~rhe)</span>
                             <span class="c1"># inside = ~out</span>
                             <span class="c1">#if inside:   # new segment is inside the beam</span>
-                            
                             <span class="n">linel</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                             <span class="n">liner</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                             <span class="n">seg</span>   <span class="o">=</span> <span class="p">(</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -3326,13 +3322,9 @@
                                 <span class="k">else</span><span class="p">:</span>
                                     <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_right</span><span class="p">,</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                                 <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
-                                
-                            
-                             
                         <span class="k">if</span> <span class="n">valid_bool</span><span class="p">:</span>
                             <span class="c1">#showsig2(visited,self.L,tahe)</span>
                             <span class="c1">#pdb.set_trace()  </span>
-            
                             <span class="c1"># sequence is valid and last interaction is in the list of targets   </span>
                             <span class="k">if</span> <span class="n">interaction</span> <span class="ow">in</span> <span class="n">lit</span><span class="p">:</span>
                                 <span class="n">anstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">visited</span><span class="p">))</span>
@@ -3345,7 +3337,6 @@
                                 <span class="c1">#print visited,len(stack),cptsig  </span>
 
                             <span class="c1"># move forward even when arrived in the target cycle</span>
-                            
                             <span class="n">outint</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]][</span><span class="n">interaction</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                             <span class="n">proint</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]][</span><span class="n">interaction</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
                             <span class="c1">#nexti  = [it for k,it in enumerate(outint) if ((it[0]&gt;0) and (proint[k]&gt;threshold))]</span>
@@ -3363,7 +3354,6 @@
                                     <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="n">last</span> <span class="o">=</span> <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="c1">#tahe.pop()</span>
-                            
                             <span class="c1">#R.pop()</span>
                             <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
