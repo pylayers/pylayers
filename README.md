@@ -1,5 +1,5 @@
 # PyLayers 
-<img src="https://github.com/pylayers/doc/tree/master/_static/logo.png" width="150">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logo.png" width="150">
 
 
 PyLayers an Open Source Site Specific Radio Channel Simulator for 
@@ -44,7 +44,7 @@ See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.
 >>> DL.eval()
 >>> DL._show3()
 ```
-<img src="https://github.com/pylayers/doc/tree/master/_static/_show3.png" width="300">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/_show3.png" width="300">
 
 ## Troubleshooting
 
@@ -64,17 +64,17 @@ Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, 
 
 This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
 
-<img src="https://github.com/pylayers/doc/tree/master/_static/logoUR1.jpg" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/logoIETR.jpg" width="100
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoUR1.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoIETR.jpg" width="100
 ">
-<img src="https://github.com/pylayers/doc/tree/master/_static/ucells.png" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/where1logo.jpg" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/WHERE2_Logo.jpg" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/Cormo.png" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/IR.png" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/bretagnegd.jpg" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/anr.png" width="100">
-<img src="https://github.com/pylayers/doc/tree/master/_static/fp7.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/ucells.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/where1logo.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/WHERE2_Logo.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/Cormo.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/IR.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/bretagnegd.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/anr.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/fp7.png" width="100">
 
 
 
