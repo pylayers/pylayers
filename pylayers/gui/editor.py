@@ -871,7 +871,7 @@ class NewLayout(QDialog):    # any super class is okay
 class Overset(QMainWindow):
     def __init__(self,parent=None):
         super(Overset, self).__init__(parent)
-        self.setModal(True) # interaction only with the current window
+        # self.setModal(True) # interaction only with the current window
         self.setWindowTitle('Set Overlay')
         self.x0=np.array([0,0])
         self.x0selected=False
