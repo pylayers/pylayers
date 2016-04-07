@@ -29,16 +29,23 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" > $(function() { $('.carousel').carousel();}); </script> 
-    <script type='text/javascript' src="http://imsky.github.io/holder/holder.js"></script>
-    <script type="text/javascript" src="./_static/jquery.js"></script>
-    <script type="text/javascript" src="./_static/underscore.js"></script>
-    <script type="text/javascript" src="./_static/bootstrap.min.js"></script>
-    <script type="text/javascript" src="./_static/doctools.js"></script>
-    <script type="text/javascript" src="./_static/d3.min.js"></script>
-    <script type="text/javascript" src="./_static/d3.geom.min.js"></script>
-    <script type="text/javascript" src="./_static/d3.layout.min.js"></script>
+   
     <link rel="top" title="PyLayers" href="http://pylayers.github.io/pylayers/index.html#"> 
+
+ 
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 70%;
+      margin: auto;
+  }
+  </style>
+
+
+
     <script>window["_GOOG_TRANS_EXT_VER"] = "1";</script>
 </head>
 
@@ -105,7 +112,7 @@
 <blockquote>
 <p>An Open Source Site Specific Radio Channel Simulator for Mobile
 Propagation - Communications - Mobility - Localisation -  Wearable Devices -  
-5G MIMO channel - IoT - Heterogeneous Networks.
+UWB-IR - 5G MIMO channel - IoT - Heterogeneous Networks.
 <!-- </p>
 </blockquote>
   </td>
@@ -137,7 +144,7 @@ Propagation - Communications - Mobility - Localisation -  Wearable Devices -
        <span class="linkdescr"></span></p>
   </td> -->
 <!--   </tr>
-</tbody></table> --> -->
+</tbody></table> -->
 
 <h2>Main Features</h2>
 <ul class="simple">
@@ -161,7 +168,6 @@ Propagation - Communications - Mobility - Localisation -  Wearable Devices -
 </li><li> Hierarchical storage of various level of traces in HDF5 format 
 </li><li> Outputs for event-driven simulator <a
     href="http://wsnet.gforge.inria.fr/">WSNET</a> -->
-</li><li> Open source GPL license
 <!--
 </li><li> <a href="./documentation/PyFlyer.pdf">The PyLayers Flyer</a> 
 -->
@@ -232,7 +238,7 @@ div#examples_carousel .carousel-indicators li {
 
 <div class="container">
   <div class="span9">
-    <div id="examples_carousel" class="carousel slide", data-interval="false">
+    <div id="examples_carousel" class="carousel slide", data-ride=carousel>
       <!-- Carousel items -->
       <div class="carousel-inner">
 
@@ -265,8 +271,15 @@ div#examples_carousel .carousel-indicators li {
           </div>
         </div>
 
-        
         <div class="item">
+          <div class="inner-item">
+            <img src="./_images/cormofig2.png" width=900>
+            <div class="carousel-caption">
+                <p>Human mobility in WBAN</p>
+            </div>    
+          </div>
+        </div>
+        <!-- <div class="item">
           <div class="inner-item">
             <img src="_static/example5.png" width=900>
             <div class="carousel-caption">
@@ -274,7 +287,7 @@ div#examples_carousel .carousel-indicators li {
                 Stamped Trajectories</p>
             </div>    
           </div>
-        </div>
+        </div> -->
 
         <div class="item">
           <div class="inner-item">
@@ -310,6 +323,7 @@ div#examples_carousel .carousel-indicators li {
     </div>
   </div>
 </div>
+
 
 
 <!--<h2>Acknowledments</h2>
