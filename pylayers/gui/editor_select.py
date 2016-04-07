@@ -8,16 +8,11 @@ from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
 
-import shapely.geometry as sh
-
-
 import matplotlib.pyplot as plt
 from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
-import networkx as nx 
 
 import copy
-
 
 
 class SelectL2(object):
@@ -78,7 +73,6 @@ class SelectL2(object):
                 'SP1':'Select Point 1',
                 'SP2':'Select Point 2, Click Again for Creating Segment',
                 'SS':'Select Segment',
-                'SC':'Select Cycle',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
@@ -86,12 +80,11 @@ class SelectL2(object):
                 'SMS': 'Multiple Segments Selection'
                 }
         self.help={'':'',
-                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments/Cycles properties',
+                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments properties',
                 'CP':'Create Segments, + CTRL same x, + SHIFT same y',
                 'SP1':'Select Point. Move Selected Point maintaing Left Clic',
                 'SP2':'Click Again for Creating Segment',
                 'SS':'F3: Edit Segment(s) properties',
-                'SC':'F3: Edit Cycle properties',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
@@ -105,10 +98,8 @@ class SelectL2(object):
 
         plt.title(self.statename[self.state])
 
-        self.undoGs=[L.Gs.copy()]
-        self.undoGt=[L.Gt.copy()]
-        
-        # self.bundo=False
+        self.undoGs=[]
+        self.bundo=False
 
         self.gridOn=False
         self.snapgridOn=False
@@ -192,9 +183,7 @@ class SelectL2(object):
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        self.L.display['nodes'] = True
-
-        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True,polyg=True)
+        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True)
         if self.gridOn:
             self.setgrid()
         else:
@@ -202,28 +191,6 @@ class SelectL2(object):
 
         return(self.fig,self.ax)
 
-    def plotselcy(self,lcy,color='y',alpha=0.4):
-        """ plot selected cycle
-
-        Parameters
-        ----------
-
-            pt : list
-            list of points or segmetns to plot
-        """
-
-        if not isinstance(lcy,list):
-            lcy=[lcy]
-
-        if len(lcy)>0:
-            for c in lcy:
-                if c >0:
-                    self.L.Gt.node[c]['polyg'].plot(fig=self.fig,
-                                                     ax=self.ax,
-                                                     color=color,
-                                                     alpha=alpha)
-            self.fig.canvas.draw()
-        return self.fig,self.ax
 
     def plotselptseg(self,pt,color='y',alpha=0.4,ms=10):
         """ plot selected point or segments
@@ -332,18 +299,7 @@ class SelectL2(object):
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 50)
-
-            shpt = sh.Point(x,y)
-            
-            ucy =np.where([self.L.Gt.node[c]['polyg'].contains(shpt) for c in self.L.Gt.nodes() if c >0])[0]
-            if len(ucy)!=0:
-                if 0 in self.L.Gs.nodes():
-                    self.ncy = self.L.Gt.nodes()[ucy+1]
-                else:
-                    self.ncy = self.L.Gt.nodes()[ucy]
-            else:
-                self.ncy=0
-
+            print self.nsel
             if self.selected_pt1==self.nsel and self.nsel != 0 and not 'SM' in self.state :
                 self.ptmove=True
             else :
@@ -410,12 +366,6 @@ class SelectL2(object):
                     # print 'sel pt'
                     self.selpt1()
                     return
-                elif self.ncy >0:
-                    # check if a cycle has been clicked
-                    self.plotselcy(self.ncy)
-                    self.state='SC'
-                    self.update_state()
-                    #otherwise return to init mode
                 else:
                     self.modeIni()
 
@@ -437,28 +387,6 @@ class SelectL2(object):
                     self.selpt1()
                 else :
                     self.modeIni()
-
-
-            #select a segment
-            if self.state=='SC':
-                self.modeIni()
-                if self.nsel > 0:
-                    # print 'sel seg'
-                    self.selseg()
-                    return
-                elif self.nsel < 0:
-                    # print 'sel pt'
-                    self.selpt1()
-                    return
-                elif self.ncy >0:
-                    # check if a cycle has been clicked
-                    self.plotselcy(self.ncy)
-                    self.state='SC'
-                    self.update_state()
-                    #otherwise return to init mode
-                else:
-                    self.modeIni()
-
             #select a point
             if self.state=='SP1':
                 if self.nsel >0:
@@ -587,9 +515,6 @@ class SelectL2(object):
 
         if event.button == 1 and self.ptmove and not ('SM' in self.state):
             # print 'move release'
-            # MOVE POINT SITUATION
-
-        
             if self.shift_is_held:
                 x = self.L.Gs.pos[self.nsel][0]
             else :
@@ -601,49 +526,21 @@ class SelectL2(object):
             if self.snapgridOn:
                 x=self.gridx[np.where(x<=self.gridx)[0][0]]
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
+            self.L.Gs.pos[self.nsel]=(x,y)
+            segs = self.L.Gs[self.nsel]
+            for s in segs:
+                n1,n2=self.L.Gs[s].keys()
+                p1 = np.array(self.L.Gs.pos[n1])
+                p2 = np.array(self.L.Gs.pos[n2])
+                p2mp1 = p2 - p1
+                t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
+                norm = np.array([t[1], -t[0], 0])
+                self.L.Gs.node[s]['norm']=norm
+                self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
+            self.L.g2npy()
+            self.modeIni()
+            self.new_state()
 
-            # check not move in another cycle
-            
-            # provide moving point move connected segments and cross a polygon
-            # 1 get connected seg
-            segs = self.L.Gs[self.nsel].keys()
-            # get points connected to seg
-            upts = [self.L.Gs[s].keys() for s in segs]
-            [u.remove(self.nsel) for u in upts]
-            # create new lines with the current poitn position
-            lines = [sh.LineString([(x,y),self.L.Gs.pos[l[0]]]) for l in upts ]
-
-            # check that all segs link to the points 
-            # are not crossing any seg of the layout
-            cond = [[l.crosses(i[1]) for i in self.L._shseg.items() if i[0] not in segs] for l in lines]
-            if not np.any(cond):
-                self.L.Gs.pos[self.nsel]=(x,y)
-                # UPDATE SEGS
-                for s in segs:
-                    n1,n2=self.L.Gs[s].keys()
-                    p1 = np.array(self.L.Gs.pos[n1])
-                    p2 = np.array(self.L.Gs.pos[n2])
-                    p2mp1 = p2 - p1
-                    t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
-                    norm = np.array([t[1], -t[0], 0])
-                    self.L.Gs.node[s]['norm']=norm
-                    self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
-                    # update polygon
-                    cy = self.L.Gs.node[s]['ncycles']
-                    for c in cy:
-                        vn = self.L.Gt.node[c]['polyg'].vnodes
-                        pts = [self.L.Gs.pos[v] for v in vn if v <0]
-                        self.L.Gt.node[c]['polyg'] = geu.Polygon(pts)
-                        self.L.Gt.node[c]['polyg'].setvnodes(self.L)
-                        self.L.Gt.pos[c] = np.array(self.L.Gt.node[c]['polyg'].centroid.xy)[:,0] 
-                    # update sh segments
-                    self.L._shseg.update({segs[i]:lines[i] for i in range(len(segs))})
-                self.L.g2npy()
-                self.modeIni()
-                self.new_state()
-            else:
-                self.modeIni()
-                self.new_state()
         if self.evt=='rclic':
             self.modeIni()
             self.new_state()
@@ -681,19 +578,10 @@ class SelectL2(object):
         # fig = plt.gcf()
         # ax = plt.gca()
         print self.state
-
-        # manage undo by checking if Layout has been modifyed
-        if len (self.undoGs) >0:
-            if self.undoGs[-1].pos != self.L.Gs.pos:
-            # if not self.bundo:
-                self.undoGs.append(self.L.Gs.copy())
-                self.undoGt.append(self.L.Gt.copy())
-                if len(self.undoGs) > 50:
-                    self.undoGs.pop(0)
-                    self.undoGt.pop(0)
-        else:
+        if not self.bundo:
             self.undoGs.append(self.L.Gs.copy())
-            self.undoGt.append(self.L.Gt.copy())
+            if len(self.undoGs) > 50:
+                self.undoGs.pop(0)
 
         self.ax.format_coord=self.format_coord
 
@@ -944,17 +832,16 @@ class SelectL2(object):
     def undo(self):
         """ self.evt==ctrl+z
         """
-        # self.bundo=True
-        if len (self.undoGs) >0:
-            print "undo"
-            self.undoGs.pop(-1)
-            self.undoGt.pop(-1)
-            self.L.Gs=self.undoGs.pop(-1)
-            self.L.Gt=self.undoGt.pop(-1)
+        self.bundo=True
+        print len(self.L.Gs)
+        if len (self.undoGs) >2:
+            oGs=self.undoGs.pop(-1)
+            oGs=self.undoGs.pop(-1)
+            self.L.Gs=oGs
             self.L.g2npy()
         self.fig.canvas.draw()
-        # self.bundo=False
         self.update_state()
+        self.bundo=False
         self.refresh()
 
     def toggle(self):
@@ -1588,7 +1475,6 @@ class SelectL2(object):
                     [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
                     [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
             except:
-                # if no point has been selected
                 if len(self.selectpt) == 0:
                     self.modeIni()
                     self.update_state()

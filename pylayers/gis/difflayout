@@ -1,5 +1,5 @@
 diff --git a/pylayers/gis/layout.py b/pylayers/gis/layout.py
-index 77d749b..65e6397 100644
+index 52e5913..65e6397 100644
 --- a/pylayers/gis/layout.py
 +++ b/pylayers/gis/layout.py
 @@ -249,7 +249,7 @@ import matplotlib.colors as clr
@@ -11,7 +11,31 @@ index 77d749b..65e6397 100644
  from descartes.patch import PolygonPatch
  from numpy import array
  import PIL.Image as Image
-@@ -358,11 +358,6 @@ class Layout(PyLayers):
+@@ -315,13 +315,7 @@ class Layout(PyLayers):
+     .. autosummary::
+ 
+     """
+-    def __init__(self,_filename='defstr.ini',
+-                      _filematini='matDB.ini',
+-                      _fileslabini='slabDB.ini',
+-                      _filefur='',
+-                      force=False,
+-                      check=True,
+-                      verbose=False):
++    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False,check=True):
+         """ object constructor
+ 
+         Parameters
+@@ -338,8 +332,6 @@ class Layout(PyLayers):
+ 
+         """
+ 
+-        self.verbose=verbose
+-
+         mat = sb.MatDB()
+         mat.load(_filematini)
+ 
+@@ -366,11 +358,6 @@ class Layout(PyLayers):
          self.tahe = np.zeros(([2, 0]), dtype=int)
          self.lbltg = []
  
@@ -23,7 +47,7 @@ index 77d749b..65e6397 100644
          #
          # related file names
          #
-@@ -1223,17 +1218,12 @@ class Layout(PyLayers):
+@@ -1231,17 +1218,12 @@ class Layout(PyLayers):
                     short filemame with extension
  
          """
@@ -41,7 +65,7 @@ index 77d749b..65e6397 100644
          config.set("info",'Npoints',self.Np)
          config.set("info",'Nsegments',self.Ns)
          config.set("info",'Nsubsegments',self.Nss)
-@@ -1275,16 +1265,6 @@ class Layout(PyLayers):
+@@ -1283,16 +1265,6 @@ class Layout(PyLayers):
                      except:
                          pass
                  config.set("segments",str(n),d)
@@ -58,7 +82,7 @@ index 77d749b..65e6397 100644
          config.set("files",'materials',self.filematini)
          config.set("files",'slab',self.fileslabini)
          config.set("files",'furniture',self.filefur)
-@@ -1411,66 +1391,6 @@ class Layout(PyLayers):
+@@ -1419,66 +1391,6 @@ class Layout(PyLayers):
              else:
                  self.name[name] = [eval(ns)]
          self.Nss = Nss
@@ -125,18 +149,17 @@ index 77d749b..65e6397 100644
          # compliant with config file without  material/slab information
          if config.has_section('files'):
              self.filematini=config.get('files','materials')
-@@ -1491,10 +1411,6 @@ class Layout(PyLayers):
+@@ -1499,8 +1411,7 @@ class Layout(PyLayers):
              self.saveini(_fileini)
          # convert graph Gs to numpy arrays for faster post processing
          self.g2npy()
 -
 -
--        self.buildGt()
--
-         # 
++        # 
  
  
-@@ -1598,6 +1514,7 @@ class Layout(PyLayers):
+     def loadfur(self, _filefur):
+@@ -1603,6 +1514,7 @@ class Layout(PyLayers):
                  print "new file",self.filename
          else:
              raise NameError('layout filename extension not recognized')
@@ -144,7 +167,7 @@ index 77d749b..65e6397 100644
          self.lbltg=['s']
          #  construct geomfile (.off) for vizualisation with geomview
          self.subseg()
-@@ -2411,36 +2328,11 @@ class Layout(PyLayers):
+@@ -2416,36 +2328,11 @@ class Layout(PyLayers):
          # delete old edge ns
          self.del_segment(ns)
          # add new edge np[0] num
@@ -152,8 +175,7 @@ index 77d749b..65e6397 100644
 +        self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
          # add new edge num np[1]
 -        seg2 = self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
-+        self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
- 
+-
 -        new_pts = self.Gs.node[seg1]['connect'] + self.Gs.node[seg2]['connect'] +[seg1]+[seg2]
 -        # # new_pts = [n for n in new_pts if n < 0]
 -        # # newnp.unique(new_pts).tolist()
@@ -176,7 +198,8 @@ index 77d749b..65e6397 100644
 -        #     seg = self.Gt.node[c]['polyg'].vnodes
 -        #     seg = seg[seg>0]
 -        #     [self.Gs.node[s]['ncycles'].append(c) for s in seg if c not in self.Gs.node[s]['ncycles']]
--
++        self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
+ 
 -        
 -    # @profile
 -    def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0,ss_slab=['FLOOR','CEIL']):
@@ -184,7 +207,7 @@ index 77d749b..65e6397 100644
          """  add segment between node n1 and node n2
  
          Parameters
-@@ -2473,371 +2365,64 @@ class Layout(PyLayers):
+@@ -2478,371 +2365,64 @@ class Layout(PyLayers):
          connect : list of point number
  
          """
@@ -263,8 +286,8 @@ index 77d749b..65e6397 100644
 -
 -
 -
--
  
+-
 -
 -            # if there is Polygon creation
 -            if len(polsnew)  > len(self.polcold):
@@ -580,7 +603,7 @@ index 77d749b..65e6397 100644
 +        #
 +        # n = t x z
 +        #
- 
++
 +        norm = np.array([t[1], -t[0], 0])
 +        self.Gs.add_node(num, name=name, 
 +                              z=z,
@@ -588,7 +611,7 @@ index 77d749b..65e6397 100644
 +                              transition=transition,
 +                              offset=offset,
 +                              connect=[n1,n2])
-+
+ 
 +        self.Gs.pos[num] = tuple((p1 + p2) / 2.)
 +        self.Gs.add_edge(n1, num)
 +        self.Gs.add_edge(n2, num)
@@ -606,7 +629,7 @@ index 77d749b..65e6397 100644
  
      def wedge2(self,apnt):
          """ calculate wedge angle of a point
-@@ -3239,10 +2824,6 @@ class Layout(PyLayers):
+@@ -3244,10 +2824,6 @@ class Layout(PyLayers):
              assert(e>0)
              self.del_subseg(e,verbose=verbose)
              name = self.Gs.node[e]['name']
@@ -617,7 +640,7 @@ index 77d749b..65e6397 100644
              del self.Gs.pos[e] # delete edge position
              self.Gs.remove_node(e)
              self.labels.pop(e)
-@@ -3250,59 +2831,9 @@ class Layout(PyLayers):
+@@ -3255,59 +2831,9 @@ class Layout(PyLayers):
              # update slab name <-> edge number dictionnary
              self.name[name].remove(e)
              # delete subseg if required
@@ -678,7 +701,7 @@ index 77d749b..65e6397 100644
      def mask(self):
          """  returns the polygonal mask of the building
  
-@@ -5636,7 +5167,6 @@ class Layout(PyLayers):
+@@ -5641,7 +5167,6 @@ class Layout(PyLayers):
                      'fGHz' : [],
                      'show':False,
                      'furniture':False,
@@ -686,7 +709,7 @@ index 77d749b..65e6397 100644
                      }
  
          for k in defaults:
-@@ -5659,8 +5189,8 @@ class Layout(PyLayers):
+@@ -5664,8 +5189,8 @@ class Layout(PyLayers):
              ax = kwargs['ax']
  
          if self.display['clear']:
@@ -696,7 +719,7 @@ index 77d749b..65e6397 100644
          # display overlay image
          if self.display['overlay']:
              # imok : Image is OK
-@@ -5778,12 +5308,7 @@ class Layout(PyLayers):
+@@ -5783,12 +5308,7 @@ class Layout(PyLayers):
              else:
                  print "Warning : no furniture file loaded"
  
@@ -709,14 +732,23 @@ index 77d749b..65e6397 100644
          for nr in kwargs['roomlist']:
              ncy = self.Gr.node[nr]['cycle']
              fig,ax=self.Gt.node[ncy]['polyg'].plot(fig=fig,ax=ax)
-@@ -5821,23 +5346,23 @@ class Layout(PyLayers):
-         """
+@@ -5803,7 +5323,7 @@ class Layout(PyLayers):
+ 
+         return fig,ax
+ 
+-    def build(self, graph='tcvirw'):
++    def build(self, graph='tcvirw',verbose=False):
+         """ build graphs
+ 
+         Parameters
+@@ -5827,32 +5347,32 @@ class Layout(PyLayers):
          # list of built graphs
  
--        # if 't' in graph:
--        #     if verbose:
--        #         print "Gt"
--        #     self.buildGt()
+         if 't' in graph:
+-            if self.verbose:
++            if verbose:
+                 print "Gt"
+             self.buildGt()
 -        #     # if convexify :
 -        #     #     #Make the layout convex the outddor
 -        #     #     self._convex_hull()
@@ -728,12 +760,6 @@ index 77d749b..65e6397 100644
 -        #     #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
 -        #     #     #
 -        #     #     # self.buildGt()
--
--        #     self.lbltg.extend('t')
-+        if 't' in graph:
-+            if verbose:
-+                print "Gt"
-+            self.buildGt()
 +            # if convexify :
 +            #     #Make the layout convex the outddor
 +            #     self._convex_hull()
@@ -745,12 +771,48 @@ index 77d749b..65e6397 100644
 +            #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
 +            #     #
 +            #     # self.buildGt()
-+
-+            self.lbltg.extend('t')
+ 
+             self.lbltg.extend('t')
  
          if 'c' in graph:
-             if verbose:
-@@ -5931,11 +5456,10 @@ class Layout(PyLayers):
+-            if self.verbose:
++            if verbose:
+                 print "Gc"
+             self.buildGc()
+ 
+             self.lbltg.extend('c')
+ 
+         if 'r' in graph:
+-            if self.verbose:
++            if verbose:
+                 print "Gr"
+             self.buildGr()
+             self.lbltg.extend('r')
+@@ -5863,20 +5383,20 @@ class Layout(PyLayers):
+         #if 'c' in graph:
+         #    self.buildGc()
+         if 'v' in graph:
+-            if self.verbose:
++            if verbose:
+                 print "Gv"
+             self.buildGv()
+             self.lbltg.extend('v')
+ 
+         if 'i' in graph:
+-            if self.verbose:
++            if verbose:
+                 print "Gi"
+             self.buildGi()
+             self.outputGi()
+             self.lbltg.extend('i')
+ 
+         if 'w' in graph and len(self.Gr.nodes())>1:
+-            if self.verbose:
++            if verbose:
+                 print "Gw"
+             self.buildGw()
+             self.lbltg.extend('w')
+@@ -5936,11 +5456,10 @@ class Layout(PyLayers):
              except:
                  raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
          # save dictionnary which maps string interaction to [interactionnode, interaction type]
@@ -764,16 +826,7 @@ index 77d749b..65e6397 100644
  
  
          root,ext = os.path.splitext(self.filename)
-@@ -5959,7 +5483,7 @@ class Layout(PyLayers):
-         specified by the $BASENAME environment variable
- 
-         """
--        graphs=['c','v','i','r','w']
-+        graphs=['t','c','v','i','r','w']
-         path = os.path.join(basename,'struc','gpickle',self.filename)
-         for g in graphs:
-             try:
-@@ -5974,40 +5498,39 @@ class Layout(PyLayers):
+@@ -5979,13 +5498,13 @@ class Layout(PyLayers):
                  pass
                  #print 'G',g,' not saved'
  
@@ -784,27 +837,6 @@ index 77d749b..65e6397 100644
 -        # for k in self.Gs.node:
 -        #     if k>0:
 -        #         self.Gs.node[k]['ncycles']=[]
--
--        # for k in self.Gt.node:
--        #     if k != 0:
--        #         vnodes = self.Gt.node[k]['cycle'].cycle
--        #         if vnodes[0]<0:
--        #             self.Gt.node[k]['polyg'].vnodes = vnodes
--        #         else:
--        #             self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
--        #         for inode in vnodes:
--        #             if inode > 0:   # segments
--        #                 if k not in self.Gs.node[inode]['ncycles']:
--        #                     self.Gs.node[inode]['ncycles'].append(k)
--        #                     if len(self.Gs.node[inode]['ncycles'])>2:
--        #                         print inode,self.Gs.node[inode]['ncycles']
--        #                         logging.warning('dumpr : a segment cannot relate more than 2 cycles')
--        # # if ncycles is a list with only one element the other cycle is the
--        # # outside region (cycle -1)
--        # for k in self.Gs.node:
--        #     if k>0:
--        #         if len(self.Gs.node[k]['ncycles'])==1:
--        #             self.Gs.node[k]['ncycles'].append(-1)
 +        #
 +        # fixing bug #136
 +        # update ncycles attributes of Gs from information in Gt
@@ -812,23 +844,17 @@ index 77d749b..65e6397 100644
 +        for k in self.Gs.node:
 +            if k>0:
 +                self.Gs.node[k]['ncycles']=[]
-+
-+        for k in self.Gt.node:
-+            if k != 0:
-+                vnodes = self.Gt.node[k]['cycle'].cycle
-+                if vnodes[0]<0:
-+                    self.Gt.node[k]['polyg'].vnodes = vnodes
-+                else:
-+                    self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
-+                for inode in vnodes:
-+                    if inode > 0:   # segments
-+                        if k not in self.Gs.node[inode]['ncycles']:
-+                            self.Gs.node[inode]['ncycles'].append(k)
-+                            if len(self.Gs.node[inode]['ncycles'])>2:
-+                                print inode,self.Gs.node[inode]['ncycles']
-+                                logging.warning('dumpr : a segment cannot relate more than 2 cycles')
-+        # if ncycles is a list with only one element the other cycle is the
-+        # outside region (cycle -1)
+ 
+         for k in self.Gt.node:
+             if k != 0:
+@@ -6003,16 +5522,15 @@ class Layout(PyLayers):
+                                 logging.warning('dumpr : a segment cannot relate more than 2 cycles')
+         # if ncycles is a list with only one element the other cycle is the
+         # outside region (cycle -1)
+-        # for k in self.Gs.node:
+-        #     if k>0:
+-        #         if len(self.Gs.node[k]['ncycles'])==1:
+-        #             self.Gs.node[k]['ncycles'].append(-1)
 +        for k in self.Gs.node:
 +            if k>0:
 +                if len(self.Gs.node[k]['ncycles'])==1:
@@ -844,7 +870,7 @@ index 77d749b..65e6397 100644
  
  
  
-@@ -6118,6 +5641,7 @@ class Layout(PyLayers):
+@@ -6123,6 +5641,7 @@ class Layout(PyLayers):
              return upt,ang
              # atan2(cross(a,b)), dot(a,b))
  
@@ -852,7 +878,7 @@ index 77d749b..65e6397 100644
      def _delaunay(self,poly,polyholes=[]):
          """ make a delaunay paritioning on poly.
  
-@@ -6276,7 +5800,7 @@ class Layout(PyLayers):
+@@ -6281,7 +5800,7 @@ class Layout(PyLayers):
                  # Check if all the original area is covered 
                  # sometimes, area surrounded by 2 new airwalls is not found
                  # the following code re-add it.
@@ -861,16 +887,7 @@ index 77d749b..65e6397 100644
                  if isinstance(cpdiff,sh.Polygon):
                      cpdiff=sh.MultiPolygon([cpdiff])
                  if isinstance(cpdiff,sh.MultiPolygon):
-@@ -6294,7 +5818,7 @@ class Layout(PyLayers):
-                 self.del_segment(d,verbose=False)
-         return ncpol
- 
--    def buildGt(self,check=True,verbose=False):
-+    def buildGt(self,check=True):
- 
-         def pltpoly(poly,fig=[],ax=[]):
-             if fig == []:
-@@ -6317,276 +5841,188 @@ class Layout(PyLayers):
+@@ -6322,304 +5841,215 @@ class Layout(PyLayers):
              plt.draw()
  
  
@@ -1144,13 +1161,13 @@ index 77d749b..65e6397 100644
 +            streets.setvnodes(self)
              ma.setvnodes(self)
 -            self.ma=ma
- 
+-
 -        n=1
 -        # manage non convex cycles
--        if verbose:
+-        if self.verbose:
 -            print "make layout convex",
 -        while n != self.Gt.nodes()[-1]:
--            if verbose:
+-            if self.verbose:
 -                print ".",
 -            for n in self.Gt.nodes():
 -                if n>0:
@@ -1158,8 +1175,9 @@ index 77d749b..65e6397 100644
 -                    if not p.isconvex():
 -                        X = self._delaunay(p)
 -                        break
--        if verbose:
+-        if self.verbose:
 -            print "done"
+ 
  
 +        self.ma = ma
 +
@@ -1252,27 +1270,53 @@ index 77d749b..65e6397 100644
  
  
  
- 
 -        segma = self.macvx.vnodes[self.macvx.vnodes>0]
-+        self.Gt=nx.Graph()
-+        self.Gt.pos={}
  
 -        # update Gt ndoe infomation :
 -        # - cycle
 -        # - open
 -        # - indoor
--        if verbose :
+-        if self.verbose :
 -            print "connect Gt nodes",
++        self.Gt=nx.Graph()
++        self.Gt.pos={}
  
 -        for n in self.Gt.node:
--            p = self.Gt.node[n]['polyg']
+-            if n>0:
+-                p = self.Gt.node[n]['polyg']
+-                S = nx.subgraph(self.Gs,p.vnodes)
+-                S.pos={}
+-                S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+-                cycle = cycl.Cycle(S)
+ 
 +        #### IV FIND VNODES and FINAL POLYGONS
-+
+ 
 +        for n in self.Gs.node:
 +            if n>0:
 +                self.Gs.node[n]['ncycles']=[]
-+
-+
+ 
+-                 # IV 1.d add node to Gt + position
+-                # By default a Layout cycle is defined as indoor
+-                # unless it is separated from the outside cycle by an airwall
+-                #
+-                # The user should be able to set this boolean to false for a patio
+-                #
+-                # An outdoor cycle has no ceil reflection
+-                seg = p.vnodes[p.vnodes>0]
+-                lair = [x in self.name['AIR'] for x in seg]
+-                outdoor = False
+-
+-                if sum(lair)>0:
+-                    isopen = True
+-                    aseg = seg[np.where(lair)]
+-                    outdoor = np.any([s in segma for s in aseg])
+-                    # if outdoor :
+-                    #     cyid = ncyid
+-                    #     ncyid = ncyid -1
+-                else:
+-                    isopen = False
+ 
+-                self.Gt.add_node(n,cycle=cycle,isopen=isopen,indoor= not outdoor)
 +        ncyid = -1
 +        sma = self.ma.vnodes[self.ma.vnodes>0]
 +        smac = self.macvx.vnodes[self.macvx.vnodes>0]
@@ -1290,53 +1334,50 @@ index 77d749b..65e6397 100644
 +            # # NOTE ! Using class cycle is MANDATORY
 +            # # because, some extra vnodes can be pickup during the contain 
 +            # # process before
-             S = nx.subgraph(self.Gs,p.vnodes)
-             S.pos={}
-             S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
--            cycle = cycl.Cycle(S)
- 
++            S = nx.subgraph(self.Gs,p.vnodes)
++            S.pos={}
++            S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
++
 +            cycle = cycl.Cycle(S)
- 
--             # IV 1.d add node to Gt + position
++
 +            # IV 1.c create a new polygon with correct vnodes and correct points
 +            # P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
 +            # import ipdb
 +            # ipdb.set_trace()
 +            # IV 1.d add node to Gt + position
-             # By default a Layout cycle is defined as indoor
-             # unless it is separated from the outside cycle by an airwall
-             #
-@@ -6595,21 +6031,22 @@ class Layout(PyLayers):
-             # An outdoor cycle has no ceil reflection
-             seg = p.vnodes[p.vnodes>0]
-             lair = [x in self.name['AIR'] for x in seg]
--            outdoor = False
- 
-             if sum(lair)>0:
-                 isopen = True
-                 aseg = seg[np.where(lair)]
-                 outdoor = np.any([s in segma for s in aseg])
--                # if outdoor :
--                #     cyid = ncyid
--                #     ncyid = ncyid -1
++            # By default a Layout cycle is defined as indoor
++            # unless it is separated from the outside cycle by an airwall
++            #
++            # The user should be able to set this boolean to false for a patio
++            #
++            # An outdoor cycle has no ceil reflection
++            seg = p.vnodes[p.vnodes>0]
++            lair = [x in self.name['AIR'] for x in seg]
++
++            if sum(lair)>0:
++                isopen = True
++                aseg = seg[np.where(lair)]
++                outdoor = np.any([s in segma for s in aseg])
 +                if outdoor :
 +                    cyid = ncyid
 +                    ncyid = ncyid -1
-             else:
-                 isopen = False
++            else:
++                isopen = False
 +            # IV 1.e add node to Gt + position
 +            # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
 +            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor= not outdoor)
 +            self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
  
--            self.Gt.add_node(n,cycle=cycle,isopen=isopen,indoor= not outdoor)
--
 -        # Manage Gt connection ( edges)
 +        # IV 2. get edges
          for n1 in self.Gt.nodes():
              for n2 in self.Gt.nodes():
-                 if n1!= n2:
-@@ -6620,14 +6057,91 @@ class Layout(PyLayers):
+-                if n1!= n2 and (n1!=0 or n2!=0):
++                if n1!= n2:
+                     if self.Gt.node[n1]['polyg'].touches(self.Gt.node[n2]['polyg']):
+                         # find common segments
+                         seg = np.array([n for n in self.Gt.node[n1]['cycle'].cycle if (n in self.Gt.node[n2]['cycle'].cycle) and (n>0)])
+@@ -6627,14 +6057,91 @@ class Layout(PyLayers):
                          if len(seg)>0:
                              self.Gt.add_edge(n1,n2,segment=seg)
  
@@ -1350,11 +1391,11 @@ index 77d749b..65e6397 100644
 +
 +        #  V update Gs
 +        #   V 1.Update graph Gs segment with their 2 cycles information
-+        #
-+        #   initialize a void list 'ncycles' for each segment of Gs
          #
--        if verbose:
+-        if self.verbose:
 -            print 'done'
++        #   initialize a void list 'ncycles' for each segment of Gs
++        #
 +        self._updGsncy()
 +        # make a convex hull of layout
 +        # get segments of the mask ( equivalent to thoose connected to 0)
@@ -1432,7 +1473,7 @@ index 77d749b..65e6397 100644
          #
          #   VIII -  Construct the list of interactions associated to each cycle
          #
-@@ -6643,8 +6157,6 @@ class Layout(PyLayers):
+@@ -6650,8 +6157,6 @@ class Layout(PyLayers):
          #
          self._interlist()
  
@@ -1441,7 +1482,7 @@ index 77d749b..65e6397 100644
      def _updGsncy(self):
          """ update Gs ncycles using Gt information
  
-@@ -6682,60 +6194,23 @@ class Layout(PyLayers):
+@@ -6689,60 +6194,23 @@ class Layout(PyLayers):
  
      def _addoutcy(self,check=False):
          """ add outside cycle (absorbant region index 0 )
@@ -1508,7 +1549,7 @@ index 77d749b..65e6397 100644
      def _interlist(self,nodelist=[]):
          """ Construct the list of interactions associated to each cycle
  
-@@ -6851,7 +6326,7 @@ class Layout(PyLayers):
+@@ -6858,7 +6326,7 @@ class Layout(PyLayers):
                  p.vnodes[aw] = awid
  
  
@@ -1517,7 +1558,7 @@ index 77d749b..65e6397 100644
          self.macvx = geu.Polygon(U)
          self.macvx.setvnodes(self)
  
-@@ -7004,7 +6479,7 @@ class Layout(PyLayers):
+@@ -7011,7 +6479,7 @@ class Layout(PyLayers):
                          # Check if all the original area is covered 
                          # sometimes, area surrounded by 2 new airwalls is not found
                          # the following code re-add it.
@@ -1526,7 +1567,7 @@ index 77d749b..65e6397 100644
                          if isinstance(cpdiff,sh.Polygon):
                              cpdiff=sh.MultiPolygon([cpdiff])
                          if isinstance(cpdiff,sh.MultiPolygon):
-@@ -7433,7 +6908,7 @@ class Layout(PyLayers):
+@@ -7440,7 +6908,7 @@ class Layout(PyLayers):
  
          for icycle in self.Gt.node:
              #print "cycle : ",icycle
@@ -1535,7 +1576,7 @@ index 77d749b..65e6397 100644
              isopen = self.Gt.node[icycle]['isopen']
  
              polyg = self.Gt.node[icycle]['polyg']
-@@ -7444,16 +6919,11 @@ class Layout(PyLayers):
+@@ -7451,16 +6919,11 @@ class Layout(PyLayers):
  
              airwalls = filter(lambda x : x in self.name['AIR'],nseg)
              # indoor (cycles >0)
