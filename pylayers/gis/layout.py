@@ -5537,31 +5537,34 @@ class Layout(PyLayers):
     def polysh2geu(self,poly):
         """ transform sh.Polygon into geu.Polygon
         """
+        try:
+            Gsnodes = np.array(self.Gs.nodes())
+            # get node coordinates
+            nodept = [self.Gs.pos[i] for i in Gsnodes]
+            # transform into shapely points
+            shpt  = [sh.Point(pt) for pt in nodept]
+            # IV 1 get nodes and vnodes
+            # Create a ring to avoid taking points inside the polygon.
+            # This helps to avoid polygon inside polygons
+            # take exterior of polygon. embose it with buffer and find difference with original polygon*.
+            polye = poly.intersection((poly.exterior).buffer(1e-3))
 
-        Gsnodes = np.array(self.Gs.nodes())
-        # get node coordinates
-        nodept = [self.Gs.pos[i] for i in Gsnodes]
-        # transform into shapely points
-        shpt  = [sh.Point(pt) for pt in nodept]
-        # IV 1 get nodes and vnodes
-        # Create a ring to avoid taking points inside the polygon.
-        # This helps to avoid polygon inside polygons
-        # take exterior of polygon. embose it with buffer and find difference with original polygon*.
-        polye = poly.intersection((poly.exterior).buffer(1e-3))
+            uvn = np.where([polye.buffer(1e-1).contains(p) for p in shpt])[0]
+            vnodes = Gsnodes[uvn]
+            # IV 1.b transform vnodes to an ordered cycle with Cycle class 
+            # NOTE ! Using class cycle is MANDATORY
+            # because, some extra vnodes can be pickup during the contain 
+            # process before
+            S = nx.subgraph(self.Gs,vnodes)
+            S.pos={}
+            S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
 
-        uvn = np.where([polye.buffer(1e-3).contains(p) for p in shpt])[0]
-        vnodes = Gsnodes[uvn]
-        # IV 1.b transform vnodes to an ordered cycle with Cycle class 
-        # NOTE ! Using class cycle is MANDATORY
-        # because, some extra vnodes can be pickup during the contain 
-        # process before
-        S = nx.subgraph(self.Gs,vnodes)
-        S.pos={}
-        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
-
-        cycle = cycl.Cycle(S)
-        # IV 1.c create a new polygon with correct vnodes and correct points
-        P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
+            cycle = cycl.Cycle(S)
+            # IV 1.c create a new polygon with correct vnodes and correct points
+            P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
+        except:
+            import ipdb
+            ipdb.set_trace()
         return P
 
     def getangles(self,poly, unit= 'rad', inside=True):
@@ -5719,11 +5722,14 @@ class Layout(PyLayers):
                     C0 = poly.contains(ts)
                     if polyholes == []:
                         C=[False]
+                        I=0
                     else: 
-                        C = [ii.contains(ts) for ii in polyholes]
+                        C = [isinstance(ii.intersection(ts),sh.Polygon) for ii in polyholes]
 
-                    # if poly contains triangle but note the polyholes
-                    if C0 and not np.any(C):
+
+
+                    # if poly contains triangle but not the polyholes
+                    if C0 and (not np.any(C) ):
                         cp =ts
                         cp.setvnodes(self)
                         uaw = np.where(cp.vnodes == 0)[0]
@@ -5817,18 +5823,22 @@ class Layout(PyLayers):
             for d in daw:
                 self.del_segment(d,verbose=False)
         return ncpol
+ # k=['r','g','b','m','y','c']
+
+    def pltpoly(self,poly,fig=[],ax=[],color='#abcdef'):
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+        mpl = [PolygonPatch(x,alpha=0.2,color=color) for x in poly]
+        [ax.add_patch(x) for x in mpl]
+        plt.axis(self.ax)
+        plt.draw()
+
 
     def buildGt(self,check=True):
 
-        def pltpoly(poly,fig=[],ax=[]):
-            if fig == []:
-                fig=plt.gcf()
-            if ax == []:
-                ax=plt.gca()
-            mpl = [PolygonPatch(x,alpha=0.2) for x in poly]
-            [ax.add_patch(x) for x in mpl]
-            plt.axis(self.ax)
-            plt.draw()
+
 
 
         def pltGt(Gt,fig=[],ax=[]):
@@ -5944,6 +5954,7 @@ class Layout(PyLayers):
             try:
                 Rgeu.append(self.polysh2geu(r))
             except:
+                print "reject"
                 import ipdb
                 ipdb.set_trace()
             # if area are not the same, it means that there is inner holes in r
@@ -5960,6 +5971,7 @@ class Layout(PyLayers):
             Rgeu.extend(ncpol)
 
 
+
         ####################
         #### Manage  convex hull of the layout
         #### -------------------
@@ -5973,10 +5985,19 @@ class Layout(PyLayers):
         #### 2 . apply a delaunay and tranform a single non convexpolygon
         ###      into several convex ( self.delaunay)
         ###  3. remove old non convex polygon and readd new convex ones.
+    
         ncpol={}
         for ur,r in enumerate(Rgeu):
             if not r.isconvex():
+
                 ncpol[ur] = self._delaunay(r)
+
+                # plt.ion()
+                # self.pltpoly(ncpol[ur],fig=plt.gcf(),ax=plt.gca())
+                # plt.show()
+                # plt.draw()
+                # import ipdb
+                # ipdb.set_trace()
         Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
         [Rgeu.extend(ncpol[k]) for k in ncpol]
         
@@ -6199,7 +6220,6 @@ class Layout(PyLayers):
         """
         seg0 = [i for i in self.macvx.vnodes if i >0]
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
-
         if check :
             print "check len(ncycles) == 2",
             nodes = [i for i in self.Gs.nodes() if i>0]
