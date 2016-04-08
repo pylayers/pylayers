@@ -127,9 +127,9 @@
             
   <div class="section" id="effect-of-modyfiying-the-nature-of-sub-segments">
 <h1>Effect of Modyfiying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modyfiying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
-<p>This notebook illustrates a simple ray tracing simulation with diffeent
+<p>This notebook illustrates a simple ray tracing simulation with different
 material properties for a single segment separating 2 rooms which
-contains multi-subsegments. The noteboook illustrates in details the
+contains multi subsegments. The noteboook illustrates in details the
 whole steps.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.simul.link import *
 from pylayers.antprop.rays import *
@@ -171,34 +171,8 @@ structure.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>check len(ncycles) == 2 passed
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-KeyError                                  Traceback (most recent call last)
-
-&lt;ipython-input-4-de0401164687&gt; in &lt;module&gt;()
-      1 L.build()
-----&gt; 2 L.save()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in save(self, _filename)
-   5203             _fileini = racine + &#39;.ini&#39;
-   5204             self.savestr2(_filename)
--&gt; 5205             self.saveini(_fileini)
-   5206             print &quot;structure saved in &quot;, _filename
-   5207             print &quot;structure saved in &quot;, _fileini
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in saveini(self, _fileini)
-   1282             d[&#39;vnodes&#39;]=vnodes
-   1283             d[&#39;ss_slab&#39;]=[]
--&gt; 1284             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][0])
-   1285             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][-1])
-   1286             config.set(&quot;cycles&quot;,str(c),d)
-
-
-KeyError: &#39;ss_slab&#39;
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 </pre></div>
 </div>
 <p>The <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> graph dictionnary has the following structure</p>
@@ -272,10 +246,10 @@ KeyError: &#39;ss_slab&#39;
   <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s1">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
   <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s1">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s1">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s1">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s1">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
@@ -300,50 +274,17 @@ KeyError: &#39;ss_slab&#39;
 <span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">Ab</span><span class="o">=</span><span class="n">Ab</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-KeyError                                  Traceback (most recent call last)
-
-&lt;ipython-input-7-fd2986e5b29e&gt; in &lt;module&gt;()
-      1 L.chgmss(1,ss_name=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;WOOD&#39;],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
-----&gt; 2 L.save()
-      3 fGHz=np.linspace(1,11,100)
-      4 #Aa = Antenna(&#39;S1R1.vsh3&#39;)
-      5 #Ab = Antenna(&#39;S1R1.vsh3&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in save(self, _filename)
-   5203             _fileini = racine + &#39;.ini&#39;
-   5204             self.savestr2(_filename)
--&gt; 5205             self.saveini(_fileini)
-   5206             print &quot;structure saved in &quot;, _filename
-   5207             print &quot;structure saved in &quot;, _fileini
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in saveini(self, _fileini)
-   1282             d[&#39;vnodes&#39;]=vnodes
-   1283             d[&#39;ss_slab&#39;]=[]
--&gt; 1284             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][0])
-   1285             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][-1])
-   1286             config.set(&quot;cycles&quot;,str(c),d)
-
-
-KeyError: &#39;ss_slab&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>structure saved in  defstr.str2
+structure saved in  defstr.ini
 </pre></div>
 </div>
 <p>A link is the set of a layout and 2 termination points.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Aa</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-8-5cb5df1cbc48&gt; in &lt;module&gt;()
-----&gt; 1 Aa.plotG()
-
-
-NameError: name &#39;Aa&#39; is not defined
+<img alt="../../_images/Multisubsegments_15_0.png" src="../../_images/Multisubsegments_15_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6c1f5e7ad0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x2b6c1f5dd950&gt;)
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#f,a=Lk.show(rays=True)</span>
@@ -352,66 +293,111 @@ NameError: name &#39;Aa&#39; is not defined
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+AttributeError                            Traceback (most recent call last)
 
 &lt;ipython-input-9-7ecd8f980a4c&gt; in &lt;module&gt;()
       1 #f,a=Lk.show(rays=True)
 ----&gt; 2 f,a=Lk.show(rays=True)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.pyc in show(self, **kwargs)
+   1498         #
+   1499         if kwargs[&#39;rays&#39;]:
+-&gt; 1500             ECtt,ECpp,ECtp,ECpt = self.C.energy()
+   1501             if kwargs[&#39;pol&#39;]==&#39;tt&#39;:
+   1502                 val = ECtt
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in energy(self, mode, Friis, sumray)
+   4097         #
+   4098
+-&gt; 4099         ECtt = self.Ctt.energy(axis=1,Friis=Friis,mode=mode)
+   4100         ECtp = self.Ctp.energy(axis=1,Friis=Friis,mode=mode)
+   4101         ECpt = self.Cpt.energy(axis=1,Friis=Friis,mode=mode)
+
+
+AttributeError: &#39;Ctilde&#39; object has no attribute &#39;Ctt&#39;
 </pre></div>
 </div>
+<img alt="../../_images/Multisubsegments_16_1.png" src="../../_images/Multisubsegments_16_1.png" />
 <p>On the figure above, we can see the Tx and Rx each placed in a different
 room appart from a wall with a subsegement placed in the middle. Then
 for evaluating the radio link, simply type:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">applywav</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>checkh5
+Start Signatures
+run
+algo 2 ( ex 7)
+Signatures&#39;&gt; from 2_1_3 saved
+Stop signature 0.159786939621
+Start Rays
+Rays&#39;&gt; from 3_5_6 saved
+Stop rays 0.647227048874
+Ctilde&#39;&gt; from 5_6_0 saved
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+ValueError                                Traceback (most recent call last)
 
 &lt;ipython-input-10-d9efa0c5005d&gt; in &lt;module&gt;()
 ----&gt; 1 ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
 
 
-NameError: name &#39;Lk&#39; is not defined
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.pyc in eval(self, **kwargs)
+   1400             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
+   1401             #T channel
+-&gt; 1402             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
+   1403             self.save(H,&#39;H&#39;,self.dexist[&#39;H&#39;][&#39;grpname&#39;],force = kwargs[&#39;force&#39;])
+   1404         self.H = H
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in prop2tran(self, a, b, Friis, debug)
+   4211             b = ant.Antenna(&#39;Omni&#39;,param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0},fGHz=self.fGHz)
+   4212
+-&gt; 4213         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+   4214         Fat = bs.FUsignal(a.fGHz, a.Ft)
+   4215         Fap = bs.FUsignal(a.fGHz, a.Fp)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.pyc in eval(self, **kwargs)
+    271         # eval
+    272         #
+--&gt; 273         eval(&#39;self._Pattern__p&#39;+self.typ)(param=self.param)
+    274
+    275         self.evaluated = True
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.pyc in __pArray(self, **kwargs)
+    821         #
+    822
+--&gt; 823         self.Ft = wp*aFt*E
+    824         self.Fp = wp*aFp*E
+    825
+
+
+ValueError: operands could not be broadcast together with shapes (16290,8,1) (450,8,100)
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-11-08f49e889d34&gt; in &lt;module&gt;()
-----&gt; 1 Lk.C
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>Ctilde : Ray Propagation Channel Matrices
+---------
+(450, 100)
+Nray : 450
+fmin(GHz) : 1.0
+fmax(GHz): 11.0
+Nfreq : 100
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;l20&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-12-ef1e84aff51a&gt; in &lt;module&gt;()
-      1 f = plt.figure(figsize=(10,10))
-----&gt; 2 f,a=Lk.C.show(cmap=&#39;jet&#39;,fig=f,typ=&#39;l20&#39;,vmin=-120,vmax=-10)
-
-
-NameError: name &#39;Lk&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b6d7fef2210&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Multisubsegments_21_0.png" src="../../_images/Multisubsegments_21_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -427,15 +413,7 @@ NameError: name &#39;Lk&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-15-00ef4b2c8627&gt; in &lt;module&gt;()
-----&gt; 1 len(Lk.fGHz)
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">100</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">)</span>
@@ -472,49 +450,104 @@ NameError: name &#39;Lk&#39; is not defined
 <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-KeyError                                  Traceback (most recent call last)
-
-&lt;ipython-input-20-ae5fc4f64f59&gt; in &lt;module&gt;()
-      3 Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
-      4 Lk.L.g2npy()
-----&gt; 5 Lk.L.save()
-      6 fGHz=np.linspace(2,11,181)
-      7 #Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in save(self, _filename)
-   5203             _fileini = racine + &#39;.ini&#39;
-   5204             self.savestr2(_filename)
--&gt; 5205             self.saveini(_fileini)
-   5206             print &quot;structure saved in &quot;, _filename
-   5207             print &quot;structure saved in &quot;, _fileini
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in saveini(self, _fileini)
-   1282             d[&#39;vnodes&#39;]=vnodes
-   1283             d[&#39;ss_slab&#39;]=[]
--&gt; 1284             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][0])
-   1285             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][-1])
-   1286             config.set(&quot;cycles&quot;,str(c),d)
-
-
-KeyError: &#39;ss_slab&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>structure saved in  defstr.str2
+structure saved in  defstr.ini
+checkh5
+Start Signatures
+run
+algo 2 ( ex 7)
+Signatures&#39;&gt; from 2_1_3 saved
+Stop signature 0.156566143036
+Start Rays
+Rays&#39;&gt; from 3_5_6 saved
+Stop rays 0.13768696785
+Ctilde&#39;&gt; from 5_6_0 saved
+Tchannel&#39;&gt; from 5_6_0_0_0_0_0 saved
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-20-ae5fc4f64f59&gt; in &lt;module&gt;()
+      8 #Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)
+      9 ak,tauk=Lk.eval(force=True)
+---&gt; 10 plt.stem(Lk.H.taud,Lk.H.ak)
+     11 plt.stem(Lk.H.taud,Lk.H.ak[:,0,50])
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in stem(*args, **kwargs)
+   3341         ax.hold(hold)
+   3342     try:
+-&gt; 3343         ret = ax.stem(*args, **kwargs)
+   3344     finally:
+   3345         ax.hold(washold)
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.pyc in inner(ax, *args, **kwargs)
+   1810                     warnings.warn(msg % (label_namer, func.__name__),
+   1811                                   RuntimeWarning, stacklevel=2)
+-&gt; 1812             return func(ax, *args, **kwargs)
+   1813         pre_doc = inner.__doc__
+   1814         if pre_doc is None:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in stem(self, *args, **kwargs)
+   2417         label = kwargs.pop(&#39;label&#39;, None)
+   2418
+-&gt; 2419         markerline, = self.plot(x, y, markerfmt, label=&quot;_nolegend_&quot;)
+   2420
+   2421         if bottom is None:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.pyc in inner(ax, *args, **kwargs)
+   1810                     warnings.warn(msg % (label_namer, func.__name__),
+   1811                                   RuntimeWarning, stacklevel=2)
+-&gt; 1812             return func(ax, *args, **kwargs)
+   1813         pre_doc = inner.__doc__
+   1814         if pre_doc is None:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in plot(self, *args, **kwargs)
+   1422             kwargs[&#39;color&#39;] = c
+   1423
+-&gt; 1424         for line in self._get_lines(*args, **kwargs):
+   1425             self.add_line(line)
+   1426             lines.append(line)
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _grab_next_args(self, *args, **kwargs)
+    384                 return
+    385             if len(remaining) &lt;= 3:
+--&gt; 386                 for seg in self._plot_args(remaining, kwargs):
+    387                     yield seg
+    388                 return
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _plot_args(self, tup, kwargs)
+    362             x, y = index_of(tup[-1])
+    363
+--&gt; 364         x, y = self._xy_from_xy(x, y)
+    365
+    366         if self.command == &#39;plot&#39;:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _xy_from_xy(self, x, y)
+    223             raise ValueError(&quot;x and y must have same first dimension&quot;)
+    224         if x.ndim &gt; 2 or y.ndim &gt; 2:
+--&gt; 225             raise ValueError(&quot;x and y can be no greater than 2-D&quot;)
+    226
+    227         if x.ndim == 1:
+
+
+ValueError: x and y can be no greater than 2-D
+</pre></div>
+</div>
+<img alt="../../_images/Multisubsegments_29_2.png" src="../../_images/Multisubsegments_29_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-21-1ef58d341060&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.ak.shape
-
-
-AttributeError: &#39;Tchannel&#39; object has no attribute &#39;ak&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">cirair</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
@@ -533,37 +566,27 @@ AttributeError: &#39;Tchannel&#39; object has no attribute &#39;ak&#39;
 <span class="n">cirmet</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-KeyError                                  Traceback (most recent call last)
-
-&lt;ipython-input-23-02ef6687144f&gt; in &lt;module&gt;()
-      3 Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
-      4 Lk.L.g2npy()
-----&gt; 5 Lk.L.save()
-      6 Lk.eval(force=True)
-      7 cirmet = Lk.H.applywavB(wav.sf)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in save(self, _filename)
-   5203             _fileini = racine + &#39;.ini&#39;
-   5204             self.savestr2(_filename)
--&gt; 5205             self.saveini(_fileini)
-   5206             print &quot;structure saved in &quot;, _filename
-   5207             print &quot;structure saved in &quot;, _fileini
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in saveini(self, _fileini)
-   1282             d[&#39;vnodes&#39;]=vnodes
-   1283             d[&#39;ss_slab&#39;]=[]
--&gt; 1284             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][0])
-   1285             d[&#39;ss_slab&#39;].append(self.Gt.node[c][&#39;ss_slab&#39;][-1])
-   1286             config.set(&quot;cycles&quot;,str(c),d)
-
-
-KeyError: &#39;ss_slab&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>structure saved in  defstr.str2
+structure saved in  defstr.ini
+checkh5
+Start Signatures
+run
+algo 2 ( ex 7)
+Signatures&#39;&gt; from 2_1_3 saved
+Stop signature 0.157233953476
+Start Rays
+Rays&#39;&gt; from 3_5_6 saved
+Stop rays 0.13773393631
+Ctilde&#39;&gt; from 5_6_0 saved
+Tchannel&#39;&gt; from 5_6_0_0_0_0_0 saved
+WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6c23eb2ad0&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b6c3479a410&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="../../_images/Multisubsegments_32_2.png" src="../../_images/Multisubsegments_32_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -611,7 +634,7 @@ omnidirectional <code class="docutils literal"><span class="pre">Antenna('Omni')
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 06, 2016.
+      Last updated on avril 08, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Multisubsegments.txt"

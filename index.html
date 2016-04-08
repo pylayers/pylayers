@@ -29,23 +29,16 @@
         HAS_SOURCE:  true
       };
     </script>
-   
+    <script type="text/javascript" > $(function() { $('.carousel').carousel();}); </script> 
+    <script type='text/javascript' src="http://imsky.github.io/holder/holder.js"></script>
+    <script type="text/javascript" src="./_static/jquery.js"></script>
+    <script type="text/javascript" src="./_static/underscore.js"></script>
+    <script type="text/javascript" src="./_static/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./_static/doctools.js"></script>
+    <script type="text/javascript" src="./_static/d3.min.js"></script>
+    <script type="text/javascript" src="./_static/d3.geom.min.js"></script>
+    <script type="text/javascript" src="./_static/d3.layout.min.js"></script>
     <link rel="top" title="PyLayers" href="http://pylayers.github.io/pylayers/index.html#"> 
-
- 
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <style>
-  .carousel-inner > .item > img,
-  .carousel-inner > .item > a > img {
-      width: 70%;
-      margin: auto;
-  }
-  </style>
-
-
-
     <script>window["_GOOG_TRANS_EXT_VER"] = "1";</script>
 </head>
 
@@ -61,12 +54,39 @@
         <li><a href="./index.html#">PyLayers Home </a> |&nbsp;</li>
         <li><a
             href="./notebook/TOC.html">Documentation </a> |&nbsp;</li>
-         <li><a href="https://github.com/pylayers/pylayers">Download </a> |&nbsp; </li>
+        <li><a href="./download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div class="sidebarblock">
+        <!--
+        <h3>Versions</h3>
+        
+        <div class="tile">
+                <h4>Latest Release</h4>
+        0.1 &ndash; February 2013<br/>
+        <a href="http://pypi.python.org/pypi/pylayers/">downloads</a> | <a
+            href="http://pylayers.github.com/pylayers/documentation/latest/">docs</a>
+        | <a href="http://pylayers.github.com/documentation/latest/_downloads/pylayers_reference.pdf">pdf</a>
+        </div>
+        -->
+        <div class="tile">
+                <h4>Development</h4>
+        0.2dev<br>
+        <a href="https://github.com/pylayers/pylayers">github</a>
+        <!-- | <a 
+href="http://pylayers.github.com/documentation/development/">docs</a> | <a
+href="http://pylayers.github.com/documentation/development/_downloads/PyLayers.pdf">pdf</a>
+        -->
+        <br>
+    </div>
+
+    
+</div>
 <div class="sidebarblock">
 <h3>Contact</h3>
   <ul class="simple">
@@ -82,6 +102,11 @@
         href="./notebook/TOC.html">
            Notebooks </a></li>
 
+    <li><a class="reference external" href="http://pylayers.github.com/documentation/development/developer">
+            Developer guide</a></li>
+        
+    <li><a class="reference external" href="https://github.com/pylayers/pylayers/wiki/PyLayers-RoadMap">
+            Road map</a></li>
 
     <li><a class="reference external" href="https://twitter.com/PyLayers">
         <img src="./_static/twitter.png" i="" width="40" ,="" alt="Twitter"></a></li>
@@ -99,25 +124,23 @@
         <div class="bodywrapper">
           <div class="body">
             
-<h2> Propagation and Localisation Simulator</h2>
+<h2>Python Indoor Propagation Simulator for Mobile Localization </h2>
 
 <table align="left" style="margin-left: 0px">
 <tbody><tr>
   <td width="60%">
 <blockquote>
 <p>An Open Source Site Specific Radio Channel Simulator for Mobile
-Propagation - Communications - Mobility - Localisation -  Wearable Devices -  
-UWB-IR - 5G MIMO channel - IoT - Heterogeneous Networks.
-<!-- </p>
+Heterogeneous Networks.  Propagation - Communications - Mobility - Localization -  Wearable Devices. 
+</p>
 </blockquote>
   </td>
     <td width="40%">
         <img src="./_images/cormofig2.png">
-</td> -->
-</tr>
+</td></tr>
 </tbody></table>
 
-<!-- <table class="contentstable" align="center" style="margin-left: 30px"><tbody><tr>
+<table class="contentstable" align="center" style="margin-left: 30px"><tbody><tr>
   <td width="25%">
     <p class="biglink"><a class="biglink"
         href="./notebook/TOC.html">Documentation</a><br>
@@ -129,17 +152,16 @@ UWB-IR - 5G MIMO channel - IoT - Heterogeneous Networks.
        <span class="linkdescr"></span></p>
   </td>
   //-->
-  <!-- <td width="25%">
+  <td width="25%">
       <p class="biglink"><a class="biglink"
           href="./modules/pylayers.html">API References</a><br>
         <span class="linkdescr"></span></p>
-  </td> -->
- <!--  <td width="25%">
+  </td>
+  <td width="25%">
     <p clas="" s="biglink"><a class="biglink" href="http://pylayers.github.io/pylayers/acknowledgments.html">Acknowledgements</a><br>
        <span class="linkdescr"></span></p>
-  </td> -->
-<!--   </tr>
-</tbody></table> -->
+  </td></tr>
+</tbody></table>
 
 <h2>Main Features</h2>
 <ul class="simple">
@@ -163,6 +185,7 @@ UWB-IR - 5G MIMO channel - IoT - Heterogeneous Networks.
 </li><li> Hierarchical storage of various level of traces in HDF5 format 
 </li><li> Outputs for event-driven simulator <a
     href="http://wsnet.gforge.inria.fr/">WSNET</a> -->
+</li><li> Open source GPL license
 <!--
 </li><li> <a href="./documentation/PyFlyer.pdf">The PyLayers Flyer</a> 
 -->
@@ -204,7 +227,7 @@ div#examples_carousel .carousel-control {
     font-size: 37px;
     line-height: 19px;
     color: rgba(35, 47, 62, 1);
-    background: #FFFFFF;
+    backgr ound: #FFFFFF;
 }
 
 div#examples_carousel .carousel-control.right {
@@ -233,7 +256,7 @@ div#examples_carousel .carousel-indicators li {
 
 <div class="container">
   <div class="span9">
-    <div id="examples_carousel" class="carousel slide", data-ride=carousel>
+    <div id="examples_carousel" class="carousel slide", data-interval="false">
       <!-- Carousel items -->
       <div class="carousel-inner">
 
@@ -266,15 +289,8 @@ div#examples_carousel .carousel-indicators li {
           </div>
         </div>
 
+        
         <div class="item">
-          <div class="inner-item">
-            <img src="./_images/cormofig2.png" width=900>
-            <div class="carousel-caption">
-                <p>Human mobility in WBAN</p>
-            </div>    
-          </div>
-        </div>
-        <!-- <div class="item">
           <div class="inner-item">
             <img src="_static/example5.png" width=900>
             <div class="carousel-caption">
@@ -282,7 +298,7 @@ div#examples_carousel .carousel-indicators li {
                 Stamped Trajectories</p>
             </div>    
           </div>
-        </div> -->
+        </div>
 
         <div class="item">
           <div class="inner-item">
@@ -325,12 +341,6 @@ div#examples_carousel .carousel-indicators li {
 -->
 <ul class="simple">
 <a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
-    <img alt="_images/WHERE2_Logo.jpg" src="./_static/logoIETR.jpg" style="width: 100.0px "></a>
-<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
-    <img alt="_images/WHERE2_Logo.jpg" src="./_static/logoUR1.jpg" style="width: 100.0px "></a>
-<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
-    <img alt="_images/WHERE2_Logo.jpg" src="./_static/logoESIR.png" style="width: 100.0px "></a>
-<a class="reference external image-reference" href="http://www.kn-s.dlr.de/where2/news.php">
     <img alt="_images/WHERE2_Logo.jpg" src="./_static/WHERE2_Logo.jpg" style="width: 100.0px "></a>
 <a class="reference internal image-reference"
     href="http://www-leti.cea.fr/fr/Les-actualites/Le-projet-CORMORAN-explore-de-nouvelles-pistes2"><img
@@ -342,10 +352,10 @@ div#examples_carousel .carousel-indicators li {
 <h2>News</h2>
 <ul>
     <li> <b>June 9, 2013 </b>: PyLayers has been presented in session Radio Channel
-    Modeling for Localisation of <a
+    Modeling for Localization of <a
         href="http://icc2013.spsc.tugraz.at/Schedule">ICC2013 Workshop on
-        Advances in Network Localisation and Navigation</a> in Budapest<br>
-   N.Amiot,M.Laaraiedh,B.Uguen,"PyLayers: An Open Source Dynamic Simulator for Indoor Propagation and Localisation"
+        Advances in Network Localization and Navigation</a> in Budapest<br>
+   N.Amiot,M.Laaraiedh,B.Uguen,"PyLayers: An Open Source Dynamic Simulator for Indoor Propagation and Localization"
     <li> <b>August  23, 2013 </b>: PyLayers has been presented at
     `EuroScipy 2013` <a href='https://www.euroscipy.org/schedule/presentation/16/'> PyLayers :
         A Graph Based Python Open Source Indoor Propagation Simulator</a>
@@ -362,13 +372,14 @@ div#examples_carousel .carousel-indicators li {
       <ul>
         <li><a href="./index.html#">PyLayers Home </a> |&nbsp;</li>
         <li><a href="./notebook/TOC.html">Documentation </a> |&nbsp;</li>
-        <li><a href="https://github.com/pylayers/">Github</a> </li>
+        <li><a href="http://pylayers.github.io/pylayers/download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  
       </ul>
     </div>
 
     <div class="footer">
-        © Copyright 2016, PyLayers developer team.
+        © Copyright 2014, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
 <script type="text/javascript">
@@ -384,6 +395,6 @@ div#examples_carousel .carousel-indicators li {
     })(); 
 </script> 
  
-<script src="_static/jquery.js"></script>
+  
 
 </body></html>
