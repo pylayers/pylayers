@@ -439,7 +439,7 @@ class PropertiesWin(QDialog):    # any super class is okay
     def valide(self):
         """ ok click
         """
-        z = (self.heightmin.value(),self.heightmax.value())
+        z = [self.heightmin.value(),self.heightmax.value()]
         if self.transition.isChecked():
             trans = True
         else :
