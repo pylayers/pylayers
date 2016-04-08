@@ -540,6 +540,7 @@ class Layout(PyLayers):
         #
 
         nseg = filter(lambda x : x>0, Gs.nodes())
+	# warning tuple
         for k in nseg:
             Ls.Gs.node[k]['z'] = tuple((np.array(Ls.Gs.node[k]['z'])-self.zmin)*alpha[2]+self.zmin)
             if Ls.Gs.node[k].has_key('ss_z'):
