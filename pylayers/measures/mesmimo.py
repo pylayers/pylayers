@@ -8,10 +8,13 @@ from pylayers.gis.readvrml import *
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
+import scipy as sp
+import scipy.special as ss
 import numpy.linalg as la
 from time import sleep
+import math as mt
 from pylayers.measures.vna.E5072A import *
-
+import ipdb
 
 class MIMO(object):
     """ This class handles the data coming from the MIMO Channel Sounder IETR lab
@@ -58,7 +61,8 @@ class MIMO(object):
                     'Nt' : 4,
                     'Nr' : 8,
                     'Aat': [],
-                    'Aar': []
+                    'Aar': [],
+                    'snrdB': np.linspace(0,25,100)
                   }
 
         for k in defaults:
@@ -75,6 +79,7 @@ class MIMO(object):
         Nz = kwargs.pop('Nz')
         Nt = kwargs.pop('Nt')
         Nr = kwargs.pop('Nr')
+        self.snrdB = kwargs.pop('snrdB')
 
         self.Aat = kwargs.pop('Aat')
         self.Aar = kwargs.pop('Aar')
@@ -83,7 +88,7 @@ class MIMO(object):
         if self.Aat == []:
             self.Aat = AntArray(N=[4,1,1])
 
-        
+
         self.Nf  = Nf
         self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
         self.rep = rep
@@ -396,7 +401,7 @@ class MIMO(object):
         # nf x nt x 1 x power
         # Ps2   = Vshwu*np.conj(Vshwu)
 
-        Pb  = N0*BGHz*1e9
+        Pb  = N0*BGHz*1e9   # Watt
 
         #Pb2 = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
 
@@ -452,7 +457,9 @@ class MIMO(object):
 
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)
+        # Bandwidth
         BGHz  = fGHz[-1]-fGHz[0]
+        # Frequency step
         dfGHz = fGHz[1]-fGHz[0]
 
         # White Noise definition
@@ -469,6 +476,9 @@ class MIMO(object):
         # Evaluation of the transfer tensor
 
         HdH,U,ld,V = self.transfer()
+
+        # Identity matrices
+
         It = np.eye(self.Nt)
         Ir = np.eye(self.Nr)
 
@@ -476,7 +486,9 @@ class MIMO(object):
         # Iterative implementation of Water Filling algorithm
         #
 
+        # pb : (nf,nt)   noise power (Watt)
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
+        # pt : (nf,nt,power)  Total power uniformly spread over (nt*nf-1)
         pt = Pt[None,None,:]/((self.Nf-1)*self.Nt)
         mu = pt
         Q0 = np.maximum(0,mu-pb[:,:,None]/ld[:,:,None])
@@ -499,6 +511,103 @@ class MIMO(object):
 
 
         return(rho,Cwf)
+
+    # def ber(self,cmd='QPSK',m = 4, snrdB = np.linspace(0,25,100)):
+    #     """computation of bit error rate
+
+    #     Parameters
+    #     ----------
+    #     cmd : 'QPSK' or M-QAM
+
+    #     M : number of bit (int) (2 or 4 or 8)
+    #     """
+        
+    #     snr = 10**(snrdB/10.)
+    #     M = 2**m
+    #     eta = np.log(M, 2)
+
+    #     if cmd == 'QPSK':
+    #         berqpsk = 0.5 * ss.erfc(sqrt(snr))
+
+    #     if cmd == 'M-PSK':
+    #         bermpsk =  1 / eta * ss.erfc(sqrt(snr * eta) * np.sin(np.pi / M))
+
+    #     if cmd == 'M-QAM':
+    #         bermqam = 2 / eta * (1 - 1 / sqrt(M)) * ss.erfc(sqrt(3 * snr * eta/(2 * (M - 1)))
+        
+    #     return(berqpsk,bermpsk,bermqam)
+
+    # def berplot(self):
+    #     """plot BER functions
+    #     """
+
+    #     berqpsk,bermpsk,bermqam = self.ber(cmd='',m = 4, snrdB = np.linspace(0,25,100))
+
+    #     if cmd == 'QPSK':
+    #         plt.semilogy(snrdB,berqpsk,label='QPSK')
+
+    #     if cmd == 'M-PSK':
+    #         plt.semilogy(snrdB,bermqpsk,label='QPSK')
+
+    #     if cmd == 'M-QAM':
+    #         plt.semilogy(snrdB,bermqam,label='4-PSK')
+
+    #     sns.set_style("darkgrid")
+    #     plt.ylim([10**-9, 0.5])
+    #     plt.figure(figsize=(20,20))
+    #     plt.xlabel('SNR(dB)',fontsize=15)
+    #     plt.ylabel('Bit Error Rate',fontsize=15)
+    #     plt.legend(loc='best')
+    #     plt.title("Digital Modulation Bit Error Rate")
+    #     plt.show()
+
+    def linear_ZF(self,cmd='QPSK',m = 4, snrdB = np.linspace(0,25,100)):
+        """linear Zero Forcing precoding
+        Parameters
+        ----------
+        
+        """
+
+        # H  : nr x nt x nf
+        H = self.Hcal.y
+        # Hd : nt x nr x nf
+        Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
+        H_inv = np.linalg.inv(H)
+        H_inv_d = np.transpose(H_inv)
+        tr_mat = np.matrix.trace(H_inv*H_inv_d)
+        beta = sqrt(self.Nt/(tr_mat))
+        W_zf = np.dot(beta,H_inv)
+
+
+
+    def linear_MMSE(self,cmd='QPSK',m = 4, snrdB = np.linspace(0,25,100)):
+        """linear MMSE precoding
+
+        Parameters
+        ----------
+        
+        """
+        # H  : nr x nt x nf
+        H = self.Hcal.y
+        # Hd : nt x nr x nf
+        Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
+        HHd =np.einsum('ijk,jlk->ilk',H,Hd)
+        Hh = np.transpose(H)
+        H_inv = np.linalg.inv(H)
+        H_inv_d = np.transpose(H_inv)
+        tr_mat = np.matrix.trace(H_inv*H_inv_d)
+        beta = sqrt(self.Nt/(tr_mat))
+        
+        Pt = np.logspace(-3,1,100)
+        kB = 1.3806488e-23
+        N0 = kB*273
+        B  = 400e6
+        Pb = N0*B
+        A = np.linalg.inv(HHd + snr)
+        B = np.dot(Hh,A)
+        W_mmse = beta * B
+
+
 
     # def meas(self):
     #     """ Allows meas from VNA and Scanner
@@ -1022,5 +1131,4 @@ class MIMO(object):
                     ax[iR,iT].set_xlabel('f (GHz)')
                 ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
-
 

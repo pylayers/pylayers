@@ -635,7 +635,7 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
 
     """
 
-    if '/' or '\\' in _filename:
+    if (('/' in _filename) or ('//' in _filename)):
         filename = _filename
     else:
         filename = pyu.getlong(_filename,os.path.join('gis','osm'))

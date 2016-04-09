@@ -264,6 +264,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
 
 
     """
+    
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
@@ -490,7 +491,8 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     """
 
-    cel = 2.997925e8
+
+    cel = 299792458
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------

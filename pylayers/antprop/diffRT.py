@@ -1,10 +1,12 @@
+#!/usr/bin/python
+# -*- coding: latin1 -*-
 import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
-def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
+def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     """ Luebbers Diffration coefficient
-    for Ray tracing 
+    for Ray tracing
 
 
 
@@ -24,13 +26,19 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
     matN : Mat
     beta : np.array (Nb)
         skew incidence angle (rad)
+    mode : str ( 'tab','exact')
+        if 'tab': the Fresnel function is interpolated
+        ( increase speed)
+        if 'exact': the Fresnel function is computed for each values
+        ( increase accuracy)
+        (see FreF)
 
     Return
     ------
 
-    Ds : numpy array 
+    Ds : numpy array
         Diffraction soft
-    Dh : numpy array 
+    Dh : numpy array
         Diffraction hard
 
     Examples
@@ -133,17 +141,33 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
 #--------------------------------------------------
 #calcul des 4 termes du coeff diff
 #--------------------------------------------------
+    # by construction
+    # 0 < KLA < 2*k*L
+    klamax = 2*np.max(k)*np.max(L)
+    if mode == 'tab':
+        #xF0 = np.logspace(-6,-2,1000)
+        #xF1 = np.logspace(-2,np.log10(klamax),1000)
+        #xF = np.hstack((xF0,xF1))
+        #pdb.set_trace()
+        # xF = np.logspace(-6,np.log10(klamax),1000)
+        xF =  np.linspace(-8,np.log10(klamax),2000)
+        pxF = 10**xF
+        F = FreF(pxF)[0]
+    else :
+        xF = []
+        F=[]
+
     sign  =  1.0
-    D1     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
+    D1     = Dfunc(sign,k,N,phi-phi0,si,sd,xF,F,beta)
 
     sign  =  -1.0
-    D2     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
+    D2     = Dfunc(sign,k,N,phi-phi0,si,sd,xF,F,beta)
 
     sign  =  +1.0
-    D3     = Dfunc(sign,k,N,phi+phi0,si,sd,beta)
+    D3     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
 
     sign  =  -1.0
-    D4     = Dfunc(sign,k,N,phi+phi0,si,sd,beta)
+    D4     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
 
 #--------------------------------------
 #n>=1 : exterior wedge
@@ -256,7 +280,7 @@ def G(N,phi0,Ro,Rn):
 
     return Go,Gn
 
-def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
+def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     """
 
     Parameters
@@ -270,7 +294,12 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     si : distance source-D
     sd : distance D-observation
     beta : skew incidence angle
-
+    xF : array
+        support of Fresnel function. 
+    F : array
+        Values of Fresnel function in regard of support
+        if F =[], fresnel function is computed
+        otherwise the passed interpolation F is used.
     Reference
     ---------
 
@@ -285,6 +314,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
         2n*racine(2*np.pi*k)    np.tan(dphi/n)sin(beta)
 
     """
+
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
@@ -306,7 +336,18 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     tan   = np.tan(angle)
 
     Di = np.empty(KLA.shape)
-    Fkla,ys,yL = FreF(KLA)
+    
+    if F == []:
+        Fkla,ys,yL = FreF(KLA)
+    else :
+        #pxF = 10**xF
+        #uF = (np.abs(KLA[:,:]-pxF[:,None,None])).argmin(axis=0)
+        uF2 = len(F)*(np.log10(np.abs(KLA))-xF[0,None,None])/(xF[-1,None,None]-xF[0,None,None])
+        uF2_int = np.floor(uF2).astype('int')
+        #pdb.set_trace()
+        Fkla = F[uF2_int]
+        #if np.max(Fkla) > 1:
+        #    Warning('diffRT : Fkla tab probably wrong')
     # 4.56 Mac Namara
     Di = -cste*Fkla/tan
 
@@ -326,7 +367,6 @@ def  FresnelI(x) :
         real argument
 
     """
-    print x.shape
 
     v  = np.empty(x.shape,dtype=complex)
     y  = np.abs(x)
@@ -358,14 +398,13 @@ def  FresnelI(x) :
 
     c1 = (1.0)/c1
     z1  = c1*c1
-    # import ipdb
-    # ipdb.set_trace()
+
     a1=((((((((((
       .23393900e-3*z1 -.12179300e-2)*z1   +.21029670e-2)*z1
       +.2464200e-3)*z1 -.67488730e-2)*z1   +.11948809e-1)*z1
       -.9497136e-2)*z1 +.68989200e-3)*z1   +.57709560e-2)*z1
       +.3936000e-5)*z1 -.24933975e-1)*z1*c1
-    # a1=((((((((((.23393900e-3*z1 -.12179300e-2)*z1+.21029670e-2)*z1+.2464200e-3)*z1 -.67488730e-2)*z1   +.11948809e-1)*z1-.9497136e-2)*z1 +.68989200e-3)*z1   +.57709560e-2)*z1+.3936000e-5)*z1 -.24933975e-1)*z1*c1
+
 
     b1=(((((((((((
        .838386000e-3*z1  -.55985150e-2)*z1  +.16497308e-1)*z1

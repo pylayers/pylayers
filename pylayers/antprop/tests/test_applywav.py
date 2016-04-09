@@ -1,6 +1,6 @@
-import numpy as np 
+import numpy as np
 from pylayers.simul.link import *
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import time
 print "======================="
 print " start test_applywav.py "

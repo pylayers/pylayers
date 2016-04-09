@@ -72,8 +72,8 @@ def vsh(A, dsf=1):
         #
         # Real part
         #
-        Fpr = A.Fp[k][::dsf, ::dsf].real
-        Ftr = A.Ft[k][::dsf, ::dsf].real
+        Fpr = A.Fp[::dsf, ::dsf,k].real
+        Ftr = A.Ft[::dsf, ::dsf,k].real
         #
         # Fpr     Ntheta,Nphi
         #
@@ -84,8 +84,8 @@ def vsh(A, dsf=1):
         #
         # Imaginary part
         #
-        Fpi = A.Fp[k][::dsf, ::dsf].imag
-        Fti = A.Ft[k][::dsf, ::dsf].imag
+        Fpi = A.Fp[::dsf, ::dsf,k].imag
+        Fti = A.Ft[::dsf, ::dsf,k].imag
         bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
                                           lvha, wvha,
                                           np.transpose(Fpi),

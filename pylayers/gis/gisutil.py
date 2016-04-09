@@ -195,7 +195,7 @@ def minsec2dec(old):
 
     """
     direction = {'N':-1, 'S':1, 'E': -1, 'W':1}
-    new = old.replace(u'°',' ').replace('\'',' ').replace('"',' ')
+    new = old.replace(u'',' ').replace('\'',' ').replace('"',' ')
     new = new.split()
     new_dir = new.pop()
     return (int(new[0])+int(new[1])/60.0+int(new[2])/3600.0) * direction[new_dir]
@@ -203,7 +203,7 @@ def minsec2dec(old):
 
 def distance_on_earth(lat1, long1, lat2, long2):
     """
-    Compute great circle distance (the shortest distance over the earth’s surface)
+    Compute great circle distance (the shortest distance over the earths surface)
     between 2 points on earth: A(lat1,lon1) and B(lat2,lon2) 
 
     (This is a John Cook code, thanks to him !)
@@ -211,13 +211,13 @@ def distance_on_earth(lat1, long1, lat2, long2):
     Parameters
     ---------
 
-    lat1 : float for  DD format | str for DMS format
+    lat1 : float for  DDformat | str for DMS format
         latitude first point 
-    lat2 : float for  DD format | str for DMS format
+    lat2 : float for  DDformat | str for DMS format
         latitude second point 
-    lon1 : float for  DD format | str for DMS format
+    lon1 : float for  DDformat | str for DMS format
         longitude first point 
-    lon2 : float for  DD format | str for DMS format
+    lon2 : float for  DDformat | str for DMS format
         longitude second point 
 
     Return
@@ -274,3 +274,20 @@ def distance_on_earth(lat1, long1, lat2, long2):
     # Remember to multiply arc by the radius of the earth 
     # in your favorite set of units to get length.
     return arc*R
+
+
+
+
+def haversine(lat1, lon1, lat2, lon2):
+
+
+    R = 6371000 # earth radius in meter
+    phi1 = lat1 * np.pi/180.
+    phi2 = lat2 * np.pi/180.
+    deltaphi = (lat2-lat1) * np.pi/180.
+    deltalamda = (lon2-lon1) * np.pi/180.
+
+    a = np.sin(deltaphi/2) * np.sin(deltaphi/2) + np.cos(phi1) * np.cos(phi2) * np.sin(deltalamda/2) * np.sin(deltalamda/2)
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1-a))
+
+    return R * c

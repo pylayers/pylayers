@@ -1,5 +1,5 @@
 # PyLayers 
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/logo.png" width="150">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logo.png" width="150">
 
 
 PyLayers an Open Source Site Specific Radio Channel Simulator for 
@@ -44,7 +44,7 @@ See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.
 >>> DL.eval()
 >>> DL._show3()
 ```
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/_show3.png" width="300">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/_show3.png" width="300">
 
 ## Troubleshooting
 
@@ -64,28 +64,24 @@ Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, 
 
 This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
 
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/logoUR1.jpg" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/logoIETR.jpg" width="100
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoUR1.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/logoIETR.jpg" width="100
 ">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/ucells.png" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/where1logo.jpg" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/WHERE2_Logo.jpg" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/Cormo.png" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/IR.png" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/bretagnegd.jpg" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/anr.png" width="100">
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/fp7.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/ucells.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/where1logo.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/WHERE2_Logo.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/Cormo.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/IR.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/bretagnegd.jpg" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/anr.png" width="100">
+<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/fp7.png" width="100">
 
 
 
 License
-Copyright ©, 2013 University of Rennes 1
+Copyright ©, 2016 University of Rennes 1
 <!-- 
 Pylayers is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. -->
-
-
-
-
 
 
 [![Analytics](https://ga-beacon.appspot.com/UA-34943220-2/pylayers/pylayers)](https://github.com/igrigorik/ga-beacon)

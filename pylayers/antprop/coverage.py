@@ -22,6 +22,8 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
 import pylayers.antprop.loss as loss
+import pylayers.antprop.deygout as dg
+import pylayers.gis.ezone as ez
 import pylayers.signal.standard as std
 
 import matplotlib.cm  as cm
@@ -106,25 +108,42 @@ class Coverage(PyLayers):
         self.showopt   = dict(self.config.items('show'))
 
         # get the Layout
-        self.L = Layout(self.layoutopt['filename'])
+        filename = self.layoutopt['filename']
+        if filename.endswith('ini'):
+            self.typ = 'indoor'
+            self.L = Layout(filename)
 
-        # get the receiving grid
-        self.nx = eval(self.gridopt['nx'])
-        self.ny = eval(self.gridopt['ny'])
-        self.mode = self.gridopt['mode']
-        self.boundary = eval(self.gridopt['boundary'])
-        self.filespa = self.gridopt['file']
+            # get the receiving grid
+            self.nx = eval(self.gridopt['nx'])
+            self.ny = eval(self.gridopt['ny'])
+            self.mode = self.gridopt['mode']
+            self.boundary = eval(self.gridopt['boundary'])
+            self.filespa = self.gridopt['file']
+            #
+            # create grid
+            #
+            self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
+            self.dap = {}
+            for k in self.apopt:
+                kwargs  = eval(self.apopt[k])
+                ap = std.AP(**kwargs)
+                self.dap[eval(k)] = ap
+            try:
+                self.L.Gt.nodes()
+            except:
+                pass
+            try:
+                self.L.dumpr()
+            except:
+                self.L.build()
+                self.L.dumpw()
 
-        #
-        # create grid
-        #
-        self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
 
-        self.dap = {}
-        for k in self.apopt:
-            kwargs  = eval(self.apopt[k])
-            ap = std.AP(**kwargs)
-            self.dap[eval(k)] = ap
+        else:
+            self.typ='outdoor'
+            self.E = ez.Ezone(filename)
+            self.E.loadh5()
+            self.E.rebase()
 
         self.fGHz = np.array([])
         #self.fGHz = eval(self.txopt['fghz'])
@@ -141,35 +160,25 @@ class Coverage(PyLayers):
         # show section
         self.bshow = str2bool(self.showopt['show'])
 
-        try:
-            self.L.Gt.nodes()
-        except:
-            pass
-        try:
-            self.L.dumpr()
-        except:
-            self.L.build()
-            self.L.dumpw()
-
-
     def __repr__(self):
         st=''
-        st = st+ 'Layout file : '+self.L.filename + '\n\n'
-        st = st + '-----list of Access Points ------'+'\n'
-        for k in self.dap:
-            st = st + self.dap[k].__repr__()+'\n'
-        st = st + '-----Rx------'+'\n'
-        st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n'
-        st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
-        st = st + '--- Grid ----'+'\n'
-        st= st+ 'mode : ' + str(self.mode) + '\n'
-        if self.mode<>'file':
-            st= st+ 'nx : ' + str(self.nx) + '\n'
-            st= st+ 'ny : ' + str(self.ny) + '\n'
-        if self.mode=='zone':
-            st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
-        if self.mode=='file':
-            st = st+' filename : '+self.filespa+'\n'
+        if self.typ=='indoor':
+            st = st+ 'Layout file : '+self.L.filename + '\n\n'
+            st = st + '-----list of Access Points ------'+'\n'
+            for k in self.dap:
+                st = st + self.dap[k].__repr__()+'\n'
+            st = st + '-----Rx------'+'\n'
+            st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n'
+            st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
+            st = st + '--- Grid ----'+'\n'
+            st= st+ 'mode : ' + str(self.mode) + '\n'
+            if self.mode<>'file':
+                st= st+ 'nx : ' + str(self.nx) + '\n'
+                st= st+ 'ny : ' + str(self.ny) + '\n'
+            if self.mode=='zone':
+                st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
+            if self.mode=='file':
+                st = st+' filename : '+self.filespa+'\n'
         return(st)
 
     def creategrid(self,mode='full',boundary=[],_fileini=''):
@@ -415,9 +424,14 @@ class Coverage(PyLayers):
 
         """
 
+        # na : number of access point
         na = self.na
 
+        # U : 1 x 1 x na x na
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
+
+        # CmWo : received power in mW orthogonal polarization
+        # CmWp : received power in mW parallel polarization
 
         ImWo = np.einsum('ijkl,ijl->ijk',U,self.CmWo)
         ImWp = np.einsum('ijkl,ijl->ijk',U,self.CmWp)
@@ -429,7 +443,7 @@ class Coverage(PyLayers):
         self.sinrp = self.CmWp/(ImWp+NmW)
 
     def evbestsv(self):
-        """ determine best server map
+        """ determine the best server map
 
         Notes
         -----
@@ -904,14 +918,14 @@ class Coverage(PyLayers):
                 if polar=='o':
                     V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinro)/np.log(2)
                 if polar=='p':
-                    V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinrp)/np.log(2)    
+                    V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinrp)/np.log(2)
             if typ=='pr':
                 title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dBm'
                 else:
                     lgdcb = 'mW'
-                if polar=='o':    
+                if polar=='o':
                     V = self.CmWo
                 if polar=='p':
                     V = self.CmWp
@@ -922,9 +936,9 @@ class Coverage(PyLayers):
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                if polar=='o':    
+                if polar=='o':
                     V = self.Lwo*self.freespace
-                if polar=='p':    
+                if polar=='p':
                     V = self.Lwp*self.freespace
 
             if a == -1:

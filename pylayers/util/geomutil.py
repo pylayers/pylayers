@@ -172,6 +172,8 @@ from   scipy.linalg import toeplitz, triu
 from   pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.graphutil as gru
+import pylayers.util.pyutil as pyu
+
 #from antenna import *
 import shapely.geometry as shg
 import shapely.ops as sho
@@ -394,6 +396,7 @@ class Polygon(PyLayers,shg.Polygon):
             2xNp np.array
             shg.MultiPoint
             shg.Polygon
+            tuple : self.ax
         vnodes : list of alternating points and segments numbers
             default = [] in this case a regular ordered sequence
             is generated.
@@ -675,7 +678,8 @@ class Polygon(PyLayers,shg.Polygon):
             default #abcdef"
         alpha :  float
             transparency   (default 0.8)
-
+        vnodes : bool
+            display vnodes
         Examples
         --------
 
@@ -701,7 +705,7 @@ class Polygon(PyLayers,shg.Polygon):
         defaults = {'show': False,
                 'fig': [],
                 'ax': [],
-                'label':False,
+                'vnodes':False,
                 'color':'#abcdef',
                 'edgecolor':'#000000',
                 'alpha':0.8 ,
@@ -734,7 +738,7 @@ class Polygon(PyLayers,shg.Polygon):
                 color = kwargs['color'],
                 alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
-        if kwargs['label']:
+        if kwargs['vnodes']:
             for k in range(len(numpt)):
                 ax.text(x[k],y[k],numpt[k])
 
@@ -2371,7 +2375,8 @@ def angular(p1, p2):
 
 
     """
-    print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong')
+    #print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going
+    #                         deprecated  because wrong')
     if p1[0] < p2[0] and p1[1] < p2[1]:
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
     elif p1[0] > p2[0] and p1[1] < p2[1]:
@@ -3023,9 +3028,42 @@ def ccw(a, b, c):
     >>> u = ccw(a,b,c)
 
     """
+    assert a.shape[0]==2
+    assert b.shape[0]==2
+    assert c.shape[0]==2
     #return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) > (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))
     return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) >
            (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
+
+def intersect_line_seg(line,seg):
+    """ intersect a line and a segment
+    
+    Parameters 
+    ----------
+    
+    line : (point,vec)
+    seg :  (pta,phe)
+    
+    Returns
+    -------
+    
+    k : intersection parameter (0<k<1 if intersection)
+    M : intersection point 
+    
+    """
+    pt, v = line
+    pta,phe = seg
+    vseg = phe-pta
+    xht = phe[0]-pta[0]
+    yth = pta[1]-phe[1]
+    num = -(v[1]*(pta[0]-pt[0])+v[0]*(pt[1]-pta[1]))
+    den = (v[1]*xht+v[0]*yth)
+    if (abs(den) > 0):
+        k = num/den
+    else:
+        k = 2
+    M = pta+k*vseg
+    return(k,M)
 
 
 def intersect(a, b, c, d):
@@ -4278,12 +4316,15 @@ def mirror(p,pa,pb):
     >>> from pylayers.util.plotutil import *
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
-    >>> p = np.random.randn(2,1000)
-    >>> pa  = np.array([0,0])
-    >>> pb  = np.array([0,1])
+    >>> p = np.random.randn(2,10)
+    >>> pa  = np.array([-0.5,1])
+    >>> pb  = np.array([0,0])
     >>> M = mirror(p,pa,pb)
     >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
     >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
+    >>> displot(p,M,alpha=0.2)
+    >>> axis = np.vstack((pa,pb))
+    >>> plt.plot(axis[:,0],axis[:,1])
 
     """
 
@@ -4318,6 +4359,95 @@ def mirror(p,pa,pb):
     v0 = np.dot(-S, p) + vc0
     x = la.solve(A, v0)
     return x
+
+def axmat(pa,pb):
+    """ Compute the image of p wrt the segment pa pb
+
+    Parameters
+    ----------
+
+
+    pa : numpy.ndarray
+        segment tail
+    pb : numpy.ndarray
+        segment head
+
+    Returns
+    -------
+
+    S : numpy.ndarray
+        symmetry matrix
+    v : numpy.ndarray
+        translatrion vector
+
+    Notes
+    -----
+
+    fir x is corrdiante of the point to mirror, 
+    the mirrored point x' from pa and pb  can be obtain with :
+
+    x' = np.dot(x,S) + v
+
+
+
+    Examples
+    --------
+
+    .. plot::
+        :include-source:
+
+    >>> from pylayers.util.geomutil import *
+    >>> from pylayers.util.plotutil import *
+    >>> import matplotlib.pyplot as plt
+    >>> import numpy as np
+    >>> p = np.random.randn(2,10)
+    >>> pa  = np.array([-0.5,1])
+    >>> pb  = np.array([0,0])
+    >>> S,v = axmat(pa,pb)
+    >>> M = np.dot(p,S) + v
+    >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
+    >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
+    >>> displot(p,M,alpha=0.2)
+    >>> axis = np.vstack((pa,pb))
+    >>> plt.plot(axis[:,0],axis[:,1])
+
+    """
+
+    if np.shape(pa)==(2,):
+        pa = pa.reshape(2,1)
+    if np.shape(pb)==(2,):
+        pb = pb.reshape(2,1)
+
+    pab = pb - pa
+    alpha = np.sum(pab * pab, axis=0)
+    zalpha = np.where(alpha == 0.)
+    alpha[zalpha] = 1.
+
+    dsal = (2. / alpha)
+    pampby = pa[1, :] - pb[1, :]
+    pbmpax = pb[0, :] - pa[0, :]
+    prod = pbmpax * pampby
+
+    a = 1 - dsal * (pampby ** 2)
+    b = dsal * prod
+    c = dsal * (pa[0, :] * (pampby ** 2) + pa[1, :] * prod)                   
+    d = dsal * (pa[1, :] * (pbmpax ** 2) + pa[0, :] * prod) 
+                        
+    # a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+    # b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+    # c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+    #                     pa[1, :] * (pa[1, :] - pb[1, :]) *
+    #                     (pb[0, :] - pa[0, :]))
+    # d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+    #                     pa[0, :] * (pa[1, :] - pb[1, :]) *
+    #                     (pb[0, :] - pa[0, :]))
+
+    N = 1
+    S = np.array([[a[0],-b[0]],[-b[0],-a[0]]])
+    vc0 = np.array([c[0], d[0]])
+    # v0 = np.dot(-S, p) + vc0
+    return S,vc0
+
 
 def distseg(a,b,c,d,alpha,beta):
     """ distance to segments
@@ -4570,6 +4700,44 @@ def qrdecomp(V):
     ipdb.set_trace()
     return V
 
+
+
+
+def check_point_unicity(A):
+    """ check if all rows of an array are unique
+
+    Parameters
+    ----------
+
+        A : np.ndarray (Npt, 2|3)
+
+    Return
+    ------
+        similar : list
+        list of index of similar points
+        if void list, all poitns are differents
+
+    Example
+    -------
+
+    >>> import numpy as np
+    >>> a = np.arange(10)
+    >>> a = np.np.vstack((a,a))
+    >>> check_point_unicity(a.T)
+    []
+    >>> b=np.array([4,4])
+    >>> aa=np.concatenate((a,b[:,None]),axis=1)
+    >>> check_point_unicity(aa.T)
+    [4, 10]
+
+    """
+    similar = []
+    for ua in xrange(len(A)):
+        rA=np.roll(A,-ua,axis=0)
+        # print rA
+        if any((A[ua] == x).all() for x in rA[1:]):
+            similar.append(ua)
+    return similar
 
 
 if __name__ == "__main__":

@@ -576,7 +576,8 @@ class Bsignal(PyLayers):
 
         # shape of y and number of dimensions
 
-        shy = self.y.shape
+        sely = np.squeeze(self.y)
+        shy = sely.shape
         naxy = len(shy)
 
         # 2 axis selection
@@ -619,11 +620,18 @@ class Bsignal(PyLayers):
             dt = self.y[us:uf,vs:vf]
         elif naxy==3:
             if ((ax[0]==0) & (ax[1]==1)):
-                dt = self.y[us:uf,vs:vf,ik]
+                dt = sely[us:uf,vs:vf,ik]
             if ((ax[0]==0) & (ax[1]==2)):
-                dt = self.y[us:uf,ik,vs:vf]
+                dt = sely[us:uf,ik,vs:vf]
             if ((ax[0]==1) & (ax[1]==2)):
-                dt = self.y[ik,us:uf,vs:vf]
+                dt = sely[ik,us:uf,vs:vf]
+        elif naxy==4:
+            if ((ax[0]==0) & (ax[1]==1)):
+                dt = sely[0,us:uf,vs:vf,ik]
+            if ((ax[0]==0) & (ax[1]==2)):
+                dt = sely[0,us:uf,ik,vs:vf]
+            if ((ax[0]==1) & (ax[1]==2)):
+                dt = sely[0,ik,us:uf,vs:vf]
 
         if t=='m':
             ylabels='Magnitude'
@@ -731,7 +739,7 @@ class Bsignal(PyLayers):
                 vmax = kwargs['vmax']
 
             if kwargs['function']=='imshow':
-                im = ax.imshow(dt,
+                im = ax.imshow(np.squeeze(dt),
                            origin = 'lower',
                            vmin = vmin,
                            vmax = vmax,
@@ -851,15 +859,30 @@ class Bsignal(PyLayers):
         #
         # if ndim(y) > 1
         #
+        
         if ndim == 4:
-            yx = self.y[idx[0],idx[1],idx[2],u]
-            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+            Nmeas = self.y.shape[0]
+            Nr = self.y.shape[1]
+            Nt = self.y.shape[2]
+            fig,ax = plt.subplots(Nr,Nt)
+            if ((Nr==1) and (Nt==1)):
+                ax = np.array([[ax]])    
+    
+            for k in range(Nr):
+                for l in range(Nt):
+                    for ix in idx:
+                        yx = self.y[ix,k,l,u]
+                        fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
+
         if ndim == 3:
             shy = self.y.shape
             yx = self.y.reshape(shy[0]*shy[1],shy[2])[:,u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 2:
-            yx = self.y[idx[0],u]
+            if kwargs['iy']==-1:
+                yx = self.y[:,u]
+            else:
+                yx = self.y[idx[0],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
@@ -1606,38 +1629,6 @@ class TBsignal(Bsignal):
 
         """
         self.x = self.x + tau
-
-    def b2fud(self, N=300):
-        r""" conversion into a FUDsignal
-
-
-        Parameters
-        ----------
-
-        N :
-
-        Notes
-        -----
-
-        This method is assuming that each element of TBsignal is a delta function.
-
-        $$ h = \sum__k y \delta(x-x_k)$$
-
-        $$ H = \sum__k y \exp(2j\pi f x_k)$$
-
-        """
-        # difference of times 
-        dtau = self.x[1:]-self.x[0:-1]
-        # determine the minimum value
-        mindtau = np.min(dtau)
-        # fix maximum frequency as the inverse of the minimum delay between
-        # delta functions
-        fmax  = 1./mindtau
-        # create an uniform frequency base
-        f = np.linspace(fmax/(1.0*N),fmax,N)
-        z = np.sum(self.y[:,None]*np.exp(-2*1j*f[None,:]*np.pi*self.x[:,None]),axis=0)
-        H = FUDsignal(f,z,taud=self.x)
-        return H
 
     def b2tu(self, N):
         """ conversion into a TUsignal
@@ -2783,7 +2774,7 @@ class FUsignal(FBsignal,Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self,axis=1,Friis=False,mode='mean'):
+    def energy(self,axis=-1,Friis=False,mode='mean'):
         r""" calculate energy along given axis
 
         Parameters
@@ -2829,24 +2820,24 @@ class FUsignal(FBsignal,Usignal):
 
         if Friis:
             factor = -1.j*0.3/(4*np.pi*self.x)
-            H = H*factor[np.newaxis,:]
+            H = H*factor[...,:]
 
         MH2 = abs(H * np.conjugate(H))
 
         if mode=='mean':
-            EMH2  = MH2.mean(axis=axis)
+            EMH2  = MH2.mean(axis=-1)
 
         if mode=='integ':
-            EMH2  = MH2.sum(axis=axis)*(self.x[1]-self.x[0])
+            EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
 
         if mode=='center':
-            EMH2  = MH2[:,len(self.x)/2]
+            EMH2  = MH2[...,len(self.x)/2]
 
-        if mode=='first':
-            EMH2  = MH2[:,0]
+        if mode=='fi13 iirst':
+            EMH2  = MH2[...,0]
 
         if mode=='last':
-            EMH2  = MH2[:,-1]
+            EMH2  = MH2[...,-1]
 
         return(EMH2)
 

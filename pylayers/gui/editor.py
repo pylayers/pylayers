@@ -10,7 +10,7 @@ from PyQt4.QtGui import *
 
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
@@ -22,11 +22,22 @@ import os
 import sys
 
 
+try:
+    _encoding = QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QApplication.translate(context, text, disambig)
 
-class SubSegWin(QDialog):    # any super class is okay
+
+class SubSegWin(QDialog):
     def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
+        self.setModal(True) # interaction only with the current window
+
+        self.setWindowTitle('Edit Sub-Segment(s) Properties')
         self.gparent=parent.parent
         self.parent=parent
         # mulsti segment selection indicator
@@ -263,9 +274,209 @@ class SubSegWin(QDialog):    # any super class is okay
         self.close()
 
 
+class CycleSubseg(QDialog):
+
+    def __init__(self,parent=None):
+        super(CycleSubseg, self).__init__(parent)
+        self.setupUi(self)
+        self.setModal(True) # interaction only with the current window
+
+
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(308, 250)
+        self.buttonBox = QDialogButtonBox(Dialog)
+        self.buttonBox.setGeometry(QRect(110, 210, 161, 32))
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName("buttonBox")
+        self.label = QLabel(Dialog)
+        self.label.setGeometry(QRect(20, 30, 31, 17))
+        self.label.setMouseTracking(False)
+        self.label.setObjectName("label")
+        self.label_2 = QLabel(Dialog)
+        self.label_2.setGeometry(QRect(20, 160, 41, 17))
+        self.label_2.setObjectName("label_2")
+        self.comboBox = QComboBox(Dialog)
+        self.comboBox.setGeometry(QRect(90, 20, 181, 27))
+        self.comboBox.setFocusPolicy(Qt.WheelFocus)
+        self.comboBox.setEditable(False)
+        self.comboBox.setObjectName("comboBox")
+        self.label_3 = QLabel(Dialog)
+        self.label_3.setGeometry(QRect(20, 100, 66, 17))
+        self.label_3.setObjectName("label_3")
+        self.comboBox_2 = QComboBox(Dialog)
+        self.comboBox_2.setGeometry(QRect(90, 160, 181, 27))
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.spinBox = QSpinBox(Dialog)
+        self.spinBox.setGeometry(QRect(90, 90, 60, 27))
+        self.spinBox.setObjectName("spinBox")
+        self.edit = QPushButton(Dialog)
+        self.edit.setGeometry(QRect(170, 90, 98, 27))
+        self.edit.setObjectName("edit")
+        self.gridLayoutWidget = QWidget(Dialog)
+        self.gridLayoutWidget.setGeometry(QRect(10, 10, 271, 231))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.gridLayout = QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setContentsMargins(-1, 0, -1, -1)
+        self.gridLayout.setObjectName("gridLayout")
+
+        self.retranslateUi(Dialog)
+        QObject.connect(self.buttonBox, SIGNAL("accepted()"), Dialog.accept)
+        QObject.connect(self.buttonBox, SIGNAL("rejected()"), Dialog.reject)
+        QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        # Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
+        # self.label.setText(_translate("Dialog", "Ceil", None))
+        # self.label_2.setText(_translate("Dialog", "Floor", None))
+        # self.label_3.setText(_translate("Dialog", "Sub-segs", None))
+        # self.edit.setText(_translate("Dialog", "Edit", None))
+
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
+        self.label.setText(_translate("Dialog", "Not", None))
+        self.label_2.setText(_translate("Dialog", "Implemented", None))
+        self.label_3.setText(_translate("Dialog", "Yet", None))
+        self.edit.setText(_translate("Dialog", "Edit", None))
+
+
+class PropertiesCycle(QDialog):
+    """ Edit cycle properties
+    """
+    def __init__(self,Nss=0,cy=1,ss_slab=['CEIL','FLOOR'],parent=None):
+        super(PropertiesCycle, self).__init__(parent)
+        #
+        self.setWindowTitle('Edit Cycle Properties')
+        self.setModal(True) # interaction only with the current window
+
+        self.parent=parent
+        # dictionnary to pass subseg data
+        self.Nss=Nss
+        self.cy = cy
+        self.segdata=[]
+        # self._autocalc_height_val()
+        # self._init_subseg_prop()
+        self._init_layout()
+
+    def _init_layout(self):
+        vbox = QVBoxLayout()
+
+        # Indicate Ceil
+        top = QHBoxLayout()
+        ceillabel = QLabel('Ceil')
+        ceillabel.setStyleSheet("font: bold 14px;")
+
+        self.comboceil = QComboBox(self)
+        self.comboceil.setGeometry(QRect(90, 20, 181, 27))
+        self.comboceil.setObjectName("slabceil")
+        for s in self.parent.L.sl.keys():
+                self.comboceil.addItem(s)
+        idx=self.comboceil.findText(self.parent.L.Gt.node[self.cy]['ss_slab'][-1])
+        self.comboceil.setCurrentIndex(idx)
+
+
+
+        top.addWidget(ceillabel)
+        top.addWidget(self.comboceil)
+        vbox.addLayout(top)
+
+
+
+
+
+
+        middle = QHBoxLayout()
+        sseg = QLabel('Subsegs')
+        sseg.setStyleSheet("font: bold 14px;")
+
+        self.spinBox = QSpinBox(self)
+
+        self.edit = QPushButton(self)
+        self.edit.setText("Edit")
+        self.edit.clicked.connect(self.editsegments)
+
+
+
+        middle.addWidget(sseg)
+        middle.addWidget(self.spinBox )
+        middle.addWidget(self.edit)
+
+        vbox.addLayout(middle)
+
+
+        bottom =  QHBoxLayout()
+        floorlabel = QLabel('Floor')
+        floorlabel.setStyleSheet("font: bold 14px;")
+        self.combofloor = QComboBox(self)
+        self.combofloor.setGeometry(QRect(90, 20, 181, 27))
+        self.combofloor.setObjectName("slabfloor")
+        for s in self.parent.L.sl.keys():
+                self.combofloor.addItem(s)
+        idx=self.combofloor.findText(self.parent.L.Gt.node[self.cy]['ss_slab'][0])
+        self.combofloor.setCurrentIndex(idx)
+
+
+
+        bottom.addWidget(floorlabel)
+        bottom.addWidget(self.combofloor)
+        vbox.addLayout(bottom)
+
+
+
+        # validation
+        buttono=QPushButton("OK")
+        buttonc=QPushButton("Cancel")
+        buttono.clicked.connect(self.valide)
+        buttonc.clicked.connect(self.cancel)
+
+        hboxDial = QHBoxLayout()
+        hboxDial.addWidget(buttonc)
+        hboxDial.addWidget(buttono)
+
+
+
+        # create Layout
+        vbox.addLayout(hboxDial)
+
+
+
+        self.setLayout(vbox)
+
+
+    def editsegments(self):
+        # laucnh cycle sement editor 
+        # not yey implemented
+        test = CycleSubseg(parent=self)
+        test.show()
+        pass
+
+    def valide(self):
+        ceil = str(self.comboceil.currentText())
+        floor = str(self.combofloor.currentText())
+
+        lslab = []
+        lslab.append(floor)
+        if len(self.segdata) != 0:
+            print "do something to update segments"
+        lslab.append(ceil)
+
+        self.parent.selectl.L._updateGtslab(self.cy,lslab)
+
+
+        self.close()
+
+    def cancel(self):
+        self.close()
+
+
+
+
+
 class PropertiesWin(QDialog):    # any super class is okay
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
+        self.setWindowTitle('Edit Segment(s) Properties')
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
         # determine if multiple se gments are selected
@@ -352,10 +563,13 @@ class PropertiesWin(QDialog):    # any super class is okay
             self.nbsubseg.setValue(len(self.segdata['ss_name']))
         except:
             self.nbsubseg.setValue(0.)
+        self.connect(self.nbsubseg, SIGNAL('valueChanged(int)'), self.enableQpush)
+
+
 
         self.editssbutton = QPushButton("Edit Sub-Segments")
         self.editssbutton.clicked.connect(self.editsubseg)
-
+        self.editssbutton.setEnabled(False)
 
 
         self.heightmin.setMinimumWidth(5)
@@ -415,6 +629,13 @@ class PropertiesWin(QDialog):    # any super class is okay
         vbox.addLayout(hboxDial)
 
         self.setLayout(vbox)
+
+    def enableQpush(self):
+        if self.nbsubseg.value() == 0:
+            self.editssbutton.setEnabled(False)
+        else:
+            self.editssbutton.setEnabled(True)
+
 
     def editsubseg(self):
         """ open a edit subseg window
@@ -482,6 +703,8 @@ class PropertiesWin(QDialog):    # any super class is okay
 class SaveQuitWin(QDialog):    # any super class is okay
     def __init__(self,exit=False,parent=None):
         super(SaveQuitWin, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
+
         self.setWindowTitle('Do you want to save?')
         self.parent=parent
         self.exit=exit
@@ -534,12 +757,20 @@ class SaveQuitWin(QDialog):    # any super class is okay
 
 
 class NewLayout(QDialog):    # any super class is okay
-    def __init__(self,parent=None):
+    def __init__(self,parent=None,overlay={}):
         super(NewLayout, self).__init__(parent)
-        self.setWindowTitle('New Layout')
+        self.setModal(True) # interaction only with the current window
+
         self.parent=parent
-        self._init_choices()
-        self._init_layoutwin()
+        self.doverlay=overlay
+        if self.doverlay == {}:
+            self.setWindowTitle('New Layout')
+            self._init_choices()
+            self._init_layoutwin()
+        else : 
+            self.new()
+
+
 
 
 
@@ -599,28 +830,305 @@ class NewLayout(QDialog):    # any super class is okay
 
     def new(self):
         self.parent.L=Layout('void.ini',check=False)
-        self.parent.L.display['overlay']=True
-        self.parent.L.display['fileoverlay']='TA-Office.png'
-        self.parent.L.display['overlay']=False
-        self.parent.L.display['inverse']=True
-        lim = (0., self.width.value(), 0.,self.height.value())
-        self.parent.L.boundary(xlim=lim)
+
+        if self.doverlay.has_key('overlay_file'):
+            self.parent.L.display['overlay_file']=self.doverlay['overlay_file']
+            flip =''
+            if self.doverlay['flipv']:
+                flip = flip + 'v'
+            if self.doverlay['fliph']:
+                flip = flip + 'h'
+            axis = self.doverlay['ax'].axis()
+            ax = self.doverlay['ratiox']
+            ay = self.doverlay['ratioy']
+            dx = self.doverlay['origin'][0]*ax
+            dy = self.doverlay['origin'][1]*ay
+            axis = (-dx,(axis[1]*ax)-dx,-dy,(axis[3]*ay)-dy)
+            self.parent.L.display['overlay_axis'] = axis
+            self.parent.L.boundary(xlim=self.parent.L.display['overlay_axis'])
+            self.parent.L.display['overlay_flip']=flip
+            self.parent.L.display['overlay']=True
+
+        else : 
+            self.parent.L.display['overlay_file']=''
+            self.parent.L.display['overlay_flip']=''
+            lim = (0., self.width.value(), 0.,self.height.value())
+            self.parent.L.boundary(xlim=lim)
+            self.parent.L.display['overlay']=False
+
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
         self.parent.setWindowTitle(self.parent.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
         self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
-
         self.close()
 
 
+
     def cancel(self):
+        self.close()
+
+class Overset(QMainWindow):
+    def __init__(self,parent=None):
+        super(Overset, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
+        self.setWindowTitle('Set Overlay')
+        self.x0=np.array([0,0])
+        self.x0selected=False
+        self.xselected=False
+        self.xselected=False
+        self.click=False
+        self.parent=parent
+        self.toolbar()
+        self.openoverlay()
+        self.showfig()
+        self.flipv=False
+        self.fliph=False
+
+    def openoverlay(self):
+        filename = QFileDialog.getOpenFileName(self,'Open Layout Overlay',pyu.getlong('',pstruc['DIRIMAGE']),'(*.png);;(*.jpg);;(*.jpeg)')
+
+        if filename != '':
+            self._fileoverlay = pyu.getshort(str(filename))
+            print 'overlay loaded'
+
+
+
+    def toolbar(self):
+        ###############################
+        ### Toolbar
+        ###############################
+        # origin
+        self.xx0 = QDoubleSpinBox()
+        self.xx0.setObjectName("x0 [m]")
+        self.xx0.setSingleStep(0.01)
+        self.xx0.setRange(-1000., 1000.)
+        self.xx0.setValue(0)
+        self.connect(self.xx0, SIGNAL('valueChanged(double)'), self.refresh)
+
+
+        self.yy0 = QDoubleSpinBox()
+        self.yy0.setObjectName("y0 [m]")
+        self.yy0.setSingleStep(0.01)
+        self.yy0.setRange(-1000., 1000.)
+        self.yy0.setValue(0)
+        self.connect(self.yy0, SIGNAL('valueChanged(double)'), self.refresh)
+
+
+        self.da = QDoubleSpinBox()
+        self.da.setObjectName("d_a [m]")
+        self.da.setSingleStep(0.01)
+        self.da.setRange(1, 10000.)
+        self.da.setValue(10)
+
+
+        self.db = QDoubleSpinBox()
+        self.db.setObjectName("d_b [m]")
+        self.db.setSingleStep(0.01)
+        self.db.setRange(1, 10000.)
+        self.db.setValue(10)
+        self.connect(self.da, SIGNAL('valueChanged(double)'), self.refresh)
+
+        vbox = QVBoxLayout()
+
+        # Indicate Ceil
+        hboxlabel = QHBoxLayout()
+        x0 = QLabel('origin x')
+        y0 = QLabel('origin y')
+        da = QLabel('x')
+        db = QLabel('y')
+        self.connect(self.db, SIGNAL('valueChanged(double)'), self.refresh)
+
+
+
+        self.toolbar0 = QToolBar(self)
+        self.toolbar0.addWidget(x0)
+        self.toolbar0.addWidget(self.xx0)
+        self.toolbar0.addWidget(y0)
+        self.toolbar0.addWidget(self.yy0)
+        self.toolbara = QToolBar(self)
+
+        self.toolbara.addWidget(da)
+        self.toolbara.addWidget(self.da)
+        self.toolbarb = QToolBar(self)
+
+        self.toolbarb.addWidget(db)
+        self.toolbarb.addWidget(self.db)
+        
+        # validation
+
+        self.toolbarval = QToolBar(self)
+
+        # Indicate Ceil
+        buttonn=QPushButton("Start Editing")
+        buttonc=QPushButton("Cancel")
+        buttonn.setAutoDefault(True)
+        buttonn.setDefault(True)
+        buttonn.clicked.connect(self.new)
+        buttonc.clicked.connect(self.cancel)
+
+        self.toolbarval.addWidget(buttonn)
+        self.toolbarval.addWidget(buttonc)
+
+
+    def showfig(self):
+        self.main_frame = QWidget()
+        self.figure = plt.figure()
+        self.ax = self.figure.add_subplot(111)
+        # this is the Canvas Widget that displays the `figure`
+        # it takes the `figure` instance as a parameter to __init__
+        self.canvas = FigureCanvas(self.figure)
+        self.canvas.setParent(self.main_frame)
+
+        self.kpress = self.figure.canvas.mpl_connect('key_press_event', self.flip)
+
+        self.mpress = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
+        self.mrelea = self.figure.canvas.mpl_connect('button_release_event', self.on_release)
+        self.kmove = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
+
+
+        self.canvas.setFocusPolicy( Qt.ClickFocus )
+        self.canvas.setFocus()
+
+
+        self.navtoolbar = NavigationToolbar(self.canvas, self.main_frame)
+        self.image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self._fileoverlay))
+        self.overlay = self.ax.imshow(self.image,origin='lower')
+        # set the layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.navtoolbar)
+        layout.addWidget(self.canvas)
+
+        # layout.addWidget(self.toolbar)
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbar0)
+        self.addToolBarBreak()
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbara)
+        self.addToolBarBreak()
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbarb)
+        self.addToolBarBreak()
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbarval)
+        # layout.addWidget(self.button)
+        self.main_frame.setLayout(layout)
+        self.setCentralWidget(self.main_frame)
+
+        self.axis = self.ax.axis()
+        self.x = self.axis[1]*0.1
+        self.y = self.axis[3]*0.1
+
+
+        self.refresh()
+        self.canvas.draw()
+
+
+    def flip(self,event):
+        if (event.key == 'v') or (event.key == 'V'):
+            self.image = self.image.transpose(Image.FLIP_LEFT_RIGHT)
+            self.flipv = ~self.flipv
+        if (event.key == 'h') or (event.key == 'H'):
+            self.image = self.image.transpose(Image.FLIP_TOP_BOTTOM )
+            self.fliph = ~self.fliph
+        if (event.key == 'v') or (event.key == 'V') or (event.key == 'h') or (event.key == 'H'):
+            self.overlay.remove()
+            self.overlay = self.ax.imshow(self.image,origin='lower')
+            self.refresh()
+
+
+    def on_press(self,event):
+        mouse  = np.array([event.xdata,event.ydata])
+
+        dx = abs(self.x0[0]-self.x)
+        dy = abs(self.x0[1]-self.y)
+        if event.button == 1:
+            self.click=True
+            if np.sqrt((mouse[0]-self.x0[0])**2+(mouse[1]-self.x0[1])**2)<10:
+                self.x0selected=True
+            elif np.sqrt((mouse[0]-self.x)**2+(mouse[1]-self.x0[1])**2)<0.3*dx:
+                self.xselected=True
+            elif np.sqrt((mouse[0]-self.x0[0])**2+(mouse[1]-self.y)**2)<0.3*dy:
+                self.yselected=True
+
+
+    def on_motion(self,event):
+        if self.click:
+            if self.x0selected:
+                self.xx0.setValue(event.xdata)
+                self.yy0.setValue(event.ydata)
+            if self.xselected:
+                self.x = event.xdata
+            if self.yselected:
+                self.y = event.ydata
+        self.refresh()
+
+
+    def on_release(self,event):
+        self.click=False
+        self.x0selected=False
+        self.xselected=False
+        self.yselected=False
+        self.refresh()
+
+
+    def refresh(self):
+
+        ptrm = ['p0','p00','p1','p2','a0','a1','b0','b1']
+        for pt in ptrm:
+            try:
+                eval('self.'+pt+'.remove()')
+            except: 
+                pass
+        
+        self.x0  = np.array([self.xx0.value(),self.yy0.value()])
+
+        self.p00 = self.ax.scatter(self.x0[0],self.x0[1],marker='o',s=300,linewidths=8, facecolors='None', edgecolors='r')
+        self.p0 = self.ax.scatter(self.x0[0],self.x0[1],marker='+',c='k',s=100,linewidths=5)
+        self.p1 = self.ax.scatter(self.x,self.x0[1],marker='x',c='r',s=100,linewidths=5)
+        self.p2 = self.ax.scatter(self.x0[0],self.y,marker='x',c='b',s=100,linewidths=5)
+
+        mx = (self.x0[0] + self.x)/2.
+        my = (self.x0[1] + self.y)/2.
+        # da
+        self.a0 = self.ax.annotate('', xy=(self.x0[0], self.x0[1]), xycoords='data',xytext=(self.x, self.x0[1]), textcoords='data',arrowprops={'arrowstyle': '<->'})
+        # self.a1 = self.ax.annotate('a'+str(self.da.value()) + ' m', xy=(mx, self.x0[1]-100), xycoords='data',xytext=(5, 0), textcoords='offset points')
+        self.a1 = self.ax.text(mx, self.x0[1]-50, 'x='+str(self.da.value()) + ' m', fontsize=15)
+        # db
+        self.b0 =self.ax.annotate('', xy=(self.x0[0], self.x0[1]), xycoords='data',xytext=(self.x0[0], self.y), textcoords='data',arrowprops={'arrowstyle': '<->'})
+        # self.b1 =self.ax.annotate('b'+str(self.db.value()) + ' m', xy=(self.x0[0]-100,my), xycoords='data',xytext=(5, 0), textcoords='offset points')
+        self.b1 = self.ax.text(self.x0[0]-50,my, 'y='+str(self.db.value()) + ' m', fontsize=15,rotation=90)
+        self.canvas.draw()
+
+
+    def compute_values(self):
+        self.ratiox = self.da.value()/abs((self.x0[0]-self.x))
+        self.ratioy = self.db.value()/abs((self.x0[1]-self.y))
+
+
+    def cancel(self):
+        self.close()
+
+    def new(self):
+        self.figure.canvas.mpl_disconnect(self.kpress)
+        self.figure.canvas.mpl_disconnect(self.mpress)
+        self.figure.canvas.mpl_disconnect(self.mrelea)
+        self.figure.canvas.mpl_disconnect(self.kmove)
+
+        
+        self.compute_values()
+        doverlay={'flipv':self.flipv,
+                  'fliph':self.fliph,
+                  'overlay_file':self._fileoverlay,
+                  'origin':self.x0,
+                  'ratiox':self.ratiox,
+                  'ratioy':self.ratioy,
+                  'ax':self.ax}
+        self.parent.newlayout=NewLayout(parent=self.parent,overlay=doverlay)
+        self.parent.newlayout.show()
         self.close()
 
 
 class GridSet(QDialog):    # any super class is okay
     def __init__(self,parent=None):
         super(GridSet, self).__init__(parent)
+        self.setModal(True) # interaction only with the current window
         self.setWindowTitle('Set Grid')
         self.parent=parent
         self._init_choices()
@@ -647,7 +1155,7 @@ class GridSet(QDialog):    # any super class is okay
         hboxlabel = QHBoxLayout()
         yspacing = QLabel('y spacing')
         xspacing = QLabel('x spacing')
-        # ceillabel.setStyleSheet("font: bold 14px;")
+        # ceillabel.setStyleSheet("font: bold 14px;"
         hboxlabel.addWidget(xspacing)
         hboxlabel.addWidget(yspacing)
         # hboxlabel.setAlignment(Qt.AlignCenter)
@@ -698,7 +1206,8 @@ class GridSet(QDialog):    # any super class is okay
 
 class AppForm(QMainWindow):
     def __init__(self, parent=None):
-        QMainWindow.__init__(self, parent)
+        super(AppForm,self).__init__()
+        # QMainWindow.__init__(self, parent)
         self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
         self.filename=''
 
@@ -716,22 +1225,24 @@ class AppForm(QMainWindow):
         self.newlayout.show()
 
 
+    def newover(self):
+        self.overset = Overset(parent=self)
+        self.overset.show()
+
     def open(self):
         filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
 
         if filename != '':
-            _filename= pyu.getshort(str(filename))
-            self.L=Layout(_filename)
-            self.filename=self.L.filename
+            _filename = pyu.getshort(str(filename))
+            self.L = Layout(_filename,force=True)
+            self.filename = self.L.filename
             self.create_main_frame()
-            self.on_draw()
+            # self.on_draw()
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
 
         # self.setgrid()
-
-
     def save(self,force=False):
 
         if self.filename == '' or force:
@@ -771,7 +1282,7 @@ class AppForm(QMainWindow):
         """
         self.selectl.toggleoverlay()
         self.fig.canvas.draw()
-        
+
     def closel(self,exit=False):
         dial_res=''
         self.sq = SaveQuitWin(parent=self,exit=exit)
@@ -787,7 +1298,8 @@ class AppForm(QMainWindow):
             self.selectl.fig.canvas.mpl_disconnect(self.cid5)
             self.selectl.fig.canvas.mpl_disconnect(self.cid6)
         except:
-            pass
+            pass        
+
         QApplication.quit()
 
     def edit_properties(self):
@@ -805,6 +1317,11 @@ class AppForm(QMainWindow):
             self.selectl.toggle()
             self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
+        elif (self.selectl.state == 'SC') :
+            self.propcy = PropertiesCycle(parent=self,cy=self.selectl.ncy)
+            self.propcy.show()
+
+
 
         # self.on_draw()
 
@@ -881,7 +1398,7 @@ class AppForm(QMainWindow):
 
          F1 : Select mode
          F2 : New segment with current active Layer
-         F3 : Edit segment properties
+         F3 : Edit segment/cycles properties
 
          g : toggle grid
          ctrl+g : choose grid properties
@@ -920,26 +1437,28 @@ class AppForm(QMainWindow):
         # self.axes.clear()
 
         # self.axes.grid(self.grid_cb.isChecked())
-        self.L.display['nodes']=True
-        self.L.display['ednodes']=True
-        self.L.display['subseg']=False
-        self.L.display['subsegnb']=True
-        self.L.display['ticksoff']=False
+        self.selectl.refresh()
+        # self.L.display['nodes']=True
+        # self.L.display['ednodes']=True
+        # self.L.display['subseg']=False
+        # self.L.display['subsegnb']=True
+        # self.L.display['ticksoff']=False
 
 
-        self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
-        # self.axes.text(10,10,str(self.properties.currentText()))
+        # self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
 
-        # self.L.showGs(fig=self.fig,ax=self.axes)
-        # self.axes.bar(
-        #     left=x,
-        #     height=self.data,
-        #     width=self.slider.value() / 100.0,
-        #     align='center',
-        #     alpha=0.44,
-        #     picker=5)
+        # # self.axes.text(10,10,str(self.properties.currentText()))
 
-        self.fig.canvas.draw()
+        # # self.L.showGs(fig=self.fig,ax=self.axes)
+        # # self.axes.bar(
+        # #     left=x,
+        # #     height=self.data,
+        # #     width=self.slider.value() / 100.0,
+        # #     align='center',
+        # #     alpha=0.44,
+        # #     picker=5)
+
+        # self.fig.canvas.draw()
 
     def on_release(self,event):
         string=''
@@ -993,8 +1512,10 @@ class AppForm(QMainWindow):
         # work.
         #
         self.axes = self.fig.add_subplot(111)
-
-
+        try:
+            self.axes.axis(self.L.display['overlay_axis'])
+        except:
+            self.axes.axis(self.L.display['box'])
         # Bind the 'pick' event for clicking on one of the bars
         #
         # self.canvas.mpl_connect('pick_event', self.on_pick)
@@ -1014,6 +1535,7 @@ class AppForm(QMainWindow):
                                            self.on_release)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
+
 
 
         #Create the navigation toolbar, tied to the canvas
@@ -1041,7 +1563,10 @@ class AppForm(QMainWindow):
         esc.setKey("escape")
         self.connect(esc, SIGNAL("activated()"), self.selectnodes)
 
-
+    def refresh(self):
+        f5 = QShortcut(self)
+        f5.setKey("F5")
+        self.connect(f5, SIGNAL("activated()"), self.selectl.refresh)
 
 
     def create_menu(self):
@@ -1055,6 +1580,8 @@ class AppForm(QMainWindow):
         #     tip="Save the plot")
         new_action = self.create_action("&New Layout", slot=self.new,
         shortcut="Ctrl+n", tip="new layout")
+        new_overlay = self.create_action("&New Overlay", slot=self.newover,
+        shortcut="Ctrl+Shift+n", tip="new layout from overlay")
         open_action = self.create_action("&Open", slot=self.open,
         shortcut="Ctrl+o", tip="Open Layout")
         save_action = self.create_action("&Save", slot=self.save,
@@ -1075,7 +1602,7 @@ class AppForm(QMainWindow):
 
         refresh = self.create_action("&Refresh", slot=self.on_draw,
             shortcut="F10", tip="Refresh the application")
-        properties= self.create_action("&Properties", slot=self.edit_properties,
+        properties= self.create_action("&Segments/Cycles Properties", slot=self.edit_properties,
             shortcut="F3", tip="Edit Wall properties")
         # show3= self.create_action("&Properties", slot=self.edit_properties,
         #     shortcut="F9", tip="3D show")
@@ -1105,7 +1632,7 @@ class AppForm(QMainWindow):
         shortcut="", tip="Toggle ovelay display")
 
         self.add_actions(self.file_menu,
-            ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
+            ( new_action,new_overlay,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
             ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
@@ -1125,7 +1652,7 @@ class AppForm(QMainWindow):
         ### Toolbar
         ###############################
         # get icons path
-        iconpath = os.path.join(os.environ['PYLAYERS'],'pylayers','gui','ico')
+        iconpath = os.path.join(pylayersdir,'pylayers','gui','ico')
         # exit
         exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
         # exitAction.triggered.connect(lambda x=True:self.closel(x))
@@ -1246,8 +1773,7 @@ def main():
     form = AppForm()
     # form.setGeometry(100,100,300,300)
     form.show()
-    app.exec_()
-
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()

@@ -55,7 +55,7 @@ def PL0(fGHz,GtdB=0,GrdB=0,R=1):
     GrdB: float
           receiving antenna gain dB (default 0 dB)
     R   : float
-        distance in m ( because f is in GHz)
+        distance in m
 
 
     Returns
@@ -669,7 +669,6 @@ def showfurniture(fig,ax):
     R9_G.show(fig,ax)
     axis('scaled')
 
-
 def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     """
     Parameters
@@ -784,7 +783,7 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     ht = p0[2,:]
     hr = p1[2,:]
 
-    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
+    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) #l0
     d0 = np.sqrt( dloss**2 - 1.*(ht-hr)**2 ) # d0
     dref = np.sqrt(d0**2+1.*(ht+hr)**2) #l0'
 
@@ -813,7 +812,6 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     else:
         return P
 
-
 def lossref_compute(P,h0,h1,k=4/3.) :
     """
     compute loss and reflection rays on curved earth
@@ -821,20 +819,20 @@ def lossref_compute(P,h0,h1,k=4/3.) :
     Parameters
     ----------
 
-    P : float | list 
+    P : float |list 
 
         if len(P) == 1 => P is a distance
         if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
 
         where :
-        lat0 : float | string
-            latitude first point (decimal | deg min sec Direction)
-        lat1 : float | string
-            latitude second point (decimal | deg min sec Direction)
-        lon0 : float | string
-            longitude first point (decimal | deg min sec Direction)
-        lon1 : float | string
-            longitude second point (decimal | deg min sec Direction)
+        lat0 : float |string
+            latitude first point (decimal |deg min sec Direction)
+        lat1 : float |string
+            latitude second point (decimal |deg min sec Direction)
+        lon0 : float |string
+            longitude first point (decimal |deg min sec Direction)
+        lon1 : float |string
+            longitude second point (decimal |deg min sec Direction)
     h0 : float:
         height of 1st point 
     h1 : float:
@@ -854,22 +852,22 @@ def lossref_compute(P,h0,h1,k=4/3.) :
 
     References
     ----------
-    B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton ; London: CRC/Taylor & Francis, chapter 8, 2013.
+    B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton; London: CRC/Taylor & Francis, chapter 8, 2013.
 
     """
 
 
     if isinstance(P,float) or isinstance(P,int) :
-        # P is a distance
+        #P is a distance
         r=P
         mode = 'dist'
     elif isinstance(P,np.ndarray) or isinstance(P,list):
         if len(P) == 1:
-            # P is a distance
+            #P is a distance
             r=P
             mode = 'dist'
         elif len(P) == 4:
-            # P is a lonlat
+            #P is a lonlat
             lat0=P[0]
             lon0=P[1]
             lat1=P[2]
@@ -878,7 +876,7 @@ def lossref_compute(P,h0,h1,k=4/3.) :
         else :
             raise AttributeError('P must be a list [lat0,lon0,lat1,lon0] or a distance')
     else :
-        raise AttributeError('Invalid P format ( list | ndarray )')
+        raise AttributeError('Invalid P format ( list |ndarray )')
 
 
     # if h0<h1:
@@ -898,17 +896,17 @@ def lossref_compute(P,h0,h1,k=4/3.) :
 
     # import ipdb
     # ipdb.set_trace()
-    p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
+    p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) #eq 8.45
     eps = np.arcsin(2*re*r*(h1-h0)/p**3) # eq 8.46
 
 
 
-    # distance of reflection on curved earth
-    r1 = r/2 - p*np.sin(eps/3) # eq 8.44
+    #distance of reflection on curved earth
+    r1 = r/2 - p*np.sin(eps/3) #eq 8.44
 
     r2 = r -r1
 
-    phi1 = r1/re # 8.47
+    phi1 = r1/re #8.47
     phi2 = r2/re # 8.48
 
     R1 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi1/2))**2) # 8.51
@@ -916,7 +914,7 @@ def lossref_compute(P,h0,h1,k=4/3.) :
 
     Rd = np.sqrt((h1-h0)**2+4*(re+h1)*(re+h0)*np.sin((phi1+phi2)/2.)**2) # 8.53
     # tangente angle on earth
-    psy = np.arcsin((h1/R1)-R1/(2.*re)) # eq 8.55
+    psy = np.arcsin((h1/R1)-R1/(2.*re)) #eq 8.55
     deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
 
     dloss = Rd
@@ -931,20 +929,20 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
     Parameters
     ----------
 
-    P : float | list 
+    P : float |list 
 
         if len(P) == 1 => P is a distance
         if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
 
         where :
-        lat0 : float | string
-            latitude first point (decimal | deg min sec Direction)
-        lat1 : float | string
-            latitude second point (decimal | deg min sec Direction)
-        lon0 : float | string
-            longitude first point (decimal | deg min sec Direction)
-        lon1 : float | string
-            longitude second point (decimal | deg min sec Direction)
+        lat0 : float |string
+            latitude first point (decimal |deg min sec Direction)
+        lat1 : float |string
+            latitude second point (decimal |deg min sec Direction)
+        lon0 : float |string
+            longitude first point (decimal |deg min sec Direction)
+        lon1 : float |string
+            longitude second point (decimal |deg min sec Direction)
     h0 : float:
         height of 1st point 
     h1 : float:
@@ -988,23 +986,27 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
     .. plot::
         :include-source:
         
-            >>> from pylayers.antprop.loss import *
-            >>> import matplotlib.pyplot as plt
-            >>> fGHz=2.4
-            >>> p0=np.array(([0,0,20]))
-            >>> p1=np.array(([0,1,20]))
-            >>> p0=p0.reshape(3,1)
-            >>> p1=p1.reshape(3,1)
-            >>> TRF = [] # Two Ray model on flat earth
-            >>> TRC = [] # Two Ray model on curved earth
-            >>> for d in np.arange(1,10000,1):
-            >>>     p1[1,:]=d
-            >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))
-            >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
-            >>> plt.semilogx(TRF,label='two-ray model flat earth')
-            >>> plt.semilogx(TRC,label='two-ray model curved earth')
-            >>> plt.legend()
-            >>> plt.show()
+        >>> from pylayers.antprop.loss import *
+        >>> import matplotlib.pyplot as plt
+        >>> fGHz=2.4
+        >>> p0=np.array(([0,0,20]))
+        >>> p1=np.array(([0,1,20]))
+        >>> p0=p0.reshape(3,1)
+        >>> p1=p1.reshape(3,1)
+        >>> TRF = [] #Two Ray model on flat earth
+        >>> TRC = [] #Two Ray model on curved earth
+        >>> PLoss=[]
+        >>> for d in np.arange(1,10000,1):
+        >>>     p1[1,:]=d
+        >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))
+        >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
+        >>>     PLoss.append(PL(fGHz, p0[:,0],p1[:,0], n=2.0, dB=True, d0=np.array([1])))
+        >>> PLoss=np.array(PLoss)[:,0,0]
+        >>> plt.semilogx(TRF,label='two-ray model flat earth')
+        >>> plt.semilogx(TRC,label='two-ray model curved earth')
+        >>> plt.semilogx(-PLoss,label='Path Loss')
+        >>> plt.legend()
+        >>> plt.show()
 
     """
 

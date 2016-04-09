@@ -2,8 +2,7 @@
 import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import pdb
+import doctest
 r"""
 
 .. currentmodule:: pylayers.antprop.aarray
@@ -80,9 +79,9 @@ class Array(ant.Pattern):
 
     def __repr__(self):
         st = ''
-        st = st + 'points :' + str(p) + '\n'
-        st = st + 'fmin :' + str(fGHz[0]) + '\n'
-        st = st + 'fmax :' + str(fGHz[1]) + '\n'
+        st = st + 'points :' + str(self.p) + '\n'
+        st = st + 'fmin :' + str(self.fGHz[0]) + '\n'
+        st = st + 'fmax :' + str(self.fGHz[1]) + '\n'
         return(st)
 
     def show(self):
@@ -114,13 +113,13 @@ class ULArray(Array):
         ----------
 
         N  : list
-            [Nx,Ny,Nz]  don't use 0 the total number of antennas is Nx*Ny*Nz
+            [Nx,Ny,Nz,Na]  don't use 0 the total number of antennas is Nx*Ny*Nz*Na
         dm : list of floats
             [dxm,dym,dzm] distance are expressed in meters
 
         """
-        defaults = { 'N'    : [8,1,1],
-                     'dm'   : [0.075,0,0],
+        defaults = { 'N'    : [8,1,1,1],
+                     'dm'   : [0.075,0,0,0],
                      'w'   : [],
                     'fGHz' : np.linspace(1.8,2.2,10),
                    }
@@ -188,12 +187,15 @@ class AntArray(Array,ant.Antenna):
 
         """
         defaults = {'tarr': 'UA',
-                    'N'    : [8,1,1],
-                    'dm'   : [0.075,0,0],
+                    'N'    : [8,1,1,1],
+                    'dm'   : [0.075,0,0,0],
+                    'min'  : [0,0,0,0],
+                    'max'  : [0,0,0,0],
                     'S'    : [],
                     'pattern' : True,
                     #'typant':'S1R1.vsh3',
-                    'typant':'Gauss'
+                    'typant':'Gauss',
+                    'mode' : 'grid'
                     }
 
 
@@ -203,9 +205,18 @@ class AntArray(Array,ant.Antenna):
 
         self.tarr = kwargs.pop('tarr')
         self.N  = np.array(kwargs.pop('N'))
+        self.max  = np.array(kwargs.pop('max'))
+        self.min  = np.array(kwargs.pop('min'))
         self.Na = np.prod(self.N)  # number of antennas
         self.dm = np.array(kwargs.pop('dm'))
         self.typant = kwargs.pop('typant')
+
+        if kwargs['mode'] == 'grid':
+            for  k in range(len(self.N)):
+                if self.N[k]==1:
+                    self.dm[k]=self.max[k]
+                else:
+                    self.dm[k]= (self.max[k]-self.min[k])/(self.N[k]-1.0)
 
         if type(self.typant)==list:
             self.sameAnt=False
@@ -242,14 +253,41 @@ class AntArray(Array,ant.Antenna):
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
-def ktoxyz(ik,Nx=10,Ny=11):
-    iz = ik/(Nx*Ny)
-    iy = (ik-iz*Nx*Ny)/Nx
-    ix = (ik-iz*Nx*Ny-iy*Nx)
-    return(iz,iy,ix)
+
+def k2xyza(ik,sh):
+    """
+
+    Parameters
+    ----------
+
+    ik : full index starting at 0
+    sh : list of [Nx,Ny,Nz,Na]
+
+    Returns
+    -------
+
+    ix , iy , iz , ia : index starting at 0
+
+
+    """
+    assert(len(sh)==4)
+    assert(len(ik)==np.prod(np.array(sh)))
+
+    Ny = sh[1]
+    Nz = sh[2]
+    Na = sh[3]
+
+    ix = ik/(Ny*Nz*Na)
+    iy = (ik-ix*Ny*Nz*Na)/(Nz*Na)
+    iz = (ik-ix*Ny*Nz*Na-iy*Nz*Na)/Na
+    ia = ik-ix*Ny*Nz*Na-iy*Nz*Na-iz*Na
+
+    return(ix,iy,iz,ia)
+
 def xyztok(iz,iy,ix,Nx=10,Ny=11):
     ik = iz*Nx*Ny+iy*Nx+ix
     return(ik)
+
 def weights(nx,nz,kx,kz,Kx,Kz):
     """
     Practical Demonstration of Limited Feedback Beamforming for mmWave Systems
@@ -664,7 +702,7 @@ if __name__=='__main__':
 #
 ## In[9]:
 #
-#w†.w        = rand(N)+1j*rand(N)
+#w.w        = rand(N)+1j*rand(N)
 #f,g,h,z,main,rejdB,bwdeg = rejection(w,theta)
 #visurej(f,g,h,z,main,rejdB,bwdeg,'Random complex 1 :')
 #
@@ -720,10 +758,10 @@ if __name__=='__main__':
 ##
 ## $$ \mathbf{F}(\theta,t)=\frac{1}{K}\sum_{k=1}^{K} \textrm{rect}(\frac{t- l T_k/2)}{T_k})\mathbf{F}_k(\theta)= \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## Interférence Radar
+## Interfrence Radar
 #
 ##  ## POSTMA
 #
 #el(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
 #    H  =
-#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit réseau et grand réseau.
+#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit rseau et grand rseau.

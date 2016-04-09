@@ -39,15 +39,15 @@ def get_adapter(**kwargs):
     Forwards all parameters to pyusb (http://pyusb.sourceforge.net/docs/1.0/tutorial.html)
     """
 
-    #find NI Instruments Corp. 
+    #find NI Instruments Corp.
     device = usb.core.find(idVendor=ID_VENDOR, idProduct=ID_PRODUCT, **kwargs)
-    
+
     #was it found?
     if not device:
-        raise ValueError('Device not found')
+        print("Device not found")
 
     return NiUsb6501(device)
-    
+
 #def find_adapters(**kwargs):
     #"""
     #Returns NiUsb6501 handle for every adapter that is connected to PC.
@@ -69,72 +69,97 @@ class NiUsb6501:
     def __init__(self, device):
         """ used only internally via get_adapter() and find_adapters()
         """
-        self.device = device
-        #pdb.set_trace()
-        cfg = self.device.get_active_configuration()
-        interface_number = cfg[(0,0)].bInterfaceNumber
-        print "interface_number",interface_number
-        #reattach = False
-        print " active : ", self.device.is_kernel_driver_active(interface_number)
-        print self.device
-        if self.device.is_kernel_driver_active(interface_number):
-        #if self.device.is_kernel_driver_active(0):
-            #reattach = True
-            print "kernel driver is active "
-            self.device.detach_kernel_driver(interface_number)
-            #self.device.detach_kernel_driver(0)
-        
-        # set the active configuration. With no arguments, the first
-        # configuration will be the active one
-        
-        #if self.device.is_kernel_driver_active(1):
-            #self.device.detach_kernel_driver(1)
+        if device!=None:
+            self.emulated = False
+            self.device = device
+            #pdb.set_trace()
+            cfg = self.device.get_active_configuration()
+            interface_number = cfg[(0,0)].bInterfaceNumber
+            print "interface_number",interface_number
+            #reattach = False
+            print " active : ", self.device.is_kernel_driver_active(interface_number)
+            print self.device
+            if self.device.is_kernel_driver_active(interface_number):
+            #if self.device.is_kernel_driver_active(0):
+                #reattach = True
+                print "kernel driver is active "
+                self.device.detach_kernel_driver(interface_number)
+                #self.device.detach_kernel_driver(0)
+            
+            # set the active configuration. With no arguments, the first
+            # configuration will be the active one
+            
+            #if self.device.is_kernel_driver_active(1):
+                #self.device.detach_kernel_driver(1)
 
-        #self.device.set_configuration()
-        
-        print self.device._ctx
+            #self.device.set_configuration()
+            
+            print self.device._ctx
 
-        usb.util.dispose_resources(self.device)
+            usb.util.dispose_resources(self.device)
+        else:
+            self.emulated=True
         # This is needed to release interface, otherwise attach_kernel_driver fails
         # due to "Resource busy" 
         
         #if reattach:
             #self.device.attach_kernel_driver(0)
+        
 
-    #def __del__(self):
-        #print "Destructor called"
+    def __repr__(self):
+        
+        switch = get_adapter()
+        #self.device = usb.core.find(idVendor=ID_VENDOR, idProduct=ID_PRODUCT)
+        #device = self.device
+        st = ''
+        st = st + '--------------------------------------'+'\n'
+        st = st + '            NI USB PARAMETERS         '+'\n'
+        st = st + '--------------------------------------'+'\n'
+        st = st + "product              : " + str(switch.device.product)+'\n'
+        st = st + "serial number        : " + str(switch.device.serial_number)+'\n'
+        st = st + "size packet (bytes)  : " + str(switch.device.bMaxPacketSize0)+'\n'
+        
+
+        return(st)
 
     def set_io_mode(self, port0, port1, port2):
         """
         Set mode for every IO pin. PIN modes are given in three groups (bitmasks represented by integers)
         bit = 0: read
         bit = 1: write
-        """
-        buf = list("\x02\x10\x00\x00\x00\x05\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00")
 
-        buf[6] = chr(port0)
-        buf[7] = chr(port1)
-        buf[8] = chr(port2)
-        buf = ''.join(buf)
-        return self.send_request(0x12, buf)
+        """
+        if not self.emulated:
+            buf = list("\x02\x10\x00\x00\x00\x05\x00\x00\x00\x00\x05\x00\x00\x00\x00\x00")
+
+            buf[6] = chr(port0)
+            buf[7] = chr(port1)
+            buf[8] = chr(port2)
+            buf = ''.join(buf)
+            return self.send_request(0x12, buf)
+        else:
+            return(None)
 
     def read_port(self, port):
         """
         Read the value from all read-mode pins from one of the 8 PIN ports
         port is 0, 1 or 2
         """
-        buf = list("\x02\x10\x00\x00\x00\x03\x00\x00")
+        if not self.emulated:
+            buf = list("\x02\x10\x00\x00\x00\x03\x00\x00")
 
-        buf[6] = chr(port)
-        buf = ''.join(buf)
+            buf[6] = chr(port)
+            buf = ''.join(buf)
 
-        response = self.send_request(0x0e, buf)
+            response = self.send_request(0x0e, buf)
 
-        self.packet_matches(response,
-                            "\x00\x0c\x01\x00\x00\x00\x00\x02\x00\x03\x00\x00",
-                            "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x00\xff")
+            self.packet_matches(response,
+                                "\x00\x0c\x01\x00\x00\x00\x00\x02\x00\x03\x00\x00",
+                                "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x00\xff")
 
-        return ord(response[10])
+            return ord(response[10])
+        else:
+            return(None)
 
     def write_port(self, port, value):
         """
@@ -142,18 +167,21 @@ class NiUsb6501:
         port is 0, 1 or 2
         value is 8 bits represented by integer
         """
-        buf = list("\x02\x10\x00\x00\x00\x03\x00\x00\x03\x00\x00\x00")
+        if not self.emulated:
+            buf = list("\x02\x10\x00\x00\x00\x03\x00\x00\x03\x00\x00\x00")
 
-        buf[6] = chr(port)
-        buf[9] = chr(value)
-        buf = ''.join(buf)
+            buf[6] = chr(port)
+            buf[9] = chr(value)
+            buf = ''.join(buf)
 
-        response = self.send_request(0x0f, buf)
-        self.packet_matches(response,
-                            "\x00\x08\x01\x00\x00\x00\x00\x02",
-                            "\xff\xff\xff\xff\xff\xff\xff\xff")
+            response = self.send_request(0x0f, buf)
+            self.packet_matches(response,
+                                "\x00\x08\x01\x00\x00\x00\x00\x02",
+                                "\xff\xff\xff\xff\xff\xff\xff\xff")
 
-        return response
+            return response
+        else:
+            return(None)
 
     ##########################################################
     # TODO: COUNTERS ARE NOT YET IMPLEMENTED
@@ -217,68 +245,65 @@ class NiUsb6501:
 
 #USAGE EXAMPLE
 if __name__ == "__main__":
-    
+    import time
+
     switch = get_adapter()
-    
     if not switch:
         raise Exception("No device found")
 
-    #switch.device
-    #switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+    #
+    #very important : to use at the beginning of the initialization of the switch
+    #for each measurements, set up the NI USB 6501 mode : bit 1 means write and bit 0 read
+    #
+
+    switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
+    #switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
+    #
+    #SISO case
+    #
+    
+    #example for use the switch 1 to 4
+    #switch 1 to 4 : port 1 is allowed
+
+    switch.write_port(1, 1) #select output 2 of the switch 1-4
+    switch.write_port(1, 2) #select output 3 of the switch 1-4
+    #switch.write_port(1, 1) #select output 2 of the switch 1-4
+    #switch.write_port(1, 2) #select output 3 of the switch 1-4
+    #example for use the switch 1 to 8
+    #switch 1 to 8 : port 0 is allowed    
+
+    switch.write_port(0, 4) #select channel 5 of the switch 1-8
+    switch.write_port(0, 5) #select channel 6 of the switch 1-8
+    #switch.write_port(0, 4) #select channel 5 of the switch 1-8
+    #switch.write_port(0, 5) #select channel 6 of the switch 1-8
 
 
-    
-    
-    #print "Port 0",bin(switch.read_port(0))
-    #print "Port 1",bin(switch.read_port(1))
+    #
+    #MIMO case
+    #
+    tic = time.time()
 
-    #reattach=False
-    
-    #if switch.device.is_kernel_driver_active(0):
-        #reattach = True
-        #switch.detach_kernel_driver(0)
-    
-    #usb.util.dispose_resources(switch.device)
+    for k in range(8):
+        print " Transmiter : select output number ",k
+        switch.write_port(0,k)
+        for  l in range(4):
+            print "Receiver : select output number ",l
+            switch.write_port(1,l)
+            time.sleep(1) #time waiting of the switch between antennas
+    toc = time.time()
+    t = toc - tic
+    print "Measurement time (s) with switching :",t
 
-    # It may raise USBError if there's e.g. no kernel driver loaded at all
-    #if reattach:
-        #switch.device.attach_kernel_driver(0)
-    
-    # import time
     # for k in range(8):
+    #     print " Transmiter : select output number ",k
     #     switch.write_port(0,k)
     #     for  l in range(4):
-    #     #switch.write_port(0,0b00000000)
-    #         print k,l
+    #         print "Receiver : select output number ",l
     #         switch.write_port(1,l)
-    #         time.sleep(1)
+    #         time.sleep(1) #time waiting of the switch between antennas
+    # toc = time.time()
+    # t = toc - tic
+    # print "Measurement time (s) with switching :",t
 
-    #dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
-    #dev.write_port(0, 0b00001111) # 3 bits needed to set up 8 antennas
-    #dev.write_port(1, 0b00000111) # 2 bits needed to set up 4 antennas
-    #dev.write_port(2, 0b00000000)
-    
-    #dev.set_io_mode(0b00001111, 0b00000111, 0b00000000)
-    
-
-    #if switch.device.is_kernel_driver_active(0):
-    #    switch.device.detach_kernel_driver(0)
-    
-    
-
-
-    #print "Port 2",bin(dev.read_port(2))
-    #dev.write_port(0, 0b00000001)
-    #dev.write_port(1, 0b00000001)
-
-    #pdb.set_trace()
-    #set IO : port (port 0, port 1, port 2)
-    #dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
-    #dev.write_port(0, 0b10111111)
-    #print bin(dev.read_port(0))
-    
-    #dev.write_port(0, 0b00000001)
-    #dev.write_port(1, 0b10101010)
-
-    #print bin(dev.read_port(1))
-    #print bin(dev.read_port(2))
+    #print "Port 0",bin(switch.read_port(0))
+    #print "Port 1",bin(switch.read_port(1))

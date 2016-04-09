@@ -354,11 +354,11 @@ class DLink(Link):
         defaults={ 'L':Layout(),
                    'a':np.array(()),
                    'b':np.array(()),
-                   'Aa':Antenna(typ='Omni'),
-                   'Ab':Antenna(typ='Omni'),
+                   'Aa':[],
+                   'Ab':[],
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':[],
+                   'fGHz':np.array([2.4,2.5]),
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
@@ -382,38 +382,35 @@ class DLink(Link):
             else :
                 if key in specset :
                     setattr(self,'_'+key,kwargs[key])
+
                 else :
                     setattr(self,key,kwargs[key])
 
+    
         force=self.force_create
         delattr(self,'force_create')
+
+       
+        if self.Aa==[]:
+            self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
+        if self.Ab==[]:
+            self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
+        
+
+        # The frequency range is dependent from the antenna frequency range
 
         if self.fGHz == []:
             self.initfreq()
         else :
             pass
 
+
         try:
             self._Lname = self._L.filename
         except:
             self._L=Layout(self._L)
             self._Lname = self._L.filename
-
-        ###########
-        # Transmitter and Receiver positions
-        ###########
-
-        self.tx = RadioNode(name = '',
-                            typ = 'tx',
-                            _fileini = 'radiotx.ini',
-                            )
-
-        self.rx = RadioNode(name = '',
-                            typ = 'rx',
-                            _fileini = 'radiorx.ini',
-                            )
-
-
+    
 
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
@@ -429,8 +426,6 @@ class DLink(Link):
                      'Ct':{'exist':False,'grpname':''},
                      'H':{'exist':False,'grpname':''}
                     }
-
-
 
         try:
             self.L.dumpr()
@@ -473,9 +468,10 @@ class DLink(Link):
             # self.cb = self.L.pt2cy(self.b)
 
 
+       
         ###########
         # init freq
-        # TODO Check where it is used redundant with fGHz
+        # TODO Check where it is used redocdundant with fGHz
         ###########
         #self.fmin  = self.fGHz[0]
         #self.fmax  = self.fGHz[-1]
@@ -558,7 +554,7 @@ class DLink(Link):
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
         self._a = position
-        self.tx.position = position
+        
 
     @b.setter
     def b(self,position):
@@ -567,7 +563,7 @@ class DLink(Link):
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
-        self.rx.position = position
+        
 
     @ca.setter
     def ca(self,cycle):
@@ -586,29 +582,21 @@ class DLink(Link):
 
     @Aa.setter
     def Aa(self,Ant):
-        position = self.a
+       
         rot = self.Ta
-        self.tx = RadioNode(name = '',
-                            typ = 'tx',
-                            _fileini = 'radiotx.ini',
-                            )
+        
         self._Aa = Ant
-        #to be removed when radionode will be updated
-        self.a = position
+       
         self.Ta = rot
         self.initfreq()
 
     @Ab.setter
     def Ab(self,Ant):
-        position = self.b
+       
         rot = self.Tb
-        self.rx = RadioNode(name = '',
-                            typ = 'rx',
-                            _fileini = 'radiorx.ini',
-                            )
+        
         self._Ab = Ant
-        #to be removed when radionode will be updated
-        self.b = position
+        
         self.Tb = rot
         self.initfreq()
 
@@ -616,22 +604,22 @@ class DLink(Link):
     @Ta.setter
     def Ta(self,orientation):
         self._Ta = orientation
-        self.tx.orientation = orientation
+        
 
     @Tb.setter
     def Tb(self,orientation):
         self._Tb = orientation
-        self.rx.orientation = orientation
+        
 
     @fGHz.setter
     def fGHz(self,freq):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
         self._fGHz = freq
-        if self.Aa.typ == 'Omni':
-            self.Aa.fGHz = self.fGHz
-        if self.Ab.typ == 'Omni':
-            self.Ab.fGHz = self.fGHz
+        # if self.Aa.typ == 'Omni':
+        #     self.Aa.fGHz = self.fGHz
+        # if self.Ab.typ == 'Omni':
+        #     self.Ab.fGHz = self.fGHz
         #if len(freq)>1:
         #    self.fmin = freq[0]
         #    self.fmax = freq[-1]
@@ -691,29 +679,39 @@ class DLink(Link):
 
 
     def initfreq(self):
-        """ Automatic freq determination from 
+        """ Automatic freq determination from
             Antennas
         """
-        fa = self.Aa.fGHz
-        fb = self.Ab.fGHz
+        sf = self.fGHz[1]-self.fGHz[0]
+        if hasattr(self.Aa,'fGHz'):
+            fa = self.Aa.fGHz
+            if len(fa)==0:
+                raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+            try:
+                sa = fa[1]-fa[0]  # step frequecy 
+            except: #single frequency
+                sa = fa[0]
+            # step
+            minfa = max(min(fa),min(self.fGHz))
+            maxfa = min(max(fa),max(self.fGHz))
+            sf = min(sa,sf)
+            self.fGHz = np.arange(minfa,maxfa+sf,sf)
 
-        # step
-        try:
-            sa = fa[1]-fa[0]
-        except: # single frequency
-            sa = fa[0]
-        try:
-            sb = fb[1]-fb[0]
-        except:
-            sb = fb[0]
+        if hasattr(self.Ab,'fGHz'):
+            fb = self.Ab.fGHz
+            if len(fb)==0:
+                raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
+        
+            try:
+                sb = fb[1]-fb[0] # step frequency 
+            except:
+                sb = fb[0]
 
+            minfb = max(min(self.fGHz),min(fb))
+            maxfb = min(max(self.fGHz),max(fb))
 
-
-        minf = max(min(fa),min(fb))
-        maxf = min(max(fa),max(fb))
-
-        sf = min(sa,sb)
-        self.fGHz = np.arange(minf,maxf+sf,sf)
+            sf = min(sf,sb)
+            self.fGHz = np.arange(minfb,maxfb+sf,sf)
 
 
     def reset_config(self):
@@ -1178,14 +1176,12 @@ class DLink(Link):
          Apply waveform to H
         force : list
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
-        si_algo : str ('old'|'new')
+        alg : 1|'old'|'exp'|'exp2'
+            version of run for signature
+        si_algo : str ('old'|'new') Only for alg 2
             signature.run algo type
             'old' : call propaths2
             'new' : call procone2
-        alg : 5|7
-            version of run for signature
-        si_mt: boolean
-            Multi thread version of algo version 7
         si_progress: bollean ( False)
             display progression bar for signatures
         diffraction : boolean (False)
@@ -1246,14 +1242,13 @@ class DLink(Link):
 
         defaults={ 'applywav':True,
                    'si_algo':'old',
-                   'si_mt':False,
                    'si_progress':False,
                    'diffraction':True,
                    'ra_vectorized':True,
                    'ra_ceil_H':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
-                   'alg':7,
+                   'alg':1,
                    'si_reverb':4,
                    'threshold':0.1,
                    'verbose':[],
@@ -1298,41 +1293,34 @@ class DLink(Link):
             if self.verbose :
                 print "load signature"
         else :
-            if kwargs['alg']==2015:
-                TMP=Si.run2015(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
+            if kwargs['alg']==1:
+                Si.run(cutoff=kwargs['cutoff'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
                 if self.verbose :
-                    print "algo 2015"
-            if kwargs['alg']==20152:
-                TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
-                if self.verbose :
-                    print "algo 20152"
+                    print "algo 2 ( ex 7)"
 
-            if kwargs['alg']==5:
-                Si.run5(cutoff=kwargs['cutoff'],
+            if kwargs['alg']=='old':
+                Si.run_old(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         progress=kwargs['si_progress'])
                 if self.verbose :
-                    print "algo 5"
-            if kwargs['alg']==7:
-                if kwargs['si_mt']==7:
-                    Si.run7mt(cutoff=kwargs['cutoff'],
-                        algo=kwargs['si_algo'],
-                        diffraction=kwargs['diffraction'],
-                        threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'])
-                    if self.verbose :
-                        print "algo 7 , si_mt"
-                else :
-                    Si.run7(cutoff=kwargs['cutoff'],
-                        algo=kwargs['si_algo'],
-                        diffraction=kwargs['diffraction'],
-                        threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'])
-                    if self.verbose :
-                        print "algo 7"
+                    print "algo 2 (ex 5)"
+
+            if kwargs['alg']=='exp':
+                TMP=Si.run_exp(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+                if self.verbose :
+                    print "experimental (ex 2015)"
+
+            if kwargs['alg']=='exp2':
+                TMP=Si.run_exp2(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+                if self.verbose :
+                    print "algo exp2 ( ex 20152)"
+
 
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
@@ -1356,6 +1344,7 @@ class DLink(Link):
             self.load(R,self.dexist['ray']['grpname'])
 
         else :
+
             # perform computation ...
             # ... with vetorized ray evaluation approach
             if kwargs['ra_vectorized']:
@@ -1373,7 +1362,8 @@ class DLink(Link):
             R.locbas(self.L)
             # ...and save
             R.fillinter(self.L)
-            C=Ctilde()
+
+            C = Ctilde()
             C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
@@ -1395,9 +1385,11 @@ class DLink(Link):
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
-            if not hasattr(R,'I'):
+            #if not hasattr(R,'I'):
             # Ctilde...
-                C = R.eval(self.fGHz)
+            # Find an other criteria in order to decide whether the R has
+            # already been evaluated
+            C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
@@ -1483,6 +1475,7 @@ class DLink(Link):
                    'col':'k',
                    'dB':False,
                    'labels':False,
+                   'aw':True,
                    'dyn':70}
 
         for key in defaults:
@@ -1492,7 +1485,7 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'])
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'])
         plt.axis('off')
         #
         # Point A
@@ -1614,17 +1607,17 @@ class DLink(Link):
 
 
         if centered :
-            ptx = self.tx.position-pg
-            prx = self.rx.position-pg
+            ptx = self.a-pg
+            prx = self.b-pg
         else :
-            ptx = self.tx.position
-            prx = self.rx.position
+            ptx = self.a
+            prx = self.b
 
         if ant :
             Atx = self.Aa
             Arx = self.Ab
-            Ttx = self.tx.orientation
-            Trx = self.rx.orientation
+            Ttx = self.Ta
+            Trx = self.Tb
 
             # evaluate antenna if required
             if not Atx.evaluated:

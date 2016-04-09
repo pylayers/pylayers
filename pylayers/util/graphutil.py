@@ -113,21 +113,22 @@ def draw(G,**kwargs):
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
     # remove airwalls
-    if not kwargs['airwalls']:
-        try:
-            #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
-            pno = filter(lambda x : x>0,nodelist)
-            # node == air
-            na = filter(lambda x : G.node[x]['name']=='AIR',pno)
-            # edge == air
-            ea=[]
-            [[ea.append((n1,n2)) for n2 in G.edge[n1].keys()] for n1 in na]
-            [[ea.append((n2,n1)) for n2 in G.edge[n1].keys()] for n1 in na]
+    try:
+        #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
+        pno = filter(lambda x : x>0,nodelist)
+        # node == air
+        na = filter(lambda x : G.node[x]['name']=='AIR',pno)
+        # edge == air
+        ea=[]
+        [[ea.append((n1,n2)) for n2 in G.edge[n1].keys()] for n1 in na]
+        [[ea.append((n2,n1)) for n2 in G.edge[n1].keys()] for n1 in na]
 
-            nodelist = filter(lambda x: x not in na, nodelist)
-            edgelist = filter(lambda x: x not in ea, edgelist)
-        except:
-            pass
+        nodelista = filter(lambda x: x in na, nodelist)
+        edgelista = filter(lambda x: x in ea, edgelist)
+        nodelist = filter(lambda x: x not in na, nodelist)
+        edgelist = filter(lambda x: x not in ea, edgelist)
+    except:
+        pass
     if kwargs['nodes']:
         nx.draw_networkx_nodes(G, G.pos,
                                nodelist = nodelist,
@@ -147,12 +148,32 @@ def draw(G,**kwargs):
                                 font_size=kwargs['font_size'],ax=ax)
 
     if kwargs['edges']:
+        if kwargs['edge_color'] == '':
+            kwargs['edge_color']='k'
+
         nx.draw_networkx_edges(G, G.pos,
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
                                width = kwargs['width'],
                                arrows= kwargs['arrows'],
                                alpha = kwargs['alphae'],ax=ax)
+        if kwargs['airwalls']:
+            try:
+                nx.draw_networkx_edges(G, G.pos,
+                                       edgelist = edgelista,
+                                       edge_color = kwargs['edge_color'],
+                                       width = kwargs['width'],
+                                       arrows= kwargs['arrows'],
+                                       alpha = kwargs['alphae'],
+                                       style='dotted',
+                                       ax=ax)
+                if kwargs['labels']:
+                    nx.draw_networkx_labels(G, G.pos,
+                                            labels={n:n for n in nodelista},
+                                            font_color=kwargs['posnode_color'],
+                                            font_size=kwargs['font_size'],ax=ax)
+            except:
+                pass
     if kwargs['show']:
         plt.show()
 

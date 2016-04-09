@@ -32,6 +32,7 @@ Cycle Class
     Cycle.inclusion
     Cycle.simplify
     Cycle.intersect
+    Cycle.reverberation
     Cycle.split
     Cycle.corrcy
     Cycle.show
@@ -73,17 +74,15 @@ class Cycles(nx.DiGraph):
         """ object representation
         """
         s = ''
-        s = s + 'Number of cycles :' +str(len(self.node)) + '\n'
+        s = s + 'Number of cycles : ' +str(len(self.node)) + '\n\n'
         for k in self:
             s = s + str(self.node[k]['cycle']) + '\n'
         return(s)
 
-    def info(self):
-        """ get info from Cycles object
-        """
-        print "Number of cycles : ",len(self)
-        for k in self.Gi:
-            print k , self.Gi.neighbors(k)
+    def check(self):
+        self.lcyroot =[k for k in nx.degree(self)
+                  if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
+                  (nx.degree(self)[k]>0))]
 
     def inclusion(self,full=True):
         """  Inform the inclusion relations between cycles
@@ -102,7 +101,7 @@ class Cycles(nx.DiGraph):
                     if ck <> cl
                         check inclusion of Ck in Cl
                         If Inclusion detected
-                            update graphe
+                            update graph
 
         Warning
         -------
@@ -133,6 +132,7 @@ class Cycles(nx.DiGraph):
         #print lcyt
         #
         # loop on all cycle in list of cycles
+
         for k in lcyt:
             ck = self.node[k]['cycle']
             for l in self:
@@ -183,6 +183,7 @@ class Cycles(nx.DiGraph):
                 self.l2[l]=[k]
         #pdb.set_trace()
         # for all inclusion length (starting in 0) 
+
         for l in self.l2.keys():
             # retrieve the list of included cycles of length l
             lnode = self.l2[l]
@@ -199,15 +200,18 @@ class Cycles(nx.DiGraph):
                     # c includes cy1
                     self.add_edge(c,cy1)
 
-
     def decompose(self):
         """ recursive function to transform the cycle basis
 
         """
         #
-        # root if degree == number of successors
+        # a cycle is a root cycle if its degree equals its number of successors
+        # In a DiGraph if nx.neighbors(A)=B then nx.neighbors(B)=[]
         #
-        plt.ion()
+        #
+        # if len(self.edges())==0:
+        #     return self
+
         self.lcyroot =[k for k in nx.degree(self)
                   if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
                   (nx.degree(self)[k]>0))]
@@ -218,6 +222,8 @@ class Cycles(nx.DiGraph):
             ncyroot = self.lcyroot.pop()
             cybig = self.node[ncyroot]['cycle']
             # get the list of the successor cycle indices
+
+
             lninc = nx.neighbors(self,ncyroot)
             #
             # reduce to the smallest cycle
@@ -232,6 +238,8 @@ class Cycles(nx.DiGraph):
                 cyinc1 = self.node[ninc]['cycle'] # cycle included
                 punctual,cyinc2 = cybig.split(cyinc1) # small cycle
                 if punctual:
+                    import ipdb
+                    ipdb.set_trace()
                     reloop = True
                     logging.warning("punctual contact detected proceed in reverse order")
                 if cyinc2 !=None: # divide again with updated big cycle
@@ -249,8 +257,6 @@ class Cycles(nx.DiGraph):
                     cyinc1 = self.node[ninc]['cycle'] # cycle included
                     punctual,cyinc2 = cybig.split(cyinc1) # small cycle
                     if punctual:
-                        import ipdb
-                        ipdb.set_trace()
                         logging.critical("contact detected reconsider the layout description ")
                     if cyinc2 !=None: # divide again with updated big cycle
                         cybig = cyinc2
@@ -277,7 +283,6 @@ class Cycles(nx.DiGraph):
             #plt.show()
             for ninc in lninc:
                 self.remove_edge(ncyroot,ninc)
-
             #
             # recursive call
             #
@@ -285,9 +290,32 @@ class Cycles(nx.DiGraph):
             #
             # Two lines to kill the monster
             #
-            if len(self.lcyroot)==0:
+            if len(self.lcyroot)==0 :
                 return(self)
         return(self)
+
+
+    def show(self,**kwargs):
+        """ show cycles
+
+
+        """
+
+        #nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
+        if 'fig' in kwargs:
+            fig = kwargs['fig']
+        else:
+            fig = plt.figure()
+        if 'ax' in kwargs:
+            ax=kwargs['ax']
+        else:
+            ax = fig.add_subplot(111)
+        
+        [self.node[c]['cycle'].show(fig=fig,ax=ax) for c in self.nodes()]
+
+        return fig,ax
+
+
 
 class Cycle(object):
     """ Graph cycle class
@@ -442,8 +470,23 @@ class Cycle(object):
     def reverberation(self,fGHz,L):
         """ calculate reverberation time of the cycle
 
+        Parameters
+        ----------
+
+        fGHz : frequency GHz
+        L : Layout
+
+        Returns
+        -------
+
+        V    : Volume
+        A    : Area
+        eta  : absorption coefficient
+        tau  :
+
         $$\tau_g = \frac{4V}{c\eta A}$$
-        where $\eta$ is the absorbtion coefficient  
+        Sabine's Model
+        where $\eta$ is the absorbtion coefficient
 
         """
         # get the sequence of segments 
@@ -505,8 +548,9 @@ class Cycle(object):
         etaFloor = S*10**(-Lofloor[0]/10.)
         etaCeil  = S*10**(-Loceil[0]/10.)
         eta = (sum(AS1)+sum(AS2)+etaFloor+etaCeil)/A
-        tau = 4*V/(0.3*A*eta)
-        return(V,A,eta,tau)
+        tau_sab = 4*V/(0.3*A*eta)
+        tau_eyr = -4*V/(0.3*A*np.log(1-eta))
+        return(V,A,eta,tau_sab,tau_eyr)
 
     def info(self):
         """
@@ -526,6 +570,20 @@ class Cycle(object):
         self.p        = self.p[:,::-1]
         self.area     = geu.SignedArea(self.p)
 
+    def inc(self,cy):
+        """ Returns True if self includes cy 
+
+        """
+        npoints = filter(lambda x : x <0 ,self.cycle)
+        coords  = map(lambda x : self.G.pos[x],npoints)
+        polyself  = geu.Polygon(sh.MultiPoint(tuple(coords)),self.cycle)
+        npoints = filter(lambda x : x <0 ,cy.cycle)
+        coords  = map(lambda x : cy.G.pos[x],npoints)
+        polycy  = geu.Polygon(sh.MultiPoint(tuple(coords)),cy.cycle)
+        pdb.set_trace()
+        bool = polyself.intersect(polycy)
+        return(bool)
+
     def inclusion(self,Cy):
         """  Return True if self includes Cy
 
@@ -535,6 +593,7 @@ class Cycle(object):
 
         Returns
         -------
+
         boolean  : True if Cy \subset self
         path     : path
 
@@ -565,14 +624,28 @@ class Cycle(object):
                         else:
                             return False,path
                 else: #cycles share a point 
-                    areabig   = abs(self.area)
-                    #areasmall = abs(Cy.area)
-                    cycomb    = self + Cy
-                    areacomb  = abs(cycomb.area)
-                    if areacomb < areabig:
-                        return True,path
-                    else:
+                    # signed area is not sufficent to determien if 
+                    # 2 polygon connect by a single point 
+                    # are inclusive or external
+
+                    # areabig   = abs(self.area)
+                    # #areasmall = abs(Cy.area)
+                    # cycomb    = self + Cy
+                    # areacomb  = abs(cycomb.area)
+                    # if areacomb < areabig:
+                    #     return True,path
+                    # else:
+                    #     return False,np.array([])
+
+                    PCy = geu.Polygon(p=Cy.p,vnodes=Cy.cycle)
+                    Pself = geu.Polygon(p=self.p,vnodes=self.cycle)
+                    inter = PCy.intersection(Pself)
+                    # if intesection is a point, Cy not subset of self 
+                    if isinstance(inter,sh.Point):
                         return False,np.array([])
+                    else:
+                        return True,path
+
             else:
                 return False,np.array([])
         else:
@@ -625,6 +698,7 @@ class Cycle(object):
         path is the common path along the cycle
 
         """
+
         #
         # segment number
         #
@@ -696,6 +770,7 @@ class Cycle(object):
 
           Returns
           -------
+
           cyout : list of output cycles
           punctual : boolean
               True if punctual connection
@@ -719,9 +794,9 @@ class Cycle(object):
         if (incl) & (len(u)>0):
             ee1   = e1[~np.in1d(e1,path)]
             ee2   = e2[~np.in1d(e2,path)]
-            r     = np.hstack((ee1,ee2))
+            hs     = np.hstack((ee1,ee2))
             cycle = np.array([],dtype=int)
-            for kt in r:
+            for kt in hs:
                 nb = Gunion.neighbors(kt)
                 cycle = np.hstack((cycle,nb[0],kt,nb[1]))
             cycle = np.unique(cycle)
@@ -733,11 +808,26 @@ class Cycle(object):
             diffarea = abs(self.area)-(abs(cyin.area)+abs(cyout.area))
             if diffarea>1e-10:
                 print "area error",diffarea
-                pdb.set_trace()
+                # import ipdb
+                # ipdb.set_trace()
 
             return(False,cyout)
         if (incl) & (len(v)>0):
-            return(True,None)
+            # seek where punctual is in both cycles
+            unc1 = np.where(self.cycle==path)[0]
+            unc2 = np.where(cyin.cycle==path)[0]
+            # to pu the punctual point as 1st node of the cycle
+            cyinr = np.roll(cyin.cycle,-unc2-1)
+            cycle = np.insert(self.cycle,unc1+1,cyinr)
+            G     = nx.subgraph(Gunion,cycle)
+            G.pos = {}
+            G.pos.update({node: Gunion.pos[node] for node in Gunion})
+            cyout = Cycle(G)
+            cyout.G=G
+            cyout.cycle=cycle
+            # import ipdb
+            # ipdb.set_trace()
+            return(True,cyout)
         else:
             return(False,None)
 

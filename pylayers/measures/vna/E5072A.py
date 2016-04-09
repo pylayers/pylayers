@@ -8,14 +8,16 @@ import sqlite3
 import matplotlib.pyplot as plt
 from types import *
 from numpy import array
-import pdb
+import ipdb
 import h5py
 import select
 from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
-# from  pylayers.measures.parker.smparker import *
+from pylayers.measures.exploith5 import Mesh5 
+import pylayers.measures.switch.ni_usb_6501 as sw
+#from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
 import os
@@ -63,9 +65,9 @@ class SCPI(PyLayers):
     PORT = 5025
     _chunk = 128
     _verbose = False
-    _timeout = 0.150
+    _timeout = 1
 
-    def __init__(self, port=PORT, timeout=None, verbose=False, **kwargs):
+    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1,emulated = False):
         """
         Parameters
         ----------
@@ -76,46 +78,52 @@ class SCPI(PyLayers):
         verbose : boolean
 
         """
-        self.emulated = False
+        self.emulated = emulated
         if "VNA_IP" in os.environ:
             host = os.environ["VNA_IP"]
         else:
             print "VNA IP not defined"
             exit
-        try:
-            self.host = host
-            self._verbose = verbose
-            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            if timeout is not None:
-                self.s.settimout(timeout)
-                self._timeout = timeout
+        if not self.emulated:
+            try:
+                self.host = host
+                self._verbose = verbose
+                self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                if timeout is not None:
+                    self.s.settimout(timeout)
+                    self._timeout = timeout
 
-            self.s.connect((host, port))
-        except socket.error as e:
-            if self._verbose:
-                print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
-            else:
-                self.emulated = True
+                self.s.connect((host, port))
+            except socket.error as e:
+                if self._verbose:
+                    print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
+                else:
+                    pass
+                    #self.emulated = True
 
-        defaults = {'Nt' : 4,
-                    'Nr' : 8}
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        self.Nt   = kwargs.pop('Nt')
-        self.Nr   = kwargs.pop('Nr')
-
+        self.Nf   = 201
         self.getIdent()
-        #print self.ident
-        # assert('E5072A' in self.ident), "E5072A not responding"
-        self.points()
+        print self.ident
+        assert('E5072A' in self.ident), "E5072A not responding"
         self.freq()
+        self.points()
         self.parS()
         self.avrg()
         self.ifband()
-        self.getdata()
+        self.power_level()
+
+        #self.getdata()
+
+        #initialization of the switch
+        if (Nr!=1) and (Nt!=1) and not self.emulated:
+            self.switch = sw.get_adapter()
+            reattach=False
+            if not self.switch:
+                raise Exception("No device found")
+
+            #self.switch.device
+            self.switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
     def __repr__(self):
         st = ''
@@ -132,6 +140,7 @@ class SCPI(PyLayers):
         st = st + "Avering            : " + self.b + '\n'
         st = st + "Nbr of averages    : " + str(self.navrg)+'\n'
         st = st + "IF Bandwidth (Hz)  : " + str(self.ifbHz)+'\n'
+        st = st + "Power level (dBm)  : " + str(self.power)+'\n'
         st = st + "Nbr of measures    : " + str(self.nmeas)+'\n'
         return(st)
 
@@ -175,7 +184,8 @@ class SCPI(PyLayers):
     def close(self):
         """ close socket
         """
-        self.s.close()
+        if not self.emulated:
+            self.s.close()
 
     def _read(self):
         if self.s is None:
@@ -316,8 +326,36 @@ class SCPI(PyLayers):
         tr  : integer
 
         """
-        com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
-        self.write(com)
+        if not self.emulated:
+            com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
+            self.write(com)
+
+    def trigger(self, cmd = 'bus'):
+        """ configure the trigger that control the acquisition of the measurements
+
+        Parameters
+        ----------
+
+        cmd : string
+            'bus' : actives the trigger via the BUS
+            'go'   : generates a trigger immediately and executes a measurement, regardless of the setting 
+                     of the trigger mode.
+            'test' : when all of pending operations complete, *OPC returns 1.
+        
+
+        """
+        if not self.emulated:            
+            if cmd == 'bus':
+                com = ":TRIG:SOUR BUS"
+                self.read(com)
+
+            if cmd == 'go':
+                com = ":TRIG:SING"
+                self.read(com)
+
+            if cmd == 'test':
+                com = "*OPC?"
+                self.read(com)
 
 
     def points(self, value=1601, cmd='get', sens=1, echo=False):
@@ -341,6 +379,7 @@ class SCPI(PyLayers):
         """
         com = ":SENS"+str(sens)+":SWE:POIN"
         self.Nf = value
+        self.fGHz = np.linspace(self.fGHz[0],self.fGHz[-1],self.Nf)
         if not self.emulated:
             if cmd == 'get':
                 comg = com+"?\n"
@@ -356,6 +395,41 @@ class SCPI(PyLayers):
                 if echo:
                     print coms
                 self.write(coms)
+
+    def power_level(self,chan=1,cmd='get',power=10):
+        """ allows 'get' | 'set' the the power level transmitted. 
+
+        Parameters
+        ----------
+
+        chan   : number of the channel
+        pow    : int power level transmitted
+        cmd     : 'get'|'set'
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.vna.E5072A import *
+        >>> vna = SCPI()
+        >>> vna.power_level(cmd='set',power=10)
+        >>> vna.close()
+
+        """
+        self.power   = power
+        
+        if not self.emulated:
+            if cmd == 'get':
+                self.read("SOUR"+str(chan)+":POW?\n")
+                
+            if cmd == 'set':
+                if power < 18:
+                    co  = "SOUR"+str(chan)+":POW"
+                    com = co +' '+str(power)
+                    # assert(npow > 17)," power level must not exceed 17dBm "
+                    com = com+"\n"
+                    self.s.send(com)
+                else:
+                    raise IOError('power level must not exceed 17dBm')
 
     def freq(self, sens=1, fminGHz=1.8, fmaxGHz=2.2, cmd='get'):
         """ get | set frequency ramp
@@ -400,6 +474,8 @@ class SCPI(PyLayers):
                 self.s.send(com1+f1)
                 time.sleep(1)
                 self.s.send(com2+f2)
+        else:
+            self.fGHz = np.linspace(fminGHz,fmaxGHz,self.Nf)
 
     def getIdent(self):
         """ get VNA Identification
@@ -413,10 +489,10 @@ class SCPI(PyLayers):
             except socket.timeout:
                 return ""
         else:
-            self.ident = 'emulated vna'
+            self.ident = 'E5072A emulated vna'
 
 
-    def getdata(self, chan=1, Nmeas=10):
+    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10,calibration=False,seed=0):
         """ getdata from VNA
 
         Parameters
@@ -424,6 +500,13 @@ class SCPI(PyLayers):
         Nmeas   : number of measures
         chan    : int
                   channel number
+        Nr      : Number of receiver (used only when calibration ==True)
+        Nt      : Number of transmitter (used only when calibration ==True)
+        Nmeas   : Number of measurements 
+        calibration : boolean (used only for emulation)
+            if True the measurement correspond to a dataset for calibration purpose
+        seed    : In emulated mode the data are produced from random number. seed is 
+            for reproducibility of random experiments.
 
         Examples
         --------
@@ -439,14 +522,17 @@ class SCPI(PyLayers):
         """
 
         self.nmeas    = Nmeas
+        #ipdb.set_trace()
+        #print "Nmeas vna",self.nmeas
         if not self.emulated:
-            com = 'CALC'+str(chan)+':DATA:SDAT?'
+            com = 'CALC'+str(chan)+':DATA:SDAT?'  #This command sets/gets the corrected data array.
             for k in  range(Nmeas):
                 buff = ''
-
-                while len(buff) <> (self.Nf*16+8):
+                while len(buff) != (self.Nf*16+8):
+                    self.trigger(cmd='test')
                     buff = self.read(com)
-
+                    #print"buffer size :",len(buff)
+                #ipdb.set_trace()
                 S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')
                 Y = S.reshape(self.Nf, 2)
                 H = Y[:, 0]+1j*Y[:, 1]
@@ -454,8 +540,25 @@ class SCPI(PyLayers):
                     tH = np.vstack((tH, H[None,:]))
                 except:
                     tH = H[None,:]
+            tH = tH[:,None,None,:]
         else:
-            tH = np.random.rand(Nmeas,self.Nf)+1j*np.random.rand(Nmeas,self.Nf)
+            if not calibration:
+                np.random.seed(seed)
+                tau = 300 + 10*np.random.rand(Nr,Nt)
+                h = ch.TBchannel()
+                h.SalehValenzuela()
+                H = h.toFD(fGHz=self.fGHz)
+                EH = np.sum(H.y*np.conj(H.y),axis=1)/self.Nf
+                stn = np.sqrt(EH)/10.
+                N = stn*(np.random.rand(Nmeas,Nr,Nt,self.Nf)+1j*np.random.rand(Nmeas,Nr,Nt,self.Nf))
+                tH = H.y[:,None,None,:]+N
+                tH = tH*np.exp(-2*1j*np.pi*self.fGHz[None,None,None,:]*tau[None,:,:,None])
+            else:
+                np.random.seed(seed)
+                tau = 300 + 10*np.random.rand(Nr,Nt)
+                tH = np.exp(-2*1j*np.pi*self.fGHz[None,None,None,:]*tau[None,:,:,None])
+                dtau = 7*np.random.rand()
+                tH = tH* np.exp(-2*1j*np.pi*self.fGHz[None,None,None,:]*dtau)
 
         return tH
 
@@ -510,11 +613,11 @@ class SCPI(PyLayers):
             # t   = toc-tic
             # print "Time measurement (ms) :",t
 
-    def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
+    def avrg(self,sens=1,b='OFF',navrg=20,cmd='getavrg'):
         """ allows get|set the point averaging
 
         Parameters
-        ----------
+        ----------    def ifband(self,sens=1,ifbHz=70000,cmd='get'):
         b        : boolean (ON/OFF)
         cmd      : getavgr (0 average OFF
                           1 average ON)
@@ -544,12 +647,17 @@ class SCPI(PyLayers):
             co2  = ":SENS"+str(sens)+":AVER:COUN"
             com1 = co1 + ' '+b
             com2 = co2 + ' '+str(navrg)
+            co3 = ":SENS"+str(sens)+":AVER:CLE"
 
             if cmd == 'getavrg':
                 com = co1+"?\n"
                 self.s.send(com)
                 # c = self.read(com)
                 # return(c)
+
+            if cmd == 'clear':
+                com3 = co3
+                self.s.send(com3)
 
             if cmd == 'setavrg':
                 com = com1+"\n"
@@ -582,10 +690,9 @@ class SCPI(PyLayers):
         >>> vna.close()
 
         """
+        self.ifbHz   = ifbHz
         if not self.emulated:
-            self.ifbHz   = ifbHz
-
-            co  = ":SENS"+str(sens)+":BAND"
+            co  = ":SENS"+str(sens)+":bandwidth"
             com = co + ' '+str(ifbHz)
 
             if cmd == 'get':
@@ -596,132 +703,244 @@ class SCPI(PyLayers):
                 com = com+"\n"
                 self.s.send(com)
 
-
-    def calibh5(self,
-                 _fileh5='scalib',
-                 _filecal='cal_config.ini',
-                 _filevna='vna_config.ini',
-                 cables=[],
-                 author='',
-                 comment='',
-                 Nmeas = 100):
-        """  measure a calibration vector and store it in a hdf5 file
+    def stepped_mode(self,sens=1,mode='STEP'):
+        """ activate sweep mode
 
         Parameters
         ----------
 
-        _fileh5 : string
-            file h5 prefix
-        _filename : string
-            vna configuration file name
-        cables : list of strings
-
+        sens : int
+        mode : 'stepped'
+        STEPped : source frequency is CONSTANT during measurement of eah displayed point. \
+                  More accurate than ANALog. Dwell time can be set in this mode.
         """
+        self.mode = mode
+        if not self.emulated:
+                com  = ":SENS"+str(sens)+":SWE:GEN"+' '+mode
+                self.read(com)
 
-        # set config
-        # file read from : ~/Pylayers_project/meas
+    def swept_mode(self,sens=1):
+        """ activate sweep mode
 
-        self.load_config(_filename=_filevna)
-        dcal = self.load_calconfig(_filename=_filecal)
+        Parameters
+        ----------
 
-        for k in dcal:
-            print dcal[k]
+        sens : int
 
-        # get Nmeas calibration vector
-        D = self.getdata(chan=1, Nmeas=Nmeas)
-
-        # store calibration vector in a hdf5 file
-        fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "w")
-        try:
-            ldataset = f.keys()
-        except:
-            ldataset = []
-        lcal =  filter(lambda x : 'cal' in x, ldataset)
-        calname = 'cal' + str(len(lcal)+1)
-
-        # dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
-        dcal = f.create_dataset(calname, (Nmeas, self.Nf, self.ifbHz), dtype=np.complex64)
-
-        dcal.attrs['Nf']        = self.Nf
-        dcal.attrs['fminGHz']   = self.fminGHz
-        dcal.attrs['fmaxGHz']   = self.fmaxGHz
-        dcal.attrs['ifbHz']     = self.ifbHz
-        dcal.attrs['Navrg']     = self.navrg
-        dcal.attrs['time']      = time.ctime()
-        dcal.attrs['author']    = author
-        dcal.attrs['cables']    = cables
-        dcal.attrs['comment']   = comment
-        dcal.attrs['param']     = self.param
-        dcal[0:Nmeas, 0:self.Nf] = D
-        f.close()
+        ANALog : source frequency is continuously RAMPING during measurement of each \ 
+                 displayed point. Faster than STEPped. Sweep time (not dwell time) can be \ 
+                 set in this mode.
+        """
+        if not self.emulated:
+                self.read(":SENS"+str(sens)+":SWE:GEN ANAL")
 
 
-    def mimocalibh5(self,
-                 _fileh5='scalib',
-                 _filename='vna_config.ini',
+
+    def calibh5(self,
+                 Nr = 4,
+                 Nt = 8,
+                 _filemesh5 = 'measures',
+                 _filecalh5 = 'mcalib',
+                 _filecal = 'cal_config.ini',
+                 _filevna='vna_config.ini',
+                 typ = 'full',
+                 gcalm = 1,
                  cables=[],
-                 author='M.D.B and B.U',
+                 author='',
                  comment='',
-                 Nmeas = 100):
+                 ):
         """  measure a calibration vector and store in h5 file
 
         Parameters
         ----------
 
-        _fileh5 : string
-            file h5 prefix
-        _filename : string
-            vna configuration file name
+        Nr : int
+        Nt : int
+        _filemesh5 : string
+            measurement data file prefix
+        _filecalh5 : string
+            multi antenna calibration data file prefix
+        _filecal : string
+            variable parameters calibration .ini configuration file name
+        _filevna : string
+            vna .ini configuration file name
+        typ : string
+            'full' | 'single'
+        gcalm : int
+            selected calibration group of _filecalh5 (used only if typ=='single')
         cables : list of strings
+        author
+        comment
 
         """
 
         # set config
         # File from : ~/Pylayers_project/meas
-        self.load_config(_filename=_filename)
 
-        # get Nmeas calibration vector
-        Dmeas = self.getdata(chan=1, Nmeas=Nmeas)
+        switch = sw.get_adapter()
+        if not switch:
+            raise Exception("No device found")
+        switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
+        #set the NI USB mode in order to use
+
 
         # store calibration vector in a hdf5 file
-        fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "w")
+
+        # SISO case
+        #     + calibration is saved in the measurement file
+        #     + calibration variable parameters are read in _filecal
+        #
+        # MIMO case
+        #     if typ is 'full'
+        #       + calibration are saved in the calibration file
+        #       + calibration variable parameters are read in _filecal
+        #     else
+        #       + a single channel calibration is saved in the measurement file
+        #       + calibration variable parameters are read in _filecalh5
+        #
+
+        Mr = Nr
+        Mt = Nt
+        # SISO case
+        if (Nr==1) and (Nt==1):
+            fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
+            self.load_config_vna(_filename=_filevna)
+            dcal = self.load_calconfig(_filename=_filecal)
+        else:
+        # MIMO case
+            if typ=='full':
+                fileh5w = pyu.getlong(_filecalh5, pstruc['DIRMES'])+'.h5'
+                self.load_config_vna(_filename=_filevna)
+                dcal = self.load_calconfig(_filename=_filecal)
+            if typ=='single':
+                Mr = 1
+                Mt = 1
+
+                fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
+                # dcal is obtained from _filecalh5 and gcal
+                dcal = Mesh5(_filecalh5).get_dcal(gcalm)
+                # In a future version it would be better to load from the 
+                # parameter which are in the MIMO calibration file instead 
+                # of thevna_config
+                self.load_config_vna(_filename=_filevna)
+
+        f = h5py.File(fileh5w, "a")
         try:
             ldataset = f.keys()
         except:
             ldataset = []
 
-        for iR in range(self.Nr):
-            for iT in range(self.Nt):
-                lmimocal =  filter(lambda x : 'mimocal' in x, ldataset)
-                calname = 'mimocal' + str(len(lmimocal)+1) + 'x' + str(iT+1) + 'x' + str(iR+1)
+        lcal =  filter(lambda x : 'cal' in x, ldataset)
+        calname = 'cal' + str(len(lcal)+1)
+        cal = f.create_group(calname)
 
-        dmimocal = f.create_dataset(calname, (Nmeas, self.Nt, self.Nr, self.Nf), dtype=np.complex64)
+        tic = time.time()
 
-        dmimocal.attrs['Nf']        = self.Nf
-        dmimocal.attrs['fminGHz']   = self.fminGHz
-        dmimocal.attrs['fmaxGHz']   = self.fmaxGHz
-        dmimocal.attrs['ifbHz']     = self.ifbHz
-        dmimocal.attrs['Navrg']     = self.navrg
-        dmimocal.attrs['time']      = time.ctime()
-        dmimocal.attrs['author']    = author
-        dmimocal.attrs['cables']    = cables
-        dmimocal.attrs['comment']   = comment
-        dmimocal.attrs['param']     = self.param
-        dmimocal.attrs['Nt']        = self.Nt
-        dmimocal.attrs['Nr']        = self.Nr
-        dmimocal[0:Nmeas, 0:self.Nf] = Dmeas
+        for iT in range(Mt):
+            print "connect transmitter :", iT +1
+            switch.write_port(0,iT)
+            for iR in range(Mr):
+                switch.write_port(1,iR)
+                print "connect receiver :", iR + 1
+                c = ""
+                while "g" not in c:
+                    c = raw_input("Hit g key ")
 
-        # S = Scanner()
+                for k in dcal:
+                    print "---------------------------------------------------------------------"
+                    print "                 Configuration Parameters                            "
+                    print   dcal[k]
+                    print "---------------------------------------------------------------------"
+                    
+                    t1 = time.time()
+                    for k2 in dcal[k]:
+                        if k2=='nf':
+                            self.points(dcal[k]['nf'], cmd='set')
+                            print "set number of points  :",dcal[k]['nf']
+                        if k2=='ifbhz':
+                            self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                            print "set number of ifbHz   :",dcal[k]['ifbhz']
+                        if k2=='navrg':
+                            self.avrg(b='ON',navrg=dcal[k]['navrg'], cmd='setavrg')
+                        if k2=='power':
+                            self.power_level(cmd='set',power=dcal[k]['power'])
 
-        for i in range(self.Nr):
-            for j in range(self.Nt):
-                # Hmeas = S.measMIMO.Smeas.y[i,j,:]
-                # Hcal =  Hmeas/Dmeas[0,0,:]
-                # Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
-                Hcal =  Dmeas[i, j,:]/Dmeas[0, 0,:]
+                    #print "activation of the trigger via the BUS"
+                    #get Nmeas calibration vector
+
+                    tic_Dmeas = time.time()
+                    print "beginning of the acquisition"
+                    time.sleep(2)
+                    Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
+                    toc_Dmeas = time.time()
+                    print "end of the acquisition (s) :",toc_Dmeas-tic_Dmeas
+
+                    if ((iR==0) and (iT==0)):
+                        cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
+                        cal[k].attrs['fminghz']   = self.fGHz[0]
+                        cal[k].attrs['fmaxghz']   = self.fGHz[-1]
+                        cal[k].attrs['time']      = time.ctime()
+                        cal[k].attrs['author']    = author
+                        cal[k].attrs['cables']    = cables
+                        cal[k].attrs['comment']   = comment
+                        cal[k].attrs['param']     = self.param
+                        cal[k].attrs['nt']        = Nt
+                        cal[k].attrs['nr']        = Nr
+                        cal[k].attrs['nmeas']     = dcal[k]['nmeas']
+                        
+                        if typ=='single':
+                            cal[k].attrs['_filecalh5'] =_filecalh5 
+                            cal[k].attrs['gcalm']= gcalm
+                            
+                    cal[k][:,iR,iT,:] = Dmeas[:,0,0,:]
+                    cal[k].attrs['nf']        = self.Nf
+                    cal[k].attrs['ifbhz']     = self.ifbHz
+                    cal[k].attrs['navrg']     = self.navrg
+                    cal[k].attrs['power']     = self.power
+
+                    t2 =  time.time()
+                    print "duration set up (s) :",t2-t1
+
+        toc = time.time()
+
+        print "---------------------------------------------------------"
+        print "                   END of calibration                    "
+        print " measurement time (s)                     :",toc-tic
+        print "---------------------------------------------------------"
+
         f.close()
+
+    def meastime(self):
+        """
+        """
+        lNf = [201,401,801,1601]
+        lIF = np.arange(1000,300000,1000)
+        #lNf = [201]
+        #lIF = [1000,2000,30000]
+        #lIF = [1000]
+        tval = np.empty((len(lNf),len(lIF)),dtype=np.float64)
+        Pb = np.empty((len(lNf),len(lIF)),dtype=np.float64)
+        for kf,f in enumerate(lNf):
+            print f
+            for ki,i in enumerate(lIF):
+                print i
+                self.points(f,cmd='set')
+                self.ifband(ifbHz=i,cmd='set')
+                time.sleep(3)
+                tic = time.time()
+                Dmeas = self.getdata(chan=1,Nmeas=10)
+                toc = time.time()
+                H  = Dmeas[:,0,0,:]
+                Hm = np.mean(H,axis=0)
+                Hc = H - Hm
+                var = np.mean(np.abs(Hc*np.conj(Hc)),axis=0)
+                var2  = np.mean(var)
+                print "Time :",toc-tic
+                print "Noise Power dB:",10*np.log10(var2)
+                tval[kf,ki]=toc-tic
+                Pb[kf,ki]= var2
+        return(tval,Pb)
+
 
 
     def load_calconfig(self,_filename='cal_config.ini'):
@@ -730,7 +949,7 @@ class SCPI(PyLayers):
         filename = pyu.getlong(_filename, pstruc['DIRMES'])
         cal_conf  = ConfigParser.ConfigParser()
         cal_conf.read(filename)
-        pdb.set_trace()
+        #pdb.set_trace()
         sections  = cal_conf.sections()
         di        = {}
         for section in sections:
@@ -746,7 +965,7 @@ class SCPI(PyLayers):
 
         return(di)
 
-    def load_config(self,_filename='vna_config.ini'):
+    def load_config_vna(self,_filename='vna_config.ini'):
         """ load a vna config file from an .ini file
 
         Parameters
@@ -758,10 +977,6 @@ class SCPI(PyLayers):
         Examples
         --------
 
-        >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
-        >>> vna.load_config()
-        >>> vna.close()
 
         """
 
@@ -785,29 +1000,52 @@ class SCPI(PyLayers):
                     di[section][option] = vna_conf.get(section, option)
 
 
-                # be careful no capital word in the sections
+        # be careful no capital word in the sections
         # link between vna and file ini
 
         # section from  vna_config
         # section : stimulus
+    
 
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz']
-
+        self.Nf = di['stimulus']['nf']
+        self.power = di['stimulus']['power']
 
         # section : response
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
-        # self.ifbHz   = di['response']['ifbhz']
+        self.ifbHz   = di['response']['ifbhz']
 
         # apply configuration setup
-        if not self.emulated:
-            self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
-            self.points(self.Nf, cmd='set')
-            self.parS(param=self.param, cmd='set')
-            self.ifband(ifbHz=self.ifbHz, cmd='set')
-            self.autoscale()
+        
+        self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
+        self.points(self.Nf, cmd='set')
+        self.power_level(cmd='set',power=self.power)
+        self.parS(param=self.param, cmd='set')
+        self.ifband(ifbHz=self.ifbHz, cmd='set')
+        self.avrg(b='ON',navrg=self.navrg,cmd='setavrg')
+        self.autoscale()
 
+        #toc_freq = time.time()
+        #print "time measurement for frequency set up (s) :", tic-toc_freq
+        #time.sleep(1)
+        
+        #tic = time.time()
+        #self.points(self.Nf, cmd='set')
+        #toc_pts = time.time()
+        #print "time measurement for points set up (s) :", tic-toc_pts
+        #time.sleep(1)
+        
+        #self.parS(param=self.param, cmd='set')
+        #toc_parS = time.time()
+        #print "time measurement for parS set up (s) :", tic-toc_parS
+        #time.sleep(1)
+        
+        #self.ifband(ifbHz=self.ifbHz, cmd='set')
+        
+        
+        self.autoscale()
 
 
 if __name__ == '__main__':

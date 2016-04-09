@@ -90,6 +90,7 @@ import scipy as sp
 import pylab as plt
 import struct as stru
 import scipy.stats as st
+import numpy.fft as fft
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
@@ -103,7 +104,7 @@ except:
     print 'h5py is not installed: Ctilde(object cannot be saved)'
 
 class TBchannel(bs.TBsignal):
-    """ Uniform channel in delay domain
+    """ radio channel in non uniform delay domain
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         #super(TUsignal,self).__init__(x,y,label)
@@ -111,7 +112,7 @@ class TBchannel(bs.TBsignal):
 
 
     def tau_Emax(self):
-        """ calculate the delay of max energy peak
+        """ calculate the delay of max energy pildeeak
 
         .. math::
             \max_{\tau} y^{2}(\tau)
@@ -137,10 +138,12 @@ class TBchannel(bs.TBsignal):
 
         #cdf, vary = self.ecdf()
 
-        cdf = np.cumsum(self.y,axis=1)
+        cdf = np.cumsum(self.y,axis=-1)
         cdf = cdf/cdf[:,-1][:,None]
 
+        #pdb.set_trace()
         pdf = np.diff(cdf.y)
+
 
         u = np.nonzero(cdf.y > alpha)[0]
         v = np.nonzero(cdf.y < 1 - alpha)[0]
@@ -233,6 +236,20 @@ class TBchannel(bs.TBsignal):
 
         return(taurms)
 
+    def toFD(self,fGHz=np.linspace(2,5,256)):
+        """ Transform to Frequency domain
+
+        Returns
+        -------
+
+        H : Tchannel
+
+        """
+
+        z = np.sum(self.y[:,None]*np.exp(-2*1j*fGHz[None,:]*np.pi*self.x[:,None]),axis=0)
+        H = Tchannel(x=fGHz,y=z,tau=self.x)
+        return H
+
     def SalehValenzuela(self,**kwargs):
         """ generic Saleh and Valenzuela Model
 
@@ -245,6 +262,13 @@ class TBchannel(bs.TBsignal):
         gam : rays exponential decay factor
         T   : observation duration
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.channel import *
+        >>> C=TBchannel()
+        >>> C.SalehValenzuela()
+        >>> C.stem()
 
         """
         defaults = { 'Lam' : .1,
@@ -266,24 +290,30 @@ class TBchannel(bs.TBsignal):
         Nc  = 1.2*T/lam
         e1 = st.expon(1./Lam)
         e2 = st.expon(1./lam)
+
         # cluster time of arrival
         tc   = np.cumsum(e1.rvs(Nr))
         tc   = tc[np.where(tc<T)]
         Nc   = len(tc)
         tauc = np.kron(tc,np.ones((1,Nr)))[0,:]
+
         # rays time of arrival
         taur = np.cumsum(e2.rvs((Nr,Nc)),axis=0).ravel()
+
         # exponential decays of cluster and rays
         etc = np.exp(-tauc/(1.0*Gam))
         etr = np.exp(-taur/(1.0*gam))
         et = etc*etr
         tau = tauc+taur
+
         # filtering < T and reordering in delay domain
         tau = tau[np.where(tau<T)]
         et = et[np.where(tau<T)]
         u = np.argsort(tau)
         taus = tau[u]
         ets  = et[u]*np.sign(np.random.rand(len(u))-0.5)
+
+        # delays and amplitudes
         self.x = taus
         self.y = ets
 
@@ -1009,6 +1039,12 @@ class TUchannel(TBchannel,bs.TUsignal):
 
     def readuwb(self, _filename):
         """ read  Waveform from Matlab file
+
+        Parameters
+        ----------
+
+        _filename : file name with extension (.mat)
+
         """
         outdir = 'output/'+outdir
         filename = getlong(_filename, outdir)
@@ -1141,7 +1177,9 @@ class TUDchannel(TUchannel):
         self.taue = taue
 
     def __repr__(self):
+        s1 = "Time domain channel with delay \n"
         s = TUchannel.__repr__(self)
+        s = s1+s
         return(s)
 
     def fig(self, N):
@@ -1173,6 +1211,90 @@ class TUDchannel(TUchannel):
            #for i in range(N1-1):
            #    yi = self.y[i+1,:] + (N1-i)*ecmax
            #    r.lines(x,yi,col='black')
+
+class Mchannel(bs.FUsignal):
+    """ Handle the measured channel
+
+    """
+    def __init__(self,
+                x ,
+                y ,
+                label = ''):
+        """ class constructor
+
+        Parameters
+        ----------
+
+        x  :  , nfreq
+            frequency GHz
+        y  :  Nm x Nr x Nt x Nf 
+            measured channel 
+
+        """
+       
+        self.label = label
+        self.calibrated = False
+        sh = y.shape
+        self.Nm = sh[0]
+        self.Nr = sh[1]
+        self.Nt = sh[2]
+        self.Nf = sh[3]
+        bs.FUsignal.__init__(self,x=x,y=y,label='Mchannel')
+
+    def plot(self,fig=[],ax=[],mode='time'):
+        
+        if fig ==[]:
+            fig = plt.gcf()  
+        if ax ==[]:
+            ax = plt.gca()
+        
+        if mode=='time':
+            cir = self.ift(ffts=1)
+            y = cir.y
+            x = cir.x 
+        else:
+            y = self.y
+            x = self.x    
+
+        my = np.mean(np.abs(y),axis=0)
+        yc = np.abs(y)-my[None,...] # TD centered      ; TDc.shape : (85, 4, 8, 801)
+
+        yc2 = np.abs(yc)**2 # square of TD centered     ; TDc2.shape : (85, 4, 8, 801)
+        vary = np.mean(yc2,axis=0) #variance of TD  ; varTD.shape : (4, 8, 801)
+        
+        
+
+        cpt = 0
+        for r in range(self.Nr):
+            for t in range(self.Nt):
+                #cpt=cpt+1
+                #ax = plt.subplot(self.Nr,self.Nt,cpt)
+                #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),color='k',linewidth=1,alpha=1)
+                #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),linewidth=1,alpha=1)
+                #l2, = ax.plot(self.x,my[r,t,:],color='r',linewidth=1,alpha=1)
+                l2, = ax.plot(x,my[r,t,:],linewidth=1,alpha=1)
+                
+                ticksx = ax.axes.get_xticklabels()
+                ticksy = ax.axes.get_yticklabels()
+                plt.setp(ticksx, visible=True)
+                plt.setp(ticksy, visible=True)
+
+                if (r == 0) & (t==1):
+                    #l1, = ax.plot(self.x,np.sqrt(vary[r,t,:]),color='k',label='sd',linewidth=1,alpha=1)
+                    l2, = ax.plot(x,np.abs(my[r,t,:]),color='r',label='mean',linewidth=1,alpha=1)
+                if (r == 3) & (t==0):
+                    plt.setp(ticksx, visible=True)
+                    ax.axes.set_xticks(np.arange(x[0],x[-1],0.2))
+                    plt.setp(ticksy, visible=True)
+                if (r == 0) & (t==3):
+                    plt.title(r'Evolution of the mean and the standard deviation of $\mathbf{H}(f)$',fontsize=12)
+                if (r == 1) & (t==0):
+                    ax.axes.set_ylabel('Amplitude (linear scale $\in [0,1]$)',fontsize=15)
+                if (r == 3) & (t == 3):
+                    ax.axes.set_xlabel('Frequency (GHz)',fontsize=15)
+
+                
+
 
 class Tchannel(bs.FUsignal):
     """ Handle the transmission channel
@@ -1250,11 +1372,12 @@ class Tchannel(bs.FUsignal):
 
 
     def __repr__(self):
-        st = ''
+        st = 'Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)\n'
+        st = st+'-----------------------------------------------------\n'
         st = st + 'freq : '+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
         st = st + 'shape  : '+str(np.shape(self.y))+"\n"
         st = st + 'tau (min, max) : '+str(min(self.taud))+' '+str(max(self.taud))+"\n"
-        st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
+        st = st + 'dist (min,max) : '+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         if self.isFriis:
             st = st + 'Friis factor -j c/(4 pi f) has been applied'
 
@@ -1722,7 +1845,9 @@ class Tchannel(bs.FUsignal):
                     'edgecolors':'none',
                     'polar':False,
                     'colorbar':False,
-                    'title':False
+                    'title':False,
+                    'xa':[],
+                    'xb':[]
                     }
 
         for key, value in defaults.items():
@@ -1786,7 +1911,7 @@ class Tchannel(bs.FUsignal):
         kwargs['c'] = col
         if len(col) != len(di):
             print "len(col):", len(col)
-            print "len(di):", len(dir)
+            print "len(di):", len(di)
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
         if reverse :
@@ -2216,8 +2341,6 @@ class Tchannel(bs.FUsignal):
 
         if typ == 'energy':
             E = self.eprfl()
-            import ipdb
-            ipdb.set_trace()
             u = np.argsort(E,axis=0)[::-1]
             u = u[:,0,0]
 
@@ -2226,6 +2349,7 @@ class Tchannel(bs.FUsignal):
         self.doa = self.doa[u]
         self.dod = self.dod[u]
         self.y = self.y[u,...]
+        return(u)
 
     def showtap(self,**kwargs):
         """ show tap
@@ -2246,7 +2370,7 @@ class Tchannel(bs.FUsignal):
 
         htap = self.tap(**kwargs)
         # sum over time m
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=i-1))/Nm
         # sum over s
         Er_htap = np.sum(htap,axis=1)/Ns
         corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
@@ -2484,7 +2608,7 @@ class Tchannel(bs.FUsignal):
 
 
     def totime(self, Nz=1, ffts=0):
-        """ transform to TUDsignal
+        """ transform to TUDchannel
 
         Parameters
         ----------
@@ -2516,8 +2640,10 @@ class Tchannel(bs.FUsignal):
         """
         Nray = len(self.taud)
         s = self.ift(Nz, ffts)
-        h = bs.TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
+        sy_shifted = fft.fftshift(s.y,axes=-1)
+        h = TUDchannel(s.x, sy_shifted, self.taud,self.taue)
         return(h)
+
 
 
     def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
@@ -2602,14 +2728,21 @@ class Tchannel(bs.FUsignal):
         dtau = (taumax-taumin)
         self.s = self.ift(Nz, ffts)
 
+        t0 = self.s.x[0]
+        te = self.s.x[-1]
+       
 
         shy = self.s.y.shape
         dx = self.s.x[1]-self.s.x[0]
+        # Delta Tau + Npoints
         N  = np.ceil(dtau/dx)+shy[-1]
+
+        # convert tau in an integer offset
+        # taumin ray is not shifted
         itau = np.floor((tau-taumin)/dx).astype(int)
         
         U = np.ones((shy[0],shy[-1]),dtype=int)
-        CU = np.cumsum(U,axis=1)-1 # -1 to start @ value 0 
+        CU = np.cumsum(U,axis=1)-1 #-1 to start @ value 0 
 
         rir  = np.zeros((shy[0],N))
         col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])
@@ -2617,7 +2750,7 @@ class Tchannel(bs.FUsignal):
         index = np.vstack((col1,col2)).T
     
         rir[index[:,0],index[:,1]] = self.s.y.ravel()
-        t = np.linspace(taumin,taumax,N)
+        t = np.linspace(t0+taumin,te+taumax,N)
         return bs.TUsignal(x=t, y=rir)
 
 
@@ -2685,12 +2818,6 @@ class Tchannel(bs.FUsignal):
         si.translate(tau[k])
         r = r + si
         return r
-
-    def cir(self,fGHzmin=0,fGHzmax=1000):
-        """
-        """
-        u = (self.x>fGHzmin) & (self.y<fGHzmax)
-        cir = sum(self.y)
 
 
     def plot3d(self,fig=[],ax=[]):
@@ -2838,7 +2965,7 @@ class Tchannel(bs.FUsignal):
         self.filecal = filecal
         Hcal = Tchannel()
         Hcal.load(filecal)
-        assert (len(self.x) == len(Hcal.x)),"calibration file has hot the same number of points"
+        assert (len(self.x) == len(Hcal.x)),"calibration file has not the same number of points"
         if not self.calibrated:
             if not(conjugate):
                 self.y = self.y/Hcal.y
@@ -2930,7 +3057,7 @@ class Ctilde(PyLayers):
         self.Tr = np.eye(3)
 
     def __repr__(self):
-        s = 'Ctilde'+'\n---------\n'
+        s = 'Ctilde : Ray Propagation Channel Matrices'+'\n---------\n'
         if hasattr(self, 'Cpp'):
             s = s + str(np.shape(self.Cpp.y))+'\n'
         if hasattr(self, 'nray'):
@@ -2940,17 +3067,7 @@ class Ctilde(PyLayers):
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
         return(s)
 
-    def choose(self):
-        """ Choose a field file in tud directory
-
-        DEPRECATED
-        """
-        import tkFileDialog as FD
-        filefield = FD.askopenfilename(filetypes=[("Files field  ", "*.field"),
-                                                  ("All", "*")],
-                                       title="Please choose a .field file",
-                                       initialdir=tuddir)
-        self.load(filefield, transpose=False)
+    
 
 
     def saveh5(self,Lfilename,idx,a,b):
@@ -4150,21 +4267,6 @@ maicher
         H.tk = H.taud
 
         return(H)
-
-    def info(self):
-        """ Info (Nf,Nray,shape(y))
-        """
-
-        print "Nfreq  :", self.nfreq
-        print "Nray :", self.nray
-        print "shape Ctt :", np.shape(self.Ctt.y)
-        print "shape Ctp :", np.shape(self.Ctp.y)
-        print "shape Cpt :", np.shape(self.Cpt.y)
-        print "shape Cpp :", np.shape(self.Cpp.y)
-
-
-
-
 
 if __name__ == "__main__":
     plt.ion()
