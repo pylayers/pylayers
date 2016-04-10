@@ -298,10 +298,10 @@ class Layout(PyLayers):
     ----------
 
     Gs     : Structure graph
-    Gt     : Topological graph  (indicates topological relationships between rooms)
+    Gt     : Topological graph  (indicates topological relationships between convex cycles)
+    Gc     : Connection graph (indicates visbility relationships)
     Gr     : Graph of rooms
     Gv     : Graph of visibility
-    Gc     : Connection graph (indicates visbility relationships)
     Nnode  : Number of nodes of Gs
     Nedge  : Number of edges of Gs
     pt     : points sequence
@@ -310,7 +310,7 @@ class Layout(PyLayers):
     Notes
     -----
 
-    This class exploits `networkx` to store Layout information
+    This class uses `networkx` to store Layout information
 
     .. autosummary::
 
@@ -488,7 +488,8 @@ class Layout(PyLayers):
     def __add__(self, other):
         """ addition
 
-        One can add a numpy array or an other layout
+        One can add either a numpy array or an other layout
+
         """
         Ls = copy.deepcopy(self)
         if type(other)==np.ndarray:
@@ -615,6 +616,8 @@ class Layout(PyLayers):
 
         delete  Gs,Gc,Gm
 
+        called in load str and loadstr2 (deprecated)
+
         """
         del self.Gs
         del self.Gc
@@ -628,6 +631,7 @@ class Layout(PyLayers):
 
         Parameters
         ----------
+
         offp : offset points
         offs : offset segments
 
@@ -661,9 +665,6 @@ class Layout(PyLayers):
         dseg.update(dpt)
         self.Gs.adj =  dseg
         self.Gs.edge = dseg
-        #pdb.set_trace()
-        #dict(zip(self.Gs.keys(),))
-        #self.Gs.adj = newapoint
 
 
     def check(self,level=0):
@@ -1559,11 +1560,12 @@ class Layout(PyLayers):
         Available formats are :
 
         +  .ini   : ini file format (natural one) DIRINI
-        +  .str2  : native Pyray (C implementation) DIRSTRUC
-        +  .str   : binary file with visibility DIRSTRUC
         +  .osm   : opens street map format  DIROSM
 
+        (Deprecated format)
 
+        +  .str2  : native Pyray (C implementation) DIRSTRUC
+        +  .str   : binary file with visibility DIRSTRUC
         layout files are stored in the directory pstruc['DIRxxx']
 
         """
@@ -3286,13 +3288,12 @@ class Layout(PyLayers):
                     # polygons can be merged
                     # but whatever, old polygons are deleted
                     for cye in ncye:
-                        
                         vn = self.Gt.node[cye]['polyg'].vnodes
                         seg = vn[vn>0]
                         seg = [s for s in seg if s in self.Gs.nodes()]
                         self.Gt.remove_node(cye)
                         self.Gt.pos.pop(cye)
-                        # remove Gt node in involved segmensncycles 
+                        # remove Gt node in involved segmensncycles
                         [self.Gs.node[s]['ncycles'].remove(cye) for s in seg if (cye in self.Gs.node[s]['ncycles'])]
 
                     if len(intersec) == 0:
