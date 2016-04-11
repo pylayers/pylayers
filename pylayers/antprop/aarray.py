@@ -12,6 +12,9 @@ This module handles antenna arrays
 Array class
 ===========
 
+Meta class which derives from Pattern.
+
+
 .. autosummary::
     :toctree: generated/
 
@@ -96,7 +99,7 @@ class Array(ant.Pattern):
 class ULArray(Array):
     """ Uniform Linear Array
 
-    An uniform array is centered on the origin.
+    An uniform linear array is centered on the origin.
     It has Nx, Ny, Nz antennas placed respectively along the x,y,z axis.
 
 
@@ -131,13 +134,16 @@ class ULArray(Array):
         self.dm = np.array(kwargs.pop('dm'))
         self.Na = np.prod(self.N)
 
+        # Number of radiating element on each axis
         Nx = self.N[0]
         Ny = self.N[1]
         Nz = self.N[2]
 
+        # phase center coordinates of radiating elements
         px = self.dm[0]*np.linspace(-(Nx-1)/2.,(Nx-1)/2.,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
         py = self.dm[1]*np.linspace(-(Ny-1)/2.,(Ny-1)/2.,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
         pz = self.dm[2]*np.linspace(-(Nz-1)/2.,(Nz-1)/2.,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
+
         #if Nx%2==0:
         #    px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
         #else:
@@ -183,7 +189,8 @@ class AntArray(Array,ant.Antenna):
         ... plot::
             :include-source:
         >>> A=AntArray()
-        >>> A.plotG()
+        >>> f,a = A.plotG()
+        >>> plt.show()
 
         """
         defaults = {'tarr': 'UA',
