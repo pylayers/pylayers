@@ -322,6 +322,8 @@ class Layout(PyLayers):
             slab dB file name
         _filefur :
             furniture file name
+        force : boolean
+        check : boolean
 
         """
 
@@ -404,7 +406,9 @@ class Layout(PyLayers):
         # check layout integrity (default)
         if check:
             self.check()
-        #self.boundary()
+        
+        if not hasattr(self,'hasboundary'):
+            self.boundary(dx=10,dy=10)
 
         # If the layout has already been built then load the built structure
         if not force:
@@ -1221,40 +1225,43 @@ class Layout(PyLayers):
         for k in self.display:
             config.set("display",k,self.display[k])
 
+        # boundary nodes and air walls are not stored
         for n in self.Gs.pos:
             if n <0:
-                config.set("points",str(n),self.Gs.pos[n])
+                if n not in self.lboundary:
+                    config.set("points",str(n),self.Gs.pos[n])
 
         for n in self.Gs.pos:
             if n >0:
-                d = self.Gs.node[n]
-                # old format conversion
-                if d.has_key('ss_ce1'):
-                    del d['ss_ce1']
-                if d.has_key('ss_ce2'):
-                    del d['ss_ce2']
-                if d.has_key('zmin'):
-                    d['z']=(d['zmin'],d['zmax'])
-                    del(d['zmin'])
-                    del(d['zmax'])
-                if d.has_key('ss_zmin'):
-                    d['ss_z']=[(d['ss_zmin'],d['ss_zmax'])]
-                    d['ss_name']=[d['ss_name']]
-                    del(d['ss_zmin'])
-                    del(d['ss_zmax'])
+                if self.Gs.node[n]['name']!='AIR':
+                    d = self.Gs.node[n]
+                    # old format conversion
+                    if d.has_key('ss_ce1'):
+                        del d['ss_ce1']
+                    if d.has_key('ss_ce2'):
+                        del d['ss_ce2']
+                    if d.has_key('zmin'):
+                        d['z']=[d['zmin'],d['zmax']]
+                        del(d['zmin'])
+                        del(d['zmax'])
+                    if d.has_key('ss_zmin'):
+                        d['ss_z']=[[d['ss_zmin'],d['ss_zmax']]]
+                        d['ss_name']=[d['ss_name']]
+                        del(d['ss_zmin'])
+                        del(d['ss_zmax'])
 
-                d['connect'] = nx.neighbors(self.Gs,n)
-                try:
-                    if d['transition']:
-                        pass
-                except:
-                    d['transition']=False
+                    d['connect'] = nx.neighbors(self.Gs,n)
                     try:
-                        if 'DOOR' in d['ss_name']:
-                            d['transition']=True
+                        if d['transition']:
+                            pass
                     except:
-                        pass
-                config.set("segments",str(n),d)
+                        d['transition']=False
+                        try:
+                            if 'DOOR' in d['ss_name']:
+                                d['transition']=True
+                        except:
+                            pass
+                    config.set("segments",str(n),d)
         config.set("files",'materials',self.filematini)
         config.set("files",'slab',self.fileslabini)
         config.set("files",'furniture',self.filefur)
@@ -5824,6 +5831,7 @@ class Layout(PyLayers):
             coords  = map(lambda x : self.Gs.pos[x],npoints)
             poly.append(sh.Polygon(coords))
         # union all polygons
+        #pdb.set_trace()
         ma = cascaded_union(poly)
 
         # transform into geomutil polygon
@@ -5935,7 +5943,7 @@ class Layout(PyLayers):
             ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
             Rgeu.pop(k)
             Rgeu.extend(ncpol)
-
+        pdb.set_trace()
 
 
         ####################
@@ -5967,7 +5975,7 @@ class Layout(PyLayers):
                 # ipdb.set_trace()
         Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
         [Rgeu.extend(ncpol[k]) for k in ncpol]
-        
+        pdb.set_trace()
        
         self.Gt=nx.Graph()
         self.Gt.pos={}
@@ -6041,7 +6049,8 @@ class Layout(PyLayers):
             # IV 1.e 
             #   + add new node (convex cycle) to Gt 
             #   + add centroid of cycle as position of cycle
-           
+            if ((cyid==40) or (cyid==41)):
+                pdb.set_trace()
             self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
@@ -6068,6 +6077,7 @@ class Layout(PyLayers):
         # seg0 = [i for i in self.ma.vnodes if i >0]
         # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         
+        pdb.set_trace()
         self._addoutcy(check)
 
         #   V 2. add outside cycle (absorbant region index 0 )
@@ -6919,11 +6929,11 @@ class Layout(PyLayers):
             nseg = filter(lambda x : x>0,vnodes)
 
             airwalls = filter(lambda x : x in self.name['AIR'],nseg)
-            # indoor (cycles >0)
-            if icycle>0:
+            # indoor 
+            if self.Gt.node[icycle]['indoor']:
                 ndiff = filter(lambda x : x in self.ldiffin,npt)
-            # indoor (cycles <0)
-            if icycle<=0:
+            # outdoor
+            else:
                 ndiff = filter(lambda x : x in self.ldiffout,npt)
             #
             # Create a graph
@@ -8851,7 +8861,7 @@ class Layout(PyLayers):
             if agext>agint:
                 self.ldiffout.append(k)
             else:
-                self.ldiffint.append(k)
+                self.ldiffin.append(k)
             # check that the sum of angles around the point is 2 pi
             agtot = agext + agint
             assert(agtot==2*np.pi)
@@ -10310,8 +10320,21 @@ class Layout(PyLayers):
             ymin = xlim[2]
             ymax = xlim[3]
 
+        n1 = self.add_fnod((xmin-dx,ymin-dy))
+        n2 = self.add_fnod((xmax+dx,ymin-dy))
+        n3 = self.add_fnod((xmax+dx,ymax+dy))
+        n4 = self.add_fnod((xmin-dx,ymax+dy))
+
+        self.lboundary=[n1,n2,n3,n4]
+
+        self.add_segment(n1, n2, name='AIR')
+        self.add_segment(n2, n3, name='AIR')
+        self.add_segment(n3, n4, name='AIR')
+        self.add_segment(n4, n1, name='AIR')
+
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
         self.display['box'] = self.ax
+        self.hasboundary = True
 
 
     def off_overlay(self,dx=0,dy=0):
