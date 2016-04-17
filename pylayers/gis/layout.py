@@ -5674,7 +5674,7 @@ class Layout(PyLayers):
                 for t in tri:
                     ts = geu.Polygon(pucs[t])
                     # check if the new polygon is contained into
-                    #the original polygon (non guaratee by Delaunay)
+                    #the original polygon (non guarantee by Delaunay)
                     C0 = poly.contains(ts)
                     if polyholes == []:
                         C=[False]
@@ -5807,6 +5807,16 @@ class Layout(PyLayers):
 
         """
 
+        def pltpoly(poly,fig=[],ax=[]):
+            if fig == []:
+                fig=plt.gcf()
+            if ax == []:
+                ax=plt.gca()
+            mpl = [PolygonPatch(x,alpha=0.2) for x in poly]
+            [ax.add_patch(x) for x in mpl]
+            plt.axis(self.ax)
+            plt.draw()
+
         def pltGt(Gt,fig=[],ax=[]):
             if fig == []:
                 fig=plt.gcf()
@@ -5920,6 +5930,9 @@ class Layout(PyLayers):
         # if !=0 it means some polygons are inside of others
         # which is not allowed. Some Layout modification will be performed
 
+        # import ipdb
+        # ipdb.set_trace()
+
         Rgeu = []
         contain = {}
 
@@ -5933,7 +5946,7 @@ class Layout(PyLayers):
             # if area are not the same, it means that there is inner holes in r
             if not np.allclose(Rgeu[ur].area,r.area):
                 # detect inclusion
-                uc = np.where([Rgeu[ur].contains(i) for i in R])[0]
+                uc = np.where([Rgeu[ur].contains(p) for p in R])[0]
                 contain[ur] = [c for c in uc if c != ur]
 
         # split polygons with holes into several polygons without holes
@@ -5943,8 +5956,10 @@ class Layout(PyLayers):
             ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
             Rgeu.pop(k)
             Rgeu.extend(ncpol)
-        pdb.set_trace()
+        
 
+        # import ipdb
+        # ipdb.set_trace()
 
         ####################
         #### Manage  convex hull of the layout
@@ -5975,7 +5990,7 @@ class Layout(PyLayers):
                 # ipdb.set_trace()
         Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
         [Rgeu.extend(ncpol[k]) for k in ncpol]
-        pdb.set_trace()
+        
        
         self.Gt=nx.Graph()
         self.Gt.pos={}
@@ -6077,7 +6092,7 @@ class Layout(PyLayers):
         # seg0 = [i for i in self.ma.vnodes if i >0]
         # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         
-        pdb.set_trace()
+        
         self._addoutcy(check)
 
         #   V 2. add outside cycle (absorbant region index 0 )
@@ -6978,21 +6993,33 @@ class Layout(PyLayers):
             ndiffvalid = filter(lambda x :
                                 filter(lambda y : y in airwalls
                                      ,nx.neighbors(self.Gs,x)),ndiff)
+            
             # non adjascent segments see valid diffraction point
             #print "diff valid",ndiffvalid
             for idiff in ndiffvalid:
                 # segvalid : not adjascent segment
                 segvalid = filter(lambda x : x not in
                                   nx.neighbors(self.Gs,idiff),nseg)
+                #segvalid = [ x not in nx.neighbors(self.Gs,idiff) for x in nseg]
                 # idiff segment neighbors
                 nsneigh = nx.neighbors(self.Gs,idiff)
                 # nbidiff valid
                 nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
+                
+                # nbidiff valid
+                #nsneigh =  [ x not in airwalls for x in nsneigh ]
+                
                 # excluded diffraction points
+                #
+                # TODO : La condition doit exclure les points qui sont sur un segment 
+
                 iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
                                    nx.neighbors(self.Gs,x),nsneigh))
+
                 # pntvalid : not excluded points
                 pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
+                #pntvalid = [ x not in iptexcluded for x in ndiff]
+
                 for ns in segvalid:
                     Gv.add_edge(idiff,ns)
 
@@ -8858,9 +8885,10 @@ class Layout(PyLayers):
                     agint = agint + da[1,u]
                 else:
                     agext = agext + da[1,u]
-            if agext>agint:
+            pdb.set_trace()
+            if (agext>agint) and (agext > np.pi+0.001):
                 self.ldiffout.append(k)
-            else:
+            if (agint>agext) and (agint > np.pi+0.001):
                 self.ldiffin.append(k)
             # check that the sum of angles around the point is 2 pi
             agtot = agext + agint
