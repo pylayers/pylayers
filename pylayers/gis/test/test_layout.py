@@ -15,7 +15,7 @@ for tL in lL:
     try:
         L.build()
     except:
-        print 'Build issue in Layout :',tL 
+        print 'Build issue in Layout :',tL
 
 
     

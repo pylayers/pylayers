@@ -1081,6 +1081,7 @@ class Polygon(PyLayers,shg.Polygon):
             #edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)
 
         return(Gv)
+
     def buildGv(self, **kwargs):
         """ Create  visibility graph for a polygon
 
@@ -1445,6 +1446,7 @@ class Polygon(PyLayers,shg.Polygon):
             #edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)
 
         return(Gv)
+
     def showGv(self, **kwargs):
         """ show graph Gv
 
@@ -1693,6 +1695,9 @@ class Polygon(PyLayers,shg.Polygon):
         #print "ptseg tcc ",tcc
         upos = np.nonzero(tcc > 1e-4)[0]
         return(tcc, n)
+
+   
+
 
 class Geomview(PyLayers):
     """ Geomview file class
