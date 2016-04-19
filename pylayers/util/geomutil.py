@@ -452,6 +452,7 @@ class Polygon(PyLayers,shg.Polygon):
             # now vnodes starts always with <0
             if self.vnodes[0]>0:
                 self.vnodes = np.roll(self.vnodes,-1)
+                print ('WARNING : Polygon.vnodes == Polygon.ndarray() modulo -1')
         else:
             # create sequence
             #
@@ -732,7 +733,7 @@ class Polygon(PyLayers,shg.Polygon):
             ax = kwargs['ax']
 
         x, y  = self.exterior.xy
-        numpt = filter(lambda x: x <0,self.vnodes)
+        numpt = filter(lambda z: z <0,self.vnodes)
 
         ax.fill(x, y,
                 color = kwargs['color'],
@@ -1557,6 +1558,7 @@ class Polygon(PyLayers,shg.Polygon):
             >>> cvex,ccave   = polyg.ptconvex2() 
 
         """
+
         if not hasattr(self,'xy'):
             self.coorddeter()
         
@@ -1570,7 +1572,7 @@ class Polygon(PyLayers,shg.Polygon):
             cw = ccw(A,B,C)
         cvex = np.array(pts)[np.roll(cw,+1)]
         ccve = np.array(pts)[np.roll(~cw,+1)]
-        
+
         return cvex.tolist(),ccve.tolist()
 
     def ptconvex(self, display=False):
