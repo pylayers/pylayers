@@ -5661,10 +5661,20 @@ class Layout(PyLayers):
         # keep all convex points (in + out) to build a Delaunay triangulation
 
         if polyholes != []:
+            # sum up polyholes to their gathered polygone
+            cp = cascaded_union(polyholes)
+            if isinstance(cp,sh.Polygon):
+                cp=[cp]
+            cp=[geu.Polygon(c) for c in cp]
+            [c.setvnodes(self) for c in cp]
             tmp=[]
-            for p in polyholes:
-                cvexh,ccveh = p.ptconvex2()
+            for c in cp :
+                cvexh,ccveh = c.ptconvex2()
                 tmp = tmp + cvexh +ccveh
+            # tmp=[]
+            # for p in polyholes:
+            #     cvexh,ccveh = p.ptconvex2()
+            #     tmp = tmp + cvexh +ccveh
 
             ucs=ucs+tmp
 
@@ -5694,8 +5704,14 @@ class Layout(PyLayers):
                         I=0
                     else: 
                         C = [isinstance(ii.intersection(ts),sh.Polygon) for ii in polyholes]
+
                     # if poly contains triangle but not the polyholes
+                    # self.pltpoly([ts],color='b')
                     if C0 and (not np.any(C) ):
+                        # self.pltpoly([ts],color='r')
+                        # plt.draw()
+                        # import ipdb
+                        # ipdb.set_trace()
                         cp =ts
                         cp.setvnodes(self)
                         uaw = np.where(cp.vnodes == 0)[0]
@@ -5952,9 +5968,7 @@ class Layout(PyLayers):
 
         for ur,r in enumerate(R):
             try:
-                if ur == 52:
-                    import ipdb
-                    ipdb.set_trace()
+
                 Rgeu.append(self.polysh2geu(r))
                 # self.pltpoly([Rgeu[-1]],color='b')
                 # plt.draw()
@@ -5971,49 +5985,27 @@ class Layout(PyLayers):
         # # split polygons with holes into several polygons without holes
 
         for k in contain:
+
             polyholes = [ Rgeu[i] for i in contain[k] ]
+            
+            # 1 convexify polyholes
+            polyg = self._convex_hull(polyholes)
+            polyholes.extend(polyg)
+            Rgeu.extend(polyg)
+            # 2 delaunay on exterior
             ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
+
             Rgeu.pop(k)
             Rgeu.extend(ncpol)
 
 
-        # import ipdb
-        # ipdb.set_trace()
+        import ipdb
+        ipdb.set_trace()
 
         ####################
         #### Manage  convex hull of the layout
         #### -------------------
 
-        # shRgeu=cascaded_union(sh.MultiPolygon(Rgeu))
-        # ch = shRgeu.convex_hull
-        # P = ch.difference(shRgeu)
-        # polys = []
-        # if isinstance(P,sh.MultiPolygon):
-        #     for p in P:
-        #         if p.area > 1e-3:
-        #             polys.append(geu.Polygon(p))
-        #             polys[-1].setvnodes(self)
-
-
-        # lncy=[]
-        # for p in polys:
-        #     # p.coorddeter()
-        #     uaw = np.where(p.vnodes == 0)
-        #     for aw in uaw :
-        #         #2 - non existing segments are created as airwalls
-        #         awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
-        #         p.vnodes[aw] = awid
-
-
-        # U = cascaded_union([self.ma]+polys)
-
-        # self.macvx = geu.Polygon(U)
-        # self.macvx.setvnodes(self)
-
-        # Rgeu.extend(polys)
-
-        # import ipdb
-        # ipdb.set_trace()
 
         # polys = self._convex_hull()
         # Rgeu.extend(polys)
@@ -6354,7 +6346,7 @@ class Layout(PyLayers):
             # add list of interactions of a cycle
             self.Gt.add_node(k, inter=ListInteractions)
 
-    def _convex_hull(self):
+    def _convex_hull(self,mask):
         """
         Add air walls to the layout enveloppe in self.Gs 
         in order the hull of the Layout to be convex.
@@ -6383,8 +6375,9 @@ class Layout(PyLayers):
         # 1 - Find differences between the convex hull and the Layout contour
         #     The result of the difference are polygons
 
-        ch = self.ma.convex_hull
-        P = ch.difference(self.ma)
+        masku = cascaded_union(mask)
+        ch = masku.convex_hull
+        P = ch.difference(masku)
         polys = []
         if isinstance(P,sh.MultiPolygon):
             for p in P:
@@ -6403,10 +6396,10 @@ class Layout(PyLayers):
                 p.vnodes[aw] = awid
 
 
-        U = cascaded_union([self.ma]+polys)
+        # U = cascaded_union([mask]+polys)
 
-        self.macvx = geu.Polygon(U)
-        self.macvx.setvnodes(self)
+        # self.macvx = geu.Polygon(U)
+        # self.macvx.setvnodes(self)
 
         return polys
 
