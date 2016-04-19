@@ -5615,14 +5615,13 @@ class Layout(PyLayers):
                 2- partition polygon into convex polygons (Delaunay)
                 3- try to merge partitioned polygons in order to obtain
                    the minimal number of convex polygons
-                4- re-number/re-create Gt by creating  new 'convex' cycles
-                   from those convex polygons
+
 
             If polyholes != []
     
                 polygon poly contains holes (polyholes)
 
-            This methods returns a partitioning of teh polygon poly 
+            This methods returns a partitioning of the polygon poly 
             into several convex polygons (voronoi). 
 
         Parameters
@@ -5631,6 +5630,11 @@ class Layout(PyLayers):
             poly : geu.Polygon
             polyhole : list of geu.Polygon
 
+
+        Return
+        ------
+            ncpol : list
+                list of new created polygons
 
         Notes
         -----
@@ -5984,6 +5988,7 @@ class Layout(PyLayers):
 
         # # split polygons with holes into several polygons without holes
 
+        self.macvx=[]
         for k in contain:
 
             polyholes = [ Rgeu[i] for i in contain[k] ]
@@ -5998,9 +6003,12 @@ class Layout(PyLayers):
             Rgeu.pop(k)
             Rgeu.extend(ncpol)
 
+            # add polyhole to convex mask ( macvx) list 
+            macvx = cascaded_union(polyholes)
+            macvx = geu.Polygon(macvx)
+            macvx.setvnodes(self)
+            self.macvx.append(macvx)
 
-        import ipdb
-        ipdb.set_trace()
 
         ####################
         #### Manage  convex hull of the layout
@@ -6107,8 +6115,8 @@ class Layout(PyLayers):
             # IV 1.e 
             #   + add new node (convex cycle) to Gt 
             #   + add centroid of cycle as position of cycle
-            if ((cyid==40) or (cyid==41)):
-                pdb.set_trace()
+            # if ((cyid==40) or (cyid==41)):
+            #     pdb.set_trace()
             self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
@@ -6116,15 +6124,15 @@ class Layout(PyLayers):
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
                 if n1!= n2:
-                    if self.Gt.node[n1]['polyg'].touches(self.Gt.node[n2]['polyg']):
+                    if self.Gt.node[n1]['polyg'].buffer(1e-3).touches(self.Gt.node[n2]['polyg']):
                         # find common segments
                         seg = np.array([n for n in self.Gt.node[n1]['cycle'].cycle if (n in self.Gt.node[n2]['cycle'].cycle) and (n>0)])
                         # if cycle are connected by at least a segmnet but not a point
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
 
-        import ipdb
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
         #  V update Gs
         #   V 1.Update graph Gs nodes with their cycles information
         #
@@ -6266,7 +6274,10 @@ class Layout(PyLayers):
         #   cycle is the  outside region (cycle 0)
 
         """
-        seg0 = [i for i in self.macvx.vnodes if i >0]
+        seg0=[]
+        for macvx in self.macvx:
+            seg = [i for i in macvx.vnodes if i >0]
+            seg0 = seg0 + seg
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         if check :
             print "check len(ncycles) == 2",
