@@ -242,6 +242,7 @@ import matplotlib.colors as clr
 import networkx as nx
 from networkx.readwrite import write_gpickle,read_gpickle
 import shapely.geometry as sh
+import shapely.ops as sho
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
@@ -5488,6 +5489,7 @@ class Layout(PyLayers):
         """ transform sh.Polygon into geu.Polygon
         """
         try:
+
             Gsnodes = np.array(self.Gs.nodes())
             # get node coordinates
             nodept = [self.Gs.pos[i] for i in Gsnodes]
@@ -5509,9 +5511,9 @@ class Layout(PyLayers):
             cycle = nx.cycle_basis(S)
             
             if len(cycle) > 1:
-                lc = [len(c) for c in cycle]
-                dif = lc - len(vnodes)
-                ud = np.where(dif == min(dif))
+                lc = np.array([len(c) for c in cycle])
+                dif = abs(lc - len(vnodes))
+                ud = np.where(dif == min(dif))[0]
                 cycle = cycle[ud]
             else: 
                 cycle = cycle[0]
@@ -5603,7 +5605,269 @@ class Layout(PyLayers):
             # atan2(cross(a,b)), dot(a,b))
 
 
-    def _delaunay(self,poly,polyholes=[]):
+    # def _delaunay(self,poly,polyholes=[]):
+    #     """ make a Delaunay partitioning of a polygon
+
+    #         If polyhole == []
+
+                       
+    #             if a cycle is non convex
+
+    #             1- find its polygon
+    #             2- partition polygon into convex polygons (Delaunay)
+    #             3- try to merge partitioned polygons in order to obtain
+    #                the minimal number of convex polygons
+
+
+    #         If polyholes != []
+    
+    #             polygon poly contains holes (polyholes)
+
+    #         This methods returns a partitioning of the polygon poly 
+    #         into several convex polygons (voronoi). 
+
+    #     Parameters
+    #     ----------
+
+    #         poly : geu.Polygon
+    #         polyhole : list of geu.Polygon
+
+
+    #     Return
+    #     ------
+    #         ncpol : list
+    #             list of new created polygons
+
+    #     Notes
+    #     -----
+
+    #     The algorithm updates the Gt nodes and edges created into self.buildGt
+    #     by adding new nodes and new AIR segments.
+
+    #     Called In 
+    #     ---------
+
+    #     pylayers.gis.layout.buildGt
+    
+
+    #     See Also
+    #     --------
+
+    #     pylayers.gis.layout.buildGt
+    #     pylayers.gis.layout.add_segment
+    #     pylayers.gis.layout.del_segment
+    #     pylayers.util.geomutil.Polygon
+    #     sp.spatial.Delaunay
+
+    #     """
+
+    #     cvex,ccve = poly.ptconvex2()
+    #     ucs = cvex+ccve
+
+    #     # keep all convex points (in + out) to build a Delaunay triangulation
+
+    #     if polyholes != []:
+    #         # sum up polyholes to their gathered polygone
+    #         cp = cascaded_union(polyholes)
+    #         if isinstance(cp,sh.Polygon):
+    #             cp=[cp]
+    #         cp=[geu.Polygon(c) for c in cp]
+    #         [c.setvnodes(self) for c in cp]
+    #         tmp=[]
+    #         for c in cp :
+    #             cvexh,ccveh = c.ptconvex2()
+    #             tmp = tmp + cvexh +ccveh
+    #         # tmp=[]
+    #         # for p in polyholes:
+    #         #     cvexh,ccveh = p.ptconvex2()
+    #         #     tmp = tmp + cvexh +ccveh
+
+    #         ucs=ucs+tmp
+
+
+    #     if len(ucs) !=0 :
+    #         try:
+    #             pucs = array(map(lambda x: self.Gs.pos[x], ucs))
+    #         except:
+    #             import ipdb
+    #             ipdb.set_trace()
+    #         pucs = np.vstack((pucs,pucs[-1]))
+    #         ####
+    #         #### perform a Delaunay Partioning
+    #         ####
+    #         if len(ucs) >2:
+    #             trid=sp.spatial.Delaunay(pucs)
+    #             tri =trid.simplices
+    #             polys = []
+    #             naw = []
+    #             for t in tri:
+    #                 ts = geu.Polygon(pucs[t])
+    #                 # check if the new polygon is contained into
+    #                 #the original polygon (non guarantee by Delaunay)
+    #                 C0 = poly.contains(ts)
+    #                 if polyholes == []:
+    #                     C=[False]
+    #                     I=0
+    #                 else: 
+    #                     C = [isinstance(ii.intersection(ts),sh.Polygon) for ii in polyholes]
+
+    #                 # if poly contains triangle but not the polyholes
+    #                 # self.pltpoly([ts],color='b')
+    #                 if C0 and (not np.any(C) ):
+    #                     # self.pltpoly([ts],color='r')
+    #                     # plt.draw()
+    #                     # import ipdb
+    #                     # ipdb.set_trace()
+    #                     cp =ts
+    #                     cp.setvnodes(self)
+    #                     uaw = np.where(cp.vnodes == 0)[0]
+    #                     lvn = len(cp.vnodes)
+    #                     for i in uaw:
+    #                         #keep track of created airwalls, because some
+    #                         #of them will be destroyed in step 3.
+    #                         naw.append(self.add_segment(
+    #                                    cp.vnodes[np.mod(i-1,lvn)],
+    #                                    cp.vnodes[np.mod(i+1,lvn)]
+    #                                    ,name='AIR'))
+    #                     polys.append(cp)
+    #         #
+    #         # 3. merge delaunay triangulation in order to obtain
+    #         #   the larger convex polygons partioning
+    #         #
+
+    #         cpolys = []
+    #         nbpolys = len(polys)
+
+    #         while polys !=[]:
+    #             p = polys.pop(0)
+    #             for ip2,p2 in enumerate(polys):
+    #                 conv=False
+    #                 inter = p.intersection(p2)
+    #                 # if 2 triangles have a common segment
+    #                 pold = p
+    #                 if isinstance(inter,sh.LineString):
+    #                     p = p + p2
+    #                     if p.isconvex():
+    #                         polys.pop(ip2)
+    #                         polys.insert(0, p)
+    #                         conv=True
+    #                         break
+    #                     else:
+    #                         # if pold not in cpolys:
+    #                         #     cpolys.append(pold)
+    #                         p = pold
+    #             # if (ip2 >= len(polys)):# and (conv):
+    #             # if conv :
+    #             #     if p not in cpolys:
+    #             #         cpolys.append(p)
+    #             if not conv:#else:
+    #                 if pold not in cpolys:
+    #                     cpolys.append(pold)
+    #             if len(polys) == 0:
+    #                 cpolys.append(p)
+
+    #         #### 4. ensure the correct vnode numerotation of the polygons
+    #         #### and remove unecessary airwalls
+
+    #         # ncpol : new created polygons
+    #         ncpol = []
+    #         vnodes = []
+    #         for p in cpolys:
+    #             interpoly = poly.intersection(p)
+    #             if isinstance(interpoly,sh.MultiPolygon):
+    #                 raise AttributeError('multi polygon encountered')
+    #             else :
+    #                 try:
+    #                     ptmp = geu.Polygon(interpoly)
+    #                     # ptmp = self.polysh2geu(interpoly)
+    #                 except:
+    #                     import ipdb
+    #                     ipdb.set_trace()
+
+    #             ptmp.setvnodes(self)
+    #             ncpol.append(ptmp)
+    #             vnodes.extend(ptmp.vnodes)
+
+
+    #         # if no polyholes
+    #         if polyholes == []:
+    #             ### 4bis 
+    #             # Check if all the original area is covered 
+    #             # sometimes, area surrounded by 2 new airwalls is not found
+    #             # the following code re-add it.
+    #             cpdiff=poly.difference(cascaded_union(cpolys))
+    #             if isinstance(cpdiff,sh.Polygon):
+    #                 cpdiff=sh.MultiPolygon([cpdiff])
+    #             if isinstance(cpdiff,sh.MultiPolygon):
+    #                 for cp in cpdiff:
+    #                     ptmp = geu.Polygon(cp)
+    #                     ptmp.setvnodes(self)
+    #                     ncpol.append(ptmp)
+    #                     vnodes.extend(ptmp.vnodes)
+
+
+
+    #         daw = filter(lambda x: x not in vnodes,naw)
+
+    #         for d in daw:
+    #             self.del_segment(d,verbose=False)
+    #     return ncpol
+
+
+    def pltpoly(self,poly,fig=[],ax=[],color='r',alpha=0.2):
+        """  plot a polygon with a specified color and transparency
+        """
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+        try:
+            mpl = [PolygonPatch(x,alpha=alpha,color=color) for x in poly]
+        except:
+            mpl = [PolygonPatch(x,alpha=alpha,color=color) for x in [poly]]
+        [ax.add_patch(x) for x in mpl]
+        plt.axis(self.ax)
+        plt.draw()
+
+    def pltvnodes(self,vn,fig=[],ax=[],):
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+        X=np.array([self.Gs.pos[x] for x in vn])
+        [ax.text(x[0],x[1],vn[xx]) for xx,x in enumerate(X)]
+
+
+    def buildGt2(self):
+
+        seg_connect = {x:self.Gs.edge[x].keys() for x in self.Gs.nodes() if x >0}
+        dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+        self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+        self._shML = sh.MultiLineString(self._shseg.values())
+        X=sho.polygonize(self._shseg.values())
+        P=[x for x in X]
+        NP=[]
+        for p in P:
+            pin = [z for z in sho.polygonize(p.interiors)]
+            # no holes in polygon
+            if pin == []:
+                # delaunay only if polygon not convex
+                if not geu.isconvex(p):
+                    A=self._delaunay2(p)
+                    NP.extend(A)
+                else:
+
+                    A=geu.Polygon(p)
+                    A.setvnodes(self)
+                    NP.extend([A])
+            # hole in polygon
+            else:
+                # print 'hole'
+                A=self._delaunay2(p,pin)
+                NP.extend(A)
+        return NP
+
+    def _delaunay2(self,poly,polyholes=[]):
         """ make a Delaunay partitioning of a polygon
 
             If polyhole == []
@@ -5659,79 +5923,92 @@ class Layout(PyLayers):
 
         """
 
-        cvex,ccve = poly.ptconvex2()
-        ucs = cvex+ccve
+
+
+        pucs = np.array(poly.exterior.xy).T
 
         # keep all convex points (in + out) to build a Delaunay triangulation
-
         if polyholes != []:
+            if not isinstance(polyholes,list):
+                polyholes=[polyholes]
+            for ph in polyholes:
             # sum up polyholes to their gathered polygone
-            cp = cascaded_union(polyholes)
-            if isinstance(cp,sh.Polygon):
-                cp=[cp]
-            cp=[geu.Polygon(c) for c in cp]
-            [c.setvnodes(self) for c in cp]
-            tmp=[]
-            for c in cp :
-                cvexh,ccveh = c.ptconvex2()
-                tmp = tmp + cvexh +ccveh
+                pucsh  = np.array(ph.exterior.xy).T
+                pucs = np.vstack((pucs,pucsh))
+
+            # cp = cascaded_union(polyholes)
+            # if isinstance(cp,sh.Polygon):
+            #     cp=[cp]
+            # cp=[geu.Polygon(c) for c in cp]
+            # [c.setvnodes(self) for c in cp]
             # tmp=[]
-            # for p in polyholes:
-            #     cvexh,ccveh = p.ptconvex2()
+            # for c in cp :
+            #     cvexh,ccveh = c.ptconvex2()
             #     tmp = tmp + cvexh +ccveh
+            # # tmp=[]
+            # # for p in polyholes:
+            # #     cvexh,ccveh = p.ptconvex2()
+            # #     tmp = tmp + cvexh +ccveh
 
-            ucs=ucs+tmp
+            # ucs=ucs+tmp
 
 
-        if len(ucs) !=0 :
-            try:
-                pucs = array(map(lambda x: self.Gs.pos[x], ucs))
-            except:
-                import ipdb
-                ipdb.set_trace()
-            pucs = np.vstack((pucs,pucs[-1]))
+        if len(pucs) !=0 :
             ####
             #### perform a Delaunay Partioning
             ####
-            if len(ucs) >2:
-                trid=sp.spatial.Delaunay(pucs)
-                tri =trid.simplices
-                polys = []
-                naw = []
-                for t in tri:
-                    ts = geu.Polygon(pucs[t])
-                    # check if the new polygon is contained into
-                    #the original polygon (non guarantee by Delaunay)
-                    C0 = poly.contains(ts)
-                    if polyholes == []:
-                        C=[False]
-                        I=0
-                    else: 
-                        C = [isinstance(ii.intersection(ts),sh.Polygon) for ii in polyholes]
 
-                    # if poly contains triangle but not the polyholes
-                    # self.pltpoly([ts],color='b')
-                    if C0 and (not np.any(C) ):
-                        # self.pltpoly([ts],color='r')
-                        # plt.draw()
-                        # import ipdb
-                        # ipdb.set_trace()
-                        cp =ts
-                        cp.setvnodes(self)
-                        uaw = np.where(cp.vnodes == 0)[0]
-                        lvn = len(cp.vnodes)
-                        for i in uaw:
-                            #keep track of created airwalls, because some
-                            #of them will be destroyed in step 3.
-                            naw.append(self.add_segment(
-                                       cp.vnodes[np.mod(i-1,lvn)],
-                                       cp.vnodes[np.mod(i+1,lvn)]
-                                       ,name='AIR'))
-                        polys.append(cp)
-            #
+            trid=sp.spatial.Delaunay(pucs)
+            tri =trid.simplices
+            polys = []
+            naw = []
+            popo=[]
+            for t in tri:
+                ts = geu.Polygon(pucs[t])
+                # check if the new polygon is contained into
+                #the original polygon (non guarantee by Delaunay)
+                C0 = poly.contains(ts)
+                if polyholes == []:
+                    C=[False]
+                    I=0
+                else: 
+                    C = [isinstance(ii.intersection(ts),sh.Polygon) for ii in polyholes]
+
+                popo.append(ts)
+                # if poly contains triangle but not the polyholes
+                # if polyholes !=[]:
+                #     self.pltpoly([ts],color='b')
+                #     import ipdb
+                #     ipdb.set_trace()
+                if C0 and (not np.any(C) ):
+                    # if polyholes!=[]:
+                    #     self.pltpoly([ts],color='r')
+                    #     plt.draw()
+
+                    cp =ts
+                    cp.setvnodes(self)
+                    uaw = np.where(cp.vnodes == 0)[0]
+                    lvn = len(cp.vnodes)
+                    for i in uaw:
+                        #keep track of created airwalls, because some
+                        #of them will be destroyed in step 3.
+                        naw.append(self.add_segment(
+                                   cp.vnodes[np.mod(i-1,lvn)],
+                                   cp.vnodes[np.mod(i+1,lvn)]
+                                   ,name='AIR'))
+                    polys.append(cp)
+        #
             # 3. merge delaunay triangulation in order to obtain
             #   the larger convex polygons partioning
             #
+            diff = poly.difference(sh.MultiPolygon(polys))
+            if isinstance(diff,sh.Polygon):
+                diff=sh.MultiPolygon([diff])
+            if isinstance(diff,sh.MultiPolygon):
+                for d in diff:
+                    extra = geu.Polygon(d)
+                    extra.setvnodes(self)
+                    polys.append(extra)
 
             cpolys = []
             nbpolys = len(polys)
@@ -5812,25 +6089,16 @@ class Layout(PyLayers):
         return ncpol
 
 
-    def pltpoly(self,poly,fig=[],ax=[],color='r',alpha=0.2):
-        """  plot a polygon with a specified color and transparency
-        """
-        if fig == []:
-            fig=plt.gcf()
-        if ax == []:
-            ax=plt.gca()
-        mpl = [PolygonPatch(x,alpha=alpha,color=color) for x in poly]
-        [ax.add_patch(x) for x in mpl]
-        plt.axis(self.ax)
-        plt.draw()
 
-    def pltvnodes(self,vn,fig=[],ax=[],):
-        if fig == []:
-            fig=plt.gcf()
-        if ax == []:
-            ax=plt.gca()
-        X=np.array([self.Gs.pos[x] for x in vn])
-        [ax.text(x[0],x[1],vn[xx]) for xx,x in enumerate(X)]
+
+
+
+
+
+
+
+
+
 
     def buildGt(self,check=True):
         """ build graph of convex cycles 
@@ -6144,7 +6412,8 @@ class Layout(PyLayers):
         # seg0 = [i for i in self.ma.vnodes if i >0]
         # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         
-        
+        import ipdb
+        ipdb.set_trace()
         self._addoutcy(check)
 
         #   V 2. add outside cycle (absorbant region index 0 )

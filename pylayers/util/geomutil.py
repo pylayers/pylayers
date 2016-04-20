@@ -187,6 +187,97 @@ COLOR = {
     False: '#ff3333'
 }
 
+
+def isconvex(poly,tol = 1e-2):
+    """ Determine if a polygon is convex
+
+    Parameters
+    ----------
+    tol : tolerence on aligned point
+
+    Returns
+    -------
+    True if convex
+
+    Notes
+    -----
+
+    the algorithm tests all triplet of point and L.determine
+    if the third point is left to the 2 first.
+    a tolerance can be introduce in cases where the polygon is
+    almost convex.
+
+    """
+    
+    p = np.array(poly.exterior.xy)[:,:-1]
+    a = p
+    b = np.roll(p,1,axis=1)
+    c = np.roll(p,2,axis=1)
+    return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
+            (np.sum(isleft(c,b,a,tol=tol)) == 0)
+
+
+
+def ptconvex(poly):
+    """ Determine convex / concave points in the Polygon
+
+
+    Parameters
+    ----------
+
+        poly : shaeply.Polygon
+
+    """
+
+    pts = np.array(poly.exterior.xy)
+     
+    
+    A=pts[:,:-1]
+    B=np.roll(A,-1)
+    C=np.roll(B,-1)
+    if signedarea(poly)>0:
+        cw = ccw(C,B,A)
+    else :
+        cw = ccw(A,B,C)
+    import ipdb
+    ipdb.set_trace()
+    cvex = A[:,np.roll(cw,+1)]
+    ccve = A[:,np.roll(~cw,+1)]
+
+    return cvex.tolist(),ccve.tolist()
+
+
+
+
+def ndarray(poly):
+    """ get a ndarray from a Polygon
+
+    Returns
+    -------
+        p : ndarray (2xNp)
+
+    Examples
+    --------
+    >>> from pylayers.util.geomutil import *
+    >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
+    >>> P1 = Polygon(p1)
+
+    """
+    lring = poly.exterior
+    x, y = lring.xy
+    p = np.array([x[0:-1], y[0:-1]])
+    return(p)
+
+
+def signedarea(poly):
+    """ get the signed area of the polygon
+
+    """
+    p = ndarray(poly)
+    return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
+
+
+
 class Plot_shapely(PyLayers):
     """draw Shapely with matplotlib - pylab
      Plot_shapely.py

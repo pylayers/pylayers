@@ -1031,7 +1031,7 @@ class AppForm(QMainWindow):
             QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
             self.L.saveini(_filename)
             self.L.saveosm(_filename.split('.')[0] + '.osm')
-            self.L = Layout(_filename)
+            # self.L = Layout(_filename)
             self.filename=self.L.filename
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
             QApplication.setOverrideCursor(oldCursor)
