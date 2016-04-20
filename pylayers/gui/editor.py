@@ -1007,7 +1007,7 @@ class AppForm(QMainWindow):
 
         if filename != '':
             _filename = pyu.getshort(str(filename))
-            self.L = Layout(_filename)
+            self.L = Layout(_filename,check=False)
             self.filename = self.L.filename
             self.create_main_frame()
             self.on_draw()
