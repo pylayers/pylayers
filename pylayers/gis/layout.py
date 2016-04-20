@@ -877,7 +877,7 @@ class Layout(PyLayers):
         lairwall = self.name['AIR']
 
         #
-        #  function to count airwall connected to a point
+        #  function to couL.filename)nt airwall connected to a point
         #  probably this is not the faster solution
         #
 
@@ -977,7 +977,7 @@ class Layout(PyLayers):
             # Warning
             # -------
             # nsmax can be different from the total number of segments
-            # This means that the numerotation of segment do not need to be
+            # This means that the numerotation of segments do not need to be
             # contiguous.
             # stridess : length is equal to nsmax+1
             # sla is an array of string, index 0 is not used because there is
@@ -1024,26 +1024,6 @@ class Layout(PyLayers):
 
         normal_ss = self.normal[:,self.tgs[self.lsss]]
         self.normal = np.hstack((self.normal,normal_ss))
-
-        # calculate extremum of segments
-        #
-        # Calculate the wedge angle of degree 2 points
-        #
-        #if 2 in self.degree:
-        #    wedgea = self.wedge(self.degree[2])
-        #
-        # wedge < 179 (not flat)
-        #    idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
-        #    self.ldiff = map(lambda x : self.degree[2][x],idiff)
-
-
-        # wedgea = self.wedge(self.degree[2])
-        # import ipdb
-        # ipdb.set_trace()
-
-        # # wedge < 179 deg (not flat)
-        # idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
-        # self.ldiff = map(lambda x : self.degree[2][x],idiff)
 
 
         # if problem here check file format 'z' should be a string
@@ -1308,7 +1288,7 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.labels = {}
 
-        #manage ini file with latlon coordinates
+        # manage ini file with latlon coordinates
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
@@ -1335,17 +1315,16 @@ class Layout(PyLayers):
         for nn in di['points']:
             nodeindex = eval(nn)
             if or_coord_format=='latlon':
-                x,y =coords.xy[nn]
+                x,y = coords.xy[nn]
             else :
-                x,y       = eval(di['points'][nn])
-
-
+                x,y = eval(di['points'][nn])
 
             #
             # limitation of point precision is important for avoiding
             # topological problems in shapely.
             # Layout precision is hard limited to millimeter precision.
             #
+
             self.Gs.add_node(nodeindex)  # add point node
             self.Gs.pos[nodeindex] = (round(1000*x)/1000.,round(1000*y)/1000.)
             self.labels[nodeindex] = nn
@@ -1388,7 +1367,9 @@ class Layout(PyLayers):
             else:
                 self.name[name] = [eval(ns)]
         self.Nss = Nss
+
         # compliant with config file without  material/slab information
+
         if config.has_section('files'):
             self.filematini=config.get('files','materials')
             self.fileslabini=config.get('files','slab')
@@ -1407,6 +1388,7 @@ class Layout(PyLayers):
 
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
+        #pdb.set_trace()
         self.g2npy()
         # 
 
@@ -6110,13 +6092,6 @@ class Layout(PyLayers):
         # wall segments of the Layout boundary
         nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
 
-        #
-        # ldiffin  : list of indoor diffraction points
-        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
-        #
-
-        # self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
-        # self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
 
         #
         # boundary adjascent cycles
@@ -6933,10 +6908,7 @@ class Layout(PyLayers):
         self.dGv = {}  # dict of Gv graph
 
         for icycle in self.Gt.node:
-            #print "cycle : ",icycle
-            #indoor = self.Gt.node[icycle]['indoor']
-            isopen = self.Gt.node[icycle]['isopen']
-
+        
             polyg = self.Gt.node[icycle]['polyg']
             vnodes = polyg.vnodes
 
@@ -6944,24 +6916,21 @@ class Layout(PyLayers):
             nseg = filter(lambda x : x>0,vnodes)
 
             airwalls = filter(lambda x : x in self.name['AIR'],nseg)
-            # indoor 
-            if self.Gt.node[icycle]['indoor']:
-                ndiff = filter(lambda x : x in self.ldiffin,npt)
-            # outdoor
-            else:
-                ndiff = filter(lambda x : x in self.ldiffout,npt)
+            
+            ndiff = [ x for x in npt if x in self.ddiff.keys()]
             #
             # Create a graph
             #
             Gv = nx.Graph()
             #
             # in convex case :
-            #    i)  every non colinear segment see each other
-            #    ii) all non adjascent valid diffraction points see each other
-            #    iii) all valid diffraction points see non adjascent
-            #    segments
             #
-            import numpy
+            #    i)  every non aligned segments see each other
+            #    ii) all non adjascent valid diffraction points see each other
+            #    iii) all valid diffraction points see segments non aligned
+            #    with adjascent segments
+            #
+    
             for nk in combinations(nseg, 2):
                 nk0 = self.tgs[nk[0]]
                 nk1 = self.tgs[nk[1]]
@@ -6974,57 +6943,52 @@ class Layout(PyLayers):
                 phe1 = self.pt[:,tahe1[1]]
                 
                 
-                A0 = numpy.vstack((pta0,phe0,pta1))
-                A0 = numpy.hstack((A0,numpy.ones((3,1))))
+                A0 = np.vstack((pta0,phe0,pta1))
+                A0 = np.hstack((A0,np.ones((3,1))))
 
-                A1 = numpy.vstack((pta0,phe0,phe1))
-                A1 = numpy.hstack((A1,numpy.ones((3,1))))
+                A1 = np.vstack((pta0,phe0,phe1))
+                A1 = np.hstack((A1,np.ones((3,1))))
 
-                d0 = numpy.linalg.det(A0)
-                d1 = numpy.linalg.det(A1)
+                d0 = np.linalg.det(A0)
+                d1 = np.linalg.det(A1)
 
                 if not ((abs(d0)<1e-3) & (abs(d1)<1e-3)):
                     Gv.add_edge(nk[0],nk[1])
 
             #
-            # Handle diffraction point
+            # Handle diffraction points
             #
-            #if isopen:
-            ndiffvalid = filter(lambda x :
-                                filter(lambda y : y in airwalls
-                                     ,nx.neighbors(self.Gs,x)),ndiff)
-            
-            # non adjascent segments see valid diffraction point
-            #print "diff valid",ndiffvalid
+
+        
+            ndiffvalid =  [ x for x in ndiff if icycle in self.ddiff[x][0] ]
+
+            # non adjascent segmep vnodesnts see valid diffraction points
+           
             for idiff in ndiffvalid:
                 # segvalid : not adjascent segment
-                segvalid = filter(lambda x : x not in
-                                  nx.neighbors(self.Gs,idiff),nseg)
-                #segvalid = [ x not in nx.neighbors(self.Gs,idiff) for x in nseg]
+                segvalid = [ x for x in nseg if x not in nx.neighbors(self.Gs,idiff)]
                 # idiff segment neighbors
                 nsneigh = nx.neighbors(self.Gs,idiff)
                 # nbidiff valid
-                nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
-                
-                # nbidiff valid
-                #nsneigh =  [ x not in airwalls for x in nsneigh ]
+                nsneigh =  [ x for x in nsneigh if x not in airwalls]
                 
                 # excluded diffraction points
                 #
                 # TODO : La condition doit exclure les points qui sont sur un segment 
 
-                iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
-                                   nx.neighbors(self.Gs,x),nsneigh))
+                #iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
+                #                   nx.neighbors(self.Gs,x),nsneigh))
 
                 # pntvalid : not excluded points
-                pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
-                #pntvalid = [ x not in iptexcluded for x in ndiff]
+                # pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
+                #pntvalid = [ x for x in ndiffvalid if x!=idiff]
 
                 for ns in segvalid:
                     Gv.add_edge(idiff,ns)
 
-                for np in pntvalid:
-                    Gv.add_edge(idiff,np)
+                for npoint in ndiffvalid:
+                    if npoint !=idiff:
+                        Gv.add_edge(idiff,npoint)
 
             #
             # Graph Gv composition
@@ -7102,8 +7066,7 @@ class Layout(PyLayers):
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
                     self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
-        #import ipdb
-        #ipdb.set_trace()
+        
         #
         # 2) Establishing link between interactions
         #
@@ -7217,6 +7180,9 @@ class Layout(PyLayers):
 
     def filterGi(self, situ = 'outdoor'):
         """ Filter Gi to manage indoor/ outdoor situations
+
+        Not called
+
         """
 
         # get outdoor notes
@@ -7225,9 +7191,9 @@ class Layout(PyLayers):
         cyout = cy[uout]
 
         inter = self.Gi.nodes()
-        Ti = [i for i in inter if len(i) == 3]
-        Ri = [i for i in inter if len(i) == 2]
-        Di = [i for i in inter if len(i) == 1]
+        Ti = [i for i in inter if ((len(i) == 3) and i[0]>0)]
+        Ri = [i for i in inter if ((len(i) == 2) and i[0]>0)]
+        Di = [i for i in inter if i[0]<0]
 
         Ti = [i for i in Ti if ((i[1] in cyout) and (i[2] in cyout))]
         Ri = [i for i in Ri if (i[1] in cyout) ]
@@ -8852,9 +8818,8 @@ class Layout(PyLayers):
 
 
 
-    def _find_diffractions(self):
+    def _find_diffractions(self,tol=0.01):
         """ Find diffractions points of the Layout
-            based on the angles in Gt
 
             Returns
             -------
@@ -8870,43 +8835,47 @@ class Layout(PyLayers):
         
         dangles = self.get_Gt_angles()
 
+        # The canditate points for being diffraction points have degree 1 or 2
+        # A point diffracts toward one or several cycles
+       
         self.ldiff = list(np.hstack((self.degree[1],self.degree[2])).astype('int'))
-        self.ldiffin = []
-        self.ldiffout = []
+        self.ddiff = {}
 
         for k in self.ldiff:
+            # list of cycles associated with point k
             lcy = self.Gs.node[k]['ncycles']
-            agint = 0
-            agext = 0
-            for cy in lcy:
+            # list of segments associated with point k 
+            lseg = self.Gs.edge[k].keys()
+            # loop over associated cycles
+            cont = True
+            l = 0 
+            while cont:
+                # determine the 2 segments involved in each cycle
+                cy = lcy[l]
+                l = l+1
+                lsegcy = []
+                for seg in lseg: 
+                    if cy in self.Gs.node[seg]['ncycles']:
+                        lsegcy.append(seg)
+                assert(len(lsegcy)==2)
+
                 da = dangles[cy]
                 u  = np.where(da[0,:].astype('int')==k)[0][0]
-                if self.Gt.node[cy]['indoor']:
-                    agint = agint + da[1,u]
-                else:
-                    agext = agext + da[1,u]
-            pdb.set_trace()
-            if (agext>agint) and (agext > np.pi+0.001):
-                self.ldiffout.append(k)
-            if (agint>agext) and (agint > np.pi+0.001):
-                self.ldiffin.append(k)
-            # check that the sum of angles around the point is 2 pi
-            agtot = agext + agint
-            assert(agtot==2*np.pi)
-        
+                ag = da[1,u]
 
-    # def updatediff(self):
-    #     """
-    #     """
-    #     tldiff = []
-    #     for c in self.Gc.node:
-    #         poly = c['polyg']
-    #         cvx,pts = poly.ptconvex()
-    #         ucvx = np.where(cvx == 1)[0]
-    #         vnodes = poly.vnodes
-    #         lpnt = filter(lambda x : x <0,vnodes)
-    #         ldif = map(lambda x: lpnt[x],ucvx)
-    #         tldif.append(ldif)
+                cond1 = self.Gs.node[lsegcy[0]]['name']!='AIR'
+                cond2 = self.Gs.node[lsegcy[1]]['name']!='AIR'
+                # The wedge without AIR segment has been found
+                if ((cond1) and (cond2)):
+                    cont = False
+                    if ag > (np.pi+tol):
+                        self.ddiff[k]=([cy],ag)
+                    elif (2*np.pi-ag) > (np.pi+tol):
+                        lcy.remove(cy)
+                        self.ddiff[k]=(lcy,2*np.pi-ag)
+           
+
+            
 
     def buildGr(self):
         """ build the graph of rooms Gr
