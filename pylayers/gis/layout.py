@@ -7464,7 +7464,7 @@ class Layout(PyLayers):
                 # non adjascent segment of vnodes see valid diffraction points
                 for idiff in ndiffvalid:
                     # idiff segment neighbors
-                    nsneigh = nx.neighbors(self.Gs,idiff)
+                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg ]
                     # segvalid : not adjascent segment
                     # seen from neighbors
                     pdb.set_trace()
