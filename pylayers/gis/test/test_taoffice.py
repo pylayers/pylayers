@@ -3,7 +3,7 @@ from pylayers.simul.link import *
 
 L = Layout('TA-Office.ini',force=True)
 L.buildGt()
-L.buildGv()
+L.buildGvsh()
 ##L.build()
 #plt.ion()
 ##L.showG('st',aw=True,labels=True,nodelist=L.ldiffout)

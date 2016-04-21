@@ -5799,6 +5799,21 @@ class Layout(PyLayers):
     #             self.del_segment(d,verbose=False)
     #     return ncpol
 
+    def pltlines(self,lines,fig=[],ax=[],color='r'):
+        """  plot a line with a specified color and transparency
+        """
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+
+        c = np.array([l.xy for l in lines])
+        [ax.plot(x[0,:],x[1,:],color=color) for x in c]
+        plt.axis(self.ax)
+        plt.draw()
+
+
+
 
     def pltpoly(self,poly,fig=[],ax=[],color='r',alpha=0.2):
         """  plot a polygon with a specified color and transparency
@@ -5824,6 +5839,11 @@ class Layout(PyLayers):
         [ax.text(x[0],x[1],vn[xx]) for xx,x in enumerate(X)]
 
 
+    def updateshseg(self):
+        seg_connect = {x:self.Gs.node[x]['connect'] for x in self.Gs.nodes() if x >0}
+        dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+        self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+
     def buildGt(self,check=False):
         """ 
         build graph of convex cycles 
@@ -5840,9 +5860,11 @@ class Layout(PyLayers):
 
 
         # I . get polygon from segments
-        seg_connect = {x:self.Gs.edge[x].keys() for x in self.Gs.nodes() if x >0}
-        dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
-        self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+        # seg_connect = {x:self.Gs.node[x]['connect'] for x in self.Gs.nodes() if x >0}
+        # pdb.set_trace()
+        # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+        # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+        self.updateshseg()
         X=sho.polygonize(self._shseg.values())
         P=[x for x in X]
         NP=[]
@@ -6027,7 +6049,9 @@ class Layout(PyLayers):
         self._interlist()
 
 
-
+        # TO DO : remove this one and manage add/deletion of seg lines at
+        # the end of  self._delaunay
+        self.updateshseg()
 
 
 
@@ -6245,6 +6269,8 @@ class Layout(PyLayers):
 
             for d in daw:
                 self.del_segment(d,verbose=False)
+
+
         return ncpol
 
 
@@ -7375,9 +7401,44 @@ class Layout(PyLayers):
     #         if len(d) > 1:
     #             self.Gw.add_edges_from(combinations(d, 2))
 
+    def buildGvsh(self):
+
+        Gv = nx.Graph()
+        for c in self.Gt.nodes():
+            if c != 0:
+
+                ext =  self.Gt.node[c]['polyg'].exterior
+                vn  = self.Gt.node[c]['polyg'].vnodes
+                seg = list(vn[vn>0])
+                ptdiff = [ v  for v in vn if v in self.ddiff and c in self.ddiff[v][0]]
+                entities = seg+ptdiff
+                combit = combinations(entities,2)
+                comb =  [(x[0],x[1]) for x in combit]
+                lines = [sh.LineString([self.Gs.pos[x[0]],self.Gs.pos[x[1]]]) for x in comb]
+                within = np.array([l.within(ext) for l in lines])
+                # looking for lines not superimposed with polygon exterior
+                ut = np.where(~within)[0]
+                comb= np.array(comb)
+                [Gv.add_edge(v[0],v[1]) for v in comb[ut]]
+
+
+                # diff diff processing
+                dd = [(x[0],x[1]) for x in comb if x[0]<0 and x[1]<0]
+                lined = [sh.LineString([self.Gs.pos[x[0]],self.Gs.pos[x[1]]]) for x in dd]
+                uair = [self.Gs.node[x]['name']=='AIR' for x in seg]
+                segair = [s for us,s in enumerate(seg) if uair[us]]
+                lineair = sh.MultiLineString([self._shseg[x] for x in segair])
+                ext2 = ext.difference(lineair)
+                withind = np.array([l.within(ext2) for l in lined])
+                if len(withind)!=0:
+                    utd = np.where(~withind)[0]
+                    dd= np.array(dd)
+                    [Gv.add_edge(v[0],v[1]) for v in dd[utd]]
+                
+        self.Gv = Gv 
 
     def buildGv(self, show=False):
-        """ build global visibility graph
+        """ build visibility graph
 
         Parameters
         ----------
@@ -7397,10 +7458,7 @@ class Layout(PyLayers):
         Notes
         -----
 
-        A cycle has the following boolean attributes
-
-        indoor
-        isopen
+        This method exploits cycles convexity.
 
         """
 
@@ -7464,11 +7522,11 @@ class Layout(PyLayers):
                 # non adjascent segment of vnodes see valid diffraction points
                 for idiff in ndiffvalid:
                     # idiff segment neighbors
-                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg ]
+                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
                     # segvalid : not adjascent segment
                     # seen from neighbors
-                    pdb.set_trace()
-                    seen_from_neighbors = [ nx.neighbors(Gv,x) for x in nsneigh]
+                    for x in nsneigh:
+                        seen_from_neighbors.append(nx.neighbors(Gv,x))
                     #segvalid = [ x for x in nseg if x in nx.neighbors(Gv,nsneigh)]
                     # nbidiff valid
                     nsneigh =  [ x for x in nsneigh if x not in airwalls]
