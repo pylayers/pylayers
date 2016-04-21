@@ -2,9 +2,10 @@ from pylayers.gis.layout import *
 from pylayers.simul.link import *
 
 L = Layout('WHERE1.ini',force=True,check=False)
-L.cleanup()
-L.saveini('WHERE1.ini')
+#L.cleanup()
+#L.saveini('WHERE1.ini')
 L.buildGt()
+L.buildGv()
 pdb.set_trace()
 plt.ion()
 #L.showG('st',aw=True,labels=True,nodelist=L.ldiffout)

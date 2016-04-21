@@ -9400,6 +9400,7 @@ class Layout(PyLayers):
             l = 0
             while cont:
                 # determine the 2 segments involved in each cycle
+                pdb.set_trace()
                 cy = lcy[l]
                 l = l+1
                 lsegcy = []
