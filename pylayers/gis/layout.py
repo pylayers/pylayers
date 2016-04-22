@@ -249,6 +249,7 @@ from numpy import array
 import PIL.Image as Image
 import logging
 import urllib2 as urllib
+import hashlib
 from cStringIO import StringIO
 
 from pylayers.antprop import slab as sb
@@ -323,7 +324,7 @@ class Layout(PyLayers):
             slab dB file name
         _filefur :
             furniture file name
-        force : boolean
+        force : booleanlo
         check : boolean
 
         """
@@ -415,12 +416,12 @@ class Layout(PyLayers):
         if not self.hasboundary:
             self.boundary(dx=10,dy=10)
 
-        # If the layout has already been built then load the built structure
-        if not force:
-            try:
-                self.dumpr()
-            except:
-                pass
+        # # If the layout has already been built then load the built structure
+        # if not force:
+        #     try:
+        #         self.dumpr()
+        #     except:
+        #         pass
 
     def __repr__(self):
         st = '\n'
@@ -1221,6 +1222,8 @@ class Layout(PyLayers):
                 if self.Gs.node[n]['name']!='AIR':
                     d = self.Gs.node[n]
                     # old format conversion
+                    if d.has_key('ncycles'):
+                        del d['ncycles']
                     if d.has_key('ss_ce1'):
                         del d['ss_ce1']
                     if d.has_key('ss_ce2'):
@@ -1339,6 +1342,9 @@ class Layout(PyLayers):
         for ns in di['segments']:
             self.Gs.add_node(eval(ns)) # add segment node
             d = eval(di['segments'][ns])
+            # deactivate ncycles 
+            # TODO not saving
+            d['ncycles']=[]
             if d.has_key('ss_name'):
                 Nss = Nss + len(d['ss_name'])
                 ss_offset=[]
@@ -1393,10 +1399,10 @@ class Layout(PyLayers):
 
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
-        #pdb.set_trace()
+        
         self.g2npy()
         # 
-
+        self._hash = hashlib.md5(fileini)
 
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
@@ -1459,14 +1465,14 @@ class Layout(PyLayers):
         Available formats are :
 
         +  .ini   : ini file format (natural one) DIRINI
-        +  .str2  : native Pyray (C implementation) DIRSTRUC
-        +  .str   : binary file with visibility DIRSTRUC
         +  .osm   : opens street map format  DIROSM
 
 
         layout files are stored in the directory pstruc['DIRxxx']
 
         """
+
+
         filename,ext=os.path.splitext(_filename)
         if ext=='.osm':
             filename = pyu.getlong(_filename,pstruc['DIROSM'])
@@ -1475,20 +1481,7 @@ class Layout(PyLayers):
             else:
                 self.filename = _filename
                 print "new file",self.filename
-        elif ext=='.str':
-            filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
-            if os.path.exists(filename):
-                self.loadstr(_filename,self.filematini,self.fileslabini)
-            else:
-                self.filename = _filename
-                print "new file",self.filename
-        elif ext=='.str2':
-            filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
-            if os.path.exists(filename):
-                self.loadstr2(_filename,self.filematini,self.fileslabini)
-            else:
-                self.filename = _filename
-                print "new file",self.filename
+        
         elif ext=='.ini':
             filename = pyu.getlong(_filename,pstruc['DIRINI'])
             if os.path.exists(filename):
@@ -1499,7 +1492,8 @@ class Layout(PyLayers):
         else:
             raise NameError('layout filename extension not recognized')
 
-        self.lbltg=['s']
+       
+
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
@@ -1508,664 +1502,31 @@ class Layout(PyLayers):
             except:
                 print "problem to construct geomfile"
 
-    # def loadstr(self, _filename, _filematini='matDB.ini', _fileslabini='slabDB.ini'):
-    #     """ loadstr load a .str de PulsRay
-
-    #     Parameters
-    #     ----------
-
-    #     _filename : string
-    #     _filematini  : string
-    #         default 'matDB.ini'
-    #     _fileslabini : string
-    #         default 'slabDB.ini'
-
-    #     Examples
-    #     --------
-
-    #     >>> from pylayers.gis.layout import *
-    #     >>> L = Layout()
-    #     >>> L.loadstr('defstr.str')
-
-    #     """
-
-    #     self.filename = _filename
-    #     self.delete()
-    #     mat = sb.MatDB()
-    #     mat.load(_filematini)
-    #     self.sl = sb.SlabDB()
-    #     self.sl.mat = mat
-    #     self.sl.load(_fileslabini)
-    #     self.labels = {}
-    #     self.name = {}
-    #     self.Gs.pos = {}
-    #     lname = []
-    #     filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
-    #     fo = open(filename, "rb")
-    #     data = fo.read()
-    #     fo.close()
-
-    #     #
-    #     # Read : Np Ns Nss
-    #     #        Number of Nodes           nn
-    #     #        Number of Edges           en
-    #     #        Number of Sub Segments    cen
-    #     #
-    #     data_nn = data[0:4]
-    #     Np = stru.unpack('i', data_nn)[0]
-    #     data_en = data[4:8]
-    #     Ns = stru.unpack('i', data_en)[0]
-    #     data_cen = data[8:12]
-    #     Nss = stru.unpack('i', data_cen)[0]
-    #     self.Np = Np
-    #     self.Ns = Ns
-    #     self.Nss = Nss
-
-    #     codesl = np.array(np.zeros(Ns), dtype=int)
-    #     codes = np.array(np.zeros(Ns), dtype=int)
-
-    #     # tahe : segment tail and head point index
-    #     tahe = np.array(np.zeros([2, Ns]), dtype=int)
-    #     ini = 12
-    #     for i in range(Ns):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         #self.tahe[0,i]= stru.unpack('i',dt)[0]-1
-    #         tahe[0, i] = stru.unpack('i', dt)[0] - 1
-
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         #self.tahe[1,i]= stru.unpack('i',dt)[0] -1
-    #         tahe[1, i] = stru.unpack('i', dt)[0] - 1
-
-    #     # x : tableau des coordonnees x des noeuds
-    #     pt = np.array(np.zeros([2, Np], dtype=np.float64))
-    #     ini = stop
-    #     for i in range(Np):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         pt[0, i] = stru.unpack('d', dt)[0]
-    #     # y : tableau des coordinates y des noeuds
-    #     ini = stop
-    #     for i in range(Np):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         pt[1, i] = stru.unpack('d', dt)[0]
-    #     #--------------------------------------------
-    #     # Node labelling (structure nodes)
-    #     #--------------------------------------------
-    #     for k in range(Np):
-    #         self.Gs.add_node(-(k + 1))
-    #         self.Gs.pos[-(k + 1)] = (pt[0, k], pt[1, k])
-    #         self.labels[-(k + 1)] = str(-(k + 1))
-
-    #     #
-    #     # y : type de noeud
-    #     #
-    #     typ = np.array(np.zeros(Np), dtype=int)
-    #     codep = np.array(np.zeros(Np), dtype=int)
-    #     ini = stop
-    #     for i in range(Np):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         typ[i] = stru.unpack('i', dt)[0]
-    #         codep[i] = stru.unpack('i', dt)[0]
-    #     #
-    #     # agi : tableau des angles initiaux des noeuds de type 2
-    #     #
-    #     ag = np.array(np.zeros([3, Np], dtype=np.float64))
-    #     ini = stop
-    #     for i in range(Np):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ag[0, i] = stru.unpack('d', dt)[0]
-    #     # agf : tableau des angles finaux des noeuds de type 2
-    #     ini = stop
-    #     for i in range(Np):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ag[1, i] = stru.unpack('d', dt)[0]
-    #     # nN : tableau des parametres d'ouverture de diedre des noeuds de type 2
-    #     nN = np.array(1.0 * np.zeros(Np))
-    #     ini = stop
-    #     for i in range(Np):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ag[2, i] = stru.unpack('d', dt)[0]
-    #     #eml  =
-    #     em = np.array(np.zeros([3, Ns]), dtype=int)
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         em[0, i] = stru.unpack('i', dt)[0]
-    #     #emr  =
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         em[1, i] = stru.unpack('i', dt)[0]
-    #     #emc  =
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         em[2, i] = stru.unpack('i', dt)[0]
-    #         codes[i] = -2
-    #         codesl[i] = em[2, i]
-    #         name = self.sl.di[codesl[i]]
-    #         lname.append(name)
-    #     #thickness =
-    #     thick = np.array(1.0 * np.zeros(Ns))
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         thick[i] = stru.unpack('d', dt)[0]
-    #     #ehmin =
-    #     z = np.array(np.zeros([2, Ns], dtype=np.float64))
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         z[0, i] = stru.unpack('d', dt)[0]
-    #     #ehmax =
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         z[1, i] = stru.unpack('d', dt)[0]
-
-    #     norm = np.array(np.zeros([2, Ns], dtype=np.float64))
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 16 * i
-    #         stop = ini + 16 * (i + 1)
-    #         dt1 = data[start:start + 8]
-    #         norm[0, i] = stru.unpack('d', dt1)[0]
-    #         dt2 = data[start + 8:stop]
-    #         norm[1, i] = stru.unpack('d', dt2)[0]
-    #     #
-    #     # read matrice node-node
-    #     #
-    #     ini = stop
-    #     nd_nd = np.zeros([Np, Np], dtype=int)
-    #     for i in range(Np):
-    #         for j in range(Np):
-    #             k = Np * i + j
-    #             start = ini + 4 * k
-    #             stop = ini + 4 * (k + 1)
-    #             dt = data[start:stop]
-    #             nd_nd[i][j] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read matrice node-edge
-    #     #
-    #     ini = stop
-    #     nd_ed = np.zeros([Ns, Np], dtype=int)
-    #     for i in range(Ns):
-    #         for j in range(Np):
-    #             k = Np * i + j
-    #             start = ini + 4 * k
-    #             stop = ini + 4 * (k + 1)
-    #             dt = data[start:stop]
-    #             nd_ed[i][j] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read mat_i
-    #     #
-    #     mat_i = np.array(np.zeros(Ns), dtype=int)
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         mat_i[i] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read mat_d
-    #     #
-    #     mat_d = np.array(1.0 * np.zeros(Ns))
-    #     ini = stop
-    #     for i in range(Ns):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         mat_d[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read matrice ed-ed
-    #     #
-    #     ini = stop
-    #     ed_ed = np.zeros([Ns, Ns], dtype=int)
-    #     for i in range(Ns):
-    #         for j in range(Ns):
-    #             k = Ns * i + j
-    #             start = ini + 4 * k
-    #             stop = ini + 4 * (k + 1)
-    #             dt = data[start:stop]
-    #             ed_ed[i][j] = stru.unpack('i', dt)[0]
-
-    #     # Sous segments
-    #     #
-    #     # read ce_core  (A COMPLETER)
-    #     #
-    #     ce_core = np.array(np.zeros(Nss), dtype=int)
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_core[i] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read ce_thick
-    #     #
-    #     ce_thick = np.array(np.zeros(Nss))
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_thick[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read ce_prop_i
-    #     #
-    #     ce_prop = np.array(np.zeros([2, Nss]), dtype=int)
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_prop[0, i] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read ce_wall_floor_ceil
-    #     #
-    #     ce_wall_floor_ceil = np.array(np.zeros(Nss), dtype=int)
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_wall_floor_ceil[i] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read ce_ed
-    #     #
-    #     ce_ed = np.array(np.zeros(Nss), dtype=int)
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 4 * i
-    #         stop = ini + 4 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_ed[i] = stru.unpack('i', dt)[0]
-    #     #
-    #     # read ce_prop_d
-    #     #
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_prop[1, i] = stru.unpack('d', dt)[0]
-    #         #   self.ce_prop[i]= stru.unpack('d',dt)[0]
-    #     #
-    #     # read ce_xmin
-    #     #
-    #     ce_xmin = np.array(np.zeros(Nss))
-    #     ce_xmax = np.array(np.zeros(Nss))
-    #     ce_ymin = np.array(np.zeros(Nss))
-    #     ce_ymax = np.array(np.zeros(Nss))
-    #     ce_zmin = np.array(np.zeros(Nss))
-    #     ce_zmax = np.array(np.zeros(Nss))
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_xmin[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read ce_xmax
-    #     #
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_xmax[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read ce_ymin
-    #     #
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_ymin[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read ce_ymax
-    #     #
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_ymax[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read ce_zmin
-    #     #
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_zmin[i] = stru.unpack('d', dt)[0]
-    #     #
-    #     # read ce_zmax
-    #     #
-    #     ini = stop
-    #     for i in range(Nss):
-    #         start = ini + 8 * i
-    #         stop = ini + 8 * (i + 1)
-    #         dt = data[start:stop]
-    #         ce_zmax[i] = stru.unpack('d', dt)[0]
-
-    #     ce = {}
-    #     for i in range(Nss):
-    #         ce[ce_ed[i] - 1] = (ce_core[i],
-    #                             ce_wall_floor_ceil[i],
-    #                             ce_prop[0, i],
-    #                             ce_zmin[i],
-    #                             ce_zmax[i],
-    #                             ce_xmin[i],
-    #                             ce_xmax[i],
-    #                             ce_ymin[i],
-    #                             ce_ymax[i])
-    #     #self.udbox()
-    #     #self.laylist()
-    #     #for i in self.layl:
-    #     #    self.display['Layer'].append(i)
-    #     #    self.display['ActiveLayer'].append(i)
-
-    #     #----------------------------------------
-    #     # Node labelling (structure edges)
-    #     #----------------------------------------
-    #     self.display['layers']=[]
-    #     for k in range(Ns):
-    #         self.Gs.add_node(k + 1, name=lname[k])
-    #         self.Gs.add_node(k + 1, z=(z[0, k],z[1, k]))
-    #         self.Gs.add_node(k + 1, norm=np.array([norm[0, k],
-    #                                                norm[1, k], 0.]))
-    #         nta = tahe[0, k]
-    #         nhe = tahe[1, k]
-    #         self.Gs.pos[k + 1] = ((pt[0, nta] + pt[0, nhe]) / 2.,
-    #                               (pt[1, nta] + pt[1, nhe]) / 2.)
-    #         self.Gs.add_edge(-(nta + 1), k + 1)
-    #         self.Gs.add_edge(k + 1, -(nhe + 1))
-    #         self.labels[k + 1] = str(k + 1)
-    #         if lname[k] not in self.display['layers']:
-    #             self.display['layers'].append(lname[k])
-
-    #         if lname[k] in self.name:
-    #             self.name[lname[k]].append(k + 1)
-    #         else:
-    #             self.name[lname[k]] = [k + 1]
-    #     #
-    #     # Update sub-segment
-    #     #
-    #     for k in ce:
-    #         self.Gs.add_node(k + 1, ss_name=[self.sl.di[ce[k][0]]])
-    #         self.Gs.add_node(k + 1, ss_ce=[(ce[k][1],ce[k][2])])
-    #         self.Gs.add_node(k + 1, ss_z=[(ce[k][3],ce[k][4])])
-
-    #     self.ndnd = nd_nd
-    #     self.eded = ed_ed
-    #     self.nded = nd_ed
-    #     #
-    #     # Create connectivity graph Gc
-    #     #   update Gc with nd_nd ed_ed
-    #     #
-    #     self.Gc = nx.Graph()
-    #     self.Gc.add_nodes_from(self.Gs.nodes())
-    #     pos = self.Gs.pos
-    #     #
-    #     # !! Incomplet  (To Do nd_ed)
-    #     #
-    #     Np = np.shape(nd_nd)[0]
-    #     for k in range(Np):
-    #         nnp = -(k + 1)
-    #         kvu = np.nonzero(nd_nd[k] == 3)
-    #         nc = -kvu[0] - 1
-    #         for l in nc:
-    #             self.Gc.add_edge(nnp, l)
-
-    #     Ns = np.shape(ed_ed)[0]
-    #     for k in range(Ns):
-    #         ne = k + 1
-    #         kvu = np.nonzero(ed_ed[k] != 0)
-    #         nc = kvu[0] + 1
-    #         for l in nc:
-    #             self.Gc.add_edge(ne, l)
+        hash_save = copy.deepcopy(self._hash)
 
 
-    #     self.Gc.pos = pos
-    #     #
-    #     # The numpy format is conserved for acceleration
-    #     #
-    #     self.pt = pt
-    #     self.tahe = tahe
-    #     self.display['activelayer'] = self.sl.keys()[0]
-    #     #
-    #     # update boundary
-    #     #
-    #     self.boundary(1, 1)
+        rebuild = False
 
-    def loadstr2(self, _filename, _filematini='matDB.ini', _fileslabini='slabDB.ini'):
-        """ load a Graph from a str2 file
-
-            Parameters
-            ----------
-            _filename : string
-                str2 filename
-            _filematini
-                mat filename
-            _fileslabini
-                slab filename
-
-            Notes
-            -----
-
-                str2 format is as follow
-
-                Np Ns Nss
-                xp_1 yp_1 zp_1 codep_1
-                ...
-                xp_Np yp_Np zp_Np codep_Np
-                tail_1 head_1 left_1 core_1 right_1 zmin_1 zmax_1
-                ...
-                tail_Ns head_Ns left_Ns core_Ns right_Ns zmin_Ns zmax_Ns
-                segId_1 SlabCode_1 wall_floor_ceil_1 prop_d_1 zmin_1 zmax_1
-                ...
-                segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss
-
-        """
-
-        self.delete()
-        self.filename = _filename
-        mat = sb.MatDB()
-        mat.load(_filematini)
-
-        self.sl = sb.SlabDB()
-        self.sl.mat = mat
-        self.sl.load(_fileslabini)
-
-        self.labels = {}
-        self.name = {}
-        self.Gs.pos = {}
-
-        self.Np = 0
-        self.Ns = 0
-        self.Nss = 0
-
-        filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
-        try:
-            fo = open(filename)
-        except:
-            print "no file named ",filename
-            return
-
-        lines = fo.readlines()
-        fo.close()
-        l1 = lines[0].split()
-
-        #
-        # Parse the .str2 header NP NSEG NCOSEG
-        #
-
-        Np = int(l1[0])
-        Ns = int(l1[1])
-        Nss = int(l1[2])
-
-        self.Np = Np
-        self.Ns = Ns
-        self.Nss = Nss
-
-        lname = []
-
-
-        pt = np.array(np.zeros([2, Np], dtype=np.float64))
-        codep = np.array(np.zeros(Np, dtype=int))
-        ag = np.array(np.zeros([3, Np], dtype=np.float64))
-        tahe = np.array(np.zeros([2, Ns], dtype=int))
-        codesl = np.array(np.zeros(Ns), dtype=int)
-        codes = np.array(np.zeros(Ns), dtype=int)
-
-        em = np.array(np.zeros([3, Ns]), dtype=int)
-        thick = np.array(np.zeros(Ns))
-
-        ed_mat_prop_d = np.array(np.zeros(Ns, dtype=float))
-        height = np.array(np.zeros([2, Ns], dtype=float))
-        z = np.array(np.zeros([2, Ns], dtype=float))
-
-        ce_ed = np.array(np.zeros(Nss), dtype=int)
-        ce_core = np.array(np.zeros(Nss), dtype=int)
-        ce_wall_floor_ceil = np.array(np.zeros(Nss))
-        ce_prop_d = np.array(np.zeros(Nss, dtype=np.float64))
-        ce_zmin = np.array(np.zeros(Nss, dtype=np.float64))
-        ce_zmax = np.array(np.zeros(Nss, dtype=np.float64))
-        #
-        # Read points
-        #
-        for i in range(Np):
-            dt = lines[i + 1].split()
-            pt[0, i] = float(dt[0])
-            pt[1, i] = float(dt[1])
-            codep[i] = int(dt[2])
-            #ag[0:i]=float(dt[3])
-            #ag[1:i]=float(dt[4])
-            #ag[2:i]=float(dt[5])
-        ind1 = i + 2
-        #--------------------------------------------
-        # Node labelling (structure nodes)
-        #--------------------------------------------
-        for k in range(Np):
-            self.Gs.add_node(-(k + 1))
-            self.Gs.pos[-(k + 1)] = (pt[0, k], pt[1, k])
-            self.labels[-(k + 1)] = str(-(k + 1))
-        #
-        # Read segments
-        #
-        for i in range(Ns):
-            dt = lines[i + ind1].split()
-            tahe[0, i] = int(dt[0])
-            tahe[1, i] = int(dt[1])
-            # em : [ left right core ]
-            em[1, i] = int(dt[2])
-            em[2, i] = int(dt[3])
-            em[0, i] = int(dt[4])
-            codes[i] = -2
-            codesl[i] = em[2, i]
-            lname.append(self.sl.di[em[2, i]])
-            ed_mat_prop_d[i] = float(dt[5])
-            z[0, i] = float(dt[6])
-            z[1, i] = float(dt[7])
-
-        ind2 = i + ind1 + 1
-        #
-        # Read co-segments   ( Transposer dans loadstr)
-        #
-        ce = {}
-        for i in range(Nss):
-            dt = lines[i + ind2].split()
-            ce_ed[i] = int(dt[0])
-            ce_core[i] = int(dt[1])
-            ce_wall_floor_ceil[i] = int(dt[2])
-            ce_prop_d[i] = float(dt[3])
-            ce_zmin[i] = float(dt[4])
-            ce_zmax[i] = float(dt[5])
-            ce[int(dt[0]) - 1] = (int(dt[1]),
-                                  int(dt[2]),
-                                  float(dt[3]),
-                                  float(dt[4]),
-                                  float(dt[5]))
-
-        #----------------------------------------
-        # Node labelling (structure edges)
-        #----------------------------------------
-        self.display['layers']=[]
-        for k in range(Ns):
-            #print k, lname[k]
-            self.Gs.add_node(k + 1, name=lname[k])
-            self.Gs.add_node(k + 1, z=(z[0, k],z[1, k]))
-            #self.Gs.add_node(k+1,norm=np.array([norm[0,k],norm[1,k],0.]))
-            nta = tahe[0, k] - 1
-            nhe = tahe[1, k] - 1
-            self.Gs.pos[k + 1] = ((pt[0, nta] + pt[0, nhe]) / 2.,
-                                  (pt[1, nta] + pt[1, nhe]) / 2.)
-            self.Gs.add_edge(-(nta + 1), k + 1)
-            self.Gs.add_edge(k + 1, -(nhe + 1))
-            self.labels[k + 1] = str(k + 1)
-            # update list of layers
-            if lname[k] not in self.display['layers']:
-                self.display['layers'].append(lname[k])
-
-            if lname[k] in self.name:
-                self.name[lname[k]].append(k + 1)
+        if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
+            path = os.path.join(basename,'struc','gpickle',self.filename)
+            self.dumpr('s')
+            if self._hash != hash_save:
+                rebuild = True 
             else:
-                self.name[lname[k]] = [k + 1]
-        #
-        # Update sub-segment
-        #
-        for k in ce:
-            self.Gs.add_node(k + 1, ss_name=[self.sl.di[ce[k][0]]])
-            self.Gs.add_node(k + 1, ss_ce= [(ce[k][1],ce[k][2])])
-            self.Gs.add_node(k + 1, ss_z = [(ce[k][3],ce[k][4])])
+                self.dumpr('tvirw')
+        else: 
+            rebuild = True
 
-        #
-        # Nodes are numbered from 1 in .str2
-        # Nodes are numbered from 0 in Graph
-        #
-        #self.udbox()
-        #self.boundary()
-        #self.laylist()
-        #for i in self.layl:
-        #    self.display['Layer'].append(i)
-        #    self.display['ActiveLayer'].append(i)
+        # build and dump
+        if rebuild:  
+            ans = raw_input('Do you want to build the layout (y/N) ? ')
+            if ans.lower()=='y':
+                self.build()
+                self.dumpw()
 
-        self.pt = pt
-        self.tahe = tahe
-        self.display['activelayer'] = self.sl.keys()[0]
-        #self.boundary(1,1)
+        self.lbltg=['s']
+            
+    
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
@@ -5281,7 +4642,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False):
+    def build(self, graph='tvirw',verbose=False):
         """ build graphs
 
         Parameters
@@ -5309,15 +4670,7 @@ class Layout(PyLayers):
             self.buildGt()
             self.lbltg.extend('t')
 
-        if 'r' in graph:
-            if verbose:
-                print "Gr"
-            self.buildGr()
-            self.lbltg.extend('r')
-
-        if 'w' in graph and len(self.Gr.nodes())>1:
-            self.buildGw()
-            self.lbltg.extend('w')
+       
       
         if 'v' in graph:
             if verbose:
@@ -5332,12 +4685,17 @@ class Layout(PyLayers):
             self.outputGi()
             self.lbltg.extend('i')
 
-        if 'w' in graph and len(self.Gr.nodes())>1:
+        if 'r' in graph:
             if verbose:
-                print "Gw"
+                print "Gr"
+            self.buildGr()
+            self.lbltg.extend('r')
+
+        if 'w' in graph and len(self.Gr.nodes())>1:
             self.buildGw()
             self.lbltg.extend('w')
-            pass
+
+
 
         # dca : dictionnary of cycles which have an air wall
         
@@ -5380,25 +4738,28 @@ class Layout(PyLayers):
         """
         # create layout directory
         path = os.path.join(basename,'struc','gpickle',self.filename)
+
+        fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
+        self.Gs.add_node(0,hash=hashlib.md5(fileini).hexdigest())
+
         if not os.path.isdir(path):
            os.mkdir(path)
         for g in self.lbltg:
             try:
-                if g in ['v','i']:
-                    gname1 ='G'+g
-                    write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle'))
-                else:
-                    gname='G'+g
-                    write_gpickle(getattr(self,gname),os.path.join(path,'G'+g+'.gpickle'))
+                # if g in ['v','i']:
+                #     gname1 ='G'+g
+                #     write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle'))
+                # else:
+                gname='G'+g
+                write_gpickle(getattr(self,gname),os.path.join(path,'G'+g+'.gpickle'))
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in self.lbltg:
-            write_gpickle(getattr(self,'ldiffin'),os.path.join(path,'ldiffin.gpickle'))
-            write_gpickle(getattr(self,'ldiffout'),os.path.join(path,'ldiffout.gpickle'))
+            write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
-
+        self.Gs.pop(0)
         root,ext = os.path.splitext(self.filename)
         if ext == '.ini':
             self.saveini(self.filename)
@@ -5420,28 +4781,29 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['t','v','i','r','w']
+        graphs=['s','t','v','i','r','w']
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
-                if g in ['v','i']:
-                    gname1 ='G'+g
-                    setattr(self, gname1, read_gpickle(os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle')))
-                else:
-                    gname='G'+g
-                    setattr(self, gname,read_gpickle(os.path.join(path,'G'+g+'.gpickle')))
+                # if g in ['v','i']:
+                #     gname1 ='G'+g
+                #     setattr(self, gname1, read_gpickle(os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle')))
+                # else:
+                gname='G'+g
+                setattr(self, gname,read_gpickle(os.path.join(path,'G'+g+'.gpickle')))
                 self.lbltg.extend(g)
             except:
                 pass
-                #print 'G',g,' not saved'
 
+        # retrieve md5 sum of the original ini file 
+        self._hash = self.Gs.node.pop(0)['hash']
         #
         # fixing bug #136
         # update ncycles attributes of Gs from information in Gt
         #
-        for k in self.Gs.node:
-            if k>0:
-                self.Gs.node[k]['ncycles']=[]
+        # for k in self.Gs.node:
+        #     if k>0:
+        #         self.Gs.node[k]['ncycles']=[]
 
         for k in self.Gt.node:
             if k != 0:
@@ -5450,23 +4812,22 @@ class Layout(PyLayers):
                     self.Gt.node[k]['polyg'].vnodes = vnodes
                 else:
                     self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
-                for inode in vnodes:
-                    if inode > 0:   # segments
-                        if k not in self.Gs.node[inode]['ncycles']:
-                            self.Gs.node[inode]['ncycles'].append(k)
-                            if len(self.Gs.node[inode]['ncycles'])>2:
-                                print inode,self.Gs.node[inode]['ncycles']
-                                logging.warning('dumpr : a segment cannot relate more than 2 cycles')
+        #         for inode in vnodes:
+        #             if inode > 0:   # segments
+        #                 if k not in self.Gs.node[inode]['ncycles']:
+        #                     self.Gs.node[inode]['ncycles'].append(k)
+        #                     if len(self.Gs.node[inode]['ncycles'])>2:
+        #                         print inode,self.Gs.node[inode]['ncycles']
+        #                         logging.warning('dumpr : a segment cannot relate more than 2 cycles')
         # if ncycles is a list with only one element the other cycle is the
         # outside region (cycle -1)
-        for k in self.Gs.node:
-            if k>0:
-                if len(self.Gs.node[k]['ncycles'])==1:
-                    self.Gs.node[k]['ncycles'].append(-1)
+        # for k in self.Gs.node:
+        #     if k>0:
+        #         if len(self.Gs.node[k]['ncycles'])==1:
+        #             self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in graphs :
-            setattr(self,'ldiffin', read_gpickle(os.path.join(path,'ldiffin.gpickle')))
-            setattr(self,'ldiffout', read_gpickle(os.path.join(path,'ldiffout.gpickle')))
+            setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
 
@@ -9509,131 +8870,7 @@ class Layout(PyLayers):
                 self.Gr.remove_edge(*e)
 
 
-    # def buildGr3(self):
-    #     """ build Graph of rooms
-
-    #     Summary
-    #     -------
-
-    #         A room is a set of cycles which contains at least one door
-
-    #         This function requires Gt
-
-    #     """
-    #     self.Gr = nx.Graph()
-    #     self.Gr.pos = {}
-    #     #self.doors ={}
-    #     self.transition = {}
-    #     self.airwall = {}
-    #     d = self.subseg()
-    #     # rcpt : rooms counter
-    #     rcpt = 0
-    #     # ltrans : list of transition segment
-    #     ltrans = np.array(self.listtransition)
-    #     # lairwalls : list of air walls
-    #     lairwalls = filter(lambda x:self.Gs.node[x]['name']=='AIR',ltrans)
-    #     # ldoors : list of doors segment number
-    #     ldoors = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-    #     #
-    #     # For all cycles
-    #     #
-    #     # Rule : add a new room if :
-    #     #       + the cycle has a transition segment which is not an air wall
-    #     #       unless
-    #     #       + there already exists a created room which is separated from the
-    #     #       current cycle by an airwall
-    #     #
-    #     #
-    #     # roomcycles dict room : list of cycles number involved in room
-    #     # cycleroom dict cycle : room number
-    #     roomcycles = {}
-    #     cycleroom = {}
-    #     for k in self.Gt.node:
-    #         #if k==5:
-    #         #    pdb.set_trace()
-    #         # list of segments from the cycle
-    #         # which have:
-    #         #  ldoors
-    #         #  lairwalls
-    #         #
-    #         lseg = self.Gt.node[k]['cycle'].cycle
-    #         u = np.intersect1d(lseg, ldoors)
-    #         v = np.intersect1d(lseg, lairwalls)
-    #         alreadythere =[]
-    #         #
-    #         # Analysis of cycles which are connected via an air-wall
-    #         #
-    #         # cyclehasdoor is True if cycle k has a door segment
-    #         # hasdoors is True if at least one adjascent cycle from the same
-    #         # room has a door
-    #         # doors : np array with doors associated to room k
-    #         cyclehasdoor = False
-    #         hasdoors = False
-    #         doors = np.array([])
-
-    #         if len(u)>0:
-    #             cyclehasdoor = True
-    #             doors = np.array(u)
-    #         # this should be a recursive function
-    #         if len(v)>0:
-    #             # b : list of cycles which involve an airwall
-    #             a = map(lambda x: self.Gs.node[x]['ncycles'],v)
-    #             b = reduce(lambda x,y: x+y,a)
-    #             involvedcycles = np.unique(np.array(b))
-    #             # list of cycles which are already involved in rooms
-    #             alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
-    #             notyet = filter(lambda x: x not in cycleroom.keys(),involvedcycles)
-    #             for cy1 in involvedcycles:
-    #                 lseg1 = self.Gt.node[cy1]['cycle'].cycle
-    #                 u1 = np.intersect1d(lseg1, ldoors)
-    #                 if len(u1)>0:
-    #                     hasdoors = True
-    #                     doors = np.unique(np.hstack((doors,u1)))
-
-    #             print "cycle "+str(k)
-    #             #print "airwall segment "+str(v)
-    #             #print "involved cycles "+str(involvedcycles)
-    #             print "already there "+str(alreadythere)
-    #             print "not there yet "+ str(notyet)
-    #             #print "cycles involved ",cycleroom.keys()
-    #         #
-    #         # If cycle has a door (transition which is not an air wall)
-    #         # Then create a new room
-    #         #
-    #         if (cyclehasdoor|hasdoors) & (len(alreadythere)==0):
-    #             #self.Gr.add_node(j, cycle=k, doors=u)
-    #             self.Gr.add_node(rcpt, cycle=[k], transitions=doors)
-    #             self.Gr.pos[rcpt] = self.Gt.pos[k]
-    #             self.Gr.node[rcpt]['polyg']=self.Gt.node[k]['polyg']
-    #             #roomcycles[rcpt].append(k)
-    #             cycleroom[k]=rcpt
-    #             # add transitions
-    #             for ku in u:
-    #                 try:
-    #                     self.transition[ku].append(rcpt)
-    #                 except:
-    #                     self.transition[ku] = [rcpt]
-
-    #             # Merge cycles which are separated by an airwall
-    #             if len(v) > 0:
-    #                 for kv in v:
-    #                     ncy  = filter(lambda x : x !=k,self.Gs.node[kv]['ncycles'])[0]
-    #                     self.Gr.node[rcpt]['cycle'].append(ncy)
-    #             # increment room counter
-    #             rcpt += 1
-    #         if (len(alreadythere)>0):
-    #             ncy = alreadythere[0]
-    #             roomn = cycleroom[ncy]
-    #             for ncy in notyet:
-    #                 print "merging cycle "+str(ncy)+"in room "+str(roomn)
-    #                 self.Gr.node[roomn]['polyg'] += self.Gt.node[ncy]['polyg']
-
-
-    #     # add connection between rooms
-    #     for k in self.transition:
-    #         room1room2 = self.transition[k]
-    #         if len(room1room2) == 2:
-    #             self.Gr.add_edge(room1room2[0], room1room2[1])
+   
 
 
     def waypoint(self, nroom1, nroom2):

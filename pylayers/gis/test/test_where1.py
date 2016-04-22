@@ -2,9 +2,7 @@ from pylayers.gis.layout import *
 from pylayers.simul.link import *
 
 L = Layout('WHERE1.ini',force=True,check=False)
-L.buildGt()
-L.buildGv()
-L.buildGi()
+#L.build(verbose=True)
 #pdb.set_trace()
 #plt.ion()
 ##L.showG('st',aw=True,labels=True,nodelist=L.ldiffout)
