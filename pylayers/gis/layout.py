@@ -1495,7 +1495,7 @@ class Layout(PyLayers):
 
         hash_save = copy.deepcopy(self._hash)
 
-        pdb.set_trace()
+        
         # if check:
         #     self.check()
         
@@ -4764,7 +4764,7 @@ class Layout(PyLayers):
         # if ext == '.ini':
         #     self.saveini(self.filename)
 
-    def dumpr(self,graphs='stvirw']):
+    def dumpr(self,graphs='stvirw'):
         """ read a dump of given Graph
 
         Notes
@@ -4797,7 +4797,9 @@ class Layout(PyLayers):
 
         # retrieve md5 sum of the original ini file 
         #pdb.set_trace()
-        self._hash = self.Gs.node.pop(0)['hash']
+        if 's' in graphs:
+            self._hash = self.Gs.node.pop(0)['hash']
+            self.g2npy()
         #
         # fixing bug #136
         # update ncycles attributes of Gs from information in Gt
@@ -4830,6 +4832,7 @@ class Layout(PyLayers):
         if 't' in graphs :
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
+
 
 
 
@@ -8799,7 +8802,7 @@ class Layout(PyLayers):
             else:
                 # diffraction by half-plane detected
                 if k in self.degree[1]:
-                    self.ddiff[k]=(lcy,2*np.pi)
+                    self.ddiff[k]=(lcyk,2*np.pi)
 
 
     def buildGr(self):
