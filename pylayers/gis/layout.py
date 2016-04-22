@@ -310,7 +310,7 @@ class Layout(PyLayers):
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False,check=True):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,**kwargs):
         """ object constructor
 
         Parameters
@@ -409,19 +409,10 @@ class Layout(PyLayers):
             self.name[k] = []
 
         self.load(_filename)
-        # check layout integrity (default)
-        if check:
-            self.check()
-        
-        if not self.hasboundary:
-            self.boundary(dx=10,dy=10)
 
-        # # If the layout has already been built then load the built structure
-        # if not force:
-        #     try:
-        #         self.dumpr()
-        #     except:
-        #         pass
+        
+
+    
 
     def __repr__(self):
         st = '\n'
@@ -1402,7 +1393,7 @@ class Layout(PyLayers):
         
         self.g2npy()
         # 
-        self._hash = hashlib.md5(fileini)
+        self._hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
 
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
@@ -1504,6 +1495,12 @@ class Layout(PyLayers):
 
         hash_save = copy.deepcopy(self._hash)
 
+        pdb.set_trace()
+        # if check:
+        #     self.check()
+        
+        
+        self.boundary(dx=10,dy=10)
 
         rebuild = False
 
@@ -1522,9 +1519,10 @@ class Layout(PyLayers):
             ans = raw_input('Do you want to build the layout (y/N) ? ')
             if ans.lower()=='y':
                 self.build()
+                self.lbltg.append('s')
                 self.dumpw()
 
-        self.lbltg=['s']
+        
             
     
 
@@ -4737,10 +4735,12 @@ class Layout(PyLayers):
 
         """
         # create layout directory
+        # pdb.set_trace()
         path = os.path.join(basename,'struc','gpickle',self.filename)
 
         fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
-        self.Gs.add_node(0,hash=hashlib.md5(fileini).hexdigest())
+        _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
+        self.Gs.add_node(0,hash=_hash)
 
         if not os.path.isdir(path):
            os.mkdir(path)
@@ -4759,12 +4759,12 @@ class Layout(PyLayers):
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
-        self.Gs.pop(0)
-        root,ext = os.path.splitext(self.filename)
-        if ext == '.ini':
-            self.saveini(self.filename)
+        self.Gs.node.pop(0)
+        # root,ext = os.path.splitext(self.filename)
+        # if ext == '.ini':
+        #     self.saveini(self.filename)
 
-    def dumpr(self):
+    def dumpr(self,graphs='stvirw']):
         """ read a dump of given Graph
 
         Notes
@@ -4781,7 +4781,7 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['s','t','v','i','r','w']
+        
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
@@ -4796,6 +4796,7 @@ class Layout(PyLayers):
                 pass
 
         # retrieve md5 sum of the original ini file 
+        #pdb.set_trace()
         self._hash = self.Gs.node.pop(0)['hash']
         #
         # fixing bug #136

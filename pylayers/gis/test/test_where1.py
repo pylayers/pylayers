@@ -1,7 +1,7 @@
 from pylayers.gis.layout import *
 from pylayers.simul.link import *
 
-L = Layout('WHERE1.ini',force=True,check=False)
+L = Layout('defstr.ini',force=True,check=False)
 #L.build(verbose=True)
 #pdb.set_trace()
 #plt.ion()
