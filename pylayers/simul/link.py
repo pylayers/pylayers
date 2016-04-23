@@ -1370,7 +1370,7 @@ class DLink(Link):
         ############
         # Ctilde
         ############
-
+        print self.fGHz
 
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C=Ctilde()

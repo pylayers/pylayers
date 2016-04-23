@@ -1762,6 +1762,7 @@ class Layout(PyLayers):
             self.name[name] = [num]
         # update label
         self.labels[num] = str(num)
+
         if name not in self.display['layers']:
             self.display['layers'].append(name)
         return(num)
@@ -4058,17 +4059,11 @@ class Layout(PyLayers):
         """
         if _filename==[]:
             racine, ext = os.path.splitext(self.filename)
-            _filename = racine + '.str2'
             _fileini = racine + '.ini'
-            self.savestr2(_filename)
             self.saveini(_fileini)
-            print "structure saved in ", _filename
             print "structure saved in ", _fileini
         else:
             racine, ext = os.path.splitext(_filename)
-            if ext == '.str2':
-                self.savestr2(_filename)
-                print "structure saved in ", _filename
             if ext == '.ini':
                 self.saveini(_filename)
                 print "structure saved in ", _filename
@@ -4799,6 +4794,11 @@ class Layout(PyLayers):
         #pdb.set_trace()
         if 's' in graphs:
             self._hash = self.Gs.node.pop(0)['hash']
+            # update self.name
+            lseg = [ x for x in self.Gs.node if x >0]
+            for name in self.name:
+                self.name[name]=[x for x in lseg if self.Gs.node[x]['name']==name]
+              
             self.g2npy()
         #
         # fixing bug #136
@@ -5540,7 +5540,7 @@ class Layout(PyLayers):
                                    cp.vnodes[np.mod(i+1,lvn)]
                                    ,name='AIR'))
                     polys.append(cp)
-        #
+            #
             # 3. merge delaunay triangulation in order to obtain
             #   the larger convex polygons partioning
             #
@@ -7327,151 +7327,24 @@ class Layout(PyLayers):
         #
         vnodes = self.Gt.node[ncy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
-        indoor = self.Gt.node[ncy]['indoor']
-        if indoor:
-            lD = map(lambda y : (y,),filter(lambda x : x in
-                                            self.ldiffin,vpoints))
-        else:
-            lD = map(lambda y : (y,),filter(lambda x : x in
-                                            self.ldiffout,vpoints))
+        lD=[]
+        for x in vnodes:
+            if x < 0:
+                if self.ddiff.has_key(x):
+                    for y in self.ddiff[x][0]:
+                        if y == ncy:
+                            lD.append((x,))
+        # indoor = self.Gt.node[ncy]['indoor']
+        # if indoor:
+        #     lD = map(lambda y : (y,),filter(lambda x : x in
+        #                                     self.ldiffin,vpoints))
+        # else:
+        #     lD = map(lambda y : (y,),filter(lambda x : x in
+        #                                     self.ldiffout,vpoints))
 
         return lR,lT,lD
 
 
-    # def intercyGc2Gt(self,ncy,typ='source'):
-    #     """ return the list of interactions in Gt from a Gc cycle
-
-    #     Parameters
-    #     ----------
-
-    #     ncy : cycle number from Gc
-    #     typ : string
-    #         if 'source' connect source cycle
-    #         if 'target' connect target cycle
-
-    #     """
-
-    #     # list of interactions
-
-    #     lint = self.Gi.node
-    #     lTa=[]
-    #     lRa=[]
-    #     lDa=[]
-    #     if self.Gt.node[ncy].has_key('merged'):
-    #         cym = self.Gt.node[ncy]['merged']
-    #         lcy = self.Gc.node[cym]['merged']
-
-    #     else :
-    #         lcy=[ncy]
-    #     # lint = self.Gi.node
-    #     for c in lcy:
-    #         # list of tuple interactions (R|T)
-    #         lD = filter(lambda x: len(x)==1,lint)
-    #         lR = filter(lambda x: len(x)==2,lint)
-    #         lT = filter(lambda x: len(x)==3,lint)
-
-    #         # visible R|T source cycle is ncy
-
-    #         lR = filter(lambda x : x[1]==c,lR)
-    #         if typ=='source':
-    #             lT = filter(lambda x: x[1]==c,lT)
-    #         if typ=='target':
-    #             lT = filter(lambda x: x[2]==c,lT)
-
-
-    #         # Finding the diffraction points
-    #         # Diffraction points are different from indoor cycle and outdoor
-    #         # cycles
-    #         #
-    #         # TODO check wedge validity.
-    #         #
-    #         vnodes = self.Gt.node[ncy]['polyg'].vnodes
-    #         vpoints = filter(lambda x: x<0,vnodes)
-    #         indoor = self.Gt.node[ncy]['indoor']
-    #         if indoor:
-    #             lD = map(lambda y : (y,),filter(lambda x : x in
-    #                                             self.ldiffin,vpoints))
-    #         else:
-    #             lD = map(lambda y : (y,),filter(lambda x : x in
-    #                                             self.ldiffout,vpoints))
-    #         lTa.extend(lT)
-    #         lRa.extend(lR)
-    #         lDa.extend(lD)
-    #     return lRa,lTa,lDa
-
-
-#    def showGraph(self,**kwargs):
-#        """
-#        Parameters
-#        ----------
-#        print n,nb
-#        show : boolean
-#        fig
-#        nodes
-#        eded
-#        ndnd
-#        nded
-#        linewidth
-#        roomlis
-#        """
-#        defaults={'show':False,
-#                  'fig':[],
-#                  'ax':[],
-#                  'nodes':False,
-#                  'eded':True,
-#                  'ndnd':True,
-#                  'nded':True,
-#                  'linewidth':2,
-#                  'nodelist':[]
-#                  }
-#        for key, value in defaults.items():
-#            if kwargs.has_key(key):
-#                setattr(self, key, kwargs[key])
-#            else:
-#                setattr(self, key, value)
-#                kwargs[key]=value
-#        if kwargs['fig']==[]:
-#            fig = plt.figure()
-#            fig.set_frameon(True)
-#        else:
-#            fig = kwargs['fig']
-#        if kwargs['ax']==[]:
-#            ax = fig.gca()
-#        else:
-#            ax = kwargs['ax']
-#
-#        if graph=='t':
-#            G = self.Gt
-#            nx.draw(G,G.pos)
-#        if graph=='r':
-#            G = self.Gr
-#            nx.draw(G,G.pos)
-#        if graph=='s':
-#            G = self.Gs
-#            nx.draw(G,G.pos)
-#        if graph=='v':
-#            G = self.Gv
-#            nx.draw(G,self.Gs.pos)
-#
-#        for k,ncy in enumerate(self.Gt.node.keys()):
-#            self.Gt.node[ncy]['polyg'].plot()
-#        ax.axis('scaled')
-#        # Display doors and windows
-#        d = self.subseg()
-#        for ss in d.keys():
-#            if ss=='DOOR':
-#                color='red'
-#            if ss=='3D_WINDOW_GLASS':
-#                color='blue'
-#            if ss=='WINDOW_GLASS':
-#                color='cyan'
-#            for ns in d[ss]:
-#                np1,np2 = self.Gs.neighbors(ns)
-#                x  = [self.Gs.pos[np1][0],self.Gs.pos[np2][0]]
-#                y  = [self.Gs.pos[np1][1],self.Gs.pos[np2][1]]
-#                ax.plot(x,y,linewidth=2,color=color)
-#        if kwargs['show']:
-#            plt.show()
 
     def show(self,**kwargs):
         """ show layout

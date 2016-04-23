@@ -2,9 +2,6 @@ from pylayers.gis.layout import *
 from pylayers.simul.link import *
 
 L = Layout('TA-Office.ini',force=True)
-pdb.set_trace()
-L.buildGt()
-L.buildGvsh()
 ##L.build()
 #plt.ion()
 ##L.showG('st',aw=True,labels=True,nodelist=L.ldiffout)

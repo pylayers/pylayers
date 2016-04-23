@@ -10,16 +10,9 @@ for tL in lL:
     print  'Layout :',tL
     try:
         L=Layout(tL)
+        L.save()
     except:
         print 'Layout :',tL ,' problem'
-    try:
-        L.build()
-    except:
-        print 'Build issue in Layout :',tL
-
-
-    
-
 
 #f = plt.figure(figsize=(20,10))
 #plt.axis('off')
