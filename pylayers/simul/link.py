@@ -771,9 +771,10 @@ class DLink(Link):
         Parameters
         ----------
 
-
         filename_long : str
             complete path and filename
+
+
         """
 
 
@@ -1332,6 +1333,7 @@ class DLink(Link):
             print "Start Rays"
         tic = time.time()
         R = Rays(self.a,self.b)
+
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
             self.load(R,self.dexist['ray']['grpname'])
 
@@ -1370,8 +1372,7 @@ class DLink(Link):
         ############
         # Ctilde
         ############
-        print self.fGHz
-
+        
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C=Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
