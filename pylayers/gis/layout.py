@@ -6762,23 +6762,33 @@ class Layout(PyLayers):
     #             self.Gw.add_edges_from(combinations(d, 2))
 
     def buildGv(self):
+        """ build graph of visibility 
+
+
+        """
 
         Gv = nx.Graph()
         for c in self.Gt.nodes():
             if c != 0:
 
-                ext =  self.Gt.node[c]['polyg'].exterior
+                ext = self.Gt.node[c]['polyg'].exterior
                 vn  = self.Gt.node[c]['polyg'].vnodes
                 seg = list(vn[vn>0])
+                # exclude segments from the boundary
+                segvalid = [x for x in seg if 0 not in self.Gs.node[x]['ncycles']]
+                
                 ptdiff = [ v  for v in vn if v in self.ddiff and c in self.ddiff[v][0]]
-                entities = seg+ptdiff
+                entities = segvalid + ptdiff
+
                 combit = combinations(entities,2)
                 comb =  [(x[0],x[1]) for x in combit]
                 lines = [sh.LineString([self.Gs.pos[x[0]],self.Gs.pos[x[1]]]) for x in comb]
                 within = np.array([l.within(ext) for l in lines])
+
                 # looking for lines not superimposed with polygon exterior
                 ut = np.where(~within)[0]
-                comb= np.array(comb)
+                comb = np.array(comb)
+
                 [Gv.add_edge(v[0],v[1]) for v in comb[ut]]
 
 
@@ -6912,9 +6922,10 @@ class Layout(PyLayers):
         Notes
         -----
 
-        For each node > of graph Gs creates
-        4 different nodes associated to the same segment
+        For each node of graph Gv creates
+        5 different nodes associated to the same segment
 
+        (np,) D
         (ns,cy0) R -> cy0
         (ns,cy1) R -> cy1
         (ns,cy0,cy1) T 0->1
@@ -6923,6 +6934,7 @@ class Layout(PyLayers):
         """
         self.Gi = nx.DiGraph()
         self.Gi.pos = {}
+
         #
         # 1 ) Create nodes of Gi and their positions
         #
@@ -6937,12 +6949,10 @@ class Layout(PyLayers):
             if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
                 name = self.Gs.node[n]['name']
-                try:
-                    cy0 = cy[0]
-                    cy1 = cy[1]
-                except:
-                    import ipdb
-                    ipdb.set_trace()
+                assert(len(cy)==2)
+                cy0 = cy[0]
+                cy1 = cy[1]
+                
                 nei = self.Gs.neighbors(n)  # get neighbor
                 np1 = nei[0]
                 np2 = nei[1]
@@ -6953,9 +6963,11 @@ class Layout(PyLayers):
                 nl = np.dot(l, l)
                 ln = l / nl
 
-                delta = nl / 10
+                delta = nl / 10.
+
                 # On AIR or ABSORBENT there is no reflection
                 # except if n is a subsegment
+
                 if ((name!='AIR') & (name!='ABSORBENT')) or (n in self.lsss):
                     self.Gi.add_node((n,cy0))
                     self.Gi.add_node((n,cy1))
@@ -6963,21 +6975,18 @@ class Layout(PyLayers):
                     self.Gi.pos[(n, cy1)] = tuple(self.Gs.pos[n] - ln * delta)
 
                 # Through METAL or ABSORBENT there is no transmission
-                # except if n is a subsegment
+                # except if n has a subsegment
+
                 if (name!='METAL') & (name!='ABSORBENT') or (n in self.lsss):
                     self.Gi.add_node((n,cy0,cy1))
                     self.Gi.add_node((n,cy1,cy0))
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
                     self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
-                else :
-                    self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                    self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
-
-        
         #
         # 2) Establishing link between interactions
         #
+        
         for cy in self.Gt.node:
             if cy >0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
@@ -6989,26 +6998,36 @@ class Layout(PyLayers):
                             for y in self.ddiff[x][0]:
                                 if y == cy:
                                     npt.append(x)
-                
+        
 
                 nseg = filter(lambda x : x>0,vnodes)
                 vnodes = nseg+npt
+
                 for nstr in vnodes:
+
                     if nstr in self.Gv.nodes():
+                        li1 = []
                         if nstr>0:
                             cyo1 = self.Gs.node[nstr]['ncycles']
                             cyo1 = filter(lambda x : x!=cy,cyo1)[0]
+
                             # R , Tin , Tout
                             if cyo1>0:
                                 if (nstr,cy) in self.Gi.nodes():
-                                    li1 = [(nstr,cy),(nstr,cy,cyo1),(nstr,cyo1,cy)]
-                                else:# no reflection on airwall
-                                    li1 = [(nstr,cyo1,cy)]
+                                    li1.append((nstr,cy))
+                                if (nstr,cy,cyo1) in self.Gi.nodes():
+                                    li1.append((nstr,cy,cyo1))
+                                if (nstr,cyo1,cy) in self.Gi.nodes():
+                                    li1.append( (nstr,cyo1,cy))
+                                # if (nstr,cy) in self.Gi.nodes():
+                                #     li1 = [(nstr,cy),(nstr,cy,cyo1),(nstr,cyo1,cy)]
+                                # else:# no reflection on airwall
+                                #     li1 = [(nstr,cyo1,cy)]
                             else:
                                 if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
-                                else:
-                                    li1 =[]
+                                # else:
+                                #     li1 =[]
                         else:
                             # D
                             li1 =[(nstr,)]
@@ -7018,19 +7037,33 @@ class Layout(PyLayers):
 
                         for nstrb in lneighcy:
                             if nstrb in self.Gv.nodes():
+                                li2 = []
                                 if nstrb>0:
                                     cyo2 = self.Gs.node[nstrb]['ncycles']
                                     cyo2 = filter(lambda x : x!=cy,cyo2)[0]
                                     if cyo2>0:
                                         if (nstrb,cy) in self.Gi.nodes():
-                                            li2 = [(nstrb,cy),(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
-                                        else: #no reflection on airwall
-                                            li2 = [(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
+                                            li2.append((nstrb,cy))
+                                        if (nstrb,cy,cyo2) in self.Gi.nodes():
+                                            li2.append((nstrb,cy,cyo2))
+                                        if (nstrb,cyo2,cy) in self.Gi.nodes():
+                                            li2.append( (nstrb,cyo2,cy))
+                                        # if (nstrb,cy) in self.Gi.nodes():
+                                        #     li2 = [(nstrb,cy),(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
+                                        # else: #no reflection on airwall
+                                        #     li2 = [(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
                                     else:
                                         if (nstrb,cy) in self.Gi.nodes():
                                             li2 = [(nstrb,cy)]
                                 else:
                                     li2 = [(nstrb,)]
+
+
+                                # if cy==4:
+                                #     print nstr,nstrb
+                                #     print "li1",li1 
+                                #     print "li2",li2
+                                
 
                                 for i1 in li1:
                                     #print li1
