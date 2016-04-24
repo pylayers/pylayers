@@ -5210,10 +5210,7 @@ class Layout(PyLayers):
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
     def buildGt(self,check=False):
-        """ 
-        build graph of convex cycles 
-
-
+        """  build Gt the graph of convex cycles 
 
         Parameters
         ----------
@@ -5230,11 +5227,15 @@ class Layout(PyLayers):
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
         self.updateshseg()
-        X=sho.polygonize(self._shseg.values())
-        P=[x for x in X]
-        NP=[]
-
-        # II . make polygon convex
+        X = sho.polygonize(self._shseg.values())
+        P = [x for x in X]
+        NP = []
+        # remove cycle 0 (exterior) if it exists
+        try:
+            del(self.Gt.node[0])
+        except:
+            pass
+        # II . make pdeolygon convex
         # for each polygon :
         # - is polygon convex: 
         #   -yes : you're done !
@@ -5305,6 +5306,7 @@ class Layout(PyLayers):
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
         # IV  create Gt edges
+  
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
                 if n1!= n2:
@@ -8651,6 +8653,7 @@ class Layout(PyLayers):
         #
         #ldiff = list(np.hstack((self.degree[1],self.degree[2])).astype('int'))
         lpnt = [x for x in self.Gs.node if (x <0 and x not in self.degree[0]) ]
+        dl
         self.ddiff = {}
 
         for k in lpnt:

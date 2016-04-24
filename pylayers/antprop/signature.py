@@ -2989,7 +2989,7 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-        print "run"
+        
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
@@ -3664,8 +3664,7 @@ class Signatures(PyLayers,dict):
 
 
     def raysv(self,ptx=0,prx=1):
-
-        """ from signatures dict to 2D rays Vectorized version
+        """ transfrom dict of signatures into 2D rays - default vectorized version
 
         Parameters
         ----------
@@ -3686,9 +3685,9 @@ class Signatures(PyLayers,dict):
         -----
 
         This is a vectorized version of Signatures.rays.
-        This implementation take advantage of the np.ndarray
-        and calculate images and backtrace for block of signatures.
-        A block of signature gather all signatures with the same number of interaction.
+        This implementation takes advantage of the np.ndarray
+        and calculates images and backtrace for block of signatures.
+        A block of signatures gathers all signatures with the same number of interactions.
 
         For mathematical details see :
 
@@ -3726,6 +3725,7 @@ class Signatures(PyLayers,dict):
             prx= np.r_[prx,0.5]
 
         rays = Rays(ptx,prx)
+
         #
         # detect LOS situation
         #
@@ -3734,9 +3734,10 @@ class Signatures(PyLayers,dict):
         # lc  = self.L.cycleinline(self.source,self.target)
 
         #
-        # if source and target in the same merged cycle
+        # if source and target are in the same merged cycle
         # and ptx != prx
         #
+
         los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
         # convex cycle of each point
@@ -3763,7 +3764,9 @@ class Signatures(PyLayers,dict):
         return rays
 
     def backtrace(self, tx, rx, M):
-        ''' Warning :
+        ''' backtracing betwen tx and rx 
+
+        Warning :
             This is an attempt to vectorize the backtrace process.
             Despite it has been tested on few cases with succes,
             this is quite new need to be validated !!!
@@ -3777,7 +3780,7 @@ class Signatures(PyLayers,dict):
                 rx : ndarray
                     position of tx (2,)
                 M : dict
-                    position of intermediate point from self.image()
+                    position of intermediate points obtained from self.image()
 
             Return
             -------
@@ -3788,11 +3791,16 @@ class Signatures(PyLayers,dict):
 
             Notes
             -----
+
             dictionnary of intermediate coordinated :
             key = number_of_interactions
             value = nd array M with shape : (2,nb_signatures,nb_interactions)
             and 2 represent x and y coordinates
 
+            See Also
+            --------
+
+            pylayers.antprop.signature.image
 
         '''
 
@@ -3930,11 +3938,11 @@ class Signatures(PyLayers,dict):
                 #valid ray is : 0 < \alpha < 1 and 0< \beta < 1
 
                 # alpha
-                uvalidA= psolved[:,2]>0.
-                uvalidB= psolved[:,2]<1.
+                uvalidA = psolved[:,2]>0.
+                uvalidB = psolved[:,2]<1.
                 #beta
-                uvalidC= psolved[:,3] >= epsilon
-                uvalidD= psolved[:,3] <=1.-epsilon
+                uvalidC = psolved[:,3] >= epsilon
+                uvalidD = psolved[:,3] <=1.-epsilon
                 valid = uvalidA & uvalidB & uvalidC & uvalidD
                 # consider valid diffraction interactions
                 valid = valid | uD
@@ -3947,10 +3955,6 @@ class Signatures(PyLayers,dict):
                 psolved[uuD,:2] = ptr[:,0,uuD,kinter].T
 
                 pvalid = psolved[uvalid,:2]
-
-
-
-
 
 
                 # keep only valid rays for ptr and Mr

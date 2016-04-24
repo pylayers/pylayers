@@ -160,12 +160,7 @@ class Rays(PyLayers,dict):
                     ni = ni + nr*k
                     nl = nl + nr*(2*k+1)
                 s = s + '-----'+'\n'
-                s = s+'ni : '+str(ni)+'\n'
-                s = s+'nl : '+str(nl)+'\n'
-            else:
-                s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
-                nray = np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
-                s = 'N2Drays : '+ str(nray) + '\n'
+                s = s + 'N2Drays : '+ str(nray) + '\n'
                 s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
                 s = s + '#Rays/#Sig: '+ str( len(self)/(1.*self.nb_origin_sig) )
 
@@ -466,11 +461,13 @@ class Rays(PyLayers,dict):
 
     def extract(self,nr,L):
         """ Extract a single ray
+
         Parameters
         ----------
         ni : group of interactions
         nr : ray index in group of interactions
         L  : Layout
+
         """
 
 
@@ -521,58 +518,7 @@ class Rays(PyLayers,dict):
         r.fillinter(L)
         return(r)
 
-    # def extract(self,nr):
-    #     """ Extract a single ray
-
-    #     Parameters
-    #     ----------
-
-    #     nr : ray index in group of interactions
-
-    #     """
-
-
-    #     r = Rays(self.pTx,self.pRx)
-    #     r.is3d = self.is3D
-
-    #     nbi = self._ray2nbi[nr]
-    #     ur = np.where(self[nbi]['rayidx']==nr)[0]
-
-    #     #check if there if diffraction the group
-    #     if self[nbi].has_key('diffvect'):
-    #         diff = True
-    #         # check if the ray has diffraction interaction
-    #         inter = self.ray2iidx(nr)[:,0]
-    #         uD = np.where([i in (self[nbi]['diffidx']) for i in inter])[0]
-    #         if len(uD) ==0:
-    #             diff =False
-    #     else : 
-    #         diff =False
-
-
-    #     r[nbi]={}
-
-    #     for k in self[nbi].keys():
-
-    #         tab  = self[nbi][k]
-    #         if type(tab)==np.ndarray and k != 'nbrays':
-    #             if 'diff' in k:
-    #                 if diff :
-    #                     r[nbi][k] = tab[...,uD][...,np.newaxis]
-    #                 else:
-    #                     pass
-    #             else:
-    #                 r[nbi][k] = tab[...,ur][...,np.newaxis]
-
-    #         # manage diffslab which is a list
-    #         if diff and k =='diffslabs':
-    #             r[nbi]['diffslabs']=[self[nbi][k][uD]]
-    #             # r[nbi]['diffslabs']=[uD]
-                
-    #     r[nbi]['nbrays']=1
-
-    #     print diff
-    #     return(r)
+   
 
     def show(self,**kwargs):
         """  plot 2D rays within the simulated environment
@@ -817,11 +763,7 @@ class Rays(PyLayers,dict):
 
         r3d : Rays
 
-        Notes
-        -----
-
-        1.
-
+    
 
         """
 
@@ -1324,8 +1266,7 @@ class Rays(PyLayers,dict):
 
         L : Layout
 
-        Notes
-        -----
+       
 
         """
 
@@ -1416,10 +1357,7 @@ class Rays(PyLayers,dict):
 
                 self[k]['norm'] = np.zeros((3, k, nray))   # 3 x int x nray
 
-                #
-                # Warning : The following commented line assumes that all the segment number are contiguous
-                # self[k]['norm'][:,uwall[0],uwall[1]] = norm[nstrwall-1,:].T
-                #
+
 
                 # norm : 3 x i x r
                 #
@@ -1434,6 +1372,7 @@ class Rays(PyLayers,dict):
                 self[k]['norm'][2, udiff[0], udiff[1]] = np.ones(len(udiff[0]))
 
                 normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
+
                 assert normcheck.all()>0.99,pdb.set_trace()
 
 
@@ -1508,19 +1447,11 @@ class Rays(PyLayers,dict):
                 #
                 # scpr : i x r
                 #
-                #if k ==5:
-                #    pdb.set_trace()
-                #scpr = np.sum(vn*s_in, axis=0)
+                
                 scpr = np.sum(vn*si[:,0:-1,:], axis=0)
                 self[k]['scpr'] = scpr
                 self[k]['theta'] = np.arccos(abs(scpr))  # *180/np.pi
-                #if k ==5:
-                    #print "vsi :",self[k]['vsi'][:,:,43]
-                    #print "si :",si[:,0:-1,43]
-                    #print "vn :",vn[:,:,43]
-                    #print "scpr :",self[k]['scpr'][:,43]
-                    #print "scpr :",self[k]['scpr'][:,43]
-                    #print "theta :",self[k]['scpr'][:,43]
+                
 
                 def fix_colinear():
                     nw = np.sqrt(np.sum(w*w, axis=0))
@@ -1564,6 +1495,7 @@ class Rays(PyLayers,dict):
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+
                 # nw : i x r
                 w, nw = fix_colinear()
 
@@ -1682,8 +1614,9 @@ class Rays(PyLayers,dict):
                     #manage flat angle : diffraction by flat segment e.g. door limitation)
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
                     # get points positions
+                    pdb.set_trace()
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-                    # get associated slab index face_0,face_n
+                    # get associated slab ind.seex face_0,face_n
                     # self[k]['diffslabs']=[[L.sl[L.sla[y]]['index'] for y in x] for x in aseg]
                     # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
                     #diffslab = [ idslab0-idslabn ]
