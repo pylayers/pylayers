@@ -3050,6 +3050,14 @@ class Signatures(PyLayers,dict):
             R = [(np.eye(2),np.array([0,0]))]
 
             visited = [s]
+            if (s in lit) or (s[-1]==self.target):
+                anstr = np.array(map(lambda x: x[0],visited))
+                typ  = np.array(map(lambda x: len(x),visited))
+                try:
+                    self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
+                except:
+                    self[len(typ)] = np.vstack((anstr,typ))
+                cptsig +=1
             # stack is a list of iterators
             try:
                 stack = [iter(Gi[s])]
@@ -3187,7 +3195,7 @@ class Signatures(PyLayers,dict):
                             #showsig2(visited,self.L,tahe)
                             #pdb.set_trace()  
                             # sequence is valid and last interaction is in the list of targets   
-                            if interaction in lit:
+                            if (interaction in lit) or (interaction[-1]==self.target):
                                 anstr = np.array(map(lambda x: x[0],visited))
                                 typ  = np.array(map(lambda x: len(x),visited))
                                 try:

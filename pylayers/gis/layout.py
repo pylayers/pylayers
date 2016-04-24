@@ -7360,15 +7360,15 @@ class Layout(PyLayers):
         #
         # TODO check wedge validity.
         #
+        
         vnodes = self.Gt.node[ncy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
         lD=[]
-        for x in vnodes:
-            if x < 0:
-                if self.ddiff.has_key(x):
-                    for y in self.ddiff[x][0]:
-                        if y == ncy:
-                            lD.append((x,))
+        for x in vpoints:
+            if self.ddiff.has_key(x):
+                for y in self.ddiff[x][0]:
+                    if y == ncy:
+                        lD.append((x,))
         # indoor = self.Gt.node[ncy]['indoor']
         # if indoor:
         #     lD = map(lambda y : (y,),filter(lambda x : x in
