@@ -37,8 +37,8 @@ class PyLayers(object):
 
         """
 
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
+        members = [ x for x in self.__dict__.keys() if x not in dict.__dict__ ]
+        lmeth = [ x for x in np.sort(dir(self)) if x not in dict.__dict__]
 
         if typ=='mb':
             print np.sort(self.__dict__.keys())
