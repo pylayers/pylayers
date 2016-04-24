@@ -2994,14 +2994,14 @@ class Signatures(PyLayers,dict):
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         # list of interactions visible from source
-        lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
+        lisR,lisT,lisD = self.L.intercy(self.source,typ='source')
         if diffraction:
             lis  = lisT + lisR + lisD
         else:
             lis  = lisT + lisR
 
         # list of interactions visible from target
-        litT,litR,litD = self.L.intercy(self.target,typ='target')
+        litR,litT,litD = self.L.intercy(self.target,typ='target')
 
         if diffraction:
            lit  = litT + litR + litD

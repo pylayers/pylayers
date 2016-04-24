@@ -464,7 +464,7 @@ class Rays(PyLayers,dict):
 
         Parameters
         ----------
-        ni : group of interactions
+        
         nr : ray index in group of interactions
         L  : Layout
 
