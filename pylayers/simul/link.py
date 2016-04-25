@@ -1283,7 +1283,6 @@ class DLink(Link):
                 print "load signature"
         else :
             if kwargs['alg']==1:
-                pdb.set_trace()
                 Si.run(cutoff=kwargs['cutoff'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],

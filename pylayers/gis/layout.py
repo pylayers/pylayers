@@ -6763,13 +6763,14 @@ class Layout(PyLayers):
     #         if len(d) > 1:
     #             self.Gw.add_edges_from(combinations(d, 2))
 
-    def buildGv(self):
+    def buildGv_experimental(self):
         """ build graph of visibility 
 
 
         """
 
         Gv = nx.Graph()
+        
         for c in self.Gt.nodes():
             if c != 0:
 
@@ -6784,14 +6785,17 @@ class Layout(PyLayers):
 
                 combit = combinations(entities,2)
                 comb =  [(x[0],x[1]) for x in combit]
+
                 lines = [sh.LineString([self.Gs.pos[x[0]],self.Gs.pos[x[1]]]) for x in comb]
                 within = np.array([l.within(ext) for l in lines])
-
+                contain = np.array([ext.contains(l) for l in lines])
+                
                 # looking for lines not superimposed with polygon exterior
                 ut = np.where(~within)[0]
+               
                 comb = np.array(comb)
 
-                [Gv.add_edge(v[0],v[1]) for v in comb[ut]]
+                [ Gv.add_edge(v[0],v[1]) for v in comb[ut] ]
 
 
                 # diff diff processing
@@ -6804,118 +6808,118 @@ class Layout(PyLayers):
                 withind = np.array([l.within(ext2) for l in lined])
                 if len(withind)!=0:
                     utd = np.where(~withind)[0]
-                    dd= np.array(dd)
+                    dd = np.array(dd)
                     [Gv.add_edge(v[0],v[1]) for v in dd[utd]]
                 
         self.Gv = Gv 
+        
+    def buildGv(self, show=False):
+        """ build visibility graph
 
-    # def buildGv(self, show=False):
-    #     """ build visibility graph
+        Parameters
+        ----------
 
-    #     Parameters
-    #     ----------
+        show : boolean
+            default False
 
-    #     show : boolean
-    #         default False
+        Examples
+        --------
 
-    #     Examples
-    #     --------
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('TA-Office.ini')
+        >>> L.buildGt()
+        >>> Ga = L.buildGr()
+        >>> L.buildGv()
 
-    #     >>> from pylayers.gis.layout import *
-    #     >>> L = Layout('TA-Office.ini')
-    #     >>> L.buildGt()
-    #     >>> Ga = L.buildGr()
-    #     >>> L.buildGv()
+        Notes
+        -----
 
-    #     Notes
-    #     -----
+        This method exploits cycles convexity.
 
-    #     This method exploits cycles convexity.
+        """
 
-    #     """
+        self.Gv = nx.Graph()
+        #
+        # loop over cycles
+        #
+        self.dGv = {}  # dict of Gv graph
 
-    #     self.Gv = nx.Graph()
-    #     #
-    #     # loop over cycles
-    #     #
-    #     self.dGv = {}  # dict of Gv graph
+        for icycle in self.Gt.node:
+            if icycle!=0:
+                polyg = self.Gt.node[icycle]['polyg']
+                vnodes = polyg.vnodes
 
-    #     for icycle in self.Gt.node:
-    #         if icycle!=0:
-    #             polyg = self.Gt.node[icycle]['polyg']
-    #             vnodes = polyg.vnodes
+                npt  = filter(lambda x : x<0,vnodes)
+                nseg = filter(lambda x : x>0,vnodes)
 
-    #             npt  = filter(lambda x : x<0,vnodes)
-    #             nseg = filter(lambda x : x>0,vnodes)
+                airwalls = filter(lambda x : x in self.name['AIR'],nseg)
+                ndiff = [ x for x in npt if x in self.ddiff.keys()]
+                #
+                # Create a graph
+                #
+                Gv = nx.Graph()
+                #
+                # in convex case :
+                #
+                #    i)  every non aligned segments see each other
+                #
+                for nk in combinations(nseg, 2):
+                    nk0 = self.tgs[nk[0]]
+                    nk1 = self.tgs[nk[1]]
+                    tahe0 = self.tahe[:,nk0]
+                    tahe1 = self.tahe[:,nk1]
 
-    #             airwalls = filter(lambda x : x in self.name['AIR'],nseg)
-    #             ndiff = [ x for x in npt if x in self.ddiff.keys()]
-    #             #
-    #             # Create a graph
-    #             #
-    #             Gv = nx.Graph()
-    #             #
-    #             # in convex case :
-    #             #
-    #             #    i)  every non aligned segments see each other
-    #             #
-    #             for nk in combinations(nseg, 2):
-    #                 nk0 = self.tgs[nk[0]]
-    #                 nk1 = self.tgs[nk[1]]
-    #                 tahe0 = self.tahe[:,nk0]
-    #                 tahe1 = self.tahe[:,nk1]
+                    pta0 = self.pt[:,tahe0[0]]
+                    phe0 = self.pt[:,tahe0[1]]
+                    pta1 = self.pt[:,tahe1[0]]
+                    phe1 = self.pt[:,tahe1[1]]
 
-    #                 pta0 = self.pt[:,tahe0[0]]
-    #                 phe0 = self.pt[:,tahe0[1]]
-    #                 pta1 = self.pt[:,tahe1[0]]
-    #                 phe1 = self.pt[:,tahe1[1]]
+                    A0 = np.vstack((pta0,phe0,pta1))
+                    A0 = np.hstack((A0,np.ones((3,1))))
 
-    #                 A0 = np.vstack((pta0,phe0,pta1))
-    #                 A0 = np.hstack((A0,np.ones((3,1))))
+                    A1 = np.vstack((pta0,phe0,phe1))
+                    A1 = np.hstack((A1,np.ones((3,1))))
 
-    #                 A1 = np.vstack((pta0,phe0,phe1))
-    #                 A1 = np.hstack((A1,np.ones((3,1))))
+                    d0 = np.linalg.det(A0)
+                    d1 = np.linalg.det(A1)
 
-    #                 d0 = np.linalg.det(A0)
-    #                 d1 = np.linalg.det(A1)
+                    if not ((abs(d0)<1e-3) & (abs(d1)<1e-3)):
+                        if ((0 not in self.Gs.node[nk[0]]['ncycles']) and 
+                           (0 not in self.Gs.node[nk[1]]['ncycles'])) : 
+                            Gv.add_edge(nk[0],nk[1])
 
-    #                 if not ((abs(d0)<1e-3) & (abs(d1)<1e-3)):
-    #                     Gv.add_edge(nk[0],nk[1])
+                #
+                # Handle diffraction points
+                #
+                #    ii) all non adjascent valid diffraction points see each other
+                #    iii) all valid diffraction points see segments non aligned
+                #    with adjascent segments
 
-    #             #
-    #             # Handle diffraction points
-    #             #
-    #             #    ii) all non adjascent valid diffraction points see each other
-    #             #    iii) all valid diffraction points see segments non aligned
-    #             #    with adjascent segments
+                ndiffvalid =  [ x for x in ndiff if icycle in self.ddiff[x][0] ]
 
-    #             ndiffvalid =  [ x for x in ndiff if icycle in self.ddiff[x][0] ]
+                # non adjascent segment of vnodes see valid diffraction points
+                
+                for idiff in ndiffvalid:
+                    # idiff segment neighbors
+                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                    # segvalid : not adjascent segment
+                    seen_from_neighbors=[]
+                    for x in nsneigh:
+                        neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles']]
+                        seen_from_neighbors += neighbx
+                    
+                    for ns in seen_from_neighbors:
+                        Gv.add_edge(idiff,ns)
 
-    #             # non adjascent segment of vnodes see valid diffraction points
-    #             for idiff in ndiffvalid:
-    #                 # idiff segment neighbors
-    #                 nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
-    #                 # segvalid : not adjascent segment
-    #                 # seen from neighbors
-    #                 for x in nsneigh:
-    #                     seen_from_neighbors.append(nx.neighbors(Gv,x))
-    #                 #segvalid = [ x for x in nseg if x in nx.neighbors(Gv,nsneigh)]
-    #                 # nbidiff valid
-    #                 nsneigh =  [ x for x in nsneigh if x not in airwalls]
-    #                 # excluded diffraction points
+                    # for npoint in ndiffvalid:
+                    #     if npoint !=idiff:
+                    #         Gv.add_edge(idiff,npoint)
+                #
+                # Graph Gv composition
+                #
 
-    #                 for ns in segvalid:
-    #                     Gv.add_edge(idiff,ns)
-
-    #                 for npoint in ndiffvalid:
-    #                     if npoint !=idiff:
-    #                         Gv.add_edge(idiff,npoint)
-    #             #
-    #             # Graph Gv composition
-    #             #
-
-    #             self.Gv  = nx.compose(self.Gv, Gv)
-    #           self.dGv[icycle] = Gv
+                self.Gv  = nx.compose(self.Gv, Gv)
+                self.dGv[icycle] = Gv
 
 
     def buildGi(self):
