@@ -1515,12 +1515,14 @@ class Layout(PyLayers):
             rebuild = True
 
         # build and dump
+
         if rebuild:  
-            ans = raw_input('Do you want to build the layout (y/N) ? ')
-            if ans.lower()=='y':
-                self.build()
-                self.lbltg.append('s')
-                self.dumpw()
+            #ans = raw_input('Do you want to build the layout (y/N) ? ')
+            #if ans.lower()=='y':
+            print "Rebuilding Layout"
+            self.build()
+            self.lbltg.append('s')
+            self.dumpw()
 
         
             
@@ -5164,8 +5166,24 @@ class Layout(PyLayers):
     #             self.del_segment(d,verbose=False)
     #     return ncpol
 
-    def pltlines(self,lines,fig=[],ax=[],color='r'):
+    def pltlines(self,lines,fig=[],ax=[],color='r',alpha=1):
         """  plot a line with a specified color and transparency
+
+        Parameters
+        -----------
+
+        lines : shapely lines
+        fig
+        ax 
+        color  : string 
+        alpha  : float 
+            transparency
+
+        See Also
+        --------
+        
+        pylayers.gis.layout.Layout.plot
+
         """
         if fig == []:
             fig=plt.gcf()
@@ -5173,7 +5191,7 @@ class Layout(PyLayers):
             ax=plt.gca()
 
         c = np.array([l.xy for l in lines])
-        [ax.plot(x[0,:],x[1,:],color=color) for x in c]
+        [ax.plot(x[0,:],x[1,:],color=color,alpha=alpha) for x in c]
         plt.axis(self.ax)
         plt.draw()
 
@@ -9787,6 +9805,40 @@ class Layout(PyLayers):
                             sigarr = np.hstack((sigarr, np.array([[it], [2]])))
 
         return sigarr
+
+
+    def plot(self,fig=[],ax=[]):
+        """ plot the layout
+
+        Parameters
+        ---------
+
+        fig 
+        ax 
+
+        """
+
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+
+        k = self.Gs.pos.keys()
+        v = self.Gs.pos.values()
+        
+        kk = np.array(k)
+        vv = np.array(v)
+        
+        w = [ str(x) for x in kk ]
+        
+        [ ax.text(vv[i,0],vv[i,1],w[i]) for i in range(len(w)) ]
+        
+        ax.scatter(vv[:,0],vv[:,1])
+        ML = sh.MultiLineString(self._shseg.values())
+        
+        self.pltlines(ML,color='k',fig=fig,ax=ax)
+
+        return fig,ax
 
 
 
