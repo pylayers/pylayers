@@ -1465,12 +1465,14 @@ class Layout(PyLayers):
 
 
         filename,ext=os.path.splitext(_filename)
+        newfile=False
         if ext=='.osm':
             filename = pyu.getlong(_filename,pstruc['DIROSM'])
             if os.path.exists(filename):
                 self.loadosm(_filename)
             else:
                 self.filename = _filename
+                newfile=True
                 print "new file",self.filename
         
         elif ext=='.ini':
@@ -1479,6 +1481,7 @@ class Layout(PyLayers):
                 self.loadini(_filename)
             else:
                 self.filename = _filename
+                newfile=True
                 print "new file",self.filename
         else:
             raise NameError('layout filename extension not recognized')
@@ -1492,10 +1495,6 @@ class Layout(PyLayers):
                 self.geomfile()
             except:
                 print "problem to construct geomfile"
-
-        hash_save = copy.deepcopy(self._hash)
-
-        
         # if check:
         #     self.check()
         
@@ -1504,29 +1503,28 @@ class Layout(PyLayers):
 
         rebuild = False
 
-        if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
-            path = os.path.join(basename,'struc','gpickle',self.filename)
-            self.dumpr('s')
-            if self._hash != hash_save:
-                rebuild = True 
-            else:
-                self.dumpr('tvirw')
-        else: 
-            rebuild = True
 
-        # build and dump
+        if not newfile :
+            hash_save = copy.deepcopy(self._hash)
 
-        if rebuild:  
-            #ans = raw_input('Do you want to build the layout (y/N) ? ')
-            #if ans.lower()=='y':
-            print "Rebuilding Layout"
-            self.build()
-            self.lbltg.append('s')
-            self.dumpw()
+            if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
+                path = os.path.join(basename,'struc','gpickle',self.filename)
+                self.dumpr('s')
+                if self._hash != hash_save:
+                    rebuild = True 
+                else:
+                    self.dumpr('tvirw')
+            else: 
+                rebuild = True
 
-        
             
-    
+            # build and dump
+            if rebuild:  
+                ans = raw_input('Do you want to build the layout (y/N) ? ')
+                if ans.lower()=='y':
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
@@ -2709,7 +2707,7 @@ class Layout(PyLayers):
             old_nbss = 0
         # update the number of subsegments for self.Nss
         deltaNss= new_nbss - old_nbss
-        print deltaNss
+        # print deltaNss
         if new_nbss != 0:
             self.Gs.node[s1]['ss_name'] = [data['ss_name']]
             self.Nss += deltaNss

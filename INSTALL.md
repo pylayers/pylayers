@@ -8,7 +8,7 @@
 
 ## Linux / OS X
 
-The prefer way to install PyLayers is to first install the free python distribution [Anaconda](https://store.continuum.io/cshop/anaconda/) on your platform. 
+The prefered way to install PyLayers is to first install the free python distribution [Anaconda](https://store.continuum.io/cshop/anaconda/) on your platform. 
 By doing so, you're installing most of the required dependencies.
 
 1. Download [Anaconda](https://store.continuum.io/cshop/anaconda/)
