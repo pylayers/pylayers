@@ -168,7 +168,7 @@ def gidl(g):
    Returns
    -------
 
-   gr
+   gr : A graph 
 
    """
 
@@ -177,7 +177,15 @@ def gidl(g):
     for n in g.nodes():
         if len(n)>1:
             edlist.append(n)
-    gr=g.subgraph(edlist)
+    gr = g.subgraph(edlist)
+    for k in gr.edge:
+        for k1 in gr.edge[k]:
+            ke = gr.edge[k][k1]['output'].keys()
+            va = gr.edge[k][k1]['output'].values()
+            keva = zip(ke,va)
+            keva_valid = [ x for x in keva if len(x[0])>1]
+            gr.edge[k][k1]['output']=dict(keva_valid)
+
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
     return(gr)
@@ -3206,7 +3214,8 @@ class Signatures(PyLayers,dict):
                                 #print visited,len(stack),cptsig  
 
                             # move forward even when arrived in the target cycle
-                            
+                            if (-8,) in visited:
+                                pdb.set_trace()
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
