@@ -213,14 +213,6 @@ as the state of the current <code class="docutils literal"><span class="pre">dis
 <li><code class="docutils literal"><span class="pre">.osm</span></code> : an xml file which can be edited with
 <a class="reference external" href="http://josm.openstreetmap.de/">JOSM</a></li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.gis.layout import *
-from pylayers.util.project import *
-%matplotlib inline
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Layout:Mayavi is not installed
-</pre></div>
-</div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
 <h2>Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
@@ -229,271 +221,29 @@ with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <code class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></code> directory of the
 project. The project root directory is defined in the <code class="docutils literal"><span class="pre">$BASENAME</span></code>
 environment variable.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSTRUC&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">struc</span><span class="o">/</span><span class="nb">str</span>
-</pre></div>
-</div>
 <p><code class="docutils literal"><span class="pre">pstruc</span></code> is a dictionnary which gathers all directories which are used
 in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">pstruc</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;DIRANT&#39;</span><span class="p">:</span> <span class="s1">&#39;ant&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRBODY&#39;</span><span class="p">:</span> <span class="s1">&#39;body&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRC3D&#39;</span><span class="p">:</span> <span class="s1">&#39;body/c3d&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRCIR&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRCT&#39;</span><span class="p">:</span> <span class="s1">&#39;output/Ct&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRFUR&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/furnitures&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRGEOM&#39;</span><span class="p">:</span> <span class="s1">&#39;geom&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRGIS&#39;</span><span class="p">:</span> <span class="s1">&#39;gis&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRH&#39;</span><span class="p">:</span> <span class="s1">&#39;output/H&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRIMAGE&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/images&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRINI&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/ini&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRLCH&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRLNK&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRMAT&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRMAT2&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRMES&#39;</span><span class="p">:</span> <span class="s1">&#39;meas&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRNETSAVE&#39;</span><span class="p">:</span> <span class="s1">&#39;netsave&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIROOSM&#39;</span><span class="p">:</span> <span class="s1">&#39;gis/osm&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIROSM&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/osm&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRPICKLE&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/gpickle&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRR2D&#39;</span><span class="p">:</span> <span class="s1">&#39;output/r2d&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRR3D&#39;</span><span class="p">:</span> <span class="s1">&#39;output/r3d&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRSIG&#39;</span><span class="p">:</span> <span class="s1">&#39;output/sig&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRSLAB&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRSLAB2&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRSTRUC&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/str&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRSTRUC2&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/str&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRTRA&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRTUD&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRTx&#39;</span><span class="p">:</span> <span class="s1">&#39;output/Tx001&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRWEAR&#39;</span><span class="p">:</span> <span class="s1">&#39;body/wear&#39;</span><span class="p">,</span>
- <span class="s1">&#39;DIRWRL&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/wrl&#39;</span><span class="p">}</span>
-</pre></div>
-</div>
 <p>The structure of the <code class="docutils literal"><span class="pre">.osm</span></code> file is shown below</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>%%bash
-
-    cd $BASENAME/struc
-    ls *.osm
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Jimmy</span><span class="o">.</span><span class="n">osm</span>
-<span class="n">nonconvex</span><span class="o">.</span><span class="n">osm</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>%%bash
-    cd $BASENAME/struc
-    head DLR.osm
-    echo &#39;---&#39;
-    tail -17 DLR.osm
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>head: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
-tail: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
-</pre></div>
-</div>
 <p>To read a new layout in osm format :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;DLR.ini&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_35_0.png" src="../../_images/LayoutEditor_35_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>filestr :  DLR.ini
-filematini :  matDB.ini
-fileslabini :  slabDB.ini
-filegeom :  DLR.off
-boundaries  [-6.571295099826252, 38.37510026097863, -11.339789148099044, 11.170751733658253]
-number of Points : 105
-number of Segments : 124
-number of Sub-Segments : 30
-Gs Nodes :  229
-Gs Edges :  248
-Gt Nodes :  20
-Gt Edges :  0
-vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
-poly = Gt.node[Nc][&#39;cycle&#39;].polyg
-Gr Nodes    : 0
-Gr Edges    : 0
-Nc  = Gr.node[nroom][&#39;cycles&#39;]
-</pre></div>
-</div>
 <p>The different graphs associated with the layout are then built</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-split
-check len(ncycles) == 2 passed
-</pre></div>
-</div>
 <p>The topological graph <img src="../../_images/mathmpl/math-3604bc74d1.png" style="position: relative; bottom: -6px"/> or graph of non overlapping
 cycles.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
-<span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_40_0.png" src="../../_images/LayoutEditor_40_0.png" />
 <p>The graph of room <img src="../../_images/mathmpl/math-ba7f66fdf0.png" style="position: relative; bottom: -6px"/>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-<span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_42_0.png" src="../../_images/LayoutEditor_42_0.png" />
 <p>The graph of waypath <img src="../../_images/mathmpl/math-4c02c53444.png" style="position: relative; bottom: -6px"/>. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-<span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_44_0.png" src="../../_images/LayoutEditor_44_0.png" />
 <p>The graph of visibility <img src="../../_images/mathmpl/math-d3189f9945.png" style="position: relative; bottom: -5px"/></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
-<span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_46_0.png" src="../../_images/LayoutEditor_46_0.png" />
 <p>The graph of interactions <img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -6px"/> used to determine the
 ray signatures.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
-<span class="n">b</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_48_0.png" src="../../_images/LayoutEditor_48_0.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
 <h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>filestr :  DLR.ini
-filematini :  matDB.ini
-fileslabini :  slabDB.ini
-filegeom :  DLR.off
-boundaries  [-6.571295099826252, 38.37510026097863, -11.339789148099044, 11.170751733658253]
-number of Points : 105
-number of Segments : 133
-number of Sub-Segments : 30
-Gs Nodes :  238
-Gs Edges :  266
-Gt Nodes :  30
-Gt Edges :  76
-vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
-poly = Gt.node[Nc][&#39;cycle&#39;].polyg
-Gr Nodes    : 24
-Gr Edges    : 21
-Nc  = Gr.node[nroom][&#39;cycles&#39;]
-</pre></div>
-</div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
 are exploited in <code class="docutils literal"><span class="pre">showGs()</span></code> vizualisation method.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">display</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s1">&#39;WALL&#39;</span><span class="p">,</span>
- <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="s1">&#39;box&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">6.571295099826252</span><span class="p">,</span>
-  <span class="mf">38.37510026097863</span><span class="p">,</span>
-  <span class="o">-</span><span class="mf">11.339789148099044</span><span class="p">,</span>
-  <span class="mf">11.170751733658253</span><span class="p">],</span>
- <span class="s1">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;edlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s1">&#39;edlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
- <span class="s1">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
- <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WALL&#39;</span><span class="p">,</span> <span class="s1">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s1">&#39;AIR&#39;</span><span class="p">,</span> <span class="s1">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span> <span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
- <span class="s1">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;AIR&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;WINDOW&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;METALIC&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;PLASTERBOARD_14CM&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;DOOR&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;FLOOR&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;METAL&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;PARTITION&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;PLASTERBOARD_10CM&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;CEIL&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;CONCRETE_6CM3D&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;CONCRETE_15CM3D&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;WALLS&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;WOOD&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;CONCRETE_7CM3D&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;PILLAR&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;ABSORBENT&#39;</span><span class="p">],</span>
- <span class="s1">&#39;ndlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s1">&#39;ndlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
- <span class="s1">&#39;ndsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;overlay&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s1">&#39;overlay_axis&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">6.571295099826252</span><span class="p">,</span>
-  <span class="mf">38.37510026097863</span><span class="p">,</span>
-  <span class="o">-</span><span class="mf">11.339789148099044</span><span class="p">,</span>
-  <span class="mf">11.170751733658253</span><span class="p">],</span>
- <span class="s1">&#39;overlay_file&#39;</span><span class="p">:</span> <span class="s1">&#39;DLR4991.png&#39;</span><span class="p">,</span>
- <span class="s1">&#39;overlay_flip&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
- <span class="s1">&#39;scaled&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;subseg&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;subsegnb&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;thin&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s1">&#39;ticksoff&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Init&#39;</span><span class="p">,</span>
- <span class="s1">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
-</pre></div>
-</div>
 <div class="section" id="layers">
 <h3>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -544,7 +294,7 @@ are exploited in <code class="docutils literal"><span class="pre">showGs()</span
 <p>The command L.editor() launches an interactive editor. The state machine
 is implemented in module <code class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></code>.</p>
 <p>To have an idea of all available options, look in the
-<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
+<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.ne%20w_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.ne%20w_state</a>&gt;`__
 module</p>
 <p>All bug correction and ergonomic improvement of this editor is welcome.
 Just pull request your modifications.</p>
@@ -557,9 +307,15 @@ solution.</p>
 <ul class="simple">
 <li>A create points mode CP</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span></span>+ left clic   : free point
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>+ left clic   : free point
 + right clic  : same x point
 + center clic : same y point
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-1-3fbadf730daa&gt;&quot;, line 1
+    + left clic   : free point
+              ^
+SyntaxError: invalid syntax
 </pre></div>
 </div>
 <ul class="simple">
@@ -577,29 +333,6 @@ solution.</p>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
-<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;fileoverlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;http://images.wikia.com/theoffice/images/9/9e/Layout.jpg&#39;</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
-<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;scaled&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;ticksoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2abeff449690&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2abeff549990&gt;)
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2abeff54e4d0&gt;
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_77_2.png" src="../../_images/LayoutEditor_77_2.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h3>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
@@ -624,7 +357,7 @@ meters) between the two points.</li>
 <p>In that sequence of operation it is useful to rescale the figure with
 &#8216;r&#8217;.</p>
 <p>At that stage, it is possible to start creating points</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&#39;b&#39;  : selct a segment
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>&#39;b&#39;  : selct a segment
 &#39;l&#39;  : select activelayer
 &#39;i&#39;  : back to init state
 &#39;e&#39;  : edit segment
@@ -640,18 +373,15 @@ meters) between the two points.</li>
 &#39;w&#39;  : display all layers
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-2-f38a305b0b72&gt;&quot;, line 1
+    &#39;b&#39;  : selct a segment
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
 </div>
 <div class="section" id="vizualisation-of-the-layout">
 <h3>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/LayoutEditor_87_0.png" src="../../_images/LayoutEditor_87_0.png" />
 <p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> with a negative index is a point.</p>
 <p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>

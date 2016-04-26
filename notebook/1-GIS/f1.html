@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; Python 1 documentation</title>
+    <title>Effect of Modyfiying the Nature of Sub-Segments &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -110,7 +110,8 @@
     <p>If you use the software, please consider
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
-	<ul class="simple">
+	<ul>
+<li><a class="reference internal" href="#">Effect of Modyfiying the Nature of Sub-Segments</a></li>
 </ul>
 
     
@@ -124,9 +125,75 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p>An Ezone is an objet which gathers vector and raster information from a
-1 degree by 1 degree tile of earth</p>
-<p>An <code class="docutils literal"><span class="pre">Ezone</span></code> can be obtained from a point (longitude,Latitude)</p>
+  <div class="section" id="effect-of-modyfiying-the-nature-of-sub-segments">
+<h1>Effect of Modyfiying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modyfiying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
+<p>This notebook illustrates a simple ray tracing simulation with different
+material properties for a single segment separating 2 rooms which
+contains multi subsegments. The noteboook illustrates in details the
+whole steps.</p>
+<p>Let start by loading a simple layout with 2 single rooms. The multi
+subsegment appears in the middle with the red vertical lines. Each
+subsegment is materialized by a segment.</p>
+<div class="figure" id="id1">
+<img alt="png" src="../../_images/Multisubsegments_5_0.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<p>The studied configuration is composed of a simple 2 rooms building
+separated by a subsegment which has a multi subsegment attribute. The
+attribute of the subsegment can be changed with the method
+<code class="docutils literal"><span class="pre">`chgmss</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/%20pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html">http://pylayers.github.io/%20pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html</a>&gt;`__
+(change multisubsegment). In the example WOOD in the lower part then
+10cm of AIR then wood again until the ceiling.</p>
+<p>As the Layout structure has been modified it is required to rebuild the
+structure.</p>
+<p>The <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> graph dictionnary has the following structure</p>
+<p>We define now two points which are the termination of a radio link.</p>
+<div class="figure" id="id2">
+<img alt="png" src="../../_images/Multisubsegments_17_1.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<p>A link is the set of a layout and 2 termination points.</p>
+<div class="figure" id="id3">
+<img alt="png" src="../../_images/Multisubsegments_19_0.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<div class="figure" id="id4">
+<img alt="png" src="../../_images/Multisubsegments_21_0.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<p>On the figure above, we can see the Tx and Rx each placed in a different
+room apart from a wall with a subsegement placed in the middle. Then for
+evaluating the radio link, simply type:</p>
+<div class="figure" id="id5">
+<img alt="png" src="../../_images/Multisubsegments_25_0.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<div class="figure" id="id6">
+<img alt="png" src="../../_images/Multisubsegments_26_0.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<div class="figure" id="id7">
+<img alt="png" src="../../_images/Multisubsegments_34_2.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<div class="figure" id="id8">
+<img alt="png" src="../../_images/Multisubsegments_35_1.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<div class="figure" id="id9">
+<img alt="png" src="../../_images/Multisubsegments_35_2.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+<p>We have modified successively the nature of the 3 surfaces in the sub
+segment placed in the sepataion partition. The first was AIR, the second
+WOOD and the third METAL. As the subsegment is placed on the LOS path
+the blockage effect is clearly visible. The chosen antennas were
+omnidirectional <code class="docutils literal"><span class="pre">Antenna('Omni')</span></code></p>
+<div class="figure" id="id10">
+<img alt="png" src="../../_images/Multisubsegments_37_1.png" />
+<p class="caption"><span class="caption-text">png</span></p>
+</div>
+</div>
 
 
           </div>
@@ -142,7 +209,7 @@
       Last updated on avril 26, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/1-GIS/Downloading.txt"
+    <a href="../../_sources/notebook/1-GIS/f1.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>

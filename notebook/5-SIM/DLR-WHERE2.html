@@ -129,7 +129,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="example-of-a-trajectory-synthesis-in-the-dlr-where2-environment">
+  <div class="code python highlight-python"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>mardi 26 avril 2016, 14:23:16 (UTC+0200)
+</pre></div>
+</div>
+<div class="section" id="example-of-a-trajectory-synthesis-in-the-dlr-where2-environment">
 <h1>Example of a trajectory synthesis in the DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-the-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
 <p>The document describing the measurement performed in the DLR environment
 is <a class="reference external" href="http://www.kn-s.dlr.de/where2/documents/Deliverables/Deliverable-D4.4.pdf">WHERE2 Deliverable D4.4 Test and Evaluation of the Integrated System
@@ -198,8 +204,7 @@ run a full simulation and returns a list of channel impulse response.</p>
             <span class="n">Si</span>  <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
             <span class="n">ctxp</span> <span class="o">=</span> <span class="n">ctx</span>
             <span class="n">crxp</span> <span class="o">=</span> <span class="n">crx</span>
-            <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span><span class="n">algo</span>
-<span class="o">=</span><span class="s1">&#39;old&#39;</span><span class="p">)</span>
+            <span class="n">Si</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
         <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
         <span class="c1">#r2d.show(S.L)</span>
 
@@ -225,10 +230,6 @@ run a full simulation and returns a list of channel impulse response.</p>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>check len(ncycles) == 2 ... passed !
-check x,y = Gs.node[seg][&#39;ncycles&#39;] ; seg in Gt[x][y][&#39;segment&#39;] ... passed !
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;DLR WP4 WHERE2 measurement site&#39;</span>
@@ -236,8 +237,8 @@ check x,y = Gs.node[seg][&#39;ncycles&#39;] ; seg in Gt[x][y][&#39;segment&#39;]
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_7_0.png" src="../../_images/DLR-WHERE2_7_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+<img alt="../../_images/DLR-WHERE2_8_0.png" src="../../_images/DLR-WHERE2_8_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#S.show3()</span>
 </pre></div>
 </div>
 <p>We have a list of static Anchor Nodes. Those values correspond to the
@@ -279,10 +280,10 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x2b4c94771d90&gt;]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x2ac3752e1f10&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_13_1.png" src="../../_images/DLR-WHERE2_13_1.png" />
+<img alt="../../_images/DLR-WHERE2_14_1.png" src="../../_images/DLR-WHERE2_14_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
 <p><code class="docutils literal"><span class="pre">linevect</span></code> function allows to define a linear trajectory from <code class="docutils literal"><span class="pre">ptt</span></code>
 along direction <code class="docutils literal"><span class="pre">vec</span></code>.</p>
@@ -302,17 +303,17 @@ along direction <code class="docutils literal"><span class="pre">vec</span></cod
 <div class="highlight-python"><div class="highlight"><pre><span></span>Warning : no furniture file loaded
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b4c944617d0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b4c944ca850&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ac374ee1550&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2ac3751bef50&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_18_2.png" src="../../_images/DLR-WHERE2_18_2.png" />
+<img alt="../../_images/DLR-WHERE2_19_2.png" src="../../_images/DLR-WHERE2_19_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;W1compensate&#39;</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_20_0.png" src="../../_images/DLR-WHERE2_20_0.png" />
+<img alt="../../_images/DLR-WHERE2_21_0.png" src="../../_images/DLR-WHERE2_21_0.png" />
 <p>running the simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -324,19 +325,27 @@ along direction <code class="docutils literal"><span class="pre">vec</span></cod
 
 AttributeError                            Traceback (most recent call last)
 
-&lt;ipython-input-12-efbe84644bc4&gt; in &lt;module&gt;()
+&lt;ipython-input-13-efbe84644bc4&gt; in &lt;module&gt;()
 ----&gt; 1 tcir = evalcir(S,wav,cutoff=4)
 
 
-&lt;ipython-input-2-3dd30752409b&gt; in evalcir(S, wav, cutoff)
-     36             ctxp = ctx
+&lt;ipython-input-3-dcdd07e668b5&gt; in evalcir(S, wav, cutoff)
      37             crxp = crx
----&gt; 38             Si.run5(cutoff=cutoff,algo
-     39 =&#39;old&#39;)
-     40         r2d = Si.rays(t,r)
+     38             Si.run(cutoff=cutoff)
+---&gt; 39         r2d = Si.rays(t,r)
+     40         #r2d.show(S.L)
+     41
 
 
-AttributeError: &#39;Signatures&#39; object has no attribute &#39;run5&#39;
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/signature.pyc in rays(self, ptx, prx)
+   3659                     # --&gt; sig2ray
+   3660
+-&gt; 3661                     isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
+   3662
+   3663                     if isray:
+
+
+AttributeError: &#39;Signature&#39; object has no attribute &#39;sig2ray&#39;
 </pre></div>
 </div>
 <p>Saving the data in pickle format</p>
@@ -387,15 +396,15 @@ AttributeError: &#39;Signatures&#39; object has no attribute &#39;run5&#39;
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_29_1.png" src="../../_images/DLR-WHERE2_29_1.png" />
+<img alt="../../_images/DLR-WHERE2_30_1.png" src="../../_images/DLR-WHERE2_30_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b4c97873850&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b4c97873ad0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ac3753917d0&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2ac3753a7c90&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_30_1.png" src="../../_images/DLR-WHERE2_30_1.png" />
+<img alt="../../_images/DLR-WHERE2_31_1.png" src="../../_images/DLR-WHERE2_31_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -407,7 +416,7 @@ AttributeError: &#39;Signatures&#39; object has no attribute &#39;run5&#39;
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-18-029939bf9a94&gt; in &lt;module&gt;()
+&lt;ipython-input-19-029939bf9a94&gt; in &lt;module&gt;()
       1 plt.figure(figsize=(10,5))
       2 tcir[1][1].plot(typ=[&#39;v&#39;])
 ----&gt; 3 xlabel(&#39;Delay (ns)&#39;)
@@ -418,10 +427,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b4c9437ca10&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ac37860f750&gt;
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_31_2.png" src="../../_images/DLR-WHERE2_31_2.png" />
+<img alt="../../_images/DLR-WHERE2_32_2.png" src="../../_images/DLR-WHERE2_32_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Level (V)&#39;</span><span class="p">)</span>
@@ -432,7 +441,7 @@ NameError: name &#39;xlabel&#39; is not defined
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-19-c4ff825d50c0&gt; in &lt;module&gt;()
+&lt;ipython-input-20-c4ff825d50c0&gt; in &lt;module&gt;()
       1 tcir[1][11].plot(typ=[&#39;v&#39;])
 ----&gt; 2 xlabel(&#39;Delay (ns)&#39;)
       3 ylabel(&#39;Level (V)&#39;)
@@ -442,7 +451,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_32_1.png" src="../../_images/DLR-WHERE2_32_1.png" />
+<img alt="../../_images/DLR-WHERE2_33_1.png" src="../../_images/DLR-WHERE2_33_1.png" />
 </div>
 </div>
 
