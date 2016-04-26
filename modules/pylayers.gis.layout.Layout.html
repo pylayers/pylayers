@@ -129,17 +129,17 @@
 <h1>pylayers.gis.layout.Layout<a class="headerlink" href="#pylayers-gis-layout-layout" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.gis.layout.Layout">
-<em class="property">class </em><code class="descclassname">pylayers.gis.layout.</code><code class="descname">Layout</code><span class="sig-paren">(</span><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>force=False</em>, <em>check=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pylayers.gis.layout.</code><code class="descname">Layout</code><span class="sig-paren">(</span><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>check=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handling Layout</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
-<p><strong>Gt</strong> : Topological graph  (indicates topological relationships between rooms)</p>
-<p><strong>Gr</strong> : Graph of rooms</p>
-<p><strong>Gv</strong> : Graph of visibility</p>
-<p><strong>Gc</strong> : Connection graph (indicates visbility relationships)</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Gs</strong> : Garph of points and segment (structure)</p>
+<p><strong>Gt</strong> : Graph of convex cycles      (topology)</p>
+<p><strong>Gv</strong> : Graph of visibility         (visibility)</p>
+<p><strong>Gi</strong> : Graph of interactions       (interactions)</p>
+<p><strong>Gr</strong> : Graph of rooms              (rooms)</p>
 <p><strong>Nnode</strong> : Number of nodes of Gs</p>
 <p><strong>Nedge</strong> : Number of edges of Gs</p>
 <p><strong>pt</strong> : points sequence</p>
@@ -160,7 +160,7 @@
 </table>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>force=False</em>, <em>check=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>check=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>object constructor</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -179,9 +179,11 @@
 <div><p>slab dB file name</p>
 </div></blockquote>
 <p><strong>_filefur :</strong> :</p>
-<blockquote class="last">
+<blockquote>
 <div><p>furniture file name</p>
 </div></blockquote>
+<p><strong>force</strong> : booleanlo</p>
+<p class="last"><strong>check</strong> : boolean</p>
 </td>
 </tr>
 </tbody>
@@ -243,8 +245,8 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.build.html#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><code class="xref py py-obj docutils literal"><span class="pre">build</span></code></a>([graph,&nbsp;verbose])</td>
 <td>build graphs</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">buildGc</span></code>()</td>
-<td>build the graph of cycles</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.buildGc</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGi.html#pylayers.gis.layout.Layout.buildGi" title="pylayers.gis.layout.Layout.buildGi"><code class="xref py py-obj docutils literal"><span class="pre">buildGi</span></code></a>()</td>
 <td>build graph of interactions</td>
@@ -252,17 +254,17 @@
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.buildGi2</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGr.html#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><code class="xref py py-obj docutils literal"><span class="pre">buildGr</span></code></a>([aw])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGr.html#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><code class="xref py py-obj docutils literal"><span class="pre">buildGr</span></code></a>()</td>
 <td>build the graph of rooms Gr</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGr3.html#pylayers.gis.layout.Layout.buildGr3" title="pylayers.gis.layout.Layout.buildGr3"><code class="xref py py-obj docutils literal"><span class="pre">buildGr3</span></code></a>()</td>
-<td>A room is a set of cycles which contains at least one door</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGt.html#pylayers.gis.layout.Layout.buildGt" title="pylayers.gis.layout.Layout.buildGt"><code class="xref py py-obj docutils literal"><span class="pre">buildGt</span></code></a>([check])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.buildGr3</span></code></td>
 <td></td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGt.html#pylayers.gis.layout.Layout.buildGt" title="pylayers.gis.layout.Layout.buildGt"><code class="xref py py-obj docutils literal"><span class="pre">buildGt</span></code></a>([check])</td>
+<td>build Gt the graph of convex cycles</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGv.html#pylayers.gis.layout.Layout.buildGv" title="pylayers.gis.layout.Layout.buildGv"><code class="xref py py-obj docutils literal"><span class="pre">buildGv</span></code></a>([show])</td>
-<td>build global visibility graph</td>
+<td>build visibility graph</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGw.html#pylayers.gis.layout.Layout.buildGw" title="pylayers.gis.layout.Layout.buildGw"><code class="xref py py-obj docutils literal"><span class="pre">buildGw</span></code></a>()</td>
 <td>build Graph of waypaths</td>
@@ -313,12 +315,12 @@
 <td>return edge list from a diagonal zone</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.displaygui.html#pylayers.gis.layout.Layout.displaygui" title="pylayers.gis.layout.Layout.displaygui"><code class="xref py py-obj docutils literal"><span class="pre">displaygui</span></code></a>()</td>
-<td>displaygui() : open a GUI for display configuration</td>
+<td>open a GUI for displaying configuration</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.distwall.html#pylayers.gis.layout.Layout.distwall" title="pylayers.gis.layout.Layout.distwall"><code class="xref py py-obj docutils literal"><span class="pre">distwall</span></code></a>(p,&nbsp;nroom)</td>
 <td>calculate distance to wall</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.dumpr.html#pylayers.gis.layout.Layout.dumpr" title="pylayers.gis.layout.Layout.dumpr"><code class="xref py py-obj docutils literal"><span class="pre">dumpr</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.dumpr.html#pylayers.gis.layout.Layout.dumpr" title="pylayers.gis.layout.Layout.dumpr"><code class="xref py py-obj docutils literal"><span class="pre">dumpr</span></code></a>([graphs])</td>
 <td>read a dump of given Graph</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.dumpw.html#pylayers.gis.layout.Layout.dumpw" title="pylayers.gis.layout.Layout.dumpw"><code class="xref py py-obj docutils literal"><span class="pre">dumpw</span></code></a>()</td>
@@ -396,8 +398,8 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.load.html#pylayers.gis.layout.Layout.load" title="pylayers.gis.layout.Layout.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(_filename)</td>
 <td>load a Layout in different formats</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadG.html#pylayers.gis.layout.Layout.loadG" title="pylayers.gis.layout.Layout.loadG"><code class="xref py py-obj docutils literal"><span class="pre">loadG</span></code></a>(filename)</td>
-<td>load Layout</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.loadG</span></code></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadfur.html#pylayers.gis.layout.Layout.loadfur" title="pylayers.gis.layout.Layout.loadfur"><code class="xref py py-obj docutils literal"><span class="pre">loadfur</span></code></a>(_filefur)</td>
 <td>loadfur load a furniture file</td>
@@ -408,11 +410,11 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadosm.html#pylayers.gis.layout.Layout.loadosm" title="pylayers.gis.layout.Layout.loadosm"><code class="xref py py-obj docutils literal"><span class="pre">loadosm</span></code></a>(_fileosm)</td>
 <td>load layout from an osm file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadstr.html#pylayers.gis.layout.Layout.loadstr" title="pylayers.gis.layout.Layout.loadstr"><code class="xref py py-obj docutils literal"><span class="pre">loadstr</span></code></a>(_filename[,&nbsp;_filematini,&nbsp;_fileslabini])</td>
-<td>loadstr load a .str de PulsRay</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.loadstr</span></code></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">loadstr2</span></code>(_filename[,&nbsp;_filematini,&nbsp;_fileslabini])</td>
-<td>load a Graph from a str2 file</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.loadstr2</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.ls.html#pylayers.gis.layout.Layout.ls" title="pylayers.gis.layout.Layout.ls"><code class="xref py py-obj docutils literal"><span class="pre">ls</span></code></a>([typ])</td>
 <td>list the available file in dirstruc</td>
@@ -453,8 +455,8 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.saveini.html#pylayers.gis.layout.Layout.saveini" title="pylayers.gis.layout.Layout.saveini"><code class="xref py py-obj docutils literal"><span class="pre">saveini</span></code></a>(_fileini)</td>
 <td>save structure in an ini file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.saveold.html#pylayers.gis.layout.Layout.saveold" title="pylayers.gis.layout.Layout.saveold"><code class="xref py py-obj docutils literal"><span class="pre">saveold</span></code></a>(filename)</td>
-<td>save Layout (deprecated)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Layout.saveold</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.saveosm.html#pylayers.gis.layout.Layout.saveosm" title="pylayers.gis.layout.Layout.saveosm"><code class="xref py py-obj docutils literal"><span class="pre">saveosm</span></code></a>(_fileosm)</td>
 <td>save layout in osm file format</td>
@@ -538,7 +540,7 @@
 <td>visi_papb : determine if pa and pb are in visibility for the structure graph</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.visilist.html#pylayers.gis.layout.Layout.visilist" title="pylayers.gis.layout.Layout.visilist"><code class="xref py py-obj docutils literal"><span class="pre">visilist</span></code></a>(p)</td>
-<td>returns the list of nodes from Gc which are visible from point p</td>
+<td>returns the list of nodes which are visible from point p</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.waypoint.html#pylayers.gis.layout.Layout.waypoint" title="pylayers.gis.layout.Layout.waypoint"><code class="xref py py-obj docutils literal"><span class="pre">waypoint</span></code></a>(nroom1,nroom2)</td>
 <td></td>
@@ -563,7 +565,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 08, 2016.
+      Last updated on avril 26, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.gis.layout.Layout.txt"

@@ -302,12 +302,7 @@
                     <span class="n">ni</span> <span class="o">=</span> <span class="n">ni</span> <span class="o">+</span> <span class="n">nr</span><span class="o">*</span><span class="n">k</span>
                     <span class="n">nl</span> <span class="o">=</span> <span class="n">nl</span> <span class="o">+</span> <span class="n">nr</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;-----&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="s1">&#39;ni : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ni</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="s1">&#39;nl : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">+</span> <span class="s1">&#39;2D</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;----------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="n">nray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">])[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;N2Drays : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nray</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;N2Drays : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nray</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;from &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_origin_sig</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; signatures</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;#Rays/#Sig: &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_origin_sig</span><span class="p">)</span> <span class="p">)</span>
 
@@ -608,11 +603,13 @@
 
 <div class="viewcode-block" id="Rays.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.extract.html#pylayers.antprop.rays.Rays.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nr</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Extract a single ray</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        ni : group of interactions</span>
 <span class="sd">        nr : ray index in group of interactions</span>
 <span class="sd">        L  : Layout</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
@@ -663,58 +660,7 @@
         <span class="n">r</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
 
-    <span class="c1"># def extract(self,nr):</span>
-    <span class="c1">#     &quot;&quot;&quot; Extract a single ray</span>
-
-    <span class="c1">#     Parameters</span>
-    <span class="c1">#     ----------</span>
-
-    <span class="c1">#     nr : ray index in group of interactions</span>
-
-    <span class="c1">#     &quot;&quot;&quot;</span>
-
-
-    <span class="c1">#     r = Rays(self.pTx,self.pRx)</span>
-    <span class="c1">#     r.is3d = self.is3D</span>
-
-    <span class="c1">#     nbi = self._ray2nbi[nr]</span>
-    <span class="c1">#     ur = np.where(self[nbi][&#39;rayidx&#39;]==nr)[0]</span>
-
-    <span class="c1">#     #check if there if diffraction the group</span>
-    <span class="c1">#     if self[nbi].has_key(&#39;diffvect&#39;):</span>
-    <span class="c1">#         diff = True</span>
-    <span class="c1">#         # check if the ray has diffraction interaction</span>
-    <span class="c1">#         inter = self.ray2iidx(nr)[:,0]</span>
-    <span class="c1">#         uD = np.where([i in (self[nbi][&#39;diffidx&#39;]) for i in inter])[0]</span>
-    <span class="c1">#         if len(uD) ==0:</span>
-    <span class="c1">#             diff =False</span>
-    <span class="c1">#     else : </span>
-    <span class="c1">#         diff =False</span>
-
-
-    <span class="c1">#     r[nbi]={}</span>
-
-    <span class="c1">#     for k in self[nbi].keys():</span>
-
-    <span class="c1">#         tab  = self[nbi][k]</span>
-    <span class="c1">#         if type(tab)==np.ndarray and k != &#39;nbrays&#39;:</span>
-    <span class="c1">#             if &#39;diff&#39; in k:</span>
-    <span class="c1">#                 if diff :</span>
-    <span class="c1">#                     r[nbi][k] = tab[...,uD][...,np.newaxis]</span>
-    <span class="c1">#                 else:</span>
-    <span class="c1">#                     pass</span>
-    <span class="c1">#             else:</span>
-    <span class="c1">#                 r[nbi][k] = tab[...,ur][...,np.newaxis]</span>
-
-    <span class="c1">#         # manage diffslab which is a list</span>
-    <span class="c1">#         if diff and k ==&#39;diffslabs&#39;:</span>
-    <span class="c1">#             r[nbi][&#39;diffslabs&#39;]=[self[nbi][k][uD]]</span>
-    <span class="c1">#             # r[nbi][&#39;diffslabs&#39;]=[uD]</span>
-                
-    <span class="c1">#     r[nbi][&#39;nbrays&#39;]=1</span>
-
-    <span class="c1">#     print diff</span>
-    <span class="c1">#     return(r)</span>
+   
 
 <div class="viewcode-block" id="Rays.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.show.html#pylayers.antprop.rays.Rays.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  plot 2D rays within the simulated environment</span>
@@ -959,11 +905,7 @@
 
 <span class="sd">        r3d : Rays</span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        1.</span>
-
+<span class="sd">    </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1466,8 +1408,7 @@
 
 <span class="sd">        L : Layout</span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
+<span class="sd">       </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1558,10 +1499,7 @@
 
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nray</span><span class="p">))</span>   <span class="c1"># 3 x int x nray</span>
 
-                <span class="c1">#</span>
-                <span class="c1"># Warning : The following commented line assumes that all the segment number are contiguous</span>
-                <span class="c1"># self[k][&#39;norm&#39;][:,uwall[0],uwall[1]] = norm[nstrwall-1,:].T</span>
-                <span class="c1">#</span>
+
 
                 <span class="c1"># norm : 3 x i x r</span>
                 <span class="c1">#</span>
@@ -1576,6 +1514,7 @@
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">,</span> <span class="n">udiff</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">udiff</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">udiff</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
                 <span class="n">normcheck</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
                 <span class="k">assert</span> <span class="n">normcheck</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">&gt;</span><span class="mf">0.99</span><span class="p">,</span><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
 
@@ -1650,19 +1589,11 @@
                 <span class="c1">#</span>
                 <span class="c1"># scpr : i x r</span>
                 <span class="c1">#</span>
-                <span class="c1">#if k ==5:</span>
-                <span class="c1">#    pdb.set_trace()</span>
-                <span class="c1">#scpr = np.sum(vn*s_in, axis=0)</span>
+                
                 <span class="n">scpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vn</span><span class="o">*</span><span class="n">si</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;scpr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scpr</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">scpr</span><span class="p">))</span>  <span class="c1"># *180/np.pi</span>
-                <span class="c1">#if k ==5:</span>
-                    <span class="c1">#print &quot;vsi :&quot;,self[k][&#39;vsi&#39;][:,:,43]</span>
-                    <span class="c1">#print &quot;si :&quot;,si[:,0:-1,43]</span>
-                    <span class="c1">#print &quot;vn :&quot;,vn[:,:,43]</span>
-                    <span class="c1">#print &quot;scpr :&quot;,self[k][&#39;scpr&#39;][:,43]</span>
-                    <span class="c1">#print &quot;scpr :&quot;,self[k][&#39;scpr&#39;][:,43]</span>
-                    <span class="c1">#print &quot;theta :&quot;,self[k][&#39;scpr&#39;][:,43]</span>
+                
 
                 <span class="k">def</span> <span class="nf">fix_colinear</span><span class="p">():</span>
                     <span class="n">nw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">w</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
@@ -1706,6 +1637,7 @@
                 <span class="c1">#w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)</span>
 
                 <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">s_in</span><span class="p">,</span> <span class="n">vn</span><span class="p">,</span> <span class="n">axisa</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axisc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
                 <span class="c1"># nw : i x r</span>
                 <span class="n">w</span><span class="p">,</span> <span class="n">nw</span> <span class="o">=</span> <span class="n">fix_colinear</span><span class="p">()</span>
 
@@ -1824,8 +1756,9 @@
                     <span class="c1">#manage flat angle : diffraction by flat segment e.g. door limitation)</span>
                     <span class="p">[</span><span class="n">aseg</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">ix</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
                     <span class="c1"># get points positions</span>
+                    <span class="c1">#pdb.set_trace()</span>
                     <span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span><span class="n">aseg</span><span class="p">))</span>
-                    <span class="c1"># get associated slab index face_0,face_n</span>
+                    <span class="c1"># get associated slab ind.seex face_0,face_n</span>
                     <span class="c1"># self[k][&#39;diffslabs&#39;]=[[L.sl[L.sla[y]][&#39;index&#39;] for y in x] for x in aseg]</span>
                     <span class="c1"># self[k][&#39;diffslabs&#39;]=[L.sla[x[0]]+&#39;-&#39;+L.sla[x[1]] for x in aseg]</span>
                     <span class="c1">#diffslab = [ idslab0-idslabn ]</span>
@@ -3153,7 +3086,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 08, 2016.
+      Last updated on avril 26, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

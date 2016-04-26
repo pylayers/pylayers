@@ -200,12 +200,6 @@
 <blockquote>
 <div><p>version of run for signature</p>
 </div></blockquote>
-<p><strong>si_algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;) Only for alg 2</p>
-<blockquote>
-<div><p>signature.run algo type
-&#8216;old&#8217; : call propaths2
-&#8216;new&#8217; : call procone2</p>
-</div></blockquote>
 <p><strong>si_progress: bollean ( False)</strong> :</p>
 <blockquote>
 <div><p>display progression bar for signatures</p>
@@ -222,7 +216,9 @@
 <blockquote>
 <div><dl class="docutils">
 <dt>ceil height . </dt>
-<dd><p class="first last">If [] : Layout max ceil height</p>
+<dd><p class="first last">If [] : Layout max ceil height 
+If 0 : only floor reflection (outdoor case) 
+If -1 : neither ceil nor floor reflection (2D case)</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -278,7 +274,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 08, 2016.
+      Last updated on avril 26, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.eval.txt"
