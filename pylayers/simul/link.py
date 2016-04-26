@@ -1179,6 +1179,8 @@ class DLink(Link):
         ra_ceil_H: float, (default [])
             ceil height . 
                 If [] : Layout max ceil height 
+                If 0 : only floor reflection (outdoor case) 
+                If -1 : neither ceil nor floor reflection (2D case) 
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
 
