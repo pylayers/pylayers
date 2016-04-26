@@ -1607,12 +1607,14 @@
 
 
         <span class="n">filename</span><span class="p">,</span><span class="n">ext</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="n">newfile</span><span class="o">=</span><span class="bp">False</span>
         <span class="k">if</span> <span class="n">ext</span><span class="o">==</span><span class="s1">&#39;.osm&#39;</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIROSM&#39;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">loadosm</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">_filename</span>
+                <span class="n">newfile</span><span class="o">=</span><span class="bp">True</span>
                 <span class="k">print</span> <span class="s2">&quot;new file&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
         
         <span class="k">elif</span> <span class="n">ext</span><span class="o">==</span><span class="s1">&#39;.ini&#39;</span><span class="p">:</span>
@@ -1621,6 +1623,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">loadini</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">_filename</span>
+                <span class="n">newfile</span><span class="o">=</span><span class="bp">True</span>
                 <span class="k">print</span> <span class="s2">&quot;new file&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;layout filename extension not recognized&#39;</span><span class="p">)</span>
@@ -1634,10 +1637,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">geomfile</span><span class="p">()</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s2">&quot;problem to construct geomfile&quot;</span>
-
-        <span class="n">hash_save</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hash</span><span class="p">)</span>
-
-        
         <span class="c1"># if check:</span>
         <span class="c1">#     self.check()</span>
         
@@ -1646,29 +1645,28 @@
 
         <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">False</span>
 
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)):</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">!=</span> <span class="n">hash_save</span><span class="p">:</span>
-                <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span> 
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;tvirw&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span> 
-            <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span>
 
-        <span class="c1"># build and dump</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">newfile</span> <span class="p">:</span>
+            <span class="n">hash_save</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hash</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">rebuild</span><span class="p">:</span>  
-            <span class="c1">#ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)</span>
-            <span class="c1">#if ans.lower()==&#39;y&#39;:</span>
-            <span class="k">print</span> <span class="s2">&quot;Rebuilding Layout&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)):</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">!=</span> <span class="n">hash_save</span><span class="p">:</span>
+                    <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span> 
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;tvirw&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span>
 
-        
             
-    
+            <span class="c1"># build and dump</span>
+            <span class="k">if</span> <span class="n">rebuild</span><span class="p">:</span>  
+                <span class="c1"># ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)</span>
+                <span class="c1"># if ans.lower()==&#39;y&#39;:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Layout.subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.subseg.html#pylayers.gis.layout.Layout.subseg">[docs]</a>    <span class="k">def</span> <span class="nf">subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; establishes the association : name &lt;-&gt;  edgelist</span>
@@ -2851,7 +2849,7 @@
             <span class="n">old_nbss</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># update the number of subsegments for self.Nss</span>
         <span class="n">deltaNss</span><span class="o">=</span> <span class="n">new_nbss</span> <span class="o">-</span> <span class="n">old_nbss</span>
-        <span class="k">print</span> <span class="n">deltaNss</span>
+        <span class="c1"># print deltaNss</span>
         <span class="k">if</span> <span class="n">new_nbss</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span> <span class="o">+=</span> <span class="n">deltaNss</span>

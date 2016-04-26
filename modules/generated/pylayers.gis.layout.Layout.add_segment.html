@@ -27,6 +27,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
+    <link rel="next" title="pylayers.gis.layout.Layout.add_furniture" href="pylayers.gis.layout.Layout.add_furniture.html" />
+    <link rel="prev" title="pylayers.gis.layout.Layout.add_pons" href="pylayers.gis.layout.Layout.add_pons.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -82,10 +85,44 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.gis.layout.Layout.add_pons.html" title="pylayers.gis.layout.Layout.add_pons"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.gis....
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.gis.layout.Layout.add_pons
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.gis.layout.Layout.add_furniture.html" title="pylayers.gis.layout.Layout.add_furniture"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.gis....
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.gis.layout.Layout.add_furniture
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -100,6 +137,22 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.gis.layout.html" title="pylayers.gis.layout" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.gis....
+	</span>
+	<span class="hiddenrellink">
+	pylayers.gis.layout
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -127,6 +180,45 @@
             
   <div class="section" id="pylayers-gis-layout-layout-add-segment">
 <h1>pylayers.gis.layout.Layout.add_segment<a class="headerlink" href="#pylayers-gis-layout-layout-add-segment" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_segment">
+<code class="descclassname">Layout.</code><code class="descname">add_segment</code><span class="sig-paren">(</span><em>n1, n2, name='PARTITION', z=[0.0, 3.0], offset=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.add_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>add segment between node n1 and node n2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n1</strong> : integer &lt; 0</p>
+<p><strong>n2</strong> : integer &lt; 0</p>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>layer name &#8216;PARTITION&#8217;</p>
+</div></blockquote>
+<p><strong>z</strong> : list of float</p>
+<blockquote>
+<div><p>default = [0,3.0]</p>
+</div></blockquote>
+<p><strong>offset</strong> : float</p>
+<blockquote>
+<div><p>[-1,1] default (0)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>num</strong> : segment number (&gt;0)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A segment dictionnary has the following mandatory attributes</p>
+<p>name : slab name associated with segment
+z : list (zmin,zmax)   (meters)
+norm : array  (1x3)  segment normal
+transition : boolean
+ncycles : list of involved cycles
+connect : list of point number</p>
+</dd></dl>
+
 </div>
 
 
@@ -147,8 +239,18 @@
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.gis.layout.Layout.add_pons.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.gis.layout.Layout.add_furniture.html">
+        Next
+      </a>  
+    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous
