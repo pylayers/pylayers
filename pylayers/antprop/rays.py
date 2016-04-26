@@ -464,7 +464,7 @@ class Rays(PyLayers,dict):
 
         Parameters
         ----------
-        
+        ni : group of interactions
         nr : ray index in group of interactions
         L  : Layout
 
@@ -1614,7 +1614,7 @@ class Rays(PyLayers,dict):
                     #manage flat angle : diffraction by flat segment e.g. door limitation)
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
                     # get points positions
-                    pdb.set_trace()
+                    #pdb.set_trace()
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
                     # get associated slab ind.seex face_0,face_n
                     # self[k]['diffslabs']=[[L.sl[L.sla[y]]['index'] for y in x] for x in aseg]

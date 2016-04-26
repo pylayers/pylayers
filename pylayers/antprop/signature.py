@@ -3214,8 +3214,7 @@ class Signatures(PyLayers,dict):
                                 #print visited,len(stack),cptsig  
 
                             # move forward even when arrived in the target cycle
-                            if (-8,) in visited:
-                                pdb.set_trace()
+                            
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
