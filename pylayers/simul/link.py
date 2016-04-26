@@ -1151,7 +1151,6 @@ class DLink(Link):
             eq = array == fa
             seq = np.sum(np.sum(eq,axis=1),axis=1)
             ua = np.where(seq==9)[0]
-
         else :
             raise NameError('Link.array_exist : invalid key')
 
@@ -1171,10 +1170,6 @@ class DLink(Link):
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
         alg : 1|'old'|'exp'|'exp2'
             version of run for signature
-        si_algo : str ('old'|'new') Only for alg 2
-            signature.run algo type
-            'old' : call propaths2
-            'new' : call procone2
         si_progress: bollean ( False)
             display progression bar for signatures
         diffraction : boolean (False)
@@ -1233,8 +1228,9 @@ class DLink(Link):
 
         """
 
+
+
         defaults={ 'applywav':True,
-                   'si_algo':'old',
                    'si_progress':False,
                    'diffraction':True,
                    'ra_vectorized':True,
@@ -1292,15 +1288,7 @@ class DLink(Link):
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
                 if self.verbose :
-                    print "algo 2 ( ex 7)"
-
-            if kwargs['alg']=='old':
-                Si.run_old(cutoff=kwargs['cutoff'],
-                        algo=kwargs['si_algo'],
-                        diffraction=kwargs['diffraction'],
-                        progress=kwargs['si_progress'])
-                if self.verbose :
-                    print "algo 2 (ex 5)"
+                    print "default algorithm"
 
             if kwargs['alg']=='exp':
                 TMP=Si.run_exp(cutoff=kwargs['cutoff'],
@@ -1382,6 +1370,7 @@ class DLink(Link):
             # Ctilde...
             # Find an other criteria in order to decide whether the R has
             # already been evaluated
+            #pdb.set_trace()
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])

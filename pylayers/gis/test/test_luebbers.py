@@ -1,3 +1,4 @@
+import mayavi.mlab as mlab
 from pylayers.gis.layout import *
 from pylayers.simul.link import *
 
@@ -19,5 +20,5 @@ DL.Aa = Antenna('Omni',fGHz=fGHz)
 DL.Ab = Antenna('Omni',fGHz=fGHz)
 DL.a = np.array([37.5,6.2,1.5])
 DL.b = np.array([12.5,30,1.5])
-DL.eval(force=True,cutoff=6)
+DL.eval(force=True,cutoff=4,verbose=False)
 #DL.R.show(L=L)

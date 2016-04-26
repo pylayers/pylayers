@@ -168,7 +168,7 @@ def gidl(g):
    Returns
    -------
 
-   gr
+   gr : A graph 
 
    """
 
@@ -177,7 +177,15 @@ def gidl(g):
     for n in g.nodes():
         if len(n)>1:
             edlist.append(n)
-    gr=g.subgraph(edlist)
+    gr = g.subgraph(edlist)
+    for k in gr.edge:
+        for k1 in gr.edge[k]:
+            ke = gr.edge[k][k1]['output'].keys()
+            va = gr.edge[k][k1]['output'].values()
+            keva = zip(ke,va)
+            keva_valid = [ x for x in keva if len(x[0])>1]
+            gr.edge[k][k1]['output']=dict(keva_valid)
+
     dpos = {k:g.pos[k] for k in edlist}
     gr.pos=dpos
     return(gr)
@@ -2989,19 +2997,19 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-        print "run"
+        
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         # list of interactions visible from source
-        lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
+        lisR,lisT,lisD = self.L.intercy(self.source,typ='source')
         if diffraction:
             lis  = lisT + lisR + lisD
         else:
             lis  = lisT + lisR
 
         # list of interactions visible from target
-        litT,litR,litD = self.L.intercy(self.target,typ='target')
+        litR,litT,litD = self.L.intercy(self.target,typ='target')
 
         if diffraction:
            lit  = litT + litR + litD
@@ -3050,6 +3058,14 @@ class Signatures(PyLayers,dict):
             R = [(np.eye(2),np.array([0,0]))]
 
             visited = [s]
+            if (s in lit) or (s[-1]==self.target):
+                anstr = np.array(map(lambda x: x[0],visited))
+                typ  = np.array(map(lambda x: len(x),visited))
+                try:
+                    self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
+                except:
+                    self[len(typ)] = np.vstack((anstr,typ))
+                cptsig +=1
             # stack is a list of iterators
             try:
                 stack = [iter(Gi[s])]
@@ -3187,7 +3203,7 @@ class Signatures(PyLayers,dict):
                             #showsig2(visited,self.L,tahe)
                             #pdb.set_trace()  
                             # sequence is valid and last interaction is in the list of targets   
-                            if interaction in lit:
+                            if (interaction in lit) or (interaction[-1]==self.target):
                                 anstr = np.array(map(lambda x: x[0],visited))
                                 typ  = np.array(map(lambda x: len(x),visited))
                                 try:
@@ -3198,6 +3214,7 @@ class Signatures(PyLayers,dict):
                                 #print visited,len(stack),cptsig  
 
                             # move forward even when arrived in the target cycle
+                            
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
@@ -3664,8 +3681,7 @@ class Signatures(PyLayers,dict):
 
 
     def raysv(self,ptx=0,prx=1):
-
-        """ from signatures dict to 2D rays Vectorized version
+        """ transfrom dict of signatures into 2D rays - default vectorized version
 
         Parameters
         ----------
@@ -3686,9 +3702,9 @@ class Signatures(PyLayers,dict):
         -----
 
         This is a vectorized version of Signatures.rays.
-        This implementation take advantage of the np.ndarray
-        and calculate images and backtrace for block of signatures.
-        A block of signature gather all signatures with the same number of interaction.
+        This implementation takes advantage of the np.ndarray
+        and calculates images and backtrace for block of signatures.
+        A block of signatures gathers all signatures with the same number of interactions.
 
         For mathematical details see :
 
@@ -3726,6 +3742,7 @@ class Signatures(PyLayers,dict):
             prx= np.r_[prx,0.5]
 
         rays = Rays(ptx,prx)
+
         #
         # detect LOS situation
         #
@@ -3734,9 +3751,10 @@ class Signatures(PyLayers,dict):
         # lc  = self.L.cycleinline(self.source,self.target)
 
         #
-        # if source and target in the same merged cycle
+        # if source and target are in the same merged cycle
         # and ptx != prx
         #
+
         los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
         # convex cycle of each point
@@ -3763,7 +3781,9 @@ class Signatures(PyLayers,dict):
         return rays
 
     def backtrace(self, tx, rx, M):
-        ''' Warning :
+        ''' backtracing betwen tx and rx 
+
+        Warning :
             This is an attempt to vectorize the backtrace process.
             Despite it has been tested on few cases with succes,
             this is quite new need to be validated !!!
@@ -3777,7 +3797,7 @@ class Signatures(PyLayers,dict):
                 rx : ndarray
                     position of tx (2,)
                 M : dict
-                    position of intermediate point from self.image()
+                    position of intermediate points obtained from self.image()
 
             Return
             -------
@@ -3788,11 +3808,16 @@ class Signatures(PyLayers,dict):
 
             Notes
             -----
+
             dictionnary of intermediate coordinated :
             key = number_of_interactions
             value = nd array M with shape : (2,nb_signatures,nb_interactions)
             and 2 represent x and y coordinates
 
+            See Also
+            --------
+
+            pylayers.antprop.signature.image
 
         '''
 
@@ -3930,11 +3955,11 @@ class Signatures(PyLayers,dict):
                 #valid ray is : 0 < \alpha < 1 and 0< \beta < 1
 
                 # alpha
-                uvalidA= psolved[:,2]>0.
-                uvalidB= psolved[:,2]<1.
+                uvalidA = psolved[:,2]>0.
+                uvalidB = psolved[:,2]<1.
                 #beta
-                uvalidC= psolved[:,3] >= epsilon
-                uvalidD= psolved[:,3] <=1.-epsilon
+                uvalidC = psolved[:,3] >= epsilon
+                uvalidD = psolved[:,3] <=1.-epsilon
                 valid = uvalidA & uvalidB & uvalidC & uvalidD
                 # consider valid diffraction interactions
                 valid = valid | uD
@@ -3947,10 +3972,6 @@ class Signatures(PyLayers,dict):
                 psolved[uuD,:2] = ptr[:,0,uuD,kinter].T
 
                 pvalid = psolved[uvalid,:2]
-
-
-
-
 
 
                 # keep only valid rays for ptr and Mr
