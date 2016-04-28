@@ -669,16 +669,25 @@ def showfurniture(fig,ax):
     R9_G.show(fig,ax)
     axis('scaled')
 
-def two_rays_flatearth(p0,p1,fGHz,**kwargs):
+def two_rays_flatearth(fGHz,**kwargs):
     """
     Parameters
     ----------
 
-    p1 : transmitter position
+    p0 : transmitter position
         (3 x Np1) array or (2,) array
-    p2 : receiver position
+    p1 : receiver position
         (3 x Np2) array or (2,) array
 
+
+    OR :
+
+    d : distance between Tx and Rx
+        (Np1,)
+    ht : Tx height
+
+    hr : Rx height
+        (Np1)
     GtdB : float (0) 
         Transmitter Antenna Gain (dB)
     GrdB : float(0)
@@ -719,7 +728,7 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
         >>> g0=1
         >>> g1=1
         >>> fGHz=2.4
-        >>> PL2R=two_rays_flatearth(x,y,fGHz,GtdB=g0,GrdB=g1)
+        >>> PL2R=two_rays_flatearth(p0=x,p1=y,fGHz=fGHz,GtdB=g0,GrdB=g1)
         >>> PL1R = PL(fGHz,x,y,2)
         >>> plt.semilogx(PL2R,label='two-ray model')
         >>> plt.semilogx(-PL1R[0,:],label='one slope model')
@@ -729,6 +738,18 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
         >>> plt.ylabel('Loss Pr/Pt (dB)')
         >>> plt.legend()
         >>> plt.show()
+
+        >>> d=np.arange(1,1000)
+        >>> PL2Rd = two_rays_flatearth(d=d,ht=np.array([5]),hr=np.array([10]),fGHz=fGHz,GtdB=g0,GrdB=g1)
+        >>> plt.semilogx(PL2Rd,label='two-ray model')
+        >>> plt.semilogx(-PL1R[0,:],label='one slope model')
+        >>> plt.axis([10,NPT,-150,-50])
+        >>> plt.title('Loss 2-rays model vs one slope model')
+        >>> plt.xlabel('distance (m)')
+        >>> plt.ylabel('Loss Pr/Pt (dB)')
+        >>> plt.legend()
+        >>> plt.show()
+
 
 
 
@@ -741,7 +762,12 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     """
 
 
-    defaults = { 'GtdB':0.,
+    defaults = { 'p0':np.array((0,0,10)),
+                 'p1':np.array((0,10,10)),
+                 'd':[],
+                 'ht':10,
+                 'hr':10,
+                 'GtdB':0.,
                  'GrdB':0.,
                  'gamma': -1.+0.j,
                  'pol':'v',
@@ -765,25 +791,37 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     sig=kwargs.pop('sig')
 
 
-    assert p0.shape[0] == 3, 'p0 is not 3D'
-    assert p1.shape[0] == 3, 'p1 is not 3D'
+    if kwargs['d'] == []:
+        p0=kwargs['p0']
+        p1=kwargs['p1']
+        assert p0.shape[0] == 3, 'p0 is not 3D'
+        assert p1.shape[0] == 3, 'p1 is not 3D'
 
 
-    if len(p0.shape) == 1:
-        p0=p0.reshape(p0.shape[0],1)
-    if len(p1.shape) == 1:
-        p1=p1.reshape(p1.shape[0],1)
+        if len(p0.shape) == 1:
+            p0=p0.reshape(p0.shape[0],1)
+        if len(p1.shape) == 1:
+            p1=p1.reshape(p1.shape[0],1)
 
-    p0=1.*p0
-    p1=1.*p1
+        p0=1.*p0
+        p1=1.*p1
+
+        ht = p0[2,:]
+        hr = p1[2,:]
+        dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) #l0
+    else:
+
+        dloss=kwargs['d']
+        ht=kwargs['ht']
+        hr=kwargs['hr']
+        
+
 
     Gt = 10**((1.*Gt)/10.)
     Gr = 10**((1.*Gr)/10.)
 
-    ht = p0[2,:]
-    hr = p1[2,:]
 
-    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) #l0
+    
     d0 = np.sqrt( dloss**2 - 1.*(ht-hr)**2 ) # d0
     dref = np.sqrt(d0**2+1.*(ht+hr)**2) #l0'
 
