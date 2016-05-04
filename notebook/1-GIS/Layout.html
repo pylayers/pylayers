@@ -197,7 +197,6 @@ degree : degree of nodes
 </div>
 <p>Querying the file name associated with the Layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
-<span class="go">&#39;defstr.ini&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;defstr.ini&#39;</span>
@@ -291,23 +290,12 @@ degree : degree of nodes
 </pre></div>
 </div>
 <img alt="../../_images/Layout_10_0.png" src="../../_images/Layout_10_0.png" />
-<p>L.ax provides the boubdary of the layout with the following format :
+<p>L.ax provides the boundary of the layout with the following format :
 (xmin,xmax,ymin,ymax)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">748.5</span><span class="p">,</span> <span class="mf">778.5</span><span class="p">,</span> <span class="mf">1101.9</span><span class="p">,</span> <span class="mf">1125.9</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>=======
-```python
-&gt;&gt;&gt; L.ax
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-9-a665882d59d9&gt;&quot;, line 1
-    =======
-     ^
-SyntaxError: invalid syntax
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
@@ -317,7 +305,7 @@ SyntaxError: invalid syntax
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ma</span>
 </pre></div>
 </div>
-<img src="../../_images/Layout_16_0.svg" /><p>This Layout has several convex cycles which are stored in the Gt graph.
+<img src="../../_images/Layout_15_0.svg" /><p>This Layout has several convex cycles which are stored in the Gt graph.
 The diffraction points oare stored in a discretionary L.ddiff. The keys
 of this diction-nary are the diffraction point and the values are both
 the list of output cycles and the corresponding wedge angle.</p>
@@ -538,7 +526,7 @@ the list of output cycles and the corresponding wedge angle.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">aw</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_22_0.png" src="../../_images/Layout_22_0.png" />
+<img alt="../../_images/Layout_21_0.png" src="../../_images/Layout_21_0.png" />
 <p>To check which are the used slabs :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Slabs</span><span class="p">:</span>
@@ -567,14 +555,14 @@ WALL : BRICK | [0.07]
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_28_0.png" src="../../_images/Layout_28_0.png" />
+<img alt="../../_images/Layout_27_0.png" src="../../_images/Layout_27_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_30_0.png" src="../../_images/Layout_30_0.png" />
+<img alt="../../_images/Layout_29_0.png" src="../../_images/Layout_29_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
 <h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
@@ -594,18 +582,11 @@ numpy array which are mostly used internally.</p>
 </ul>
 <div class="section" id="pt-the-array-of-points">
 <h3><code class="docutils literal"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
-<p>The point coordinates are stored in two different places (which in
-principle is a bad thing to do !).</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>L.Gs.pos : in a dictionary form (key is the point negative index)
-L.pt : in a numpy array
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-22-3648a03bd3e2&gt;&quot;, line 1
-    L.Gs.pos : in a dictionary form (key is the point negative index)
-             ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
+<p>The point coordinates are stored in two different places</p>
+<ul class="simple">
+<li>L.Gs.pos : in a dictionary form (key is the point negative index)</li>
+<li>L.pt : in a numpy array</li>
+</ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
 </pre></div>
@@ -632,7 +613,7 @@ Where <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: rela
 
 KeyError                                  Traceback (most recent call last)
 
-&lt;ipython-input-24-63002b766909&gt; in &lt;module&gt;()
+&lt;ipython-input-22-63002b766909&gt; in &lt;module&gt;()
 ----&gt; 1 L.build()
 
 
@@ -663,7 +644,7 @@ KeyError                                  Traceback (most recent call last)
 KeyError: 31
 </pre></div>
 </div>
-<p>The figure below illustrates a Layout and a surimposition of the graph
+<p>The figure below illustrates a Layout and a superimposition of the graph
 of cycles <img src="../../_images/mathmpl/math-7ab57d2327.png" style="position: relative; bottom: -6px"/>. Those cycles are automatically
 extracted from a well defined layout. This concept of <strong>cycles</strong> is
 central in the ray determination algorithm which is implemented in
@@ -671,30 +652,17 @@ PyLayers. Notice that the exterior region is the cycle indexed by 0. All
 the rooms which have a common frontier with the exterior cycle are here
 connected to the origin (corresponding to exterior cycle).</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-25-409b00e0f26f&gt; in &lt;module&gt;()
-      1 f,a = L.showG(&#39;s&#39;)
-----&gt; 2 nx.draw(L.Gc,L.Gc.pos)
-
-
-AttributeError: &#39;Layout&#39; object has no attribute &#39;Gc&#39;
-</pre></div>
-</div>
-<img alt="../../_images/Layout_37_1.png" src="../../_images/Layout_37_1.png" />
+<img alt="../../_images/Layout_35_0.png" src="../../_images/Layout_35_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x2b95cfb46ed0&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x2b3a1ef2b810&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Layout_38_1.png" src="../../_images/Layout_38_1.png" />
+<img alt="../../_images/Layout_36_1.png" src="../../_images/Layout_36_1.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
@@ -790,7 +758,7 @@ because none segment has 0 as an index.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_55_1.png" src="../../_images/Layout_55_1.png" />
+<img alt="../../_images/Layout_53_1.png" src="../../_images/Layout_53_1.png" />
 </div>
 </div>
 
