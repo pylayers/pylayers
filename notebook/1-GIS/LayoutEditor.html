@@ -213,6 +213,14 @@ as the state of the current <code class="docutils literal"><span class="pre">dis
 <li><code class="docutils literal"><span class="pre">.osm</span></code> : an xml file which can be edited with
 <a class="reference external" href="http://josm.openstreetmap.de/">JOSM</a></li>
 </ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Layout:Mayavi is not installed
+</pre></div>
+</div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
 <h2>Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
@@ -221,29 +229,449 @@ with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <code class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></code> directory of the
 project. The project root directory is defined in the <code class="docutils literal"><span class="pre">$BASENAME</span></code>
 environment variable.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSTRUC&#39;</span><span class="p">]</span>
+<span class="go">struc/str</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">struc</span><span class="o">/</span><span class="nb">str</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-2-ec9ba75a5513&gt; in &lt;module&gt;()
+      1 print pstruc[&#39;DIRSTRUC&#39;]
+----&gt; 2 struc/str
+
+
+NameError: name &#39;struc&#39; is not defined
+</pre></div>
+</div>
 <p><code class="docutils literal"><span class="pre">pstruc</span></code> is a dictionnary which gathers all directories which are used
 in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pstruc</span>
+<span class="go">{&#39;DIRANT&#39;: &#39;ant&#39;,</span>
+<span class="go"> &#39;DIRBODY&#39;: &#39;body&#39;,</span>
+<span class="go"> &#39;DIRC3D&#39;: &#39;body/c3d&#39;,</span>
+<span class="go"> &#39;DIRCIR&#39;: &#39;output&#39;,</span>
+<span class="go"> &#39;DIRCT&#39;: &#39;output/Ct&#39;,</span>
+<span class="go"> &#39;DIRFUR&#39;: &#39;struc/furnitures&#39;,</span>
+<span class="go"> &#39;DIRGEOM&#39;: &#39;geom&#39;,</span>
+<span class="go"> &#39;DIRGIS&#39;: &#39;gis&#39;,</span>
+<span class="go"> &#39;DIRH&#39;: &#39;output/H&#39;,</span>
+<span class="go"> &#39;DIRIMAGE&#39;: &#39;struc/images&#39;,</span>
+<span class="go"> &#39;DIRINI&#39;: &#39;struc/ini&#39;,</span>
+<span class="go"> &#39;DIRLCH&#39;: &#39;output&#39;,</span>
+<span class="go"> &#39;DIRLNK&#39;: &#39;output&#39;,</span>
+<span class="go"> &#39;DIRMAT&#39;: &#39;ini&#39;,</span>
+<span class="go"> &#39;DIRMAT2&#39;: &#39;ini&#39;,</span>
+<span class="go"> &#39;DIRMES&#39;: &#39;meas&#39;,</span>
+<span class="go"> &#39;DIRNETSAVE&#39;: &#39;netsave&#39;,</span>
+<span class="go"> &#39;DIROOSM&#39;: &#39;gis/osm&#39;,</span>
+<span class="go"> &#39;DIROSM&#39;: &#39;struc/osm&#39;,</span>
+<span class="go"> &#39;DIRPICKLE&#39;: &#39;struc/gpickle&#39;,</span>
+<span class="go"> &#39;DIRR2D&#39;: &#39;output/r2d&#39;,</span>
+<span class="go"> &#39;DIRR3D&#39;: &#39;output/r3d&#39;,</span>
+<span class="go"> &#39;DIRSIG&#39;: &#39;output/sig&#39;,</span>
+<span class="go"> &#39;DIRSIMUL&#39;: &#39;ini&#39;,</span>
+<span class="go"> &#39;DIRSLAB&#39;: &#39;ini&#39;,</span>
+<span class="go"> &#39;DIRSLAB2&#39;: &#39;ini&#39;,</span>
+<span class="go"> &#39;DIRSTRUC&#39;: &#39;struc/str&#39;,</span>
+<span class="go"> &#39;DIRSTRUC2&#39;: &#39;struc/str&#39;,</span>
+<span class="go"> &#39;DIRTRA&#39;: &#39;output&#39;,</span>
+<span class="go"> &#39;DIRTUD&#39;: &#39;output&#39;,</span>
+<span class="go"> &#39;DIRTx&#39;: &#39;output/Tx001&#39;,</span>
+<span class="go"> &#39;DIRWEAR&#39;: &#39;body/wear&#39;,</span>
+<span class="go"> &#39;DIRWRL&#39;: &#39;struc/wrl&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;DIRANT&#39;</span><span class="p">:</span> <span class="s1">&#39;ant&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRBODY&#39;</span><span class="p">:</span> <span class="s1">&#39;body&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRC3D&#39;</span><span class="p">:</span> <span class="s1">&#39;body/c3d&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRCIR&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRCT&#39;</span><span class="p">:</span> <span class="s1">&#39;output/Ct&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRFUR&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/furnitures&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRGEOM&#39;</span><span class="p">:</span> <span class="s1">&#39;geom&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRGIS&#39;</span><span class="p">:</span> <span class="s1">&#39;gis&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRH&#39;</span><span class="p">:</span> <span class="s1">&#39;output/H&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRIMAGE&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/images&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRINI&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRLCH&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRLNK&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRMAT&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRMAT2&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRMES&#39;</span><span class="p">:</span> <span class="s1">&#39;meas&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRNETSAVE&#39;</span><span class="p">:</span> <span class="s1">&#39;netsave&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIROOSM&#39;</span><span class="p">:</span> <span class="s1">&#39;gis/osm&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIROSM&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/osm&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRPICKLE&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/gpickle&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRR2D&#39;</span><span class="p">:</span> <span class="s1">&#39;output/r2d&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRR3D&#39;</span><span class="p">:</span> <span class="s1">&#39;output/r3d&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRSIG&#39;</span><span class="p">:</span> <span class="s1">&#39;output/sig&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRSLAB&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRSLAB2&#39;</span><span class="p">:</span> <span class="s1">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRSTRUC&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/str&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRSTRUC2&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/str&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRTRA&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRTUD&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRTx&#39;</span><span class="p">:</span> <span class="s1">&#39;output/Tx001&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRWEAR&#39;</span><span class="p">:</span> <span class="s1">&#39;body/wear&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DIRWRL&#39;</span><span class="p">:</span> <span class="s1">&#39;struc/wrl&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
 <p>The structure of the <code class="docutils literal"><span class="pre">.osm</span></code> file is shown below</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>&gt;&gt;&gt; %%bash
+...
+...     cd $BASENAME/struc
+...     ls *.osm
+DLR.osm
+MADRID-METIS.osm
+MOCAP2.osm
+MOCAP3.osm
+MOCAP-small2.osm
+TA-Office.osm
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">convexity</span><span class="o">.</span><span class="n">osm</span>
+<span class="n">Jimmy</span><span class="o">.</span><span class="n">osm</span>
+<span class="n">nonconvex</span><span class="o">.</span><span class="n">osm</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>bash: ligne 4: DLR.osm : commande introuvable
+bash: ligne 5: MADRID-METIS.osm : commande introuvable
+bash: ligne 6: MOCAP2.osm : commande introuvable
+bash: ligne 7: MOCAP3.osm : commande introuvable
+bash: ligne 8: MOCAP-small2.osm : commande introuvable
+bash: ligne 9: TA-Office.osm : commande introuvable
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>&gt;&gt;&gt; %%bash
+...     cd $BASENAME/struc
+...     head DLR.osm
+...     echo &#39;---&#39;
+...     tail -17 DLR.osm
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;osm version=&#39;0.6&#39; upload=&#39;false&#39; generator=&#39;PyLayers&#39;&gt;
+&lt;node id=&#39;-212&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100855114&#39; lon=&#39;-1.98980710934&#39; /&gt;
+&lt;node id=&#39;-210&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100789151&#39; lon=&#39;-1.9897910381&#39; /&gt;
+&lt;node id=&#39;-208&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100738861&#39; lon=&#39;-1.98977878545&#39; /&gt;
+&lt;node id=&#39;-206&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100616861&#39; lon=&#39;-1.98982814281&#39; /&gt;
+&lt;node id=&#39;-204&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101583649&#39; lon=&#39;-1.98982436917&#39; /&gt;
+&lt;node id=&#39;-202&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101656174&#39; lon=&#39;-1.98981796656&#39; /&gt;
+&lt;node id=&#39;-200&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101843662&#39; lon=&#39;-1.98977935424&#39; /&gt;
+&lt;node id=&#39;-198&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101791636&#39; lon=&#39;-1.98982426816&#39; /&gt;
+---
+&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
+&lt;/way&gt;
+&lt;way id=&#39;-10000123&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
+&lt;nd ref=&#39;-200&#39; /&gt;
+&lt;nd ref=&#39;-100&#39; /&gt;
+&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
+&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
+&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
+&lt;/way&gt;
+&lt;way id=&#39;-10000124&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
+&lt;nd ref=&#39;-166&#39; /&gt;
+&lt;nd ref=&#39;-188&#39; /&gt;
+&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
+&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
+&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
+&lt;/way&gt;
+&lt;/osm&gt;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>head: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
+tail: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
+bash: ligne 5: Erreur de syntaxe près du symbole inattendu « newline »
+bash: ligne 5: `&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;&#39;
+</pre></div>
+</div>
 <p>To read a new layout in osm format :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;DLR.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_11_0.png" src="../../_images/LayoutEditor_11_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="go">filestr :  DLR.ini</span>
+<span class="go">filematini :  matDB.ini</span>
+<span class="go">fileslabini :  slabDB.ini</span>
+<span class="go">filegeom :  DLR.off</span>
+<span class="go">boundaries  (-0.505, 32.586, -8.277, 8.878)</span>
+<span class="go">number of Points : 105</span>
+<span class="go">number of Segments : 124</span>
+<span class="go">number of Sub-Segments : 30</span>
+<span class="go">Gs Nodes :  229</span>
+<span class="go">Gs Edges :  248</span>
+<span class="go">Gt Nodes :  0</span>
+<span class="go">Gt Edges :  0</span>
+<span class="go">vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle</span>
+<span class="go">poly = Gt.node[Nc][&#39;cycle&#39;].polyg</span>
+<span class="go">Gr Nodes    : 0</span>
+<span class="go">Gr Edges    : 0</span>
+<span class="go">Nc  = Gr.node[nroom][&#39;cycles&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-8-f080ba66bd97&gt;&quot;, line 2
+    filestr :  DLR.ini
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
 <p>The different graphs associated with the layout are then built</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+KeyError                                  Traceback (most recent call last)
+
+&lt;ipython-input-9-63002b766909&gt; in &lt;module&gt;()
+----&gt; 1 L.build()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4682             if verbose:
+   4683                 print &quot;Gr&quot;
+-&gt; 4684             self.buildGr()
+   4685             self.lbltg.extend(&#39;r&#39;)
+   4686
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGr(self)
+   8783                     pass
+   8784                 else:
+-&gt; 8785                     self.Gr.remove_node(cy)
+   8786                     self.Gr.pos.pop(cy)
+   8787
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/networkx/classes/graph.pyc in remove_node(self, n)
+    569             raise NetworkXError(&quot;The node %s is not in the graph.&quot; % (n,))
+    570         for u in nbrs:
+--&gt; 571             del adj[u][n]   # remove all edges n-u in graph
+    572         del adj[n]          # now remove node
+    573
+
+
+KeyError: 13
+</pre></div>
+</div>
 <p>The topological graph <img src="../../_images/mathmpl/math-3604bc74d1.png" style="position: relative; bottom: -6px"/> or graph of non overlapping
 cycles.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_16_0.png" src="../../_images/LayoutEditor_16_0.png" />
 <p>The graph of room <img src="../../_images/mathmpl/math-ba7f66fdf0.png" style="position: relative; bottom: -6px"/>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+KeyError                                  Traceback (most recent call last)
+
+&lt;ipython-input-11-691b11b3fe3c&gt; in &lt;module&gt;()
+----&gt; 1 f,a=L.showG(&#39;r&#39;)
+      2 b=plt.axis(&#39;off&#39;)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in showG(self, graph, **kwargs)
+   7769             else:
+   7770                 kwargs[&#39;labels&#39;]=False
+-&gt; 7771             fig,ax = gru.draw(G,**kwargs)
+   7772             kwargs[&#39;fig&#39;]=fig
+   7773             kwargs[&#39;ax&#39;]=ax
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/graphutil.pyc in draw(G, **kwargs)
+    157                                width = kwargs[&#39;width&#39;],
+    158                                arrows= kwargs[&#39;arrows&#39;],
+--&gt; 159                                alpha = kwargs[&#39;alphae&#39;],ax=ax)
+    160         if kwargs[&#39;airwalls&#39;]:
+    161             try:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/networkx/drawing/nx_pylab.pyc in draw_networkx_edges(G, pos, edgelist, width, edge_color, style, alpha, edge_cmap, edge_vmin, edge_vmax, ax, arrows, label, **kwds)
+    513
+    514     # set edge positions
+--&gt; 515     edge_pos = numpy.asarray([(pos[e[0]], pos[e[1]]) for e in edgelist])
+    516
+    517     if not cb.iterable(width):
+
+
+KeyError: 0
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_18_1.png" src="../../_images/LayoutEditor_18_1.png" />
 <p>The graph of waypath <img src="../../_images/mathmpl/math-4c02c53444.png" style="position: relative; bottom: -6px"/>. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_20_0.png" src="../../_images/LayoutEditor_20_0.png" />
 <p>The graph of visibility <img src="../../_images/mathmpl/math-d3189f9945.png" style="position: relative; bottom: -5px"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_22_0.png" src="../../_images/LayoutEditor_22_0.png" />
 <p>The graph of interactions <img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -6px"/> used to determine the
 ray signatures.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_24_0.png" src="../../_images/LayoutEditor_24_0.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
 <h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="go">filestr :  DLR.ini</span>
+<span class="go">filematini :  matDB.ini</span>
+<span class="go">fileslabini :  slabDB.ini</span>
+<span class="go">filegeom :  DLR.off</span>
+<span class="go">boundaries  (-0.505, 32.586, -8.277, 8.878)</span>
+<span class="go">number of Points : 105</span>
+<span class="go">number of Segments : 124</span>
+<span class="go">number of Sub-Segments : 30</span>
+<span class="go">Gs Nodes :  229</span>
+<span class="go">Gs Edges :  248</span>
+<span class="go">Gt Nodes :  21</span>
+<span class="go">Gt Edges :  52</span>
+<span class="go">vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle</span>
+<span class="go">poly = Gt.node[Nc][&#39;cycle&#39;].polyg</span>
+<span class="go">Gr Nodes    : 18</span>
+<span class="go">Gr Edges    : 18</span>
+<span class="go">Nc  = Gr.node[nroom][&#39;cycles&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-15-b3e7505f6503&gt;&quot;, line 2
+    filestr :  DLR.ini
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
 are exploited in <code class="docutils literal"><span class="pre">showGs()</span></code> vizualisation method.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span>
+<span class="go">{&#39;activelayer&#39;: &#39;WALL&#39;,</span>
+<span class="go"> &#39;alpha&#39;: 0.5,</span>
+<span class="go"> &#39;box&#39;: (-0.505, 32.586, -8.277, 8.878),</span>
+<span class="go"> &#39;clear&#39;: True,</span>
+<span class="go"> &#39;edges&#39;: True,</span>
+<span class="go"> &#39;edlabel&#39;: False,</span>
+<span class="go"> &#39;edlblsize&#39;: 20,</span>
+<span class="go"> &#39;ednodes&#39;: True,</span>
+<span class="go"> &#39;fileoverlay&#39;: &#39;DLR4991.png&#39;,</span>
+<span class="go"> &#39;fontsize&#39;: 10,</span>
+<span class="go"> &#39;inverse&#39;: False,</span>
+<span class="go"> &#39;layer&#39;: [],</span>
+<span class="go"> &#39;layers&#39;: [&#39;WALL&#39;, &#39;PARTITION&#39;, &#39;AIR&#39;, &#39;WINDOW_GLASS&#39;, &#39;3D_WINDOW_GLASS&#39;],</span>
+<span class="go"> &#39;layerset&#39;: [&#39;WINDOW_GLASS&#39;,</span>
+<span class="go">  &#39;PLASTERBOARD_7CM&#39;,</span>
+<span class="go">  &#39;WALL&#39;,</span>
+<span class="go">  &#39;AIR&#39;,</span>
+<span class="go">  &#39;WINDOW&#39;,</span>
+<span class="go">  &#39;METALIC&#39;,</span>
+<span class="go">  &#39;PLASTERBOARD_14CM&#39;,</span>
+<span class="go">  &#39;DOOR&#39;,</span>
+<span class="go">  &#39;FLOOR&#39;,</span>
+<span class="go">  &#39;METAL&#39;,</span>
+<span class="go">  &#39;PARTITION&#39;,</span>
+<span class="go">  &#39;CONCRETE_20CM3D&#39;,</span>
+<span class="go">  &#39;PLASTERBOARD_10CM&#39;,</span>
+<span class="go">  &#39;CEIL&#39;,</span>
+<span class="go">  &#39;CONCRETE_6CM3D&#39;,</span>
+<span class="go">  &#39;CONCRETE_15CM3D&#39;,</span>
+<span class="go">  &#39;3D_WINDOW_GLASS&#39;,</span>
+<span class="go">  &#39;WALLS&#39;,</span>
+<span class="go">  &#39;WOOD&#39;,</span>
+<span class="go">  &#39;CONCRETE_7CM3D&#39;,</span>
+<span class="go">  &#39;PILLAR&#39;,</span>
+<span class="go">  &#39;ABSORBENT&#39;],</span>
+<span class="go"> &#39;ndlabel&#39;: False,</span>
+<span class="go"> &#39;ndlblsize&#39;: 20,</span>
+<span class="go"> &#39;ndsize&#39;: 10,</span>
+<span class="go"> &#39;nodes&#39;: True,</span>
+<span class="go"> &#39;overlay&#39;: False,</span>
+<span class="go"> &#39;scaled&#39;: True,</span>
+<span class="go"> &#39;subseg&#39;: True,</span>
+<span class="go"> &#39;subsegnb&#39;: True,</span>
+<span class="go"> &#39;thin&#39;: False,</span>
+<span class="go"> &#39;ticksoff&#39;: True,</span>
+<span class="go"> &#39;title&#39;: &#39;Init&#39;,</span>
+<span class="go"> &#39;transition&#39;: True,</span>
+<span class="go"> &#39;visu&#39;: False}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s1">&#39;WALL&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+ <span class="s1">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.505</span><span class="p">,</span> <span class="mf">32.586</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.277</span><span class="p">,</span> <span class="mf">8.878</span><span class="p">),</span>
+ <span class="s1">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;edlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;edlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s1">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s1">&#39;DLR4991.png&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s1">&#39;inverse&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
+ <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WALL&#39;</span><span class="p">,</span> <span class="s1">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s1">&#39;AIR&#39;</span><span class="p">,</span> <span class="s1">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span> <span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;AIR&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;WINDOW&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;METALIC&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;PLASTERBOARD_14CM&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;DOOR&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;FLOOR&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;METAL&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;PARTITION&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;PLASTERBOARD_10CM&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;CEIL&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;CONCRETE_6CM3D&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;CONCRETE_15CM3D&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;WALLS&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;WOOD&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;CONCRETE_7CM3D&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;PILLAR&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;ABSORBENT&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;ndlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;ndlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s1">&#39;ndsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;overlay&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;scaled&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;subseg&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;subsegnb&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;thin&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;ticksoff&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Init&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s1">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+</pre></div>
+</div>
 <div class="section" id="layers">
 <h3>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -294,7 +722,7 @@ are exploited in <code class="docutils literal"><span class="pre">showGs()</span
 <p>The command L.editor() launches an interactive editor. The state machine
 is implemented in module <code class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></code>.</p>
 <p>To have an idea of all available options, look in the
-<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.ne%20w_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.ne%20w_state</a>&gt;`__
+<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
 module</p>
 <p>All bug correction and ergonomic improvement of this editor is welcome.
 Just pull request your modifications.</p>
@@ -312,7 +740,7 @@ solution.</p>
 + center clic : same y point
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-1-3fbadf730daa&gt;&quot;, line 1
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-17-3fbadf730daa&gt;&quot;, line 1
     + left clic   : free point
               ^
 SyntaxError: invalid syntax
@@ -333,6 +761,29 @@ SyntaxError: invalid syntax
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;fileoverlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;http://images.wikia.com/theoffice/images/9/9e/Layout.jpg&#39;</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;scaled&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;ticksoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b5c4e0fbd10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b5c4e4eb990&gt;)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b5c4e0fb990&gt;
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_34_2.png" src="../../_images/LayoutEditor_34_2.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h3>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
@@ -373,7 +824,7 @@ meters) between the two points.</li>
 &#39;w&#39;  : display all layers
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-2-f38a305b0b72&gt;&quot;, line 1
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-21-f38a305b0b72&gt;&quot;, line 1
     &#39;b&#39;  : selct a segment
          ^
 SyntaxError: invalid syntax
@@ -382,6 +833,15 @@ SyntaxError: invalid syntax
 </div>
 <div class="section" id="vizualisation-of-the-layout">
 <h3>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/LayoutEditor_38_0.png" src="../../_images/LayoutEditor_38_0.png" />
 <p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> with a negative index is a point.</p>
 <p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
