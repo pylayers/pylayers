@@ -251,39 +251,6 @@ NameError: name &#39;struc&#39; is not defined
 <p><code class="docutils literal"><span class="pre">pstruc</span></code> is a dictionnary which gathers all directories which are used
 in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pstruc</span>
-<span class="go">{&#39;DIRANT&#39;: &#39;ant&#39;,</span>
-<span class="go"> &#39;DIRBODY&#39;: &#39;body&#39;,</span>
-<span class="go"> &#39;DIRC3D&#39;: &#39;body/c3d&#39;,</span>
-<span class="go"> &#39;DIRCIR&#39;: &#39;output&#39;,</span>
-<span class="go"> &#39;DIRCT&#39;: &#39;output/Ct&#39;,</span>
-<span class="go"> &#39;DIRFUR&#39;: &#39;struc/furnitures&#39;,</span>
-<span class="go"> &#39;DIRGEOM&#39;: &#39;geom&#39;,</span>
-<span class="go"> &#39;DIRGIS&#39;: &#39;gis&#39;,</span>
-<span class="go"> &#39;DIRH&#39;: &#39;output/H&#39;,</span>
-<span class="go"> &#39;DIRIMAGE&#39;: &#39;struc/images&#39;,</span>
-<span class="go"> &#39;DIRINI&#39;: &#39;struc/ini&#39;,</span>
-<span class="go"> &#39;DIRLCH&#39;: &#39;output&#39;,</span>
-<span class="go"> &#39;DIRLNK&#39;: &#39;output&#39;,</span>
-<span class="go"> &#39;DIRMAT&#39;: &#39;ini&#39;,</span>
-<span class="go"> &#39;DIRMAT2&#39;: &#39;ini&#39;,</span>
-<span class="go"> &#39;DIRMES&#39;: &#39;meas&#39;,</span>
-<span class="go"> &#39;DIRNETSAVE&#39;: &#39;netsave&#39;,</span>
-<span class="go"> &#39;DIROOSM&#39;: &#39;gis/osm&#39;,</span>
-<span class="go"> &#39;DIROSM&#39;: &#39;struc/osm&#39;,</span>
-<span class="go"> &#39;DIRPICKLE&#39;: &#39;struc/gpickle&#39;,</span>
-<span class="go"> &#39;DIRR2D&#39;: &#39;output/r2d&#39;,</span>
-<span class="go"> &#39;DIRR3D&#39;: &#39;output/r3d&#39;,</span>
-<span class="go"> &#39;DIRSIG&#39;: &#39;output/sig&#39;,</span>
-<span class="go"> &#39;DIRSIMUL&#39;: &#39;ini&#39;,</span>
-<span class="go"> &#39;DIRSLAB&#39;: &#39;ini&#39;,</span>
-<span class="go"> &#39;DIRSLAB2&#39;: &#39;ini&#39;,</span>
-<span class="go"> &#39;DIRSTRUC&#39;: &#39;struc/str&#39;,</span>
-<span class="go"> &#39;DIRSTRUC2&#39;: &#39;struc/str&#39;,</span>
-<span class="go"> &#39;DIRTRA&#39;: &#39;output&#39;,</span>
-<span class="go"> &#39;DIRTUD&#39;: &#39;output&#39;,</span>
-<span class="go"> &#39;DIRTx&#39;: &#39;output/Tx001&#39;,</span>
-<span class="go"> &#39;DIRWEAR&#39;: &#39;body/wear&#39;,</span>
-<span class="go"> &#39;DIRWRL&#39;: &#39;struc/wrl&#39;}</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;DIRANT&#39;</span><span class="p">:</span> <span class="s1">&#39;ant&#39;</span><span class="p">,</span>
@@ -322,16 +289,9 @@ in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
 </pre></div>
 </div>
 <p>The structure of the <code class="docutils literal"><span class="pre">.osm</span></code> file is shown below</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>&gt;&gt;&gt; %%bash
-...
-...     cd $BASENAME/struc
-...     ls *.osm
-DLR.osm
-MADRID-METIS.osm
-MOCAP2.osm
-MOCAP3.osm
-MOCAP-small2.osm
-TA-Office.osm
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">%%</span><span class="n">bash</span>
+<span class="go">    cd $BASENAME/struc</span>
+<span class="go">    ls *.osm</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">convexity</span><span class="o">.</span><span class="n">osm</span>
@@ -339,47 +299,11 @@ TA-Office.osm
 <span class="n">nonconvex</span><span class="o">.</span><span class="n">osm</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>bash: ligne 4: DLR.osm : commande introuvable
-bash: ligne 5: MADRID-METIS.osm : commande introuvable
-bash: ligne 6: MOCAP2.osm : commande introuvable
-bash: ligne 7: MOCAP3.osm : commande introuvable
-bash: ligne 8: MOCAP-small2.osm : commande introuvable
-bash: ligne 9: TA-Office.osm : commande introuvable
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>&gt;&gt;&gt; %%bash
-...     cd $BASENAME/struc
-...     head DLR.osm
-...     echo &#39;---&#39;
-...     tail -17 DLR.osm
-&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
-&lt;osm version=&#39;0.6&#39; upload=&#39;false&#39; generator=&#39;PyLayers&#39;&gt;
-&lt;node id=&#39;-212&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100855114&#39; lon=&#39;-1.98980710934&#39; /&gt;
-&lt;node id=&#39;-210&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100789151&#39; lon=&#39;-1.9897910381&#39; /&gt;
-&lt;node id=&#39;-208&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100738861&#39; lon=&#39;-1.98977878545&#39; /&gt;
-&lt;node id=&#39;-206&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100616861&#39; lon=&#39;-1.98982814281&#39; /&gt;
-&lt;node id=&#39;-204&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101583649&#39; lon=&#39;-1.98982436917&#39; /&gt;
-&lt;node id=&#39;-202&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101656174&#39; lon=&#39;-1.98981796656&#39; /&gt;
-&lt;node id=&#39;-200&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101843662&#39; lon=&#39;-1.98977935424&#39; /&gt;
-&lt;node id=&#39;-198&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101791636&#39; lon=&#39;-1.98982426816&#39; /&gt;
----
-&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
-&lt;/way&gt;
-&lt;way id=&#39;-10000123&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
-&lt;nd ref=&#39;-200&#39; /&gt;
-&lt;nd ref=&#39;-100&#39; /&gt;
-&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
-&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
-&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
-&lt;/way&gt;
-&lt;way id=&#39;-10000124&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
-&lt;nd ref=&#39;-166&#39; /&gt;
-&lt;nd ref=&#39;-188&#39; /&gt;
-&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
-&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
-&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
-&lt;/way&gt;
-&lt;/osm&gt;
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">%%</span><span class="n">bash</span>
+<span class="go">     cd $BASENAME/struc</span>
+<span class="go">     head DLR.osm</span>
+<span class="go">     echo &#39;---&#39;</span>
+<span class="go">     tail -17 DLR.osm</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---
@@ -387,8 +311,6 @@ bash: ligne 9: TA-Office.osm : commande introuvable
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>head: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
 tail: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
-bash: ligne 5: Erreur de syntaxe près du symbole inattendu « newline »
-bash: ligne 5: `&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;&#39;
 </pre></div>
 </div>
 <p>To read a new layout in osm format :</p>
@@ -400,29 +322,25 @@ bash: ligne 5: `&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;&#39
 </div>
 <img alt="../../_images/LayoutEditor_11_0.png" src="../../_images/LayoutEditor_11_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">filestr :  DLR.ini</span>
-<span class="go">filematini :  matDB.ini</span>
-<span class="go">fileslabini :  slabDB.ini</span>
-<span class="go">filegeom :  DLR.off</span>
-<span class="go">boundaries  (-0.505, 32.586, -8.277, 8.878)</span>
-<span class="go">number of Points : 105</span>
-<span class="go">number of Segments : 124</span>
-<span class="go">number of Sub-Segments : 30</span>
-<span class="go">Gs Nodes :  229</span>
-<span class="go">Gs Edges :  248</span>
-<span class="go">Gt Nodes :  0</span>
-<span class="go">Gt Edges :  0</span>
-<span class="go">vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle</span>
-<span class="go">poly = Gt.node[Nc][&#39;cycle&#39;].polyg</span>
-<span class="go">Gr Nodes    : 0</span>
-<span class="go">Gr Edges    : 0</span>
-<span class="go">Nc  = Gr.node[nroom][&#39;cycles&#39;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-8-f080ba66bd97&gt;&quot;, line 2
-    filestr :  DLR.ini
-            ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>filestr :  DLR.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  DLR.off
+boundaries  (-10.505, 42.586, -18.277, 18.878)
+number of Points : 109
+number of Segments : 138
+number of Sub-Segments : 30
+Gs Nodes :  247
+Gs Edges :  276
+Gt Nodes :  31
+Gt Edges :  79
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
+Gr Nodes    : 21
+Gr Edges    : 21
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </pre></div>
 </div>
 <p>The different graphs associated with the layout are then built</p>
@@ -543,96 +461,42 @@ ray signatures.</p>
 <div class="section" id="the-display-options-dictionnary">
 <h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">filestr :  DLR.ini</span>
-<span class="go">filematini :  matDB.ini</span>
-<span class="go">fileslabini :  slabDB.ini</span>
-<span class="go">filegeom :  DLR.off</span>
-<span class="go">boundaries  (-0.505, 32.586, -8.277, 8.878)</span>
-<span class="go">number of Points : 105</span>
-<span class="go">number of Segments : 124</span>
-<span class="go">number of Sub-Segments : 30</span>
-<span class="go">Gs Nodes :  229</span>
-<span class="go">Gs Edges :  248</span>
-<span class="go">Gt Nodes :  21</span>
-<span class="go">Gt Edges :  52</span>
-<span class="go">vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle</span>
-<span class="go">poly = Gt.node[Nc][&#39;cycle&#39;].polyg</span>
-<span class="go">Gr Nodes    : 18</span>
-<span class="go">Gr Edges    : 18</span>
-<span class="go">Nc  = Gr.node[nroom][&#39;cycles&#39;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-15-b3e7505f6503&gt;&quot;, line 2
-    filestr :  DLR.ini
-            ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>filestr :  DLR.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  DLR.off
+boundaries  (-10.505, 42.586, -18.277, 18.878)
+number of Points : 109
+number of Segments : 138
+number of Sub-Segments : 30
+Gs Nodes :  247
+Gs Edges :  276
+Gt Nodes :  31
+Gt Edges :  140
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
+Gr Nodes    : 26
+Gr Edges    : 114
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </pre></div>
 </div>
-<p>The layout can be displayed using matplotlib ploting primitive. Several
-display options are specified in the display dictionnary. Those options
-are exploited in <code class="docutils literal"><span class="pre">showGs()</span></code> vizualisation method.</p>
+<p>The layout can be displayed using matplotlib plotting primitive. Several
+display options are specified in the display dictionary. Those options
+are exploited in <code class="docutils literal"><span class="pre">showGs()</span></code> visualization method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">display</span>
-<span class="go">{&#39;activelayer&#39;: &#39;WALL&#39;,</span>
-<span class="go"> &#39;alpha&#39;: 0.5,</span>
-<span class="go"> &#39;box&#39;: (-0.505, 32.586, -8.277, 8.878),</span>
-<span class="go"> &#39;clear&#39;: True,</span>
-<span class="go"> &#39;edges&#39;: True,</span>
-<span class="go"> &#39;edlabel&#39;: False,</span>
-<span class="go"> &#39;edlblsize&#39;: 20,</span>
-<span class="go"> &#39;ednodes&#39;: True,</span>
-<span class="go"> &#39;fileoverlay&#39;: &#39;DLR4991.png&#39;,</span>
-<span class="go"> &#39;fontsize&#39;: 10,</span>
-<span class="go"> &#39;inverse&#39;: False,</span>
-<span class="go"> &#39;layer&#39;: [],</span>
-<span class="go"> &#39;layers&#39;: [&#39;WALL&#39;, &#39;PARTITION&#39;, &#39;AIR&#39;, &#39;WINDOW_GLASS&#39;, &#39;3D_WINDOW_GLASS&#39;],</span>
-<span class="go"> &#39;layerset&#39;: [&#39;WINDOW_GLASS&#39;,</span>
-<span class="go">  &#39;PLASTERBOARD_7CM&#39;,</span>
-<span class="go">  &#39;WALL&#39;,</span>
-<span class="go">  &#39;AIR&#39;,</span>
-<span class="go">  &#39;WINDOW&#39;,</span>
-<span class="go">  &#39;METALIC&#39;,</span>
-<span class="go">  &#39;PLASTERBOARD_14CM&#39;,</span>
-<span class="go">  &#39;DOOR&#39;,</span>
-<span class="go">  &#39;FLOOR&#39;,</span>
-<span class="go">  &#39;METAL&#39;,</span>
-<span class="go">  &#39;PARTITION&#39;,</span>
-<span class="go">  &#39;CONCRETE_20CM3D&#39;,</span>
-<span class="go">  &#39;PLASTERBOARD_10CM&#39;,</span>
-<span class="go">  &#39;CEIL&#39;,</span>
-<span class="go">  &#39;CONCRETE_6CM3D&#39;,</span>
-<span class="go">  &#39;CONCRETE_15CM3D&#39;,</span>
-<span class="go">  &#39;3D_WINDOW_GLASS&#39;,</span>
-<span class="go">  &#39;WALLS&#39;,</span>
-<span class="go">  &#39;WOOD&#39;,</span>
-<span class="go">  &#39;CONCRETE_7CM3D&#39;,</span>
-<span class="go">  &#39;PILLAR&#39;,</span>
-<span class="go">  &#39;ABSORBENT&#39;],</span>
-<span class="go"> &#39;ndlabel&#39;: False,</span>
-<span class="go"> &#39;ndlblsize&#39;: 20,</span>
-<span class="go"> &#39;ndsize&#39;: 10,</span>
-<span class="go"> &#39;nodes&#39;: True,</span>
-<span class="go"> &#39;overlay&#39;: False,</span>
-<span class="go"> &#39;scaled&#39;: True,</span>
-<span class="go"> &#39;subseg&#39;: True,</span>
-<span class="go"> &#39;subsegnb&#39;: True,</span>
-<span class="go"> &#39;thin&#39;: False,</span>
-<span class="go"> &#39;ticksoff&#39;: True,</span>
-<span class="go"> &#39;title&#39;: &#39;Init&#39;,</span>
-<span class="go"> &#39;transition&#39;: True,</span>
-<span class="go"> &#39;visu&#39;: False}</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s1">&#39;WALL&#39;</span><span class="p">,</span>
  <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="s1">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.505</span><span class="p">,</span> <span class="mf">32.586</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.277</span><span class="p">,</span> <span class="mf">8.878</span><span class="p">),</span>
+ <span class="s1">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">10.505</span><span class="p">,</span> <span class="mf">42.586</span><span class="p">,</span> <span class="o">-</span><span class="mf">18.277</span><span class="p">,</span> <span class="mf">18.878</span><span class="p">),</span>
  <span class="s1">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s1">&#39;edlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s1">&#39;edlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
  <span class="s1">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s1">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s1">&#39;DLR4991.png&#39;</span><span class="p">,</span>
  <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s1">&#39;inverse&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
  <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WALL&#39;</span><span class="p">,</span> <span class="s1">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s1">&#39;AIR&#39;</span><span class="p">,</span> <span class="s1">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span> <span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
  <span class="s1">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
@@ -662,6 +526,12 @@ are exploited in <code class="docutils literal"><span class="pre">showGs()</span
  <span class="s1">&#39;ndsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
  <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s1">&#39;overlay&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;overlay_axis&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">6.571295099826252</span><span class="p">,</span>
+  <span class="mf">38.37510026097863</span><span class="p">,</span>
+  <span class="o">-</span><span class="mf">11.339789148099044</span><span class="p">,</span>
+  <span class="mf">11.170751733658253</span><span class="p">],</span>
+ <span class="s1">&#39;overlay_file&#39;</span><span class="p">:</span> <span class="s1">&#39;DLR4991.png&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;overlay_flip&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
  <span class="s1">&#39;scaled&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s1">&#39;subseg&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s1">&#39;subsegnb&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
@@ -721,14 +591,12 @@ are exploited in <code class="docutils literal"><span class="pre">showGs()</span
 <h2>Interactive Editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
 <p>The command L.editor() launches an interactive editor. The state machine
 is implemented in module <code class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></code>.</p>
-<p>To have an idea of all available options, look in the
-<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
+<p>To have an idea of all available options, look in the</p>
+<p><code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
 module</p>
-<p>All bug correction and ergonomic improvement of this editor is welcome.
-Just pull request your modifications.</p>
 <p>PyLayers comes along with a low level structure editor based on
-<code class="docutils literal"><span class="pre">matplotlib</span></code> which can be invoqued using the <code class="docutils literal"><span class="pre">editor()</span></code> method. This
-editor is more suited for modyfing constitutive properties of walls. In
+<code class="docutils literal"><span class="pre">matplotlib</span></code> which can be invoked using the <code class="docutils literal"><span class="pre">editor()</span></code> method. This
+editor is more suited for modifying constitutive properties of walls. In
 the future a dedicated plugin in <code class="docutils literal"><span class="pre">JOSM</span></code> could be a much better
 solution.</p>
 <p>There are two different modes of edition</p>
@@ -776,11 +644,11 @@ a filename. In that case the file is stored in</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b5c4e0fbd10&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b5c4e4eb990&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b550ea2b790&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b550ee1d790&gt;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b5c4e0fb990&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b550ea2b7d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LayoutEditor_34_2.png" src="../../_images/LayoutEditor_34_2.png" />
@@ -846,7 +714,7 @@ SyntaxError: invalid syntax
 <p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -6px"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
-<p><a class="reference external" href="./Multisubsegments.ipynb">Multi Subsegments</a></p>
+<p><a class="reference external" href="./Multisubsegments.html">Multi Subsegments</a></p>
 </div>
 </div>
 </div>

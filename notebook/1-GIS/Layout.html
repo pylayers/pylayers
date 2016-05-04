@@ -137,11 +137,10 @@
             
   <div class="section" id="description-of-the-propagation-environment">
 <h1>Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">Layout</span></code> class contains the data structure for describing an
-Indoor environment. It contathe different graphs helping the
-implementation of the ray tracing. The class is implemented in the
-<code class="docutils literal"><span class="pre">`layout.py</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html">http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html</a>&gt;`__
-module.ins</p>
+<p>The <code class="docutils literal"><span class="pre">Layout</span></code> class contains the data structure for describing a
+propagation environment. It contains different graphs helping the
+implementation of the ray tracing. The class is implemented in the</p>
+<p><code class="docutils literal"><span class="pre">`layout.py</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html">http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html</a>&gt;`__</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
@@ -156,47 +155,44 @@ module.ins</p>
 <p>Creating a default Layout is as simple as :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>
-
-<span class="go">----------------</span>
-<span class="go">defstr.ini</span>
-<span class="go">----------------</span>
-
-<span class="go">Number of points  : 8</span>
-<span class="go">Number of segments  : 9</span>
-<span class="go">Number of sub segments  : 3</span>
-<span class="go">Number of cycles  : 3</span>
-<span class="go">Number of rooms  : 2</span>
-<span class="go">degree 0 : []</span>
-<span class="go">degree 1 : []</span>
-<span class="go">number of node point of degree 2 : 6</span>
-<span class="go">number of node point of degree 3 : 2</span>
-
-<span class="go">xrange :(758.49, 768.516)</span>
-<span class="go">yrange :(1111.9, 1115.963)</span>
-
-<span class="go">Useful dictionnaries</span>
-<span class="go">----------------</span>
-<span class="go">dca {cycle : []} cycle with an airwall</span>
-<span class="go">sl {slab name : slab dictionary}</span>
-<span class="go">name :  {slab :seglist}</span>
-
-<span class="go">Useful arrays</span>
-<span class="go">----------------</span>
-<span class="go">pt : numpy array of points</span>
-<span class="go">normal : numpy array of normal</span>
-<span class="go">offset : numpy array of offset</span>
-<span class="go">tsg : get segment index in Gs from tahe</span>
-<span class="go">isss :  sub-segment index above Nsmax</span>
-<span class="go">tgs : get segment index in tahe from Gs</span>
-<span class="go">lsss : list of segments with sub-segment</span>
-<span class="go">sla : list of all slab names (Nsmax+Nss+1)</span>
-<span class="go">degree : degree of nodes</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-2-352ea663191a&gt;&quot;, line 4
-    ----------------
-                    ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>----------------
+defstr.ini
+----------------
+
+Number of points  : 12
+Number of segments  : 17
+Number of sub segments  : 3
+Number of cycles  : 7
+Number of rooms  : 2
+degree 0 : [-12 -11 -10  -9]
+degree 1 : []
+number of node point of degree 2 : 6
+number of node point of degree 3 : 2
+
+xrange :(748.5, 778.5)
+yrange :(1101.9, 1125.9)
+
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
+
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
 </pre></div>
 </div>
 <p>Querying the file name associated with the Layout</p>
@@ -204,392 +200,381 @@ SyntaxError: invalid syntax
 <span class="go">&#39;defstr.ini&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-3-3b33f209cb23&gt; in &lt;module&gt;()
-----&gt; 1 L.filename
-      2 &#39;defstr.ini&#39;
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;defstr.ini&#39;</span>
 </pre></div>
 </div>
-<p>The Layout is described in an <code class="docutils literal"><span class="pre">.ini</span></code> file.The <code class="docutils literal"><span class="pre">ls()</span></code> method lists
-the layout files which are available in the <code class="docutils literal"><span class="pre">struc</span></code> directory of your
-current project, which is set up via the $BASENAME environment variable
-which is crucial to be early defined in order PyLayers find its way to
-the good directories.</p>
+<p>The Layout is described in an <code class="docutils literal"><span class="pre">.ini</span></code> file.</p>
+<p>The <code class="docutils literal"><span class="pre">ls()</span></code> method lists the layout files which are available in the
+<code class="docutils literal"><span class="pre">struc</span></code> directory of your current project, which is set up via the
+$BASENAME environment variable which should be defined in order PyLayers
+find the good directories.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;ini&#39;</span><span class="p">)</span>
-<span class="go">[&#39;11Dbibli.ini&#39;,</span>
-<span class="go"> &#39;CORM1.ini&#39;,</span>
-<span class="go"> &#39;DLR.ini&#39;,</span>
-<span class="go"> &#39;DLR2.ini&#39;,</span>
-<span class="go"> &#39;MADRID-METIS.ini&#39;,</span>
-<span class="go"> &#39;MOCAP-small.ini&#39;,</span>
-<span class="go"> &#39;MOCAP-small2.ini&#39;,</span>
-<span class="go"> &#39;MOCAP-small3.ini&#39;,</span>
-<span class="go"> &#39;MOCAP.ini&#39;,</span>
-<span class="go"> &#39;MOCAPext.ini&#39;,</span>
-<span class="go"> &#39;Scene.ini&#39;,</span>
-<span class="go"> &#39;TA-Office.ini&#39;,</span>
-<span class="go"> &#39;TA-OfficeAir.ini&#39;,</span>
-<span class="go"> &#39;Test_layout6.ini&#39;,</span>
-<span class="go"> &#39;W2PTIN.ini&#39;,</span>
-<span class="go"> &#39;WHERE1.ini&#39;,</span>
-<span class="go"> &#39;WHERE2.ini&#39;,</span>
-<span class="go"> &#39;d24.ini&#39;,</span>
-<span class="go"> &#39;defstr.ini&#39;,</span>
-<span class="go"> &#39;defstr3.ini&#39;,</span>
-<span class="go"> &#39;homeK_vf.ini&#39;,</span>
-<span class="go"> &#39;klepal.ini&#39;,</span>
-<span class="go"> &#39;nicta.ini&#39;,</span>
-<span class="go"> &#39;rr.ini&#39;,</span>
-<span class="go"> &#39;scat1.ini&#39;,</span>
-<span class="go"> &#39;scat2.ini&#39;,</span>
-<span class="go"> &#39;scattering.ini&#39;,</span>
-<span class="go"> &#39;test.ini&#39;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-4-ce75dd86ad91&gt; in &lt;module&gt;()
-----&gt; 1 L.ls(&#39;ini&#39;)
-      2 [&#39;11Dbibli.ini&#39;,
-      3  &#39;CORM1.ini&#39;,
-      4  &#39;DLR.ini&#39;,
-      5  &#39;DLR2.ini&#39;,
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;11Dbibli.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;CORM1.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DLR-bug.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DLR.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DLR2.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Jimmy.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Luebbers.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAP-small.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAP-small2.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAP.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAPext.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;NYU.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Scene.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;TA-Office_sauv.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;TC1_METIS.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;W2PTIN.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;WHERE1.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;WHERE1_sauv.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;convexity.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defdiff.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defsthdiff.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defstr.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defstr3.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;edge.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;klepal.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;nonconvex.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;scattering.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;square.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;test.ini&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>
-
-<span class="go">----------------</span>
-<span class="go">defstr.ini</span>
-<span class="go">----------------</span>
-
-<span class="go">Number of points  : 8</span>
-<span class="go">Number of segments  : 9</span>
-<span class="go">Number of sub segments  : 3</span>
-<span class="go">Number of cycles  : 3</span>
-<span class="go">Number of rooms  : 2</span>
-<span class="go">degree 0 : []</span>
-<span class="go">degree 1 : []</span>
-<span class="go">number of node point of degree 2 : 6</span>
-<span class="go">number of node point of degree 3 : 2</span>
-
-<span class="go">xrange :(758.49, 768.516)</span>
-<span class="go">yrange :(1111.9, 1115.963)</span>
-
-<span class="go">Useful dictionnaries</span>
-<span class="go">----------------</span>
-<span class="go">dca {cycle : []} cycle with an airwall</span>
-<span class="go">sl {slab name : slab dictionary}</span>
-<span class="go">name :  {slab :seglist}</span>
-
-<span class="go">Useful arrays</span>
-<span class="go">----------------</span>
-<span class="go">pt : numpy array of points</span>
-<span class="go">normal : numpy array of normal</span>
-<span class="go">offset : numpy array of offset</span>
-<span class="go">tsg : get segment index in Gs from tahe</span>
-<span class="go">isss :  sub-segment index above Nsmax</span>
-<span class="go">tgs : get segment index in tahe from Gs</span>
-<span class="go">lsss : list of segments with sub-segment</span>
-<span class="go">sla : list of all slab names (Nsmax+Nss+1)</span>
-<span class="go">degree : degree of nodes</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-6-03563da311d6&gt;&quot;, line 3
-    ----------------
-                    ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>----------------
+defstr.ini
+----------------
+
+Number of points  : 12
+Number of segments  : 17
+Number of sub segments  : 3
+Number of cycles  : 7
+Number of rooms  : 2
+degree 0 : [-12 -11 -10  -9]
+degree 1 : []
+number of node point of degree 2 : 6
+number of node point of degree 3 : 2
+
+xrange :(748.5, 778.5)
+yrange :(1101.9, 1125.9)
+
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
+
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">slab</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_10_0.png" src="../../_images/Layout_10_0.png" />
-<p>L.ax is : (xmin,xmax,ymin,ymax)</p>
+<p>L.ax provides the boubdary of the layout with the following format :
+(xmin,xmax,ymin,ymax)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
-<span class="go">(758.49, 768.516, 1111.9, 1115.963)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">758.49</span><span class="p">,</span> <span class="mf">768.516</span><span class="p">,</span> <span class="mf">1111.9</span><span class="p">,</span> <span class="mf">1115.963</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">748.5</span><span class="p">,</span> <span class="mf">778.5</span><span class="p">,</span> <span class="mf">1101.9</span><span class="p">,</span> <span class="mf">1125.9</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span>=======
 ```python
 &gt;&gt;&gt; L.ax
-(758.49, 768.516, 1111.9, 1115.963)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-9-fce3e6a072c4&gt;&quot;, line 1
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-9-a665882d59d9&gt;&quot;, line 1
     =======
      ^
 SyntaxError: invalid syntax
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;&gt;&gt;&gt;&gt; master</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-10-a0ff386569cc&gt;&quot;, line 1
-    &gt;&gt;&gt;&gt;&gt;&gt;&gt; master
-     ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
+<p>L.ma is the polygon mask of the layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ma</span>
-<span class="go">(763.49,1115.931)</span>
-<span class="go">(768.49,1115.963)</span>
-<span class="go">(768.516,1111.964)</span>
-<span class="go">(763.516,1111.932)</span>
-<span class="go">(758.516,1111.9)</span>
-<span class="go">(758.49,1115.9)</span>
-
-<span class="go">vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-11-891149bf8d7c&gt;&quot;, line 9
-    vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )
-           ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
-<p>This Layout has 3 cycles. Negative index cycle are outdoor and positive
-index cycle are indoor. The list of diffraction point for indoor is in
-ldiffin and the list of diffraction points for outdoor diffraction is in
-ldiffout. These two listr are</p>
+<img src="../../_images/Layout_16_0.svg" /><p>This Layout has several convex cycles which are stored in the Gt graph.
+The diffraction points oare stored in a discretionary L.ddiff. The keys
+of this diction-nary are the diffraction point and the values are both
+the list of output cycles and the corresponding wedge angle.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gv</span><span class="o">.</span><span class="n">node</span>
-<span class="go">{1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}, 7: {}, 8: {}, 9: {}}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">2</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">3</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">4</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">5</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">6</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">7</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">8</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">9</span><span class="p">:</span> <span class="p">{}}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">7</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">8</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">16</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">17</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">20</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="mi">21</span><span class="p">:</span> <span class="p">{}}</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ldiff</span>
-<span class="go">[-6, -4, -3, -1]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ddiff</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-13-46e5a8777357&gt; in &lt;module&gt;()
-----&gt; 1 L.ldiff
-      2 [-6, -4, -3, -1]
-
-
-AttributeError: &#39;Layout&#39; object has no attribute &#39;ldiff&#39;
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ldiffin</span>
-<span class="go">[]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-14-0b2e527d6b66&gt; in &lt;module&gt;()
-----&gt; 1 L.ldiffin
-      2 []
-
-
-AttributeError: &#39;Layout&#39; object has no attribute &#39;ldiffin&#39;
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ldiffout</span>
-<span class="go">[-6, -4, -3, -1]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-15-22ade19ea939&gt; in &lt;module&gt;()
-----&gt; 1 L.ldiffout
-      2 [-6, -4, -3, -1]
-
-
-AttributeError: &#39;Layout&#39; object has no attribute &#39;ldiffout&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">)}</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span>
-<span class="go">{0: {&#39;indoor&#39;: False,</span>
-<span class="go">  &#39;inter&#39;: [(6, 0),</span>
-<span class="go">   (6, 0, 1),</span>
-<span class="go">   (6, 1, 0),</span>
-<span class="go">   (7, 0),</span>
-<span class="go">   (7, 0, 1),</span>
-<span class="go">   (7, 1, 0),</span>
-<span class="go">   (8, 0),</span>
-<span class="go">   (8, 0, 1),</span>
-<span class="go">   (8, 1, 0),</span>
-<span class="go">   (9, 0),</span>
-<span class="go">   (9, 0, 2),</span>
-<span class="go">   (9, 2, 0),</span>
-<span class="go">   (4, 0),</span>
-<span class="go">   (4, 0, 2),</span>
-<span class="go">   (4, 2, 0),</span>
-<span class="go">   (5, 0),</span>
-<span class="go">   (5, 0, 2),</span>
-<span class="go">   (5, 2, 0),</span>
-<span class="go">   (-4,),</span>
-<span class="go">   (-3,),</span>
-<span class="go">   (-1,),</span>
-<span class="go">   (-6,)],</span>
-<span class="go">  &#39;isopen&#39;: True,</span>
-<span class="go">  &#39;polyg&#39;: (753.49,1106.9)</span>
-<span class="go">  (753.49,1120.963)</span>
-<span class="go">  (773.516,1120.963)</span>
-<span class="go">  (773.516,1106.9)</span>
-
-<span class="go">  vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )},</span>
-<span class="go"> 1: {&#39;cycle&#39;: cycle nstr[-8  2 -2  8 -3  7 -4  6 -5  3 -7  1]</span>
-<span class="go">  point number 6</span>
-<span class="go">  segment number 6</span>
-<span class="go">  area : 19.995824</span>
-<span class="go">  centroid : [  766.00300113  1113.94747911],</span>
-<span class="go">  &#39;indoor&#39;: True,</span>
-<span class="go">  &#39;inter&#39;: [(2, 1),</span>
-<span class="go">   (2, 1, 2),</span>
-<span class="go">   (2, 2, 1),</span>
-<span class="go">   (8, 1),</span>
-<span class="go">   (8, 1, 0),</span>
-<span class="go">   (8, 0, 1),</span>
-<span class="go">   (7, 1),</span>
-<span class="go">   (7, 1, 0),</span>
-<span class="go">   (7, 0, 1),</span>
-<span class="go">   (6, 1),</span>
-<span class="go">   (6, 1, 0),</span>
-<span class="go">   (6, 0, 1),</span>
-<span class="go">   (3, 1),</span>
-<span class="go">   (3, 1, 2),</span>
-<span class="go">   (3, 2, 1),</span>
-<span class="go">   (1, 1),</span>
-<span class="go">   (1, 1, 2),</span>
-<span class="go">   (1, 2, 1)],</span>
-<span class="go">  &#39;isopen&#39;: False,</span>
-<span class="go">  &#39;polyg&#39;: (763.506,1113.432)</span>
-<span class="go">  (763.516,1111.932)</span>
-<span class="go">  (768.516,1111.964)</span>
-<span class="go">  (768.49,1115.963)</span>
-<span class="go">  (763.49,1115.931)</span>
-<span class="go">  (763.5,1114.432)</span>
-
-<span class="go">  vnodes : (-8 2 -2 8 -3 7 -4 6 -5 3 -7 1 )},</span>
-<span class="go"> 2: {&#39;cycle&#39;: cycle nstr[-8  2 -2  9 -1  4 -6  5 -5  3 -7  1]</span>
-<span class="go">  point number 6</span>
-<span class="go">  segment number 6</span>
-<span class="go">  area : -19.998327</span>
-<span class="go">  centroid : [  761.0028967   1113.91576981],</span>
-<span class="go">  &#39;indoor&#39;: True,</span>
-<span class="go">  &#39;inter&#39;: [(2, 2),</span>
-<span class="go">   (2, 2, 1),</span>
-<span class="go">   (2, 1, 2),</span>
-<span class="go">   (9, 2),</span>
-<span class="go">   (9, 2, 0),</span>
-<span class="go">   (9, 0, 2),</span>
-<span class="go">   (4, 2),</span>
-<span class="go">   (4, 2, 0),</span>
-<span class="go">   (4, 0, 2),</span>
-<span class="go">   (5, 2),</span>
-<span class="go">   (5, 2, 0),</span>
-<span class="go">   (5, 0, 2),</span>
-<span class="go">   (3, 2),</span>
-<span class="go">   (3, 2, 1),</span>
-<span class="go">   (3, 1, 2),</span>
-<span class="go">   (1, 2),</span>
-<span class="go">   (1, 2, 1),</span>
-<span class="go">   (1, 1, 2)],</span>
-<span class="go">  &#39;isopen&#39;: False,</span>
-<span class="go">  &#39;polyg&#39;: (763.506,1113.432)</span>
-<span class="go">  (763.516,1111.932)</span>
-<span class="go">  (758.516,1111.9)</span>
-<span class="go">  (758.49,1115.9)</span>
-<span class="go">  (763.49,1115.931)</span>
-<span class="go">  (763.5,1114.432)</span>
-
-<span class="go">  vnodes : (-8 2 -2 9 -1 4 -6 5 -5 3 -7 1 )}}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-16-4c0b75a54d06&gt;&quot;, line 31
-    vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )},
-         ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>{0: {&#39;indoor&#39;: False},
+ 1: {&#39;cycle&#39;: cycle nstr[-8  2 -2  8 -3  7 -4  6 -5  3 -7  1]
+  point number 6
+  segment number 6
+  area : 20.0
+  centroid : [  766.   1113.9],
+  &#39;indoor&#39;: True,
+  &#39;inter&#39;: [(1, 1),
+   (1, 1, 2),
+   (1, 2, 1),
+   (3, 1),
+   (3, 1, 2),
+   (3, 2, 1),
+   (6, 1),
+   (6, 1, 4),
+   (6, 4, 1),
+   (7, 1),
+   (7, 1, 5),
+   (7, 5, 1),
+   (8, 1),
+   (8, 1, 6),
+   (8, 6, 1),
+   (2, 1),
+   (2, 1, 2),
+   (2, 2, 1),
+   (-3,),
+   (-1,)],
+  &#39;isopen&#39;: False,
+  &#39;polyg&#39;: (763.5,1113.432)
+  (763.5,1114.432)
+  (763.5,1115.9)
+  (768.5,1115.9)
+  (768.5,1111.9)
+  (763.5,1111.9)
 
-TypeError                                 Traceback (most recent call last)
+  vnodes : (-8 1 -7 3 -5 6 -4 7 -3 8 -2 2 )},
+ 2: {&#39;cycle&#39;: cycle nstr[-8  2 -2  9 -1  4 -6  5 -5  3 -7  1]
+  point number 6
+  segment number 6
+  area : -20.0
+  centroid : [  761.   1113.9],
+  &#39;indoor&#39;: True,
+  &#39;inter&#39;: [(1, 2),
+   (1, 2, 1),
+   (1, 1, 2),
+   (2, 2),
+   (2, 2, 1),
+   (2, 1, 2),
+   (9, 2),
+   (9, 2, 6),
+   (9, 6, 2),
+   (4, 2),
+   (4, 2, 3),
+   (4, 3, 2),
+   (5, 2),
+   (5, 2, 4),
+   (5, 4, 2),
+   (3, 2),
+   (3, 2, 1),
+   (3, 1, 2),
+   (-3,),
+   (-1,)],
+  &#39;isopen&#39;: False,
+  &#39;polyg&#39;: (763.5,1114.432)
+  (763.5,1113.432)
+  (763.5,1111.9)
+  (758.5,1111.9)
+  (758.5,1115.9)
+  (763.5,1115.9)
 
-&lt;ipython-input-17-ab53c04c2744&gt; in &lt;module&gt;()
-----&gt; 1 f,a=L.showG
+  vnodes : (-7 1 -8 2 -2 9 -1 4 -6 5 -5 3 )},
+ 3: {&#39;cycle&#39;: cycle nstr[ -6  20 -12  13  -9  16  -1   4]
+  point number 4
+  segment number 4
+  area : 140.0
+  centroid : [  752.30952381  1113.9       ],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(4, 3),
+   (4, 3, 2),
+   (4, 2, 3),
+   (16, 3, 6),
+   (16, 6, 3),
+   (13, 3, 0),
+   (13, 0, 3),
+   (20, 3, 4),
+   (20, 4, 3),
+   (-3,),
+   (-1,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (758.5,1115.9)
+  (758.5,1111.9)
+  (748.5,1101.9)
+  (748.5,1125.9)
 
+  vnodes : (-6 4 -1 16 -9 13 -12 20 )},
+ 4: {&#39;cycle&#39;: cycle nstr[ -6  20 -12  12 -11  21  -4   6  -5   5]
+  point number 5
+  segment number 5
+  area : -200.0
+  centroid : [  763.5         1121.73333333],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(5, 4),
+   (5, 4, 2),
+   (5, 2, 4),
+   (20, 4, 3),
+   (20, 3, 4),
+   (12, 4, 0),
+   (12, 0, 4),
+   (21, 4, 5),
+   (21, 5, 4),
+   (6, 4),
+   (6, 4, 1),
+   (6, 1, 4),
+   (-3,),
+   (-1,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (763.5,1115.9)
+  (758.5,1115.9)
+  (748.5,1125.9)
+  (778.5,1125.9)
+  (768.5,1115.9)
 
-TypeError: &#39;instancemethod&#39; object is not iterable
+  vnodes : (-5 5 -6 20 -12 12 -11 21 -4 6 )},
+ 5: {&#39;cycle&#39;: cycle nstr[ -4  21 -11  11 -10  17  -3   7]
+  point number 4
+  segment number 4
+  area : -140.0
+  centroid : [  774.69047619  1113.9       ],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(7, 5),
+   (7, 5, 1),
+   (7, 1, 5),
+   (21, 5, 4),
+   (21, 4, 5),
+   (11, 5, 0),
+   (11, 0, 5),
+   (17, 5, 6),
+   (17, 6, 5),
+   (-3,),
+   (-1,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (768.5,1111.9)
+  (768.5,1115.9)
+  (778.5,1125.9)
+  (778.5,1101.9)
+
+  vnodes : (-3 7 -4 21 -11 11 -10 17 )},
+ 6: {&#39;cycle&#39;: cycle nstr[ -3  17 -10  10  -9  16  -1   9  -2   8]
+  point number 5
+  segment number 5
+  area : -200.0
+  centroid : [  763.5         1106.06666667],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(8, 6),
+   (8, 6, 1),
+   (8, 1, 6),
+   (17, 6, 5),
+   (17, 5, 6),
+   (10, 6, 0),
+   (10, 0, 6),
+   (16, 6, 3),
+   (16, 3, 6),
+   (9, 6),
+   (9, 6, 2),
+   (9, 2, 6),
+   (-3,),
+   (-1,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (763.5,1111.9)
+  (768.5,1111.9)
+  (778.5,1101.9)
+  (748.5,1101.9)
+  (758.5,1111.9)
+
+  vnodes : (-2 8 -3 17 -10 10 -9 16 -1 9 )}}
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;DLR.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">aw</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_24_0.png" src="../../_images/Layout_24_0.png" />
+<img alt="../../_images/Layout_22_0.png" src="../../_images/Layout_22_0.png" />
 <p>To check which are the used slabs :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Slabs</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
-<span class="go">3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]</span>
-
-<span class="go">AIR : AIR | [0.02]</span>
-
-<span class="go">DOOR : WOOD | [0.03]</span>
-
-<span class="go">METAL : METAL | [0.1]</span>
-
-<span class="go">PARTITION : PLASTER | [0.1]</span>
-
-<span class="go">WALL : BRICK | [0.07]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">:</span>
+<span class="go">           print L.sl[s]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-20-7f81a2cfb2ec&gt;&quot;, line 5
-    3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
-                  ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
+
+AIR : AIR | [0.02]
+
+DOOR : WOOD | [0.03]
+
+METAL : METAL | [0.1]
+
+PARTITION : PLASTER | [0.1]
+
+WALL : BRICK | [0.07]
 </pre></div>
 </div>
 <p>Let&#8217;s load an other layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The showG method provides many vizualization of the layout</p>
+<p>The showG method provides many possible visualization of the layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_30_0.png" src="../../_images/Layout_30_0.png" />
+<img alt="../../_images/Layout_28_0.png" src="../../_images/Layout_28_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_32_0.png" src="../../_images/Layout_32_0.png" />
+<img alt="../../_images/Layout_30_0.png" src="../../_images/Layout_30_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
 <h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
@@ -611,12 +596,12 @@ numpy array which are mostly used internally.</p>
 <h3><code class="docutils literal"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
 <p>The point coordinates are stored in two different places (which in
 principle is a bad thing to do !).</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>L.Gs.pos : in a dictionnary form (key is the point negative index)
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>L.Gs.pos : in a dictionary form (key is the point negative index)
 L.pt : in a numpy array
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-25-111e63864323&gt;&quot;, line 1
-    L.Gs.pos : in a dictionnary form (key is the point negative index)
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-22-3648a03bd3e2&gt;&quot;, line 1
+    L.Gs.pos : in a dictionary form (key is the point negative index)
              ^
 SyntaxError: invalid syntax
 </pre></div>
@@ -629,10 +614,10 @@ SyntaxError: invalid syntax
 <span class="mi">189</span>
 </pre></div>
 </div>
-<p>This dual storage is chosen (temporarily ? ) for computational
-efficiency reason. The priority goes to the graph and the numpy array is
-calculated at the end of the edition in the <code class="docutils literal"><span class="pre">Layout.g2npy</span></code> method
-(graph to numpy) which is in charge of the conversion.</p>
+<p>This dual storage is chosen for computational efficiency reason. The
+priority goes to the graph and the numpy array is calculated at the end
+of the edition in the <code class="docutils literal"><span class="pre">Layout.g2npy</span></code> method (graph to numpy) which is
+in charge of the conversion.</p>
 </div>
 <div class="section" id="tahe-tail-head">
 <h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
@@ -647,7 +632,7 @@ Where <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: rela
 
 KeyError                                  Traceback (most recent call last)
 
-&lt;ipython-input-27-63002b766909&gt; in &lt;module&gt;()
+&lt;ipython-input-24-63002b766909&gt; in &lt;module&gt;()
 ----&gt; 1 L.build()
 
 
@@ -693,7 +678,7 @@ connected to the origin (corresponding to exterior cycle).</p>
 
 AttributeError                            Traceback (most recent call last)
 
-&lt;ipython-input-28-409b00e0f26f&gt; in &lt;module&gt;()
+&lt;ipython-input-25-409b00e0f26f&gt; in &lt;module&gt;()
       1 f,a = L.showG(&#39;s&#39;)
 ----&gt; 2 nx.draw(L.Gc,L.Gc.pos)
 
@@ -701,15 +686,15 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: &#39;Layout&#39; object has no attribute &#39;Gc&#39;
 </pre></div>
 </div>
-<img alt="../../_images/Layout_39_1.png" src="../../_images/Layout_39_1.png" />
+<img alt="../../_images/Layout_37_1.png" src="../../_images/Layout_37_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x2af91da8e6d0&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x2b95cfb46ed0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Layout_40_1.png" src="../../_images/Layout_40_1.png" />
+<img alt="../../_images/Layout_38_1.png" src="../../_images/Layout_38_1.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
@@ -805,7 +790,7 @@ because none segment has 0 as an index.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_57_1.png" src="../../_images/Layout_57_1.png" />
+<img alt="../../_images/Layout_55_1.png" src="../../_images/Layout_55_1.png" />
 </div>
 </div>
 
