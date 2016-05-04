@@ -129,34 +129,109 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
+  <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.gis.ezone</span> <span class="kn">as</span> <span class="nn">ez</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.gisutil</span> <span class="kn">import</span> <span class="n">ent</span><span class="p">,</span><span class="n">ext2qt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>%matplotlib inline
+</pre></div>
+</div>
+<div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
 <h1>Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal"><span class="pre">Ezone</span></code> class handles an earth zone which corresponds to the
 <code class="docutils literal"><span class="pre">strm</span></code> or <code class="docutils literal"><span class="pre">aster</span></code> DEM data. It has the same naming convention as
 <code class="docutils literal"><span class="pre">srtm</span></code> files and corresponds to a portion of earth corresponding to 1
-° latitude and 1° of longitude. An <code class="docutils literal"><span class="pre">Ezone</span></code> is an heterogeneous dataset
-stored in <code class="docutils literal"><span class="pre">hdf5</span></code> format.</p>
-<p>Let consider an example with the file <code class="docutils literal"><span class="pre">N48W002.h5</span></code>.</p>
+latitude and 1 of longitude. An <code class="docutils literal"><span class="pre">Ezone</span></code> is an heterogeneous dataset
+stored in <code class="docutils literal"><span class="pre">hdf5</span></code> format. Let see an example with the file
+<code class="docutils literal"><span class="pre">N48W002.h5</span></code>.</p>
 <p>By default files are placed in directory <code class="docutils literal"><span class="pre">gis/h5</span></code> of the current
 project tree.</p>
 <p>The command h5ls allows to see the hierarchical structure of the file</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>!h5ls $BASENAME/gis/h5/N48W002.h5ls
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/gis/h5/N48W002.h5ls: unable to open file
+</pre></div>
+</div>
 <p>Invoquing an earth zone requires to specify the tile prefix with the
 same naming convention as with SRTM files. For example let consider the
-earth zone from -2 to -1 in longitude west and from 48 to 49 in latitude
-North this corresponds to the <code class="docutils literal"><span class="pre">N48W002</span></code> tile, so the ezone <code class="docutils literal"><span class="pre">z</span></code> is
+earth zone from -2 to -1 in west longitude and from 48 to 49 in North
+latitude this corresponds to the <code class="docutils literal"><span class="pre">N48W002</span></code> tile, so the ezone <code class="docutils literal"><span class="pre">z</span></code> is
 invoqued as :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">Ezone</span><span class="p">(</span><span class="s1">&#39;N48W002&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>In this initial phase no data is loaded yet, to load all the data
 gathered for this <code class="docutils literal"><span class="pre">Ezone</span></code> in an existing HDF5 file let invoque the
 <code class="docutils literal"><span class="pre">loadh5</span></code> method.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>N48W002
+--------
+latlon (deg) : [-2 -1 48 49]
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]
+
+Buildings
+---------
+i-longitude : 64 96
+i-latitude  : 19 38
+</pre></div>
+</div>
 <p>This object contains the srtm DEM data, the aster data and a filtration
 of the <code class="docutils literal"><span class="pre">open</span> <span class="pre">street</span> <span class="pre">map</span></code> database selecting only the ways with
 <code class="docutils literal"><span class="pre">building</span></code> attribute. Let&#8217;s have a look to the data with the <code class="docutils literal"><span class="pre">show</span></code>
 method.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ltiles</span> <span class="o">=</span> <span class="n">ext2qt</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">extent</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">lL0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">150</span><span class="p">,</span><span class="mi">350</span><span class="p">],</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ab09b7b6190&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2ab0d2d79590&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x2ab0d836aa10&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_11_1.png" src="../../_images/Ezone_11_1.png" />
 <p>The <code class="docutils literal"><span class="pre">Ezone</span></code> object has a member extent which gives
 [lonmin,lonmax,latmin,latmax]</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span><span class="o">.</span><span class="n">extent</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">49</span><span class="p">])</span>
+</pre></div>
+</div>
 <p>The shape of hgta data is larger (3601,3601) than the srtm data
 (1201,1201)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">hgta</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3601</span><span class="p">,</span> <span class="mi">3601</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">hgts</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1201</span><span class="p">,</span> <span class="mi">1201</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>The aster DEM can also be shown.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;aster&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">320</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ab0d3153710&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2ab0d82f9410&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x2ab0d8959510&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_18_1.png" src="../../_images/Ezone_18_1.png" />
 <p>An earth zone has an attached dictionnary of buildings, which contains
 the data of all the set of building footprints of the city extracted out
 of open street map data. Below is shown an example for the city of
@@ -167,13 +242,91 @@ Rennes in Brittany (France).</p>
 given rectangular region with <code class="docutils literal"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></code>.</p>
 <p>This region can be converted into cartesian coordinates with the
 <code class="docutils literal"><span class="pre">conv</span></code> method.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">extent1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.6</span><span class="p">,</span><span class="mf">48.05</span><span class="p">,</span><span class="mf">48.15</span><span class="p">)</span>
+<span class="n">extent1_cart</span>  <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">extent1</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;latlon extent :&quot;</span><span class="p">,</span><span class="n">extent1</span>
+<span class="k">print</span> <span class="s2">&quot;Cartesian extent (meters):&quot;</span><span class="p">,</span><span class="n">extent1_cart</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>latlon extent : (-1.8, -1.6, 48.05, 48.15)
+Cartesian extent (meters): [ 14902.21631869  29782.9577558    5482.53114884  16563.42201909]
+</pre></div>
+</div>
 <p>Once the selected extent has been chosen, it is possible to pass it to
 the <code class="docutils literal"><span class="pre">show</span></code> method for zooming in the map.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">axd</span><span class="o">=</span><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Rennes City Center (ASTER data)&#39;</span><span class="p">,</span>
+              <span class="n">extent</span><span class="o">=</span><span class="n">extent1</span><span class="p">,</span>
+              <span class="n">bldg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">contour</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="n">source</span><span class="o">=</span><span class="s1">&#39;aster&#39;</span><span class="p">,</span>
+                <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">105</span><span class="p">],</span>
+                <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+              <span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_22_0.png" src="../../_images/Ezone_22_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">axd</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Rennes City Center (SRTM data)&#39;</span><span class="p">,</span>
+              <span class="n">extent</span><span class="o">=</span><span class="n">extent1</span><span class="p">,</span>
+            <span class="n">bldg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">contour</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+           <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">,</span>
+                  <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">105</span><span class="p">],</span>
+          <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+                 <span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_23_0.png" src="../../_images/Ezone_23_0.png" />
 <p>The maps diplayed above are labeled in longitude (horizontal axis) and
 latitude (vertical axis) but it is also possible to label it in
 cartesian coordinates as below</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">z</span><span class="o">.</span><span class="n">rebase</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+<span class="n">z</span><span class="o">.</span><span class="n">tocart</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">axd</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Rennes City Center&#39;</span><span class="p">,</span>
+             <span class="n">extent</span><span class="o">=</span><span class="n">extent1_cart</span><span class="p">,</span><span class="n">coord</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span>
+             <span class="n">bldg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_26_0.png" src="../../_images/Ezone_26_0.png" />
 <p>Let zoom to the University of Rennes 1 campus in the North-East region
 of the city.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">extent2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.645</span><span class="p">,</span><span class="o">-</span><span class="mf">1.62</span><span class="p">,</span><span class="mf">48.111</span><span class="p">,</span><span class="mf">48.125</span><span class="p">)</span>
+<span class="n">extent2_cart</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">extent2</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">extent2</span>
+<span class="k">print</span> <span class="n">extent2_cart</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(-1.645, -1.62, 48.111, 48.125)
+[ 26436.36082372  28294.87716101  12232.14024036  13785.67272683]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">axd</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Beaulieu Campus&#39;</span><span class="p">,</span>
+              <span class="n">extent</span><span class="o">=</span><span class="n">extent2_cart</span><span class="p">,</span>
+              <span class="n">coord</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span>
+              <span class="n">height</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="n">bldg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_29_0.png" src="../../_images/Ezone_29_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>f,a,axd  = z.show(title=&#39;Beaulieu Campus&#39;,
+             extent=extent2_cart,
+...              coord=&#39;cartesian&#39;,
+...              bldg=True,
+...              height=True,
+...              clim=[0,80])
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-20-dee4e4d50ca4&gt;&quot;, line 3
+    ...              coord=&#39;cartesian&#39;,
+    ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
 </div>
 <div class="section" id="ground-height-profile-extraction">
 <h2>Ground Height Profile Extraction<a class="headerlink" href="#ground-height-profile-extraction" title="Permalink to this headline">¶</a></h2>
@@ -182,6 +335,108 @@ height profile between 2 points on the earth surface. The <code class="docutils 
 method does a profile extraction and geometrical calculation for further
 propagation loss determination using the Deygout method. Points have to
 be expressed in (lon,lat) coordinates in WGS84 system.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">dh</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">num</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">LOS</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">profile</span><span class="p">(</span><span class="n">pa</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.645</span><span class="p">,</span><span class="mf">48.111</span><span class="p">),</span>
+<span class="gp">... </span>                                <span class="n">pb</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.62</span><span class="p">,</span><span class="mf">48.325</span><span class="p">),</span>
+<span class="gp">... </span>                                <span class="n">fGHz</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+<span class="gp">... </span>                                <span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">dh</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">LOS</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;distance (meters)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2ab0eb8a7150&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_33_1.png" src="../../_images/Ezone_33_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">nu</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">25000</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">r&#39;Fresnel parameter $\nu$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance (meters)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x2ab0ec708710&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_34_1.png" src="../../_images/Ezone_34_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span>
+<span class="go">N48W002</span>
+<span class="go">--------</span>
+<span class="go">latlon (deg) : [-2 -1 48 49]</span>
+<span class="go">cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]</span>
+
+<span class="go">Buildings</span>
+<span class="go">---------</span>
+<span class="go">i-longitude : 64 96</span>
+<span class="go">i-latitude  : 19 38</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-24-7ff7359ea1c0&gt;&quot;, line 3
+    --------
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">z</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">Ht</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Hr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Rmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-25-322291411616&gt; in &lt;module&gt;()
+----&gt; 1 a=z.cover(Ht=2,Hr=2,Rmax=10000)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/ezone.py in cover(self, **kwargs)
+    869         # adding effect of earth equivalent curvature
+    870         R = expand(r)
+--&gt; 871         B = r.T-R
+    872         h_earth = (R*B)/(2*kwargs[&#39;K&#39;]*6375e3)
+    873
+
+
+ValueError: operands could not be broadcast together with shapes (200,1) (1,199,200)
+</pre></div>
+</div>
+<img alt="../../_images/Ezone_36_1.png" src="../../_images/Ezone_36_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">20000</span><span class="o">*</span><span class="mi">20000</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span><span class="mi">6370</span><span class="o">*</span><span class="mf">1e3</span><span class="p">)</span>
+<span class="go">23.547880690737838</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">23.547880690737838</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mf">5.77</span><span class="o">+</span><span class="mf">23.54</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">20000.</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mf">20000.</span><span class="p">))</span>
+<span class="go">0.50766409169843796</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">0.507664091698438</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">6.9</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.407</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mf">0.407</span><span class="p">)</span>
+<span class="go">10.344187901280684</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">10.344187901280684</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.01</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">9</span><span class="o">*</span><span class="mf">8.85e-4</span><span class="p">)</span>
+<span class="go">0.19981788209905252</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">0.19981788209905252</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">9</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="mi">1j</span><span class="p">)</span>
+<span class="go">(3.0001851566146316+0.033331276164581342j)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">3.0001851566146316</span><span class="o">+</span><span class="mf">0.03333127616458134j</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -196,7 +451,7 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 26, 2016.
+      Last updated on mai 04, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Ezone.txt"
