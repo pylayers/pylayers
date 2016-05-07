@@ -136,7 +136,6 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.tdoa</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.rss</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </pre></div>
@@ -146,8 +145,10 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">]))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">5</span><span class="p">,</span><span class="mi">28</span><span class="p">]))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the unknown point is p</span>
-<span class="gp">... </span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The unknown point is <img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Then displaying the scene with ancho nodes (in red) and blind nodes in
@@ -159,38 +160,32 @@ blue</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;anchor 3&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;anchor 4&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;xb&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#ax.legend(loc=&#39;best&#39;)</span>
-<span class="gp">... </span><span class="n">a</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/LOC-rgpa_5_0.png" src="../../_images/LOC-rgpa_5_0.png" />
+<img alt="../../_images/LOC-rgpa_7_0.png" src="../../_images/LOC-rgpa_7_0.png" />
 <p>The euclidian distance <img src="../../_images/mathmpl/math-eb6bd6e7ff.png" style="position: relative; bottom: -9px"/> between the blind node
 <img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/> and anchors <img src="../../_images/mathmpl/math-bb7f67c6e1.png" style="position: relative; bottom: -9px"/> are then evaluated.</p>
-<p>The associated time of flight is</p>
-<img src="../../_images/mathmpl/math-4553b31524.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<p>The associated time of flight is <img src="../../_images/mathmpl/math-4553b31524.png" style="position: relative; bottom: -9px"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt3</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt4</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">toa1</span><span class="o">=</span><span class="n">d1</span><span class="o">/</span><span class="mf">0.3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">toa2</span><span class="o">=</span><span class="n">d2</span><span class="o">/</span><span class="mf">0.3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">toa3</span><span class="o">=</span><span class="n">d3</span><span class="o">/</span><span class="mf">0.3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">toa4</span><span class="o">=</span><span class="n">d4</span><span class="o">/</span><span class="mf">0.3</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s1">&#39;distance p1=&#39;</span><span class="p">,</span><span class="n">d1</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span> <span class="s1">&#39;/ toa1=&#39;</span><span class="p">,</span><span class="n">toa1</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s1">&#39;distance p2=&#39;</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span><span class="s1">&#39;/ toa2=&#39;</span><span class="p">,</span><span class="n">toa2</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s1">&#39;distance p3=&#39;</span><span class="p">,</span><span class="n">d3</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span><span class="s1">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa3</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s1">&#39;distance p4=&#39;</span><span class="p">,</span><span class="n">d4</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span><span class="s1">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa4</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
-<span class="go">distance p1= 5.0  m / toa1= 16.6666666667 ns</span>
-<span class="go">distance p2= 14.1421356237  m / toa2= 47.1404520791 ns</span>
-<span class="go">distance p3= 23.5372045919  m / toa3= 78.4573486396 ns</span>
-<span class="go">distance p4= 18.0277563773  m / toa3= 60.0925212577 ns</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-4-f48f2bbd1c1c&gt;&quot;, line 15
-    distance p1= 5.0  m / toa1= 16.6666666667 ns
-              ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>distance p1= 5.0  m / toa1= 16.6666666667 ns
+distance p2= 14.1421356237  m / toa2= 47.1404520791 ns
+distance p3= 23.5372045919  m / toa3= 78.4573486396 ns
+distance p4= 18.0277563773  m / toa3= 60.0925212577 ns
 </pre></div>
 </div>
 <div class="section" id="rgpa-robust-geometric-positioning-algorithm">
@@ -202,67 +197,35 @@ the geometric constraints of a considered scenario.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Instanciate TOA constraints, notice that their id are differents</p>
+<p>Instanciate TOA constraints, notice that their id are different.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">T1</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">T2</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">T3</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">T4</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt4</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-6-822166095b6c&gt; in &lt;module&gt;()
-----&gt; 1 T1=TOA(id=0,value = toa1, std = np.array([1.0]), p = pt1)
-      2 T2=TOA(id=1,value = toa2, std = np.array([1.0]), p = pt2)
-      3 T3=TOA(id=2,value = toa3, std = np.array([1.0]), p = pt3)
-      4 T4=TOA(id=3,value = toa4, std = np.array([1.0]), p = pt4)
-
-
-NameError: name &#39;toa1&#39; is not defined
-</pre></div>
-</div>
-<p>Add TOA contraints to the CLA</p>
+<p>Then, add the 4 TOA constraints to the CLA.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T4</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-7-89464406346a&gt; in &lt;module&gt;()
-----&gt; 1 C.append(T1)
-      2 C.append(T2)
-      3 C.append(T3)
-      4 C.append(T4)
-
-
-NameError: name &#39;T1&#39; is not defined
-</pre></div>
-</div>
 <p>All the constraints of the CLA can be listed as follows</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">c</span>
-<span class="go">[node | peer   |type | rat  | p              | value    | std  | runable| usable|</span>
-<span class="go">    0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,</span>
-<span class="go"> node | peer   |type | rat  | p              | value    | std  | runable| usable|</span>
-<span class="go">    1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,</span>
-<span class="go"> node | peer   |type | rat  | p              | value    | std  | runable| usable|</span>
-<span class="go">    2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,</span>
-<span class="go"> node | peer   |type | rat  | p              | value    | std  | runable| usable|</span>
-<span class="go">    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-8-fccf8836786a&gt;&quot;, line 3
+<div class="highlight-python"><div class="highlight"><pre><span></span>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
     0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
-               ^
-SyntaxError: invalid syntax
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]
 </pre></div>
 </div>
-<p>Get information on the cla :</p>
+<p>Get information about the CLA :</p>
 <ul class="simple">
 <li>type : TOA / RSS</li>
 <li>p : Position of the origin of the constraint</li>
@@ -270,24 +233,20 @@ SyntaxError: invalid syntax
 <li>std : standard deviation <img src="../../_images/mathmpl/math-54bf156f7e.png" style="position: relative; bottom: -3px"/> of value</li>
 <li>runable : does the constraint has a position p ?</li>
 <li>obsolete : does the value has been obtained recently ?</li>
-<li>usuable : runbale AND NOT obsolete</li>
+<li>usuable : runable AND NOT obsolete</li>
 <li>evlauated : obsolete</li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">type , p              , value, std  , runable, usable, obsolete, evaluated</span>
-<span class="go">TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0</span>
-<span class="go">type , p              , value, std  , runable, usable, obsolete, evaluated</span>
-<span class="go">TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0</span>
-<span class="go">type , p              , value, std  , runable, usable, obsolete, evaluated</span>
-<span class="go">TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0</span>
-<span class="go">type , p              , value, std  , runable, usable, obsolete, evaluated</span>
-<span class="go">TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-9-ac84f0430fda&gt;&quot;, line 3
-    TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
-              ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
 </pre></div>
 </div>
 <p>Update the CLA</p>
@@ -299,66 +258,25 @@ SyntaxError: invalid syntax
 <span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-UnboundLocalError                         Traceback (most recent call last)
-
-&lt;ipython-input-11-13732261b42d&gt; in &lt;module&gt;()
-----&gt; 1 C.compute()
-      2 True
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/constraints/cla.pyc in compute(self, pe, mergeRSS, refineRSS, NBOXMAX, VOLMIN, HT, forceamb)
-    272
-    273         &quot;&quot;&quot;
---&gt; 274         self.merge2(RSS=mergeRSS)
-    275         self.refine(l=self.Nc,NBOXMAX=NBOXMAX, VOLMIN=VOLMIN,RSS=refineRSS)
-    276         self.update()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/constraints/cla.pyc in merge2(self, vcw_init, RSS)
-    501                 pass
-    502
---&gt; 503             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
-    504                 vcw1 = vcw1 + step
-    505                 step = step * 1.2
-
-
-UnboundLocalError: local variable &#39;tlb&#39; referenced before assignment
+<pre class="literal-block">
+/home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/util/boxn.py:92: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
+  if Lb==None:
+</pre>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">True</span>
 </pre></div>
 </div>
 <p>show the estimated position</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
-<span class="go">array([-0.031,  5.028])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-12-2042e8b63793&gt; in &lt;module&gt;()
-      1 C.pe
-----&gt; 2 array([-0.031,  5.028])
-
-
-NameError: name &#39;array&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="o">-</span><span class="mf">4.735e-03</span><span class="p">,</span>   <span class="mf">4.992e+00</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>to be compare with the actual position value</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span>
-<span class="go">array([0, 5])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-13-fe6e0c2bc958&gt; in &lt;module&gt;()
-      1 p
-----&gt; 2 array([0, 5])
-
-
-NameError: name &#39;array&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -366,7 +284,7 @@ NameError: name &#39;array&#39; is not defined
 <h2>RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
 <p>The RSS is a quantity which is weakly related to distance via a
 parametric model. The better the model, the better would be the
-inference about tthe associated distance. In that purpose, the Path Loss
+inference about the associated distance. In that purpose, the Path Loss
 shadowing model is a widely used model.</p>
 <p>To define the classical path loss shadowing model widely used in this
 context the <code class="docutils literal"><span class="pre">PLSmodel</span></code> class has been defined.</p>
@@ -376,35 +294,15 @@ context the <code class="docutils literal"><span class="pre">PLSmodel</span></co
 <p>For simulation purpose : get RSS from distances (or associated delay)
 with the above model</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">toa1</span>
-<span class="go">16.666666666666668</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-15-d27872339f6b&gt; in &lt;module&gt;()
-----&gt; 1 toa1
-      2 16.666666666666668
-
-
-NameError: name &#39;toa1&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">16.666666666666668</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">9.6512038582807111</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-16-4cc14b19ca52&gt; in &lt;module&gt;()
-----&gt; 1 M.getPL(toa1,1)
-      2 9.6512038582807111
-
-
-NameError: name &#39;toa1&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">7.9840892057831496</span>
 </pre></div>
 </div>
 </div>
@@ -415,85 +313,22 @@ NameError: name &#39;toa1&#39; is not defined
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt4</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-17-361729e2e8af&gt; in &lt;module&gt;()
-----&gt; 1 Td1=TDOA(id=0,value = toa1-toa2, std = np.array([1.0]), p = np.array([pt1,pt2]))
-      2 Td2=TDOA(id=1,value = toa1-toa3, std = np.array([1.0]), p = np.array([pt1,pt3]))
-      3 Td3=TDOA(id=2,value = toa1-toa4, std = np.array([1.0]), p = np.array([pt1,pt4]))
-
-
-NameError: name &#39;toa1&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-18-10aec895c66a&gt; in &lt;module&gt;()
-      1 C=CLA()
-----&gt; 2 C.append(Td1)
-      3 C.append(Td2)
-      4 C.append(Td3)
-
-
-NameError: name &#39;Td1&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-<span class="go">True</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-UnboundLocalError                         Traceback (most recent call last)
-
-&lt;ipython-input-19-13732261b42d&gt; in &lt;module&gt;()
-----&gt; 1 C.compute()
-      2 True
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/constraints/cla.pyc in compute(self, pe, mergeRSS, refineRSS, NBOXMAX, VOLMIN, HT, forceamb)
-    272
-    273         &quot;&quot;&quot;
---&gt; 274         self.merge2(RSS=mergeRSS)
-    275         self.refine(l=self.Nc,NBOXMAX=NBOXMAX, VOLMIN=VOLMIN,RSS=refineRSS)
-    276         self.update()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/constraints/cla.pyc in merge2(self, vcw_init, RSS)
-    501                 pass
-    502
---&gt; 503             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
-    504                 vcw1 = vcw1 + step
-    505                 step = step * 1.2
-
-
-UnboundLocalError: local variable &#39;tlb&#39; referenced before assignment
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">True</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
-<span class="go">array([ 0.021,  4.987])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-20-b7ae0571d9e1&gt; in &lt;module&gt;()
-      1 C.pe
-----&gt; 2 array([ 0.021,  4.987])
-
-
-NameError: name &#39;array&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.021</span><span class="p">,</span>  <span class="mf">4.987</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
