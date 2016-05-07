@@ -131,19 +131,19 @@
             
   <div class="section" id="the-transmission-channel">
 <h1>The transmission channel<a class="headerlink" href="#the-transmission-channel" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span>%matplotlib inline
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="kn">as</span> <span class="nn">fft</span>
-<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
-<span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
-<span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="kn">as</span> <span class="nn">fft</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
@@ -152,43 +152,39 @@
 <p>We start by constructing a propagation channel with the dedicated class
 <code class="docutils literal"><span class="pre">DLink</span></code>. We specify a Layout as well as the two extremities of the
 link. Antennas are also specified.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr3.ini&#39;</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WOOD&#39;</span><span class="p">,</span><span class="s1">&#39;AIR&#39;</span><span class="p">,</span><span class="s1">&#39;METAL&#39;</span><span class="p">]</span>
-<span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">tx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
-<span class="n">rx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">761</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>check len(ncycles) == 2 passed
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr3.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WOOD&#39;</span><span class="p">,</span><span class="s1">&#39;AIR&#39;</span><span class="p">,</span><span class="s1">&#39;METAL&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">761</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>The full evaluation and hdf5 storage of the channel is done with the
 eval function. The <code class="docutils literal"><span class="pre">force</span></code> option is for recalculating everything
 whatever what has been previously calculated.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>checkh5
 Start Signatures
-run
-algo 2 ( ex 7)
-Signatures&#39;&gt; from 2_2_3 saved
-Stop signature 0.098562002182
+Signatures&#39;&gt; from 2_2_3 loaded
+load signature
+Stop signature 0.203061103821
 Start Rays
-Rays&#39;&gt; from 3_2_3 saved
-Stop rays 0.330257892609
-Ctilde&#39;&gt; from 2_3_1 saved
-Tchannel&#39;&gt; from 2_3_1_0_0_0_0 saved
+Rays&#39;&gt; from 3_2_3 loaded
+Stop rays 0.237995862961
+Ctilde&#39;&gt; from 2_3_0 saved
+Tchannel&#39;&gt; from 2_3_0_0_0_0_0 saved
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;l20&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;l20&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_7_0.png" src="../../_images/Channel_7_0.png" />
 <p>The transmission channel is stored in <code class="docutils literal"><span class="pre">H</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
@@ -203,26 +199,22 @@ Friis factor -j c/(4 pi f) has been applied
 </pre></div>
 </div>
 <p>Once the channel has been calculated, we define an IR-UWB waveform.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Channel_12_0.png" src="../../_images/Channel_12_0.png" />
 <p>Cwood is an object which contains all the information about the
 propagation channel.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ae159523250&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2ae155c45550&gt;)
-</pre></div>
-</div>
-<img alt="../../_images/Channel_14_1.png" src="../../_images/Channel_14_1.png" />
+<img alt="../../_images/Channel_14_0.png" src="../../_images/Channel_14_0.png" />
 <p>The <code class="docutils literal"><span class="pre">Ctilde</span></code> channel can be sorted with respect to delay</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
@@ -236,14 +228,14 @@ Friis factor -j c/(4 pi f) has been applied
  windowed : No
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">2</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -286,12 +278,12 @@ IndexError: tuple index out of range
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
-<img src="../../_images/mathmpl/math-34633926c9.png" class="center" /><p>This factor is fundamental and should be applied only once. The energy
+<img src="../../_images/mathmpl/math-34633926c9.png" class="center" /><p>This factor is fundamental and has to be applied only once. The energy
 method has a parameter <code class="docutils literal"><span class="pre">Friis</span></code> which indicates if this factor has to
 be used for the calculation of the energy. By default the link is
 evaluated with the Friis factor. This can be checked at the end of the
 <strong>repr</strong> of <code class="docutils literal"><span class="pre">H</span></code>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
@@ -307,11 +299,11 @@ Friis factor -j c/(4 pi f) has been applied
 </div>
 <p>If this factor has already been applied the energy function should be
 called with the option <code class="docutils literal"><span class="pre">Friis</span></code> set to False</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Emean</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
-<span class="n">Eint</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;integ&#39;</span><span class="p">)</span>
-<span class="n">Ecenter</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-<span class="n">Efirst</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
-<span class="n">Elast</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Emean</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Eint</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;integ&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ecenter</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Efirst</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Elast</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -327,11 +319,11 @@ IndexError                                Traceback (most recent call last)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in energy(self, mode, Friis, sumray)
-   2129         #  axis 1 : frequency
-   2130         #
--&gt; 2131         Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
-   2132         if sumray:
-   2133             Etot = np.sum(Etot,axis=0)
+   2213         #  axis 1 : frequency
+   2214         #
+-&gt; 2215         Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
+   2216         if sumray:
+   2217             Etot = np.sum(Etot,axis=0)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in energy(self, axis, Friis, mode)
@@ -345,7 +337,7 @@ IndexError                                Traceback (most recent call last)
 IndexError: index 1 is out of bounds for axis 0 with size 1
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -365,32 +357,32 @@ straight lines coresponds to the Free space path loss formula for 3
 frequencies (f = 2GHz,f=6GHz,f=10GHz). For those 3 frequencies the first
 path is perfectly on the curve, which is a validation the observed
 level.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1216</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">f2</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">f3</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Efirst</span><span class="p">),</span><span class="s1">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=2GHz&#39;</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Elast</span><span class="p">),</span><span class="s1">&#39;.g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=10GHz&#39;</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eint</span><span class="p">),</span><span class="s1">&#39;.k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;integral&#39;</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecenter</span><span class="p">),</span><span class="s1">&#39;.c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;6GHz&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">r&#39;$\tau$ (ns)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
-<span class="n">LOS1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
-<span class="n">LOS2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
-<span class="n">LOS3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS1</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS2</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS3</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f3</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Efirst</span><span class="p">),</span><span class="s1">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=2GHz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Elast</span><span class="p">),</span><span class="s1">&#39;.g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=10GHz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eint</span><span class="p">),</span><span class="s1">&#39;.k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;integral&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecenter</span><span class="p">),</span><span class="s1">&#39;.c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;6GHz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">r&#39;$\tau$ (ns)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LOS1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LOS2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LOS3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS1</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS2</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">LOS3</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -408,13 +400,13 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;Efirst&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ae15626f150&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2af871b12110&gt;
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -487,11 +479,11 @@ ValueError                                Traceback (most recent call last)
 ValueError: x and y can be no greater than 2-D
 </pre></div>
 </div>
-<img alt="../../_images/Channel_29_1.png" src="../../_images/Channel_29_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">CIR</span><span class="o">=</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
-<span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
-<span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Infinite bandwidth CIR&#39;</span><span class="p">)</span>
+<img alt="../../_images/Channel_27_1.png" src="../../_images/Channel_27_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">=</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Infinite bandwidth CIR&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -508,26 +500,20 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: &#39;TUsignal&#39; object has no attribute &#39;aggcir&#39;
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">MeanDelay</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
-<span class="n">DelaySpread</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_rms</span><span class="p">()</span>
-<span class="k">print</span> <span class="n">MeanDelay</span><span class="p">,</span><span class="n">DelaySpread</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MeanDelay</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DelaySpread</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_rms</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">MeanDelay</span><span class="p">,</span><span class="n">DelaySpread</span>
+<span class="go">37.3831958728 18.5606177248</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-20-6f04a248436b&gt; in &lt;module&gt;()
-----&gt; 1 MeanDelay = CIR.tau_moy()
-      2 DelaySpread = CIR.tau_rms()
-      3 print MeanDelay,DelaySpread
-
-
-AttributeError: &#39;TUsignal&#39; object has no attribute &#39;tau_moy&#39;
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-20-239d3c420603&gt;&quot;, line 4
+    37.3831958728 18.5606177248
+                              ^
+SyntaxError: invalid syntax
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -566,14 +552,14 @@ IndexError                                Traceback (most recent call last)
 IndexError: tuple index out of range
 </pre></div>
 </div>
-<img alt="../../_images/Channel_32_1.png" src="../../_images/Channel_32_1.png" />
+<img alt="../../_images/Channel_30_1.png" src="../../_images/Channel_30_1.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -612,7 +598,7 @@ IndexError                                Traceback (most recent call last)
 IndexError: tuple index out of range
 </pre></div>
 </div>
-<img alt="../../_images/Channel_35_1.png" src="../../_images/Channel_35_1.png" />
+<img alt="../../_images/Channel_33_1.png" src="../../_images/Channel_33_1.png" />
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
@@ -629,16 +615,16 @@ number of time samples <img src="../../_images/mathmpl/math-a4285baa0e.png" styl
 <li>axis 2 is discrete time</li>
 <li>axis 3 is tap index</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Va</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">Vb</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">fcGHz</span> <span class="o">=</span> <span class="mf">4.5</span>
-<span class="n">Nm</span> <span class="o">=</span> <span class="mi">50</span>
-<span class="n">Ns</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">WMHz</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="n">Ntap</span> <span class="o">=</span> <span class="mi">10</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Va</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Vb</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fcGHz</span> <span class="o">=</span> <span class="mf">4.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nm</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ns</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">WMHz</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ntap</span> <span class="o">=</span> <span class="mi">10</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">htap</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tap</span><span class="p">(</span><span class="n">WMHz</span><span class="o">=</span><span class="n">WMHz</span><span class="p">,</span><span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span><span class="n">Nm</span><span class="o">=</span><span class="n">Nm</span><span class="p">,</span><span class="n">Va</span><span class="o">=</span><span class="n">Va</span><span class="p">,</span><span class="n">Vb</span><span class="o">=</span><span class="n">Vb</span><span class="p">,</span><span class="n">Ntap</span><span class="o">=</span><span class="n">Ntap</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">htap</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tap</span><span class="p">(</span><span class="n">WMHz</span><span class="o">=</span><span class="n">WMHz</span><span class="p">,</span><span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span><span class="n">Nm</span><span class="o">=</span><span class="n">Nm</span><span class="p">,</span><span class="n">Va</span><span class="o">=</span><span class="n">Va</span><span class="p">,</span><span class="n">Vb</span><span class="o">=</span><span class="n">Vb</span><span class="p">,</span><span class="n">Ntap</span><span class="o">=</span><span class="n">Ntap</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -650,25 +636,27 @@ ValueError                                Traceback (most recent call last)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in tap(self, **kwargs)
-   2464
-   2465         # f x s  x m x tap
--&gt; 2466         htap  = htap.reshape(Nf,Ns,Nm,Ntap)
-   2467         Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
-   2468         Er_htap = np.sum(htap,axis=1)/Ns
+   2548
+   2549         # f x s  x m x tap
+-&gt; 2550         htap  = htap.reshape(Nf,Ns,Nm,Ntap)
+   2551         Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+   2552         Er_htap = np.sum(htap,axis=1)/Ns
 
 
 ValueError: total size of new array must be unchanged
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">htap</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">htap</span><span class="p">)</span>
+<span class="go">(161, 10, 50, 10)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-26-ac45a4e5a814&gt; in &lt;module&gt;()
+&lt;ipython-input-26-36568a82085e&gt; in &lt;module&gt;()
 ----&gt; 1 np.shape(htap)
+      2 (161, 10, 50, 10)
 
 
 NameError: name &#39;htap&#39; is not defined
@@ -680,43 +668,49 @@ NameError: name &#39;htap&#39; is not defined
 <li>axis 2 is spatial (realization)</li>
 <li>axis 2 is tap</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">b</span><span class="o">.</span><span class="n">shape</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(161, 10, 10)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-27-82ed078d10e8&gt; in &lt;module&gt;()
+&lt;ipython-input-27-9be9b775c895&gt; in &lt;module&gt;()
 ----&gt; 1 b.shape
+      2 (161, 10, 10)
 
 
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">(161, 50, 10)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-28-cc55a9cc958f&gt; in &lt;module&gt;()
+&lt;ipython-input-28-0e61c3a383ad&gt; in &lt;module&gt;()
 ----&gt; 1 np.shape(c)
+      2 (161, 50, 10)
 
 
 NameError: name &#39;c&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">.</span><span class="n">shape</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(99,)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-29-68023ae9b3bd&gt; in &lt;module&gt;()
+&lt;ipython-input-29-50f043f5a600&gt; in &lt;module&gt;()
 ----&gt; 1 d.shape
+      2 (99,)
 
 
 NameError: name &#39;d&#39; is not defined
@@ -724,11 +718,11 @@ NameError: name &#39;d&#39; is not defined
 </div>
 <p>The figure below illustrates the joint frequency and spatial fluctuation
 for the first channel tap. :exit</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">img</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]),</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;spatial realizations&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency GHz&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]),</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;spatial realizations&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency GHz&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -746,8 +740,8 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-<span class="n">h</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e5</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e5</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -762,16 +756,16 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ae158e6a550&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2af870da8190&gt;
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>
-<span class="n">tmaxms</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">mmax</span><span class="o">/</span><span class="p">(</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]),</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tmaxms</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Discrete Time (ms)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tmaxms</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">mmax</span><span class="o">/</span><span class="p">(</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]),</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tmaxms</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Discrete Time (ms)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -789,21 +783,17 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;c&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]))</span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd3d1756950&gt;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-33-0f4c005a4ee8&gt; in &lt;module&gt;()
-----&gt; 1 plt.plot(abs(c[0,:,0]))
-
-
-NameError: name &#39;c&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-33-29006800c1b4&gt;&quot;, line 2
+    [&lt;matplotlib.lines.Line2D at 0x7fd3d1756950&gt;]
+     ^
+SyntaxError: invalid syntax
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -817,10 +807,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;c&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="kn">as</span> <span class="nn">fft</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="kn">as</span> <span class="nn">fft</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -834,25 +824,27 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;h&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">H</span><span class="p">)))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">H</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="go">(-0.5, 49.5, 160.5, -0.5)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-37-dfddc57fe5a3&gt; in &lt;module&gt;()
+&lt;ipython-input-37-95dd544c1522&gt; in &lt;module&gt;()
 ----&gt; 1 plt.imshow(fft.fftshift(abs(H)))
       2 plt.axis(&#39;tight&#39;)
+      3 (-0.5, 49.5, 160.5, -0.5)
 
 
 NameError: name &#39;H&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="c1">#from pylayers.util.mayautil import *</span>
-<span class="c1">#m=VolumeSlicer(data=abs(htap[:,0,:,:]))</span>
-<span class="c1">#m.configure_traits()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#from pylayers.util.mayautil import *</span>
+<span class="gp">... </span><span class="c1">#m=VolumeSlicer(data=abs(htap[:,0,:,:]))</span>
+<span class="gp">... </span><span class="c1">#m.configure_traits()</span>
 </pre></div>
 </div>
 </div>
@@ -869,7 +861,7 @@ NameError: name &#39;H&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 26, 2016.
+      Last updated on mai 07, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Channel.txt"

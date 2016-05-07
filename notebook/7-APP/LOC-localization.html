@@ -125,24 +125,24 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.location.algebraic.algebraic</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="n">dist</span>
+  <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.algebraic.algebraic</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="n">dist</span>
 </pre></div>
 </div>
 <div class="section" id="example-of-tdoa">
 <h1>Example of TDOA<a class="headerlink" href="#example-of-tdoa" title="Permalink to this headline">¶</a></h1>
-<p>First, it is necesary to define Anchor nodes and associated Reference
+<p>First, it is necessary to define Anchor nodes and associated Reference
 Anchor Nodes. This is important to be very specific about what exactly
 the TDOA is. In the example the Blin node is draw randomly as well as
 anchor nodes.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">nodes</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">AN_TDOA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="c1">#AN_TDOA1=np.array([[0, 0, 1, 1],[0,1,1,0]])</span>
-<span class="c1">#AN_TDOAr1 = np.roll(AN_TDOA,1,axis=1)</span>
-<span class="n">AN_TDOAr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">AN_TDOAr2</span> <span class="o">=</span> <span class="n">AN_TDOA</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">newaxis</span><span class="p">]</span>
-<span class="n">BN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.2</span><span class="p">],[</span><span class="mf">0.3</span><span class="p">]])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AN_TDOA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#AN_TDOA1=np.array([[0, 0, 1, 1],[0,1,1,0]])</span>
+<span class="gp">... </span><span class="c1">#AN_TDOAr1 = np.roll(AN_TDOA,1,axis=1)</span>
+<span class="gp">... </span><span class="n">AN_TDOAr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AN_TDOAr2</span> <span class="o">=</span> <span class="n">AN_TDOA</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.2</span><span class="p">],[</span><span class="mf">0.3</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -159,21 +159,21 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;newaxis&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">AN_TDOA</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AN_TDOA</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.1172917</span> <span class="p">,</span>  <span class="mf">0.85299383</span><span class="p">,</span>  <span class="mf">0.2289946</span> <span class="p">,</span>  <span class="mf">0.17593613</span><span class="p">,</span>  <span class="mf">0.56199628</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.09755558</span><span class="p">,</span>  <span class="mf">0.25577299</span><span class="p">,</span>  <span class="mf">0.16259968</span><span class="p">,</span>  <span class="mf">0.09864148</span><span class="p">,</span>  <span class="mf">0.51069025</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.55876239</span><span class="p">,</span>  <span class="mf">0.08363696</span><span class="p">,</span>  <span class="mf">0.4812062</span> <span class="p">,</span>  <span class="mf">0.11405118</span><span class="p">,</span>  <span class="mf">0.09545324</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.89561928</span><span class="p">,</span>  <span class="mf">0.70859709</span><span class="p">,</span>  <span class="mf">0.03454619</span><span class="p">,</span>  <span class="mf">0.93278095</span><span class="p">,</span>  <span class="mf">0.09827916</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">AN_TDOAr1</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AN_TDOAr1</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.</span><span class="p">],</span>
        <span class="p">[</span> <span class="mf">0.</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">AN_TDOAr2</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AN_TDOAr2</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -189,10 +189,10 @@ NameError: name &#39;AN_TDOAr2&#39; is not defined
 </div>
 <p>The figure below illustrates the situation, in red the anchor nodes, the
 blue star is the blind node.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">AN_TDOA</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">AN_TDOA</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">AN_TDOAr2</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">AN_TDOAr2</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">BN</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">BN</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;*b&#39;</span><span class="p">)</span>
-<span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">AN_TDOA</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">AN_TDOA</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">AN_TDOAr2</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">AN_TDOAr2</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">BN</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">BN</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;*b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -209,9 +209,9 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;plot&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">dr1</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr1</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">dr2</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr2</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr1</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr1</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr2</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr2</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -227,13 +227,13 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;BN&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tdoa1</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">dr1</span><span class="p">)</span><span class="o">/</span><span class="mf">0.3</span>
-<span class="n">tdoa2</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">dr2</span><span class="p">)</span><span class="o">/</span><span class="mf">0.3</span>
-<span class="n">tdoa0</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">roll</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mf">0.3</span>
-
-<span class="k">print</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">tdoa0</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">tdoa1</span>
-<span class="k">print</span> <span class="n">tdoa2</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tdoa1</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">dr1</span><span class="p">)</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tdoa2</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">dr2</span><span class="p">)</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tdoa0</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">roll</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">tdoa0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tdoa1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tdoa2</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -251,13 +251,13 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;d&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">node</span><span class="o">=</span><span class="p">{}</span>
-<span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;BN&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">BN</span>
-<span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;RN_TDOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">AN_TDOA</span>
-<span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;RNr_TDOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">AN_TDOAr2</span>
-<span class="n">ldp</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">ldp</span><span class="p">[</span><span class="s1">&#39;TDOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cumsum</span><span class="p">(</span><span class="n">tdoa0</span><span class="p">)</span>
-<span class="n">ldp</span><span class="p">[</span><span class="s1">&#39;TDOA_std&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span><span class="o">=</span><span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;BN&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">BN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;RN_TDOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">AN_TDOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;RNr_TDOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">AN_TDOAr2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s1">&#39;TDOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cumsum</span><span class="p">(</span><span class="n">tdoa0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s1">&#39;TDOA_std&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -275,7 +275,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;BN&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">=</span><span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -289,7 +289,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;ldp&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -303,7 +303,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;S&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -317,7 +317,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;ldp&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">toa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">toa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -331,7 +331,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;S&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;BN&#39;</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;BN&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
@@ -358,7 +358,7 @@ KeyError: &#39;BN&#39;
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 26, 2016.
+      Last updated on mai 07, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/7-APP/LOC-localization.txt"
