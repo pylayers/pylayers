@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RGPA (Robust Geometric Positioning Algorithm) &mdash; Python 1 documentation</title>
+    <title> Robust Geometric Positioning Algorithm &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -111,7 +111,8 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li><a class="reference internal" href="#">&nbsp;Robust Geometric Positioning Algorithm</a></li>
+<li><a class="reference internal" href="#rgpa-robust-geometric-positioning-algorithm">RGPA (Robust Geometric Positioning Algorithm)</a><ul>
 <li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">Exploiting Time of Arrival (ToA) only</a></li>
 <li><a class="reference internal" href="#rss">RSS</a></li>
 <li><a class="reference internal" href="#tdoa">TDOA</a></li>
@@ -130,7 +131,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p>Robust Geometric Positioning Algorithm</p>
+  <div class="code python highlight-python"><div class="highlight"><pre><span></span>&gt;&gt;&gt; !date
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>samedi 7 mai 2016, 14:36:13 (UTC+0200)
+</pre></div>
+</div>
+<div class="section" id="robust-geometric-positioning-algorithm">
+<h1>&nbsp;Robust Geometric Positioning Algorithm<a class="headerlink" href="#robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.cla</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.toa</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.tdoa</span> <span class="kn">import</span> <span class="o">*</span>
@@ -145,13 +153,10 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">]))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">5</span><span class="p">,</span><span class="mi">28</span><span class="p">]))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>The unknown point is <img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Then displaying the scene with ancho nodes (in red) and blind nodes in
+<p>Then displaying the scene with anchor nodes (in red) and blind nodes in
 blue</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -164,7 +169,7 @@ blue</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/LOC-rgpa_7_0.png" src="../../_images/LOC-rgpa_7_0.png" />
+<img alt="../../_images/LOC-rgpa_6_0.png" src="../../_images/LOC-rgpa_6_0.png" />
 <p>The euclidian distance <img src="../../_images/mathmpl/math-eb6bd6e7ff.png" style="position: relative; bottom: -9px"/> between the blind node
 <img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/> and anchors <img src="../../_images/mathmpl/math-bb7f67c6e1.png" style="position: relative; bottom: -9px"/> are then evaluated.</p>
 <p>The associated time of flight is <img src="../../_images/mathmpl/math-4553b31524.png" style="position: relative; bottom: -9px"/></p>
@@ -187,6 +192,7 @@ distance p2= 14.1421356237  m / toa2= 47.1404520791 ns
 distance p3= 23.5372045919  m / toa3= 78.4573486396 ns
 distance p4= 18.0277563773  m / toa3= 60.0925212577 ns
 </pre></div>
+</div>
 </div>
 <div class="section" id="rgpa-robust-geometric-positioning-algorithm">
 <h1>RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
@@ -302,7 +308,7 @@ with the above model</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">7.9840892057831496</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">11.729189855089983</span>
 </pre></div>
 </div>
 </div>
