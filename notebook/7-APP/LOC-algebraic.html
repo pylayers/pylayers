@@ -127,14 +127,14 @@
             
   <div class="section" id="algebraic-localization-class">
 <h1>Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
-<p>For localization in the plane it is important not to provide the z
+<p>For localization in the plane, it is important not to specify the z
 coordinates. Otherwise a singularity problem arises.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.algebraic.algebraic</span>  <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="mf">0.2997924583</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="o">=</span><span class="p">{}</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="o">=</span><span class="p">{}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="o">=</span><span class="p">{}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -147,61 +147,30 @@ coordinates. Otherwise a singularity problem arises.</p>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ldp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Alg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="go">{&#39;TOA_std&#39;: array([1, 1, 1]), &#39;TOA&#39;: array([ 1.41421356,  1.41421356,  1.        ])}</span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x7f9a02ad8a90&gt;,</span>
-<span class="go"> &lt;mpl_toolkits.mplot3d.axes3d.Axes3D at 0x7f9a02ad8e50&gt;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">Alg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-3-7a8f67a236e1&gt;&quot;, line 4
-    (&lt;matplotlib.figure.Figure at 0x7f9a02ad8a90&gt;,
-     ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;TOA_std&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="s1">&#39;TOA&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.41421356</span><span class="p">,</span>  <span class="mf">1.41421356</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">])}</span>
 </pre></div>
 </div>
+<img alt="../../_images/LOC-algebraic_3_1.png" src="../../_images/LOC-algebraic_3_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pest</span> <span class="o">=</span> <span class="n">Alg</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Alg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x7f9a02b1b790&gt;,</span>
-<span class="go"> &lt;mpl_toolkits.mplot3d.axes3d.Axes3D at 0x7f9a02399a90&gt;)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-5-12de1f6a57fb&gt;&quot;, line 2
-    (&lt;matplotlib.figure.Figure at 0x7f9a02b1b790&gt;,
-     ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pest</span>
-<span class="go">array([[ 0.        ],</span>
-<span class="go">       [-0.22753112]])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-6-01ebc99df534&gt; in &lt;module&gt;()
-      1 pest
-----&gt; 2 array([[ 0.        ],
-      3        [-0.22753112]])
-
-
-NameError: name &#39;array&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.</span>        <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.22753112</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Alg</span>
-<span class="go">Nodes : {&#39;BN&#39;: array([[0],</span>
-<span class="go">       [0]]), &#39;RN_TOA&#39;: array([[-1,  1,  0],</span>
-<span class="go">       [-1, -1,  1]])}</span>
-<span class="go">LDPs :{&#39;TOA_std&#39;: array([1, 1, 1]), &#39;TOA&#39;: array([ 1.41421356,  1.41421356,  1.        ])}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-7-728820b88ffd&gt;&quot;, line 2
-    Nodes : {&#39;BN&#39;: array([[0],
-          ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>Nodes : {&#39;BN&#39;: array([[0],
+       [0]]), &#39;RN_TOA&#39;: array([[-1,  1,  0],
+       [-1, -1,  1]])}
+LDPs :{&#39;TOA_std&#39;: array([1, 1, 1]), &#39;TOA&#39;: array([ 1.41421356,  1.41421356,  1.        ])}
 </pre></div>
 </div>
 </div>
