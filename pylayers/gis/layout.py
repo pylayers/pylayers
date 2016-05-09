@@ -5250,7 +5250,7 @@ class Layout(PyLayers):
         NP = []
         # remove cycle 0 (exterior) if it exists
         try:
-            self.Gt.emove_noden(0)
+            self.Gt.remove_node(0)
         except:
             pass
         # II . make polygon convex
@@ -8759,7 +8759,6 @@ class Layout(PyLayers):
         self.Gr = copy.deepcopy(self.Gt)
         
         # delete node 0 which cannot be a room 
-        pdb.set_trace()
         try:
             self.Gr.remove_node(0)
         except:
