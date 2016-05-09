@@ -568,8 +568,14 @@ class Ezone(PyLayers):
         #self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1)
         #self.tocart(Nx=Nlon,Ny=Nlat)
 
-    def rebase(self,source):
+    def rebase(self,source='srtm'):
         """ reevaluate base
+
+        Parameters
+        ----------
+
+        source : string
+            source of data 'srtm' or 'aster'
 
         """
         if source =='srtm':

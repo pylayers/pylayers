@@ -4534,6 +4534,8 @@ class Layout(PyLayers):
             #edlist = tn[u]
             edlist = filter(lambda x: (x>0) ,tn)
             #& (not self.Gs.node[x].has_key('ss_name')),tn)
+        else:
+            edlist = kwargs['edlist']
 
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
@@ -5248,15 +5250,15 @@ class Layout(PyLayers):
         NP = []
         # remove cycle 0 (exterior) if it exists
         try:
-            del(self.Gt.node[0])
+            self.Gt.emove_noden(0)
         except:
             pass
-        # II . make pdeolygon convex
+        # II . make polygon convex
         # for each polygon :
-        # - is polygon convex: 
-        #   -yes : you're done !
+        # - is polygon convex ?: 
+        #   - yes : you're done !
         #   - no :
-        #       -has polygon an inner hole ? 
+        #       - has polygon an inner hole ? 
         #           - yes : delaunay on polygon, excluing the polygon inside ( polyhole)
         #           - no : delaunay on the polygon
         #
@@ -8757,11 +8759,12 @@ class Layout(PyLayers):
         self.Gr = copy.deepcopy(self.Gt)
         
         # delete node 0 which cannot be a room 
-
+        pdb.set_trace()
         try:
-            del(self.Gr.node[0])
+            self.Gr.remove_node(0)
         except:
             pass
+
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
@@ -8771,21 +8774,20 @@ class Layout(PyLayers):
             self.Gr.node[n]['transition'] = []
         ltrans = self.listtransition
         ldoors = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-
+        
         # Destroy cycles which have no doors
-
         keys = self.Gr.node.keys()
         for cy in keys:
-            if cy>0:
-                lseg = self.Gr.node[cy]['cycle'].cycle
-                hasdoor = filter(lambda n : n in ldoors,lseg)
-                if len(hasdoor)>0:
-                    pass
-                else:
-                    self.Gr.remove_node(cy)
-                    self.Gr.pos.pop(cy)
+            lseg = self.Gr.node[cy]['cycle'].cycle
+            #hasdoor = filter(lambda n : n in ldoors,lseg)
+            hasdoor = [ x for x in lseg if x in ldoors]
+            if len(hasdoor)>0:
+                pass
+            else:
+                self.Gr.remove_node(cy)
+                self.Gr.pos.pop(cy)
 
-        # Destroy edges which do not share a door
+        # Destroy edges which do not share a transition
         for e in self.Gr.edges():
             keep = False
             if (e[0]>0) & (e[1]>0):
