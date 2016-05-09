@@ -1243,7 +1243,8 @@ class Mchannel(bs.FUsignal):
     def __init__(self,
                 x ,
                 y ,
-                label = ''):
+                label = '',
+                calibration = False):
         """ class constructor
 
         Parameters
@@ -1258,6 +1259,7 @@ class Mchannel(bs.FUsignal):
        
         self.label = label
         self.calibrated = False
+        self.calibration = calibration
         sh = y.shape
         self.Nm = sh[0]
         self.Nr = sh[1]
@@ -1265,6 +1267,8 @@ class Mchannel(bs.FUsignal):
         self.Nf = sh[3]
         bs.FUsignal.__init__(self,x=x,y=y,label='Mchannel')
 
+
+        
     def plot(self,fig=[],ax=[],mode='time'):
         
         if fig ==[]:
