@@ -428,7 +428,7 @@ class Cycle(object):
                 newcy.update()
                 return(newcy)
         else:
-            return
+            return cy
 
 
     def update(self):

@@ -7,17 +7,18 @@ PyLayers an Open Source Site Specific Radio Channel Simulator for
     * Mobile Heterogeneous Networks,
     * Propagation,
     * Communications,
-    * Mobility,
+    * Human Mobility,
     * Localization,
     * Wearable Devices.
+    * 5G and IoT studies
 
-The code is developped at the University of Rennes 1 in the laboratory
+The code is developed at the University of Rennes 1 in the laboratory
 Institute of Electronics and Telecommunication of Rennes. 
 
 WebSite : [http://www.pylayers.org](http://www.pylayers.org)
 Documentation : [Documentation](http://pylayers.github.io/pylayers/notebook/TOC.html)
 
-Pylayers is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+PyLayers is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 ## Main features
 
