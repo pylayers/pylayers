@@ -49,7 +49,6 @@ class MIMO(object):
         Data are placed in the directory mesdir + rep directory
 
         """
-
         defaults = { '_filename':'',
                     'rep':'',
                     'Nf':1601,
@@ -67,7 +66,7 @@ class MIMO(object):
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k]
+                kwargs[k]=defaults[k]exit
 
         _filename = kwargs.pop('_filename')
         rep = kwargs.pop('rep')
@@ -314,7 +313,9 @@ class MIMO(object):
         V   : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)
 
         HdH = U L U^{\dagger}
-
+        
+        Transfered to Mchannel 
+        DONE 
         """
 
         # H  : nr x nt x nf
@@ -351,7 +352,11 @@ class MIMO(object):
             np.array (Nf,Nt,NPt)
 
             log_2(det(I+(Et/(N0Nt))HH^{H})
+        
+        Transferd to Mchannel 
 
+        Done
+        
         """
 
         fGHz  = self.Hcal.x

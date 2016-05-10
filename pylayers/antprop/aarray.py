@@ -77,6 +77,17 @@ class Array(ant.Pattern):
 
         ant.Pattern.__init__(self)
 
+
+    def __add__(self,Aa):
+
+        Anew = Array()
+        assert((self.fGHz==Aa.fGHz).all())
+        assert((self.p.ndim==2) and (Aa.p.ndim==2))
+        Anew.p = np.concatenate(self.p,Aa.p,axis=1)
+        Anew.w = np.concatenate(self.w,Aa.w,axis=0)
+        
+        return(Anew)
+
     def __repr__(self):
         st = ''
         st = st + 'points :' + str(self.p) + '\n'
@@ -244,6 +255,11 @@ class AntArray(Array,ant.Antenna):
         super(AntArray,self).__init__(p=UA.p,fGHz=self.la[0].fGHz)
         ant.Antenna.__init__(self,typ=typ,**kwargs)
 
+    def __add__(self,Aa):
+        assert(Aa.typant==self.typant)
+        Anew = self+Aa
+        Anew.typant = self.typant
+        return(Anew)
 
     def __repr__(self):
          st = "Antenna Array : \n"

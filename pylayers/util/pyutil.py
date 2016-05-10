@@ -50,6 +50,7 @@ r"""
 
 """
 import os
+import re
 import numpy as np
 import scipy as sp
 import matplotlib.pylab as plt
@@ -1846,6 +1847,79 @@ def in_ipynb():
             return False
     except NameError:
         return False
+
+
+def npextract(y,s):
+    """  access a numpy MDA while keeping number of axis
+
+    Parameters
+    ----------
+
+    y : numpy.MDA
+    s : string 
+        access string 
+
+    Returns
+    -------
+
+    ye : numpy.MDA
+        subset of y with the same number of axis
+
+
+    Exemples
+    --------
+
+        >>> y = np.random.rand(7,5,3,7)
+        >>> s = '[0,(1,2,3),:,::2]'
+        >>> ye = access(y,s)
+        >>> assert(ye.shape==(1,3,3,4))
+
+    Notes
+    -----
+
+    Each axis can be accessed with several method : 
+
+        single value : an int on an axis retrieve the corresponding value
+        all value    : a charcater : allows to get all the values of an axis 
+        sub sampled values : ::n allows an axis subsampling with a factor n 
+        list access : [ i1,i2,i3,...,iN ] allows specific values extraction on a single axis
+
+        The dimension of the shape of the extracted array is the same as the dimension of the original array.
+        Missing axis are broadcasted in the proper original position
+
+    Warning : some extractions invoking multiple list access on several axis do not work properly. 
+
+    The recommandation is to use tuple extraction on a single axis
+
+
+    """
+
+
+    ye = eval('y'+s)
+   
+    lm = re.findall('\[[0-9,]*\]',s)
+    for m in lm:
+        s = s.replace(m,'?')
+    s = s.replace('[','').replace(']','')
+
+    lish = s.split(',')
+    
+    k1 = 0
+    k2 = 0
+    for x in lish:
+        if '?' in x:
+            lish[k2]=lm[k1]
+            k1 = k1+1
+        k2 = k2+1
+    lik = np.array([ k for k,val in enumerate(lish) if (':' not in val and '[' not in val)])
+    shf = np.arange(len(lish)).astype(int)
+    u = np.setdiff1d(shf,lik)
+    nsh = np.ones(len(lish),dtype=int)
+    nsh[u] = np.array(ye.shape)
+    ye = ye.reshape(nsh)
+    return(ye)
+
+
 
 if __name__ == "__main__":
     doctest.testmod()
