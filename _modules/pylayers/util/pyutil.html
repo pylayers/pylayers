@@ -192,6 +192,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -1989,6 +1990,79 @@
     <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">False</span></div>
 
+
+<span class="k">def</span> <span class="nf">npextract</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  access a numpy MDA while keeping number of axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    y : numpy.MDA</span>
+<span class="sd">    s : string </span>
+<span class="sd">        access string </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    ye : numpy.MDA</span>
+<span class="sd">        subset of y with the same number of axis</span>
+
+
+<span class="sd">    Exemples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        &gt;&gt;&gt; y = np.random.rand(7,5,3,7)</span>
+<span class="sd">        &gt;&gt;&gt; s = &#39;[0,(1,2,3),:,::2]&#39;</span>
+<span class="sd">        &gt;&gt;&gt; ye = access(y,s)</span>
+<span class="sd">        &gt;&gt;&gt; assert(ye.shape==(1,3,3,4))</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Each axis can be accessed with several method : </span>
+
+<span class="sd">        single value : an int on an axis retrieve the corresponding value</span>
+<span class="sd">        all value    : a charcater : allows to get all the values of an axis </span>
+<span class="sd">        sub sampled values : ::n allows an axis subsampling with a factor n </span>
+<span class="sd">        list access : [ i1,i2,i3,...,iN ] allows specific values extraction on a single axis</span>
+
+<span class="sd">        The dimension of the shape of the extracted array is the same as the dimension of the original array.</span>
+<span class="sd">        Missing axis are broadcasted in the proper original position</span>
+
+<span class="sd">    Warning : some extractions invoking multiple list access on several axis do not work properly. </span>
+
+<span class="sd">    The recommandation is to use tuple extraction on a single axis</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="n">ye</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="o">+</span><span class="n">s</span><span class="p">)</span>
+   
+    <span class="n">lm</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;\[[0-9,]*\]&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">lm</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">lish</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    
+    <span class="n">k1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">k2</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lish</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">lish</span><span class="p">[</span><span class="n">k2</span><span class="p">]</span><span class="o">=</span><span class="n">lm</span><span class="p">[</span><span class="n">k1</span><span class="p">]</span>
+            <span class="n">k1</span> <span class="o">=</span> <span class="n">k1</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="n">k2</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">lik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lish</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;:&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">val</span> <span class="ow">and</span> <span class="s1">&#39;[&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)])</span>
+    <span class="n">shf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lish</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">shf</span><span class="p">,</span><span class="n">lik</span><span class="p">)</span>
+    <span class="n">nsh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lish</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">nsh</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ye</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">ye</span> <span class="o">=</span> <span class="n">ye</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nsh</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ye</span><span class="p">)</span>
+
+
+
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
@@ -2003,7 +2077,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 09, 2016.
+      Last updated on mai 10, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

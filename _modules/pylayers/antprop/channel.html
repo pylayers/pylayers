@@ -228,6 +228,7 @@
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">struct</span> <span class="kn">as</span> <span class="nn">stru</span>
@@ -240,6 +241,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.raysc</span> <span class="kn">import</span> <span class="n">GrRay3D</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="k">except</span><span class="p">:</span>
@@ -349,30 +351,6 @@
 <span class="sd">        .. math::</span>
 
 <span class="sd">            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt;&gt; from pylayers.measures.mesuwb import *</span>
-<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            &gt;&gt;&gt; M = UWBMeasure(1)</span>
-<span class="sd">            &gt;&gt;&gt; ch4 = M.tdd.ch4</span>
-<span class="sd">            &gt;&gt;&gt; f1,a1=ch4.plot(color=&#39;k&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; tit0 = plt.title(&quot;WHERE1 M1 UWB Channel impulse response&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; f2,a2=ch4.plot(color=&#39;k&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; tit1= plt.title(&quot;WHERE1 M1 UWB Channel impulse response (Zoom 1)&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; ax1=plt.axis([10,160,-90,-50])</span>
-<span class="sd">            &gt;&gt;&gt; f3,a3=ch4.plot(color=&#39;k&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; tit2 = plt.title(&quot;WHERE1 M1 UWB Channel impulse response (Zoom 2)&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; ax2=plt.axis([20,120,-80,-50])</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
-<span class="sd">            &gt;&gt;&gt; tau_moy = ch4.tau_moy()</span>
-
-
-
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
@@ -1385,7 +1363,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">x</span> <span class="p">,</span>
                 <span class="n">y</span> <span class="p">,</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>      
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -1397,17 +1375,226 @@
 <span class="sd">            measured channel </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-       
-        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Aat&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;Aar&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;calibrated&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+        <span class="s1">&#39;label&#39;</span> <span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;filename&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mes&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;calibrated&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filename&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mes</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Aat</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;Aat&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Aar</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;Aar&#39;</span><span class="p">)</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nm</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nr</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nt</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
         <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mchannel&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">):</span>
+    
+        
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;Calibrated&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;Not calibrated&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
+
+
+    <span class="k">def</span> <span class="nf">eig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">HdH</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate eigen values of the transfer matrix.</span>
+<span class="sd">            it involves H and Hd against svd() which acts only over H.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        HdH : Hermitian transfer matrix  (nf x nt x nt )</span>
+<span class="sd">        U   : Unitary tensor  (nf x nt x nt )</span>
+<span class="sd">        S   : Singular values (nf x nt)</span>
+<span class="sd">        V   : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)</span>
+
+<span class="sd">        HdH = U L U^{\dagger}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># H  : nm x nr x nt x nf</span>
+        <span class="n">H</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="c1"># Hd : nm x nt x nr x nf</span>
+        <span class="n">Hd</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+        
+        <span class="k">if</span> <span class="n">HdH</span><span class="p">:</span>
+            <span class="c1">#T : nm x nt x nt x nf</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;uijk,ujlk-&gt;uilk&#39;</span><span class="p">,</span><span class="n">Hd</span><span class="p">,</span><span class="n">H</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#T : nm x nr x nr x nf</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;uijk,ujlk-&gt;uilk&#39;</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">Hd</span><span class="p">)</span>
+        <span class="c1"># HdH : nm x nf x nr x nr</span>
+        <span class="n">T</span>  <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1">#U   : nm x nf x (nr|nt) x (nr|nt)</span>
+        <span class="c1">#S   : nm x nf x (nr|nt)</span>
+        <span class="c1">#V   : nm x nf x (nr|nt) x (nr|nt)</span>
+        <span class="n">U</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">V</span>  <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">V</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">Bcapacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1e-3</span><span class="p">]),</span><span class="n">Tp</span><span class="o">=</span><span class="mi">273</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculates BLAST deterministic MIMO channel capacity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Pt : np.array (,NPt)</span>
+<span class="sd">            the total power is assumed uniformaly distributed over the whole bandwidth</span>
+<span class="sd">        Tp : Receiver Temperature (K)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        C   : sum rate or spectral efficiency (bit/s)</span>
+<span class="sd">            np.array (Nf,NPt)</span>
+<span class="sd">        rho : SNR</span>
+<span class="sd">            np.array (Nf,Nt,NPt)</span>
+
+<span class="sd">            log_2(det(I+(Et/(N0Nt))HH^{H})</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        The returned value is homogeneous to bit/s the aggregated capacity is obtrained by a simple summation </span>
+<span class="sd">        of the returned quantity. To obtain the sum rate or the spectral efficiency in (bit/s/Hz ) the returned </span>
+<span class="sd">        value should be divided by the frequency step dfGHz</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fGHz</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">Nf</span>    <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">BGHz</span>  <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dfGHz</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">Pt</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">:</span>
+            <span class="n">Pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Pt</span><span class="p">])</span>
+
+        <span class="c1"># White Noise definition</span>
+        <span class="c1">#</span>
+        <span class="c1"># Boltzman constantf    = len(fGHz)</span>
+
+        <span class="n">kB</span> <span class="o">=</span> <span class="mf">1.03806488e-23</span>
+
+        <span class="c1"># N0 ~ J ~ W/Hz ~ W.s</span>
+
+        <span class="n">N0</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">Tp</span>
+
+
+        <span class="c1"># Evaluation of the transfer tensor</span>
+        <span class="c1">#</span>
+        <span class="c1"># HdH :</span>
+
+        <span class="n">U</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">HdH</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        
+        <span class="n">Ps</span>  <span class="o">=</span> <span class="n">Pt</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
+      
+
+        <span class="n">Pb</span>  <span class="o">=</span> <span class="n">N0</span><span class="o">*</span><span class="n">BGHz</span><span class="o">*</span><span class="mf">1e9</span>   <span class="c1"># Watt</span>
+
+
+        <span class="c1"># S : nm x nf x nr </span>
+        <span class="c1"># rho : nm x nf x nr x power</span>
+        <span class="c1">#</span>
+        <span class="n">rho</span>  <span class="o">=</span> <span class="p">(</span><span class="n">Ps</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="n">Pb</span><span class="p">)</span><span class="o">*</span><span class="n">S</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">]</span>
+        
+        <span class="n">CB</span>   <span class="o">=</span> <span class="n">dfGHz</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">rho</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+       
+        <span class="k">return</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span><span class="n">CB</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">WFcapacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1e-3</span><span class="p">]),</span><span class="n">Tp</span><span class="o">=</span><span class="mi">273</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculates deterministic MIMO channel capacity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Pt :  the total power to be distributed over the different spatial</span>
+<span class="sd">            channels using water filling</span>
+<span class="sd">        Tp : Receiver Noise Temperature (K)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        C : capacity (bit/s)</span>
+<span class="sd">        rho : SNR (in linear scale)</span>
+
+<span class="sd">            log_2(det(It + HH^{H})</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fGHz</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">Nf</span>    <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="c1"># Bandwidth</span>
+        <span class="n">BGHz</span>  <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Frequency step</span>
+        <span class="n">dfGHz</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># White Noise definition</span>
+        <span class="c1">#</span>
+        <span class="c1"># Boltzman constant</span>
+
+        <span class="n">kB</span> <span class="o">=</span> <span class="mf">1.03806488e-23</span>
+
+        <span class="c1"># N0 ~ J ~ W/Hz ~ W.s</span>
+
+        <span class="n">N0</span> <span class="o">=</span> <span class="n">kB</span><span class="o">*</span><span class="n">Tp</span>
+
+        <span class="c1"># Evaluation of the transfer HHd tensor</span>
+        
+        <span class="n">U</span><span class="p">,</span><span class="n">ld</span><span class="p">,</span><span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">HdH</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+       
+        <span class="c1">#</span>
+        <span class="c1"># Iterative implementation of Water Filling algorithm</span>
+        <span class="c1">#</span>
+
+        <span class="c1"># pb : (nm,nf,nt)   noise power (Watt)</span>
+        <span class="n">pb</span> <span class="o">=</span> <span class="n">N0</span><span class="o">*</span><span class="n">dfGHz</span><span class="o">*</span><span class="mf">1e9</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">))</span>
+        <span class="c1"># pt : (nm,nf,nt,power)  Total power uniformly spread over (nt*nf-1)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">Pt</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="n">Q0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">mu</span><span class="o">-</span><span class="n">pb</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">/</span><span class="n">ld</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">])</span>
+        <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Q0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">Peff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Q0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">deltamu</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Peff</span><span class="o">-</span><span class="n">Pt</span><span class="p">)</span><span class="o">&gt;</span><span class="mf">1e-16</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">deltamu</span>
+            <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">mu</span><span class="o">-</span><span class="n">pb</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">/</span><span class="n">ld</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">])</span>
+            <span class="n">Peff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1">#print &quot;mu , Peff : &quot;,mu,Peff</span>
+            <span class="n">usup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Peff</span><span class="o">&gt;</span><span class="n">Pt</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mu</span><span class="p">[:,:,:,</span><span class="n">usup</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[:,:,:,</span><span class="n">usup</span><span class="p">]</span><span class="o">-</span> <span class="n">deltamu</span><span class="p">[:,:,:,</span><span class="n">usup</span><span class="p">]</span>
+            <span class="n">deltamu</span><span class="p">[:,:,:,</span><span class="n">usup</span><span class="p">]</span> <span class="o">=</span> <span class="n">deltamu</span><span class="p">[:,:,:,</span><span class="n">usup</span><span class="p">]</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">Qn</span>   <span class="o">=</span> <span class="n">Q</span><span class="o">/</span><span class="n">pb</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">rho</span>  <span class="o">=</span> <span class="n">Qn</span><span class="o">*</span><span class="n">ld</span><span class="p">[:,:,:,</span><span class="bp">None</span><span class="p">]</span>
+
+        <span class="n">Cwf</span>  <span class="o">=</span> <span class="n">dfGHz</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">rho</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+        <span class="k">return</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span><span class="n">Cwf</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">):</span>
         
         <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span><span class="p">[]:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>  
@@ -4449,7 +4636,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 09, 2016.
+      Last updated on mai 10, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

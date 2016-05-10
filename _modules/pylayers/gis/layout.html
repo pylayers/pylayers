@@ -447,7 +447,7 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 
-<span class="sd">    This class exploits `networkx` to store Layout information</span>
+<span class="sd">    This class uses `networkx` to store Layout information</span>
 
 <span class="sd">    .. autosummary::</span>
 
@@ -618,7 +618,8 @@
     <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; addition</span>
 
-<span class="sd">        One can add a numpy array or an other layout</span>
+<span class="sd">        One can add either a numpy array or an other layout</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Ls</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -745,6 +746,8 @@
 
 <span class="sd">        delete  Gs</span>
 
+<span class="sd">        called in load str and loadstr2 (deprecated)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span></div>
@@ -756,6 +759,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        offp : offset points</span>
 <span class="sd">        offs : offset segments</span>
 
@@ -789,9 +793,6 @@
         <span class="n">dseg</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dpt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span>  <span class="n">dseg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edge</span> <span class="o">=</span> <span class="n">dseg</span>
-        <span class="c1">#pdb.set_trace()</span>
-        <span class="c1">#dict(zip(self.Gs.keys(),))</span>
-        <span class="c1">#self.Gs.adj = newapoint</span>
 
 
 <div class="viewcode-block" id="Layout.check"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.check.html#pylayers.gis.layout.Layout.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -1600,7 +1601,10 @@
 <span class="sd">        +  .ini   : ini file format (natural one) DIRINI</span>
 <span class="sd">        +  .osm   : opens street map format  DIROSM</span>
 
+<span class="sd">        (Deprecated format)</span>
 
+<span class="sd">        +  .str2  : native Pyray (C implementation) DIRSTRUC</span>
+<span class="sd">        +  .str   : binary file with visibility DIRSTRUC</span>
 <span class="sd">        layout files are stored in the directory pstruc[&#39;DIRxxx&#39;]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -8492,307 +8496,6 @@
         <span class="n">alreadythere</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cycleroom</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">involvedcycles</span><span class="p">)</span></div>
 
 
-    <span class="c1"># def buildGc(self):</span>
-    <span class="c1">#     &quot;&quot;&quot; build the graph of cycles</span>
-
-    <span class="c1">#     Returns</span>
-    <span class="c1">#     -------</span>
-
-    <span class="c1">#     Ga : graph of adjascent rooms</span>
-
-    <span class="c1">#     Notes</span>
-    <span class="c1">#     -----</span>
-
-    <span class="c1">#     An adjascent graph (connecting cycle sharing airwalls) is created.</span>
-    <span class="c1">#     This graph contains multiples sub-graph which are not connected with each others</span>
-
-    <span class="c1">#     lGa is a list of each of thoose subgraphs</span>
-
-    <span class="c1">#     For each of those sub graphs, all their nodes are merged until they only have a single node.</span>
-    <span class="c1">#     The main difficulty here , is to merge the polygons of those nodes.</span>
-    <span class="c1">#     Because GeomUtil.Polygon, does not support multiple Polygons, nodes of a graph Ga must be </span>
-    <span class="c1">#     merged into a specific order.</span>
-    <span class="c1">#     This exaplains the dfs_successors and following in the code !:w</span>
-
-
-
-    <span class="c1">#     &quot;&quot;&quot;</span>
-
-    <span class="c1">#     #</span>
-    <span class="c1">#     # Create a graph of adjascent cycles</span>
-    <span class="c1">#     #</span>
-
-    <span class="c1">#     Ga = nx.Graph()</span>
-    <span class="c1">#     Ga.pos ={}</span>
-    <span class="c1">#     for k in self.Gt.edge:</span>
-    <span class="c1">#         dk = self.Gt.edge[k]</span>
-    <span class="c1">#         for cy in dk:</span>
-    <span class="c1">#             try:</span>
-    <span class="c1">#                 segs = dk[cy][&#39;segment&#39;]</span>
-    <span class="c1">#             except:</span>
-    <span class="c1">#                 segs=[]</span>
-    <span class="c1">#             for s in segs:</span>
-    <span class="c1">#                 if self.Gs.node[s][&#39;name&#39;]==&#39;AIR&#39;:</span>
-    <span class="c1">#                     if k not in Ga.node:</span>
-    <span class="c1">#                         Ga.add_node(k)</span>
-    <span class="c1">#                         Ga.pos[k]=self.Gt.pos[k]</span>
-    <span class="c1">#                     if cy not in Ga.node:</span>
-    <span class="c1">#                         Ga.add_node(cy)</span>
-    <span class="c1">#                         Ga.pos[cy]=self.Gt.pos[cy]</span>
-    <span class="c1">#                     Ga.add_edge(k,cy)</span>
-
-    <span class="c1">#     # deep copy of Gt</span>
-    <span class="c1">#     self.Gc = copy.deepcopy(self.Gt)</span>
-
-    <span class="c1">#     # list of connected subgraphs of Gt</span>
-    <span class="c1">#     lGa = nx.connected_component_subgraphs(Ga)</span>
-
-    <span class="c1">#     #dictionnary mapping</span>
-    <span class="c1">#     # key = old cycle ID :  value =new cycle ID</span>
-    <span class="c1">#     dmap={x:x for x in self.Gc.nodes()}</span>
-
-
-    <span class="c1">#     def merge_cycle(root,child):</span>
-    <span class="c1">#         &quot;&quot;&quot; method to merge a child cycle into a root cycle</span>
-    <span class="c1">#         &quot;&quot;&quot;</span>
-    <span class="c1">#         try:</span>
-    <span class="c1">#             self.Gc.node[root][&#39;polyg&#39;]+=self.Gc.node[child][&#39;polyg&#39;] # here the merging</span>
-    <span class="c1">#             self.Gc.node[root][&#39;cycle&#39;]+=self.Gc.node[child][&#39;cycle&#39;] # here the merging</span>
-    <span class="c1">#             # import ipdb</span>
-    <span class="c1">#             # ipdb.set_trace()</span>
-    <span class="c1">#             # self.Gc.node[root][&#39;polyg&#39;].plot(fig=plt.gcf(),ax=plt.gca(),color=&#39;g&#39;)</span>
-    <span class="c1">#             # self.Gc.node[root][&#39;cycle&#39;].show(fig=plt.gcf(),ax=plt.gca())</span>
-    <span class="c1">#             # plt.draw()</span>
-    <span class="c1">#         except:</span>
-    <span class="c1">#             import ipdb</span>
-    <span class="c1">#             ipdb.set_trace()</span>
-    <span class="c1">#         try:</span>
-    <span class="c1">#             self.Gc.node[root][&#39;merged&#39;].append(child)</span>
-    <span class="c1">#         except:</span>
-    <span class="c1">#             self.Gc.node[root][&#39;merged&#39;]=[child]</span>
-
-    <span class="c1">#         dmap[child] = root</span>
-
-            
-    <span class="c1">#         self.Gc.add_edges_from([(root,x) for x in self.Gc.edge[child].keys()])</span>
-    <span class="c1">#         # update Gt</span>
-    <span class="c1">#         self.Gt.node[child][&#39;merged&#39;] = root</span>
-    <span class="c1">#         # a merged cycle is open</span>
-    <span class="c1">#         self.Gt.node[child][&#39;isopen&#39;] = True</span>
-    <span class="c1">#         self.Gt.node[root][&#39;merged&#39;] = root</span>
-    <span class="c1">#         self.Gc.remove_node(child)</span>
-    <span class="c1">#         # self.Gc.pos[root]=tuple(self.Gc.node[root][&#39;cycle&#39;].g)</span>
-    <span class="c1">#         self.Gc.pos[root]=tuple(np.array(self.Gc.node[root][&#39;polyg&#39;].centroid.xy)[:,0])</span>
-
-
-    <span class="c1">#     for Ga in lGa:</span>
-
-
-    <span class="c1">#         # root node of subgraph</span>
-    <span class="c1">#         r = Ga.nodes()[0]</span>
-    <span class="c1">#         cnctd = [r]</span>
-    <span class="c1">#         # depth first search successors tree rooted on r</span>
-    <span class="c1">#         # this return dict where keys are cycles and values</span>
-    <span class="c1">#         # are list of cycle (a.k.a. child ) connected to the key cycle</span>
-    <span class="c1">#         dn = nx.dfs_successors(Ga,r)</span>
-
-    <span class="c1">#         # merge </span>
-
-    <span class="c1">#         # loop on each root cycles</span>
-    <span class="c1">#         for uk,k in enumerate(dn.keys()):</span>
-    <span class="c1">#             # loop on child cycles</span>
-    <span class="c1">#             for v in dn[k]:</span>
-    <span class="c1">#                 # </span>
-    <span class="c1">#                 root =dmap[k]</span>
-    <span class="c1">#                 while dmap[root] !=root :</span>
-    <span class="c1">#                     root = dmap[root]</span>
-    <span class="c1">#                 # if the child cycle has already been merged in a previous</span>
-    <span class="c1">#                 # loop; its ID has changed but thoose of its childs too. </span>
-    <span class="c1">#                 # This update the ID of childs of v</span>
-    <span class="c1">#                 if v in dn.keys()[:uk]:</span>
-    <span class="c1">#                     # list of cycle to be modified</span>
-    <span class="c1">#                     lcy = dn[v]</span>
-    <span class="c1">#                     [dmap.update({c:root}) for c in lcy]</span>
-
-    <span class="c1">#                 merge_cycle(root,v)</span>
-    <span class="c1">#     # find diffractions of the layout</span>
-    <span class="c1">#     self._find_diffractions()</span>
-
-
-
-
-
-    <span class="c1"># def buildGc_old(self):</span>
-    <span class="c1">#     &quot;&quot;&quot; </span>
-    <span class="c1">#     DEPRECATED</span>
-
-    <span class="c1">#     This version of buildGc do not works well with</span>
-    <span class="c1">#     large layout. </span>
-    <span class="c1">#     Indeed, the algorithm cannot merge large room</span>
-    <span class="c1">#     with multiple airwalls</span>
-
-    <span class="c1">#     build the graph of cycles</span>
-
-
-
-    <span class="c1">#     Returns</span>
-    <span class="c1">#     -------</span>
-
-    <span class="c1">#     Ga : graph of adjascent rooms</span>
-
-    <span class="c1">#     Notes</span>
-    <span class="c1">#     -----</span>
-
-    <span class="c1">#     adjascent rooms are connected</span>
-    <span class="c1">#     Gr is at first a deep copy of Gt</span>
-
-    <span class="c1">#     The difficulty here is to take into account the AIR transition</span>
-    <span class="c1">#     segments</span>
-
-    <span class="c1">#     &quot;&quot;&quot;</span>
-    <span class="c1">#     #</span>
-    <span class="c1">#     # Create a graph of adjascent cycles</span>
-    <span class="c1">#     #</span>
-
-    <span class="c1">#     Ga = nx.Graph()</span>
-    <span class="c1">#     Ga.pos ={}</span>
-    <span class="c1">#     for k in self.Gt.edge:</span>
-    <span class="c1">#         dk = self.Gt.edge[k]</span>
-    <span class="c1">#         for cy in dk:</span>
-    <span class="c1">#             try:</span>
-    <span class="c1">#                 segs = dk[cy][&#39;segment&#39;]</span>
-    <span class="c1">#             except:</span>
-    <span class="c1">#                 segs=[]</span>
-    <span class="c1">#             for s in segs:</span>
-    <span class="c1">#                 if self.Gs.node[s][&#39;name&#39;]==&#39;AIR&#39;:</span>
-    <span class="c1">#                     if k not in Ga.node:</span>
-    <span class="c1">#                         Ga.add_node(k)</span>
-    <span class="c1">#                         Ga.pos[k]=self.Gt.pos[k]</span>
-    <span class="c1">#                     if cy not in Ga.node:</span>
-    <span class="c1">#                         Ga.add_node(cy)</span>
-    <span class="c1">#                         Ga.pos[cy]=self.Gt.pos[cy]</span>
-    <span class="c1">#                     Ga.add_edge(k,cy)</span>
-
-    <span class="c1">#     # deep copy of Gt</span>
-    <span class="c1">#     self.Gc = copy.deepcopy(self.Gt)</span>
-
-    <span class="c1">#     # list of connected subgraphs of Gt</span>
-    <span class="c1">#     lGa = nx.connected_component_subgraphs(Ga)</span>
-    <span class="c1">#     connected = []</span>
-    <span class="c1">#     for Ga in lGa:</span>
-    <span class="c1">#         # root node of subgraph</span>
-    <span class="c1">#         r = Ga.nodes()[0]</span>
-    <span class="c1">#         cnctd = [r]</span>
-    <span class="c1">#         # depth first search successors tree rooted on r</span>
-    <span class="c1">#         dn = nx.dfs_successors(Ga,r)</span>
-    <span class="c1">#         Nlevel = len(dn)</span>
-
-    <span class="c1">#         #</span>
-    <span class="c1">#         # Probably it exists a simpler manner to obtain</span>
-    <span class="c1">#         # the sequence of connected nodes</span>
-    <span class="c1">#         #</span>
-    <span class="c1">#         succ =[]</span>
-
-    <span class="c1">#         while dn.keys()!=[]:</span>
-                
-    <span class="c1">#             try:</span>
-    <span class="c1">#                 succ = succ+ dn.pop(r)</span>
-    <span class="c1">#             except:</span>
-    <span class="c1">#                 r = dn.pop()</span>
-    <span class="c1">#             if r ==102:</span>
-    <span class="c1">#                 import ipdb</span>
-    <span class="c1">#                 ipdb.set_trace()</span>
-
-
-    <span class="c1">#             for i in range(len(succ)):</span>
-    <span class="c1">#                 try:</span>
-    <span class="c1">#                     n = succ.pop()</span>
-    <span class="c1">#                 except:</span>
-    <span class="c1">#                     r = succ.pop()</span>
-    <span class="c1">#                     cnctd.append(r)</span>
-    <span class="c1">#                     break</span>
-    <span class="c1">#                 if n in dn.keys():</span>
-    <span class="c1">#                     r = n</span>
-    <span class="c1">#                     cnctd.append(r)</span>
-    <span class="c1">#                 else:</span>
-    <span class="c1">#                     cnctd.append(n)</span>
-    <span class="c1">#                     # try:</span>
-    <span class="c1">#                     #     r = succ.pop()</span>
-    <span class="c1">#                     #     cnctd.append(r)</span>
-    <span class="c1">#                     # except:</span>
-    <span class="c1">#                     #     break</span>
-    <span class="c1">#         #for i in range(Nlevel):</span>
-    <span class="c1">#         #    succ = dn.pop(r)</span>
-    <span class="c1">#         #    cnctd = cnctd + succ</span>
-    <span class="c1">#         #    for k in dn:</span>
-    <span class="c1">#         #        if k in succ:</span>
-    <span class="c1">#         #            r = k</span>
-    <span class="c1">#         #            break</span>
-    <span class="c1">#         connected.append(cnctd)</span>
-    <span class="c1">#     #</span>
-    <span class="c1">#     # Merge all air-connected cycles</span>
-    <span class="c1">#     #  for all conected components</span>
-    <span class="c1">#     #  example licy = [[22,78,5],[3,4]] 2 cycles are connected</span>
-    <span class="c1">#     #</span>
-    <span class="c1">#     import ipdb</span>
-    <span class="c1">#     ipdb.set_trace()</span>
-    <span class="c1">#     merge2c=[]</span>
-    <span class="c1">#     for licy in connected:</span>
-    <span class="c1">#         root = licy[0]      # pick the first cycle as root</span>
-    <span class="c1">#         merged = [root]     # merged cycle is void</span>
-    <span class="c1">#         tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list</span>
-    <span class="c1">#         #for cy in tomerge: #</span>
-    <span class="c1">#         while tomerge!=[]:</span>
-
-    <span class="c1">#             ncy = tomerge.pop()</span>
-    <span class="c1">#             #print &quot;ncy = &quot;,ncy</span>
-    <span class="c1">#             # testing cycle contiguity before merging</span>
-
-    <span class="c1">#             try:</span>
-    <span class="c1">#                 croot = self.Gc.node[root][&#39;cycle&#39;]</span>
-    <span class="c1">#             except:</span>
-    <span class="c1">#                 import ipdb</span>
-    <span class="c1">#                 ipdb.set_trace()</span>
-    <span class="c1">#             cy = self.Gc.node[ncy][&#39;cycle&#39;]</span>
-    <span class="c1">#             flip,path = croot.intersect(cy)</span>
-
-    <span class="c1">#             if len(path) &lt; 1 and [root,ncy] not in merge2c:</span>
-    <span class="c1">#                 print tomerge,root,ncy,merge2c</span>
-    <span class="c1">#                 tomerge.insert(0,ncy)</span>
-    <span class="c1">#             else:</span>
-    <span class="c1">#                 print &#39;merge&#39; </span>
-
-    <span class="c1">#                 neigh = nx.neighbors(self.Gc,ncy) # all neighbors of 5</span>
-    <span class="c1">#                 self.Gc.node[root][&#39;polyg&#39;]+=self.Gc.node[ncy][&#39;polyg&#39;] # here the merging</span>
-    <span class="c1">#                 self.Gc.node[root][&#39;cycle&#39;]+=self.Gc.node[ncy][&#39;cycle&#39;] # here the merging</span>
-    <span class="c1">#                 merged.append(ncy)</span>
-    <span class="c1">#                 merge2c.append([root,ncy])</span>
-    <span class="c1">#                 #print self.Gc.node[root][&#39;polyg&#39;].exterior.xy</span>
-    <span class="c1">#                 for k in neigh:</span>
-    <span class="c1">#                     if k!= root:</span>
-    <span class="c1">#                         self.Gc.add_edge(root,k)</span>
-
-    <span class="c1">#         # keep track of merged convex cycles</span>
-    <span class="c1">#         self.Gc.node[root][&#39;merged&#39;] = merged</span>
-    <span class="c1">#         for cy in merged:</span>
-    <span class="c1">#             self.Gt.node[cy][&#39;merged&#39;] = root</span>
-    <span class="c1">#             # a merged cycle is open</span>
-    <span class="c1">#             self.Gt.node[cy][&#39;isopen&#39;] = True</span>
-    <span class="c1">#         self.Gt.node[root][&#39;merged&#39;] = root</span>
-    <span class="c1">#         # remove merged cycles</span>
-    <span class="c1">#         for cy in merged:</span>
-    <span class="c1">#             if cy != root:</span>
-    <span class="c1">#                 self.Gc.remove_node(cy)</span>
-    <span class="c1">#         # update pos of root cycle with new center of gravity</span>
-    <span class="c1">#         self.Gc.pos[root]=tuple(self.Gc.node[root][&#39;cycle&#39;].g)</span>
-
-    <span class="c1">#     self._find_diffractions()</span>
-
-
-
-
-    <span class="c1">#     return(Ga)</span>
-
 
 
     <span class="k">def</span> <span class="nf">_find_diffractions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
@@ -10308,7 +10011,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 09, 2016.
+      Last updated on mai 10, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
