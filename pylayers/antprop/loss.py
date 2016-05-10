@@ -960,7 +960,7 @@ def lossref_compute(P,h0,h1,k=4/3.) :
 
     return psy,dloss,dref
 
-def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
+def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
     """
 
 
@@ -1037,11 +1037,11 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
         >>> for d in np.arange(1,10000,1):
         >>>     p1[1,:]=d
         >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))
-        >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
+        >>>     TRC.append(two_rays_curvedearth(d,p0[2,:],p1[2,:],fGHz))
         >>>     PLoss.append(PL(fGHz, p0[:,0],p1[:,0], n=2.0, dB=True, d0=np.array([1])))
         >>> PLoss=np.array(PLoss)[:,0,0]
-        >>> plt.semilogx(TRF,label='two-ray model flat earth')
-        >>> plt.semilogx(TRC,label='two-ray model curved earth')
+        >>> plt.semilogx(TRF,label='two-rays model flat earth')
+        >>> plt.semilogx(TRC,label='two-rays model curved earth')
         >>> plt.semilogx(-PLoss,label='Path Loss')
         >>> plt.legend()
         >>> plt.show()
@@ -1101,6 +1101,51 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
         return 10*np.log10(P)
     else:
         return P
+
+
+
+def two_rays_curvedearth(fGHz,**kwargs):
+    """
+    Parameters
+    ----------
+
+    p0 : transmitter position
+        (3 x Np1) array or (2,) array
+    p1 : receiver position
+        (3 x Np2) array or (2,) array
+
+
+    OR :
+
+    d : distance between Tx and Rx
+        (Np1,)
+    ht : Tx height
+
+    hr : Rx height
+        (Np1)
+    GtdB : float (0) 
+        Transmitter Antenna Gain (dB)
+    GrdB : float(0)
+        Receiver Antenna Gain (dB)
+    fGHz : float (2.4)
+        frequency (GHz)
+    gamma : complex (-1.+0.j)
+        Reflexion coeff
+
+    
+    dB : boolean (True)
+        return result in d
+
+
+    Returns
+    -------
+
+    P : 
+        received power
+    """
+
+
+
 
 
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
