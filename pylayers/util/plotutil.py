@@ -200,7 +200,8 @@ def mulcplot(x,y,**kwargs):
                 'fig':[],
                 'ax':[],
                 'figsize':(8,8),
-                'att':False
+                'att':False,
+                'fontsize':14
                }
     # radians to degree coefficient
     rtd = 180./np.pi
@@ -272,6 +273,7 @@ def mulcplot(x,y,**kwargs):
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
     figsize = kwargs['figsize']
+    fontsize= kwargs['fontsize']
 
     ntypes = np.prod(np.array(types).shape,dtype='int')
     ntitles = np.prod(np.array(titles).shape,dtype='int')
@@ -377,17 +379,17 @@ def mulcplot(x,y,**kwargs):
                     df  = x[1]-x[0]
                     ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
                 if nxlabels>1:
-                    ax[l,c].set_xlabel(xlabels[l,c])
+                    ax[l,c].set_xlabel(xlabels[l,c],fontsize=fontsize)
                 else:
-                    ax[l,c].set_xlabel(xlabels[0])
+                    ax[l,c].set_xlabel(xlabels[0],fontsize=fontsize)
                 if nylabels>1:
-                    ax[l,c].set_ylabel(ylabels[l,c])
+                    ax[l,c].set_ylabel(ylabels[l,c],fontsize=fontsize)
                 else:
-                    ax[l,c].set_ylabel(ylabels[0])
+                    ax[l,c].set_ylabel(ylabels[0],fontsize=fontsize)
                 if ntitles>1:
-                    ax[l,c].set_title(titles[l,c])
+                    ax[l,c].set_title(titles[l,c],fontsize=fontsize)
                 else:
-                    ax[l,c].set_title(titles[0])
+                    ax[l,c].set_title(titles[0],fontsize=fontsize)
                 if labels[0]!='':
                     ax[l,c].legend()
 
@@ -423,9 +425,9 @@ def mulcplot(x,y,**kwargs):
                     df  = x[1]-x[0]
                     ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
 
-                ax[l,c].set_xlabel(xlabels[k%nxlabels])
-                ax[l,c].set_ylabel(ylabels[k%nylabels])
-                ax[l,c].set_title(titles[k%ntitles])
+                ax[l,c].set_xlabel(xlabels[k%nxlabels],fontsize=fontsize)
+                ax[l,c].set_ylabel(ylabels[k%nylabels],fontsize=fontsize)
+                ax[l,c].set_title(titles[k%ntitles],fontsize=fontsize+2)
 
                 if labels[0]!='':
                     ax[l,c].legend()

@@ -829,11 +829,15 @@ class Bsignal(PyLayers):
             if key not in kwargs:
                  kwargs[key] = value
 
-
-        vline = kwargs['vline']
-        hline = kwargs['hline']
-
-        idx = kwargs['idx']
+        iy = kwargs.pop('iy') 
+        vline = kwargs.pop('vline')
+        hline = kwargs.pop('hline')
+        idx = kwargs.pop('idx')
+        unit1 = kwargs.pop('unit1')
+        unit2 = kwargs.pop('unit2')
+        xmin = kwargs.pop('xmin')
+        xmax = kwargs.pop('xmax')
+        dist = kwargs.pop('dist')
         # filtering kwargs argument for plot function
         args = {}
         for k in kwargs:
@@ -841,16 +845,16 @@ class Bsignal(PyLayers):
                 args[k]=kwargs[k]
 
         conversion = 1.0
-        if ((kwargs['unit1'] == 'V') & (kwargs['unit2'] == 'mV')):
+        if ((unit1 == 'V') & (unit2 == 'mV')):
             conversion = 1000
 
         # restriction of x support
-        u = np.nonzero((self.x > kwargs['xmin']) & (self.x < kwargs['xmax']))[0]
+        u = np.nonzero((self.x > xmin) & (self.x < xmax))[0]
 
         #
         # convert ns in meter if dist=True
         #
-        if kwargs['dist']:
+        if dist:
             x = 0.3 * self.x[u]
         else:
             x = self.x[u]
@@ -864,22 +868,30 @@ class Bsignal(PyLayers):
             Nmeas = self.y.shape[0]
             Nr = self.y.shape[1]
             Nt = self.y.shape[2]
-            fig,ax = plt.subplots(Nr,Nt)
-            if ((Nr==1) and (Nt==1)):
-                ax = np.array([[ax]])    
-    
-            for k in range(Nr):
-                for l in range(Nt):
-                    for ix in idx:
-                        yx = self.y[ix,k,l,u]
-                        fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
+
+            if iy==-1:
+                fig,ax = plt.subplots(Nr,Nt)
+                if ((Nr==1) and (Nt==1)):
+                    ax = np.array([[ax]])    
+        
+                for k in range(Nr):
+                    for l in range(Nt):
+                        for ix in idx:
+                            yx = self.y[ix,k,l,u]
+                            fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
+            else:
+                fig = plt.gcf()
+                ax = np.array([[plt.gca()]])
+                yx = self.y[iy[0],iy[1],iy[2],u]
+                fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[0,0],**args)
+               
 
         if ndim == 3:
             shy = self.y.shape
             yx = self.y.reshape(shy[0]*shy[1],shy[2])[:,u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 2:
-            if kwargs['iy']==-1:
+            if iy==-1:
                 yx = self.y[:,u]
             else:
                 yx = self.y[idx[0],u]
@@ -3081,7 +3093,7 @@ class FUsignal(FBsignal,Usignal):
         #
         # fl [ 0 , (Nl-1) *df ]
         # fh [ f[-1]+df , f[-1] + Nz *df ]
-        #
+        #a
         fl = np.linspace(0, (Nl-1) * df, Nl)
         fh = np.linspace(f[-1] + df, f[-1] + Nz * df, Nz)
         fz = np.concatenate((f, fh), 0)
@@ -3141,7 +3153,7 @@ class FUsignal(FBsignal,Usignal):
         tc = TUsignal(x, y)
         return tc
 
-    def ift(self, Nz=1, ffts=0):
+    def ift(self, Nz=1, ffts=0 ,beta = 0):
         """ Inverse Fourier Transform - returns the associated TUsignal
 
         Parameters
@@ -3149,6 +3161,11 @@ class FUsignal(FBsignal,Usignal):
 
         Nz   : Number of zeros (-1) No forcing
         ffts : 0 (no fftshift 1:fftshift)
+        beta : kaiser window shape 
+            0   : rectangular 
+            5   : similar to a Hamming
+            6   : similar to a Hanning
+            8.6 : similar to a blackman
 
         Returns
         -------
@@ -3177,11 +3194,16 @@ class FUsignal(FBsignal,Usignal):
 
         """
         # enforce Hermitian Symetry
-        if (Nz == -1):
-            UH = self.symH(1)
+        if beta == 0 :
+            V = FUsignal(self.x,self.y)
         else:
+            window = np.kaiser(len(self.x),beta)
+            V = FUsignal(self.x,self.y*window[...,:])
+        # if (Nz == -1):
+        #     UH = self.symH(1)
+        # else:
             #UH = self.symHz(Nz,scale='cir')
-            UH = self.symHz(Nz,scale='extract')
+        UH = V.symHz(Nz,scale='extract')
         # Back in time
         # UH is an FHsignal
         # uh is a TUsignal
