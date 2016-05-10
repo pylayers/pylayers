@@ -1520,11 +1520,11 @@ class Layout(PyLayers):
             
             # build and dump
             if rebuild:  
-                ans = raw_input('Do you want to build the layout (y/N) ? ')
-                if ans.lower()=='y':
-                    self.build()
-                    self.lbltg.append('s')
-                    self.dumpw()
+                # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                # if ans.lower()=='y':
+                self.build()
+                self.lbltg.append('s')
+                self.dumpw()
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
