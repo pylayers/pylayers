@@ -1749,7 +1749,8 @@ class Layout(PyLayers):
                               norm=norm,
                               transition=transition,
                               offset=offset,
-                              connect=[n1,n2])
+                              connect=[n1,n2]
+                              )
 
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
@@ -2431,7 +2432,7 @@ class Layout(PyLayers):
         self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1]))
 
 
-    def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[]):
+    def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[],g2npy=True):
         """ change multi subsegments properties
 
         Parameters
@@ -2475,7 +2476,8 @@ class Layout(PyLayers):
 
 
                 # update Layout information
-                self.g2npy()
+                if g2npy:
+                    self.g2npy()
 
     def edit_segment(self, e1 , gui=True,outdata={}):
         """ edit segment WITH EasyGUI
@@ -2681,7 +2683,7 @@ class Layout(PyLayers):
             return False
 
 
-    def update_sseg(self,s1,data={}):
+    def update_sseg(self,s1,data={},g2npy=True):
         """ update subsegment(s) on a segment
 
         Parameters
@@ -2713,7 +2715,7 @@ class Layout(PyLayers):
             self.Nss += deltaNss
             self.chgmss(s1,ss_name=data['ss_name'],
                 ss_offset=data['ss_offset'],
-                ss_z=data['ss_z'])
+                ss_z=data['ss_z'],g2npy=g2npy)
             return True
         else:
             if self.Gs.node[s1].has_key('ss_name'):
@@ -2721,7 +2723,8 @@ class Layout(PyLayers):
                 self.Gs.node[s1].pop('ss_z')
                 self.Gs.node[s1].pop('ss_offset')
                 self.Nss += deltaNss
-                self.g2npy()
+                if g2npy:
+                    self.g2npy()
                 return True
             else :
                 return True
@@ -7694,6 +7697,7 @@ class Layout(PyLayers):
                         kwargs['edge_color']=cold[self.sl[lmat]['color']]
                         kwargs['width']=self.sl[lmat]['linewidth']
                     else:
+          
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
@@ -9805,7 +9809,7 @@ class Layout(PyLayers):
         return sigarr
 
 
-    def plot(self,fig=[],ax=[]):
+    def plot(self,**kwargs):
         """ plot the layout
 
         Parameters
@@ -9815,11 +9819,34 @@ class Layout(PyLayers):
         ax 
 
         """
+        defaults = {'show': False,
+                    'fig': [],
+                    'ax': [],
+                    'labels':[],
+                    }
 
-        if fig == []:
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+        if kwargs['fig'] == []:
             fig=plt.gcf()
-        if ax == []:
+        if kwargs['ax'] == []:
             ax=plt.gca()
+
+
+
+        if isinstance(kwargs['labels'],list):
+            labels = kwargs['labels']
+        elif kwargs['labels'] == True:
+            labels=['s','t','v','i','w']
+        elif isinstance(kwargs['labels'],str):
+            labels=kwargs['labels']
+        else:
+            labels=[]
+
+
 
         k = self.Gs.pos.keys()
         v = self.Gs.pos.values()
@@ -9829,7 +9856,8 @@ class Layout(PyLayers):
         
         w = [ str(x) for x in kk ]
         
-        [ ax.text(vv[i,0],vv[i,1],w[i]) for i in range(len(w)) ]
+        if 's' in labels:
+            [ ax.text(vv[i,0],vv[i,1],w[i]) for i in range(len(w)) ]
         
         ax.scatter(vv[:,0],vv[:,1])
         ML = sh.MultiLineString(self._shseg.values())
