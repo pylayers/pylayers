@@ -89,7 +89,6 @@ class Array(ant.Pattern):
         assert((self.p.ndim==2) and (Aa.p.ndim==2))
         Anew.p = np.concatenate(self.p,Aa.p,axis=1)
         Anew.w = np.concatenate(self.w,Aa.w,axis=0)
-        
         return(Anew)
 
     def __repr__(self):
@@ -185,7 +184,7 @@ class AntArray(Array,ant.Antenna):
         Parameters
         ----------
 
-        tarr : string 
+        tarr : string
             type of array : 'UA' |
         N  :
         dm :
@@ -194,8 +193,8 @@ class AntArray(Array,ant.Antenna):
         S :
         pattern : boolean
         typant : Gauss
-        mode : string 
-            'grid' | 
+        mode : string
+            'grid' |
 
 
         Examples
@@ -231,7 +230,6 @@ class AntArray(Array,ant.Antenna):
         self.max  = np.array(kwargs.pop('max'))
         self.min  = np.array(kwargs.pop('min'))
         self.Na = np.prod(self.N)  # number of antennas
-        pdb.set_trace()
         self.dm = np.array(kwargs.pop('dm'))
         self.typant = kwargs.pop('typant')
 
