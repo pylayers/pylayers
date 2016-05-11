@@ -1093,9 +1093,10 @@ class Layout(PyLayers):
 
         for k,nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
-            if len(tahe)==2:
-                nta = tahe[0]
-                nhe = tahe[1]
+            
+            for l in range(len(tahe)-1):
+                nta = tahe[l]
+                nhe = tahe[l+1]
                 d  = ways.way[nseg].tags
 
                 # old format conversion
@@ -1141,7 +1142,10 @@ class Layout(PyLayers):
 #                    self.name[name].append(ns)
 #                else:
 #                    self.name[name] = [ns]
-                ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+
+			
+                #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                ns = self.add_segment(nta,nhe,name="WALL",z=[0,3.0],offset=0)
                # self.chgmss(s1,ss_name=d['ss_name'],ss_offset=d['ss_offset'],ss_z=d['ss_z'])
                 if d.has_key('ss_name'):
                     nss+=len(d['ss_name'])
@@ -1192,20 +1196,21 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n >0:
-                neigh = nx.neighbors(self.Gs,n)
-                d = self.Gs.node[n]
-                noden = -10000000-n
-                fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n")
-                fd.write("<nd ref='"+str(neigh[0])+"' />\n")
-                fd.write("<nd ref='"+str(neigh[1])+"' />\n")
-                fd.write("<tag k='name' v='"+str(d['name'])+"' />\n")
-                fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
-                fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
-                if d.has_key('ss_name'):
-                    ch = str(d['ss_name'])
-                    fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
-                    fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
-                fd.write("</way>\n")
+                if L.Gs.node['name']!='AIR':
+                    neigh = nx.neighbors(self.Gs,n)
+                    d = self.Gs.node[n]
+                    noden = -10000000-n
+                    fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n")
+                    fd.write("<nd ref='"+str(neigh[0])+"' />\n")
+                    fd.write("<nd ref='"+str(neigh[1])+"' />\n")
+                    fd.write("<tag k='name' v='"+str(d['name'])+"' />\n")
+                    fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
+                    fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
+                    if d.has_key('ss_name'):
+                        ch = str(d['ss_name'])
+                        fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
+                        fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
+                    fd.write("</way>\n")
 
 
         fd.write("</osm>\n")
