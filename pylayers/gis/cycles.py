@@ -331,10 +331,24 @@ class Cycle(object):
     def __init__(self,G,lnode=[]):
         # This call to cycle_basis is to obtained an ordered cycle
         self.G  = G
-        cycle = nx.algorithms.cycles.cycle_basis(self.G)[0]
+        cycles = nx.algorithms.cycles.cycle_basis(self.G)
+        if len(cycles) >1:
+            if lnode == []:
+                cycle=cycles[0]
+            else:
+                # determine which cycle basis corresponds to the lnode list
+                lln = len(lnode)
+                lcy = np.array([len(c) for c in cycles])
+                dif = lln-lcy
+                ud = np.where(dif==min(dif))[0]
+                cycle = cycles[ud]
+        else:
+            cycle=cycles[0]
+
         self.G  = G.subgraph(cycle)
         self.G.pos = {}
         self.G.pos.update({ node : G.pos[node] for node in cycle})
+
         #for node in cycle:
         #    self.G.pos[node] = G.pos[node]
         if lnode == []:

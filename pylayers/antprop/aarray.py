@@ -3,6 +3,7 @@ import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
 import doctest
+import pdb
 r"""
 
 .. currentmodule:: pylayers.antprop.aarray
@@ -11,6 +12,9 @@ This module handles antenna arrays
 
 Array class
 ===========
+
+Meta class which derives from Pattern.
+
 
 .. autosummary::
     :toctree: generated/
@@ -77,6 +81,17 @@ class Array(ant.Pattern):
 
         ant.Pattern.__init__(self)
 
+
+    def __add__(self,Aa):
+
+        Anew = Array()
+        assert((self.fGHz==Aa.fGHz).all())
+        assert((self.p.ndim==2) and (Aa.p.ndim==2))
+        Anew.p = np.concatenate(self.p,Aa.p,axis=1)
+        Anew.w = np.concatenate(self.w,Aa.w,axis=0)
+        
+        return(Anew)
+
     def __repr__(self):
         st = ''
         st = st + 'points :' + str(self.p) + '\n'
@@ -96,7 +111,7 @@ class Array(ant.Pattern):
 class ULArray(Array):
     """ Uniform Linear Array
 
-    An uniform array is centered on the origin.
+    An uniform linear array is centered on the origin.
     It has Nx, Ny, Nz antennas placed respectively along the x,y,z axis.
 
 
@@ -113,15 +128,15 @@ class ULArray(Array):
         ----------
 
         N  : list
-            [Nx,Ny,Nz,Na]  don't use 0 the total number of antennas is Nx*Ny*Nz*Na
+            [Nx,Ny,Nz]  don't use 0 the total number of antennas is Nx*Ny*Nz
         dm : list of floats
             [dxm,dym,dzm] distance are expressed in meters
 
         """
-        defaults = { 'N'    : [8,1,1,1],
-                     'dm'   : [0.075,0,0,0],
+        defaults = { 'N'    : [8,1,1],
+                     'dm'   : [0.075,0,0],
                      'w'   : [],
-                    'fGHz' : np.linspace(1.8,2.2,10),
+                    'fGHz' : np.linspace(1.8,2.2,801),
                    }
         for k in defaults:
             if k not in kwargs:
@@ -131,28 +146,17 @@ class ULArray(Array):
         self.dm = np.array(kwargs.pop('dm'))
         self.Na = np.prod(self.N)
 
+        # Number of radiating element on each axis
         Nx = self.N[0]
         Ny = self.N[1]
         Nz = self.N[2]
 
+        # phase center coordinates of radiating elements
         px = self.dm[0]*np.linspace(-(Nx-1)/2.,(Nx-1)/2.,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
         py = self.dm[1]*np.linspace(-(Ny-1)/2.,(Ny-1)/2.,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
         pz = self.dm[2]*np.linspace(-(Nz-1)/2.,(Nz-1)/2.,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
-        #if Nx%2==0:
-        #    px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
-        #else:
-        #    px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
-        #if Ny%2==0:
-        #    py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # 1 x Nx x Ny x Nz
-        #else:
-        #    py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
-        #if Nz%2==0:
-        #    pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  1 x Nx x Ny x Nz
-        #else:
-        #    pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
 
         p = np.zeros((3,Nx,Ny,Nz))
-        #p = np.zeros((3,Nx*Ny*Nz))
 
         p[0,:,:,:] = px
         p[1,:,:,:] = py
@@ -177,13 +181,32 @@ class AntArray(Array,ant.Antenna):
 
     def __init__(self,**kwargs):
         """
+
+        Parameters
+        ----------
+
+        tarr : string 
+            type of array : 'UA' |
+        N  :
+        dm :
+        min :
+        max :
+        S :
+        pattern : boolean
+        typant : Gauss
+        mode : string 
+            'grid' | 
+
+
         Examples
         --------
 
         ... plot::
             :include-source:
+
         >>> A=AntArray()
-        >>> A.plotG()
+        >>> f,a = A.plotG()
+        >>> plt.show()
 
         """
         defaults = {'tarr': 'UA',
@@ -208,6 +231,7 @@ class AntArray(Array,ant.Antenna):
         self.max  = np.array(kwargs.pop('max'))
         self.min  = np.array(kwargs.pop('min'))
         self.Na = np.prod(self.N)  # number of antennas
+        pdb.set_trace()
         self.dm = np.array(kwargs.pop('dm'))
         self.typant = kwargs.pop('typant')
 
@@ -218,6 +242,8 @@ class AntArray(Array,ant.Antenna):
                 else:
                     self.dm[k]= (self.max[k]-self.min[k])/(self.N[k]-1.0)
 
+
+        # to handle different antennas specified it in a list
         if type(self.typant)==list:
             self.sameAnt=False
             assert len(self.typant)==self.Na,"Wrong number of antennas"
@@ -244,6 +270,11 @@ class AntArray(Array,ant.Antenna):
         super(AntArray,self).__init__(p=UA.p,fGHz=self.la[0].fGHz)
         ant.Antenna.__init__(self,typ=typ,**kwargs)
 
+    def __add__(self,Aa):
+        assert(Aa.typant==self.typant)
+        Anew = self+Aa
+        Anew.typant = self.typant
+        return(Anew)
 
     def __repr__(self):
          st = "Antenna Array : \n"

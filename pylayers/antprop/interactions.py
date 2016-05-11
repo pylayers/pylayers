@@ -492,7 +492,8 @@ class IntB(Inter):
         Parameters
         ----------
 
-        fGHz : np.array()
+        fGHz : np.array()nn
+
             frequency range
 
         Returns

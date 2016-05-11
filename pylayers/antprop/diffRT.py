@@ -165,7 +165,7 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
 
     sign  =  +1.0
     D3     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
-
+    
     sign  =  -1.0
     D4     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
 
@@ -342,7 +342,8 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     else :
         #pxF = 10**xF
         #uF = (np.abs(KLA[:,:]-pxF[:,None,None])).argmin(axis=0)
-        uF2 = len(F)*(np.log10(np.abs(KLA))-xF[0,None,None])/(xF[-1,None,None]-xF[0,None,None])
+        val = np.maximum(np.log10(np.abs(KLA))-xF[0,None,None],0)
+        uF2 = len(F)*(val)/(xF[-1,None,None]-xF[0,None,None])
         uF2_int = np.floor(uF2).astype('int')
         #pdb.set_trace()
         Fkla = F[uF2_int]

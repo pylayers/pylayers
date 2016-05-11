@@ -15,7 +15,7 @@ from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
-from pylayers.measures.exploith5 import Mesh5 
+from pylayers.measures.exploith5 import Mesh5
 import pylayers.measures.switch.ni_usb_6501 as sw
 #from  pylayers.measures.parker.smparker import *
 from time import sleep
@@ -105,7 +105,7 @@ class SCPI(PyLayers):
         self.Nf   = 201
         self.getIdent()
         print self.ident
-        assert('E5072A' in self.ident), "E5072A not responding"
+        #assert('E5072A' in self.ident), "E5072A not responding"
         self.freq()
         self.points()
         self.parS()
@@ -1041,18 +1041,19 @@ class SCPI(PyLayers):
         #toc_parS = time.time()
         #print "time measurement for parS set up (s) :", tic-toc_parS
         #time.sleep(1)
-        
         #self.ifband(ifbHz=self.ifbHz, cmd='set')
-        
-        
         self.autoscale()
 
 
 if __name__ == '__main__':
-    doctest.testmod()
-
-#    vna = SCPI(vna_ip,verbose=False)
-#    ident = vna.getIdent()
+    #doctest.testmod()
+    #
+    # YOU NEED to specify your environment variable $VNA_IP
+    #
+    vna_ip = "10.42.0.2"
+    vna = SCPI(verbose=True)
+    ident = vna.getIdent()
+    #print ident
 # lNpoints = ['201','401','601','801','1601']
 #
 # lNpoints = [1601]

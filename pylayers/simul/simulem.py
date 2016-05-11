@@ -66,7 +66,7 @@ Patud class
      Patud.info
      Patud.gui
 
-     
+
 Launch class
 ============
 
