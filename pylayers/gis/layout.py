@@ -1057,68 +1057,60 @@ class Layout(PyLayers):
         _ns = 0
         ns  = 0
         nss  = 0
+        
+        # Reading points  (<0 index)
         for npt in coords.xy:
             self.Gs.add_node(npt)
             self.Gs.pos[npt] = tuple(coords.xy[npt])
             _np+=1
 
+        # reading segments
         for k,nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
-            if len(tahe)==2:
-                nta = tahe[0]
-                nhe = tahe[1]
+            for l in range(len(tahe)-1):
+                nta = tahe[l]
+                nhe = tahe[l+1]
                 d  = ways.way[nseg].tags
 
-                # old format conversion
-                if d.has_key('zmin'):
-                    d['z']=[d['zmin'],d['zmax']]
-                    del(d['zmin'])
-                    del(d['zmax'])
-                if d.has_key('ss_zmin'):
-                    d['ss_z']=[[d['ss_zmin'],d['ss_zmax']]]
-                    d['ss_name']=[d['ss_name']]
-                    del(d['ss_zmin'])
-                    del(d['ss_zmax'])
-                #/old format conversion
                 for key in d:
                     try:
                         d[key]=eval(d[key])
                     except:
                         pass
-                # avoid  0 value (not a segment number)
-#                ns = k+1
-#                # transcode segment index
-#                if d.has_key('name'):
-#                    name = d['name']
-#                else:
-#                    name = 'AIR'
-#                    d['name'] = 'AIR'
-#                self.Gs.add_node(ns)
-#                self.Gs.add_edge(nta,ns)
-#                self.Gs.add_edge(ns,nhe)
-#                self.Gs.node[ns] = d
-#                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-#                if name not in self.display['layers']:
-#                    self.display['layers'].append(name)
-#                self.labels[ns] = str(ns)
-#                if d.has_key('ss_name'):
-#                    nss+=len(d['ss_name'])
-#                    for n in d['ss_name']:
-#                        if n in self.name:
-#                            self.name[n].append(ns)
-#                        else:
-#                            self.name[n]=[ns]
-#                if name in self.name:
-#                    self.name[name].append(ns)
-#                else:
-#                    self.name[name] = [ns]
-                ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
-               # self.chgmss(s1,ss_name=d['ss_name'],ss_offset=d['ss_offset'],ss_z=d['ss_z'])
+                
+                u1 = np.array(nx.neighbors(self.Gs,nta))
+                u2 = np.array(nx.neighbors(self.Gs,nhe))
+                inter_u1_u2 = np.intersect1d(u1,u2)
+                #
+                # segment do not exist yet (create segment)
+                #
+                if len(inter_u1_u2)==0:
+                    #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                    if 'name' in ways.way[nseg].tags:
+                        slab = ways.way[nseg].tags['name']
+                    else:
+                        slab = "WALL"
+                    if 'z' in ways.way[nseg].tags:
+                        z = ways.way[nseg].tags['z']
+                    else:
+                        z = (0,3)
+                    if 'offset' in ways.way[nseg].tags:
+                        offset = ways.way[nseg].tags['offset']
+                    else:
+                        offset = 0   
+                    ns = self.add_segment(nta,nhe,name=slab,z=z,offset=offset)
+                #
+                # segment do exist already (create sub_segment)
+                #
+                else:
+                    pass
+                    #ss_name = self.Gs.node[]
+                    #ns = self.chgmss(inter_u1_u2[0],name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+
                 if d.has_key('ss_name'):
                     nss+=len(d['ss_name'])
                     self.chgmss(ns,ss_name=d['ss_name'],ss_z=[[eval(u) for u in v ] for v in d['ss_z']])
 
-#                _ns+=1
 
         self.Np = _np
         #self.Ns = _ns
@@ -1506,29 +1498,29 @@ class Layout(PyLayers):
         self.boundary(dx=10,dy=10)
 
         rebuild = False
+        
+        if ext!='.osm':
+            if not newfile :
+                hash_save = copy.deepcopy(self._hash)
 
+                if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
+                    path = os.path.join(basename,'struc','gpickle',self.filename)
+                    self.dumpr('s')
+                    if self._hash != hash_save:
+                        rebuild = True 
+                    else:
+                        self.dumpr('tvirw')
+                else: 
+                    rebuild = True
 
-        if not newfile :
-            hash_save = copy.deepcopy(self._hash)
-
-            if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
-                path = os.path.join(basename,'struc','gpickle',self.filename)
-                self.dumpr('s')
-                if self._hash != hash_save:
-                    rebuild = True 
-                else:
-                    self.dumpr('tvirw')
-            else: 
-                rebuild = True
-
-            
-            # build and dump
-            if rebuild:  
-                # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                # if ans.lower()=='y':
-                self.build()
-                self.lbltg.append('s')
-                self.dumpw()
+                
+                # build and dump
+                if rebuild:  
+                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                    # if ans.lower()=='y':
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
