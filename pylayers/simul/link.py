@@ -5,18 +5,14 @@ r"""
 
 .. currentmodule:: pylayers.simul.link
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-This module runs the electromagnetic simulation for a link.
+
 =======
 This module runs the electromagnetic simulation at the link level.
->>>>>>> 6ca6caccf58fd16243e0937658c6780172672876
-=======
+
 This module runs the electromagnetic simulation for a link.
 A deterministic link has two termination points and an associated Layout
 whereas a statistical link do not need any of those precursor object.
 
->>>>>>> 95d88122037bbe1e5d26beff4fd79e7448eb3dd8
 It stores simulated objects in `hdf5` format.
 
 
@@ -358,7 +354,7 @@ class DLink(Link):
                    'Ab':[],
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':np.array([2.4,2.5]),
+                   'fGHz':[],
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
@@ -682,7 +678,8 @@ class DLink(Link):
         """ Automatic freq determination from
             Antennas
         """
-        sf = self.fGHz[1]-self.fGHz[0]
+        #sf = self.fGHz[1]-self.fGHz[0]
+        sf = 1e15
         if hasattr(self.Aa,'fGHz'):
             fa = self.Aa.fGHz
             if len(fa)==0:
@@ -692,8 +689,12 @@ class DLink(Link):
             except: #single frequency
                 sa = fa[0]
             # step
-            minfa = max(min(fa),min(self.fGHz))
-            maxfa = min(max(fa),max(self.fGHz))
+            if len(self.fGHz)>0:
+                minfa = max(min(fa),min(self.fGHz))
+                maxfa = min(max(fa),max(self.fGHz))
+            else:
+                minfa = min(fa)
+                maxfa = max(fa)
             sf = min(sa,sf)
             self.fGHz = np.arange(minfa,maxfa+sf,sf)
 
@@ -707,8 +708,12 @@ class DLink(Link):
             except:
                 sb = fb[0]
 
-            minfb = max(min(self.fGHz),min(fb))
-            maxfb = min(max(self.fGHz),max(fb))
+            if len(self.fGHz)>0:
+                minfb = max(min(self.fGHz),min(fb))
+                maxfb = min(max(self.fGHz),max(fb))
+            else:
+                minfb = min(fb)
+                maxfb = max(fb)
 
             sf = min(sf,sb)
             self.fGHz = np.arange(minfb,maxfb+sf,sf)
@@ -1467,7 +1472,7 @@ class DLink(Link):
                    'col':'k',
                    'dB':False,
                    'labels':False,
-                   'aw':True,
+                   'aw':False,
                    'dyn':70}
 
         for key in defaults:

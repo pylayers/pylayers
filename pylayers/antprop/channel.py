@@ -2380,7 +2380,7 @@ class Tchannel(bs.FUsignal):
         #return(f)
 
 
-    def energy(self,mode='mean',Friis=True,sumray=False):
+    def energy(self,mode='mean',sumray=False):
         """ calculates channel energy including antennas spatial filtering
 
         Parameters
@@ -2399,7 +2399,11 @@ class Tchannel(bs.FUsignal):
         #  axis 1 : ray
         #  axis 1 : frequency
         #
-        Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
+        if self.isFriis:
+            Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=False)
+        else:
+            Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
+            
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot

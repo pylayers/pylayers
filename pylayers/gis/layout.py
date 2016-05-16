@@ -310,7 +310,7 @@ class Layout(PyLayers):
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,**kwargs):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,build=True,**kwargs):
         """ object constructor
 
         Parameters
@@ -408,7 +408,7 @@ class Layout(PyLayers):
         for k in self.sl.keys():
             self.name[k] = []
 
-        self.load(_filename)
+        self.load(_filename,build=build)
 
         
 
@@ -1051,6 +1051,7 @@ class Layout(PyLayers):
         """
 
         self.filename = _fileosm
+        self.coordinates = 'latlon'
         fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
         coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
         _np = 0 # _ to avoid name conflict with numpy alias
@@ -1188,9 +1189,13 @@ class Layout(PyLayers):
         config.add_section("segments")
         config.add_section("display")
         config.add_section("files")
-        config.set("info",'Npoints',self.Np)
-        config.set("info",'Nsegments',self.Ns)
-        config.set("info",'Nsubsegments',self.Nss)
+        if self.coordinates=='latlon':
+            config.set("info","format","latlon")
+        else:
+            config.set("info","format","cart")
+        #config.set("info",'Npoints',self.Np)
+        #config.set("info",'Nsegments',self.Ns)
+        #config.set("info",'Nsubsegments',self.Nss)
 
         for k in self.display:
             config.set("display",k,self.display[k])
@@ -1292,6 +1297,7 @@ class Layout(PyLayers):
                 coords.cartesian(cart=True)
         else :
             or_coord_format = 'cart'
+        
         #
         # update display section
         #
@@ -1435,7 +1441,7 @@ class Layout(PyLayers):
             self.lfur.append(F)
         self.filefur=_filefur
 
-    def load(self,_filename):
+    def load(self,_filename,build=True):
         """ load a Layout in different formats
 
         Parameters
@@ -1483,7 +1489,7 @@ class Layout(PyLayers):
             raise NameError('layout filename extension not recognized')
 
        
-
+        
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
@@ -1515,7 +1521,7 @@ class Layout(PyLayers):
 
                 
                 # build and dump
-                if rebuild:  
+                if build and rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
                     self.build()
@@ -2206,7 +2212,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        vec :
+     loa   vec :
 
         """
         for k in self.Gs.pos:
@@ -5219,6 +5225,19 @@ class Layout(PyLayers):
 
 
     def updateshseg(self):
+        """ update shapely segment
+
+        build a shapely object for all segments
+
+        This function is called at the beginning of buildGt
+
+        See Also
+        --------
+
+        buildGt
+
+        """
+
         seg_connect = {x:self.Gs.node[x]['connect'] for x in self.Gs.nodes() if x >0}
         dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
@@ -5241,9 +5260,11 @@ class Layout(PyLayers):
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
         self.updateshseg()
+
         X = sho.polygonize(self._shseg.values())
         P = [x for x in X]
         NP = []
+
         # remove cycle 0 (exterior) if it exists
         try:
             self.Gt.remove_node(0)
@@ -5255,14 +5276,15 @@ class Layout(PyLayers):
         #   - yes : you're done !
         #   - no :
         #       - has polygon an inner hole ? 
-        #           - yes : delaunay on polygon, excluing the polygon inside ( polyhole)
-        #           - no : delaunay on the polygon
+        #           - yes : Delaunay on polygon, excluding the polygon inside ( polyhole)
+        #           - no : Delaunay on the polygon
         #
+        
         for p in P:
             pin = [z for z in sho.polygonize(p.interiors)]
             # no holes in polygon
             if pin == []:
-                # delaunay only if polygon not convex
+                # Delaunay only if polygon not convex
                 if not geu.isconvex(p):
                     A=self._delaunay(p)
                     NP.extend(A)
@@ -5557,8 +5579,8 @@ class Layout(PyLayers):
                                    ,name='AIR'))
                     polys.append(cp)
             #
-            # 3. merge delaunay triangulation in order to obtain
-            #   the larger convex polygons partioning
+            # 3. merge Delaunay triangulation in order to obtain
+            #   the larger convex polygons partitioning
             #
             diff = poly.difference(sh.MultiPolygon(polys))
             if isinstance(diff,sh.Polygon):
@@ -5571,7 +5593,7 @@ class Layout(PyLayers):
 
             cpolys = []
             nbpolys = len(polys)
-
+            
             while polys !=[]:
                 p = polys.pop(0)
                 for ip2,p2 in enumerate(polys):
@@ -5584,7 +5606,7 @@ class Layout(PyLayers):
                         if p.isconvex():
                             polys.pop(ip2)
                             polys.insert(0, p)
-                            conv=True
+                            conv = True
                             break
                         else:
                             # if pold not in cpolys:
