@@ -452,7 +452,7 @@
 <span class="sd">    .. autosummary::</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">,</span><span class="n">_filematini</span><span class="o">=</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslabini</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">_filefur</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">,</span><span class="n">_filematini</span><span class="o">=</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslabini</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">_filefur</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">build</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -550,7 +550,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">build</span><span class="o">=</span><span class="n">build</span><span class="p">)</span></div>
 
         
 
@@ -1193,74 +1193,67 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">_fileosm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="s1">&#39;latlon&#39;</span>
         <span class="n">fileosm</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileosm</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;osm&#39;</span><span class="p">))</span>
         <span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relations</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">osmparse</span><span class="p">(</span><span class="n">fileosm</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;floorplan&#39;</span><span class="p">)</span>
         <span class="n">_np</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># _ to avoid name conflict with numpy alias</span>
         <span class="n">_ns</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">ns</span>  <span class="o">=</span> <span class="mi">0</span>
         <span class="n">nss</span>  <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># Reading points  (&lt;0 index)</span>
         <span class="k">for</span> <span class="n">npt</span> <span class="ow">in</span> <span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="n">npt</span><span class="p">])</span>
             <span class="n">_np</span><span class="o">+=</span><span class="mi">1</span>
 
+        <span class="c1"># reading segments</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">nseg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">):</span>
             <span class="n">tahe</span> <span class="o">=</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">refs</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
-                <span class="n">nta</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">nhe</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">nta</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+                <span class="n">nhe</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">d</span>  <span class="o">=</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span>
 
-                <span class="c1"># old format conversion</span>
-                <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;zmin&#39;</span><span class="p">):</span>
-                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;zmax&#39;</span><span class="p">]]</span>
-                    <span class="k">del</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;zmin&#39;</span><span class="p">])</span>
-                    <span class="k">del</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;zmax&#39;</span><span class="p">])</span>
-                <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_zmin&#39;</span><span class="p">):</span>
-                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_zmin&#39;</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_zmax&#39;</span><span class="p">]]]</span>
-                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]]</span>
-                    <span class="k">del</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_zmin&#39;</span><span class="p">])</span>
-                    <span class="k">del</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_zmax&#39;</span><span class="p">])</span>
-                <span class="c1">#/old format conversion</span>
                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="k">pass</span>
-                <span class="c1"># avoid  0 value (not a segment number)</span>
-<span class="c1">#                ns = k+1</span>
-<span class="c1">#                # transcode segment index</span>
-<span class="c1">#                if d.has_key(&#39;name&#39;):</span>
-<span class="c1">#                    name = d[&#39;name&#39;]</span>
-<span class="c1">#                else:</span>
-<span class="c1">#                    name = &#39;AIR&#39;</span>
-<span class="c1">#                    d[&#39;name&#39;] = &#39;AIR&#39;</span>
-<span class="c1">#                self.Gs.add_node(ns)</span>
-<span class="c1">#                self.Gs.add_edge(nta,ns)</span>
-<span class="c1">#                self.Gs.add_edge(ns,nhe)</span>
-<span class="c1">#                self.Gs.node[ns] = d</span>
-<span class="c1">#                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)</span>
-<span class="c1">#                if name not in self.display[&#39;layers&#39;]:</span>
-<span class="c1">#                    self.display[&#39;layers&#39;].append(name)</span>
-<span class="c1">#                self.labels[ns] = str(ns)</span>
-<span class="c1">#                if d.has_key(&#39;ss_name&#39;):</span>
-<span class="c1">#                    nss+=len(d[&#39;ss_name&#39;])</span>
-<span class="c1">#                    for n in d[&#39;ss_name&#39;]:</span>
-<span class="c1">#                        if n in self.name:</span>
-<span class="c1">#                            self.name[n].append(ns)</span>
-<span class="c1">#                        else:</span>
-<span class="c1">#                            self.name[n]=[ns]</span>
-<span class="c1">#                if name in self.name:</span>
-<span class="c1">#                    self.name[name].append(ns)</span>
-<span class="c1">#                else:</span>
-<span class="c1">#                    self.name[name] = [ns]</span>
-                <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">nta</span><span class="p">,</span><span class="n">nhe</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]],</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-               <span class="c1"># self.chgmss(s1,ss_name=d[&#39;ss_name&#39;],ss_offset=d[&#39;ss_offset&#39;],ss_z=d[&#39;ss_z&#39;])</span>
+                
+                <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">nta</span><span class="p">))</span>
+                <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">nhe</span><span class="p">))</span>
+                <span class="n">inter_u1_u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">)</span>
+                <span class="c1">#</span>
+                <span class="c1"># segment do not exist yet (create segment)</span>
+                <span class="c1">#</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inter_u1_u2</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="c1">#ns = self.add_segment(nta,nhe,name=d[&#39;name&#39;],z=[eval(u) for u in d[&#39;z&#39;]],offset=0)</span>
+                    <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                        <span class="n">slab</span> <span class="o">=</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">slab</span> <span class="o">=</span> <span class="s2">&quot;WALL&quot;</span>
+                    <span class="k">if</span> <span class="s1">&#39;z&#39;</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                        <span class="n">z</span> <span class="o">=</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s1">&#39;offset&#39;</span> <span class="ow">in</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                        <span class="n">offset</span> <span class="o">=</span> <span class="n">ways</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>   
+                    <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">nta</span><span class="p">,</span><span class="n">nhe</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="n">slab</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+                <span class="c1">#</span>
+                <span class="c1"># segment do exist already (create sub_segment)</span>
+                <span class="c1">#</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                    <span class="c1">#ss_name = self.Gs.node[]</span>
+                    <span class="c1">#ns = self.chgmss(inter_u1_u2[0],name=d[&#39;name&#39;],z=[eval(u) for u in d[&#39;z&#39;]],offset=0)</span>
+
                 <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_name&#39;</span><span class="p">):</span>
                     <span class="n">nss</span><span class="o">+=</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">])</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">],</span><span class="n">ss_z</span><span class="o">=</span><span class="p">[[</span><span class="nb">eval</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">v</span> <span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]])</span>
 
-<span class="c1">#                _ns+=1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">_np</span>
         <span class="c1">#self.Ns = _ns</span>
@@ -1338,9 +1331,13 @@
         <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;segments&quot;</span><span class="p">)</span>
         <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">)</span>
         <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;files&quot;</span><span class="p">)</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="s1">&#39;Npoints&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="s1">&#39;Nsegments&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ns</span><span class="p">)</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="s1">&#39;Nsubsegments&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">==</span><span class="s1">&#39;latlon&#39;</span><span class="p">:</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="s2">&quot;format&quot;</span><span class="p">,</span><span class="s2">&quot;latlon&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="s2">&quot;format&quot;</span><span class="p">,</span><span class="s2">&quot;cart&quot;</span><span class="p">)</span>
+        <span class="c1">#config.set(&quot;info&quot;,&#39;Npoints&#39;,self.Np)</span>
+        <span class="c1">#config.set(&quot;info&quot;,&#39;Nsegments&#39;,self.Ns)</span>
+        <span class="c1">#config.set(&quot;info&quot;,&#39;Nsubsegments&#39;,self.Nss)</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">:</span>
             <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -1442,6 +1439,7 @@
                 <span class="n">coords</span><span class="o">.</span><span class="n">cartesian</span><span class="p">(</span><span class="n">cart</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="n">or_coord_format</span> <span class="o">=</span> <span class="s1">&#39;cart&#39;</span>
+        
         <span class="c1">#</span>
         <span class="c1"># update display section</span>
         <span class="c1">#</span>
@@ -1585,7 +1583,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">lfur</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filefur</span><span class="o">=</span><span class="n">_filefur</span></div>
 
-<div class="viewcode-block" id="Layout.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.load.html#pylayers.gis.layout.Layout.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.load.html#pylayers.gis.layout.Layout.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="p">,</span><span class="n">build</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a Layout in different formats</span>
 
 <span class="sd">        Parameters</span>
@@ -1633,7 +1631,7 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;layout filename extension not recognized&#39;</span><span class="p">)</span>
 
        
-
+        
         <span class="c1">#  construct geomfile (.off) for vizualisation with geomview</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subseg</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -1648,29 +1646,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">(</span><span class="n">dx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">dy</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
         <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">False</span>
+        
+        <span class="k">if</span> <span class="n">ext</span><span class="o">!=</span><span class="s1">&#39;.osm&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">newfile</span> <span class="p">:</span>
+                <span class="n">hash_save</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hash</span><span class="p">)</span>
 
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)):</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">!=</span> <span class="n">hash_save</span><span class="p">:</span>
+                        <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span> 
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;tvirw&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span> 
+                    <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">newfile</span> <span class="p">:</span>
-            <span class="n">hash_save</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hash</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)):</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">!=</span> <span class="n">hash_save</span><span class="p">:</span>
-                    <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span> 
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;tvirw&#39;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span> 
-                <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span>
-
-            
-            <span class="c1"># build and dump</span>
-            <span class="k">if</span> <span class="n">rebuild</span><span class="p">:</span>  
-                <span class="c1"># ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)</span>
-                <span class="c1"># if ans.lower()==&#39;y&#39;:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
+                
+                <span class="c1"># build and dump</span>
+                <span class="k">if</span> <span class="n">build</span> <span class="ow">and</span> <span class="n">rebuild</span><span class="p">:</span>  
+                    <span class="c1"># ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)</span>
+                    <span class="c1"># if ans.lower()==&#39;y&#39;:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Layout.subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.subseg.html#pylayers.gis.layout.Layout.subseg">[docs]</a>    <span class="k">def</span> <span class="nf">subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; establishes the association : name &lt;-&gt;  edgelist</span>
@@ -2356,7 +2354,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        vec :</span>
+<span class="sd">     loa   vec :</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
@@ -5369,6 +5367,19 @@
 
 
     <span class="k">def</span> <span class="nf">updateshseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update shapely segment</span>
+
+<span class="sd">        build a shapely object for all segments</span>
+
+<span class="sd">        This function is called at the beginning of buildGt</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        buildGt</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">seg_connect</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;connect&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">}</span>
         <span class="n">dpts</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg_connect</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dpts</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
@@ -5391,9 +5402,11 @@
         <span class="c1"># dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }</span>
         <span class="c1"># self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">updateshseg</span><span class="p">()</span>
+
         <span class="n">X</span> <span class="o">=</span> <span class="n">sho</span><span class="o">.</span><span class="n">polygonize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
         <span class="n">P</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>
         <span class="n">NP</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="c1"># remove cycle 0 (exterior) if it exists</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -5405,14 +5418,15 @@
         <span class="c1">#   - yes : you&#39;re done !</span>
         <span class="c1">#   - no :</span>
         <span class="c1">#       - has polygon an inner hole ? </span>
-        <span class="c1">#           - yes : delaunay on polygon, excluing the polygon inside ( polyhole)</span>
-        <span class="c1">#           - no : delaunay on the polygon</span>
+        <span class="c1">#           - yes : Delaunay on polygon, excluding the polygon inside ( polyhole)</span>
+        <span class="c1">#           - no : Delaunay on the polygon</span>
         <span class="c1">#</span>
+        
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">pin</span> <span class="o">=</span> <span class="p">[</span><span class="n">z</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">sho</span><span class="o">.</span><span class="n">polygonize</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">interiors</span><span class="p">)]</span>
             <span class="c1"># no holes in polygon</span>
             <span class="k">if</span> <span class="n">pin</span> <span class="o">==</span> <span class="p">[]:</span>
-                <span class="c1"># delaunay only if polygon not convex</span>
+                <span class="c1"># Delaunay only if polygon not convex</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">geu</span><span class="o">.</span><span class="n">isconvex</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
                     <span class="n">A</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_delaunay</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
                     <span class="n">NP</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
@@ -5707,8 +5721,8 @@
                                    <span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;AIR&#39;</span><span class="p">))</span>
                     <span class="n">polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span>
             <span class="c1">#</span>
-            <span class="c1"># 3. merge delaunay triangulation in order to obtain</span>
-            <span class="c1">#   the larger convex polygons partioning</span>
+            <span class="c1"># 3. merge Delaunay triangulation in order to obtain</span>
+            <span class="c1">#   the larger convex polygons partitioning</span>
             <span class="c1">#</span>
             <span class="n">diff</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">(</span><span class="n">polys</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span><span class="n">sh</span><span class="o">.</span><span class="n">Polygon</span><span class="p">):</span>
@@ -5721,7 +5735,7 @@
 
             <span class="n">cpolys</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">nbpolys</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">polys</span><span class="p">)</span>
-
+            
             <span class="k">while</span> <span class="n">polys</span> <span class="o">!=</span><span class="p">[]:</span>
                 <span class="n">p</span> <span class="o">=</span> <span class="n">polys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">ip2</span><span class="p">,</span><span class="n">p2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">polys</span><span class="p">):</span>
@@ -5734,7 +5748,7 @@
                         <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">isconvex</span><span class="p">():</span>
                             <span class="n">polys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">ip2</span><span class="p">)</span>
                             <span class="n">polys</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-                            <span class="n">conv</span><span class="o">=</span><span class="bp">True</span>
+                            <span class="n">conv</span> <span class="o">=</span> <span class="bp">True</span>
                             <span class="k">break</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="c1"># if pold not in cpolys:</span>
@@ -10011,7 +10025,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 10, 2016.
+      Last updated on mai 16, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
