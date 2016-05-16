@@ -496,7 +496,7 @@
                    <span class="s1">&#39;Ab&#39;</span><span class="p">:[],</span>
                    <span class="s1">&#39;Ta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
                    <span class="s1">&#39;Tb&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-                   <span class="s1">&#39;fGHz&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">2.5</span><span class="p">]),</span>
+                   <span class="s1">&#39;fGHz&#39;</span><span class="p">:[],</span>
                    <span class="s1">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
                    <span class="s1">&#39;cutoff&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
                    <span class="s1">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
@@ -820,7 +820,8 @@
         <span class="sd">&quot;&quot;&quot; Automatic freq determination from</span>
 <span class="sd">            Antennas</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#sf = self.fGHz[1]-self.fGHz[0]</span>
+        <span class="n">sf</span> <span class="o">=</span> <span class="mf">1e15</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="p">,</span><span class="s1">&#39;fGHz&#39;</span><span class="p">):</span>
             <span class="n">fa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">fGHz</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fa</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -830,8 +831,12 @@
             <span class="k">except</span><span class="p">:</span> <span class="c1">#single frequency</span>
                 <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># step</span>
-            <span class="n">minfa</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span>
-            <span class="n">maxfa</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">minfa</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span>
+                <span class="n">maxfa</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">minfa</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">fa</span><span class="p">)</span>
+                <span class="n">maxfa</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">fa</span><span class="p">)</span>
             <span class="n">sf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minfa</span><span class="p">,</span><span class="n">maxfa</span><span class="o">+</span><span class="n">sf</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
 
@@ -845,8 +850,12 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="n">minfb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
-            <span class="n">maxfb</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">minfb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+                <span class="n">maxfb</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">minfb</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span>
+                <span class="n">maxfb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span>
 
             <span class="n">sf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span><span class="n">sb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minfb</span><span class="p">,</span><span class="n">maxfb</span><span class="o">+</span><span class="n">sf</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
