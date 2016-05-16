@@ -2522,7 +2522,7 @@
         <span class="c1">#return(f)</span>
 
 
-<div class="viewcode-block" id="Tchannel.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.energy.html#pylayers.antprop.channel.Tchannel.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Tchannel.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.energy.html#pylayers.antprop.channel.Tchannel.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates channel energy including antennas spatial filtering</span>
 
 <span class="sd">        Parameters</span>
@@ -2541,7 +2541,11 @@
         <span class="c1">#  axis 1 : ray</span>
         <span class="c1">#  axis 1 : frequency</span>
         <span class="c1">#</span>
-        <span class="n">Etot</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="n">Friis</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
+            <span class="n">Etot</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Etot</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            
         <span class="k">if</span> <span class="n">sumray</span><span class="p">:</span>
             <span class="n">Etot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Etot</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Etot</span></div>

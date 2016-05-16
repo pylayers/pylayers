@@ -174,12 +174,12 @@ reevaluation.</p>
 Start Signatures
 Signatures&#39;&gt; from 2_2_3 loaded
 load signature
-Stop signature 0.11194896698
+Stop signature 0.121210098267
 Start Rays
 Rays&#39;&gt; from 3_2_3 loaded
-Stop rays 0.190311908722
-Ctilde&#39;&gt; from 2_3_9 saved
-Tchannel&#39;&gt; from 2_3_9_0_0_0_0 saved
+Stop rays 0.179488182068
+Ctilde&#39;&gt; from 2_3_11 saved
+Tchannel&#39;&gt; from 2_3_11_0_0_0_0 saved
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
@@ -247,11 +247,9 @@ Friis factor -j c/(4 pi f) has been applied
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
-<img src="../../_images/mathmpl/math-34633926c9.png" class="center" /><p>This factor is fundamental and has to be applied only once. The energy
-method has a parameter <code class="docutils literal"><span class="pre">Friis</span></code> which indicates if this factor has to
-be used for the calculation of the energy. By default the link is
-evaluated with the Friis factor. This can be checked at the end of the
-<strong>repr</strong> of <code class="docutils literal"><span class="pre">H</span></code>.</p>
+<img src="../../_images/mathmpl/math-34633926c9.png" class="center" /><p>This factor is fundamental and has to be applied only once. By default
+the link is evaluated with the Friis factor : &nbsp;<code class="docutils literal"><span class="pre">isFriis=True</span></code>. This
+can be checked at the end of the <strong>repr</strong> of <code class="docutils literal"><span class="pre">H</span></code>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
@@ -266,57 +264,17 @@ Friis factor -j c/(4 pi f) has been applied
  windowed : No
 </pre></div>
 </div>
-<p>If this factor has already been applied the energy function should be
-called with the option <code class="docutils literal"><span class="pre">Friis</span></code> set to False</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Emean</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Eint</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;integ&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Ecenter</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Efirst</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Elast</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-UnboundLocalError                         Traceback (most recent call last)
-
-&lt;ipython-input-14-2c8aff483b42&gt; in &lt;module&gt;()
-      2 Eint=Lk.H.energy(Friis=False,mode=&#39;integ&#39;)
-      3 Ecenter=Lk.H.energy(Friis=False,mode=&#39;center&#39;)
-----&gt; 4 Efirst=Lk.H.energy(Friis=False,mode=&#39;first&#39;)
-      5 Elast=Lk.H.energy(Friis=False,mode=&#39;last&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in energy(self, mode, Friis, sumray)
-   2400         #  axis 1 : frequency
-   2401         #
--&gt; 2402         Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
-   2403         if sumray:
-   2404             Etot = np.sum(Etot,axis=0)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in energy(self, axis, Friis, mode)
-   2852             EMH2  = MH2[...,-1]
-   2853
--&gt; 2854         return(EMH2)
-   2855
-   2856
-
-
-UnboundLocalError: local variable &#39;EMH2&#39; referenced before assignment
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Emean</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Eint</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;integ&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ecenter</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Efirst</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Elast</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-15-4b40c4a26243&gt; in &lt;module&gt;()
-----&gt; 1 print Efirst[0],Elast[0]
-
-
-NameError: name &#39;Efirst&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[[</span>  <span class="mf">4.13893724e-05</span><span class="p">]]</span> <span class="p">[[</span>  <span class="mf">2.77069352e-05</span><span class="p">]]</span>
 </pre></div>
 </div>
 <p>On the figure below we have selected a LOS situation and we compare the
@@ -355,7 +313,7 @@ level.</p>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-NameError                                 Traceback (most recent call last)
+ValueError                                Traceback (most recent call last)
 
 &lt;ipython-input-17-75aafd70e74e&gt; in &lt;module&gt;()
       3 f3 = 6
@@ -365,12 +323,66 @@ NameError                                 Traceback (most recent call last)
       7 a = plt.semilogx(Lk.H.taud,10*np.log10(Elast),&#39;.g&#39;,label=&#39;f=10GHz&#39;)
 
 
-NameError: name &#39;Efirst&#39; is not defined
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in semilogx(*args, **kwargs)
+   3266         ax.hold(hold)
+   3267     try:
+-&gt; 3268         ret = ax.semilogx(*args, **kwargs)
+   3269     finally:
+   3270         ax.hold(washold)
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in semilogx(self, *args, **kwargs)
+   1614         b = self._hold
+   1615         self._hold = True  # we&#39;ve already processed the hold
+-&gt; 1616         l = self.plot(*args, **kwargs)
+   1617         self._hold = b  # restore the hold
+   1618         return l
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.pyc in inner(ax, *args, **kwargs)
+   1810                     warnings.warn(msg % (label_namer, func.__name__),
+   1811                                   RuntimeWarning, stacklevel=2)
+-&gt; 1812             return func(ax, *args, **kwargs)
+   1813         pre_doc = inner.__doc__
+   1814         if pre_doc is None:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in plot(self, *args, **kwargs)
+   1422             kwargs[&#39;color&#39;] = c
+   1423
+-&gt; 1424         for line in self._get_lines(*args, **kwargs):
+   1425             self.add_line(line)
+   1426             lines.append(line)
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _grab_next_args(self, *args, **kwargs)
+    384                 return
+    385             if len(remaining) &lt;= 3:
+--&gt; 386                 for seg in self._plot_args(remaining, kwargs):
+    387                     yield seg
+    388                 return
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _plot_args(self, tup, kwargs)
+    362             x, y = index_of(tup[-1])
+    363
+--&gt; 364         x, y = self._xy_from_xy(x, y)
+    365
+    366         if self.command == &#39;plot&#39;:
+
+
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _xy_from_xy(self, x, y)
+    223             raise ValueError(&quot;x and y must have same first dimension&quot;)
+    224         if x.ndim &gt; 2 or y.ndim &gt; 2:
+--&gt; 225             raise ValueError(&quot;x and y can be no greater than 2-D&quot;)
+    226
+    227         if x.ndim == 1:
+
+
+ValueError: x and y can be no greater than 2-D
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b43f7bf0cd0&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Channel_25_1.png" src="../../_images/Channel_25_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -447,7 +459,7 @@ ValueError                                Traceback (most recent call last)
 ValueError: x and y can be no greater than 2-D
 </pre></div>
 </div>
-<img alt="../../_images/Channel_27_1.png" src="../../_images/Channel_27_1.png" />
+<img alt="../../_images/Channel_26_1.png" src="../../_images/Channel_26_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">=</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
@@ -484,7 +496,7 @@ SyntaxError: invalid syntax
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_30_0.png" src="../../_images/Channel_30_0.png" />
+<img alt="../../_images/Channel_29_0.png" src="../../_images/Channel_29_0.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
@@ -494,7 +506,7 @@ channel.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_33_0.png" src="../../_images/Channel_33_0.png" />
+<img alt="../../_images/Channel_32_0.png" src="../../_images/Channel_32_0.png" />
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
@@ -532,11 +544,11 @@ MemoryError                               Traceback (most recent call last)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in tap(self, **kwargs)
-   2732         S   = np.sinc(l-tau2*WMHz/1000.)
-   2733         # sum over r :  f x s  x m x tap
--&gt; 2734         htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
-   2735
-   2736         # f x s  x m x tap
+   2736         S   = np.sinc(l-tau2*WMHz/1000.)
+   2737         # sum over r :  f x s  x m x tap
+-&gt; 2738         htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+   2739
+   2740         # f x s  x m x tap
 
 
 MemoryError:
@@ -652,7 +664,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b43f87332d0&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ac8c5d38890&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>

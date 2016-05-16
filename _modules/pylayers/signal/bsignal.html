@@ -2929,7 +2929,7 @@
         <span class="k">print</span> <span class="s1">&#39;Frequency sampling step : &#39;</span><span class="p">,</span> <span class="n">df</span></div>
 
 <div class="viewcode-block" id="FUsignal.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.energy.html#pylayers.signal.bsignal.FUsignal.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; calculate energy along given axis</span>
+        <span class="sd">r&quot;&quot;&quot; calculate energy along a given axis</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2987,7 +2987,7 @@
         <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;center&#39;</span><span class="p">:</span>
             <span class="n">EMH2</span>  <span class="o">=</span> <span class="n">MH2</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;fi13 iirst&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;first&#39;</span><span class="p">:</span>
             <span class="n">EMH2</span>  <span class="o">=</span> <span class="n">MH2</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;last&#39;</span><span class="p">:</span>
