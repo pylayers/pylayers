@@ -165,8 +165,8 @@ the frequency range of antennas.</p>
 </pre></div>
 </div>
 <p>The full evaluation and hdf5 storage of the channel is done with the
-eval function. The <code class="docutils literal"><span class="pre">force</span></code> option is for recalculating everything
-whatever what has been previously calculated.</p>
+<code class="docutils literal"><span class="pre">eval</span></code> function. The <code class="docutils literal"><span class="pre">force</span></code> option is for forcing a full
+reevaluation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -174,12 +174,12 @@ whatever what has been previously calculated.</p>
 Start Signatures
 Signatures&#39;&gt; from 2_2_3 loaded
 load signature
-Stop signature 0.122692108154
+Stop signature 0.11194896698
 Start Rays
 Rays&#39;&gt; from 3_2_3 loaded
-Stop rays 0.175342082977
-Ctilde&#39;&gt; from 2_3_0 loaded
-Tchannel&#39;&gt; from 2_3_0_0_0_0_0 loaded
+Stop rays 0.190311908722
+Ctilde&#39;&gt; from 2_3_9 saved
+Tchannel&#39;&gt; from 2_3_9_0_0_0_0 saved
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
@@ -193,16 +193,17 @@ Tchannel&#39;&gt; from 2_3_0_0_0_0_0 loaded
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
 -----------------------------------------------------
-freq : 2.4 2.4 1
-shape  : (1216, 1, 1, 1)
+freq : 1.8 2.2 401
+shape  : (1216, 1, 1, 401)
 tau (min, max) : 6.87184270936 92.947720014
 dist (min,max) : 2.06155281281 27.8843160042
-
+Friis factor -j c/(4 pi f) has been applied
  calibrated : No
  windowed : No
 </pre></div>
 </div>
-<p>Once the channel has been calculated, we define an IR-UWB waveform.</p>
+<p>Once the channel has been calculated, we define an Impulse Radio
+Waveform.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
@@ -211,8 +212,8 @@ dist (min,max) : 2.06155281281 27.8843160042
 </pre></div>
 </div>
 <img alt="../../_images/Channel_12_0.png" src="../../_images/Channel_12_0.png" />
-<p>Cwood is an object which contains all the information about the
-propagation channel.</p>
+<p>is an object which contains all the information about the propagation
+channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -223,11 +224,11 @@ propagation channel.</p>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
 -----------------------------------------------------
-freq : 2.4 2.4 1
-shape  : (1216, 1, 1, 1)
+freq : 1.8 2.2 401
+shape  : (1216, 1, 1, 401)
 tau (min, max) : 6.87184270936 92.947720014
 dist (min,max) : 2.06155281281 27.8843160042
-
+Friis factor -j c/(4 pi f) has been applied
  calibrated : No
  windowed : No
 </pre></div>
@@ -235,50 +236,14 @@ dist (min,max) : 2.06155281281 27.8843160042
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">402</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-IndexError                                Traceback (most recent call last)
-
-&lt;ipython-input-12-f5a32547e4dd&gt; in &lt;module&gt;()
-      1 f = plt.figure(figsize=(20,10))
-----&gt; 2 f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in show(self, **kwargs)
-   3242
-   3243         ax1 = fig.add_subplot(121)
--&gt; 3244         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
-   3245         ax2 = fig.add_subplot(122)
-   3246         if &#39;vmin&#39; in kwargs:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in imshow(self, **kwargs)
-    727
-    728         if self.y.ndim&gt;1:
---&gt; 729             dt,ylabels = self.cformat(**kwargs)
-    730
-    731             if &#39;vmin&#39; not in kwargs:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in cformat(self, **kwargs)
-    603             # whole range
-    604             vs = 0
---&gt; 605             vf = shy[ax[1]]
-    606         else:
-    607             # subset of values
-
-
-IndexError: tuple index out of range
-</pre></div>
-</div>
-<img alt="../../_images/Channel_18_1.png" src="../../_images/Channel_18_1.png" />
+<img alt="../../_images/Channel_18_0.png" src="../../_images/Channel_18_0.png" />
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
@@ -292,11 +257,11 @@ evaluated with the Friis factor. This can be checked at the end of the
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
 -----------------------------------------------------
-freq : 2.4 2.4 1
-shape  : (1216, 1, 1, 1)
+freq : 1.8 2.2 401
+shape  : (1216, 1, 1, 401)
 tau (min, max) : 6.87184270936 92.947720014
 dist (min,max) : 2.06155281281 27.8843160042
-
+Friis factor -j c/(4 pi f) has been applied
  calibrated : No
  windowed : No
 </pre></div>
@@ -312,13 +277,12 @@ called with the option <code class="docutils literal"><span class="pre">Friis</s
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-IndexError                                Traceback (most recent call last)
+UnboundLocalError                         Traceback (most recent call last)
 
 &lt;ipython-input-14-2c8aff483b42&gt; in &lt;module&gt;()
-      1 Emean=Lk.H.energy(Friis=False,mode=&#39;mean&#39;)
-----&gt; 2 Eint=Lk.H.energy(Friis=False,mode=&#39;integ&#39;)
+      2 Eint=Lk.H.energy(Friis=False,mode=&#39;integ&#39;)
       3 Ecenter=Lk.H.energy(Friis=False,mode=&#39;center&#39;)
-      4 Efirst=Lk.H.energy(Friis=False,mode=&#39;first&#39;)
+----&gt; 4 Efirst=Lk.H.energy(Friis=False,mode=&#39;first&#39;)
       5 Elast=Lk.H.energy(Friis=False,mode=&#39;last&#39;)
 
 
@@ -331,14 +295,14 @@ IndexError                                Traceback (most recent call last)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in energy(self, axis, Friis, mode)
-   2841
-   2842         if mode==&#39;integ&#39;:
--&gt; 2843             EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
-   2844
-   2845         if mode==&#39;center&#39;:
+   2852             EMH2  = MH2[...,-1]
+   2853
+-&gt; 2854         return(EMH2)
+   2855
+   2856
 
 
-IndexError: index 1 is out of bounds for axis 0 with size 1
+UnboundLocalError: local variable &#39;EMH2&#39; referenced before assignment
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -364,7 +328,7 @@ level.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1216</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1216</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span>
@@ -404,7 +368,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;Efirst&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b7199524910&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b43f7bf0cd0&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
@@ -520,43 +484,7 @@ SyntaxError: invalid syntax
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-IndexError                                Traceback (most recent call last)
-
-&lt;ipython-input-21-61834b1cbc3e&gt; in &lt;module&gt;()
-      1 f = plt.figure(figsize=(20,10))
-----&gt; 2 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in show(self, **kwargs)
-   3242
-   3243         ax1 = fig.add_subplot(121)
--&gt; 3244         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
-   3245         ax2 = fig.add_subplot(122)
-   3246         if &#39;vmin&#39; in kwargs:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in imshow(self, **kwargs)
-    727
-    728         if self.y.ndim&gt;1:
---&gt; 729             dt,ylabels = self.cformat(**kwargs)
-    730
-    731             if &#39;vmin&#39; not in kwargs:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in cformat(self, **kwargs)
-    603             # whole range
-    604             vs = 0
---&gt; 605             vf = shy[ax[1]]
-    606         else:
-    607             # subset of values
-
-
-IndexError: tuple index out of range
-</pre></div>
-</div>
-<img alt="../../_images/Channel_30_1.png" src="../../_images/Channel_30_1.png" />
+<img alt="../../_images/Channel_30_0.png" src="../../_images/Channel_30_0.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
@@ -566,43 +494,7 @@ channel.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-IndexError                                Traceback (most recent call last)
-
-&lt;ipython-input-23-61834b1cbc3e&gt; in &lt;module&gt;()
-      1 f = plt.figure(figsize=(20,10))
-----&gt; 2 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in show(self, **kwargs)
-   3242
-   3243         ax1 = fig.add_subplot(121)
--&gt; 3244         fig,ax1 = self.imshow(typ=&#39;l20&#39;,fig=fig,ax=ax1,**kwargs)
-   3245         ax2 = fig.add_subplot(122)
-   3246         if &#39;vmin&#39; in kwargs:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in imshow(self, **kwargs)
-    727
-    728         if self.y.ndim&gt;1:
---&gt; 729             dt,ylabels = self.cformat(**kwargs)
-    730
-    731             if &#39;vmin&#39; not in kwargs:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in cformat(self, **kwargs)
-    603             # whole range
-    604             vs = 0
---&gt; 605             vf = shy[ax[1]]
-    606         else:
-    607             # subset of values
-
-
-IndexError: tuple index out of range
-</pre></div>
-</div>
-<img alt="../../_images/Channel_33_1.png" src="../../_images/Channel_33_1.png" />
+<img alt="../../_images/Channel_33_0.png" src="../../_images/Channel_33_0.png" />
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
@@ -633,21 +525,21 @@ number of time samples <img src="../../_images/mathmpl/math-a4285baa0e.png" styl
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-ValueError                                Traceback (most recent call last)
+MemoryError                               Traceback (most recent call last)
 
 &lt;ipython-input-25-1e46705dbeb0&gt; in &lt;module&gt;()
 ----&gt; 1 htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in tap(self, **kwargs)
+   2732         S   = np.sinc(l-tau2*WMHz/1000.)
+   2733         # sum over r :  f x s  x m x tap
+-&gt; 2734         htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
    2735
    2736         # f x s  x m x tap
--&gt; 2737         htap  = htap.reshape(Nf,Ns,Nm,Ntap)
-   2738         Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
-   2739         Er_htap = np.sum(htap,axis=1)/Ns
 
 
-ValueError: total size of new array must be unchanged
+MemoryError:
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">htap</span><span class="p">)</span>
@@ -760,7 +652,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b71995280d0&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b43f87332d0&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>
