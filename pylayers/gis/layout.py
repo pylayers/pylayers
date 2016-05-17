@@ -1107,10 +1107,14 @@ class Layout(PyLayers):
                     pass
                     #ss_name = self.Gs.node[]
                     #ns = self.chgmss(inter_u1_u2[0],name=d['name'],z=[eval(u) for u in d['z']],offset=0)
-
+                
                 if d.has_key('ss_name'):
                     nss+=len(d['ss_name'])
-                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=[[eval(u) for u in v ] for v in d['ss_z']])
+                    if type(d['ss_z'][0][0])=='str':
+                        ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
+                    else:
+                        ss_z = d['ss_z']
+                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
 
 
         self.Np = _np
@@ -1150,26 +1154,28 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n <0:
-                x,y = self.Gs.pos[n]
-                lon,lat = m(x,y,inverse=True)
-                fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
+                if n not in self.lboundary:
+                    x,y = self.Gs.pos[n]
+                    lon,lat = m(x,y,inverse=True)
+                    fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
 
         for n in self.Gs.pos:
             if n >0:
-                neigh = nx.neighbors(self.Gs,n)
-                d = self.Gs.node[n]
-                noden = -10000000-n
-                fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n")
-                fd.write("<nd ref='"+str(neigh[0])+"' />\n")
-                fd.write("<nd ref='"+str(neigh[1])+"' />\n")
-                fd.write("<tag k='name' v='"+str(d['name'])+"' />\n")
-                fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
-                fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
-                if d.has_key('ss_name'):
-                    ch = str(d['ss_name'])
-                    fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
-                    fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
-                fd.write("</way>\n")
+                if self.Gs.node[n]['name']!='AIR':
+                    neigh = nx.neighbors(self.Gs,n)
+                    d = self.Gs.node[n]
+                    noden = -10000000-n
+                    fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n")
+                    fd.write("<nd ref='"+str(neigh[0])+"' />\n")
+                    fd.write("<nd ref='"+str(neigh[1])+"' />\n")
+                    fd.write("<tag k='name' v='"+str(d['name'])+"' />\n")
+                    fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
+                    fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
+                    if d.has_key('ss_name'):
+                        ch = str(d['ss_name'])
+                        fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
+                        fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
+                    fd.write("</way>\n")
 
 
         fd.write("</osm>\n")
@@ -7921,7 +7927,7 @@ class Layout(PyLayers):
             kwargs['fig']=fig
             kwargs['ax']=ax
 
-        #args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
+        args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
 
         if len(kwargs['edgelist'])==0:
             if kwargs['mode']=='cycle':
