@@ -1168,7 +1168,7 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n >0:
-                if L.Gs.node['name']!='AIR':
+                if self.Gs.node[n]['name']!='AIR':
                     neigh = nx.neighbors(self.Gs,n)
                     d = self.Gs.node[n]
                     noden = -10000000-n
