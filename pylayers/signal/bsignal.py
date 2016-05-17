@@ -2787,7 +2787,7 @@ class FUsignal(FBsignal,Usignal):
         print 'Frequency sampling step : ', df
 
     def energy(self,axis=-1,Friis=False,mode='mean'):
-        r""" calculate energy along given axis
+        r""" calculate energy along a given axis
 
         Parameters
         ----------
@@ -2845,7 +2845,7 @@ class FUsignal(FBsignal,Usignal):
         if mode=='center':
             EMH2  = MH2[...,len(self.x)/2]
 
-        if mode=='fi13 iirst':
+        if mode=='first':
             EMH2  = MH2[...,0]
 
         if mode=='last':

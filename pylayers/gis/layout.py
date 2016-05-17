@@ -310,7 +310,7 @@ class Layout(PyLayers):
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,**kwargs):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,build=True,**kwargs):
         """ object constructor
 
         Parameters
@@ -408,7 +408,7 @@ class Layout(PyLayers):
         for k in self.sl.keys():
             self.name[k] = []
 
-        self.load(_filename)
+        self.load(_filename,build=build)
 
         
 
@@ -1052,78 +1052,63 @@ class Layout(PyLayers):
         """
 
         self.filename = _fileosm
+        self.coordinates = 'latlon'
         fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
         coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
         ns  = 0
         nss  = 0
+        
+        # Reading points  (<0 index)
         for npt in coords.xy:
             self.Gs.add_node(npt)
             self.Gs.pos[npt] = tuple(coords.xy[npt])
             _np+=1
 
+        # reading segments
         for k,nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
-            
             for l in range(len(tahe)-1):
                 nta = tahe[l]
                 nhe = tahe[l+1]
                 d  = ways.way[nseg].tags
-
-                # old format conversion
-                if d.has_key('zmin'):
-                    d['z']=[d['zmin'],d['zmax']]
-                    del(d['zmin'])
-                    del(d['zmax'])
-                if d.has_key('ss_zmin'):
-                    d['ss_z']=[[d['ss_zmin'],d['ss_zmax']]]
-                    d['ss_name']=[d['ss_name']]
-                    del(d['ss_zmin'])
-                    del(d['ss_zmax'])
-                #/old format conversion
-                for key in d:
-                    try:
-                        d[key]=eval(d[key])
-                    except:
-                        pass
-                # avoid  0 value (not a segment number)
-#                ns = k+1
-#                # transcode segment index
-#                if d.has_key('name'):
-#                    name = d['name']
-#                else:
-#                    name = 'AIR'
-#                    d['name'] = 'AIR'
-#                self.Gs.add_node(ns)
-#                self.Gs.add_edge(nta,ns)
-#                self.Gs.add_edge(ns,nhe)
-#                self.Gs.node[ns] = d
-#                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-#                if name not in self.display['layers']:
-#                    self.display['layers'].append(name)
-#                self.labels[ns] = str(ns)
-#                if d.has_key('ss_name'):
-#                    nss+=len(d['ss_name'])
-#                    for n in d['ss_name']:
-#                        if n in self.name:
-#                            self.name[n].append(ns)
-#                        else:
-#                            self.name[n]=[ns]
-#                if name in self.name:
-#                    self.name[name].append(ns)
-#                else:
-#                    self.name[name] = [ns]
-
+                u1 = np.array(nx.neighbors(self.Gs,nta))
+                u2 = np.array(nx.neighbors(self.Gs,nhe))
+                inter_u1_u2 = np.intersect1d(u1,u2)
+                #
+                # segment do not exist yet (create segment)
+                #
+                if len(inter_u1_u2)==0:
+                    #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                    if 'name' in ways.way[nseg].tags:
+                        slab = ways.way[nseg].tags['name']
+                    else:
+                        slab = "WALL"
+                    if 'z' in ways.way[nseg].tags:
+                        z = ways.way[nseg].tags['z']
+                    else:
+                        z = (0,3)
+                    if 'offset' in ways.way[nseg].tags:
+                        offset = ways.way[nseg].tags['offset']
+                    else:
+                        offset = 0   
+                    ns = self.add_segment(nta,nhe,name=slab,z=z,offset=offset)
+                #
+                # segment do exist already (create sub_segment)
+                #
+                else:
+                    pass
 			
-                #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
-                ns = self.add_segment(nta,nhe,name="WALL",z=[0,3.0],offset=0)
-               # self.chgmss(s1,ss_name=d['ss_name'],ss_offset=d['ss_offset'],ss_z=d['ss_z'])
-                if d.has_key('ss_name'):
-                    nss+=len(d['ss_name'])
-                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=[[eval(u) for u in v ] for v in d['ss_z']])
+		
+		if d.has_key('ss_name'):
+		    nss+=len(d['ss_name'])
+		    if type(d['ss_z'][0][0])=='str':
+			ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
+		    else:
+			ss_z = d['ss_z']
+		    self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
 
-#                _ns+=1
 
         self.Np = _np
         #self.Ns = _ns
@@ -1162,9 +1147,10 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n <0:
-                x,y = self.Gs.pos[n]
-                lon,lat = m(x,y,inverse=True)
-                fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
+                if n not in self.lboundary:
+                    x,y = self.Gs.pos[n]
+                    lon,lat = m(x,y,inverse=True)
+                    fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
 
         for n in self.Gs.pos:
             if n >0:
@@ -1202,9 +1188,13 @@ class Layout(PyLayers):
         config.add_section("segments")
         config.add_section("display")
         config.add_section("files")
-        config.set("info",'Npoints',self.Np)
-        config.set("info",'Nsegments',self.Ns)
-        config.set("info",'Nsubsegments',self.Nss)
+        if self.coordinates=='latlon':
+            config.set("info","format","latlon")
+        else:
+            config.set("info","format","cart")
+        #config.set("info",'Npoints',self.Np)
+        #config.set("info",'Nsegments',self.Ns)
+        #config.set("info",'Nsubsegments',self.Nss)
 
         for k in self.display:
             config.set("display",k,self.display[k])
@@ -1306,6 +1296,7 @@ class Layout(PyLayers):
                 coords.cartesian(cart=True)
         else :
             or_coord_format = 'cart'
+        
         #
         # update display section
         #
@@ -1449,7 +1440,7 @@ class Layout(PyLayers):
             self.lfur.append(F)
         self.filefur=_filefur
 
-    def load(self,_filename):
+    def load(self,_filename,build=True):
         """ load a Layout in different formats
 
         Parameters
@@ -1497,7 +1488,7 @@ class Layout(PyLayers):
             raise NameError('layout filename extension not recognized')
 
        
-
+        
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
@@ -1512,29 +1503,29 @@ class Layout(PyLayers):
         self.boundary(dx=10,dy=10)
 
         rebuild = False
+        
+        if ext!='.osm':
+            if not newfile :
+                hash_save = copy.deepcopy(self._hash)
 
+                if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
+                    path = os.path.join(basename,'struc','gpickle',self.filename)
+                    self.dumpr('s')
+                    if self._hash != hash_save:
+                        rebuild = True 
+                    else:
+                        self.dumpr('tvirw')
+                else: 
+                    rebuild = True
 
-        if not newfile :
-            hash_save = copy.deepcopy(self._hash)
-
-            if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
-                path = os.path.join(basename,'struc','gpickle',self.filename)
-                self.dumpr('s')
-                if self._hash != hash_save:
-                    rebuild = True 
-                else:
-                    self.dumpr('tvirw')
-            else: 
-                rebuild = True
-
-            
-            # build and dump
-            if rebuild:  
-                # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                # if ans.lower()=='y':
-                self.build()
-                self.lbltg.append('s')
-                self.dumpw()
+                
+                # build and dump
+                if build and rebuild:  
+                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                    # if ans.lower()=='y':
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
@@ -2220,7 +2211,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        vec :
+     loa   vec :
 
         """
         for k in self.Gs.pos:
@@ -5233,6 +5224,19 @@ class Layout(PyLayers):
 
 
     def updateshseg(self):
+        """ update shapely segment
+
+        build a shapely object for all segments
+
+        This function is called at the beginning of buildGt
+
+        See Also
+        --------
+
+        buildGt
+
+        """
+
         seg_connect = {x:self.Gs.node[x]['connect'] for x in self.Gs.nodes() if x >0}
         dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
@@ -5255,9 +5259,11 @@ class Layout(PyLayers):
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
         self.updateshseg()
+
         X = sho.polygonize(self._shseg.values())
         P = [x for x in X]
         NP = []
+
         # remove cycle 0 (exterior) if it exists
         try:
             self.Gt.remove_node(0)
@@ -5269,14 +5275,15 @@ class Layout(PyLayers):
         #   - yes : you're done !
         #   - no :
         #       - has polygon an inner hole ? 
-        #           - yes : delaunay on polygon, excluing the polygon inside ( polyhole)
-        #           - no : delaunay on the polygon
+        #           - yes : Delaunay on polygon, excluding the polygon inside ( polyhole)
+        #           - no : Delaunay on the polygon
         #
+        
         for p in P:
             pin = [z for z in sho.polygonize(p.interiors)]
             # no holes in polygon
             if pin == []:
-                # delaunay only if polygon not convex
+                # Delaunay only if polygon not convex
                 if not geu.isconvex(p):
                     A=self._delaunay(p)
                     NP.extend(A)
@@ -5571,8 +5578,8 @@ class Layout(PyLayers):
                                    ,name='AIR'))
                     polys.append(cp)
             #
-            # 3. merge delaunay triangulation in order to obtain
-            #   the larger convex polygons partioning
+            # 3. merge Delaunay triangulation in order to obtain
+            #   the larger convex polygons partitioning
             #
             diff = poly.difference(sh.MultiPolygon(polys))
             if isinstance(diff,sh.Polygon):
@@ -5585,7 +5592,7 @@ class Layout(PyLayers):
 
             cpolys = []
             nbpolys = len(polys)
-
+            
             while polys !=[]:
                 p = polys.pop(0)
                 for ip2,p2 in enumerate(polys):
@@ -5598,7 +5605,7 @@ class Layout(PyLayers):
                         if p.isconvex():
                             polys.pop(ip2)
                             polys.insert(0, p)
-                            conv=True
+                            conv = True
                             break
                         else:
                             # if pold not in cpolys:
@@ -7913,7 +7920,7 @@ class Layout(PyLayers):
             kwargs['fig']=fig
             kwargs['ax']=ax
 
-        #args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
+        args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
 
         if len(kwargs['edgelist'])==0:
             if kwargs['mode']=='cycle':
