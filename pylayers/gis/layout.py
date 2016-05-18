@@ -310,7 +310,7 @@ class Layout(PyLayers):
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,build=True,**kwargs):
+    
         """ object constructor
 
         Parameters
@@ -6942,10 +6942,14 @@ class Layout(PyLayers):
                 # non adjascent segment of vnodes see valid diffraction points
                 
                 for idiff in ndiffvalid:
+                    import ipdb
+                    ipdb.set_trace()
                     # idiff segment neighbors
                     nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
                     # segvalid : not adjascent segment
-                    seen_from_neighbors=[]
+                    seen_from_nei                    for npoint in ndiffvalid:
+                        if npoint !=idiff:
+                            Gv.add_edge(idiff,npoint)ghbors=[]
                     for x in nsneigh:
                         neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles']]
                         seen_from_neighbors += neighbx
@@ -6953,9 +6957,9 @@ class Layout(PyLayers):
                     for ns in seen_from_neighbors:
                         Gv.add_edge(idiff,ns)
 
-                    # for npoint in ndiffvalid:
-                    #     if npoint !=idiff:
-                    #         Gv.add_edge(idiff,npoint)
+                    for npoint in ndiffvalid:
+                        if npoint !=idiff:
+                            Gv.add_edge(idiff,npoint)
                 #
                 # Graph Gv composition
                 #
@@ -7046,7 +7050,6 @@ class Layout(PyLayers):
                             for y in self.ddiff[x][0]:
                                 if y == cy:
                                     npt.append(x)
-        
 
                 nseg = filter(lambda x : x>0,vnodes)
                 vnodes = nseg+npt
@@ -7111,7 +7114,6 @@ class Layout(PyLayers):
                                 #     print nstr,nstrb
                                 #     print "li1",li1 
                                 #     print "li2",li2
-                                
 
                                 for i1 in li1:
                                     #print li1
