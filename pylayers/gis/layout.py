@@ -311,6 +311,15 @@ class Layout(PyLayers):
 
     """
     
+    def __init__(self,_filename='defstr.ini',
+                      _filematini='matDB.ini',
+                      _fileslabini='slabDB.ini',
+                      _filefur='',
+                      force=False,
+                      check=True,
+                      build=False,
+                      verbose=False):
+
         """ object constructor
 
         Parameters
@@ -6947,9 +6956,11 @@ class Layout(PyLayers):
                     # idiff segment neighbors
                     nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
                     # segvalid : not adjascent segment
-                    seen_from_nei                    for npoint in ndiffvalid:
+                    seen_from_neighbors=[]
+
+                    for npoint in ndiffvalid:
                         if npoint !=idiff:
-                            Gv.add_edge(idiff,npoint)ghbors=[]
+                            Gv.add_edge(idiff,npoint)
                     for x in nsneigh:
                         neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles']]
                         seen_from_neighbors += neighbx
