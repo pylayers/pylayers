@@ -305,12 +305,21 @@ class Layout(PyLayers):
     Notes
     -----
 
-    This class exploits `networkx` to store Layout information
+    This class uses `networkx` to store Layout information
 
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',check=True,**kwargs):
+    
+    def __init__(self,_filename='defstr.ini',
+                      _filematini='matDB.ini',
+                      _fileslabini='slabDB.ini',
+                      _filefur='',
+                      force=False,
+                      check=True,
+                      build=False,
+                      verbose=False):
+
         """ object constructor
 
         Parameters
@@ -408,7 +417,7 @@ class Layout(PyLayers):
         for k in self.sl.keys():
             self.name[k] = []
 
-        self.load(_filename)
+        self.load(_filename,build=build)
 
         
 
@@ -476,7 +485,8 @@ class Layout(PyLayers):
     def __add__(self, other):
         """ addition
 
-        One can add a numpy array or an other layout
+        One can add either a numpy array or an other layout
+
         """
         Ls = copy.deepcopy(self)
         if type(other)==np.ndarray:
@@ -603,6 +613,8 @@ class Layout(PyLayers):
 
         delete  Gs
 
+        called in load str and loadstr2 (deprecated)
+
         """
         del self.Gs
         self.Gs = nx.Graph()
@@ -614,6 +626,7 @@ class Layout(PyLayers):
 
         Parameters
         ----------
+
         offp : offset points
         offs : offset segments
 
@@ -647,9 +660,6 @@ class Layout(PyLayers):
         dseg.update(dpt)
         self.Gs.adj =  dseg
         self.Gs.edge = dseg
-        #pdb.set_trace()
-        #dict(zip(self.Gs.keys(),))
-        #self.Gs.adj = newapoint
 
 
     def check(self,level=0):
@@ -1050,74 +1060,71 @@ class Layout(PyLayers):
         """
 
         self.filename = _fileosm
+        self.coordinates = 'latlon'
         fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
         coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
         ns  = 0
         nss  = 0
+        
+        # Reading points  (<0 index)
         for npt in coords.xy:
             self.Gs.add_node(npt)
             self.Gs.pos[npt] = tuple(coords.xy[npt])
             _np+=1
 
+        # reading segments
         for k,nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
-            if len(tahe)==2:
-                nta = tahe[0]
-                nhe = tahe[1]
+            for l in range(len(tahe)-1):
+                nta = tahe[l]
+                nhe = tahe[l+1]
                 d  = ways.way[nseg].tags
 
-                # old format conversion
-                if d.has_key('zmin'):
-                    d['z']=[d['zmin'],d['zmax']]
-                    del(d['zmin'])
-                    del(d['zmax'])
-                if d.has_key('ss_zmin'):
-                    d['ss_z']=[[d['ss_zmin'],d['ss_zmax']]]
-                    d['ss_name']=[d['ss_name']]
-                    del(d['ss_zmin'])
-                    del(d['ss_zmax'])
-                #/old format conversion
                 for key in d:
                     try:
                         d[key]=eval(d[key])
                     except:
                         pass
-                # avoid  0 value (not a segment number)
-#                ns = k+1
-#                # transcode segment index
-#                if d.has_key('name'):
-#                    name = d['name']
-#                else:
-#                    name = 'AIR'
-#                    d['name'] = 'AIR'
-#                self.Gs.add_node(ns)
-#                self.Gs.add_edge(nta,ns)
-#                self.Gs.add_edge(ns,nhe)
-#                self.Gs.node[ns] = d
-#                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-#                if name not in self.display['layers']:
-#                    self.display['layers'].append(name)
-#                self.labels[ns] = str(ns)
-#                if d.has_key('ss_name'):
-#                    nss+=len(d['ss_name'])
-#                    for n in d['ss_name']:
-#                        if n in self.name:
-#                            self.name[n].append(ns)
-#                        else:
-#                            self.name[n]=[ns]
-#                if name in self.name:
-#                    self.name[name].append(ns)
-#                else:
-#                    self.name[name] = [ns]
-                ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
-               # self.chgmss(s1,ss_name=d['ss_name'],ss_offset=d['ss_offset'],ss_z=d['ss_z'])
+                
+                u1 = np.array(nx.neighbors(self.Gs,nta))
+                u2 = np.array(nx.neighbors(self.Gs,nhe))
+                inter_u1_u2 = np.intersect1d(u1,u2)
+                #
+                # segment do not exist yet (create segment)
+                #
+                if len(inter_u1_u2)==0:
+                    #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                    if 'name' in ways.way[nseg].tags:
+                        slab = ways.way[nseg].tags['name']
+                    else:
+                        slab = "WALL"
+                    if 'z' in ways.way[nseg].tags:
+                        z = ways.way[nseg].tags['z']
+                    else:
+                        z = (0,3)
+                    if 'offset' in ways.way[nseg].tags:
+                        offset = ways.way[nseg].tags['offset']
+                    else:
+                        offset = 0   
+                    ns = self.add_segment(nta,nhe,name=slab,z=z,offset=offset)
+                #
+                # segment do exist already (create sub_segment)
+                #
+                else:
+                    pass
+                    #ss_name = self.Gs.node[]
+                    #ns = self.chgmss(inter_u1_u2[0],name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                
                 if d.has_key('ss_name'):
                     nss+=len(d['ss_name'])
-                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=[[eval(u) for u in v ] for v in d['ss_z']])
+                    if type(d['ss_z'][0][0])=='str':
+                        ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
+                    else:
+                        ss_z = d['ss_z']
+                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
 
-#                _ns+=1
 
         self.Np = _np
         #self.Ns = _ns
@@ -1156,26 +1163,28 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n <0:
-                x,y = self.Gs.pos[n]
-                lon,lat = m(x,y,inverse=True)
-                fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
+                if n not in self.lboundary:
+                    x,y = self.Gs.pos[n]
+                    lon,lat = m(x,y,inverse=True)
+                    fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
 
         for n in self.Gs.pos:
             if n >0:
-                neigh = nx.neighbors(self.Gs,n)
-                d = self.Gs.node[n]
-                noden = -10000000-n
-                fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n")
-                fd.write("<nd ref='"+str(neigh[0])+"' />\n")
-                fd.write("<nd ref='"+str(neigh[1])+"' />\n")
-                fd.write("<tag k='name' v='"+str(d['name'])+"' />\n")
-                fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
-                fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
-                if d.has_key('ss_name'):
-                    ch = str(d['ss_name'])
-                    fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
-                    fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
-                fd.write("</way>\n")
+                if self.Gs.node[n]['name']!='AIR':
+                    neigh = nx.neighbors(self.Gs,n)
+                    d = self.Gs.node[n]
+                    noden = -10000000-n
+                    fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n")
+                    fd.write("<nd ref='"+str(neigh[0])+"' />\n")
+                    fd.write("<nd ref='"+str(neigh[1])+"' />\n")
+                    fd.write("<tag k='name' v='"+str(d['name'])+"' />\n")
+                    fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
+                    fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
+                    if d.has_key('ss_name'):
+                        ch = str(d['ss_name'])
+                        fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
+                        fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
+                    fd.write("</way>\n")
 
 
         fd.write("</osm>\n")
@@ -1195,9 +1204,13 @@ class Layout(PyLayers):
         config.add_section("segments")
         config.add_section("display")
         config.add_section("files")
-        config.set("info",'Npoints',self.Np)
-        config.set("info",'Nsegments',self.Ns)
-        config.set("info",'Nsubsegments',self.Nss)
+        if self.coordinates=='latlon':
+            config.set("info","format","latlon")
+        else:
+            config.set("info","format","cart")
+        #config.set("info",'Npoints',self.Np)
+        #config.set("info",'Nsegments',self.Ns)
+        #config.set("info",'Nsubsegments',self.Nss)
 
         for k in self.display:
             config.set("display",k,self.display[k])
@@ -1299,6 +1312,7 @@ class Layout(PyLayers):
                 coords.cartesian(cart=True)
         else :
             or_coord_format = 'cart'
+        
         #
         # update display section
         #
@@ -1442,7 +1456,7 @@ class Layout(PyLayers):
             self.lfur.append(F)
         self.filefur=_filefur
 
-    def load(self,_filename):
+    def load(self,_filename,build=True):
         """ load a Layout in different formats
 
         Parameters
@@ -1458,7 +1472,10 @@ class Layout(PyLayers):
         +  .ini   : ini file format (natural one) DIRINI
         +  .osm   : opens street map format  DIROSM
 
+        (Deprecated format)
 
+        +  .str2  : native Pyray (C implementation) DIRSTRUC
+        +  .str   : binary file with visibility DIRSTRUC
         layout files are stored in the directory pstruc['DIRxxx']
 
         """
@@ -1487,7 +1504,7 @@ class Layout(PyLayers):
             raise NameError('layout filename extension not recognized')
 
        
-
+        
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
@@ -1502,29 +1519,29 @@ class Layout(PyLayers):
         self.boundary(dx=10,dy=10)
 
         rebuild = False
+        
+        if ext!='.osm':
+            if not newfile :
+                hash_save = copy.deepcopy(self._hash)
 
+                if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
+                    path = os.path.join(basename,'struc','gpickle',self.filename)
+                    self.dumpr('s')
+                    if self._hash != hash_save:
+                        rebuild = True 
+                    else:
+                        self.dumpr('tvirw')
+                else: 
+                    rebuild = True
 
-        if not newfile :
-            hash_save = copy.deepcopy(self._hash)
-
-            if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
-                path = os.path.join(basename,'struc','gpickle',self.filename)
-                self.dumpr('s')
-                if self._hash != hash_save:
-                    rebuild = True 
-                else:
-                    self.dumpr('tvirw')
-            else: 
-                rebuild = True
-
-            
-            # build and dump
-            if rebuild:  
-                # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                # if ans.lower()=='y':
-                self.build()
-                self.lbltg.append('s')
-                self.dumpw()
+                
+                # build and dump
+                if build and rebuild:  
+                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                    # if ans.lower()=='y':
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
@@ -2211,7 +2228,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        vec :
+     loa   vec :
 
         """
         for k in self.Gs.pos:
@@ -4537,6 +4554,8 @@ class Layout(PyLayers):
             #edlist = tn[u]
             edlist = filter(lambda x: (x>0) ,tn)
             #& (not self.Gs.node[x].has_key('ss_name')),tn)
+        else:
+            edlist = kwargs['edlist']
 
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
@@ -5224,6 +5243,19 @@ class Layout(PyLayers):
 
 
     def updateshseg(self):
+        """ update shapely segment
+
+        build a shapely object for all segments
+
+        This function is called at the beginning of buildGt
+
+        See Also
+        --------
+
+        buildGt
+
+        """
+
         seg_connect = {x:self.Gs.node[x]['connect'] for x in self.Gs.nodes() if x >0}
         dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
@@ -5246,28 +5278,31 @@ class Layout(PyLayers):
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
         self.updateshseg()
+
         X = sho.polygonize(self._shseg.values())
         P = [x for x in X]
         NP = []
+
         # remove cycle 0 (exterior) if it exists
         try:
-            del(self.Gt.node[0])
+            self.Gt.remove_node(0)
         except:
             pass
-        # II . make pdeolygon convex
+        # II . make polygon convex
         # for each polygon :
-        # - is polygon convex: 
-        #   -yes : you're done !
+        # - is polygon convex ?: 
+        #   - yes : you're done !
         #   - no :
-        #       -has polygon an inner hole ? 
-        #           - yes : delaunay on polygon, excluing the polygon inside ( polyhole)
-        #           - no : delaunay on the polygon
+        #       - has polygon an inner hole ? 
+        #           - yes : Delaunay on polygon, excluding the polygon inside ( polyhole)
+        #           - no : Delaunay on the polygon
         #
+        
         for p in P:
             pin = [z for z in sho.polygonize(p.interiors)]
             # no holes in polygon
             if pin == []:
-                # delaunay only if polygon not convex
+                # Delaunay only if polygon not convex
                 if not geu.isconvex(p):
                     A=self._delaunay(p)
                     NP.extend(A)
@@ -5562,8 +5597,8 @@ class Layout(PyLayers):
                                    ,name='AIR'))
                     polys.append(cp)
             #
-            # 3. merge delaunay triangulation in order to obtain
-            #   the larger convex polygons partioning
+            # 3. merge Delaunay triangulation in order to obtain
+            #   the larger convex polygons partitioning
             #
             diff = poly.difference(sh.MultiPolygon(polys))
             if isinstance(diff,sh.Polygon):
@@ -5576,7 +5611,7 @@ class Layout(PyLayers):
 
             cpolys = []
             nbpolys = len(polys)
-
+            
             while polys !=[]:
                 p = polys.pop(0)
                 for ip2,p2 in enumerate(polys):
@@ -5589,7 +5624,7 @@ class Layout(PyLayers):
                         if p.isconvex():
                             polys.pop(ip2)
                             polys.insert(0, p)
-                            conv=True
+                            conv = True
                             break
                         else:
                             # if pold not in cpolys:
@@ -6919,10 +6954,16 @@ class Layout(PyLayers):
                 # non adjascent segment of vnodes see valid diffraction points
                 
                 for idiff in ndiffvalid:
+                    import ipdb
+                    ipdb.set_trace()
                     # idiff segment neighbors
                     nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
                     # segvalid : not adjascent segment
                     seen_from_neighbors=[]
+
+                    for npoint in ndiffvalid:
+                        if npoint !=idiff:
+                            Gv.add_edge(idiff,npoint)
                     for x in nsneigh:
                         neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles']]
                         seen_from_neighbors += neighbx
@@ -6930,9 +6971,9 @@ class Layout(PyLayers):
                     for ns in seen_from_neighbors:
                         Gv.add_edge(idiff,ns)
 
-                    # for npoint in ndiffvalid:
-                    #     if npoint !=idiff:
-                    #         Gv.add_edge(idiff,npoint)
+                    for npoint in ndiffvalid:
+                        if npoint !=idiff:
+                            Gv.add_edge(idiff,npoint)
                 #
                 # Graph Gv composition
                 #
@@ -7023,7 +7064,6 @@ class Layout(PyLayers):
                             for y in self.ddiff[x][0]:
                                 if y == cy:
                                     npt.append(x)
-        
 
                 nseg = filter(lambda x : x>0,vnodes)
                 vnodes = nseg+npt
@@ -7088,7 +7128,6 @@ class Layout(PyLayers):
                                 #     print nstr,nstrb
                                 #     print "li1",li1 
                                 #     print "li2",li2
-                                
 
                                 for i1 in li1:
                                     #print li1
@@ -7905,7 +7944,7 @@ class Layout(PyLayers):
             kwargs['fig']=fig
             kwargs['ax']=ax
 
-        #args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
+        args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
 
         if len(kwargs['edgelist'])==0:
             if kwargs['mode']=='cycle':
@@ -8352,307 +8391,6 @@ class Layout(PyLayers):
         alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
 
 
-    # def buildGc(self):
-    #     """ build the graph of cycles
-
-    #     Returns
-    #     -------
-
-    #     Ga : graph of adjascent rooms
-
-    #     Notes
-    #     -----
-
-    #     An adjascent graph (connecting cycle sharing airwalls) is created.
-    #     This graph contains multiples sub-graph which are not connected with each others
-
-    #     lGa is a list of each of thoose subgraphs
-
-    #     For each of those sub graphs, all their nodes are merged until they only have a single node.
-    #     The main difficulty here , is to merge the polygons of those nodes.
-    #     Because GeomUtil.Polygon, does not support multiple Polygons, nodes of a graph Ga must be 
-    #     merged into a specific order.
-    #     This exaplains the dfs_successors and following in the code !:w
-
-
-
-    #     """
-
-    #     #
-    #     # Create a graph of adjascent cycles
-    #     #
-
-    #     Ga = nx.Graph()
-    #     Ga.pos ={}
-    #     for k in self.Gt.edge:
-    #         dk = self.Gt.edge[k]
-    #         for cy in dk:
-    #             try:
-    #                 segs = dk[cy]['segment']
-    #             except:
-    #                 segs=[]
-    #             for s in segs:
-    #                 if self.Gs.node[s]['name']=='AIR':
-    #                     if k not in Ga.node:
-    #                         Ga.add_node(k)
-    #                         Ga.pos[k]=self.Gt.pos[k]
-    #                     if cy not in Ga.node:
-    #                         Ga.add_node(cy)
-    #                         Ga.pos[cy]=self.Gt.pos[cy]
-    #                     Ga.add_edge(k,cy)
-
-    #     # deep copy of Gt
-    #     self.Gc = copy.deepcopy(self.Gt)
-
-    #     # list of connected subgraphs of Gt
-    #     lGa = nx.connected_component_subgraphs(Ga)
-
-    #     #dictionnary mapping
-    #     # key = old cycle ID :  value =new cycle ID
-    #     dmap={x:x for x in self.Gc.nodes()}
-
-
-    #     def merge_cycle(root,child):
-    #         """ method to merge a child cycle into a root cycle
-    #         """
-    #         try:
-    #             self.Gc.node[root]['polyg']+=self.Gc.node[child]['polyg'] # here the merging
-    #             self.Gc.node[root]['cycle']+=self.Gc.node[child]['cycle'] # here the merging
-    #             # import ipdb
-    #             # ipdb.set_trace()
-    #             # self.Gc.node[root]['polyg'].plot(fig=plt.gcf(),ax=plt.gca(),color='g')
-    #             # self.Gc.node[root]['cycle'].show(fig=plt.gcf(),ax=plt.gca())
-    #             # plt.draw()
-    #         except:
-    #             import ipdb
-    #             ipdb.set_trace()
-    #         try:
-    #             self.Gc.node[root]['merged'].append(child)
-    #         except:
-    #             self.Gc.node[root]['merged']=[child]
-
-    #         dmap[child] = root
-
-            
-    #         self.Gc.add_edges_from([(root,x) for x in self.Gc.edge[child].keys()])
-    #         # update Gt
-    #         self.Gt.node[child]['merged'] = root
-    #         # a merged cycle is open
-    #         self.Gt.node[child]['isopen'] = True
-    #         self.Gt.node[root]['merged'] = root
-    #         self.Gc.remove_node(child)
-    #         # self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
-    #         self.Gc.pos[root]=tuple(np.array(self.Gc.node[root]['polyg'].centroid.xy)[:,0])
-
-
-    #     for Ga in lGa:
-
-
-    #         # root node of subgraph
-    #         r = Ga.nodes()[0]
-    #         cnctd = [r]
-    #         # depth first search successors tree rooted on r
-    #         # this return dict where keys are cycles and values
-    #         # are list of cycle (a.k.a. child ) connected to the key cycle
-    #         dn = nx.dfs_successors(Ga,r)
-
-    #         # merge 
-
-    #         # loop on each root cycles
-    #         for uk,k in enumerate(dn.keys()):
-    #             # loop on child cycles
-    #             for v in dn[k]:
-    #                 # 
-    #                 root =dmap[k]
-    #                 while dmap[root] !=root :
-    #                     root = dmap[root]
-    #                 # if the child cycle has already been merged in a previous
-    #                 # loop; its ID has changed but thoose of its childs too. 
-    #                 # This update the ID of childs of v
-    #                 if v in dn.keys()[:uk]:
-    #                     # list of cycle to be modified
-    #                     lcy = dn[v]
-    #                     [dmap.update({c:root}) for c in lcy]
-
-    #                 merge_cycle(root,v)
-    #     # find diffractions of the layout
-    #     self._find_diffractions()
-
-
-
-
-
-    # def buildGc_old(self):
-    #     """ 
-    #     DEPRECATED
-
-    #     This version of buildGc do not works well with
-    #     large layout. 
-    #     Indeed, the algorithm cannot merge large room
-    #     with multiple airwalls
-
-    #     build the graph of cycles
-
-
-
-    #     Returns
-    #     -------
-
-    #     Ga : graph of adjascent rooms
-
-    #     Notes
-    #     -----
-
-    #     adjascent rooms are connected
-    #     Gr is at first a deep copy of Gt
-
-    #     The difficulty here is to take into account the AIR transition
-    #     segments
-
-    #     """
-    #     #
-    #     # Create a graph of adjascent cycles
-    #     #
-
-    #     Ga = nx.Graph()
-    #     Ga.pos ={}
-    #     for k in self.Gt.edge:
-    #         dk = self.Gt.edge[k]
-    #         for cy in dk:
-    #             try:
-    #                 segs = dk[cy]['segment']
-    #             except:
-    #                 segs=[]
-    #             for s in segs:
-    #                 if self.Gs.node[s]['name']=='AIR':
-    #                     if k not in Ga.node:
-    #                         Ga.add_node(k)
-    #                         Ga.pos[k]=self.Gt.pos[k]
-    #                     if cy not in Ga.node:
-    #                         Ga.add_node(cy)
-    #                         Ga.pos[cy]=self.Gt.pos[cy]
-    #                     Ga.add_edge(k,cy)
-
-    #     # deep copy of Gt
-    #     self.Gc = copy.deepcopy(self.Gt)
-
-    #     # list of connected subgraphs of Gt
-    #     lGa = nx.connected_component_subgraphs(Ga)
-    #     connected = []
-    #     for Ga in lGa:
-    #         # root node of subgraph
-    #         r = Ga.nodes()[0]
-    #         cnctd = [r]
-    #         # depth first search successors tree rooted on r
-    #         dn = nx.dfs_successors(Ga,r)
-    #         Nlevel = len(dn)
-
-    #         #
-    #         # Probably it exists a simpler manner to obtain
-    #         # the sequence of connected nodes
-    #         #
-    #         succ =[]
-
-    #         while dn.keys()!=[]:
-                
-    #             try:
-    #                 succ = succ+ dn.pop(r)
-    #             except:
-    #                 r = dn.pop()
-    #             if r ==102:
-    #                 import ipdb
-    #                 ipdb.set_trace()
-
-
-    #             for i in range(len(succ)):
-    #                 try:
-    #                     n = succ.pop()
-    #                 except:
-    #                     r = succ.pop()
-    #                     cnctd.append(r)
-    #                     break
-    #                 if n in dn.keys():
-    #                     r = n
-    #                     cnctd.append(r)
-    #                 else:
-    #                     cnctd.append(n)
-    #                     # try:
-    #                     #     r = succ.pop()
-    #                     #     cnctd.append(r)
-    #                     # except:
-    #                     #     break
-    #         #for i in range(Nlevel):
-    #         #    succ = dn.pop(r)
-    #         #    cnctd = cnctd + succ
-    #         #    for k in dn:
-    #         #        if k in succ:
-    #         #            r = k
-    #         #            break
-    #         connected.append(cnctd)
-    #     #
-    #     # Merge all air-connected cycles
-    #     #  for all conected components
-    #     #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
-    #     #
-    #     import ipdb
-    #     ipdb.set_trace()
-    #     merge2c=[]
-    #     for licy in connected:
-    #         root = licy[0]      # pick the first cycle as root
-    #         merged = [root]     # merged cycle is void
-    #         tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list
-    #         #for cy in tomerge: #
-    #         while tomerge!=[]:
-
-    #             ncy = tomerge.pop()
-    #             #print "ncy = ",ncy
-    #             # testing cycle contiguity before merging
-
-    #             try:
-    #                 croot = self.Gc.node[root]['cycle']
-    #             except:
-    #                 import ipdb
-    #                 ipdb.set_trace()
-    #             cy = self.Gc.node[ncy]['cycle']
-    #             flip,path = croot.intersect(cy)
-
-    #             if len(path) < 1 and [root,ncy] not in merge2c:
-    #                 print tomerge,root,ncy,merge2c
-    #                 tomerge.insert(0,ncy)
-    #             else:
-    #                 print 'merge' 
-
-    #                 neigh = nx.neighbors(self.Gc,ncy) # all neighbors of 5
-    #                 self.Gc.node[root]['polyg']+=self.Gc.node[ncy]['polyg'] # here the merging
-    #                 self.Gc.node[root]['cycle']+=self.Gc.node[ncy]['cycle'] # here the merging
-    #                 merged.append(ncy)
-    #                 merge2c.append([root,ncy])
-    #                 #print self.Gc.node[root]['polyg'].exterior.xy
-    #                 for k in neigh:
-    #                     if k!= root:
-    #                         self.Gc.add_edge(root,k)
-
-    #         # keep track of merged convex cycles
-    #         self.Gc.node[root]['merged'] = merged
-    #         for cy in merged:
-    #             self.Gt.node[cy]['merged'] = root
-    #             # a merged cycle is open
-    #             self.Gt.node[cy]['isopen'] = True
-    #         self.Gt.node[root]['merged'] = root
-    #         # remove merged cycles
-    #         for cy in merged:
-    #             if cy != root:
-    #                 self.Gc.remove_node(cy)
-    #         # update pos of root cycle with new center of gravity
-    #         self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
-
-    #     self._find_diffractions()
-
-
-
-
-    #     return(Ga)
-
 
 
     def _find_diffractions(self,tol=0.01):
@@ -8761,11 +8499,11 @@ class Layout(PyLayers):
         self.Gr = copy.deepcopy(self.Gt)
         
         # delete node 0 which cannot be a room 
-
         try:
-            del(self.Gr.node[0])
+            self.Gr.remove_node(0)
         except:
             pass
+
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
@@ -8775,21 +8513,20 @@ class Layout(PyLayers):
             self.Gr.node[n]['transition'] = []
         ltrans = self.listtransition
         ldoors = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-
+        
         # Destroy cycles which have no doors
-
         keys = self.Gr.node.keys()
         for cy in keys:
-            if cy>0:
-                lseg = self.Gr.node[cy]['cycle'].cycle
-                hasdoor = filter(lambda n : n in ldoors,lseg)
-                if len(hasdoor)>0:
-                    pass
-                else:
-                    self.Gr.remove_node(cy)
-                    self.Gr.pos.pop(cy)
+            lseg = self.Gr.node[cy]['cycle'].cycle
+            #hasdoor = filter(lambda n : n in ldoors,lseg)
+            hasdoor = [ x for x in lseg if x in ldoors]
+            if len(hasdoor)>0:
+                pass
+            else:
+                self.Gr.remove_node(cy)
+                self.Gr.pos.pop(cy)
 
-        # Destroy edges which do not share a door
+        # Destroy edges which do not share a transition
         for e in self.Gr.edges():
             keep = False
             if (e[0]>0) & (e[1]>0):

@@ -38,6 +38,11 @@ Utility Functions
     importh5
 
 """
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
+except:
+    print 'mayavi not installed'
 import numpy as np
 import scipy as sp
 import pdb
@@ -50,19 +55,15 @@ import pandas as pd
 import copy
 import time
 import doctest
+from datetime import datetime
 from matplotlib.widgets import Slider, CheckButtons
 import matplotlib.animation as animation
-try:
-    from mayavi import mlab
-    from tvtk.tools import visual
 
-except:
-    print 'mayavi not installed'
+
 
 
 class Trajectories(PyLayers,list):
     """  Define a list of trajectory
-
 
     """
     def __init__(self):
@@ -536,7 +537,10 @@ class Trajectory(PyLayers,pd.DataFrame):
             raise AttributeError('Trajectory.generate requieres at least 3 time stamps')
         pt = kwargs['pt']
         npt = len(t)
+        now = datetime.now()
         td = pd.to_datetime(t,unit=kwargs['unit'])
+        delta = now - td[0]
+        td = td+delta
         # velocity vector
         v = (pt[1:, :]-pt[0:-1, :])/(t[1]-t[0])
         # acceleration vector

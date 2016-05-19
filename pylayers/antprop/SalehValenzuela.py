@@ -14,15 +14,15 @@ def SalehValenzuela(**kwargs):
     lam : rays Poisson Process parameter (ns)
     Gam : clusters exponential decay factor
     gam : rays exponential decay factor
-    T   : observation duration
+    tauM : maximum delay
 
 
     """
-    defaults = { 'Lam' : .1,
-                 'lam' : .5,
-                 'Gam' : 30,
-                 'gam' : 5 ,
-                 'T'   : 100}
+    defaults = { 'Lam' : 10.,
+                 'lam' : 5.,
+                 'Gam' : 30.,
+                 'gam' : 5. ,
+                 'tauM': 1000.}
 
     for k in defaults:
         if k not in kwargs:
@@ -32,11 +32,12 @@ def SalehValenzuela(**kwargs):
     lam = kwargs['lam']
     Gam = kwargs['Gam']
     gam = kwargs['gam']
-    T   = kwargs['T']
-    Nr  = 1.2*T/Lam
-    Nc  = 1.2*T/lam
-    e1 = st.expon(1./Lam)
-    e2 = st.expon(1./lam)
+    tauM = kwargs['tauM']
+    Nc = tauM/Lam
+    Nr = tauM/lam
+
+    p1 = st.poisson(Lam)
+    p2 = st.poisson(lam)
     # cluster time of arrival
     tc   = np.cumsum(e1.rvs(Nr))
     tc   = tc[np.where(tc<T)]
@@ -54,8 +55,12 @@ def SalehValenzuela(**kwargs):
     et = et[np.where(tau<T)]
     u = np.argsort(tau)
     taus = tau[u]
-    ets  = et[u]*np.sign(np.random.rand(len(u))-0.5)
-    SVir = bs.TBsignal(taus,ets)
+    ets = et[u]
+    # limiting in delay domain
+    v = np.where(taus<tauM)[0]
+    taus = taus[v]
+    ets = ets[v]
+    SVir = bs.Bsignal(taus,ets)
     return(SVir)
 
 if __name__ =="__main__":

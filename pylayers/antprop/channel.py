@@ -86,6 +86,7 @@ Members
 import doctest
 import pdb
 import numpy as np
+import numpy.linalg as la
 import scipy as sp
 import pylab as plt
 import struct as stru
@@ -98,6 +99,7 @@ import pylayers.antprop.antenna as ant
 from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 try:
     import h5py
 except:
@@ -207,30 +209,6 @@ class TBchannel(bs.TBsignal):
         .. math::
 
             \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pyplot as plt
-            >>> M = UWBMeasure(1)
-            >>> ch4 = M.tdd.ch4
-            >>> f1,a1=ch4.plot(color='k')
-            >>> tit0 = plt.title("WHERE1 M1 UWB Channel impulse response")
-            >>> f2,a2=ch4.plot(color='k')
-            >>> tit1= plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
-            >>> ax1=plt.axis([10,160,-90,-50])
-            >>> f3,a3=ch4.plot(color='k')
-            >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
-            >>> ax2=plt.axis([20,120,-80,-50])
-            >>> plt.show()
-            >>> tau_moy = ch4.tau_moy()
-
-
-
         See Also
         --------
 
@@ -1243,7 +1221,7 @@ class Mchannel(bs.FUsignal):
     def __init__(self,
                 x ,
                 y ,
-                label = ''):
+                **kwargs):      
         """ class constructor
 
         Parameters
@@ -1255,17 +1233,226 @@ class Mchannel(bs.FUsignal):
             measured channel 
 
         """
-       
-        self.label = label
-        self.calibrated = False
+        defaults = {
+        'Aat': [],
+        'Aar': [],
+        'calibrated':True,
+        'label' :'',
+        'filename':'',
+        'mes':''
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+        
+        self.calibrated = kwargs.pop('calibrated')
+        self.label = kwargs.pop('label')
+        self.filename = kwargs.pop('filename')
+        self.mes = kwargs.pop('mes')
+        self.Aat = kwargs.pop('Aat')
+        self.Aar = kwargs.pop('Aar')
         sh = y.shape
         self.Nm = sh[0]
         self.Nr = sh[1]
         self.Nt = sh[2]
         self.Nf = sh[3]
+
         bs.FUsignal.__init__(self,x=x,y=y,label='Mchannel')
 
-    def plot(self,fig=[],ax=[],mode='time'):
+    
+        
+    def __repr__(self):
+        st = bs.FUsignal.__repr__(self)  
+        if self.calibrated:
+            st = st + 'Calibrated'
+        else:
+             st = st + 'Not calibrated'
+        return(st)
+
+
+
+    def eig(self,HdH=False):
+        """ calculate eigen values of the transfer matrix.
+            it involves H and Hd against svd() which acts only over H.
+
+        Returns
+        -------
+
+        HdH : Hermitian transfer matrix  (nf x nt x nt )
+        U   : Unitary tensor  (nf x nt x nt )
+        S   : Singular values (nf x nt)
+        V   : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)
+
+        HdH = U L U^{\dagger}
+
+        """
+
+        # H  : nm x nr x nt x nf
+        H   = self.y
+        # Hd : nm x nt x nr x nf
+        Hd  = np.conj(self.y.swapaxes(1,2))
+
+        
+        if HdH:
+            #T : nm x nt x nt x nf
+            T = np.einsum('uijk,ujlk->uilk',Hd,H)
+        else:
+            #T : nm x nr x nr x nf
+            T = np.einsum('uijk,ujlk->uilk',H,Hd)
+        # HdH : nm x nf x nr x nr
+        T  = T.swapaxes(1,3)
+        #U   : nm x nf x (nr|nt) x (nr|nt)
+        #S   : nm x nf x (nr|nt)
+        #V   : nm x nf x (nr|nt) x (nr|nt)
+        U,S,V  = la.svd(T)
+        
+
+        return (U,S,V)
+
+    def Bcapacity(self,Pt=np.array([1e-3]),Tp=273):
+        """ calculates BLAST deterministic MIMO channel capacity
+
+        Parameters
+        ----------
+
+        Pt : np.array (,NPt)
+            the total power is assumed uniformaly distributed over the whole bandwidth
+        Tp : Receiver Temperature (K)
+
+        Returns
+        -------
+
+        C   : sum rate or spectral efficiency (bit/s)
+            np.array (Nf,NPt)
+        rho : SNR
+            np.array (Nf,Nt,NPt)
+
+            log_2(det(I+(Et/(N0Nt))HH^{H})
+
+        Notes
+        -----
+
+        The returned value is homogeneous to bit/s the aggregated capacity is obtrained by a simple summation 
+        of the returned quantity. To obtain the sum rate or the spectral efficiency in (bit/s/Hz ) the returned 
+        value should be divided by the frequency step dfGHz
+
+        """
+
+        fGHz  = self.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0]
+        dfGHz = fGHz[1]-fGHz[0]
+
+    
+        if type(Pt)==float:
+            Pt=np.array([Pt])
+
+        # White Noise definition
+        #
+        # Boltzman constantf    = len(fGHz)
+
+        kB = 1.03806488e-23
+
+        # N0 ~ J ~ W/Hz ~ W.s
+
+        N0 = kB*Tp
+
+
+        # Evaluation of the transfer tensor
+        #
+        # HdH :
+
+        U,S,V = self.eig(HdH=True)
+
+        
+        Ps  = Pt/(self.Nt)
+      
+
+        Pb  = N0*BGHz*1e9   # Watt
+
+
+        # S : nm x nf x nr 
+        # rho : nm x nf x nr x power
+        #
+        rho  = (Ps[None,None,None,:]/Pb)*S[:,:,:,None]
+        
+        CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=2)
+       
+        return(rho,CB)
+
+    def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
+        """ calculates deterministic MIMO channel capacity
+
+        Parameters
+        ----------
+
+        Pt :  the total power to be distributed over the different spatial
+            channels using water filling
+        Tp : Receiver Noise Temperature (K)
+
+        Returns
+        -------
+
+        C : capacity (bit/s)
+        rho : SNR (in linear scale)
+
+            log_2(det(It + HH^{H})
+
+        """
+
+        fGHz  = self.x
+        Nf    = len(fGHz)
+        # Bandwidth
+        BGHz  = fGHz[-1]-fGHz[0]
+        # Frequency step
+        dfGHz = fGHz[1]-fGHz[0]
+
+        # White Noise definition
+        #
+        # Boltzman constant
+
+        kB = 1.03806488e-23
+
+        # N0 ~ J ~ W/Hz ~ W.s
+
+        N0 = kB*Tp
+
+        # Evaluation of the transfer HHd tensor
+        
+        U,ld,V = self.eig(HdH=True)
+       
+        #
+        # Iterative implementation of Water Filling algorithm
+        #
+
+        # pb : (nm,nf,nt)   noise power (Watt)
+        pb = N0*dfGHz*1e9*np.ones((self.Nm,self.Nf,self.Nt))
+        # pt : (nm,nf,nt,power)  Total power uniformly spread over (nt*nf-1)
+        pt = Pt[None,None,None,:]/((self.Nf-1)*self.Nt)
+        mu = pt
+        Q0 = np.maximum(0,mu-pb[:,:,:,None]/ld[:,:,:,None])
+        u  = np.where(Q0>0)[0]
+
+        Peff = np.sum(np.sum(Q0,axis=1),axis=1)
+        deltamu = pt
+        while (np.abs(Peff-Pt)>1e-16).any():
+            mu = mu + deltamu
+            Q = np.maximum(0,mu-pb[:,:,:,None]/ld[:,:,:,None])
+            Peff = np.sum(np.sum(Q,axis=1),axis=1)
+            #print "mu , Peff : ",mu,Peff
+            usup = np.where(Peff>Pt)[0]
+            mu[:,:,:,usup] = mu[:,:,:,usup]- deltamu[:,:,:,usup]
+            deltamu[:,:,:,usup] = deltamu[:,:,:,usup]/2.
+        Qn   = Q/pb[:,:,:,None]
+        rho  = Qn*ld[:,:,:,None]
+
+        Cwf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=2)
+
+
+        return(rho,Cwf)
+
+    def plot2(self,fig=[],ax=[],mode='time'):
         
         if fig ==[]:
             fig = plt.gcf()  
@@ -2193,7 +2380,7 @@ class Tchannel(bs.FUsignal):
         #return(f)
 
 
-    def energy(self,mode='mean',Friis=True,sumray=False):
+    def energy(self,mode='mean',sumray=False):
         """ calculates channel energy including antennas spatial filtering
 
         Parameters
@@ -2212,7 +2399,11 @@ class Tchannel(bs.FUsignal):
         #  axis 1 : ray
         #  axis 1 : frequency
         #
-        Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
+        if self.isFriis:
+            Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=False)
+        else:
+            Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
+            
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot
