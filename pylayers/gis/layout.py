@@ -7517,7 +7517,7 @@ class Layout(PyLayers):
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='s', **kwargs):
-        u""" show the different graphs
+        """ show the different graphs
 
         Parameters
         ----------
@@ -7653,7 +7653,7 @@ class Layout(PyLayers):
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
-                    'nodes': False,
+                    'nodes': [],
                     'edges': True,
                     'sllist':[],
                     'airwalls': False,
@@ -7702,6 +7702,16 @@ class Layout(PyLayers):
             labels=kwargs['labels']
         else:
             labels=[]
+
+
+        if isinstance(kwargs['nodes'],list):
+            dis_nodes = kwargs['nodes']
+        elif kwargs['nodes'] == True:
+            dis_nodes=['s','t','v','i','w']
+        elif isinstance(kwargs['nodes'],str):
+            dis_nodes=kwargs['nodes']
+        else:
+            dis_nodes=[]
         #
         # s : structure graph
         #
@@ -7744,6 +7754,10 @@ class Layout(PyLayers):
                    kwargs['labels']=True
                 else:
                    kwargs['labels']=False
+                if 's' in dis_nodes:
+                   kwargs['nodes']=True
+                else:
+                   kwargs['nodes']=False
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -7793,6 +7807,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 't' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -7811,6 +7829,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 'r' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -7840,6 +7862,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 'v' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
 
             if 'ee' in kwargs['lvis']:
                 kwargs['edgelist'] = eded
@@ -7907,6 +7933,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 'v' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
             for inter in kwargs['linter']:
                 if len(eval(inter))>0:
                     li.append(inter)
@@ -7949,14 +7979,16 @@ class Layout(PyLayers):
         if len(kwargs['edgelist'])==0:
             if kwargs['mode']=='cycle':
                 for k, ncy in enumerate(self.Gt.node.keys()):
-                    fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
-                    args['fig']=fig
-                    args['ax']=ax
+                    if k !=0:
+                        fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
+                        args['fig']=fig
+                        args['ax']=ax
             if kwargs['mode']=='room':
                 for k, nro in enumerate(self.Gr.node.keys()):
-                    fig,ax = self.Gr.node[nro]['cycle'].show(**args)
-                    args['fig']=fig
-                    args['ax']=ax
+                    if k != 0:
+                        fig,ax = self.Gr.node[nro]['cycle'].show(**args)
+                        args['fig']=fig
+                        args['ax']=ax
 
         kwargs['ax'].axis('scaled')
         if not kwargs['axis']:

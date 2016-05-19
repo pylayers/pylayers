@@ -45,7 +45,9 @@ See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.
 >>> DL.eval()
 >>> DL._show3()
 ```
-<img src="https://raw.githubusercontent.com/pylayers/doc/master/_static/_show3.png" width="300">
+
+![/home/niamiot/Documents/code/website/_static/_show3.png](/home/niamiot/Documents/code/website/_static/_show3.png ){width=70%}
+
 
 ## Troubleshooting
 

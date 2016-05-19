@@ -1103,51 +1103,6 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
         return P
 
 
-
-def two_rays_curvedearth(fGHz,**kwargs):
-    """
-    Parameters
-    ----------
-
-    p0 : transmitter position
-        (3 x Np1) array or (2,) array
-    p1 : receiver position
-        (3 x Np2) array or (2,) array
-
-
-    OR :
-
-    d : distance between Tx and Rx
-        (Np1,)
-    ht : Tx height
-
-    hr : Rx height
-        (Np1)
-    GtdB : float (0) 
-        Transmitter Antenna Gain (dB)
-    GrdB : float(0)
-        Receiver Antenna Gain (dB)
-    fGHz : float (2.4)
-        frequency (GHz)
-    gamma : complex (-1.+0.j)
-        Reflexion coeff
-
-    
-    dB : boolean (True)
-        return result in d
-
-
-    Returns
-    -------
-
-    P : 
-        received power
-    """
-
-
-
-
-
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
     """ visuPt  : Visualization of values a given points
 
