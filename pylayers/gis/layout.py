@@ -1766,7 +1766,8 @@ class Layout(PyLayers):
                               norm=norm,
                               transition=transition,
                               offset=offset,
-                              connect=[n1,n2])
+                              connect=[n1,n2]
+                              )
 
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
@@ -2448,7 +2449,7 @@ class Layout(PyLayers):
         self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1]))
 
 
-    def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[]):
+    def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[],g2npy=True):
         """ change multi subsegments properties
 
         Parameters
@@ -2492,7 +2493,8 @@ class Layout(PyLayers):
 
 
                 # update Layout information
-                self.g2npy()
+                if g2npy:
+                    self.g2npy()
 
     def edit_segment(self, e1 , gui=True,outdata={}):
         """ edit segment WITH EasyGUI
@@ -2698,7 +2700,7 @@ class Layout(PyLayers):
             return False
 
 
-    def update_sseg(self,s1,data={}):
+    def update_sseg(self,s1,data={},g2npy=True):
         """ update subsegment(s) on a segment
 
         Parameters
@@ -2730,7 +2732,7 @@ class Layout(PyLayers):
             self.Nss += deltaNss
             self.chgmss(s1,ss_name=data['ss_name'],
                 ss_offset=data['ss_offset'],
-                ss_z=data['ss_z'])
+                ss_z=data['ss_z'],g2npy=g2npy)
             return True
         else:
             if self.Gs.node[s1].has_key('ss_name'):
@@ -2738,7 +2740,8 @@ class Layout(PyLayers):
                 self.Gs.node[s1].pop('ss_z')
                 self.Gs.node[s1].pop('ss_offset')
                 self.Nss += deltaNss
-                self.g2npy()
+                if g2npy:
+                    self.g2npy()
                 return True
             else :
                 return True
@@ -6951,8 +6954,10 @@ class Layout(PyLayers):
                 # non adjascent segment of vnodes see valid diffraction points
                 
                 for idiff in ndiffvalid:
+
                     # import ipdb
                     # ipdb.set_trace()
+
                     # idiff segment neighbors
                     nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
                     # segvalid : not adjascent segment
@@ -7514,7 +7519,7 @@ class Layout(PyLayers):
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='s', **kwargs):
-        u""" show the different graphs
+        """ show the different graphs
 
         Parameters
         ----------
@@ -7650,7 +7655,7 @@ class Layout(PyLayers):
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
-                    'nodes': False,
+                    'nodes': [],
                     'edges': True,
                     'sllist':[],
                     'airwalls': False,
@@ -7699,6 +7704,16 @@ class Layout(PyLayers):
             labels=kwargs['labels']
         else:
             labels=[]
+
+
+        if isinstance(kwargs['nodes'],list):
+            dis_nodes = kwargs['nodes']
+        elif kwargs['nodes'] == True:
+            dis_nodes=['s','t','v','i','w']
+        elif isinstance(kwargs['nodes'],str):
+            dis_nodes=kwargs['nodes']
+        else:
+            dis_nodes=[]
         #
         # s : structure graph
         #
@@ -7733,6 +7748,7 @@ class Layout(PyLayers):
                         kwargs['edge_color']=cold[self.sl[lmat]['color']]
                         kwargs['width']=self.sl[lmat]['linewidth']
                     else:
+          
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
@@ -7740,6 +7756,10 @@ class Layout(PyLayers):
                    kwargs['labels']=True
                 else:
                    kwargs['labels']=False
+                if 's' in dis_nodes:
+                   kwargs['nodes']=True
+                else:
+                   kwargs['nodes']=False
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -7789,6 +7809,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 't' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -7807,6 +7831,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 'r' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -7836,6 +7864,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 'v' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
 
             if 'ee' in kwargs['lvis']:
                 kwargs['edgelist'] = eded
@@ -7903,6 +7935,10 @@ class Layout(PyLayers):
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            if 'v' in dis_nodes:
+               kwargs['nodes']=True
+            else:
+               kwargs['nodes']=False
             for inter in kwargs['linter']:
                 if len(eval(inter))>0:
                     li.append(inter)
@@ -7945,14 +7981,16 @@ class Layout(PyLayers):
         if len(kwargs['edgelist'])==0:
             if kwargs['mode']=='cycle':
                 for k, ncy in enumerate(self.Gt.node.keys()):
-                    fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
-                    args['fig']=fig
-                    args['ax']=ax
+                    if k !=0:
+                        fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
+                        args['fig']=fig
+                        args['ax']=ax
             if kwargs['mode']=='room':
                 for k, nro in enumerate(self.Gr.node.keys()):
-                    fig,ax = self.Gr.node[nro]['cycle'].show(**args)
-                    args['fig']=fig
-                    args['ax']=ax
+                    if k != 0:
+                        fig,ax = self.Gr.node[nro]['cycle'].show(**args)
+                        args['fig']=fig
+                        args['ax']=ax
 
         kwargs['ax'].axis('scaled')
         if not kwargs['axis']:
@@ -9542,7 +9580,7 @@ class Layout(PyLayers):
         return sigarr
 
 
-    def plot(self,fig=[],ax=[]):
+    def plot(self,**kwargs):
         """ plot the layout
 
         Parameters
@@ -9552,11 +9590,34 @@ class Layout(PyLayers):
         ax 
 
         """
+        defaults = {'show': False,
+                    'fig': [],
+                    'ax': [],
+                    'labels':[],
+                    }
 
-        if fig == []:
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+        if kwargs['fig'] == []:
             fig=plt.gcf()
-        if ax == []:
+        if kwargs['ax'] == []:
             ax=plt.gca()
+
+
+
+        if isinstance(kwargs['labels'],list):
+            labels = kwargs['labels']
+        elif kwargs['labels'] == True:
+            labels=['s','t','v','i','w']
+        elif isinstance(kwargs['labels'],str):
+            labels=kwargs['labels']
+        else:
+            labels=[]
+
+
 
         k = self.Gs.pos.keys()
         v = self.Gs.pos.values()
@@ -9566,7 +9627,8 @@ class Layout(PyLayers):
         
         w = [ str(x) for x in kk ]
         
-        [ ax.text(vv[i,0],vv[i,1],w[i]) for i in range(len(w)) ]
+        if 's' in labels:
+            [ ax.text(vv[i,0],vv[i,1],w[i]) for i in range(len(w)) ]
         
         ax.scatter(vv[:,0],vv[:,1])
         ML = sh.MultiLineString(self._shseg.values())
