@@ -6955,27 +6955,37 @@ class Layout(PyLayers):
                 
                 for idiff in ndiffvalid:
 
-                    # import ipdb
+                    import ipdb
                     # ipdb.set_trace()
+                    # if (icycle==2) & (idiff==-2399):
+                    #     ipdb.set_trace()
+
 
                     # idiff segment neighbors
-                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                    #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg ]
                     # segvalid : not adjascent segment
                     seen_from_neighbors=[]
 
+                    #
+                    # point to point 
+                    #
                     for npoint in ndiffvalid:
                         if npoint !=idiff:
                             Gv.add_edge(idiff,npoint)
+
+                    #
+                    # All the neighbors segment in visibility which are not connected to cycle 0 
+                    # and which are not neighbrs of the point idiff
+                    #
                     for x in nsneigh:
-                        neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles']]
+                        neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles'] and y not in nsneigh]
                         seen_from_neighbors += neighbx
                     
                     for ns in seen_from_neighbors:
                         Gv.add_edge(idiff,ns)
 
-                    for npoint in ndiffvalid:
-                        if npoint !=idiff:
-                            Gv.add_edge(idiff,npoint)
+                   
                 #
                 # Graph Gv composition
                 #
