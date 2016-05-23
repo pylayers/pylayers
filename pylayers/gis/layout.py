@@ -612,13 +612,21 @@ class Layout(PyLayers):
     def delete(self):
         """ delete Layout graphs
 
-        delete  Gs
-
-        called in load str and loadstr2 (deprecated)
+        delete dependent graphs
 
         """
-        del self.Gs
-        self.Gs = nx.Graph()
+        try:
+            del self.Gt
+        except:
+            pass
+        try:
+            del self.Gi
+        except:
+            pass
+        try:
+            del self.Gv
+        except:
+            pass
        
        
 
@@ -8170,10 +8178,17 @@ class Layout(PyLayers):
 
         boolean : True if inside
 
+        Notes
+        -----
+
+        This function exploits L.ax which is the boundary of the current layout L. 
+        This boundary is calculated in L.boundary()
+
         See Also
         --------
 
-        ispoint
+        Layout.ispoint
+        Layout.boundary 
 
         """
 
@@ -9837,7 +9852,7 @@ class Layout(PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, dx=0, dy=0,xlim=()):
+    def boundary(self, dx=0, dy=0,xlim=(),force=False):
         """ add a blank boundary around layout
 
         Parameters
@@ -9858,7 +9873,7 @@ class Layout(PyLayers):
         >>> L.boundary()
 
         """
-        if not self.hasboundary:
+        if (not self.hasboundary) or (force==True):
             if len(self.Gs.pos.values())!=0:
                 xmax = max(p[0] for p in self.Gs.pos.values())
                 xmin = min(p[0] for p in self.Gs.pos.values())

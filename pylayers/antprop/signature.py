@@ -80,6 +80,7 @@ Utility functions
 """
 import doctest
 import numpy as np
+import numpy.ma as ma
 #import scipy as sp
 import scipy.linalg as la
 import pdb
@@ -4035,7 +4036,7 @@ class Signatures(PyLayers,dict):
             # determine positions of points limiting the segments
             #1 get index in L.tahe
             # 2 get associated position in L.pt
-
+            seg[seg<0] = 0
             utahe = self.L.tahe[:,self.L.tgs[seg]]
             # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
             pt = self.L.pt[:,utahe]

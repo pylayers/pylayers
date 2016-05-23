@@ -2,10 +2,9 @@ from pylayers.simul.link import *
 import pylayers.signal.waveform as wvf
 import pdb
 
-DL=DLink(L=Layout('defstr.ini'))
-DL.Aa=Antenna(typ='Omni')
-DL.Ab=Antenna(typ='Omni')
-DL.fGHz=np.arange(2.41,10.,0.05)
+DL=DLink(L=Layout('defstr.ini'),fGHz=np.arange(2.41,10.,0.05))
+#DL.Aa=Antenna(typ='Omni')
+#DL.Ab=Antenna(typ='Omni')
 DL.b=DL.b+1
 DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
 dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
