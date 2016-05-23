@@ -534,7 +534,7 @@ class Layout(PyLayers):
         #
 
         nseg = filter(lambda x : x>0, Gs.nodes())
-	# warning tuple
+    # warning tuple
         for k in nseg:
             Ls.Gs.node[k]['z'] = tuple((np.array(Ls.Gs.node[k]['z'])-self.zmin)*alpha[2]+self.zmin)
             if Ls.Gs.node[k].has_key('ss_z'):
@@ -1099,15 +1099,16 @@ class Layout(PyLayers):
                 #
                 else:
                     pass
-			
-		
-		if d.has_key('ss_name'):
-		    nss+=len(d['ss_name'])
-		    if type(d['ss_z'][0][0])=='str':
-			ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
-		    else:
-			ss_z = d['ss_z']
-		    self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
+            
+        
+            if d.has_key('ss_name'):
+                nss+=len(d['ss_name'])
+                if type(d['ss_z'][0][0])=='str':
+                    ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
+                else:
+                    ss_z = d['ss_z']
+                    
+                self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
 
 
         self.Np = _np
