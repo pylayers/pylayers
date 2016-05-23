@@ -6,7 +6,7 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.coverage import *
 from pylayers.network.model import *
 
-
+plt.ion()
 C1 = Coverage('coverage.ini')
 C1.cover()
 C1.show(typ='loss',vmin=-80,vmax=-20)
