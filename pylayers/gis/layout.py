@@ -1303,6 +1303,7 @@ class Layout(PyLayers):
         self.labels = {}
 
         # manage ini file with latlon coordinates
+        pdb.set_trace()
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
@@ -1528,6 +1529,7 @@ class Layout(PyLayers):
 
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
                     path = os.path.join(basename,'struc','gpickle',self.filename)
+                    
                     self.dumpr('s')
                     if self._hash != hash_save:
                         rebuild = True 
@@ -4759,7 +4761,7 @@ class Layout(PyLayers):
 
         fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
         _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
-        self.Gs.add_node(0,hash=_hash)
+        self.Gt.add_node(0,hash=_hash)
 
         if not os.path.isdir(path):
            os.mkdir(path)
@@ -4817,7 +4819,7 @@ class Layout(PyLayers):
         # retrieve md5 sum of the original ini file 
         #pdb.set_trace()
         if 's' in graphs:
-            self._hash = self.Gs.node.pop(0)['hash']
+           
             # update self.name
             lseg = [ x for x in self.Gs.node if x >0]
             for name in self.name:
@@ -4854,6 +4856,7 @@ class Layout(PyLayers):
         #             self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in graphs :
+            self._hash = self.Gt.node[0]['hash']
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
@@ -6957,24 +6960,37 @@ class Layout(PyLayers):
                 
                 for idiff in ndiffvalid:
 
+                    import ipdb
+                    # ipdb.set_trace()
+                    # if (icycle==2) & (idiff==-2399):
+                    #     ipdb.set_trace()
+
+
                     # idiff segment neighbors
-                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                    #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                    nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg ]
                     # segvalid : not adjascent segment
                     seen_from_neighbors=[]
 
+                    #
+                    # point to point 
+                    #
                     for npoint in ndiffvalid:
                         if npoint !=idiff:
                             Gv.add_edge(idiff,npoint)
+
+                    #
+                    # All the neighbors segment in visibility which are not connected to cycle 0 
+                    # and which are not neighbrs of the point idiff
+                    #
                     for x in nsneigh:
-                        neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles']]
+                        neighbx = [y for y in nx.neighbors(Gv,x) if 0 not in self.Gs.node[y]['ncycles'] and y not in nsneigh]
                         seen_from_neighbors += neighbx
                     
                     for ns in seen_from_neighbors:
                         Gv.add_edge(idiff,ns)
 
-                    for npoint in ndiffvalid:
-                        if npoint !=idiff:
-                            Gv.add_edge(idiff,npoint)
+                   
                 #
                 # Graph Gv composition
                 #

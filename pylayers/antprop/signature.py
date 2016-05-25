@@ -2998,7 +2998,6 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
-        
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 

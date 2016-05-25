@@ -6,7 +6,7 @@ DL=DLink(L=Layout('defstr.ini'),fGHz=fGHz)
 #DL.Aa=Antenna(typ='Omni')
 #DL.Ab=Antenna(typ='Omni')
 DL.b=DL.b+1
-DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
+DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=False,cutoff=6)
 dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
 #
 if DL.R.los:
