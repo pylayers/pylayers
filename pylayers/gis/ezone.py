@@ -865,7 +865,7 @@ class Ezone(PyLayers):
 
         cov = self.hgts[ry,rx]
 
-
+        pdb.set_trace()
         # adding effect of earth equivalent curvature
         R = expand(r)
         B = r.T-R

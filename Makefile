@@ -5,7 +5,7 @@
 #PYTHON ?= python
 PYTHON=python2.7
 CYTHON ?= cython
-NOSETESTS ?= nosetests
+NOSETESTS ?= nosetests -x --debug-log test.log --with-id
 CTAGS ?= ctags
 
 all: clean inplace test

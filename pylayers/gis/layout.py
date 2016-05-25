@@ -376,6 +376,7 @@ class Layout(PyLayers):
 
 
         self.hasboundary=False
+        self.coordinates='cart'
         #
         # setting display option
         #
@@ -1313,6 +1314,8 @@ class Layout(PyLayers):
                 coords.boundary=np.hstack((np.min(np.array(coords.latlon.values()),axis=0),
                                            np.max(np.array(coords.latlon.values()),axis=0)))
                 coords.cartesian(cart=True)
+            else :
+                or_coord_format = 'cart'
         else :
             or_coord_format = 'cart'
         
@@ -1525,13 +1528,13 @@ class Layout(PyLayers):
         
         if ext!='.osm':
             if not newfile :
-                hash_save = copy.deepcopy(self._hash)
+                #hash_save = copy.deepcopy(self._hash)
 
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
                     path = os.path.join(basename,'struc','gpickle',self.filename)
                     
-                    self.dumpr('s')
-                    if self._hash != hash_save:
+                    self.dumpr('t')
+                    if self._hash != self.Gt.node[0]['hash']:
                         rebuild = True 
                     else:
                         self.dumpr('tvirw')
@@ -1540,11 +1543,13 @@ class Layout(PyLayers):
 
                 
                 # build and dump
-                if build and rebuild:  
+                if build or rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
+                    # buid graph
                     self.build()
                     self.lbltg.append('s')
+                    # save built graph
                     self.dumpw()
 
     def subseg(self):
@@ -4780,18 +4785,19 @@ class Layout(PyLayers):
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
-        self.Gs.node.pop(0)
+        #self.Gs.node.pop(0)
         # root,ext = os.path.splitext(self.filename)
         # if ext == '.ini':
         #     self.saveini(self.filename)
 
     def dumpr(self,graphs='stvirw'):
-        """ read a dump of given Graph
+        """ read of given graphs
 
         Notes
         -----
 
         graph : string
+            's' : Gv
             't' : Gt
             'r' : Gr
             'v' : Gv
@@ -4819,7 +4825,8 @@ class Layout(PyLayers):
         # retrieve md5 sum of the original ini file 
         #pdb.set_trace()
         if 's' in graphs:
-           
+            #self._hash = self.Gs.node.pop(0)['hash']
+            # self._hash = self.Gs.node[0]['hash']
             # update self.name
             lseg = [ x for x in self.Gs.node if x >0]
             for name in self.name:
