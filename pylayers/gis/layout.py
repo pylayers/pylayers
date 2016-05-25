@@ -1304,7 +1304,7 @@ class Layout(PyLayers):
         self.labels = {}
 
         # manage ini file with latlon coordinates
-        pdb.set_trace()
+        
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
