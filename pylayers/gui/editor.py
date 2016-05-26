@@ -218,6 +218,8 @@ class SubSegWin(QDialog):    # any super class is okay
             self.lzQ[uline][0].setValue(zmax)
 
     def force_minmax_previous(self,event):
+        """
+        """
         sender = self.sender()
         # find sender in self.lzq
         us = [sender in x for x in self.lzQ]
@@ -983,7 +985,6 @@ class AppForm(QMainWindow):
         # QMainWindow.__init__(self, parent)
         self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
         self.filename=''
-
         self.create_menu()
         self.create_status_bar()
         self.shortcuts()
@@ -1031,7 +1032,7 @@ class AppForm(QMainWindow):
             QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
             self.L.saveini(_filename)
             self.L.saveosm(_filename.split('.')[0] + '.osm')
-            # self.L = Layout(_filename)
+            #self.L = Layout(_filename)
             self.filename=self.L.filename
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
             QApplication.setOverrideCursor(oldCursor)
@@ -1118,7 +1119,9 @@ class AppForm(QMainWindow):
 
     def updatelayerselector(self):
         slname={}
+	# retrieve the slab name from the selected text
         slname['name']=str(self.layerselector.currentText())
+	self.L.display['activelayer']=slname['name']
         if self.selectl.state == 'Init' or self.selectl.state == 'SS':
             if self.selectl.nsel > 0:
                 if (self.selectl.state == 'SS'):
@@ -1536,6 +1539,9 @@ class AppForm(QMainWindow):
 
 
 def main():
+    from PyQt4.QtCore import pyqtRemoveInputHook
+    from pdb import set_trace
+    pyqtRemoveInputHook()
     app = QApplication(sys.argv)
     form = AppForm()
     # form.setGeometry(100,100,300,300)
@@ -1543,4 +1549,5 @@ def main():
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
+
     main()
