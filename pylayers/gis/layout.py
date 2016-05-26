@@ -223,6 +223,12 @@ Signatures
 """
 #
 #
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 import pdb
 import os
 import copy
@@ -278,12 +284,7 @@ import pdb
 import ast
 import pylayers.util.graphutil as gph
 from mpl_toolkits.basemap import Basemap
-try:
-    from tvtk.api import tvtk
-    from mayavi.sources.vtk_data_source import VTKDataSource
-    from mayavi import mlab
-except:
-    print 'Layout:Mayavi is not installed'
+
 
 
 class Layout(PyLayers):
@@ -1528,7 +1529,6 @@ class Layout(PyLayers):
         
         if ext!='.osm':
             if not newfile :
-                #hash_save = copy.deepcopy(self._hash)
 
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
                     path = os.path.join(basename,'struc','gpickle',self.filename)
@@ -4738,6 +4738,11 @@ class Layout(PyLayers):
                     except:
                         self.dca[cy[1]]=[cy[0]]
 
+        # add hash to node 0 of Gt 
+        fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
+        _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
+        self.Gt.add_node(0,hash=_hash)
+        
         # f=os.path.splitext(self.filename)
         # if f[1] =='.ini':
         #     self.saveini(self.filename)
@@ -4761,12 +4766,10 @@ class Layout(PyLayers):
 
         """
         # create layout directory
-        # pdb.set_trace()
+        
         path = os.path.join(basename,'struc','gpickle',self.filename)
 
-        fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
-        _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
-        self.Gt.add_node(0,hash=_hash)
+
 
         if not os.path.isdir(path):
            os.mkdir(path)
