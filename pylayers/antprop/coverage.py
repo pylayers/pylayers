@@ -350,7 +350,7 @@ class Coverage(PyLayers):
 
         PnW = np.array((10**(self.noisefactordb/10.))*self.kB*self.temperaturek*self.bmhz*1e6)
         # Evaluate Noise Power (in dBm)
-        self.pndbm = np.array([10*np.log10(PnW)+30])
+        self.pndbm = np.array(10*np.log10(PnW)+30)
         #lchan = map(lambda x: self.dap[x]['chan'],lap)
         #apchan = zip(self.dap.keys(),lchan)
         #self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]]['BMHz']*len(x[1]),apchan))
@@ -402,7 +402,7 @@ class Coverage(PyLayers):
         self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
         self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
 
-        
+
         if snr:
             self.evsnr()
         if sinr:
