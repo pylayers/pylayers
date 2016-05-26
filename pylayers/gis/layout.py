@@ -4760,7 +4760,7 @@ class Layout(PyLayers):
 
         fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
         _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
-        self.Gs.add_node(0,hash=_hash)
+        self.Gt.add_node(0,hash=_hash)
 
         if not os.path.isdir(path):
            os.mkdir(path)
