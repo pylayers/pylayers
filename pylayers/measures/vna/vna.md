@@ -4,13 +4,7 @@
 >>> from E5072A import *
 >>> from pylayers.antprop.channel import *
 >>> %pylab inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
-Populating the interactive namespace from numpy and matplotlib
-WARNING: pylab import has clobbered these variables: ['plt', 'select']
-`%matplotlib` prevents importing * from pylab and numpy
 ```
-
-Attention à la taile du buffer lu. Toutes les données ne sont pas utiles.
 
 ```python
 >>> vna = SCPI("129.20.33.201",verbose=False)
@@ -76,11 +70,6 @@ Attention à la taile du buffer lu. Toutes les données ne sont pas utiles.
 >>> #plt.imshow(abs(res))
 ... #plt.axis('tight')
 ... #plt.show()
-Talking to :  Agilent Technologies,E5072A,MY51100293,A.01.04
-
-Npoints :  1201
-19216
-19216
 ```
 
 ```python
@@ -93,8 +82,6 @@ Npoints :  1201
 
 ```python
 >>> S
-array([ 0.13201947,  0.34113391,  0.36570441, ...,  0.19094155,
-        0.27251609, -0.20261151])
 ```
 
 ```python
@@ -102,13 +89,10 @@ array([ 0.13201947,  0.34113391,  0.36570441, ...,  0.19094155,
 >>> plt.plot(np.imag(H.y[0]),'r',label='Imaginary part"')
 >>> plt.legend()
 >>> plt.ylim(-1,2)
-(-1, 2)
 ```
 
 ```python
 >>> H.plot()
-(<matplotlib.figure.Figure at 0x7fe27ef1a750>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fe27efdac10>]], dtype=object))
 ```
 
 ```python
@@ -125,8 +109,6 @@ dist :[] []
 ```python
 >>> fig=figure(figsize=(20,10))
 >>> H.plot(fig=fig)
-(<matplotlib.figure.Figure at 0x7f927184f2d0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f9271a0bd50>]], dtype=object))
 ```
 
 ```python
@@ -140,8 +122,6 @@ dist :[] []
 
 ```python
 >>> h.plot(typ='v',xmin=-10,xmax=10)
-(<matplotlib.figure.Figure at 0x7fe27f22f250>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fe27f1bb210>]], dtype=object))
 ```
 
 ```python
@@ -175,8 +155,6 @@ dist :[] []
 
 ```python
 >>> H.plot()
-(<matplotlib.figure.Figure at 0x7f927165f610>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f9271655710>]], dtype=object))
 ```
 
 ```python
@@ -185,10 +163,6 @@ dist :[] []
 
 ```python
 >>> h.plot(typ='v')
-(<matplotlib.figure.Figure at 0x7f927159be10>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f9271642910>]], dtype=object))
 ```
 
-```python
 
-```

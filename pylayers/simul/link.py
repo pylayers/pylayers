@@ -387,18 +387,19 @@ class DLink(Link):
         delattr(self,'force_create')
 
        
-        if self.Aa==[]:
-            self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
-        if self.Ab==[]:
-            self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
-        
-
         # The frequency range is dependent from the antenna frequency range
 
         if self.fGHz == []:
             self.initfreq()
         else :
             pass
+
+        
+        if self.Aa==[]:
+            self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
+        if self.Ab==[]:
+            self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
+        
 
 
         try:
@@ -701,7 +702,7 @@ class DLink(Link):
             sf = min(sa,sf)
             self.fGHz = np.arange(minfa,maxfa+sf,sf)
 
-        if hasattr(self.Ab,'fGHz'):
+        elif hasattr(self.Ab,'fGHz'):
             fb = self.Ab.fGHz
             if len(fb)==0:
                 # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
@@ -724,6 +725,8 @@ class DLink(Link):
 
             sf = min(sf,sb)
             self.fGHz = np.arange(minfb,maxfb+sf,sf)
+        else:
+            self.fGHz = np.array([2.3,2.4,2.5])
 
 
     def reset_config(self):
