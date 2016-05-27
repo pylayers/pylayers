@@ -236,28 +236,27 @@ class Coords(object):
 
         Parameters
         ----------
-
         cart : Boolean 
+            conversion to cartesian 
         delta : offset 
-            default 0 : in this case the origin corresponds to the lower left point
+ +            default 0 : in this case the origin corresponds to the lower left point
+ 
+        Notes
+        -----
 
-       
+        This method converts latlon coordinates into cartesian x,y coordinates in
+        Cassini projection relatively to specified latlon boundary 
+        The basemap objet for back and forth coordinates.
+        conversion is returned.
+
+        The transformation is centered on the mean of latitude and longitude. 
+        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 
+
         Returns
         -------
 
         m : Basemap converter
 
-        Notes
-        -----
-
-        This method converts latlon coordinates into cartesian x,y coordinates in
-        Cassini projection relatively to specified latlon boundary + an offset
-        of 0.01 degrees.(to be parameterized ? )
-        The basemap objet for back and forth coordinates.
-        conversion is returned.
-
-        The transformation is centered on the mean of latitude and longitude
-        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 
 
 
         Warning

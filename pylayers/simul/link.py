@@ -1281,7 +1281,7 @@ class DLink(Link):
             self.verbose=kwargs['verbose']
 
 
-        pdb.set_trace()
+        
         # must be placed after all the init !!!!
         if self.verbose :
             print "checkh5"

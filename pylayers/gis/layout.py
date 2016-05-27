@@ -545,7 +545,6 @@ class Layout(PyLayers):
         #
 
         nseg = filter(lambda x : x>0, Gs.nodes())
-    # warning tuple
         for k in nseg:
             Ls.Gs.node[k]['z'] = tuple((np.array(Ls.Gs.node[k]['z'])-self.zmin)*alpha[2]+self.zmin)
             if Ls.Gs.node[k].has_key('ss_z'):
@@ -614,21 +613,13 @@ class Layout(PyLayers):
     def delete(self):
         """ delete Layout graphs
 
-        delete dependent graphs
+        delete  Gs
+
+        called in load str and loadstr2 (deprecated)
 
         """
-        try:
-            del self.Gt
-        except:
-            pass
-        try:
-            del self.Gi
-        except:
-            pass
-        try:
-            del self.Gv
-        except:
-            pass
+        del self.Gs
+        self.Gs = nx.Graph()
        
        
 
@@ -1092,6 +1083,13 @@ class Layout(PyLayers):
                 nta = tahe[l]
                 nhe = tahe[l+1]
                 d  = ways.way[nseg].tags
+
+                for key in d:
+                    try:
+                        d[key]=eval(d[key])
+                    except:
+                        pass
+                
                 u1 = np.array(nx.neighbors(self.Gs,nta))
                 u2 = np.array(nx.neighbors(self.Gs,nhe))
                 inter_u1_u2 = np.intersect1d(u1,u2)
@@ -1118,16 +1116,16 @@ class Layout(PyLayers):
                 #
                 else:
                     pass
-            
-        
-            if d.has_key('ss_name'):
-                nss+=len(d['ss_name'])
-                if type(d['ss_z'][0][0])=='str':
-                    ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
-                else:
-                    ss_z = d['ss_z']
-                    
-                self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
+                    #ss_name = self.Gs.node[]
+                    #ns = self.chgmss(inter_u1_u2[0],name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                
+                if d.has_key('ss_name'):
+                    nss+=len(d['ss_name'])
+                    if type(d['ss_z'][0][0])=='str':
+                        ss_z = [[eval(u) for u in v ] for v in d['ss_z']]
+                    else:
+                        ss_z = d['ss_z']
+                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=ss_z)
 
 
         self.Np = _np
@@ -1305,7 +1303,6 @@ class Layout(PyLayers):
         self.labels = {}
 
         # manage ini file with latlon coordinates
-        
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
@@ -1532,9 +1529,8 @@ class Layout(PyLayers):
 
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
                     path = os.path.join(basename,'struc','gpickle',self.filename)
-                    
                     self.dumpr('t')
-                    if self._hash != self.Gt.node[0]['hash']:
+                    if self._hash != self.Gt.node[0]:
                         rebuild = True 
                     else:
                         self.dumpr('tvirw')
@@ -1546,10 +1542,8 @@ class Layout(PyLayers):
                 if build or rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
-                    # buid graph
                     self.build()
                     self.lbltg.append('s')
-                    # save built graph
                     self.dumpw()
 
     def subseg(self):
@@ -4770,6 +4764,8 @@ class Layout(PyLayers):
         path = os.path.join(basename,'struc','gpickle',self.filename)
 
 
+       
+
 
         if not os.path.isdir(path):
            os.mkdir(path)
@@ -4788,7 +4784,7 @@ class Layout(PyLayers):
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
-        #self.Gs.node.pop(0)
+        
         # root,ext = os.path.splitext(self.filename)
         # if ext == '.ini':
         #     self.saveini(self.filename)
@@ -4866,7 +4862,6 @@ class Layout(PyLayers):
         #             self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in graphs :
-            self._hash = self.Gt.node[0]['hash']
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
@@ -8204,17 +8199,10 @@ class Layout(PyLayers):
 
         boolean : True if inside
 
-        Notes
-        -----
-
-        This function exploits L.ax which is the boundary of the current layout L. 
-        This boundary is calculated in L.boundary()
-
         See Also
         --------
 
-        Layout.ispoint
-        Layout.boundary 
+        ispoint
 
         """
 
@@ -9878,7 +9866,7 @@ class Layout(PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, dx=0, dy=0,xlim=(),force=False):
+    def boundary(self, dx=0, dy=0,xlim=()):
         """ add a blank boundary around layout
 
         Parameters
@@ -9899,7 +9887,7 @@ class Layout(PyLayers):
         >>> L.boundary()
 
         """
-        if (not self.hasboundary) or (force==True):
+        if not self.hasboundary:
             if len(self.Gs.pos.values())!=0:
                 xmax = max(p[0] for p in self.Gs.pos.values())
                 xmin = min(p[0] for p in self.Gs.pos.values())

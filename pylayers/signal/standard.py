@@ -207,6 +207,7 @@ class Wstandard(dict):
     """ Wireless standard class
 
     The various available standard are described in a wstd.json file
+    It could be a mongodb database
 
     """
     def __init__(self,stdname='',_filejson='wstd.json'):
@@ -242,7 +243,7 @@ class Wstandard(dict):
 
     def load(self,stdname,_fileini='wstd.json'):
         """ load a standard from file
-        
+
         Parameters
         ----------
 
