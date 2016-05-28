@@ -684,7 +684,10 @@ class DLink(Link):
         if hasattr(self.Aa,'fGHz'):
             fa = self.Aa.fGHz
             if len(fa)==0:
-                raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+                fa = np.array([2.4])
+                self.Aa.fGHz = fa
+                # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+                print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
             try:
                 sa = fa[1]-fa[0]  # step frequecy 
             except: #single frequency
@@ -702,7 +705,11 @@ class DLink(Link):
         elif hasattr(self.Ab,'fGHz'):
             fb = self.Ab.fGHz
             if len(fb)==0:
-                raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
+                # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
+                fb = np.array([2.4])
+                self.Ab.fGHz=fb
+                # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+                print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
         
             try:
                 sb = fb[1]-fb[0] # step frequency 
