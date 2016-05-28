@@ -304,6 +304,53 @@ class Pattern(PyLayers):
         self.radF()
 
 
+
+    def __pCloud(self,**kwargs):
+
+        """ Gauss pattern
+
+        Parameters
+        ----------
+        """
+
+
+
+        defaults = {'param':
+                    {'filename' : '',
+                   }}
+
+        f=open(kwargs['param']['filename'])
+        Gthetaphi=f.readlines()
+        f.close()
+        Gthetaphi = np.array(Gthetaphi).astype('float')
+        Gth = Gthetaphi[360:]
+        Gph = Gthetaphi[:360]
+
+        sqGthlin = np.sqrt(pow(10,Gth/20.))
+        sqGphlin = np.sqrt(pow(10,Gph/20.))
+
+
+        if self.grid :
+            # Nth x Nph x Nf
+            self.Ft = sqGthlin[:,None,None]
+            self.Fp = sqGphlin[None,:,None]
+            # self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            # self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            self.evaluated = True
+        else:
+            pass
+            # #
+            # #  Nd x Nf
+            # #
+            # Ft = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+            # Fp = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+            # # add frequency axis (Ndir x Nf)
+            # self.Ft = np.dot(Ft[:,None],np.ones(len(self.fGHz))[None,:])
+            # self.Fp = np.dot(Fp[:,None],np.ones(len(self.fGHz))[None,:])
+        self.gain()
+
+
+
     def __pGauss(self,**kwargs):
         """ Gauss pattern
 
@@ -991,7 +1038,6 @@ class Pattern(PyLayers):
                 itheta = np.arange(self.nth)
                 iphi1 = np.where(abs(self.phi-kwargs['angdeg']*dtr)<dphi)[0][0]
                 Np = self.nph
-
                 #   0 <= theta  <= pi/2
                 u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
                 #   0 < theta < pi
