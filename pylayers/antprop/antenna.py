@@ -261,7 +261,9 @@ class Pattern(PyLayers):
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
             self.phi = kwargs['ph']
-
+        if self.typ=='azel':
+            self.theta=np.linspace(-np.pi,np.pi,360)
+            self.phi=np.linspace(-np.pi,np.pi,360)
         self.nth = len(self.theta)
         self.nph = len(self.phi)
 
@@ -305,35 +307,61 @@ class Pattern(PyLayers):
 
 
 
-    def __pCloud(self,**kwargs):
+    def __pazel(self,**kwargs):
 
         """ Gauss pattern
 
         Parameters
         ----------
+
+        filename : ANT filename
+
         """
 
 
 
-        defaults = {'param':
-                    {'filename' : '',
-                   }}
+        defaults = {'param': {'filename' : '',
+                              'pol':'V'}}
 
-        f=open(kwargs['param']['filename'])
-        Gthetaphi=f.readlines()
+        f = open(kwargs['param']['filename'])
+        Gthetaphi = f.readlines()
         f.close()
         Gthetaphi = np.array(Gthetaphi).astype('float')
-        Gth = Gthetaphi[360:]
-        Gph = Gthetaphi[:360]
+        Gaz = Gthetaphi[360:]
+        Gel = Gthetaphi[:360]
 
-        sqGthlin = np.sqrt(pow(10,Gth/20.))
-        sqGphlin = np.sqrt(pow(10,Gph/20.))
-
+        sqGazlin = np.sqrt(pow(10,Gaz/10.))
+        sqGellin = np.sqrt(pow(10,Gel/10.))
 
         if self.grid :
             # Nth x Nph x Nf
-            self.Ft = sqGthlin[:,None,None]
-            self.Fp = sqGphlin[None,:,None]
+            if kwargs['param']['pol']=='V':
+                self.Ft = np.ones((360,360,1))
+                self.Fp = np.zeros((360,360,1))
+                #self.Ft[180,:] = sqGazlin[:,None]
+                #self.Ft[:,180] = sqGellin[:,None]
+                self.Ft = sqGazlin[None,:,None]*sqGellin[:,None,None]
+            if kwargs['param']['pol']=='H':
+                self.Fp = np.ones((360,360,1))
+                self.Ft = np.zeros((360,360,1))
+                self.Fp = sqGazlin[None,:,None]*sqGellin[:,None,None]
+                #self.Fp[180,:]= sqGazlin[:,None]
+                #self.Fp[:,180]= sqGellin[:,None]
+            if kwargs['param']['pol']=='45':
+                self.Fp = np.ones((360,360,1))
+                self.Ft = np.ones((360,360,1))
+                # Azimuth
+                self.Ft = (1/sqrt(2))*sqGazlin[None,:,None]*sqGellin[:,None,None]
+                self.Fp = (1/sqrt(2))*sqGazlin[None,:,None]*sqGellin[:,None,None]
+                #self.Fp[180,:]= sqGazlin[:,None]
+                #self.Fp[180,:]= (1/sqrt(2))*sqGazlin[:,None]
+                #self.Ft[180,:]= (1/sqrt(2))*sqGazlin[:,None]
+                # Elevation
+                #self.Fp[:,180]= (1/sqrt(2))*sqGellin[:,None]
+                #self.Ft[:,180]= (1/sqrt(2))*sqGellin[:,None]
+
+            #self.Ft = sqGthlin[:,None,None]
+            #self.Fp = sqGphlin[None,:,None]
             # self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
             # self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
             self.evaluated = True
@@ -969,6 +997,7 @@ class Pattern(PyLayers):
                     'topos':False,
                     'source':'satimo',
                     'show':True,
+                    'mode':'index',
                     'u':0,
                     }
 
@@ -1083,16 +1112,16 @@ class Pattern(PyLayers):
                 #pdb.set_trace()
                 if kwargs['polar']:
                     if kwargs['source']=='satimo':
-                        r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
+                        r1 = -GmindB + 20 * np.log10( self.sqG[arg1]+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]+1e-12)
                         r3 = -GmindB + 20 * np.log10( self.sqG[arg3]+1e-12)
                         #print max(r1)+GmindB
                         #print max(r2)+GmindB
                         #print max(r3)+GmindB
                     if kwargs['source']=='cst':
-                        r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]/np.sqrt(30)+1e-12)
+                        r1 = -GmindB + 20 * np.log10( self.sqG[arg1]/np.sqrt(30)+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]/np.sqrt(30)+1e-12)
-                        r3 = -GmindB + 20 * np.log10(  self.sqG[arg3]/np.sqrt(30)+1e-12)
+                        r3 = -GmindB + 20 * np.log10( self.sqG[arg3]/np.sqrt(30)+1e-12)
 
                     if type(r1)!= np.ndarray:
                         r1 = np.array([r1])*np.ones(len(self.phi))
