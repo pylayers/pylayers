@@ -699,6 +699,7 @@ class IntR(Inter):
         if np.shape(self.data)[0]!=len(self.idx):
             self.data=self.data.T
 
+
         if len(self.data) != 0:
             mapp = []
             # loop on all type of materials used for reflexion
@@ -719,8 +720,8 @@ class IntR(Inter):
             self.A[:, np.array((mapp)), :, :] = R
             self.alpha = np.array(self.alpha*len(self.idx), dtype=complex)
             self.gamma = np.array(self.gamma*len(self.idx), dtype=complex)
-
             return(self.A)
+
         else:
             self.A = self.data[:, None, None, None]
             # print 'no R interaction to evaluate'

@@ -2015,15 +2015,14 @@ class Rays(PyLayers,dict):
                 # dimension i and r are merged
                 b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
+
                 ## find used slab
                 ##################
                 # find slab type for the rnstr
                 # nstrf is a number of slab
                 # this is a problem for handling subsegment
                 #
-
-                sl = L.sla[nstrf]
-
+                
                 # seek for interactions position
                 ################################
 
@@ -2036,19 +2035,22 @@ class Rays(PyLayers,dict):
                 # assign floor and ceil slab
                 ############################
 
+
+                slT=L.sla[nstrf[uT]]
+                slR=L.sla[nstrf[uR]]
                 # WARNING
                 # in future version floor and ceil could be different for each cycle.
                 # this information would be directly obtained from L.Gs
                 # then the two following lines would have to be  modified
+                slRf=np.array(['FLOOR']*len(uRf))
+                slRc=np.array(['CEIL']*len(uRc))
 
-                sl[uRf] = 'FLOOR'
-                sl[uRc] = 'CEIL'
 
                 # Fill the used slab
                 #####################
 
-                tsl = np.hstack((tsl, sl[uT]))
-                rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
+                tsl = np.hstack((tsl, slT))
+                rsl = np.hstack((rsl, slR, slRf, slRc))
                 if self[k].has_key('diffvect'): 
                     dw = np.hstack((dw,self[k]['diffslabs'])) 
     ##            for s in uslv:
