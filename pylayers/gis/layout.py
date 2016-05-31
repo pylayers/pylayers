@@ -481,7 +481,11 @@ class Layout(PyLayers):
             st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
         if hasattr(self,'degree'):
             st = st + "degree : degree of nodes " +"\n"
-
+        st = st + "\nUseful tip" + "\n----------------\n"
+        st = st + "Point p in Gs => p_coord:\n"
+        st = st + "p -> u = self.iupnt[p] -> p_coord = self.pt[:,u]\n\n"
+        st = st + "Segment s in Gs => s_ab coordinates \n"
+        st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
 
     def __add__(self, other):
@@ -998,7 +1002,8 @@ class Layout(PyLayers):
             #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
             self.stridess = np.empty(nsmax+1,dtype=int)
             # +1 is for discarding index 0 (unused here)
-            self.sla  = np.empty((nsmax+1+self.Nss), dtype='S20')
+            # self.sla  = np.empty((nsmax+1+self.Nss), dtype='S20')
+            self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
             self.offset = np.empty(nsmax+1+self.Nss,dtype=int)
 
 

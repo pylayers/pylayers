@@ -3831,45 +3831,101 @@ class Signatures(PyLayers,dict):
         # loop on number of interactions
         for ninter in self.keys():
             signatures = copy.deepcopy(self[ninter])
-            #get segment ids of signature with 4 interactions
             #get segment ids of signature with ninter interactions
-            seg = self[ninter][::2]
-            unegseg=np.where(seg<0)
-            uninegseg,idx = np.unique(seg[unegseg],return_inverse=True)
-            pneg = np.array([self.L.Gs.pos[x] for x in uninegseg])
+            # seg = self[ninter][::2]
+            # unegseg=np.where(seg<0)
+            # uninegseg,idx = np.unique(seg[unegseg],return_inverse=True)
+            # pneg = np.array([self.L.Gs.pos[x] for x in uninegseg])
 
-            nsig = len(seg)
+            # nsig = len(seg)
 
-            # determine positions of points limiting the semgments
-            #1 get index in L.tahe
-            # 2 get associated position in L.pt
+            # # determine positions of points limiting the semgments
+            # #1 get index in L.tahe
+            # # 2 get associated position in L.pt
 
 
-            utahe = self.L.tahe[:,self.L.tgs[seg]]
-            # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
-            pt = self.L.pt[:,utahe]
+            # utahe = self.L.tahe[:,self.L.tgs[seg]]
+            # # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
+            # pt = self.L.pt[:,utahe]
             
 
-            ####WARNING BIG TRICK HERE :
-            #### pa and pb are not set as the same value 
-            #### to avoid a singular matrixnext.
-            #### set pa =-pb has no incidence but avoid complex and vain code 
-            #### modification for handling diffractions
-            try:
-                pt[:,0,unegseg[0],unegseg[1]]=pneg[idx].T
-                pt[:,1,unegseg[0],unegseg[1]]=-pneg[idx].T
-            except:
-                pass
+            # ####WARNING BIG TRICK HERE :
+            # #### pa and pb are not set as the same value 
+            # #### to avoid a singular matrixnext.
+            # #### set pa =-pb has no incidence but avoid complex and vain code 
+            # #### modification for handling diffractions
+            # try:
+            #     pt[:,0,unegseg[0],unegseg[1]]=pneg[idx].T
+            #     pt[:,1,unegseg[0],unegseg[1]]=-pneg[idx].T
+            # except:
+            #     pass
             # pt shape =
             # 0 : (x,y) coordinates x=0,y=1
             # 1 : 2 points (linking the semgnet) a=0,b=1
             #2 : nb of found signatures/segments
             # 3 : nb interaction
-            #shape =
+
+
+
+            ################################
+            ###############################
+            ####### This part between hash has been copy/paste from self.image2
+            ###### should be considered to become a function
+
+            #get segment ids of signature with ninter interactions
+            # nid = node id
+            nid = self[ninter][::2]
+            nsig = len(nid)
+
+
+            # pt shape =
             # 0 : (x,y) coordinates x=0,y=1
-            # 1 : 2 points (linking the semgnet) a=0,b=1
-            #2 : nb of found signatures/segments
-            # 3 : nb interaction
+            # 1 : 2 points (linking the nidment) a=0,b=1
+            # 2 : nb of found signatures/nidments
+            # 3 : nb interactions
+            pt = np.empty((2,2,nsig,ninter))
+
+
+            # 1 negative points
+            # seek for diffraction 
+            # negative index points are diffraction points
+            upoint = np.where(nid<0)
+            unipoint,idx = np.unique(nid[upoint],return_inverse=True)
+
+            # get their coordinates
+            upointcoord = self.L.iupnt[-unipoint]
+            pointcoord = self.L.pt[:,upointcoord]
+
+            # ####WARNING BIG TRICK HERE :
+            # #### pa and pb are not set as the same value 
+            # #### to avoid a singular matrixnext.
+            # #### set pa =-pb has no incidence but avoid complex and vain code 
+            # #### modification for handling diffractions
+            try:
+                pt[:,0,upoint[0],upoint[1]] = pointcoord[:,idx]
+                pt[:,1,upoint[0],upoint[1]] = -pointcoord[:,idx]
+            except:
+                pass
+
+
+            # 2 poisive points
+            # seek for segments
+            useg = np.where(nid>0)
+            # removing duplicates ( for increasing speed)
+            uniseg,idxp = np.unique(nid[useg],return_inverse=True)
+
+            # determine positions of points limiting the nidments
+            #1 get index in L.tahe
+            utahe = self.L.tahe[:,self.L.tgs[uniseg]]
+            segcoord = self.L.pt[:,utahe]
+
+            pt[:,:,useg[0],useg[1]]=segcoord[:,:,idxp]
+
+            ###################################
+            ########################################
+
+
+
             # how to do this into a while loop
             p=rx
 
@@ -4022,22 +4078,52 @@ class Signatures(PyLayers,dict):
         for ninter in self.keys():
 
             #get segment ids of signature with ninter interactions
-            seg = self[ninter][::2]
-            # seek for diffraction
-            # negative index points are diffraction points
-            unegseg = np.where(seg<0)
-            uninegseg,idx = np.unique(seg[unegseg],return_inverse=True)
-            pneg = np.array([self.L.Gs.pos[x] for x in uninegseg])
-            nsig = len(seg)
-
+            # nid = node id
+            nid = self[ninter][::2]
+            nsig = len(nid)
             M = np.empty((2,nsig,ninter))
-            # determine positions of points limiting the segments
-            #1 get index in L.tahe
-            # 2 get associated position in L.pt
 
-            utahe = self.L.tahe[:,self.L.tgs[seg]]
-            # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
-            pt = self.L.pt[:,utahe]
+
+            # pt shape =
+            # 0 : (x,y) coordinates x=0,y=1
+            # 1 : 2 points (linking the nidment) a=0,b=1
+            # 2 : nb of found signatures/nidments
+            # 3 : nb interactions
+            pt = np.nan*np.empty((2,2,nsig,ninter))
+
+            # 1 negative points
+            # seek for diffraction 
+            # negative index points are diffraction points
+            upoint = np.where(nid<0)
+            unipoint,idxpt = np.unique(nid[upoint],return_inverse=True)
+
+            # get their coordinates
+            upointcoord = self.L.iupnt[-unipoint]
+            pointcoord = self.L.pt[:,upointcoord]
+
+            # try except if there is no diffraction
+            try:
+                pt[:,0,upoint[0],upoint[1]] = pointcoord[:,idxpt]
+                pt[:,1,upoint[0],upoint[1]] = pointcoord[:,idxpt]
+            except:
+                pass
+
+
+            # 2 poisive points
+            # seek for segments
+            useg = np.where(nid>0)
+            # removing duplicates ( for increasing speed)
+            uniseg,idxseg = np.unique(nid[useg],return_inverse=True)
+
+            # determine positions of points limiting the nidments
+            #1 get index in L.tahe
+            utahe = self.L.tahe[:,self.L.tgs[uniseg]]
+            segcoord = self.L.pt[:,utahe]
+
+            pt[:,:,useg[0],useg[1]]=segcoord[:,:,idxseg]
+
+            # check every element of pt is filled
+            assert not np.isnan(pt).any()
             #
             # TODO Upgrading layout for handling slab offsets 
             #
@@ -4047,16 +4133,6 @@ class Signatures(PyLayers,dict):
             #offset  = self.L.offset[:,utahe]
             # pt = pt + offset*norm
 
-            try:
-                pt[:,0,unegseg[0],unegseg[1]] = pneg[idx].T
-                pt[:,1,unegseg[0],unegseg[1]] = pneg[idx].T
-            except:
-                pass
-            # pt shape =
-            # 0 : (x,y) coordinates x=0,y=1
-            # 1 : 2 points (linking the segment) a=0,b=1
-            #2 : nb of found signatures/segments
-            # 3 : nb interactions
 
             ############
             #formula 2.61 -> 2.64 N.AMIOT PH.D thesis
