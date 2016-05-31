@@ -29,7 +29,7 @@ wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 #
 Si1 = Signatures(S.L,Ctx,Crx)
 #Si1.run4(cutoff=5,algo='old')
-Si1.run5(diffraction=False)
+Si1.run(diffraction=False)
 toc = time.time()
 print "signature ",toc-tic
 tic = time.time()
