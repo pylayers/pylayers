@@ -1288,11 +1288,11 @@ class DLink(Link):
             self.verbose=kwargs['verbose']
 
 
-        
+        #pdb.set_trace()
         # must be placed after all the init !!!!
         if self.verbose :
             print "checkh5"
-        self.checkh5()
+            self.checkh5()
 
         ############
         # Signatures
@@ -1330,6 +1330,7 @@ class DLink(Link):
 
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
+            pdb.set_trace() 
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si

@@ -4,7 +4,7 @@ from pylayers.antprop.signature import Signatures
 import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf 
 from pylayers.simul.simulem import *
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import time
 print "======================="
 print " start test_reciprocity.py "
@@ -27,6 +27,7 @@ wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 #
 # Dans un sens
 #
+tic = time.time()
 Si1 = Signatures(S.L,Ctx,Crx)
 #Si1.run4(cutoff=5,algo='old')
 Si1.run(diffraction=False)
