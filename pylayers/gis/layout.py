@@ -483,7 +483,7 @@ class Layout(PyLayers):
             st = st + "degree : degree of nodes " +"\n"
         st = st + "\nUseful tip" + "\n----------------\n"
         st = st + "Point p in Gs => p_coord:\n"
-        st = st + "p -> u = self.iupnt[p] -> p_coord = self.pt[:,u]\n\n"
+        st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
         st = st + "Segment s in Gs => s_ab coordinates \n"
         st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
@@ -1230,7 +1230,7 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n >0:
-                if self.Gs.node[n]['name']!='AIR':
+                if self.Gs.node[n]['name']!='AIR' or self.Gs.node[n].has_key('ss_name'):
                     d = self.Gs.node[n]
                     # old format conversion
                     if d.has_key('ncycles'):
@@ -1547,6 +1547,8 @@ class Layout(PyLayers):
                 if build or rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
+                    import ipdb
+                    ipdb.set_trace()
                     self.build()
                     self.lbltg.append('s')
                     self.dumpw()
