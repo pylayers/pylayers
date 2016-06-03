@@ -158,10 +158,68 @@ the frequency range of antennas.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rx</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">761</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.8</span><span class="p">,</span><span class="mf">2.2</span><span class="p">,</span><span class="mi">401</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">401</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Aa</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Ab</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">Ab</span><span class="o">=</span><span class="n">Ab</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>new file defstr3.ini
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-3-5fb46505a749&gt; in &lt;module&gt;()
+      1 L = Layout(&#39;defstr3.ini&#39;)
+      2 L.Gs.node[1][&#39;ss_name&#39;]=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;METAL&#39;]
+----&gt; 3 L.build()
+      4 tx=array([759,1114,1.0])
+      5 rx=array([761,1114,1.5])
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4691             if verbose:
+   4692                 print &quot;Gt&quot;
+-&gt; 4693             self.buildGt()
+   4694             self.lbltg.extend(&#39;t&#39;)
+   4695
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGt(self, check)
+   5462
+   5463
+-&gt; 5464         self._find_diffractions()
+   5465         #
+   5466         #   VIII -  Construct the list of interactions associated to each cycle
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in _find_diffractions(self, tol)
+   8467
+   8468         &quot;&quot;&quot;
+-&gt; 8469         dangles = self.get_Gt_angles()
+   8470
+   8471         #
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in get_Gt_angles(self)
+   1985         dangles = {}
+   1986         for cy in self.Gt.nodes():
+-&gt; 1987             uc,ac = self.get_singlGt_angles(cy,inside=True)
+   1988             dangles[cy]=np.array(([uc,ac]))
+   1989         return dangles
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in get_singlGt_angles(self, cy, unit, inside)
+   1927         # rupt=np.roll(upt,1)         # for debug
+   1928         # rupt2=np.roll(upt,-1)         # for debug
+-&gt; 1929         pt = self.pt[:,self.iupnt[-upt]]
+   1930         if geu.SignedArea(pt)&lt;0:
+   1931             upt = upt[::-1]
+
+
+AttributeError: &#39;Layout&#39; object has no attribute &#39;pt&#39;
 </pre></div>
 </div>
 <p>The full evaluation and hdf5 storage of the channel is done with the
@@ -170,36 +228,49 @@ reevaluation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>checkh5
-Start Signatures
-Signatures&#39;&gt; from 2_2_3 loaded
-load signature
-Stop signature 0.121210098267
-Start Rays
-Rays&#39;&gt; from 3_2_3 loaded
-Stop rays 0.179488182068
-Ctilde&#39;&gt; from 2_3_11 saved
-Tchannel&#39;&gt; from 2_3_11_0_0_0_0 saved
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-4-93695eef2a3c&gt; in &lt;module&gt;()
+----&gt; 1 ak,tauk=Lk.eval()
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;l20&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_7_0.png" src="../../_images/Channel_7_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-5-b4eee5c9d035&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(15,15))
+----&gt; 2 f,a=Lk.C.show(cmap=&#39;jet&#39;,typ=&#39;l20&#39;,fig=f,vmin=-100,vmax=-20,fontsize=22)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b22b93ed2d0&gt;
+</pre></div>
+</div>
 <p>The transmission channel is stored in <code class="docutils literal"><span class="pre">H</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
------------------------------------------------------
-freq : 1.8 2.2 401
-shape  : (1216, 1, 1, 401)
-tau (min, max) : 6.87184270936 92.947720014
-dist (min,max) : 2.06155281281 27.8843160042
-Friis factor -j c/(4 pi f) has been applied
- calibrated : No
- windowed : No
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-6-345dfe201bf5&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <p>Once the channel has been calculated, we define an Impulse Radio
@@ -217,33 +288,65 @@ channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_14_0.png" src="../../_images/Channel_14_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-9-5e7aed51dc8f&gt; in &lt;module&gt;()
+----&gt; 1 f,a=Lk.show()
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
 <p>The <code class="docutils literal"><span class="pre">Ctilde</span></code> channel can be sorted with respect to delay</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
------------------------------------------------------
-freq : 1.8 2.2 401
-shape  : (1216, 1, 1, 401)
-tau (min, max) : 6.87184270936 92.947720014
-dist (min,max) : 2.06155281281 27.8843160042
-Friis factor -j c/(4 pi f) has been applied
- calibrated : No
- windowed : No
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-10-345dfe201bf5&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">402</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-11-00ef4b2c8627&gt; in &lt;module&gt;()
+----&gt; 1 len(Lk.fGHz)
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_18_0.png" src="../../_images/Channel_18_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-12-f5a32547e4dd&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(20,10))
+----&gt; 2 f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b22b93dcb10&gt;
+</pre></div>
+</div>
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
@@ -253,15 +356,15 @@ can be checked at the end of the <strong>repr</strong> of <code class="docutils 
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)
------------------------------------------------------
-freq : 1.8 2.2 401
-shape  : (1216, 1, 1, 401)
-tau (min, max) : 6.87184270936 92.947720014
-dist (min,max) : 2.06155281281 27.8843160042
-Friis factor -j c/(4 pi f) has been applied
- calibrated : No
- windowed : No
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-13-345dfe201bf5&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Emean</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
@@ -271,10 +374,33 @@ Friis factor -j c/(4 pi f) has been applied
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Elast</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-14-86decd824c1e&gt; in &lt;module&gt;()
+----&gt; 1 Emean=Lk.H.energy(mode=&#39;mean&#39;)
+      2 Eint=Lk.H.energy(mode=&#39;integ&#39;)
+      3 Ecenter=Lk.H.energy(mode=&#39;center&#39;)
+      4 Efirst=Lk.H.energy(mode=&#39;first&#39;)
+      5 Elast=Lk.H.energy(mode=&#39;last&#39;)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Efirst</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Elast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[[</span>  <span class="mf">4.13893724e-05</span><span class="p">]]</span> <span class="p">[[</span>  <span class="mf">2.77069352e-05</span><span class="p">]]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-15-4b40c4a26243&gt; in &lt;module&gt;()
+----&gt; 1 print Efirst[0],Elast[0]
+
+
+NameError: name &#39;Efirst&#39; is not defined
 </pre></div>
 </div>
 <p>On the figure below we have selected a LOS situation and we compare the
@@ -286,18 +412,26 @@ level.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">1216</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-16-3fd9ccc926f4&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.y.shape
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f3</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Efirst</span><span class="p">),</span><span class="s1">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=2GHz&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Elast</span><span class="p">),</span><span class="s1">&#39;.g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=10GHz&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eint</span><span class="p">),</span><span class="s1">&#39;.k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;integral&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecenter</span><span class="p">),</span><span class="s1">&#39;.c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;6GHz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Efirst</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=2GHz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Elast</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=10GHz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eint</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;integral&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecenter</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;.c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;6GHz&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">r&#39;$\tau$ (ns)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">LOS1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">32.4</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
@@ -313,76 +447,22 @@ level.</p>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-ValueError                                Traceback (most recent call last)
+NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-17-75aafd70e74e&gt; in &lt;module&gt;()
+&lt;ipython-input-17-22c3e61e964c&gt; in &lt;module&gt;()
       3 f3 = 6
       4 fig = plt.figure(figsize=(10,5))
-----&gt; 5 a = plt.semilogx(Lk.H.taud,10*np.log10(Efirst),&#39;.r&#39;,label=&#39;f=2GHz&#39;)
-      6 a = plt.semilogx(Lk.H.taud,10*np.log10(Emean),&#39;.b&#39;,label=&#39;mean&#39;)
-      7 a = plt.semilogx(Lk.H.taud,10*np.log10(Elast),&#39;.g&#39;,label=&#39;f=10GHz&#39;)
+----&gt; 5 a = plt.semilogx(Lk.H.taud,10*np.log10(Efirst[:,0,0]),&#39;.r&#39;,label=&#39;f=2GHz&#39;)
+      6 a = plt.semilogx(Lk.H.taud,10*np.log10(Emean[:,0,0]),&#39;.b&#39;,label=&#39;mean&#39;)
+      7 a = plt.semilogx(Lk.H.taud,10*np.log10(Elast[:,0,0]),&#39;.g&#39;,label=&#39;f=10GHz&#39;)
 
 
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in semilogx(*args, **kwargs)
-   3266         ax.hold(hold)
-   3267     try:
--&gt; 3268         ret = ax.semilogx(*args, **kwargs)
-   3269     finally:
-   3270         ax.hold(washold)
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in semilogx(self, *args, **kwargs)
-   1614         b = self._hold
-   1615         self._hold = True  # we&#39;ve already processed the hold
--&gt; 1616         l = self.plot(*args, **kwargs)
-   1617         self._hold = b  # restore the hold
-   1618         return l
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.pyc in inner(ax, *args, **kwargs)
-   1810                     warnings.warn(msg % (label_namer, func.__name__),
-   1811                                   RuntimeWarning, stacklevel=2)
--&gt; 1812             return func(ax, *args, **kwargs)
-   1813         pre_doc = inner.__doc__
-   1814         if pre_doc is None:
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in plot(self, *args, **kwargs)
-   1422             kwargs[&#39;color&#39;] = c
-   1423
--&gt; 1424         for line in self._get_lines(*args, **kwargs):
-   1425             self.add_line(line)
-   1426             lines.append(line)
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _grab_next_args(self, *args, **kwargs)
-    384                 return
-    385             if len(remaining) &lt;= 3:
---&gt; 386                 for seg in self._plot_args(remaining, kwargs):
-    387                     yield seg
-    388                 return
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _plot_args(self, tup, kwargs)
-    362             x, y = index_of(tup[-1])
-    363
---&gt; 364         x, y = self._xy_from_xy(x, y)
-    365
-    366         if self.command == &#39;plot&#39;:
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _xy_from_xy(self, x, y)
-    223             raise ValueError(&quot;x and y must have same first dimension&quot;)
-    224         if x.ndim &gt; 2 or y.ndim &gt; 2:
---&gt; 225             raise ValueError(&quot;x and y can be no greater than 2-D&quot;)
-    226
-    227         if x.ndim == 1:
-
-
-ValueError: x and y can be no greater than 2-D
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Channel_25_1.png" src="../../_images/Channel_25_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b22bbbba4d0&gt;
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s1">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -391,7 +471,7 @@ ValueError: x and y can be no greater than 2-D
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-ValueError                                Traceback (most recent call last)
+NameError                                 Traceback (most recent call last)
 
 &lt;ipython-input-18-79fa43f184e0&gt; in &lt;module&gt;()
 ----&gt; 1 a = plt.semilogx(Lk.H.taud,10*np.log10(Emean),&#39;.b&#39;,label=&#39;mean&#39;)
@@ -400,66 +480,9 @@ ValueError                                Traceback (most recent call last)
       4 plt.legend()
 
 
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in semilogx(*args, **kwargs)
-   3266         ax.hold(hold)
-   3267     try:
--&gt; 3268         ret = ax.semilogx(*args, **kwargs)
-   3269     finally:
-   3270         ax.hold(washold)
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in semilogx(self, *args, **kwargs)
-   1614         b = self._hold
-   1615         self._hold = True  # we&#39;ve already processed the hold
--&gt; 1616         l = self.plot(*args, **kwargs)
-   1617         self._hold = b  # restore the hold
-   1618         return l
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.pyc in inner(ax, *args, **kwargs)
-   1810                     warnings.warn(msg % (label_namer, func.__name__),
-   1811                                   RuntimeWarning, stacklevel=2)
--&gt; 1812             return func(ax, *args, **kwargs)
-   1813         pre_doc = inner.__doc__
-   1814         if pre_doc is None:
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_axes.pyc in plot(self, *args, **kwargs)
-   1422             kwargs[&#39;color&#39;] = c
-   1423
--&gt; 1424         for line in self._get_lines(*args, **kwargs):
-   1425             self.add_line(line)
-   1426             lines.append(line)
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _grab_next_args(self, *args, **kwargs)
-    384                 return
-    385             if len(remaining) &lt;= 3:
---&gt; 386                 for seg in self._plot_args(remaining, kwargs):
-    387                     yield seg
-    388                 return
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _plot_args(self, tup, kwargs)
-    362             x, y = index_of(tup[-1])
-    363
---&gt; 364         x, y = self._xy_from_xy(x, y)
-    365
-    366         if self.command == &#39;plot&#39;:
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.pyc in _xy_from_xy(self, x, y)
-    223             raise ValueError(&quot;x and y must have same first dimension&quot;)
-    224         if x.ndim &gt; 2 or y.ndim &gt; 2:
---&gt; 225             raise ValueError(&quot;x and y can be no greater than 2-D&quot;)
-    226
-    227         if x.ndim == 1:
-
-
-ValueError: x and y can be no greater than 2-D
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Channel_26_1.png" src="../../_images/Channel_26_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">=</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
@@ -468,16 +491,16 @@ ValueError: x and y can be no greater than 2-D
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-AttributeError                            Traceback (most recent call last)
+NameError                                 Traceback (most recent call last)
 
 &lt;ipython-input-19-e688100b13ed&gt; in &lt;module&gt;()
-      1 CIR=bs.TUsignal(tauk,np.zeros(len(tauk)))
-----&gt; 2 CIR.aggcir(ak,tauk)
+----&gt; 1 CIR=bs.TUsignal(tauk,np.zeros(len(tauk)))
+      2 CIR.aggcir(ak,tauk)
       3 CIR.stem()
       4 plt.title(&#39;Infinite bandwidth CIR&#39;)
 
 
-AttributeError: &#39;TUsignal&#39; object has no attribute &#39;aggcir&#39;
+NameError: name &#39;tauk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MeanDelay</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
@@ -496,17 +519,56 @@ SyntaxError: invalid syntax
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_29_0.png" src="../../_images/Channel_29_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-21-61834b1cbc3e&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(20,10))
+----&gt; 2 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b22bbaca490&gt;
+</pre></div>
+</div>
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-22-c50272a814d0&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.cut()
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_32_0.png" src="../../_images/Channel_32_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-23-61834b1cbc3e&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(20,10))
+----&gt; 2 f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b22bbaca9d0&gt;
+</pre></div>
+</div>
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
@@ -537,34 +599,24 @@ number of time samples <img src="../../_images/mathmpl/math-a4285baa0e.png" styl
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
-MemoryError                               Traceback (most recent call last)
+NameError                                 Traceback (most recent call last)
 
 &lt;ipython-input-25-1e46705dbeb0&gt; in &lt;module&gt;()
 ----&gt; 1 htap,b,c,d = Lk.H.tap(WMHz=WMHz,Ns=Ns,Nm=Nm,Va=Va,Vb=Vb,Ntap=Ntap)
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.pyc in tap(self, **kwargs)
-   2736         S   = np.sinc(l-tau2*WMHz/1000.)
-   2737         # sum over r :  f x s  x m x tap
--&gt; 2738         htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
-   2739
-   2740         # f x s  x m x tap
-
-
-MemoryError:
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">htap</span><span class="p">)</span>
-<span class="go">(161, 10, 50, 10)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-26-36568a82085e&gt; in &lt;module&gt;()
+&lt;ipython-input-26-ac45a4e5a814&gt; in &lt;module&gt;()
 ----&gt; 1 np.shape(htap)
-      2 (161, 10, 50, 10)
 
 
 NameError: name &#39;htap&#39; is not defined
@@ -664,7 +716,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;b&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2ac8c5d38890&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x2b22bbbba150&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>
@@ -692,13 +744,17 @@ NameError: name &#39;c&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd3d1756950&gt;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>  File &quot;&lt;ipython-input-33-29006800c1b4&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fd3d1756950&gt;]
-     ^
-SyntaxError: invalid syntax
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-33-0f4c005a4ee8&gt; in &lt;module&gt;()
+----&gt; 1 plt.plot(abs(c[0,:,0]))
+
+
+NameError: name &#39;c&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
@@ -733,18 +789,14 @@ NameError: name &#39;h&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">H</span><span class="p">)))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
-<span class="go">(-0.5, 49.5, 160.5, -0.5)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-37-95dd544c1522&gt; in &lt;module&gt;()
+&lt;ipython-input-37-6325b7c4882e&gt; in &lt;module&gt;()
 ----&gt; 1 plt.imshow(fft.fftshift(abs(H)))
-      2 plt.axis(&#39;tight&#39;)
-      3 (-0.5, 49.5, 160.5, -0.5)
 
 
 NameError: name &#39;H&#39; is not defined
@@ -769,7 +821,7 @@ NameError: name &#39;H&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 16, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Channel.txt"

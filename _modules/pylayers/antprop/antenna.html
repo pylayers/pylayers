@@ -403,7 +403,9 @@
             <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;th&#39;</span><span class="p">])</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ph&#39;</span><span class="p">]))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;th&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ph&#39;</span><span class="p">]</span>
-
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;azel&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">360</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">360</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nth</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nph</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
 
@@ -444,6 +446,79 @@
             <span class="c1"># Nd x Nf</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))[</span><span class="bp">None</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radF</span><span class="p">()</span>
+
+
+
+    <span class="k">def</span> <span class="nf">__pazel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot; Gauss pattern</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        filename : ANT filename</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;param&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;filename&#39;</span> <span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;V&#39;</span><span class="p">}}</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">])</span>
+        <span class="n">Gthetaphi</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">Gthetaphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Gthetaphi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="n">Gaz</span> <span class="o">=</span> <span class="n">Gthetaphi</span><span class="p">[</span><span class="mi">360</span><span class="p">:]</span>
+        <span class="n">Gel</span> <span class="o">=</span> <span class="n">Gthetaphi</span><span class="p">[:</span><span class="mi">360</span><span class="p">]</span>
+
+        <span class="n">sqGazlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">Gaz</span><span class="o">/</span><span class="mf">10.</span><span class="p">))</span>
+        <span class="n">sqGellin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">Gel</span><span class="o">/</span><span class="mf">10.</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="p">:</span>
+            <span class="c1"># Nth x Nph x Nf</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;V&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="c1">#self.Ft[180,:] = sqGazlin[:,None]</span>
+                <span class="c1">#self.Ft[:,180] = sqGellin[:,None]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">=</span> <span class="n">sqGazlin</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">sqGellin</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;H&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">=</span> <span class="n">sqGazlin</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">sqGellin</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+                <span class="c1">#self.Fp[180,:]= sqGazlin[:,None]</span>
+                <span class="c1">#self.Fp[:,180]= sqGellin[:,None]</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;45&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                <span class="c1"># Azimuth</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">sqGazlin</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">sqGellin</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">sqGazlin</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">sqGellin</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+                <span class="c1">#self.Fp[180,:]= sqGazlin[:,None]</span>
+                <span class="c1">#self.Fp[180,:]= (1/sqrt(2))*sqGazlin[:,None]</span>
+                <span class="c1">#self.Ft[180,:]= (1/sqrt(2))*sqGazlin[:,None]</span>
+                <span class="c1"># Elevation</span>
+                <span class="c1">#self.Fp[:,180]= (1/sqrt(2))*sqGellin[:,None]</span>
+                <span class="c1">#self.Ft[:,180]= (1/sqrt(2))*sqGellin[:,None]</span>
+
+            <span class="c1">#self.Ft = sqGthlin[:,None,None]</span>
+            <span class="c1">#self.Fp = sqGphlin[None,:,None]</span>
+            <span class="c1"># self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )</span>
+            <span class="c1"># self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+            <span class="c1"># #</span>
+            <span class="c1"># #  Nd x Nf</span>
+            <span class="c1"># #</span>
+            <span class="c1"># Ft = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )</span>
+            <span class="c1"># Fp = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )</span>
+            <span class="c1"># # add frequency axis (Ndir x Nf)</span>
+            <span class="c1"># self.Ft = np.dot(Ft[:,None],np.ones(len(self.fGHz))[None,:])</span>
+            <span class="c1"># self.Fp = np.dot(Fp[:,None],np.ones(len(self.fGHz))[None,:])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gain</span><span class="p">()</span>
+
 
 
     <span class="k">def</span> <span class="nf">__pGauss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1064,6 +1139,7 @@
                     <span class="s1">&#39;topos&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s1">&#39;source&#39;</span><span class="p">:</span><span class="s1">&#39;satimo&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;show&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="s1">&#39;index&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;u&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                     <span class="p">}</span>
 
@@ -1133,7 +1209,6 @@
                 <span class="n">itheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nth</span><span class="p">)</span>
                 <span class="n">iphi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;angdeg&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">dtr</span><span class="p">)</span><span class="o">&lt;</span><span class="n">dphi</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">Np</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nph</span>
-
                 <span class="c1">#   0 &lt;= theta  &lt;= pi/2</span>
                 <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="c1">#   0 &lt; theta &lt; pi</span>
@@ -1179,16 +1254,16 @@
                 <span class="c1">#pdb.set_trace()</span>
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;polar&#39;</span><span class="p">]:</span>
                     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;satimo&#39;</span><span class="p">:</span>
-                        <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                         <span class="n">r2</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg2</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                         <span class="n">r3</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg3</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                         <span class="c1">#print max(r1)+GmindB</span>
                         <span class="c1">#print max(r2)+GmindB</span>
                         <span class="c1">#print max(r3)+GmindB</span>
                     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;cst&#39;</span><span class="p">:</span>
-                        <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg1</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg1</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                         <span class="n">r2</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg2</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
-                        <span class="n">r3</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg3</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                        <span class="n">r3</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">[</span><span class="n">arg3</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span><span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
                         <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r1</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">))</span>
@@ -1410,7 +1485,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">=</span><span class="n">typ</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;vsh3&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initvsh</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Antenna.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__repr__.html#pylayers.antprop.antenna.Antenna.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">Pattern</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1500,6 +1578,28 @@
 <span class="c1">#            st = st + &#39;sqrt G :&#39; + str(self.sqG) + &#39;\n&#39;</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">initvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lmax</span><span class="o">=</span><span class="mi">45</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize a void vsh structure</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fGHz : array</span>
+<span class="sd">        lmax : int</span>
+<span class="sd">            level max</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">Br</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">lmax</span><span class="p">,</span> <span class="n">lmax</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">Bi</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">lmax</span><span class="p">,</span> <span class="n">lmax</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">Cr</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">lmax</span><span class="p">,</span> <span class="n">lmax</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">Ci</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">lmax</span><span class="p">,</span> <span class="n">lmax</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">Br</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Br</span><span class="p">)</span>
+        <span class="n">Bi</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Bi</span><span class="p">)</span>
+        <span class="n">Cr</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Cr</span><span class="p">)</span>
+        <span class="n">Ci</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Ci</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">VSHCoeff</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Antenna.ls"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.ls.html#pylayers.antprop.antenna.Antenna.ls">[docs]</a>    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;vsh3&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; list the antenna files in antenna project directory</span>
@@ -4358,7 +4458,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 16, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -182,23 +182,34 @@
 <h1>pylayers.gis.osmparser.Coords.cartesian<a class="headerlink" href="#pylayers-gis-osmparser-coords-cartesian" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.gis.osmparser.Coords.cartesian">
-<code class="descclassname">Coords.</code><code class="descname">cartesian</code><span class="sig-paren">(</span><em>cart=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/osmparser.html#Coords.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.cartesian" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Coords.</code><code class="descname">cartesian</code><span class="sig-paren">(</span><em>cart=False</em>, <em>delta=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/osmparser.html#Coords.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.cartesian" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert Latitude/Longitude in cartesian</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>m</strong> : Basemap converter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cart</strong> : Boolean</p>
+<blockquote>
+<div><blockquote>
+<div><p>conversion to cartesian</p>
+</div></blockquote>
+<p>delta : offset</p>
+</div></blockquote>
+<p><strong>+            default 0</strong> : in this case the origin corresponds to the lower left point</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>m</strong> : Basemap converter</p>
+</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
 <p>This method converts latlon coordinates into cartesian x,y coordinates in
-Cassini projection relatively to specified latlon boundary + an offset
-of 0.01 degrees.(to be parameterized ? )
+Cassini projection relatively to specified latlon boundary 
 The basemap objet for back and forth coordinates.
 conversion is returned.</p>
-<p>The transformation is centered on the mean of latitude and longitude</p>
+<p>The transformation is centered on the mean of latitude and longitude. 
+The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin)</p>
 </dd></dl>
 
 </div>
@@ -214,7 +225,7 @@ conversion is returned.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 26, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.gis.osmparser.Coords.cartesian.txt"

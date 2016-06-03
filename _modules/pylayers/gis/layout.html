@@ -365,6 +365,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s1">&#39;Layout:Mayavi is not installed&#39;</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">copy</span>
@@ -420,12 +426,7 @@
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.graphutil</span> <span class="kn">as</span> <span class="nn">gph</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
-    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
-    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s1">&#39;Layout:Mayavi is not installed&#39;</span>
+
 
 
 <div class="viewcode-block" id="Layout"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout">[docs]</a><span class="k">class</span> <span class="nc">Layout</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
@@ -452,7 +453,16 @@
 <span class="sd">    .. autosummary::</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">,</span><span class="n">_filematini</span><span class="o">=</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslabini</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">_filefur</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">build</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">,</span>
+                      <span class="n">_filematini</span><span class="o">=</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">,</span>
+                      <span class="n">_fileslabini</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">,</span>
+                      <span class="n">_filefur</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                      <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                      <span class="n">check</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                      <span class="n">build</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                      <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -509,6 +519,7 @@
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">hasboundary</span><span class="o">=</span><span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">=</span><span class="s1">&#39;cart&#39;</span>
         <span class="c1">#</span>
         <span class="c1"># setting display option</span>
         <span class="c1">#</span>
@@ -612,7 +623,11 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;sla : list of all slab names (Nsmax+Nss+1)&quot;</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;degree&#39;</span><span class="p">):</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;degree : degree of nodes &quot;</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Useful tip&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">----------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;Point p in Gs =&gt; p_coord:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;p -&gt; u = self.iupnt[p] -&gt; p_coord = self.pt[:,u]</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;Segment s in Gs =&gt; s_ab coordinates </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]</span><span class="se">\n\n</span><span class="s2">&quot;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -1129,7 +1144,8 @@
             <span class="c1">#self.stridess = np.array(np.zeros(nsmax+1),dtype=int)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stridess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
             <span class="c1"># +1 is for discarding index 0 (unused here)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sla</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S20&#39;</span><span class="p">)</span>
+            <span class="c1"># self.sla  = np.empty((nsmax+1+self.Nss), dtype=&#39;S20&#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sla</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S20&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
 
@@ -1249,10 +1265,14 @@
                     <span class="k">pass</span>
                     <span class="c1">#ss_name = self.Gs.node[]</span>
                     <span class="c1">#ns = self.chgmss(inter_u1_u2[0],name=d[&#39;name&#39;],z=[eval(u) for u in d[&#39;z&#39;]],offset=0)</span>
-
+                
                 <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_name&#39;</span><span class="p">):</span>
                     <span class="n">nss</span><span class="o">+=</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">],</span><span class="n">ss_z</span><span class="o">=</span><span class="p">[[</span><span class="nb">eval</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">v</span> <span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]])</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;str&#39;</span><span class="p">:</span>
+                        <span class="n">ss_z</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">eval</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">v</span> <span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ss_z</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">],</span><span class="n">ss_z</span><span class="o">=</span><span class="n">ss_z</span><span class="p">)</span>
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">_np</span>
@@ -1292,26 +1312,28 @@
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
-                <span class="n">lon</span><span class="p">,</span><span class="n">lat</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;node id=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; lon=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lboundary</span><span class="p">:</span>
+                    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">lon</span><span class="p">,</span><span class="n">lat</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;node id=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; lon=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">neigh</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
-                <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
-                <span class="n">noden</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10000000</span><span class="o">-</span><span class="n">n</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;way id=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">noden</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;nd ref=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">neigh</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;nd ref=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">neigh</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;name&#39; v=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;z&#39; v=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;transition&#39; v=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;transition&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_name&#39;</span><span class="p">):</span>
-                    <span class="n">ch</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">])</span>
-                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;ss_name&#39; v=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">ch</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;ss_z&#39; v=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;/way&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;AIR&#39;</span><span class="p">:</span>
+                    <span class="n">neigh</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">noden</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10000000</span><span class="o">-</span><span class="n">n</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;way id=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">noden</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;nd ref=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">neigh</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;nd ref=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">neigh</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;name&#39; v=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;z&#39; v=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;transition&#39; v=&#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;transition&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_name&#39;</span><span class="p">):</span>
+                        <span class="n">ch</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">])</span>
+                        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;ss_name&#39; v=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">ch</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;tag k=&#39;ss_z&#39; v=</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> /&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;/way&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
         <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&lt;/osm&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
@@ -1437,6 +1459,8 @@
                 <span class="n">coords</span><span class="o">.</span><span class="n">boundary</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">latlon</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
                                            <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">latlon</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
                 <span class="n">coords</span><span class="o">.</span><span class="n">cartesian</span><span class="p">(</span><span class="n">cart</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">or_coord_format</span> <span class="o">=</span> <span class="s1">&#39;cart&#39;</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="n">or_coord_format</span> <span class="o">=</span> <span class="s1">&#39;cart&#39;</span>
         
@@ -1649,12 +1673,11 @@
         
         <span class="k">if</span> <span class="n">ext</span><span class="o">!=</span><span class="s1">&#39;.osm&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">newfile</span> <span class="p">:</span>
-                <span class="n">hash_save</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hash</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)):</span>
                     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">!=</span> <span class="n">hash_save</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                         <span class="n">rebuild</span> <span class="o">=</span> <span class="bp">True</span> 
                     <span class="k">else</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">(</span><span class="s1">&#39;tvirw&#39;</span><span class="p">)</span>
@@ -1663,7 +1686,7 @@
 
                 
                 <span class="c1"># build and dump</span>
-                <span class="k">if</span> <span class="n">build</span> <span class="ow">and</span> <span class="n">rebuild</span><span class="p">:</span>  
+                <span class="k">if</span> <span class="n">build</span> <span class="ow">or</span> <span class="n">rebuild</span><span class="p">:</span>  
                     <span class="c1"># ans = raw_input(&#39;Do you want to build the layout (y/N) ? &#39;)</span>
                     <span class="c1"># if ans.lower()==&#39;y&#39;:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
@@ -1893,7 +1916,8 @@
                               <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
                               <span class="n">transition</span><span class="o">=</span><span class="n">transition</span><span class="p">,</span>
                               <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
-                              <span class="n">connect</span><span class="o">=</span><span class="p">[</span><span class="n">n1</span><span class="p">,</span><span class="n">n2</span><span class="p">])</span>
+                              <span class="n">connect</span><span class="o">=</span><span class="p">[</span><span class="n">n1</span><span class="p">,</span><span class="n">n2</span><span class="p">]</span>
+                              <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">p1</span> <span class="o">+</span> <span class="n">p2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
@@ -2575,7 +2599,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">np</span><span class="p">]</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></div>
 
 
-<div class="viewcode-block" id="Layout.chgmss"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.chgmss.html#pylayers.gis.layout.Layout.chgmss">[docs]</a>    <span class="k">def</span> <span class="nf">chgmss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ns</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[],</span><span class="n">ss_z</span><span class="o">=</span><span class="p">[],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Layout.chgmss"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.chgmss.html#pylayers.gis.layout.Layout.chgmss">[docs]</a>    <span class="k">def</span> <span class="nf">chgmss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ns</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[],</span><span class="n">ss_z</span><span class="o">=</span><span class="p">[],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[],</span><span class="n">g2npy</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; change multi subsegments properties</span>
 
 <span class="sd">        Parameters</span>
@@ -2619,7 +2643,8 @@
 
 
                 <span class="c1"># update Layout information</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span></div>
+                <span class="k">if</span> <span class="n">g2npy</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Layout.edit_segment"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.edit_segment.html#pylayers.gis.layout.Layout.edit_segment">[docs]</a>    <span class="k">def</span> <span class="nf">edit_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span> <span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">outdata</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot; edit segment WITH EasyGUI</span>
@@ -2825,7 +2850,7 @@
             <span class="k">return</span> <span class="bp">False</span></div>
 
 
-    <span class="k">def</span> <span class="nf">update_sseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">def</span> <span class="nf">update_sseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="p">{},</span><span class="n">g2npy</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update subsegment(s) on a segment</span>
 
 <span class="sd">        Parameters</span>
@@ -2857,7 +2882,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span> <span class="o">+=</span> <span class="n">deltaNss</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ss_name&#39;</span><span class="p">],</span>
                 <span class="n">ss_offset</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ss_offset&#39;</span><span class="p">],</span>
-                <span class="n">ss_z</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">])</span>
+                <span class="n">ss_z</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ss_z&#39;</span><span class="p">],</span><span class="n">g2npy</span><span class="o">=</span><span class="n">g2npy</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_name&#39;</span><span class="p">):</span>
@@ -2865,7 +2890,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ss_z&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ss_offset&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span> <span class="o">+=</span> <span class="n">deltaNss</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">g2npy</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
                 <span class="k">return</span> <span class="bp">True</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">return</span> <span class="bp">True</span>
@@ -4851,8 +4877,13 @@
                     <span class="k">try</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">dca</span><span class="p">[</span><span class="n">cy</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                     <span class="k">except</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dca</span><span class="p">[</span><span class="n">cy</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">=</span><span class="p">[</span><span class="n">cy</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span></div>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dca</span><span class="p">[</span><span class="n">cy</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">=</span><span class="p">[</span><span class="n">cy</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
+        <span class="c1"># add hash to node 0 of Gt </span>
+        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRINI&#39;</span><span class="p">])</span>
+        <span class="n">_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">hash</span><span class="o">=</span><span class="n">_hash</span><span class="p">)</span></div>
+        
         <span class="c1"># f=os.path.splitext(self.filename)</span>
         <span class="c1"># if f[1] ==&#39;.ini&#39;:</span>
         <span class="c1">#     self.saveini(self.filename)</span>
@@ -4876,12 +4907,12 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># create layout directory</span>
-        <span class="c1"># pdb.set_trace()</span>
+        
         <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;struc&#39;</span><span class="p">,</span><span class="s1">&#39;gpickle&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
 
-        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRINI&#39;</span><span class="p">])</span>
-        <span class="n">_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">hash</span><span class="o">=</span><span class="n">_hash</span><span class="p">)</span>
+
+       
+
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -4898,20 +4929,21 @@
         <span class="c1"># save dictionnary which maps string interaction to [interactionnode, interaction type]</span>
         <span class="k">if</span> <span class="s1">&#39;t&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="p">:</span>
             <span class="n">write_gpickle</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;ddiff&#39;</span><span class="p">),</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="s1">&#39;ddiff.gpickle&#39;</span><span class="p">))</span>
-        <span class="n">write_gpickle</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;dca&#39;</span><span class="p">),</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="s1">&#39;dca.gpickle&#39;</span><span class="p">))</span>
+        <span class="n">write_gpickle</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;dca&#39;</span><span class="p">),</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="s1">&#39;dca.gpickle&#39;</span><span class="p">))</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+        
         <span class="c1"># root,ext = os.path.splitext(self.filename)</span>
         <span class="c1"># if ext == &#39;.ini&#39;:</span>
         <span class="c1">#     self.saveini(self.filename)</span>
 
 <div class="viewcode-block" id="Layout.dumpr"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.dumpr.html#pylayers.gis.layout.Layout.dumpr">[docs]</a>    <span class="k">def</span> <span class="nf">dumpr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">graphs</span><span class="o">=</span><span class="s1">&#39;stvirw&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; read a dump of given Graph</span>
+        <span class="sd">&quot;&quot;&quot; read of given graphs</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        graph : string</span>
+<span class="sd">            &#39;s&#39; : Gv</span>
 <span class="sd">            &#39;t&#39; : Gt</span>
 <span class="sd">            &#39;r&#39; : Gr</span>
 <span class="sd">            &#39;v&#39; : Gv</span>
@@ -4939,7 +4971,8 @@
         <span class="c1"># retrieve md5 sum of the original ini file </span>
         <span class="c1">#pdb.set_trace()</span>
         <span class="k">if</span> <span class="s1">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="s1">&#39;hash&#39;</span><span class="p">]</span>
+            <span class="c1">#self._hash = self.Gs.node.pop(0)[&#39;hash&#39;]</span>
+            <span class="c1"># self._hash = self.Gs.node[0][&#39;hash&#39;]</span>
             <span class="c1"># update self.name</span>
             <span class="n">lseg</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
@@ -7078,20 +7111,38 @@
                 <span class="c1"># non adjascent segment of vnodes see valid diffraction points</span>
                 
                 <span class="k">for</span> <span class="n">idiff</span> <span class="ow">in</span> <span class="n">ndiffvalid</span><span class="p">:</span>
+
+                    <span class="kn">import</span> <span class="nn">ipdb</span>
+                    <span class="c1"># ipdb.set_trace()</span>
+                    <span class="c1"># if (icycle==2) &amp; (idiff==-2399):</span>
+                    <span class="c1">#     ipdb.set_trace()</span>
+
+
                     <span class="c1"># idiff segment neighbors</span>
-                    <span class="n">nsneigh</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">idiff</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nseg</span> <span class="ow">and</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">airwalls</span><span class="p">]</span>
+                    <span class="c1">#nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]</span>
+                    <span class="n">nsneigh</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">idiff</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nseg</span> <span class="p">]</span>
                     <span class="c1"># segvalid : not adjascent segment</span>
                     <span class="n">seen_from_neighbors</span><span class="o">=</span><span class="p">[]</span>
+
+                    <span class="c1">#</span>
+                    <span class="c1"># point to point </span>
+                    <span class="c1">#</span>
+                    <span class="k">for</span> <span class="n">npoint</span> <span class="ow">in</span> <span class="n">ndiffvalid</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">npoint</span> <span class="o">!=</span><span class="n">idiff</span><span class="p">:</span>
+                            <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">idiff</span><span class="p">,</span><span class="n">npoint</span><span class="p">)</span>
+
+                    <span class="c1">#</span>
+                    <span class="c1"># All the neighbors segment in visibility which are not connected to cycle 0 </span>
+                    <span class="c1"># and which are not neighbrs of the point idiff</span>
+                    <span class="c1">#</span>
                     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nsneigh</span><span class="p">:</span>
-                        <span class="n">neighbx</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;ncycles&#39;</span><span class="p">]]</span>
+                        <span class="n">neighbx</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;ncycles&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nsneigh</span><span class="p">]</span>
                         <span class="n">seen_from_neighbors</span> <span class="o">+=</span> <span class="n">neighbx</span>
                     
                     <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">seen_from_neighbors</span><span class="p">:</span>
                         <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">idiff</span><span class="p">,</span><span class="n">ns</span><span class="p">)</span>
 
-                    <span class="c1"># for npoint in ndiffvalid:</span>
-                    <span class="c1">#     if npoint !=idiff:</span>
-                    <span class="c1">#         Gv.add_edge(idiff,npoint)</span>
+                   
                 <span class="c1">#</span>
                 <span class="c1"># Graph Gv composition</span>
                 <span class="c1">#</span>
@@ -7182,7 +7233,6 @@
                             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ddiff</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
                                 <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="n">cy</span><span class="p">:</span>
                                     <span class="n">npt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        
 
                 <span class="n">nseg</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">vnodes</span><span class="p">)</span>
                 <span class="n">vnodes</span> <span class="o">=</span> <span class="n">nseg</span><span class="o">+</span><span class="n">npt</span>
@@ -7247,7 +7297,6 @@
                                 <span class="c1">#     print nstr,nstrb</span>
                                 <span class="c1">#     print &quot;li1&quot;,li1 </span>
                                 <span class="c1">#     print &quot;li2&quot;,li2</span>
-                                
 
                                 <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="n">li1</span><span class="p">:</span>
                                     <span class="c1">#print li1</span>
@@ -7637,7 +7686,7 @@
         <span class="c1">#         fig,ax = self.showG(&#39;s&#39;,fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color=&#39;b&#39;)</span>
 
 <div class="viewcode-block" id="Layout.showG"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.showG.html#pylayers.gis.layout.Layout.showG">[docs]</a>    <span class="k">def</span> <span class="nf">showG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">u&quot;&quot;&quot; show the different graphs</span>
+        <span class="sd">&quot;&quot;&quot; show the different graphs</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -7773,7 +7822,7 @@
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                     <span class="s1">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s1">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
                     <span class="s1">&#39;sllist&#39;</span><span class="p">:[],</span>
                     <span class="s1">&#39;airwalls&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
@@ -7822,6 +7871,16 @@
             <span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">labels</span><span class="o">=</span><span class="p">[]</span>
+
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">],</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">dis_nodes</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">dis_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">,</span><span class="s1">&#39;v&#39;</span><span class="p">,</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">],</span><span class="nb">str</span><span class="p">):</span>
+            <span class="n">dis_nodes</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dis_nodes</span><span class="o">=</span><span class="p">[]</span>
         <span class="c1">#</span>
         <span class="c1"># s : structure graph</span>
         <span class="c1">#</span>
@@ -7856,6 +7915,7 @@
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cold</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">lmat</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]]</span>
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">lmat</span><span class="p">][</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
+          
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;k&#39;</span>
                         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
 
@@ -7863,6 +7923,10 @@
                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+                <span class="k">if</span> <span class="s1">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">dis_nodes</span><span class="p">:</span>
+                   <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                   <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodelistbkup</span>
@@ -7912,6 +7976,10 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="k">if</span> <span class="s1">&#39;t&#39;</span> <span class="ow">in</span> <span class="n">dis_nodes</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
@@ -7930,6 +7998,10 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="k">if</span> <span class="s1">&#39;r&#39;</span> <span class="ow">in</span> <span class="n">dis_nodes</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
@@ -7959,6 +8031,10 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="k">if</span> <span class="s1">&#39;v&#39;</span> <span class="ow">in</span> <span class="n">dis_nodes</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 
             <span class="k">if</span> <span class="s1">&#39;ee&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;lvis&#39;</span><span class="p">]:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eded</span>
@@ -8026,6 +8102,10 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="k">if</span> <span class="s1">&#39;v&#39;</span> <span class="ow">in</span> <span class="n">dis_nodes</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+               <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
             <span class="k">for</span> <span class="n">inter</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;linter&#39;</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">inter</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                     <span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inter</span><span class="p">)</span>
@@ -8063,19 +8143,21 @@
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
 
-        <span class="c1">#args = {&#39;fig&#39;:kwargs[&#39;fig&#39;],&#39;ax&#39;:kwargs[&#39;ax&#39;],&#39;show&#39;:False}</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fig&#39;</span><span class="p">:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">],</span><span class="s1">&#39;ax&#39;</span><span class="p">:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">],</span><span class="s1">&#39;show&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">}</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edgelist&#39;</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;cycle&#39;</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">ncy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alphacy&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colorcy&#39;</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
-                    <span class="n">args</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
-                    <span class="n">args</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alphacy&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;colorcy&#39;</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                        <span class="n">args</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
+                        <span class="n">args</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;room&#39;</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">nro</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nro</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
-                    <span class="n">args</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
-                    <span class="n">args</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nro</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                        <span class="n">args</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
+                        <span class="n">args</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
 
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">]:</span>
@@ -9665,7 +9747,7 @@
         <span class="k">return</span> <span class="n">sigarr</span></div>
 
 
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot the layout</span>
 
 <span class="sd">        Parameters</span>
@@ -9675,11 +9757,34 @@
 <span class="sd">        ax </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s1">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;labels&#39;</span><span class="p">:[],</span>
+                    <span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">,</span><span class="s1">&#39;v&#39;</span><span class="p">,</span><span class="s1">&#39;i&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span><span class="nb">str</span><span class="p">):</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[]</span>
+
+
 
         <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
@@ -9689,7 +9794,8 @@
         
         <span class="n">w</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">kk</span> <span class="p">]</span>
         
-        <span class="p">[</span> <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">vv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="p">[</span> <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">vv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="p">]</span>
         
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">vv</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">vv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">ML</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
@@ -10025,7 +10131,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 16, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

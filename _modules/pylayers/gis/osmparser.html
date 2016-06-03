@@ -373,19 +373,26 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">minlon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">minlat</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlon</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlat</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Coords.cartesian.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    <span class="k">def</span> <span class="nf">cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cart</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Coords.cartesian.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    <span class="k">def</span> <span class="nf">cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cart</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert Latitude/Longitude in cartesian</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cart : Boolean </span>
+<span class="sd">            conversion to cartesian </span>
+<span class="sd">        delta : offset </span>
+<span class="sd"> +            default 0 : in this case the origin corresponds to the lower left point</span>
+<span class="sd"> </span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        This method converts latlon coordinates into cartesian x,y coordinates in</span>
-<span class="sd">        Cassini projection relatively to specified latlon boundary + an offset</span>
-<span class="sd">        of 0.01 degrees.(to be parameterized ? )</span>
+<span class="sd">        Cassini projection relatively to specified latlon boundary </span>
 <span class="sd">        The basemap objet for back and forth coordinates.</span>
 <span class="sd">        conversion is returned.</span>
 
-<span class="sd">        The transformation is centered on the mean of latitude and longitude</span>
+<span class="sd">        The transformation is centered on the mean of latitude and longitude. </span>
+<span class="sd">        The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) </span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -405,8 +412,8 @@
         <span class="n">lon_0</span> <span class="o">=</span> <span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">bd</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
         <span class="n">lat_0</span> <span class="o">=</span> <span class="p">(</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">bd</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
 
-        <span class="n">m</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">llcrnrlon</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span>
-                    <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">llcrnrlon</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span>
+                    <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">bd</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span>
                 <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;cass&#39;</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="p">:</span>
@@ -960,7 +967,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 16, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

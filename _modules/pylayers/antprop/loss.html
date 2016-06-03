@@ -1102,7 +1102,7 @@
 
     <span class="k">return</span> <span class="n">psy</span><span class="p">,</span><span class="n">dloss</span><span class="p">,</span><span class="n">dref</span>
 
-<span class="k">def</span> <span class="nf">two_ray_curvedearth</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">two_rays_curvedearthold</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -1179,11 +1179,11 @@
 <span class="sd">        &gt;&gt;&gt; for d in np.arange(1,10000,1):</span>
 <span class="sd">        &gt;&gt;&gt;     p1[1,:]=d</span>
 <span class="sd">        &gt;&gt;&gt;     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))</span>
-<span class="sd">        &gt;&gt;&gt;     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))</span>
+<span class="sd">        &gt;&gt;&gt;     TRC.append(two_rays_curvedearth(d,p0[2,:],p1[2,:],fGHz))</span>
 <span class="sd">        &gt;&gt;&gt;     PLoss.append(PL(fGHz, p0[:,0],p1[:,0], n=2.0, dB=True, d0=np.array([1])))</span>
 <span class="sd">        &gt;&gt;&gt; PLoss=np.array(PLoss)[:,0,0]</span>
-<span class="sd">        &gt;&gt;&gt; plt.semilogx(TRF,label=&#39;two-ray model flat earth&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; plt.semilogx(TRC,label=&#39;two-ray model curved earth&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.semilogx(TRF,label=&#39;two-rays model flat earth&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.semilogx(TRC,label=&#39;two-rays model curved earth&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; plt.semilogx(-PLoss,label=&#39;Path Loss&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; plt.legend()</span>
 <span class="sd">        &gt;&gt;&gt; plt.show()</span>
@@ -1377,7 +1377,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 16, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

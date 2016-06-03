@@ -2157,15 +2157,14 @@
                 <span class="c1"># dimension i and r are merged</span>
                 <span class="n">b</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size2</span><span class="o">-</span><span class="n">nbray</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
 
+
                 <span class="c1">## find used slab</span>
                 <span class="c1">##################</span>
                 <span class="c1"># find slab type for the rnstr</span>
                 <span class="c1"># nstrf is a number of slab</span>
                 <span class="c1"># this is a problem for handling subsegment</span>
                 <span class="c1">#</span>
-
-                <span class="n">sl</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">]</span>
-
+                
                 <span class="c1"># seek for interactions position</span>
                 <span class="c1">################################</span>
 
@@ -2178,19 +2177,22 @@
                 <span class="c1"># assign floor and ceil slab</span>
                 <span class="c1">############################</span>
 
+
+                <span class="n">slT</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uT</span><span class="p">]]</span>
+                <span class="n">slR</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uR</span><span class="p">]]</span>
                 <span class="c1"># WARNING</span>
                 <span class="c1"># in future version floor and ceil could be different for each cycle.</span>
                 <span class="c1"># this information would be directly obtained from L.Gs</span>
                 <span class="c1"># then the two following lines would have to be  modified</span>
+                <span class="n">slRf</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;FLOOR&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">uRf</span><span class="p">))</span>
+                <span class="n">slRc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;CEIL&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">uRc</span><span class="p">))</span>
 
-                <span class="n">sl</span><span class="p">[</span><span class="n">uRf</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;FLOOR&#39;</span>
-                <span class="n">sl</span><span class="p">[</span><span class="n">uRc</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;CEIL&#39;</span>
 
                 <span class="c1"># Fill the used slab</span>
                 <span class="c1">#####################</span>
 
-                <span class="n">tsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tsl</span><span class="p">,</span> <span class="n">sl</span><span class="p">[</span><span class="n">uT</span><span class="p">]))</span>
-                <span class="n">rsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rsl</span><span class="p">,</span> <span class="n">sl</span><span class="p">[</span><span class="n">uR</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="n">uRf</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="n">uRc</span><span class="p">]))</span>
+                <span class="n">tsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tsl</span><span class="p">,</span> <span class="n">slT</span><span class="p">))</span>
+                <span class="n">rsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rsl</span><span class="p">,</span> <span class="n">slR</span><span class="p">,</span> <span class="n">slRf</span><span class="p">,</span> <span class="n">slRc</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;diffvect&#39;</span><span class="p">):</span> 
                     <span class="n">dw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">dw</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;diffslabs&#39;</span><span class="p">]))</span> 
     <span class="c1">##            for s in uslv:</span>
@@ -3086,7 +3088,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 16, 2016.
+      Last updated on juin 03, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
