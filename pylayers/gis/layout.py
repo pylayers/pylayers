@@ -1735,25 +1735,32 @@ class Layout(PyLayers):
 
         """
 
+
+
         # if 2 points are selected
         if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
-            nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
-            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
-            lp = len(up)                        ## lp : number of segments  (can be zero)
-            if lp>0:
-                e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+            if not np.any([i in nx.neighbors(self.Gs,n1) for i in nx.neighbors(self.Gs,n2)]):
+
+                nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
+                up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
+                lp = len(up)                        ## lp : number of segments  (can be zero)
+                if lp>0:
+                    e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+                else:
+                    e1 = np.array([1])
+                e2 = nn[up]                         ## e2 : current list of segment number
+                c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
+                tn = e1[c]                          ## tn[c] free segment number
+                #print tn
+                try:
+                    num = tn[0]
+                except:
+                    num = max(self.Gs.node.keys()) + 1
+                    if num == 0:
+                        num = 1
             else:
-                e1 = np.array([1])
-            e2 = nn[up]                         ## e2 : current list of segment number
-            c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
-            tn = e1[c]                          ## tn[c] free segment number
-            #print tn
-            try:
-                num = tn[0]
-            except:
-                num = max(self.Gs.node.keys()) + 1
-                if num == 0:
-                    num = 1
+                print "segment already exists"
+                return
         else:
             print "add_segment : error not a node", n1, n2
             return
