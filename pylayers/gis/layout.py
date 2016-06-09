@@ -1307,6 +1307,7 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.labels = {}
 
+
         # manage ini file with latlon coordinates
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
@@ -1547,8 +1548,6 @@ class Layout(PyLayers):
                 if build or rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
-                    import ipdb
-                    ipdb.set_trace()
                     self.build()
                     self.lbltg.append('s')
                     self.dumpw()
@@ -2152,7 +2151,7 @@ class Layout(PyLayers):
         for k in ls:
             assert(k>0)
             self.del_segment(k)
-
+            print 'del ',k
         # 2) delete involved points
         for n1 in lp:
             assert(n1<0)
@@ -2195,6 +2194,10 @@ class Layout(PyLayers):
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
             # delete subseg if required
+            try:
+                self.pop._shseg(e)
+            except:
+                pass
         self.g2npy()
 
 
@@ -5583,7 +5586,11 @@ class Layout(PyLayers):
                 ts = geu.Polygon(pucs[t])
                 # check if the new polygon is contained into
                 #the original polygon (non guarantee by Delaunay)
-                C0 = poly.contains(ts)
+                try:
+                    C0 = poly.contains(ts)
+                except:
+                    from IPython.core.debugger import Tracer
+                    Tracer()()
                 if polyholes == []:
                     C=[False]
                     I=0
