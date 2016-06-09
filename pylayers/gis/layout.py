@@ -1548,6 +1548,7 @@ class Layout(PyLayers):
                 if build or rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
+
                     self.build()
                     self.lbltg.append('s')
                     self.dumpw()
