@@ -21,7 +21,6 @@ pylayers/antprop/diffRT.py
 pylayers/antprop/diffraction.py
 pylayers/antprop/interactions.py
 pylayers/antprop/loss.py
-pylayers/antprop/poo.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
@@ -56,6 +55,7 @@ pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
+pylayers/gui/TEST.py
 pylayers/gui/__init__.py
 pylayers/gui/editor.py
 pylayers/gui/editor_select.py
@@ -65,7 +65,6 @@ pylayers/location/locarule.py
 pylayers/location/algebraic/PyGraphTool.py
 pylayers/location/algebraic/PyMathTool.py
 pylayers/location/algebraic/__init__.py
-pylayers/location/algebraic/alge.py
 pylayers/location/algebraic/algebraic.py
 pylayers/location/algebraic/crlb.py
 pylayers/location/algebraic/hdf.py
