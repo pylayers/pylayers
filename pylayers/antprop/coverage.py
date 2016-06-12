@@ -973,7 +973,7 @@ class Coverage(PyLayers):
                             vmax = vmax,
                             cmap = kwargs['cmap'])
             else:
-                img=ax.scatter(self.grid[:,0],self.grid[:,1],c=U,s=20,linewidth=0)
+                img=ax.scatter(self.grid[:,0],self.grid[:,1],c=U,s=20,linewidth=0,cmap=kwargs['cmap'])
 
             for k in range(self.na):
                 ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))

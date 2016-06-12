@@ -100,6 +100,7 @@ pylayers/measures/measmimo.py
 pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
 pylayers/measures/parker/__init__.py
+pylayers/measures/parker/plot_scanner.py
 pylayers/measures/parker/smparker.py
 pylayers/measures/switch/__init__.py
 pylayers/measures/switch/ni_usb_6501.py
