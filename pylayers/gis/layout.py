@@ -1226,7 +1226,9 @@ class Layout(PyLayers):
         for n in self.Gs.pos:
             if n <0:
                 if n not in self.lboundary:
-                    config.set("points",str(n),self.Gs.pos[n])
+                    config.set("points",str(n),(self.Gs.pos[n][0],self.Gs.pos[n][1]))
+
+
 
         for n in self.Gs.pos:
             if n >0:
