@@ -1234,7 +1234,7 @@ class DLink(Link):
             :include-source:
 
             >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
+            >>> L = DLink(verbose=False)
             >>> aktk = L.eval()
 
 
