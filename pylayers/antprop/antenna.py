@@ -532,7 +532,7 @@ class Pattern(PyLayers):
 
         # vector spherical harmonics basis functions
 
-#:x        V, W = VW(lBr, mBr, theta, phi)
+        # V, W = VW(lBr, mBr, theta, phi)
 
         V, W = VW(lBr, mBr, theta, phi)
 
