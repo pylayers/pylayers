@@ -1226,7 +1226,9 @@ class Layout(PyLayers):
         for n in self.Gs.pos:
             if n <0:
                 if n not in self.lboundary:
-                    config.set("points",str(n),self.Gs.pos[n])
+                    config.set("points",str(n),(self.Gs.pos[n][0],self.Gs.pos[n][1]))
+
+
 
         for n in self.Gs.pos:
             if n >0:
@@ -1306,6 +1308,7 @@ class Layout(PyLayers):
         self.Gs = nx.Graph()
         self.Gs.pos = {}
         self.labels = {}
+
 
         # manage ini file with latlon coordinates
         if di['info'].has_key('format'):
@@ -1547,8 +1550,7 @@ class Layout(PyLayers):
                 if build or rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
-                    #import ipdb
-                    #ipdb.set_trace()
+
                     self.build()
                     self.lbltg.append('s')
                     self.dumpw()
@@ -1735,25 +1737,32 @@ class Layout(PyLayers):
 
         """
 
+
+
         # if 2 points are selected
         if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
-            nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
-            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
-            lp = len(up)                        ## lp : number of segments  (can be zero)
-            if lp>0:
-                e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+            if not np.any([i in nx.neighbors(self.Gs,n1) for i in nx.neighbors(self.Gs,n2)]):
+
+                nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
+                up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
+                lp = len(up)                        ## lp : number of segments  (can be zero)
+                if lp>0:
+                    e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+                else:
+                    e1 = np.array([1])
+                e2 = nn[up]                         ## e2 : current list of segment number
+                c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
+                tn = e1[c]                          ## tn[c] free segment number
+                #print tn
+                try:
+                    num = tn[0]
+                except:
+                    num = max(self.Gs.node.keys()) + 1
+                    if num == 0:
+                        num = 1
             else:
-                e1 = np.array([1])
-            e2 = nn[up]                         ## e2 : current list of segment number
-            c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
-            tn = e1[c]                          ## tn[c] free segment number
-            #print tn
-            try:
-                num = tn[0]
-            except:
-                num = max(self.Gs.node.keys()) + 1
-                if num == 0:
-                    num = 1
+                print "segment already exists"
+                return
         else:
             print "add_segment : error not a node", n1, n2
             return
@@ -2152,7 +2161,7 @@ class Layout(PyLayers):
         for k in ls:
             assert(k>0)
             self.del_segment(k)
-
+            print 'del ',k
         # 2) delete involved points
         for n1 in lp:
             assert(n1<0)
@@ -2195,6 +2204,10 @@ class Layout(PyLayers):
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
             # delete subseg if required
+            try:
+                self.pop._shseg(e)
+            except:
+                pass
         self.g2npy()
 
 
@@ -5583,7 +5596,11 @@ class Layout(PyLayers):
                 ts = geu.Polygon(pucs[t])
                 # check if the new polygon is contained into
                 #the original polygon (non guarantee by Delaunay)
-                C0 = poly.contains(ts)
+                try:
+                    C0 = poly.contains(ts)
+                except:
+                    from IPython.core.debugger import Tracer
+                    Tracer()()
                 if polyholes == []:
                     C=[False]
                     I=0

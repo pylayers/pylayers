@@ -532,7 +532,7 @@ class Pattern(PyLayers):
 
         # vector spherical harmonics basis functions
 
-#:x        V, W = VW(lBr, mBr, theta, phi)
+        # V, W = VW(lBr, mBr, theta, phi)
 
         V, W = VW(lBr, mBr, theta, phi)
 
@@ -1343,7 +1343,10 @@ class Antenna(Pattern):
         else:
             self.typ=typ
             self._filename=typ
-            self.eval()
+            if self.typ=='vsh3':
+                self.initvsh()
+            else:
+                self.eval()
 
     def __repr__(self):
         st = Pattern.__repr__(self)
@@ -1433,6 +1436,28 @@ class Antenna(Pattern):
 #            st = st + 'sqrt G :' + str(self.sqG) + '\n'
 
         return(st)
+
+    def initvsh(self,lmax=45):
+        """ Initialize a void vsh structure
+
+        Parameters
+        ----------
+
+        fGHz : array
+        lmax : int
+            level max
+
+        """
+        nf = len(self.fGHz)
+        Br = 1j * np.zeros((nf, lmax, lmax-1))
+        Bi = 1j * np.zeros((nf, lmax, lmax-1))
+        Cr = 1j * np.zeros((nf, lmax, lmax-1))
+        Ci = 1j * np.zeros((nf, lmax, lmax-1))
+        Br = VCoeff(typ='s1', fmin=self.fGHz[0], fmax=self.fGHz[-1], data=Br)
+        Bi = VCoeff(typ='s1', fmin=self.fGHz[0], fmax=self.fGHz[-1], data=Bi)
+        Cr = VCoeff(typ='s1', fmin=self.fGHz[0], fmax=self.fGHz[-1], data=Cr)
+        Ci = VCoeff(typ='s1', fmin=self.fGHz[0], fmax=self.fGHz[-1], data=Ci)
+        self.C = VSHCoeff(Br, Bi, Cr, Ci)
 
     def ls(self, typ='vsh3'):
         """ list the antenna files in antenna project directory

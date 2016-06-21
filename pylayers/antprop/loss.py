@@ -39,7 +39,7 @@ import matplotlib.pylab as plt
 import pylayers.simul.simulem
 import pylayers.measures.mesuwb
 import pylayers.gis.gisutil as gu
-
+import numpy.linalg as la
 import pdb
 
 def PL0(fGHz,GtdB=0,GrdB=0,R=1):
@@ -107,6 +107,301 @@ def Dgrid_points(points,Px):
 
     return(D)
 
+def FMetisShad(fGHz,r,D,sign=1):
+    """ F Metis shadowing function
+
+    Parameters
+    ----------
+
+    fGHz : float 
+        frequency GHz
+    r : float
+        distance between Tx and Rx
+    D : float 
+        indirect distance between Tx and Rx (screen effect)
+    sign : int
+        == 1  : Shadowing NLOS situation
+        ==-1  : No shadowing LOS situation   
+
+
+    Notes
+    -----
+
+    Provides an implementation of formula (6.6) in D1.4 of METIS project
+
+
+    See Also
+    --------
+
+    LossMetisShadowing
+
+
+    """
+    lamda = 0.3/fGHz
+    F = np.arctan(sign*np.pi/2.*(np.sqrt((np.pi/lamda)*(D-r)))) / np.pi
+    return(F)
+
+def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
+    """ Calculate the Loss from 
+
+    Parameters
+    ----------
+    fGHz : float
+        
+    tx  : np.array (,3) of floats  
+        transmiter coordinates 
+    rx  : np.array (,3) of floats  
+        receiver coordinates 
+    pg  : np.array (,3) of floats 
+        center of gravity of the screen 
+    uw  : np.array (,3) of floats 
+        unitary vector along width dimension
+    uh  : np.array (,3) of floats 
+        unitary vector along height dimension
+    w   : float 
+        width in meters
+    h   : float 
+        height in meters 
+
+    Returns
+    -------
+
+    Lsh : float 
+        Loss in dB to add to the FS path Loss
+
+
+    Notes
+    -----
+
+    This function provides an implementation of formula 6.5 of D1.4 deliverable of METIS project
+
+    [Metis D1.4](Ahttps://www.metis2020.com/wp-content/uploads/METIS_D1.4_v3.pdf)
+
+    # geometry parametric issue : find M in [tx-rx] defined as M = alpha*rx + (1-alpha)tx where alpha in [0-1].
+    # if alpha = 0 then M = tx ; if alpha = 1 then M = rx.
+    # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
+    # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx <==> Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
+
+    TODO
+    ----
+
+    To be vectorized 
+
+    """
+
+    rxtx = rx - tx # LOS distance
+   
+    # x[2]=gamma.
+    A = np.vstack((rxtx,-uw,-uh)).T 
+    b = pg - tx
+    x = la.solve(A,b)
+    
+    # condition of shadowing
+    condseg = ((x[0]>1) or (x[0]<0)) 
+    condw = ((x[1]>w/2.) or (x[1]<-w/2.)) 
+    condh = ((x[2]>h/2.) or (x[2]<-h/2.)) 
+    
+    visi = condseg or condw or condh
+    if visi:
+        shad = -1
+    else:
+        shad = 1
+        
+    r = np.dot(rxtx,rxtx)**0.5
+    w1 = pg + uw*w/2.
+    w2 = pg - uw*w/2.
+    h1 = pg + uh*h/2.
+    h2 = pg - uh*h/2.
+
+    
+    Dtw1 = np.dot(tx-w1,tx-w1)**0.5
+    Drw1 = np.dot(rx-w1,rx-w1)**0.5
+    Dtw2 = np.dot(tx-w2,tx-w2)**0.5
+    Drw2 = np.dot(rx-w2,rx-w2)**0.5
+    Dth1 = np.dot(tx-h1,tx-h1)**0.5
+    Drh1 = np.dot(rx-h1,rx-h1)**0.5
+    Dth2 = np.dot(tx-h2,tx-h2)**0.5
+    Drh2 = np.dot(rx-h2,rx-h2)**0.5
+    
+    D1w = Dtw1+Drw1
+    D1h = Dth1+Drh1
+    D2w = Dtw2+Drw2
+    D2h = Dth2+Drh2
+    
+    if shad == 1:
+        signw1 = 1
+        signw2 = 1
+        signh1 = 1
+        signh2 = 1
+    else:
+        if condw:
+            if D1w>D2w:
+                signw1=1
+                signw2=-1
+            else:
+                signw1=-1
+                signw2=1
+        else:
+            signw1 = 1
+            signw2 = 1
+        
+        if condh:
+            if D1h>D2h:
+                signh1=1
+                signh2=-1
+            else:
+                signh1=-1
+                signh2=1
+        else:
+            
+            signh1 = 1
+            signh2 = 1
+            
+    Fw1 = FMetisShad(fGHz,r,D1w,sign=signw1)
+    Fh1 = FMetisShad(fGHz,r,D1h,sign=signh1)
+    Fw2 = FMetisShad(fGHz,r,D2w,sign=signw2)
+    Fh2 = FMetisShad(fGHz,r,D2h,sign=signh2)
+    tmp = (Fh1+Fh2)*(Fw1+Fw2)
+    Lsh = -20*np.log10(1-tmp)
+
+    #return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)
+    return(Lsh)
+
+def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
+    """ Calculate the Loss from 
+
+    Parameters
+    ----------
+
+    fGHz : np.array(,Nf)
+        
+    tx  : np.array (3,Nseg) of floats  
+        transmiter coordinates 
+    rx  : np.array (3,Nseg) of floats  
+        receiver coordinates 
+    pg  : np.array (3,Nscreen) of floats 
+        center of gravity of the screen 
+    uw  : np.array (3,Nscreen) of floats 
+        unitary vector along width dimension
+    uh  : np.array (3,Nscreen) of floats 
+        unitary vector along height dimension
+    w   : np.array (,Nscreen)
+        width in meters
+    h   : np.array (,Nscreen)
+        height in meters 
+
+    Returns
+    -------
+
+    Lsh : np.array (Nseg,Nscreen,Nf)
+        Loss in dB to add to the FS path Loss
+
+
+    Notes
+    -----
+
+    This function provides an implementation of formula 6.5 of D1.4 deliverable of METIS project
+
+    [Metis D1.4](Ahttps://www.metis2020.com/wp-content/uploads/METIS_D1.4_v3.pdf)
+
+    # geometry parametric issue : find M in [tx-rx] defined as M = alpha*rx + (1-alpha)tx where alpha in [0-1].
+    # if alpha = 0 then M = tx ; if alpha = 1 then M = rx.
+    # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
+    # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx <==> Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
+
+    TODO
+    ----
+
+    To be vectorized 
+
+    """
+
+    rxtx = rx - tx # (3,Nseg) LOS distance
+   
+
+    # A : (Nseg,Nscreen,3,3)
+    # b : (Nseg,Nscreen,3)
+    # rxtx.T (Nseg,3)
+    # uw.T (Nscreen, 3)
+    # uh.T (Nscreen,3)
+    A = np.vstack((rxtx,-uw,-uh)).T 
+
+    # pg.T Nscreen, 3
+    # tx.T Nseg,3
+    b = pg.T[None,:,:]-tx[:,None,:] 
+    #b = pg - tx
+    x = la.solve(A,b)
+    
+    # condition of shadowing
+    condseg = ((x[0]>1) or (x[0]<0)) 
+    condw = ((x[1]>w/2.) or (x[1]<-w/2.)) 
+    condh = ((x[2]>h/2.) or (x[2]<-h/2.)) 
+    
+    visi = condseg or condw or condh
+    if visi:
+        shad = -1
+    else:
+        shad = 1
+        
+    r = np.dot(rxtx,rxtx)**0.5
+    w1 = pg + uw*w/2.
+    w2 = pg - uw*w/2.
+    h1 = pg + uh*h/2.
+    h2 = pg - uh*h/2.
+
+    
+    Dtw1 = np.dot(tx-w1,tx-w1)**0.5
+    Drw1 = np.dot(rx-w1,rx-w1)**0.5
+    Dtw2 = np.dot(tx-w2,tx-w2)**0.5
+    Drw2 = np.dot(rx-w2,rx-w2)**0.5
+    Dth1 = np.dot(tx-h1,tx-h1)**0.5
+    Drh1 = np.dot(rx-h1,rx-h1)**0.5
+    Dth2 = np.dot(tx-h2,tx-h2)**0.5
+    Drh2 = np.dot(rx-h2,rx-h2)**0.5
+    
+    D1w = Dtw1+Drw1
+    D1h = Dth1+Drh1
+    D2w = Dtw2+Drw2
+    D2h = Dth2+Drh2
+    
+    if shad == 1:
+        signw1 = 1
+        signw2 = 1
+        signh1 = 1
+        signh2 = 1
+    else:
+        if condw:
+            if D1w>D2w:
+                signw1=1
+                signw2=-1
+            else:
+                signw1=-1
+                signw2=1
+        else:
+            signw1 = 1
+            signw2 = 1
+        
+        if condh:
+            if D1h>D2h:
+                signh1=1
+                signh2=-1
+            else:
+                signh1=-1
+                signh2=1
+        else:
+            
+            signh1 = 1
+            signh2 = 1
+            
+    Fw1 = FMetisShad(fGHz,r,D1w,sign=signw1)
+    Fh1 = FMetisShad(fGHz,r,D1h,sign=signh1)
+    Fw2 = FMetisShad(fGHz,r,D2w,sign=signw2)
+    Fh2 = FMetisShad(fGHz,r,D2h,sign=signh2)
+    tmp = (Fh1+Fh2)*(Fw1+Fw2)
+    Lsh = -20*np.log10(1-tmp)
+
+    #return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)
+    return(Lsh)
 def Dgrid_zone(zone,Px):
     """ Distance point to zone
 

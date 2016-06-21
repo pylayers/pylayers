@@ -8,22 +8,32 @@ from setuptools import setup,find_packages
 import os
 
 setup(name='pylayers' ,
-      version='0.1',
+      version='0.5',
       description='Python LocAlization mobilitY Environement aware Radio Simulator',
       author='UGUEN Bernard, AMIOT Nicolas, LAARAIEDH Mohamed, MHEDHBI Meriem',
       author_email='bernard.uguen@univ-rennes1.fr, nicolas.amiot@univ-rennes1.fr, mohamed.laaraeidh@gmail.com',
       url='https://github.com/pylayers/pylayers',
       include_dirs = [numpy.get_include()],
       install_requires=[
-        'numpy>=1.6.1',
-        'scipy>=0.10.1',
-        'networkx>=1.7',
-        'matplotlib>=1.1.0',
+        'numpy>=1.9.0',
+        'scipy>=0.17.1',
+        'networkx>=1.10',
+        'matplotlib>=1.5.0',
         'SimPy==2.2',
-        'PIL>=1.1.5',
-        'bitstring>=3.0.2',
-        'descartes>=1.0',
-        'osmapi>=0.3',
+        'PIL>=1.1.7',
+        'bitstring>=3.1.3',
+        'descartes>=1.0.1',
+        'osmapi>=0.3.1',
+        'GDAL>=2.0.0',
+        'h5py>=2.5.0',
+        'seaborn>=0.7.0',
+        'basemap>=1.0.7',
+        'protobuf==2.6.1',
+        'mayavi>=4.4.0'
+
+
+
+
                         ],
       packages=find_packages()
 )
