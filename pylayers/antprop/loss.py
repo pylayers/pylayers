@@ -107,6 +107,45 @@ def Dgrid_points(points,Px):
 
     return(D)
 
+
+def FMetisShad2(fGHz,r,D,sign=1):
+    """ F Metis shadowing function
+
+    Parameters
+    ----------
+
+    fGHz : np.array(Nf)
+        frequency GHz
+    r : np.array(Nseg,)
+        distance between Tx and Rx
+    D : np.array(Nseg,Nscreen)
+        indirect distance between Tx and Rx (screen effect)
+    sign : np.array(Nseg,Nscreen)
+        == 1  : Shadowing NLOS situation
+        ==-1  : No shadowing LOS situation   
+
+
+    Returns
+    -------
+
+    F : np.array(Nseg,Nscreen,Nf)
+
+    Notes
+    -----
+
+    Provides an implementation of formula (6.6) in D1.4 of METIS project
+
+
+    See Also
+    --------
+
+    LossMetisShadowing
+
+
+    """
+    lamda = 0.3/fGHz[None,None,:]
+    F = np.arctan(sign[:,:,None]*np.pi/2.*(np.sqrt((np.pi/lamda)*(D[:,:,None]-r[:,None,None])))) / np.pi
+    return(F)
 def FMetisShad(fGHz,r,D,sign=1):
     """ F Metis shadowing function
 
@@ -189,6 +228,8 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
 
     """
 
+    
+
     rxtx = rx - tx # LOS distance
    
     # x[2]=gamma.
@@ -228,6 +269,7 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
     D2w = Dtw2+Drw2
     D2h = Dth2+Drh2
     
+
     if shad == 1:
         signw1 = 1
         signw2 = 1
@@ -256,6 +298,8 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
             
             signh1 = 1
             signh2 = 1
+
+    
             
     Fw1 = FMetisShad(fGHz,r,D1w,sign=signw1)
     Fh1 = FMetisShad(fGHz,r,D1h,sign=signh1)
@@ -316,6 +360,9 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
 
     """
 
+    Nseg = tx.shape[1]
+    Nscreen = uw.shape[1]
+
     rxtx = rx - tx # (3,Nseg) LOS distance
    
 
@@ -323,80 +370,94 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     # b : (Nseg,Nscreen,3)
     # rxtx.T (Nseg,3)
     # uw.T (Nscreen, 3)
-    # uh.T (Nscreen,3)
-    A = np.vstack((rxtx,-uw,-uh)).T 
+    # uh.T (Nscreen, 3)
+
+    U = rxtx.T[:,None,:,None]
+    W = uw.T[None,:,:,None]
+    H = uh.T[None,:,:,None]
+
+    We = W + np.zeros(U.shape)
+    He = H + np.zeros(U.shape)
+    Ue = U + np.zeros(He.shape)
+
+    A = np.concatenate((Ue,-We,-He),axis=3)
+    #A = np.vstack((rxtx,-uw,-uh)).T 
 
     # pg.T Nscreen, 3
     # tx.T Nseg,3
-    b = pg.T[None,:,:]-tx[:,None,:] 
+    b = pg.T[None,:,:]-tx.T[:,None,:] 
     #b = pg - tx
     x = la.solve(A,b)
     
-    # condition of shadowing
-    condseg = ((x[0]>1) or (x[0]<0)) 
-    condw = ((x[1]>w/2.) or (x[1]<-w/2.)) 
-    condh = ((x[2]>h/2.) or (x[2]<-h/2.)) 
     
-    visi = condseg or condw or condh
-    if visi:
-        shad = -1
-    else:
-        shad = 1
-        
-    r = np.dot(rxtx,rxtx)**0.5
-    w1 = pg + uw*w/2.
-    w2 = pg - uw*w/2.
-    h1 = pg + uh*h/2.
-    h2 = pg - uh*h/2.
+    # condition of shadowing
+    condseg = ((x[:,:,0]>1) + (x[:,:,0]<0)) 
+    condw = ((x[:,:,1]>w[None,:]/2.) + (x[:,:,1]<-w[None,:]/2.)) 
+    condh = ((x[:,:,2]>h[None,:]/2.) + (x[:,:,2]<-h[None,:]/2.)) 
+    
+    visi = (condseg + condw + condh)%2
 
     
-    Dtw1 = np.dot(tx-w1,tx-w1)**0.5
-    Drw1 = np.dot(rx-w1,rx-w1)**0.5
-    Dtw2 = np.dot(tx-w2,tx-w2)**0.5
-    Drw2 = np.dot(rx-w2,rx-w2)**0.5
-    Dth1 = np.dot(tx-h1,tx-h1)**0.5
-    Drh1 = np.dot(rx-h1,rx-h1)**0.5
-    Dth2 = np.dot(tx-h2,tx-h2)**0.5
-    Drh2 = np.dot(rx-h2,rx-h2)**0.5
+    # if visi:
+    #     shad = -1
+    # else:
+    #     shad = 1
+    #shad = - visi    
+    
+    r = np.sum(rxtx*rxtx,axis=0)**0.5
+
+
+    w1 = pg + uw*w[None,:]/2.
+    w2 = pg - uw*w[None,:]/2.
+    h1 = pg + uh*h[None,:]/2.
+    h2 = pg - uh*h[None,:]/2.
+
+
+    
+    Dtw1 = np.sum((tx[...,None]-w1[:,None,:])*(tx[...,None]-w1[:,None,:]),axis=0)**0.5
+    Drw1 = np.sum((rx[...,None]-w1[:,None,:])*(rx[...,None]-w1[:,None,:]),axis=0)**0.5
+    Dtw2 = np.sum((tx[...,None]-w2[:,None,:])*(tx[...,None]-w2[:,None,:]),axis=0)**0.5
+    Drw2 = np.sum((rx[...,None]-w2[:,None,:])*(rx[...,None]-w2[:,None,:]),axis=0)**0.5
+
+    Dth1 = np.sum((tx[...,None]-h1[:,None,:])*(tx[...,None]-h1[:,None,:]),axis=0)**0.5
+    Drh1 = np.sum((rx[...,None]-h1[:,None,:])*(rx[...,None]-h1[:,None,:]),axis=0)**0.5
+    Dth2 = np.sum((tx[...,None]-h2[:,None,:])*(tx[...,None]-h2[:,None,:]),axis=0)**0.5
+    Drh2 = np.sum((rx[...,None]-h2[:,None,:])*(rx[...,None]-h2[:,None,:]),axis=0)**0.5
+
+    # Drw1 = np.dot(rx-w1,rx-w1)**0.5
+    # Dtw2 = np.dot(tx-w2,tx-w2)**0.5
+    # Drw2 = np.dot(rx-w2,rx-w2)**0.5
+    # Dth1 = np.dot(tx-h1,tx-h1)**0.5
+    # Drh1 = np.dot(rx-h1,rx-h1)**0.5
+    # Dth2 = np.dot(tx-h2,tx-h2)**0.5
+    # Drh2 = np.dot(rx-h2,rx-h2)**0.5
+    
     
     D1w = Dtw1+Drw1
     D1h = Dth1+Drh1
     D2w = Dtw2+Drw2
     D2h = Dth2+Drh2
     
-    if shad == 1:
-        signw1 = 1
-        signw2 = 1
-        signh1 = 1
-        signh2 = 1
-    else:
-        if condw:
-            if D1w>D2w:
-                signw1=1
-                signw2=-1
-            else:
-                signw1=-1
-                signw2=1
-        else:
-            signw1 = 1
-            signw2 = 1
-        
-        if condh:
-            if D1h>D2h:
-                signh1=1
-                signh2=-1
-            else:
-                signh1=-1
-                signh2=1
-        else:
+    signw1 = np.ones((Nseg,Nscreen))
+    signw2 = np.ones((Nseg,Nscreen))
+    signh1 = np.ones((Nseg,Nscreen))
+    signh2 = np.ones((Nseg,Nscreen))
+
+
+    condw1 = (visi*condw*(D1w<=D2w)).astype(bool)
+    condw2 = (visi*condw*(D1w>D2w)).astype(bool)
+    signw1[condw1]=-1
+    signw2[condw2]=-1
+    condh1 = (visi*condh*(D1h<=D2h)).astype(bool)
+    condh2 = (visi*condh*(D1h>D2h)).astype(bool)
+    signh1[condh1]=-1
+    signh2[condh2]=-1
+    
             
-            signh1 = 1
-            signh2 = 1
-            
-    Fw1 = FMetisShad(fGHz,r,D1w,sign=signw1)
-    Fh1 = FMetisShad(fGHz,r,D1h,sign=signh1)
-    Fw2 = FMetisShad(fGHz,r,D2w,sign=signw2)
-    Fh2 = FMetisShad(fGHz,r,D2h,sign=signh2)
+    Fw1 = FMetisShad2(fGHz,r,D1w,sign=signw1)
+    Fh1 = FMetisShad2(fGHz,r,D1h,sign=signh1)
+    Fw2 = FMetisShad2(fGHz,r,D2w,sign=signw2)
+    Fh2 = FMetisShad2(fGHz,r,D2h,sign=signh2)
     tmp = (Fh1+Fh2)*(Fw1+Fw2)
     Lsh = -20*np.log10(1-tmp)
 
