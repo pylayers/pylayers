@@ -191,7 +191,6 @@ def LossMetisShadowing(fGHz,tx,rx,pg,uw,uh,w,h):
 
     rxtx = rx - tx # LOS distance
    
-    # x[2]=gamma.
     A = np.vstack((rxtx,-uw,-uh)).T 
     b = pg - tx
     x = la.solve(A,b)
@@ -309,25 +308,23 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
     # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx <==> Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
 
-    TODO
-    ----
-
-    To be vectorized 
 
     """
 
-    rxtx = rx - tx # (3,Nseg) LOS distance
+    rxtx = rx - tx # rxtx : (3,Nseg) LOS distance
    
 
-    # A : (Nseg,Nscreen,3,3)
-    # b : (Nseg,Nscreen,3)
-    # rxtx.T (Nseg,3)
-    # uw.T (Nscreen, 3)
-    # uh.T (Nscreen,3)
+    # A      : (Nseg,Nscreen,3,3)
+    # b      : (Nseg,Nscreen,3)
+    # rxtx.T : (Nseg,3)
+    # uw.T   : (Nscreen, 3)
+    # uh.T   : (Nscreen,3)
+    # pg.T   : (Nscreen, 3)
+    # tx.T   : (Nseg,3)
+
     A = np.vstack((rxtx,-uw,-uh)).T 
 
-    # pg.T Nscreen, 3
-    # tx.T Nseg,3
+    
     b = pg.T[None,:,:]-tx[:,None,:] 
     #b = pg - tx
     x = la.solve(A,b)
