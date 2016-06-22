@@ -339,12 +339,13 @@ class Layout(PyLayers):
 
         """
 
-        mat = sb.MatDB()
-        mat.load(_filematini)
+        #mat = sb.MatDB()
+        #mat.load(_filematini)
 
-        self.sl = sb.SlabDB()
-        self.sl.mat = mat
-        self.sl.load(_fileslabini)
+        #self.sl = sb.SlabDB()
+        #self.sl.mat = mat
+        #self.sl.load(_fileslabini)
+
         self.labels = {}
 
         self.Np = 0
@@ -378,6 +379,8 @@ class Layout(PyLayers):
 
         self.hasboundary=False
         self.coordinates='cart'
+        self.version='1.0'
+        
         #
         # setting display option
         #
@@ -403,23 +406,24 @@ class Layout(PyLayers):
         self.display['alpha'] = 0.5
         self.display['layer'] = []
         self.display['clear'] = False
-        self.display['activelayer'] = self.sl.keys()[0]
+        self.display['activelayer'] = 'AIR'
         self.display['layers'] = []
         self.display['overlay'] = False
         self.display['overlay_flip'] = ""
         #self.display['overlay_file']="/home/buguen/Pyproject/data/image/"
         self.display['overlay_file'] = ""
         self.display['overlay_axis'] = ""
-        self.display['layerset'] = self.sl.keys()
+        #self.display['layerset'] = self.sl.keys()
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
 
         self.zmin = 0
 
+        self.load(_filename,build=build)
+
         for k in self.sl.keys():
             self.name[k] = []
 
-        self.load(_filename,build=build)
 
         
 
@@ -1216,10 +1220,13 @@ class Layout(PyLayers):
         config.add_section("segments")
         config.add_section("display")
         config.add_section("files")
+        config.add_section("slabs")
+        config.add_section("materials")
         if self.coordinates=='latlon':
             config.set("info","format","latlon")
         else:
             config.set("info","format","cart")
+        config.set("info","version",self.version)
         #config.set("info",'Npoints',self.Np)
         #config.set("info",'Nsegments',self.Ns)
         #config.set("info",'Nsubsegments',self.Nss)
@@ -1268,8 +1275,27 @@ class Layout(PyLayers):
                     # remove normal information from the strucure        
                     d.pop('norm')
                     config.set("segments",str(n),d)
-        config.set("files",'materials',self.filematini)
-        config.set("files",'slab',self.fileslabini)
+
+        lslab = [ x for x in self.name if len(self.name[x]) > 0 ]
+        lmat = []
+        for s in lslab:
+            ds = {}
+            ds['index']=self.sl[s]['index']
+            ds['color']=self.sl[s]['color']
+            ds['lmatname']=self.sl[s]['lmatname']
+            for m in ds['lmatname']:
+                if m not in lmat:
+                    lmat.append(m)
+            ds['lthick']=self.sl[s]['lthick']
+            ds['linewidth']=self.sl[s]['linewidth']
+            config.set("slabs",s,ds)
+
+        for m in lmat:
+            dm = self.sl.mat[m]
+            config.set("materials",m,dm)
+
+        #config.set("files",'materials',self.filematini)
+        #config.set("files",'slab',self.fileslabini)
         config.set("files",'furniture',self.filefur)
         fileini = pyu.getlong(_fileini,pstruc['DIRINI'])
         fd = open(fileini,"w")
@@ -1404,10 +1430,17 @@ class Layout(PyLayers):
         # compliant with config file without  material/slab information
 
         if config.has_section('files'):
-            self.filematini=config.get('files','materials')
-            self.fileslabini=config.get('files','slab')
+            #self.filematini=config.get('files','materials')
+            #self.fileslabini=config.get('files','slab')
             self.filefur=config.get('files','furniture')
 
+        if config.has_section('slabs'):
+            filemat = self.filename.replace('ini','mate')
+            fileslab = self.filename.replace('ini','slab')
+            ds = di['slabs']
+            dm = di['materials']
+            self.sl = sb.SlabDB(filemat=filemat,fileslab=fileslab,bydict=True,ds=ds,dm=dm)
+        
         # In this section we handle the ini file format evolution
 
         if self.display.has_key('fileoverlay'):
@@ -1421,7 +1454,6 @@ class Layout(PyLayers):
 
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
-        
         self.g2npy()
         # 
         self._hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
@@ -6592,7 +6624,7 @@ class Layout(PyLayers):
 
             if True:#name != 'AIR':
                 pn = self.Gs.node[Id]['norm']
-                sl = self.sl[name]
+                sl = self.sl[name.lower()]
                 thick = (sum(sl['lthick'])/2.)+0.2
 
 
@@ -8823,8 +8855,8 @@ class Layout(PyLayers):
         """ gives information about the Layout
         """
         print "filestr : ", self.filename
-        print "filematini : ", self.filematini
-        print "fileslabini : ", self.fileslabini
+        #print "filematini : ", self.filematini
+        #print "fileslabini : ", self.fileslabini
         try:
             print "filegeom : ", self.filegeom
         except:

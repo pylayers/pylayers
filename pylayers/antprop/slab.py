@@ -850,7 +850,7 @@ class MatDB(PyLayers,dict):
     associate numeric and alphanumeric keys
 
     """
-    def __init__(self, _fileini='matDB.ini'):
+    def __init__(self, _fileini='matDB.ini',bydict=False,dm={}):
         """ class constructor
 
         Parameters
@@ -861,7 +861,12 @@ class MatDB(PyLayers,dict):
         """
         self.fileini = _fileini
         self.filemat = self.fileini.replace('.ini','.mat')
-        self.load(_fileini)
+        if not bydict:
+            self.load(_fileini)
+        else:
+            self.update(dm)
+            for k in self:
+                self[k]=eval(self[k])
 
     def __repr__(self):
         st = 'Available Material\n'
@@ -1944,7 +1949,7 @@ class SlabDB(dict):
     DB : slab dictionnary
 
     """
-    def __init__(self, filemat='matDB.ini', fileslab='slabDB.ini'):
+    def __init__(self, filemat='matDB.ini', fileslab='slabDB.ini',bydict=False,ds={},dm={}):
         """ class constructor
 
         Parameters
@@ -1952,25 +1957,33 @@ class SlabDB(dict):
 
         filemat : string
         fileslab : string
+        bydict : False
+            If True update directly the dictionaryi with ds and dm, otherwise read from file 
 
         """
 
         self.fileslab = fileslab
-        # deprecated
-        #self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!! deprecated in new verion
-        self.mat = MatDB()
-        if (filemat != ''):
-            self.mat.load(filemat)
-        if (fileslab != ''):
-            self.load(fileslab)
-            self.dass()
+        if not bydict:
+            self.mat = MatDB()
+            if (filemat != ''):
+                self.mat.load(filemat)
+            if (fileslab != ''):
+                self.load(fileslab)
+        else:
+            assert(type(dm)==dict)
+            assert(type(ds)==dict)
+            self.update(ds)
+            self.mat = MatDB(_fileini=filemat,bydict=True,dm=dm)
+            for k in self.keys():
+                self[k]=eval(self[k])
+        self.dass()
 
     def __repr__(self):
         st =      "Slab file name     : " + self.fileslab+ '\n'
         st = st + "Material file name : " +  self.mat.fileini+'\n'
         st = st + '-----------------------------'+'\n'+'\n'
         for i in self.keys():
-            st = st + self[i].__repr__()+'\n'
+            st = st + i + ':' + self[i].__repr__()+'\n'
         #    S.info()
         return(st)
 
