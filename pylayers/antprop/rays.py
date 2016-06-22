@@ -1852,23 +1852,23 @@ class Rays(PyLayers,dict):
             self.raypt = 0
 
         # stacked interactions
-        I = Interactions()
+        I = Interactions(bydict=True,slab=L.sl)
 
         # rotation basis
-        B  = IntB()
-        B0 = IntB()
+        B  = IntB(bydict=True,slab=L.sl)
+        B0 = IntB(bydict=True,slab=L.sl)
 
         # # LOS Interaction
         # Los = IntL()
 
         # Reflexion
-        R = IntR()
+        R = IntR(bydict=True,slab=L.sl)
 
         # Transmission
-        T = IntT()
+        T = IntT(bydict=True,slab=L.sl)
 
         # Diffraction
-        D = IntD()
+        D = IntD(bydict=True,slab=L.sl)
 
         idx = np.array(())
 
@@ -2157,14 +2157,14 @@ class Rays(PyLayers,dict):
         self.filled = True
 
     def eval(self,fGHz=np.array([2.4]),ib=[]):
-        """  docstring for eval
+        """  field evaluation of rays  
 
         Parameters
         ----------
 
         fGHz : array
             frequency in GHz array
-        ib : list of intercation block
+        ib : list of interactions block
 
         """
 

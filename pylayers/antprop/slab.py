@@ -1972,6 +1972,7 @@ class SlabDB(dict):
         else:
             assert(type(dm)==dict)
             assert(type(ds)==dict)
+            # copier le contenu du load ici 
             self.update(ds)
             self.mat = MatDB(_fileini=filemat,bydict=True,dm=dm)
             for k in self.keys():
