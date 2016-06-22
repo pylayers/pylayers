@@ -1228,11 +1228,9 @@ class Layout(PyLayers):
                 if n not in self.lboundary:
                     config.set("points",str(n),(self.Gs.pos[n][0],self.Gs.pos[n][1]))
 
-
-
         for n in self.Gs.pos:
             if n >0:
-                if self.Gs.node[n]['name']!='AIR' or self.Gs.node[n].has_key('ss_name'):
+                if self.Gs.node[n]['name']!='_AIR' or self.Gs.node[n].has_key('ss_name'):
                     d = self.Gs.node[n]
                     # old format conversion
                     if d.has_key('ncycles'):
