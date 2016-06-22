@@ -424,6 +424,7 @@ class Interactions(Inter,dict):
             except:
                 print Warning('Warning Interaction.eval: No R interaction Evaluated,\
 whereas Reflection rays found')
+                pdb.set_trace()
         # evaluate T and fill I
         if len(self.T.data)!=0:
             try:
@@ -436,6 +437,7 @@ whereas Reflection rays found')
             except:
                 print Warning('Warning Interaction.eval: No T interaction Evaluated,\
 whereas Transmission rays found')
+                pdb.set_trace()
         # evaluate D and fill I
 
         if len(self.D.data)!=0:
@@ -449,6 +451,7 @@ whereas Transmission rays found')
             except:
                 print Warning('Warning Interaction.eval: No D interaction Evaluated,\
 whereas Diffraction rays found')
+                pdb.set_trace()
 
         self.evaluated = True
 

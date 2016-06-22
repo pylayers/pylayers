@@ -887,13 +887,18 @@ class Layout(PyLayers):
 
         # lairwall : list of air wall segments
 
-        lairwall = self.name['AIR']
+        lairwall = []
+
+        if 'AIR' in self.name:
+            lairwall+=self.name['AIR']
+        if '_AIR' in self.name:
+            lairwall+=self.name['_AIR']
 
         #
-        #  function to couL.filename)nt airwall connected to a point
+        #  function to count airwall connected to a point
         #  probably this is not the faster solution
         #
-
+        
         def nairwall(nupt):
             lseg = nx.neighbors(self.Gs,nupt)
             n = 0
@@ -1177,7 +1182,7 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n >0:
-                if self.Gs.node[n]['name']!='AIR':
+                if self.Gs.node[n]['name']!='_AIR':
                     neigh = nx.neighbors(self.Gs,n)
                     d = self.Gs.node[n]
                     noden = -10000000-n
@@ -1260,6 +1265,8 @@ class Layout(PyLayers):
                                 d['transition']=True
                         except:
                             pass
+                    # remove normal information from the strucure        
+                    d.pop('norm')
                     config.set("segments",str(n),d)
         config.set("files",'materials',self.filematini)
         config.set("files",'slab',self.fileslabini)
@@ -5376,7 +5383,7 @@ class Layout(PyLayers):
             
 
             seg = p.vnodes[p.vnodes>0]
-            lair = [x in self.name['AIR'] for x in seg]
+            lair = [x in (self.name['AIR']+self.name['_AIR']) for x in seg]
             
             if sum(lair)>0:
                 isopen = True
@@ -5423,9 +5430,9 @@ class Layout(PyLayers):
         # all segments of the Layout boundary
         nseg = filter(lambda x : x >0 , boundary.vnodes)
         # air segments of the Layout boundary
-        nsegair = filter(lambda x : x in self.name['AIR'],nseg)
+        nsegair = filter(lambda x : x in (self.name['AIR']+self.name['_AIR']),nseg)
         # wall segments of the Layout boundary
-        nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
+        nsegwall = filter(lambda x : x not in (self.name['AIR']+self.name['_AIR']),nseg)
 
         #
         # ldiffin  : list of indoor diffraction points
@@ -5467,7 +5474,8 @@ class Layout(PyLayers):
                 lncy = nx.neighbors(self.Gt,cy)  
                 for ncy in lncy:
                     segnum = self.Gt.edge[cy][ncy]['segment'][0]
-                    if self.Gs.node[segnum]['name']=='AIR':  
+                    if ((self.Gs.node[segnum]['name']=='AIR')
+                    or (self.Gs.node[segnum]['name']=='_AIR')):  
                         if not self.Gt.node[cy]['indoor']:
                             self.Gt.node[ncy]['indoor']=False
 
@@ -5626,7 +5634,7 @@ class Layout(PyLayers):
                         naw.append(self.add_segment(
                                    cp.vnodes[np.mod(i-1,lvn)],
                                    cp.vnodes[np.mod(i+1,lvn)]
-                                   ,name='AIR'))
+                                   ,name='_AIR'))
                     polys.append(cp)
             #
             # 3. merge Delaunay triangulation in order to obtain
@@ -5805,7 +5813,7 @@ class Layout(PyLayers):
                 self.add_segment(
                            streets.vnodes[np.mod(i-1,lvn)],
                            streets.vnodes[np.mod(i+1,lvn)]
-                           ,name='AIR')
+                           ,name='_AIR')
 
 
             ma= self.polysh2geu(macvx)
@@ -6043,8 +6051,7 @@ class Layout(PyLayers):
         # seg0 = [i for i in self.ma.vnodes if i >0]
         # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         
-        import ipdb
-        ipdb.set_trace()
+        
         self._addoutcy(check)
 
         #   V 2. add outside cycle (absorbant region index 0 )
@@ -6236,7 +6243,7 @@ class Layout(PyLayers):
                         # Reflexion occurs on segment different
                         # from AIR and ABSORBENT  (segment number, cycle)
                         #
-                        if (name!='AIR') & (name!='ABSORBENT'):
+                        if ((name!='_AIR') & (name!='AIR') & (name!='ABSORBENT')):
                             ListInteractions.append((inode, k))
                         #
                         # Transmission requires 2 cycles separated by a
@@ -6394,7 +6401,7 @@ class Layout(PyLayers):
                                         naw.append(self.add_segment(
                                                    cp.vnodes[np.mod(i-1,lvn)],
                                                    cp.vnodes[np.mod(i+1,lvn)]
-                                                   ,name='AIR'))
+                                                   ,name='_AIR'))
                                     polys.append(cp)
                         #
                         # 3. merge delaunay triangulation in order to obtain
@@ -6938,11 +6945,14 @@ class Layout(PyLayers):
                 npt  = filter(lambda x : x<0,vnodes)
                 nseg = filter(lambda x : x>0,vnodes)
 
-                airwalls = filter(lambda x : x in self.name['AIR'],nseg)
+                lair = self.name['AIR']+self.name['_AIR']
+                airwalls = filter(lambda x : x in lair,nseg)
                 ndiff = [ x for x in npt if x in self.ddiff.keys()]
                 #
                 # Create a graph
                 #
+
+
                 Gv = nx.Graph()
                 #
                 # in convex case :
@@ -7078,7 +7088,7 @@ class Layout(PyLayers):
                 # On AIR or ABSORBENT there is no reflection
                 # except if n is a subsegment
 
-                if ((name!='AIR') & (name!='ABSORBENT')) or (n in self.lsss):
+                if ((name!='_AIR') & (name!='AIR') & (name!='ABSORBENT')) or (n in self.lsss):
                     self.Gi.add_node((n,cy0))
                     self.Gi.add_node((n,cy1))
                     self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
@@ -7517,7 +7527,8 @@ class Layout(PyLayers):
             if key not in kwargs:
                 kwargs[key] = value
 
-        segfilt = filter(lambda x : x not in self.name['AIR'], self.tsg)
+        lair = self.name['AIR']+self.name['_AIR']
+        segfilt = filter(lambda x : x not in lair, self.tsg)
         # get the association between segment and nx edges
         edges = self.Gs.edges()
         Ne = len(edges)
@@ -8507,7 +8518,9 @@ class Layout(PyLayers):
                     pdb.set_trace()
                 
                 neigh = self.Gs[k].keys()
-                sega  = [ n for n in neigh if self.Gs.node[n]['name']=='AIR' ]
+                sega  = [ n for n in neigh if 
+                    (self.Gs.node[n]['name']=='AIR' or 
+                     self.Gs.node[n]['name']=='_AIR')]
 
                 nsector = len(neigh)-len(sega)
 
@@ -8521,7 +8534,7 @@ class Layout(PyLayers):
 
                     segsep = self.Gt[ccy[0]][ccy[1]]['segment'][0]
                     typslab = self.Gs.node[segsep]['name']
-                    if typslab=='AIR': # same sector
+                    if (typslab=='AIR' or typslab=='_AIR'): # same sector
                         dsector[ct].append(ccy[1])
                     else: # change sector
                         ct=(ct+1)%nsector
@@ -8588,10 +8601,11 @@ class Layout(PyLayers):
         for n in self.Gr.nodes():
             self.Gr.node[n]['transition'] = []
         ltrans = self.listtransition
-        ldoors = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-        
-        # Destroy cycles which have no doors
+        ltmp = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
+        ldoors = filter(lambda x:self.Gs.node[x]['name']!='_AIR',ltmp)
+    
         keys = self.Gr.node.keys()
+
         for cy in keys:
             lseg = self.Gr.node[cy]['cycle'].cycle
             #hasdoor = filter(lambda n : n in ldoors,lseg)
@@ -9144,7 +9158,8 @@ class Layout(PyLayers):
         dikn = {}
         for i in self.Gs.node.keys():
             if i > 0:  # segment
-                if self.Gs.node[i]['name']!='AIR':
+                if ((self.Gs.node[i]['name']!='AIR') and 
+                    (self.Gs.node[i]['name']!='_AIR')):
                     nebr = self.Gs.neighbors(i)
                     n1 = nebr[0]
                     n2 = nebr[1]
@@ -9311,7 +9326,8 @@ class Layout(PyLayers):
 
         for i in self.Gs.node.keys():
             if i > 0:  # segment
-                if self.Gs.node[i]['name']!='AIR':
+                if ((self.Gs.node[i]['name']!='AIR') and
+                    (self.Gs.node[i]['name']!='_AIR')):
                     nebr = self.Gs.neighbors(i)
                     n1 = nebr[0]
                     n2 = nebr[1]
@@ -9934,10 +9950,10 @@ class Layout(PyLayers):
             self.lboundary=[n1,n2,n3,n4]
 
             self.segboundary = []
-            self.segboundary.append(self.add_segment(n1, n2, name='AIR'))
-            self.segboundary.append(self.add_segment(n2, n3, name='AIR'))
-            self.segboundary.append(self.add_segment(n3, n4, name='AIR'))
-            self.segboundary.append(self.add_segment(n4, n1, name='AIR'))
+            self.segboundary.append(self.add_segment(n1, n2, name='_AIR'))
+            self.segboundary.append(self.add_segment(n2, n3, name='_AIR'))
+            self.segboundary.append(self.add_segment(n3, n4, name='_AIR'))
+            self.segboundary.append(self.add_segment(n4, n1, name='_AIR'))
 
             self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
             self.display['box'] = self.ax

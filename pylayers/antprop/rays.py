@@ -1608,7 +1608,8 @@ class Rays(PyLayers,dict):
                     ptdiff = L.pt[:,L.iupnt[-diffupt]]
                     self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
-                    aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
+                    lair = L.name['AIR']+L.name['_AIR']
+                    aseg = map(lambda x : filter(lambda y : y not in lair,
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)
                     #manage flat angle : diffraction by flat segment e.g. door limitation)
