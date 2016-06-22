@@ -1622,7 +1622,11 @@ class Rays(PyLayers,dict):
                     # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
                     #diffslab = [ idslab0-idslabn ]
 
-                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'_'+str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
+                    #
+                    # slab name are converted in lower case since v1.0 file format of layout
+                    #
+                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]].lower()]['index'])+'_'
+                                        + str(L.sl[L.sla[x[1]].lower()]['index']) for x in aseg]
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)
 

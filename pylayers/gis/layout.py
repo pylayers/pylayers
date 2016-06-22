@@ -419,10 +419,9 @@ class Layout(PyLayers):
 
         self.zmin = 0
 
+        
+        
         self.load(_filename,build=build)
-
-        for k in self.sl.keys():
-            self.name[k] = []
 
 
         
@@ -1214,6 +1213,7 @@ class Layout(PyLayers):
                    short filemame with extension
 
         """
+        current_version = 1.0
         config = ConfigParser.ConfigParser()
         config.add_section("info")
         config.add_section("points")
@@ -1226,7 +1226,7 @@ class Layout(PyLayers):
             config.set("info","format","latlon")
         else:
             config.set("info","format","cart")
-        config.set("info","version",self.version)
+        config.set("info","version",current_version)
         #config.set("info",'Npoints',self.Np)
         #config.set("info",'Nsegments',self.Ns)
         #config.set("info",'Nsubsegments',self.Nss)
@@ -1279,6 +1279,8 @@ class Layout(PyLayers):
         lslab = [ x for x in self.name if len(self.name[x]) > 0 ]
         lmat = []
         for s in lslab:
+            if self.version>=1.0:
+                s = s.lower()
             ds = {}
             ds['index']=self.sl[s]['index']
             ds['color']=self.sl[s]['color']
@@ -1291,6 +1293,8 @@ class Layout(PyLayers):
             config.set("slabs",s,ds)
 
         for m in lmat:
+            if self.version>=1.0:
+                m = m.lower()
             dm = self.sl.mat[m]
             config.set("materials",m,dm)
 
@@ -1340,6 +1344,21 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.labels = {}
 
+        #
+        # Check file version 
+        #
+        if di['info'].has_key('version'):
+            self.version = di['info']['version']
+            self.name = {}
+        else:
+            self.version=0.9
+            mat = sb.MatDB()
+            mat.load(self.filematini)
+            self.sl = sb.SlabDB()
+            self.sl.mat = mat
+            self.sl.load(self.fileslabini)
+            for k in self.sl.keys():
+                self.name[k] = []
 
         # manage ini file with latlon coordinates
         if di['info'].has_key('format'):
@@ -6624,7 +6643,10 @@ class Layout(PyLayers):
 
             if True:#name != 'AIR':
                 pn = self.Gs.node[Id]['norm']
-                sl = self.sl[name.lower()]
+                if (self.version >= 1.0):   
+                    sl = self.sl[name.lower()]
+                else:
+                    sl = self.sl[name]
                 thick = (sum(sl['lthick'])/2.)+0.2
 
 
@@ -9283,7 +9305,11 @@ class Layout(PyLayers):
 #                core = self.ce[subseg[i-en]][0]
 #                name = sl.di[core]
 
-            colname = sl[name]['color']
+            if self.version>=1.0:
+                colname = sl[name.lower()]['color']
+            else:
+                colname = sl[name]['color']
+
             colhex = cold[colname]
             col = pyu.rgb(colhex) / 255.
             fos.write("4 %i %i %i %i %6.3f %6.3f %6.3f 0.4\n" % (q +
