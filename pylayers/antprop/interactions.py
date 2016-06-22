@@ -781,7 +781,7 @@ class IntT(Inter):
         array([ 0.1 ,  4.  ,  3.15])
         >>> T.stack(data2,idx=1)
         >>> T.uslidx=1
-        >>> T.dusl['WOOD']=[0,1]
+        >>> T.dusl['AIR']=[0,1]
 
         >>> # evaluation parameters (normally read from config.ini)
         >>> T.f = np.array([  2.,  11.])
@@ -796,8 +796,8 @@ class IntT(Inter):
         >>> np.shape(eT)
         (1, 2, 2, 2)
         >>> eT[0,0]
-        array([[-0.94187991+0.26299468j,  0.00000000+0.j        ],
-               [ 0.00000000+0.j        , -0.94234012+0.26232713j]])
+        array([[ 1.+0.j,  0.+0.j],
+               [ 0.+0.j,  1.+0.j]])
         """
 
         self.sinsout()

@@ -2043,10 +2043,12 @@ class Rays(PyLayers,dict):
 
                 slT=L.sla[nstrf[uT]]
                 slR=L.sla[nstrf[uR]]
+
                 # WARNING
                 # in future version floor and ceil could be different for each cycle.
                 # this information would be directly obtained from L.Gs
                 # then the two following lines would have to be  modified
+
                 slRf=np.array(['FLOOR']*len(uRf))
                 slRc=np.array(['CEIL']*len(uRc))
 
