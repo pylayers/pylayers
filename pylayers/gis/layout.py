@@ -1242,7 +1242,7 @@ class Layout(PyLayers):
 
         for n in self.Gs.pos:
             if n >0:
-                if self.Gs.node[n]['name']!='_AIR' or self.Gs.node[n].has_key('ss_name'):
+                if self.Gs.node[n]['name']!='_AIR':
                     d = self.Gs.node[n]
                     # old format conversion
                     if d.has_key('ncycles'):
@@ -1458,7 +1458,7 @@ class Layout(PyLayers):
             fileslab = self.filename.replace('ini','slab')
             ds = di['slabs']
             dm = di['materials']
-            self.sl = sb.SlabDB(filemat=filemat,fileslab=fileslab,bydict=True,ds=ds,dm=dm)
+            self.sl = sb.SlabDB(filemat=filemat,fileslab=fileslab,ds=ds,dm=dm)
         
         # In this section we handle the ini file format evolution
 

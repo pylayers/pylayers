@@ -123,7 +123,6 @@ class Inter(PyLayers):
             idx=[],
             _filemat='matDB.ini',
             _fileslab='slabDB.ini',
-            bydict=False,
             slab={}):
         """ Inter object constructor
 
@@ -135,18 +134,17 @@ class Inter(PyLayers):
         idx : list
         _filemat : string
         _fileslab : string
-        bydict : boolean 
-            if True read slab from dict 
+        slab : SlabDB
 
         """
 
         self.typ = typ
         self.data = data
         self.idx = idx
-        if bydict:
-            self.slab = slab
-        else:
+        if slab=={}:
             self.slab = SlabDB(filemat=_filemat, fileslab=_fileslab)
+        else:
+            self.slab = slab
 
         self.idx = []
         if idx != []:
@@ -302,10 +300,10 @@ class Interactions(Inter,dict):
 
     """
 
-    def __init__(self,bydict=False,slab={}):
+    def __init__(self,slab={}):
         """ object constructor
         """
-        Inter.__init__(self,bydict=bydict,slab=slab)
+        Inter.__init__(self,slab=slab)
         self['B'] = []
         self['L'] = []
         self[''] = []
@@ -491,8 +489,8 @@ class IntB(Inter):
         The interaction object is np.array with shape (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()), idx=[],bydict=False,slab={}):
-        Inter.__init__(self, data=data, idx=idx, typ=-1,bydict=bydict,slab=slab)
+    def __init__(self, data=np.array(()), idx=[],slab={}):
+        Inter.__init__(self, data=data, idx=idx, typ=-1,slab=slab)
 
     def __repr__(self):
         s = 'number of B basis :' + str(np.shape(self.data)[0])
@@ -621,11 +619,11 @@ class IntR(Inter):
 
 
     """
-    def __init__(self, data=np.array(()), idx=[],bydict=False,slab={}):
+    def __init__(self, data=np.array(()), idx=[],slab={}):
 #        self.theta = data[0]
 #        self.si = data[1]
 #        self.sr = data[2]
-        Inter.__init__(self, data=data, idx=idx, typ=2,bydict=bydict,slab=slab)
+        Inter.__init__(self, data=data, idx=idx, typ=2,slab=slab)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index of self.idx
@@ -752,9 +750,9 @@ class IntT(Inter):
 
     """
 
-    def __init__(self, data=np.array(()), idx=[],bydict=False,slab={}):
+    def __init__(self, data=np.array(()), idx=[],slab={}):
 
-        Inter.__init__(self, data=data, idx=idx, typ=3,bydict=bydict,slab=slab)
+        Inter.__init__(self, data=data, idx=idx, typ=3,slab=slab)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
@@ -870,8 +868,8 @@ class IntT(Inter):
 class IntD(Inter):
     """ diffraction interaction class
     """
-    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4]),bydict=False,slab={}):
-        Inter.__init__(self, data=data, idx=idx, typ=1,bydict=bydict,slab=slab)
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4]),slab={}):
+        Inter.__init__(self, data=data, idx=idx, typ=1,slab=slab)
         self.dusl = {}
     def __repr__(self):
         s = 'number of D interaction :' + str(np.shape(self.data)[0])

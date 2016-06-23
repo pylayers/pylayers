@@ -1852,23 +1852,23 @@ class Rays(PyLayers,dict):
             self.raypt = 0
 
         # stacked interactions
-        I = Interactions(bydict=True,slab=L.sl)
+        I = Interactions(slab=L.sl)
 
         # rotation basis
-        B  = IntB(bydict=True,slab=L.sl)
-        B0 = IntB(bydict=True,slab=L.sl)
+        B  = IntB(slab=L.sl)
+        B0 = IntB(slab=L.sl)
 
         # # LOS Interaction
         # Los = IntL()
 
         # Reflexion
-        R = IntR(bydict=True,slab=L.sl)
+        R = IntR(slab=L.sl)
 
         # Transmission
-        T = IntT(bydict=True,slab=L.sl)
+        T = IntT(slab=L.sl)
 
         # Diffraction
-        D = IntD(bydict=True,slab=L.sl)
+        D = IntD(slab=L.sl)
 
         idx = np.array(())
 
