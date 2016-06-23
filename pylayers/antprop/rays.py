@@ -1165,25 +1165,27 @@ class Rays(PyLayers,dict):
                         uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in L.Gt.nodes() if x>0] for p in P])
 
                         # find points are indoor/outdoor cycles
-                        upt,ucy = np.where(uinter)
-                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] # ucy+1 is to manage cycle 0
+                        upt,cyid = np.where(uinter)
+                        cyid=cyid+1# cyid+1 is to manage cycle 0
+                        uout = np.where([not L.Gt.node[u]['indoor'] for u in cyid])[0] 
                         ax=plt.gca()
                         [L.Gt.node[x]['polyg'].plot(ax=plt.gca(),fig=plt.gcf(),color='c') for x in L.Gt.nodes() if (x>0) and (L.Gt.node[x]['indoor'])]
                         [L.Gt.node[x]['polyg'].plot(ax=plt.gca(),fig=plt.gcf()) for x in L.Gt.nodes() if  (x>0) and not(L.Gt.node[x]['indoor'])]
                         if len(uout)>0:
                             # rays to be removed:
-                            [ax.plot(p.xy[0],p.xy[1],'or') for p in P]
                             plt.draw()
-
+                            import ipdb
+                            ipdb.set_trace()
                             ptees = np.delete(ptees,uc[1][uout],axis=2)
                             siges = np.delete(siges,uc[1][uout],axis=2)
-                            sigsave = np.delete(sigsave,uc[1][uout],axis=2)
-                        else:
+                            sigsave = np.delete(sigsave,uc[1][upt[uout]],axis=2)
+                        [ax.plot(p.xy[0],p.xy[1],'or') for up,p in enumerate(P) if up in uout]
 
-                            [ax.plot(p.xy[0],p.xy[1],'og') for p in P]
-                            plt.draw()
+                        [ax.plot(p.xy[0],p.xy[1],'og') for up,p in enumerate(P) if up not in uout]
+                        plt.draw()
                         # import ipdb
                         # ipdb.set_trace()
+                        print k+Nint
                         import ipdb
                         ipdb.set_trace()
                 try:
