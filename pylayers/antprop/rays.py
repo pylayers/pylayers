@@ -57,6 +57,7 @@ from pylayers.antprop.slab import *
 from pylayers.antprop.channel import Ctilde
 from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
+import shapely.geometry as shg
 import h5py
 
 class Rays(PyLayers,dict):
@@ -743,7 +744,7 @@ class Rays(PyLayers,dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1):
+    def to3D(self,L,H=3, N=1,outdoor=True):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -1152,6 +1153,39 @@ class Rays(PyLayers,dict):
                     #   z --> kl subseg level 
                     #   siges[0,:] --> Ms + nstr *Mss + (kl)
                     #
+                if outdoor:
+                    # uc (inter x ray)
+                    uc = np.where(siges[1,:,:]==5)
+                    print uc
+                    ptc = ptees[:,uc[0],uc[1]]
+                    if len(uc[0]) !=0:
+                        P = shg.MultiPoint(ptc[:2,:].T)
+                        #find where points are in 
+                        # uinter(nb pt x nb cycles)
+                        uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in L.Gt.nodes() if x>0] for p in P])
+
+                        # find points are indoor/outdoor cycles
+                        upt,ucy = np.where(uinter)
+                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] # ucy+1 is to manage cycle 0
+                        ax=plt.gca()
+                        [L.Gt.node[x]['polyg'].plot(ax=plt.gca(),fig=plt.gcf(),color='c') for x in L.Gt.nodes() if (x>0) and (L.Gt.node[x]['indoor'])]
+                        [L.Gt.node[x]['polyg'].plot(ax=plt.gca(),fig=plt.gcf()) for x in L.Gt.nodes() if  (x>0) and not(L.Gt.node[x]['indoor'])]
+                        if len(uout)>0:
+                            # rays to be removed:
+                            [ax.plot(p.xy[0],p.xy[1],'or') for p in P]
+                            plt.draw()
+
+                            ptees = np.delete(ptees,uc[1][uout],axis=2)
+                            siges = np.delete(siges,uc[1][uout],axis=2)
+                            sigsave = np.delete(sigsave,uc[1][uout],axis=2)
+                        else:
+
+                            [ax.plot(p.xy[0],p.xy[1],'og') for p in P]
+                            plt.draw()
+                        # import ipdb
+                        # ipdb.set_trace()
+                        import ipdb
+                        ipdb.set_trace()
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
