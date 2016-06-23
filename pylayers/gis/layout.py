@@ -1214,7 +1214,8 @@ class Layout(PyLayers):
 
         """
         current_version = 1.0
-        config = ConfigParser.ConfigParser()
+        config = ConfigParser.RawConfigParser()
+        config.optionxform = str
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
@@ -1279,8 +1280,6 @@ class Layout(PyLayers):
         lslab = [ x for x in self.name if len(self.name[x]) > 0 ]
         lmat = []
         for s in lslab:
-            if self.version>=1.0:
-                s = s.lower()
             ds = {}
             ds['index']=self.sl[s]['index']
             ds['color']=self.sl[s]['color']
@@ -1291,13 +1290,20 @@ class Layout(PyLayers):
             ds['lthick']=self.sl[s]['lthick']
             ds['linewidth']=self.sl[s]['linewidth']
             config.set("slabs",s,ds)
+        if "CEIL" not in lslab:
+            ceil = {'color': 'grey20', 'index': 6, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+            config.set("slabs","CEIL",ceil)
+        if "FLOOR" not in lslab:
+            floor = {'color': 'grey40', 'index': 7, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+            config.set("slabs","FLOOR",floor)
 
         for m in lmat:
-            if self.version>=1.0:
-                m = m.lower()
             dm = self.sl.mat[m]
             config.set("materials",m,dm)
 
+        if "REINFORCED_CONCRETE" not in lmat:
+            reic = {'index': 6, 'name': 'REINFORCED_CONCRETE', 'mur': (1+0j), 'epr': (8.69999980927+0j), 'roughness': 0.0, 'sigma': 3.0}
+            config.set("materials","REINFORCED_CONCRETE",reic)
         #config.set("files",'materials',self.filematini)
         #config.set("files",'slab',self.fileslabini)
         config.set("files",'furniture',self.filefur)
@@ -1325,7 +1331,8 @@ class Layout(PyLayers):
         """
         self.filename=_fileini
         di = {}
-        config = ConfigParser.ConfigParser()
+        config = ConfigParser.RawConfigParser()
+        config.optionxform = str
         fileini = pyu.getlong(_fileini,pstruc['DIRINI'])
         config.read(fileini)
         sections = config.sections()
@@ -1458,6 +1465,10 @@ class Layout(PyLayers):
             fileslab = self.filename.replace('ini','slab')
             ds = di['slabs']
             dm = di['materials']
+            for k in ds:
+                ds[k]=eval(ds[k])
+            for k in dm:
+                dm[k]=eval(dm[k])
             self.sl = sb.SlabDB(filemat=filemat,fileslab=fileslab,ds=ds,dm=dm)
         
         # In this section we handle the ini file format evolution
@@ -6643,10 +6654,7 @@ class Layout(PyLayers):
 
             if True:#name != 'AIR':
                 pn = self.Gs.node[Id]['norm']
-                if (self.version >= 1.0):   
-                    sl = self.sl[name.lower()]
-                else:
-                    sl = self.sl[name]
+                sl = self.sl[name]
                 thick = (sum(sl['lthick'])/2.)+0.2
 
 
@@ -9305,10 +9313,7 @@ class Layout(PyLayers):
 #                core = self.ce[subseg[i-en]][0]
 #                name = sl.di[core]
 
-            if self.version>=1.0:
-                colname = sl[name.lower()]['color']
-            else:
-                colname = sl[name]['color']
+            colname = sl[name]['color']
 
             colhex = cold[colname]
             col = pyu.rgb(colhex) / 255.

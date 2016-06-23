@@ -423,7 +423,6 @@ class Interactions(Inter,dict):
         #     print 'Warning : No L interaction Evaluated'
 
         # evaluate R and fill I
-        pdb.set_trace()
         if len(self.R.data)!=0:
             #try:
             self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
@@ -718,8 +717,8 @@ class IntR(Inter):
                 ut = self.data[self.dusl[m], 0]
                 if not ut.size == 0:
                     # find the index of angles which satisfied the data
-                    if m not in self.slab:
-                        m = m.lower()
+                    #if m not in self.slab:
+                    #    m = m.lower()
                     self.slab[m].ev(fGHz=fGHz, theta=ut, RT='R')
                     try:
                         R = np.concatenate((R, self.slab[m].R), axis=1)
@@ -828,8 +827,8 @@ class IntT(Inter):
                 # used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
                 if ut.size != 0:
-                    if m not in self.slab:
-                        m = m.lower()
+                    #if m not in self.slab:
+                    #    m = m.lower()
                     # get alpha and gamma for divergence factor
                     if len(self.slab[m]['lmat']) > 1:
                         print 'Warning : IntR class implemented for mat with only 1 layer '

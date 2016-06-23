@@ -869,7 +869,8 @@ class MatDB(PyLayers,dict):
             #self.update(dm)
             for matname in dm.keys():
                 M=Mat(name=matname)
-                for k in dm[matname]:
+                ddm = dm[matname]
+                for k in ddm:
                     M[k] = dm[matname][k]
                 self[matname] = M
 
@@ -1960,7 +1961,7 @@ class SlabDB(dict):
             for slabname in ds:
                 S = Slab(name=slabname,mat=self.mat)
                 for k in ds[slabname]:
-                    S[k]=db[slabname][k]
+                    S[k]=ds[slabname][k]
                 S['nmat']=len(ds[slabname]['lmatname'])
                 self[slabname]=S
 
