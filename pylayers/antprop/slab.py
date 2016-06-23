@@ -876,7 +876,7 @@ class MatDB(PyLayers,dict):
 
 
     def __repr__(self):
-        st = 'Available Material\n'
+        st = 'List of Materials\n'
         st = st+'-------------------\n'
         for k in self:
             epsr  = "%.2f" % abs(self[k]['epr'])
@@ -1394,29 +1394,11 @@ class Slab(Interface,dict):
         U.conv()
         return(U)
 
-#    def __repr__(self):
-#        if self['evaluated']:
-#            st = 'fGHz : '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
-#            st = st+ 'theta : '+str(self.theta[:,0])+':'+str(self.theta[:,-1])+':'+str(len(self.theta[0,:]))+"\n"
-#            st = st + '| '
-#        else:
-#            st = '| '
-#        for k in range(len(self['lmat'])):
-#            st = st + self['lmat'][k]+' | '
-#        st = st+'\n|'
-#
-#        for k in range(len(self['lmat'])):
-#            ntick = int(np.ceil(self['lthick'][k]/0.01))
-#            for l in range(ntick):
-#                st = st+'-'
-#            st = st +'|'
-#        st = st+'\n'
-#        return(st)
-
     def __repr__(self):
         st = self['name']+' : '
         st = st + reduce(lambda x,y: x+' | '+y,self['lmatname'])+ ' | '
-        st = st +str(self['lthick'])+'\n'
+        st = st + str(self['lthick'])+'\n'
+        st = st + '       ' + str(self['color'])+' '+str(self['linewidth'])+'\n'
         if self['evaluated']:
                 nf = len(self.fGHz)
                 nt = len(self.theta)
@@ -1920,12 +1902,13 @@ class SlabDB(dict):
         self.dass()
 
     def __repr__(self):
-        st =      "Slab file name     : " + self.fileslab+ '\n'
-        st = st + "Material file name : " +  self.mat.fileini+'\n'
+        st = 'List of Slabs\n'
         st = st + '-----------------------------'+'\n'+'\n'
         for i in self.keys():
-            st = st + i + ':' + self[i].__repr__()+'\n'
+            st = st + self[i].__repr__()
         #    S.info()
+        #st =      "Slab file name     : " + self.fileslab+ '\n'
+        #st = st + "Material file name : " +  self.mat.fileini+'\n'
         return(st)
 
     def showall(self):
