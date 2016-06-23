@@ -900,9 +900,9 @@ class Rays(PyLayers,dict):
                     u = u + 4
                     #
                     # At that point we introduce the signature of the new
-                    # introced points on the ceil and/or floor.
+                    # introduced points on the ceil and/or floor.
                     #
-                    # A signature is compose of two lines
+                    # A signature is composed of two lines
                     # esigs sup line : interaction number
                     # esigi inf line : interaction type
                     #
@@ -972,6 +972,9 @@ class Rays(PyLayers,dict):
                     #iintp_c = iint_c + 1
 
 
+                    #
+                    # If there are floor points
+                    #
                     if len(iint_f)>0:
                         a1esm_f = a1es[iintm_f, iray_f]
                         a1esc_f = a1es[iint_f, iray_f]
@@ -984,6 +987,9 @@ class Rays(PyLayers,dict):
                         coeff_f = (a1esc_f-a1esm_f)/(a1esp_f-a1esm_f)
                         ptees[0:2, iint_f, iray_f] = pteesm_f + coeff_f*(pteesp_f-pteesm_f)
 
+                    #
+                    # If there are ceil points
+                    #
                     if len(iint_c)>0:
                         a1esm_c = a1es[iintm_c, iray_c]
                         a1esc_c = a1es[iint_c, iray_c]
@@ -994,33 +1000,6 @@ class Rays(PyLayers,dict):
 
                         coeff_c = (a1esc_c-a1esm_c)/(a1esp_c-a1esm_c)
                         ptees[0:2, iint_c, iray_c] = pteesm_c + coeff_c*(pteesp_c-pteesm_c)
-
-
-                    #    a1es[iint_f+1, iray_f]-a1es[iint_f-1, iray_f])
-                    #coeff_f = (a1es[iint_f, iray_f]-a1es[iint_f-1, iray_f])/(
-                    #    a1es[iint_f+1, iray_f]-a1es[iint_f-1, iray_f])
-
-                    #coeff_c = (a1es[iint_c, iray_c]-a1es[iint_c-1, iray_c])/(
-                    #    a1es[iint_c+1, iray_c]-a1es[iint_c-1, iray_c])
-                    #
-                    # Update coordinate in the horizontal plane
-                    #
-                    #
-                    #ptees[0:2, iint_f, iray_f] = ptees[0:2, iint_f-1, iray_f] + coeff_f*(
-                    #    ptees[0:2, iint_f+1, iray_f]-ptees[0:2, iint_f-1, iray_f])
-                    #ptees[0:2, iint_c, iray_c] = ptees[0:2, iint_c-1, iray_c] + coeff_c*(
-                    #    ptees[0:2, iint_c+1, iray_c]-ptees[0:2, iint_c-1, iray_c])
-
-
-                    # vertical plane
-                    # WARNING !!
-                    #
-                    # ptees[2,iint_f,iray_f]   = 0
-                    # ptees[2,iint_c,iray_c]   = H
-                    #
-
-                    #
-                    # case where ceil reflection exists
 
                     if H != 0:
                         z  = np.mod(l+a1es*(rx[2]-l), 2*H)
