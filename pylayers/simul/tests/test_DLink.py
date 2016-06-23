@@ -22,4 +22,4 @@ if DL.R.los:
 # Point outside
 DL.b=np.array([755,1110,1.2])
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True,ra_ceil_H=0)
-DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
+ak,tauk = DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
