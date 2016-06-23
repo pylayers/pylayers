@@ -810,10 +810,6 @@ class Simul(PyLayers):
         self.config.add_section("waveform")
         self.config.add_section("output")
 
-        self.dout = {}
-        self.dlch = {}
-        self.dtra = {}
-        self.dtud = {}
         self.dtang = {}
         self.drang = {}
         self.dtauk = {}
@@ -821,13 +817,6 @@ class Simul(PyLayers):
         self.dcir = {}
         self.output = {}
 
-        #if os.path.isfile(pyu.getlong(_filesimul,'ini')):
-        self.filematini = "matDB.ini"
-        self.fileslabini = "slabDB.ini"
-        self.filemat = self.filematini.replace('.ini','.mat')
-        self.fileslab = self.fileslabini.replace('.ini','.slab')
-        self.slab=SlabDB(self.filematini, self.fileslabini)
-        self.filestr = 'defstr.str2'
         #
         # Here was a nasty bug : Rule for the future
         #    "Always precise the key value of the passed argument"
@@ -846,38 +835,23 @@ class Simul(PyLayers):
                             _fileant = 'defant.vsh3',
                             _filestr = self.filestr)
 
-        self.filepatra = "def.patra"
-        self.filepalch = "def.palch"
         self.filefreq = "def.freq"
-        self.patud = Patud()
-        self.palch = Palch(self.filepalch)
-        self.patra = Patra(self.filepatra)
-        self.pafreq = Pafreq(self.filefreq)
 
         self.progress = -1  # simulation not loaded
-        self.filelch = []
 
-        self.filetra = []
-        self.filetud = []
         self.filetang = []
         self.filerang = []
         self.filetauk = []
         self.filefield = []
 
-        self.claunching = []
-        self.ctracing = []
-        self.ctratotud = []
         self.fileconf = "project.conf"
         self.cfield = []
-#        self.freq = np.linspace(2, 11, 181, endpoint=True)
         self.fGHz = np.linspace(2, 11, 181, endpoint=True)
         self.wav = wvf.Waveform()
         try:
             self.load(_filesimul)
         except:
             pass
-            #self.updcfg()
-        #self.load(self.filesimul)
 
 
     def gui(self):
@@ -912,8 +886,6 @@ class Simul(PyLayers):
         """
         self.config.set("files", "struc", self.filestr)
         self.config.set("files", "conf", self.fileconf)
-        self.config.set("files", "patra", self.filepatra)
-        self.config.set("files", "palch", self.filepalch)
         self.config.set("files", "txant", self.tx.fileant)
         self.config.set("files", "rxant", self.rx.fileant)
         self.config.set("files", "tx", self.tx.fileini)
@@ -1483,7 +1455,7 @@ class Simul(PyLayers):
         self.wav = wvf.Waveform()
         self.wav.read(self.config)
 
-    def layout(self, _filestruc, _filematini='matDB.ini', _fileslabini='slabDB.ini'):
+    def layout(self, _filestruc):
         """ load a layout in the simulation oject
 
         Parameters
@@ -1491,10 +1463,6 @@ class Simul(PyLayers):
 
         _filestruc : string
             short file name of the Layout object
-        _filematini   : string
-            short file name of the Mat object  (default matDB.ini)
-        _fileslab  : string
-            short file name of the Slab object (default slabDB.ini)
 
         Examples
         --------
@@ -1505,14 +1473,10 @@ class Simul(PyLayers):
 
         """
         self.filestr = _filestruc
-        self.filematini = _filematini
-        self.fileslabini = _fileslabini
 
-        self.L = Layout(_filestruc,_filematini, _fileslabini)
+        self.L = Layout(_filestruc)
         # update config
         self.config.set("files", "struc", self.filestr)
-        self.config.set("files", "slab", self.fileslabini)
-        self.config.set("files", "mat", self.filematini)
         self.save()
 
     def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):

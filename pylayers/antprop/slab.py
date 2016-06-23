@@ -1372,10 +1372,11 @@ class Slab(Interface,dict):
             dict.__setitem__(self,"lthick",[0.05]*nbmat)
         
         elif key == "lthick":
-            if len(value)!=len(self['lmatname']):
-                raise ValueError("wrong number of material layers")
-            else:
-                dict.__setitem__(self,"lthick",value)
+            #pdb.set_trace()
+            #if len(value)!=len(self['lmatname']):
+            #    raise ValueError("wrong number of material layers")
+            #else:
+            dict.__setitem__(self,"lthick",value)
         else:        
             dict.__setitem__(self,key, value)
 

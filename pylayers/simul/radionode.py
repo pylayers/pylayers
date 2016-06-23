@@ -106,7 +106,7 @@ class RadioNode(PyLayers):
                  _fileini='radionode.ini',
                  _filetraj='pos.csv',
                  _fileant='defant.vsh3',
-                 _filestr='defstr.str2'):
+                 _filestr='defstr.ini'):
         """
 
         the _fileini file must be placed in the ini directory

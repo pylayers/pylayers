@@ -1605,7 +1605,7 @@ class Layout(PyLayers):
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
                     path = os.path.join(basename,'struc','gpickle',self.filename)
                     self.dumpr('t')
-                    if self._hash != self.Gt.node[0]:
+                    if self._hash != self.Gt.node[0]['hash']:
                         rebuild = True 
                     else:
                         self.dumpr('tvirw')
@@ -4768,7 +4768,7 @@ class Layout(PyLayers):
 
         """
         # list of built graphs
-
+        print "building Layout ..." 
         if 't' in graph:
             if verbose:
                 print "Gt"
