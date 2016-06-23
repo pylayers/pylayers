@@ -1469,6 +1469,7 @@ class Layout(PyLayers):
                 ds[k]=eval(ds[k])
             for k in dm:
                 dm[k]=eval(dm[k])
+            pdb.set_trace()
             self.sl = sb.SlabDB(filemat=filemat,fileslab=fileslab,ds=ds,dm=dm)
         
         # In this section we handle the ini file format evolution

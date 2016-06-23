@@ -1347,15 +1347,12 @@ class Slab(Interface,dict):
             self.mat = mat
         self['name'] = name
         self['index'] = 0
-        self['nbmat'] = 1
-        self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
-        #self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        self['lthick'] = [0.1]
+        # lmatname has to be set before lthick
         self['lmatname'] = ['AIR']
+        self['lthick'] = [0.1]
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self['evaluated'] = False
-        self.conv()
 
     def __setitem__(self,key,value):
         """ dictionnary setter
@@ -1371,12 +1368,11 @@ class Slab(Interface,dict):
                     print self.mat.__repr__()
                     raise ValueError(na+ ' not in material Database')
             dict.__setitem__(self,"lmatname", value)
-            dict.__setitem__(self,"nbmat",nbmat)
+            #dict.__setitem__(self,"nbmat",nbmat)
             dict.__setitem__(self,"lthick",[0.05]*nbmat)
-            self.conv()
         
         elif key == "lthick":
-            if len(value)!=self['nbmat']:
+            if len(value)!=len(self['lmatname']):
                 raise ValueError("wrong number of material layers")
             else:
                 dict.__setitem__(self,"lthick",value)
@@ -1387,25 +1383,14 @@ class Slab(Interface,dict):
     def __add__(self,u):
         """ This function makes the addition between 2 Slabs
 
-        It could be simplified once we decide not to be compatible
-        with old version odf slab for PyRay. Wait until diffraction are OK.
-        Problem with length of slab !!
-
         """
         U = Slab(self.mat)
         # lmatname should be modified before lthick
         U['lmatname'] = self['lmatname']+u['lmatname']
         U['lthick']   = self['lthick']+u['lthick']
         U['name'] = self['name']+u['name']
-        #U['nbmat'] = len(U['lmatname'])
-        #imat = np.zeros(8).astype(int)
-        #thickness = np.zeros(8)
         for i in range(len(U['lmatname'])):
             namem = U['lmatname'][i]
-            #imat[i] = U.mat[namem]['index']
-            #thickness[i] = U['lthick'][i] * 100 # m ->cm
-        #U['imat'] = tuple(imat)
-        #U['thickness'] = tuple(thickness) # cm
         U.conv()
         return(U)
 
@@ -1482,8 +1467,6 @@ class Slab(Interface,dict):
             chaine = chaine + name + ' '
             chaine = chaine + ']'
             print "index : ", self['index']
-            #print "imat : ", self['imat']
-            #print "thickness (cm) : ", self['thickness']
             print "color : ", self['color']
             print "linewidth :", self['linewidth']
             if self['evaluated']:
@@ -1500,37 +1483,6 @@ class Slab(Interface,dict):
                 else:
                     print "th (rad) : ", self.theta[0]
 
-    def conv(self):
-        """ build lmat and thick
-
-        Warnings
-        --------
-
-        Deprecated
-
-        In .slab file thickness variable is expressed in cm
-
-        for lthick distance are expressed in meters
-
-        """
-        #m1 = self.mat['AIR']
-        self['lmat'] = []
-        self['thickness'] = []
-        #self.lmat.append(m1)
-
-        for matname in self['lmatname']:
-            #index_mat = self['imat'][i]
-            mi = self.mat[matname]
-            self['lmat'].append(mi)
-            self['thickness']=self['lthick']*100 # m ->cm
-
-        #self.lmat.append(m1)
-        #
-        # ..todo::
-        # fix this problem in MLAYER need thickness 0 for last medium
-        #
-        #self.thick.append(0.0)
-   
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
         """ evaluation of the Slab
 
@@ -1856,48 +1808,48 @@ class Slab(Interface,dict):
         Lo, Lp = Interface.losst(self, fGHz)
         return(Lo, Lp)
 
-    def editgui(self):
-        """ edit a Slab in the DB
-
-        """
-        chaine1 = ""
-        chaine2 = ""
-        for i in range(self.nbmat):
-            index_mat = self.imat[i]
-            name_mat = self.mat.di[index_mat]
-            thick = str(self.thickness[i])
-            chaine1 = chaine1 + name_mat + ' '
-            chaine2 = chaine2 + thick + ' '
-
-        data = multenterbox('Slab', 'Enter',
-                            ('name', 'index', 'nbmat', 'imat',
-                             'thickness (cm)', 'color', 'linewidth'),
-                            (self.name, self.index, self.nbmat, chaine1,
-                             chaine2, self.color, str(self.linewidth)))
-
-        self.index = eval(data[1])
-        self.nbmat = eval(data[2])
-        chaine1 = data[3].split()
-        chaine2 = data[4].split()
-
-        tt = [0, 0, 0, 0, 0, 0, 0, 0]
-        th = [0, 0, 0, 0, 0, 0, 0, 0]
-        if (len(chaine1) != len(chaine2)):
-            print ('erreur edit slab')
-            return(-1)
-        for i in range(len(chaine1)):
-            nom = chaine1[i]
-            thick = chaine2[i]
-            index = self.mat[nom].index
-            tt[i] = index
-            th[i] = eval(thick)
-
-        self.imat = tt
-        self.charindex = str(tt)
-        self.thickness = th
-        self.color = data[5]
-        self.linewidth = eval(data[6])
-        self.dass()
+#    def editgui(self):
+#        """ edit a Slab in the DB
+#
+#        """
+#        chaine1 = ""
+#        chaine2 = ""
+#        for i in range(self.nbmat):
+#            index_mat = self.imat[i]
+#            name_mat = self.mat.di[index_mat]
+#            thick = str(self.thickness[i])
+#            chaine1 = chaine1 + name_mat + ' '
+#            chaine2 = chaine2 + thick + ' '
+#
+#        data = multenterbox('Slab', 'Enter',
+#                            ('name', 'index', 'nbmat', 'imat',
+#                             'thickness (cm)', 'color', 'linewidth'),
+#                            (self.name, self.index, self.nbmat, chaine1,
+#                             chaine2, self.color, str(self.linewidth)))
+#
+#        self.index = eval(data[1])
+#        self.nbmat = eval(data[2])
+#        chaine1 = data[3].split()
+#        chaine2 = data[4].split()
+#
+#        tt = [0, 0, 0, 0, 0, 0, 0, 0]
+#        th = [0, 0, 0, 0, 0, 0, 0, 0]
+#        if (len(chaine1) != len(chaine2)):
+#            print ('erreur edit slab')
+#            return(-1)
+#        for i in range(len(chaine1)):
+#            nom = chaine1[i]
+#            thick = chaine2[i]
+#            index = self.mat[nom].index
+#            tt[i] = index
+#            th[i] = eval(thick)
+#
+#        self.imat = tt
+#        self.charindex = str(tt)
+#        self.thickness = th
+#        self.color = data[5]
+#        self.linewidth = eval(data[6])
+#        self.dass()
 
     def show(self, fGHz=2.4, theta=np.arange(0, np.pi / 2., 0.01), dtype=np.float64, dB=False):
         """ show slab Reflection and Transmission coefficient
@@ -2068,15 +2020,12 @@ class SlabDB(dict):
         lthick     : list ot float
            list of layer thickness in meters
 
-        Warnings
-        --------
-
-        thickness is in cm in .slab
 
         Examples
         --------
 
-        Example from the paper:
+        Examples from the paper:
+
         "Reflection ant Transmission Properties of Building Materials in D-Band
         for Modeling Future mm-Wave Communication Systems "
         Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz
@@ -2143,23 +2092,12 @@ class SlabDB(dict):
 
         U = Slab(self.mat, name)
         maxi = self.maxindex()
-        # Do not confuse lmat and lmatname
         U['lmatname'] = lmatname
         U['lthick'] = lthick
         U['index'] = maxi + 1
-        U['nbmat'] = len(lmatname)
-        imat = np.zeros(8).astype(int)
-        thickness = np.zeros(8)
-        for i in range(len(lmatname)):
-            namem = lmatname[i]
-            imat[i] = U.mat[namem]['index']
-            thickness[i] = lthick[i] * 100 # m ->cm
-        U['imat'] = tuple(imat)
-        U['thickness'] = tuple(thickness) # cm
         U['color'] = color
         U['linewidth'] = 1
         U['evaluated'] = False
-        U.conv()
         self[name] = U
         self.dass()
 
@@ -2177,34 +2115,14 @@ class SlabDB(dict):
         self[U.name] = U
         self.dass()
 
-# Parameters
-# ----------
-# _filename : string
-
-# """
-# filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-# fo = open(filename, 'r')
-# DB = cPickle.load(fo)
-# self = DB
-# self.conv()
-# fo.close()
-
-# def choose(self):
-# """ Choose a mat file from matdir and slab from slabdir
-# """
-# import tkFileDialog
-# FD = tkFileDialog
-
-# self.mat.choose()
-# fileslab = FD.askopenfilename(filetypes=[("Slab file ", "*.slab"),
-# ("All", "*")],
-# title="Please choose a .slab file",
-# initialdir=slabdir)
-# _fileslab = pyu.getshort(fileslab)
-# self.load(_fileslab)
 
     def load(self,_fileini='slabDB.ini'):
         """Load a Material from a .ini file
+
+        Parameters
+        ----------
+
+        _fileini : string 
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
@@ -2225,19 +2143,6 @@ class SlabDB(dict):
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
 
-            #
-            # imat and thickness are deprecated 
-            #
-            imat=[0,0,0,0,0,0,0,0]
-            for i,m in enumerate(S['lmatname']):
-                imat[i]=S.mat[m]['index']
-            S['imat']=tuple(imat)
-
-            thickness=[0,0,0,0,0,0,0,0]
-            for i,t in enumerate(S['lthick']):
-                thickness[i]=t*100.
-            S['thickness']=tuple(thickness)
-            S.conv()
             self[slabname] = S
 
     def save(self,_fileini='slabDB.ini'):
