@@ -1499,7 +1499,7 @@ class Slab(Interface,dict):
         #th1 = np.linspace(thetai,thetaf,nt)
 
         metalic = False
-        name1 = '|'.join(mat['name'] for mat in self['lmat'])
+        name1 = '|'.join(mat for mat in self['lmatname'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
         name = '(' + name1 + ')' + '(' + name2 + ')'
         #super(Slab,self).__init__(fGHz=fGHz, theta=theta, name=name)

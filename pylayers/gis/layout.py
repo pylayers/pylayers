@@ -4682,7 +4682,7 @@ class Layout(PyLayers):
             dnodes = self.display['ednodes']
             dthin = self.display['thin']
             alpha = self.display['alpha']
-            for nameslab in self.display['layers']:
+            for nameslab in self.sl:
                 color = self.sl[nameslab]['color']
                 edlist = self.name[nameslab]
                 fig,ax=self.show_layer(nameslab, edlist=edlist, alpha=alpha,
@@ -7832,7 +7832,6 @@ class Layout(PyLayers):
         #
         # s : structure graph
         #
-
         if 's' in graph:
 
             # not efficient
@@ -7875,6 +7874,7 @@ class Layout(PyLayers):
                    kwargs['nodes']=True
                 else:
                    kwargs['nodes']=False
+                
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
