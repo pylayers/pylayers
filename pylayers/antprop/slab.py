@@ -1353,6 +1353,7 @@ class Slab(Interface,dict):
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self['evaluated'] = False
+        self.conv()
 
     def __setitem__(self,key,value):
         """ dictionnary setter
@@ -1465,6 +1466,17 @@ class Slab(Interface,dict):
                     print "theta : ", (self.theta[0], self.theta[-1], nt)
                 else:
                     print "th (rad) : ", self.theta[0]
+
+    def conv(self):
+        """ build lmat 
+
+        """
+        self['lmat'] = []
+
+        for matname in self['lmatname']:
+            mi = self.mat[matname]
+            self['lmat'].append(mi)
+
 
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
         """ evaluation of the Slab
@@ -2082,6 +2094,7 @@ class SlabDB(dict):
         U['color'] = color
         U['linewidth'] = 1
         U['evaluated'] = False
+        U.conv()
         self[name] = U
         self.dass()
 
@@ -2127,6 +2140,7 @@ class SlabDB(dict):
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
 
+            S.conv()
             self[slabname] = S
 
     def save(self,_fileini='slabDB.ini'):
