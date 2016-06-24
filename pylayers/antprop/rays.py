@@ -758,6 +758,9 @@ class Rays(PyLayers,dict):
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
+        rmoutceilR ; bool
+            Remove Ceil reflexions in cycles (Gt nodes) 
+            with indoor=False attribute 
 
         returns
         -------
