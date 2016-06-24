@@ -1290,6 +1290,10 @@ class Layout(PyLayers):
             ds['lthick']=self.sl[s]['lthick']
             ds['linewidth']=self.sl[s]['linewidth']
             config.set("slabs",s,ds)
+        if "AIR" not in lslab:
+            air = {'color': 'white', 'index': 1, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
+            config.set("slabs","AIR",air)
+
         if "CEIL" not in lslab:
             ceil = {'color': 'grey20', 'index': 6, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs","CEIL",ceil)
@@ -1413,6 +1417,7 @@ class Layout(PyLayers):
 
         # update segments section
         Nss = 0
+        self.name['AIR']=[]
         for ns in di['segments']:
             self.Gs.add_node(eval(ns)) # add segment node
             d = eval(di['segments'][ns])

@@ -118,7 +118,8 @@ def draw(G,**kwargs):
         pno = filter(lambda x : x>0,nodelist)
         # node == air
         na1 = filter(lambda x : G.node[x]['name']=='AIR',pno)
-        na = filter(lambda x : G.node[x]['name']=='_AIR',na1)
+        na2 = filter(lambda x : G.node[x]['name']=='_AIR',pno)
+        na = na1 + na2
         # edge == air
         ea=[]
         [[ea.append((n1,n2)) for n2 in G.edge[n1].keys()] for n1 in na]
