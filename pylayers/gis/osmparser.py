@@ -705,7 +705,7 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
         ways = None
 
     #
-    # Read realtions
+    # Read relations
     #
     if r:
         relations = Relations()

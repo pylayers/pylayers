@@ -319,7 +319,8 @@ class Layout(PyLayers):
                       force=False,
                       check=True,
                       build=False,
-                      verbose=False):
+                      verbose=False,
+                      cartesian=False):
 
         """ object constructor
 
@@ -421,7 +422,7 @@ class Layout(PyLayers):
 
         
         
-        self.load(_filename,build=build)
+        self.load(_filename,build=build,cartesian=cartesian)
 
 
         
@@ -699,6 +700,10 @@ class Layout(PyLayers):
                 for all the other vertices
                     check if it belongs to segment
 
+        If there are points which are not valid they are displayed
+
+        In red point with degree == 1 , In black points with degree == 0
+
         """
         consistent = True
         nodes = self.Gs.nodes()
@@ -729,10 +734,15 @@ class Layout(PyLayers):
             #  No points of degree 1
             #
             if (degmin<=1):
+                f,a = self.showG('s',aw=1)
                 deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
                 deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
-                assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
-                assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
+                if len(deg0)>0:
+                    print("It exists degree 0 points :  %r" % deg0)
+                    f,a = self.pltvnodes(deg0,color='black',fig=f,ax=a)
+                if len(deg1)>0:
+                    print("It exists degree 1 points : %r" % deg1)
+                    f,a = self.pltvnodes(deg0,color='red',fig=f,ax=a)
 
             self.deg={}
             for deg in range(degmax+1):
@@ -1054,7 +1064,7 @@ class Layout(PyLayers):
         self.extrseg()
 
 
-    def loadosm(self, _fileosm):
+    def loadosm(self, _fileosm , typ ='floorplan',cartesian=False):
         """ load layout from an osm file 
 
         Parameters
@@ -1066,22 +1076,30 @@ class Layout(PyLayers):
         Notes
         -----
 
-        In JOSM nodes are numbered with negative indexes. It is not valid to
-        have a positive node number. To remain compliant with the PyLayers
+        In JOSM nodes are numbered with negative indexes.
+        A positive node number is not valid. To remain compliant with the PyLayers
         convention which assumes that <0 nodes are points and >0 nodes are segments,
         in the osm format, segments are numbered negatively with a known offset
         of 1e7=10000000. The convention is set back when loading the osm file.
+
+        See Also
+        --------
+
+        pylayers.gis.osmparser.osmparse
 
         """
 
         self.filename = _fileosm
         self.coordinates = 'latlon'
         fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
-        coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
+        
+        # 2 valid typ : 'floorplan' and 'building' 
+        coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=typ)
+
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
         ns  = 0
-        nss  = 0
+        nss = 0
         
         # Reading points  (<0 index)
         for npt in coords.xy:
@@ -1089,7 +1107,9 @@ class Layout(PyLayers):
             self.Gs.pos[npt] = tuple(coords.xy[npt])
             _np+=1
 
-        # reading segments
+        # Reading segments
+        # 
+        # ways of osm 
         for k,nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
             for l in range(len(tahe)-1):
@@ -1102,12 +1122,14 @@ class Layout(PyLayers):
                         d[key]=eval(d[key])
                     except:
                         pass
-                
+                #
+                # get the common neighbor of nta and nhe if it exists
+                #
                 u1 = np.array(nx.neighbors(self.Gs,nta))
                 u2 = np.array(nx.neighbors(self.Gs,nhe))
                 inter_u1_u2 = np.intersect1d(u1,u2)
                 #
-                # segment do not exist yet (create segment)
+                # The segment do not exist yet then create  a new segment
                 #
                 if len(inter_u1_u2)==0:
                     #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
@@ -1125,7 +1147,7 @@ class Layout(PyLayers):
                         offset = 0   
                     ns = self.add_segment(nta,nhe,name=slab,z=z,offset=offset)
                 #
-                # segment do exist already (create sub_segment)
+                # The segment do already exists the create a sub_segment
                 #
                 else:
                     pass
@@ -1144,6 +1166,18 @@ class Layout(PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
+        if cartesian:
+            lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
+            lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+            bd = [lon.min(),lat.min(),lon.max(),lat.max()]
+            lon_0 = (bd[0]+bd[2])/2.
+            lat_0 = (bd[1]+bd[3])/2.
+            self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
+                        urcrnrlon=bd[2], urcrnrlat=bd[3],
+                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+            x,y = m(lon,lat)
+            self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
+            self.coordinates ='cart'
         #del coords
         #del nodes
         #del ways
@@ -1209,6 +1243,7 @@ class Layout(PyLayers):
 
         Parameters
         ----------
+
         _fileini : string
                    short filemame with extension
 
@@ -1235,12 +1270,14 @@ class Layout(PyLayers):
         for k in self.display:
             config.set("display",k,self.display[k])
 
-        # boundary nodes and air walls are not stored
+        # iterate on points 
+        # boundary nodes and air walls are not saved
         for n in self.Gs.pos:
             if n <0:
                 if n not in self.lboundary:
                     config.set("points",str(n),(self.Gs.pos[n][0],self.Gs.pos[n][1]))
-
+        
+        # iterate on segments
         for n in self.Gs.pos:
             if n >0:
                 if self.Gs.node[n]['name']!='_AIR':
@@ -1277,12 +1314,18 @@ class Layout(PyLayers):
                     d.pop('norm')
                     config.set("segments",str(n),d)
 
+        # list of used slab 
         lslab = [ x for x in self.name if len(self.name[x]) > 0 ]
         lmat = []
+        # In case an osm file has been read; there is no .sl 
+        # 
+        if not hasattr(self,'sl'):
+            self.sl = sb.SlabDB(filemat='matDB.ini',fileslab='slabDB.ini')
+
         for s in lslab:
             ds = {}
-            ds['index']=self.sl[s]['index']
-            ds['color']=self.sl[s]['color']
+            ds['index'] = self.sl[s]['index']
+            ds['color'] = self.sl[s]['color']
             ds['lmatname']=self.sl[s]['lmatname']
             for m in ds['lmatname']:
                 if m not in lmat:
@@ -1290,6 +1333,11 @@ class Layout(PyLayers):
             ds['lthick']=self.sl[s]['lthick']
             ds['linewidth']=self.sl[s]['linewidth']
             config.set("slabs",s,ds)
+
+        if "_AIR" not in lslab:
+            air = {'color': 'white', 'index': 1, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
+            config.set("slabs","_AIR",air)
+
         if "AIR" not in lslab:
             air = {'color': 'white', 'index': 1, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
             config.set("slabs","AIR",air)
@@ -1372,6 +1420,11 @@ class Layout(PyLayers):
                 self.name[k] = []
 
         # manage ini file with latlon coordinates
+        #
+        # if the format is latlon, coordinates are converted into 
+        # cartesian coordinates with the coords.cartesian method
+        #
+        ""
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
@@ -1540,7 +1593,7 @@ class Layout(PyLayers):
             self.lfur.append(F)
         self.filefur=_filefur
 
-    def load(self,_filename,build=True):
+    def load(self,_filename,build=True,cartesian=False):
         """ load a Layout in different formats
 
         Parameters
@@ -1570,7 +1623,7 @@ class Layout(PyLayers):
         if ext=='.osm':
             filename = pyu.getlong(_filename,pstruc['DIROSM'])
             if os.path.exists(filename):
-                self.loadosm(_filename)
+                self.loadosm(_filename,cartesian=cartesian)
             else:
                 self.filename = _filename
                 newfile=True
@@ -4687,7 +4740,7 @@ class Layout(PyLayers):
             dnodes = self.display['ednodes']
             dthin = self.display['thin']
             alpha = self.display['alpha']
-            for nameslab in self.sl:
+            for nameslab in self.name:
                 color = self.sl[nameslab]['color']
                 edlist = self.name[nameslab]
                 fig,ax=self.show_layer(nameslab, edlist=edlist, alpha=alpha,
@@ -5335,13 +5388,28 @@ class Layout(PyLayers):
         plt.axis(self.ax)
         plt.draw()
 
-    def pltvnodes(self,vn,fig=[],ax=[],):
+    def pltvnodes(self,vn,color='red',fig=[],ax=[],):
+        """ plot vnodes 
+
+        Parameters
+        ----------
+
+        vn : list of nodes
+        fig : 
+        ax : 
+
+        """
         if fig == []:
             fig=plt.gcf()
         if ax == []:
             ax=plt.gca()
-        X=np.array([self.Gs.pos[x] for x in vn])
-        [ax.text(x[0],x[1],vn[xx]) for xx,x in enumerate(X)]
+
+        if len(vn) >0:
+            X = np.array([self.Gs.pos[x] for x in vn])
+            ax.plot(X[:,0],X[:,1],'or')
+            [ax.text(x[0],x[1],vn[xx]) for xx,x in enumerate(X)]
+
+        return fig,ax
 
 
     def updateshseg(self):
@@ -9821,6 +9889,8 @@ class Layout(PyLayers):
         fig,ax = plu.displot(pt,ph,fig=fig,ax=ax,color=kwargs['color'])
 
         return fig,ax
+
+
     def showSig(self, sigarr, Tx=None, Rx=None, fig=[], ax=None):
         """ Show signature
 

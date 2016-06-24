@@ -70,7 +70,6 @@ MatDB Class
     MatDB.addgui
     MatDB.choose
     MatDB.load
-    MatDB.loadmat
     MatDB.save
     MatDB.savemat
 
@@ -468,6 +467,7 @@ class Interface(PyLayers):
             >>> II = MatInterface([air,brick],0,fGHz,theta)
             >>> II.RT()
             >>> fig,ax = II.plotwrt(var='f',color='k',typ=['m'])
+            >>> plt.ion()
             >>> plt.show()
 
 
@@ -1124,73 +1124,6 @@ class MatDB(PyLayers,dict):
             M['mur'] = eval(config.get(matname,'mur'))
             self[matname] = M
 
-        # PULSRAY compatibility : save in the old .mat format
-        # Should be deprecated soon
-        self.savemat(self.filemat)
-
-    def loadmat(self, _filemat):
-        """ Load a Material from a .mat file
-
-        Parameters
-        ----------
-
-        _filemat : string
-        a short file name
-
-        Notes
-        -----
-
-            Deprecated this the format for PyRay
-
-        """
-        filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
-        try:
-            fo = open(filemat, "rb")
-            data = fo.read()
-            #
-            # decodage des donnees lues
-            #
-            data_listname = data[0:1200]
-            self.tname = data_listname.replace(
-                "\x00", "").replace("\"", "").split()
-            data_N = data[1200:1204]
-            self.N = stru.unpack('i', data_N)[0]
-
-            for i in range(self.N):
-                # Creation d'un objet Mat
-                M = Mat()
-                delta = i * 82
-                data_name = data[1204 + delta:1234 + delta]
-                name = data_name.replace("\x00", "")
-                M['name'] = name
-
-                data_index = data[1234 + delta:1238 + delta]
-                index = stru.unpack('i', data_index)[0]
-                M['index'] = index
-
-                data_err = data[1238 + delta:1246 + delta]
-                err = stru.unpack('d', data_err)[0]
-                data_eri = data[1246 + delta:1254 + delta]
-                eri = stru.unpack('d', data_eri)[0]
-                epr = err + 1j * eri
-                M['epr'] = epr
-                data_mur = data[1254 + delta:1262 + delta]
-                mur = stru.unpack('d', data_mur)[0]
-                data_mui = data[1262 + delta:1270 + delta]
-                mui = stru.unpack('d', data_mui)[0]
-                mur = mur + 1j * mui
-                M['mur'] = mur
-                data_sigma = data[1270 + delta:1278 + delta]
-                sigma = stru.unpack('d', data_sigma)[0]
-                M['sigma'] = sigma
-                data_roughness = data[1278 + delta:1286 + delta]
-                roughness = stru.unpack('d', data_roughness)[0]
-                M['roughness'] = roughness
-                self[name] = M
-        except:
-            print "file : ", filename, "is unreachable"
-        self.dass()
-
     def save(self,_fileini='matDB.ini'):
         """ save MatDB in an ini file
 
@@ -1238,60 +1171,6 @@ class MatDB(PyLayers,dict):
 
         config.write(fd)
         fd.close()
-
-    def savemat(self, _filemat):
-        """ save a .mat file (PulsRay format)
-
-        Parameters
-        ----------
-
-        _filemat : string
-        a short file name
-
-        """
-        filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
-        fo = open(filemat, 'wb')
-        N = len(self.di)
-        data_listname = ''
-        for k in range(N):
-            data_listname = data_listname + "\"" + self.di[k - 1] + "\" "
-
-        L = len(data_listname)
-        if L < 1200:
-            for i in range(1200 - L):
-                data_listname = data_listname + "\x00"
-        else:
-            print " out of range in save Mat - too many materials"
-        data_N = stru.pack('i', N)
-        data = data_listname + data_N
-
-        for i in range(len(self.di)):
-            key = self.di[i - 1]
-            M = self[key]
-            data_name = key
-            L = len(data_name)
-            if L < 30:
-                for j in range(30 - L):
-                    data_name = data_name + "\x00"
-            else:
-                    print " Mat : name too long maximum 30 characters !"
-
-            data_index = stru.pack('i', M['index'])
-            data_err = stru.pack('d', np.real(M['epr']))
-            data_eri = stru.pack('d', np.imag(M['epr']))
-            data_epr = data_err + data_eri
-            data_mur = stru.pack('d', np.real(M['mur']))
-            data_mui = stru.pack('d', np.imag(M['mur']))
-            data_mu = data_mur + data_mui
-            data_sigma = stru.pack('d', M['sigma'])
-            data_roughness = stru.pack('d', M['roughness'])
-            data_mat = data_name + data_index + data_epr + \
-                data_mu + data_sigma + data_roughness
-            data = data + data_mat
-
-        fo.write(data)
-        fo.close()
-
 
 class Slab(Interface,dict):
     """ Handle a Slab
@@ -1436,6 +1315,7 @@ class Slab(Interface,dict):
             >>> fGHz = np.array([57.5])
             >>> sl['placo'].ev(fGHz,theta)
             >>> fig,ax=sl['placo'].plotwrt(var='a',typ=['m'])
+            >>> plt.ion()
             >>> plt.show()
 
         """
@@ -1762,10 +1642,10 @@ class Slab(Interface,dict):
 
         >>> from pylayers.antprop.slab import *
         >>> sl = SlabDB('matDB.ini','slabDB.ini')
-        >>> s1 = sl['PARTITION']
+        >>> s1 = sl['AIR']
         >>> Lo,Lp = s1.loss0(2.4)
-        >>> assert ((Lo[0]>5.54)&(Lo[0]<5.56)),'def Partition has changed'
-        >>> assert (Lo[0]==Lp[0]),'something wrong with polarization'
+        >>> assert (np.allclose(Lo[0],0)),'Problem with AIR slab loss'
+        >>> assert (np.allclose(Lo[0],Lp[0])),'something wrong with polarization'
 
         """
 
