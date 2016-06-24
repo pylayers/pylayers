@@ -238,7 +238,7 @@ class CorSer(PyLayers):
         several subject (Jihad, Eric , Nicolas)
     """
 
-    def __init__(self,serie=6,day=11,source='CITI'):
+    def __init__(self,serie=6,day=11,source='CITI',layout=False):
         """
         Parameters
         ----------
@@ -309,7 +309,8 @@ class CorSer(PyLayers):
 
 
         #Layout
-        self.L= Layout('MOCAP-small2.ini')
+        if layout:
+            self.L= Layout('MOCAP-small2.ini')
 
 
         # Load Infrastructure Nodes
