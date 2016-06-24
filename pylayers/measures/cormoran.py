@@ -333,7 +333,11 @@ class CorSer(PyLayers):
             self._computedevpdf()
             if isinstance(self.B,dict):
                 for b in self.B:
-                    self.B[b].traj.Lfilename=copy.copy(self.L.filename)
+                    if hasattr(self,'L'):
+                        self.B[b].traj.Lfilename=copy.copy(self.L.filename)
+                    else:
+                        self.B[b].traj.Lfilename='notloaded'
+
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
