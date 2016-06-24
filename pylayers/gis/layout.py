@@ -7064,7 +7064,7 @@ class Layout(PyLayers):
                 
                 for idiff in ndiffvalid:
 
-                    import ipdb
+                    #import ipdb
                     # ipdb.set_trace()
                     # if (icycle==2) & (idiff==-2399):
                     #     ipdb.set_trace()
