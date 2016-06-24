@@ -744,7 +744,7 @@ class Rays(PyLayers,dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1,outdoor=True):
+    def to3D(self,L,H=3, N=1,rmoutceilR=True):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -1172,7 +1172,7 @@ class Rays(PyLayers,dict):
                     #   siges[0,:] --> Ms + nstr *Mss + (kl)
                     #
 
-                if outdoor:
+                if rmoutceilR:
                     # 1 determine Ceil reflexion index
                     # uc (inter x ray)
                     uc = np.where(siges[1,:,:]==5)
