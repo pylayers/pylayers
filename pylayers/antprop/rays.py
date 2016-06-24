@@ -57,6 +57,7 @@ from pylayers.antprop.slab import *
 from pylayers.antprop.channel import Ctilde
 from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
+import shapely.geometry as shg
 import h5py
 
 class Rays(PyLayers,dict):
@@ -743,7 +744,7 @@ class Rays(PyLayers,dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1):
+    def to3D(self,L,H=3, N=1,rmoutceilR=True):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -757,6 +758,9 @@ class Rays(PyLayers,dict):
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
+        rmoutceilR ; bool
+            Remove Ceil reflexions in cycles (Gt nodes) 
+            with indoor=False attribute 
 
         returns
         -------
@@ -892,10 +896,27 @@ class Rays(PyLayers,dict):
                     #  l >0 corresponds to last reflexion on ceil
                     #
                     # u =0 (floor) or 1 (ceil)
-                    if l < 0:
+                    # if l < 0:
+                    #     u = np.mod(range(Nint), 2)
+                    # else:
+                    #     u = 1 - np.mod(range(Nint), 2)
+
+
+                    if l < 0 and Nint%2 ==1: # l<0 Nint odd
                         u = np.mod(range(Nint), 2)
-                    else:
+
+                    elif l > 0 and Nint%2 ==1: # l>0 Nint odd
                         u = 1 - np.mod(range(Nint), 2)
+
+
+                    elif l < 0 and Nint%2 ==0: # l<0 Nint even
+                        u = 1 - np.mod(range(Nint), 2)
+
+                    elif l > 0 and Nint%2 ==0: # l>0 Nint even
+                        u = np.mod(range(Nint), 2)
+                    
+
+
                     #
                     u = u + 4
                     #
@@ -924,6 +945,7 @@ class Rays(PyLayers,dict):
                     #
                     ptees = ptee[:, ks, range(Nrayk)]
                     siges = sige[:, ks, range(Nrayk)]
+
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
                     iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
@@ -1152,20 +1174,49 @@ class Rays(PyLayers,dict):
                     #   z --> kl subseg level 
                     #   siges[0,:] --> Ms + nstr *Mss + (kl)
                     #
-                try:
+
+                if rmoutceilR:
+                    # 1 determine Ceil reflexion index
+                    # uc (inter x ray)
+                    uc = np.where(siges[1,:,:]==5)
+                    ptc = ptees[:,uc[0],uc[1]]
+                    if len(uc[0]) !=0:
+                        P = shg.MultiPoint(ptc[:2,:].T)
+                        # 2 determine the cycle where ceil reflexions append
+                        # uinter(nb pt x nb cycles)
+                        uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in L.Gt.nodes() if x>0] for p in P])
+
+                        # find points are indoor/outdoor cycles
+                        upt,ucy = np.where(uinter)
+                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] # ucy+1 is to manage cycle 0
+                        
+                        # 3 remove ceil reflexion of outdoor cycles
+                        if len(uout)>0:
+                        
+                            ptees = np.delete(ptees,uc[1][uout],axis=2)
+                            siges = np.delete(siges,uc[1][uout],axis=2)
+                            sigsave = np.delete(sigsave,uc[1][uout],axis=2)
+
+                
+                if r3d.has_key(k+Nint):
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
                     r3d[k+Nint]['sig2d'].append(sigsave)
-                except:
-                    r3d[k+Nint] = {}
-                    # r3d[k+Nint]['alpha'] = a1es
-                    # r3d[k+Nint]['ks'] = ks
-                    r3d[k+Nint]['pt'] = ptees
-                    r3d[k+Nint]['sig'] = siges
-                    r3d[k+Nint]['sig2d'] = [sigsave]
-
+                else:
+                    if ptees.shape[2]!=0:
+                        r3d[k+Nint] = {}
+                        # r3d[k+Nint]['alpha'] = a1es
+                        # r3d[k+Nint]['ks'] = ks
+                        r3d[k+Nint]['pt'] = ptees
+                        r3d[k+Nint]['sig'] = siges
+                        r3d[k+Nint]['sig2d'] = [sigsave]
+                # ax=plt.gca()
+                # uu = np.where(ptees[2,...]==3.0)
+                # ax.plot(ptees[0,uu[0],uu[1]],ptees[1,uu[0],uu[1]],'ok')
+                # import ipdb
+                # ipdb.set_trace()
         #
         # Add Line Of Sight ray information
         #   pt =  [tx,rx]
@@ -1195,6 +1246,7 @@ class Rays(PyLayers,dict):
             r3d[k]['rayidx'] = np.arange(nrayk)+val
             r3d.nray = r3d.nray + nrayk
             val=r3d[k]['rayidx'][-1]+1
+
             # 3 : x,y,z
             # i : interaction index
             # r : ray index
@@ -2700,6 +2752,7 @@ class Rays(PyLayers,dict):
             else : use the current
 
         """
+
         if newfig:
             mlab.clf()
             f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
@@ -2725,6 +2778,7 @@ class Rays(PyLayers,dict):
                 # current number of interactions
                 cnbi = i + 2
                 pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
+
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
                 lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
                 mesh = tvtk.PolyData(points=pt.T, polys=lines)
