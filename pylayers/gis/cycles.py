@@ -336,7 +336,7 @@ class Cycle(object):
             if lnode == []:
                 cycle=cycles[0]
             else:
-                # determine which cycle basis corresponds to the lnode list
+                #determine which cycle basis corresponds to the lnode list
                 lln = len(lnode)
                 lcy = np.array([len(c) for c in cycles])
                 dif = lln-lcy
@@ -638,9 +638,9 @@ class Cycle(object):
                         else:
                             return False,path
                 else: #cycles share a point 
-                    # signed area is not sufficent to determien if 
-                    # 2 polygon connect by a single point 
-                    # are inclusive or external
+                    #signed area is not sufficent to determien if 
+                    #2 polygon connect by a single point 
+                    #are inclusive or external
 
                     # areabig   = abs(self.area)
                     # #areasmall = abs(Cy.area)

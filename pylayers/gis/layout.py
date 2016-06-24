@@ -4963,19 +4963,19 @@ class Layout(PyLayers):
             Gsnodes = np.array(self.Gs.nodes())
             # get node coordinates
             nodept = [self.Gs.pos[i] for i in Gsnodes]
-            # transform into shapely points
+            #transform into shapely points
             shpt  = [sh.Point(pt) for pt in nodept]
             # IV 1 get nodes and vnodes
             # Create a ring to avoid taking points inside the polygon.
             # This helps to avoid polygon inside polygons
-            # take exterior of polygon. embose it with buffer and find difference with original polygon*.
+            #take exterior of polygon. embose it with buffer and find difference with original polygon*.
             # polye = poly.intersection((poly.exterior).buffer(1e-3))
 
             uvn = np.where([poly.exterior.buffer(1e-3).contains(p) for p in shpt])[0]
             vnodes = Gsnodes[uvn]
             # IV 1.b transform vnodes to an ordered cycle with Cycle class 
             # NOTE ! Using class cycle is MANDATORY
-            # because, some extra vnodes can be pickup during the contain 
+            #because, some extra vnodes can be pickup during the contain 
             # process before
             S = nx.subgraph(self.Gs,vnodes)
             cycle = nx.cycle_basis(S)
@@ -5137,7 +5137,7 @@ class Layout(PyLayers):
     #     # keep all convex points (in + out) to build a Delaunay triangulation
 
     #     if polyholes != []:
-    #         # sum up polyholes to their gathered polygone
+    #         #sum up polyholes to their gathered polygone
     #         cp = cascaded_union(polyholes)
     #         if isinstance(cp,sh.Polygon):
     #             cp=[cp]
@@ -5264,7 +5264,7 @@ class Layout(PyLayers):
     #             ### 4bis 
     #             # Check if all the original area is covered 
     #             # sometimes, area surrounded by 2 new airwalls is not found
-    #             # the following code re-add it.
+    #             #the following code re-add it.
     #             cpdiff=poly.difference(cascaded_union(cpolys))
     #             if isinstance(cpdiff,sh.Polygon):
     #                 cpdiff=sh.MultiPolygon([cpdiff])
@@ -5385,11 +5385,11 @@ class Layout(PyLayers):
             self.Gt.remove_node(0)
         except:
             pass
-        # II . make polygon convex
-        # for each polygon :
+        #II . make polygon convex
+        #for each polygon :
         # - is polygon convex ?: 
         #   - yes : you're done !
-        #   - no :
+        #  - no :
         #       - has polygon an inner hole ? 
         #           - yes : Delaunay on polygon, excluding the polygon inside ( polyhole)
         #           - no : Delaunay on the polygon
@@ -5397,9 +5397,9 @@ class Layout(PyLayers):
         
         for p in P:
             pin = [z for z in sho.polygonize(p.interiors)]
-            # no holes in polygon
+            #no holes in polygon
             if pin == []:
-                # Delaunay only if polygon not convex
+                #Delaunay only if polygon not convex
                 if not geu.isconvex(p):
                     A=self._delaunay(p)
                     NP.extend(A)
@@ -5415,12 +5415,12 @@ class Layout(PyLayers):
                 NP.extend(A)
 
 
-        # III . create Gt nodes
+        #III . create Gt nodes
         for ui,p in enumerate(NP):
             cyid = ui+1
             outdoor = False
             # III 1.a get vnode associated to the polygon
-            # get vnodes not in the correct order
+            #get vnodes not in the correct order
             # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
             # vnodes = Gsnodes[uvn]
 
@@ -5456,7 +5456,7 @@ class Layout(PyLayers):
             self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
-        # IV  create Gt edges
+        #IV  create Gt edges
   
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
@@ -5464,7 +5464,7 @@ class Layout(PyLayers):
                     if self.Gt.node[n1]['polyg'].touches(self.Gt.node[n2]['polyg']):
                         # find common segments
                         seg = np.array([n for n in self.Gt.node[n1]['cycle'].cycle if (n in self.Gt.node[n2]['cycle'].cycle) and (n>0)])
-                        # if cycle are connected by at least a segmnet but not a point
+                        #if cycle are connected by at least a segmnet but not a point
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
 
@@ -5477,7 +5477,7 @@ class Layout(PyLayers):
         
         self._updGsncy()
 
-        # add cycle 0 to boundaries segments
+        #add cycle 0 to boundaries segments
         for s in self.segboundary:
             self.Gs.node[s]['ncycles'].append(0)
 
@@ -5563,8 +5563,8 @@ class Layout(PyLayers):
         self._interlist()
 
 
-        # TO DO : remove this one and manage add/deletion of seg lines at
-        # the end of  self._delaunay
+        #TO DO : remove this one and manage add/deletion of seg lines at
+        #the end of  self._delaunay
         self.updateshseg()
 
 
@@ -5645,7 +5645,7 @@ class Layout(PyLayers):
             if not isinstance(polyholes,list):
                 polyholes=[polyholes]
             for ph in polyholes:
-            # sum up polyholes to their gathered polygone
+            #sum up polyholes to their gathered polygone
                 pucsh  = np.array(ph.exterior.xy).T
                 pucs = np.vstack((pucs,pucsh))
 
@@ -5770,7 +5770,7 @@ class Layout(PyLayers):
                 ### 4bis 
                 # Check if all the original area is covered 
                 # sometimes, area surrounded by 2 new airwalls is not found
-                # the following code re-add it.
+                #the following code re-add it.
                 cpdiff=poly.difference(cascaded_union(cpolys))
                 if isinstance(cpdiff,sh.Polygon):
                     cpdiff=sh.MultiPolygon([cpdiff])
@@ -5833,7 +5833,7 @@ class Layout(PyLayers):
             plt.draw()
 
 
-        # I. get cycle basis
+        #I. get cycle basis
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
         if C==[]:
             C = [self.Gs]
@@ -5850,15 +5850,15 @@ class Layout(PyLayers):
         #pdb.set_trace()
         ma = cascaded_union(poly)
 
-        # transform into geomutil polygon
-        # if  polygon is a layout
+        #transform into geomutil polygon
+        #if  polygon is a layout
         if not isinstance(ma,sh.MultiPolygon):
             ma = geu.Polygon(ma)
             ma.setvnodes(self)
 
         else :
-            # This is a fix for non enclosed layouts 
-            # with multiple non joint polygons (a.k.a. a city)
+            #This is a fix for non enclosed layouts 
+            #with multiple non joint polygons (a.k.a. a city)
             # raise AttributeError('this is a city')
             macvx = ma.convex_hull
 
@@ -5891,14 +5891,14 @@ class Layout(PyLayers):
         # polygons of each cycle are found by finding the interesection between 
         # all segments of the layout and the layout hull.
         # The shapely diff return a multipolygon where all polygons corresponds to 
-        # a cycle
+        #a cycle
         #
 
-        # get connected points from segments
+        #get connected points from segments
         # connect is equivalent to self.tahe and lpos to self.pt
         #
         connect = [self.Gs.node[i]['connect'] for i in self.Gs.nodes() if i>0]
-        # get their coordinates
+        #get their coordinates
         lpos = np.array([(self.Gs.pos[i[0]],self.Gs.pos[i[1]]) for i in connect])
         pp = []
         lines = []
@@ -5914,7 +5914,7 @@ class Layout(PyLayers):
         while  not isinstance(R ,sh.MultiPolygon) and buffersize<1e-3  :
             # create polygon from multiline by given a width to lines
             mlp = ml.buffer(buffersize)
-            # the difference between the layout hull and polygons built from lines 
+            #the difference between the layout hull and polygons built from lines 
             # returns the ndesired multipolygon
             R = self.ma.difference(mlp)
             # increase size of the buffer
@@ -5932,8 +5932,8 @@ class Layout(PyLayers):
         ### polygons remains in the middle of others
         ######
 
-        # if !=0 it means some polygons are inside of others
-        # which is not allowed. Some Layout modification will be performed
+        #if !=0 it means some polygons are inside of others
+        #which is not allowed. Some Layout modification will be performed
 
 
         Rgeu = []
@@ -5966,7 +5966,7 @@ class Layout(PyLayers):
             polyg = self._convex_hull(polyholes)
             polyholes.extend(polyg)
             Rgeu.extend(polyg)
-            # 2 delaunay on exterior
+            #2 delaunay on exterior
             ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
 
             Rgeu.pop(k)
@@ -6014,7 +6014,7 @@ class Layout(PyLayers):
         self.Gt=nx.Graph()
         self.Gt.pos={}
 
-        #### IV Find Vnodes and Final polygons
+        ####IV Find Vnodes and Final polygons
 
         for n in self.Gs.node:
             if n>0:
@@ -6027,7 +6027,7 @@ class Layout(PyLayers):
         # smac = self.macvx.vnodes[self.macvx.vnodes>0]
         # segma = np.unique(np.concatenate((sma,smac)))
         segma=sma
-        # VI  add node 0
+        #VI  add node 0
         #
         #   This shapely polygon has an interior 
         #    Cycles = 0 exterior cycle (assumed outdoor)
@@ -6049,7 +6049,7 @@ class Layout(PyLayers):
             cyid = ui+1
             outdoor = False
             # IV 1.a get vnode associated to the polygon
-            # get vnodes not in the correct order
+            #get vnodes not in the correct order
             # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
             # vnodes = Gsnodes[uvn]
 
@@ -6089,14 +6089,14 @@ class Layout(PyLayers):
             self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
-        # IV 2. get edges
+        #IV 2. get edges
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
                 if n1!= n2:
                     if self.Gt.node[n1]['polyg'].buffer(1e-3).touches(self.Gt.node[n2]['polyg']):
                         # find common segments
                         seg = np.array([n for n in self.Gt.node[n1]['cycle'].cycle if (n in self.Gt.node[n2]['cycle'].cycle) and (n>0)])
-                        # if cycle are connected by at least a segmnet but not a point
+                        #if cycle are connected by at least a segmnet but not a point
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
 
@@ -6525,7 +6525,7 @@ class Layout(PyLayers):
                         ### 4bis 
                         # Check if all the original area is covered 
                         # sometimes, area surrounded by 2 new airwalls is not found
-                        # the following code re-add it.
+                        #the following code re-add it.
                         cpdiff=self.Gt.node[n]['polyg'].difference(cascaded_union(cpolys))
                         if isinstance(cpdiff,sh.Polygon):
                             cpdiff=sh.MultiPolygon([cpdiff])
@@ -6953,7 +6953,7 @@ class Layout(PyLayers):
                 [ Gv.add_edge(v[0],v[1]) for v in comb[ut] ]
 
 
-                # diff diff processing
+                #diff diff processing
                 dd = [(x[0],x[1]) for x in comb if x[0]<0 and x[1]<0]
                 lined = [sh.LineString([self.Gs.pos[x[0]],self.Gs.pos[x[1]]]) for x in dd]
                 uair = [self.Gs.node[x]['name']=='AIR' for x in seg]
