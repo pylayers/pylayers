@@ -1,0 +1,839 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WHERE1-M1 UWB measurement campaign &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">WHERE1-M1 UWB measurement campaign</a><ul>
+<li><a class="reference internal" href="#simulation-creation">Simulation Creation</a></li>
+<li><a class="reference internal" href="#adding-coordinates-of-transmiting-and-receiving-points">Adding coordinates of transmiting and receiving points</a></li>
+<li><a class="reference internal" href="#signatures-rays-and-radio-channel">Signatures, Rays and Radio Channel</a></li>
+<li><a class="reference internal" href="#apply-waveform">Apply waveform</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="where1-m1-uwb-measurement-campaign">
+<h1>WHERE1-M1 UWB measurement campaign<a class="headerlink" href="#where1-m1-uwb-measurement-campaign" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-2-d0e6bec50186&gt;&quot;, line 9
+    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+           ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>The deliverable describing the FP7 WHERE1 measurement campaign M1 can be
+found &#64; <a class="reference external" href="http://www.kn-s.dlr.de/where/documents/Deliverable41.pdf">WHERE1 D4.1 Measurements of location-dependent channel
+features</a></p>
+<div class="section" id="simulation-creation">
+<h2>Simulation Creation<a class="headerlink" href="#simulation-creation" title="Permalink to this headline">¶</a></h2>
+<p>A ray-tracing simulation is controlled via a configuration file which is
+stored in the <tt class="docutils literal"><span class="pre">ini</span></tt> directory of the project directory. By default,
+there is a default configuration file named <tt class="docutils literal"><span class="pre">default.ini</span></tt>.</p>
+<p>A first step consists in loading a layout associated with the
+simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
+corresponding slabs and materials.</p>
+<p>This layout corresponds to the office building where the first WHERE1
+UWB measurement campaign has been conducted.</p>
+<p>The layout method loads those in a member layout object <strong>L</strong> of the
+simulation object <strong>S</strong>.</p>
+<p>If not already available, the layout associated graphs are built.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># loading a layout</span>
+<span class="gp">... </span><span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;WHERE1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">except</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+<span class="go">new file WHERE1.str</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-04c81ec454f4&gt;&quot;, line 10
+    new file WHERE1.str
+           ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-4-7a3dbe3af248&gt; in &lt;module&gt;()
+----&gt; 1 f,a=S.L.showG(&#39;s&#39;,figsize=(16,8),nodes=False)
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_showGi</span><span class="p">(</span><span class="n">en</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="go">int0 :  (81, 34, 38)</span>
+<span class="go">int1 :  (120, 38, 37)</span>
+<span class="go"> output  {(129, 37, 39): 0.41574782790169362, (125, 39, 38): 0.99999999999998146, (127, 37): 5.3091135732287613e-08, (127, 37, 41): 5.3091135732287613e-08, (117, 41, 38): 5.3091135732287613e-08, (129, 37): 0.41574782790169362, (126, 37): 0.58425217209829539, (126, 37, 45): 0.58425217209829539}</span>
+<span class="go">(-31.123950000000001, 34.74295, 0.34508915054064992, 17.468049999999998)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-5-8e95b97e7578&gt;&quot;, line 3
+    int0 :  (81, 34, 38)
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>The layout display is fully parameterized via the embedded <strong>display</strong>
+dictionnary member of the Layout object.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;WHERE1 Project Office Measurement Site&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-6-abc8d17ff932&gt; in &lt;module&gt;()
+----&gt; 1 fig = plt.figure(figsize=(10,5))
+      2 S.L.display[&#39;ednodes&#39;]=False
+      3 S.L.display[&#39;nodes&#39;]=False
+      4 S.L.display[&#39;title&#39;]=&#39;WHERE1 Project Office Measurement Site&#39;
+      5 fig,ax=S.L.showGs(fig=fig)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">((81, 34, 38), (131, 38))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-7-b781190e8c7f&gt; in &lt;module&gt;()
+----&gt; 1 S.L.Gi.edges()[0]
+      2 ((81, 34, 38), (131, 38))
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
+<h2>Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
+<p>Transmitters and receivers coordinates for the simulation are stored in
+<strong>.ini</strong> files. Transmitter and Receiver are instances of the class
+<tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for specifying nodes
+positions. The stucture of this <strong>.ini</strong> file presented below. The node
+Id is associated with the 3 coordinates <img src="../../_images/mathmpl/math-aaef4cabe9.png" style="position: relative; bottom: -7px"/> separated by white
+spaces.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>[coordinates]
+1 = -12.2724 7.76319999993 1.2
+2 = -18.7747 15.1779999998 1.2
+3 = -4.14179999998 8.86029999983 1.2
+4 = -9.09139999998 15.1899000001 1.2
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-3da80372a972&gt;&quot;, line 2
+    1 = -12.2724 7.76319999993 1.2
+                             ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-9-91b5d3f220b3&gt; in &lt;module&gt;()
+----&gt; 1 S.tx = RadioNode(_fileini=&#39;w2m1rx.ini&#39;,_fileant=&#39;defant.vsh3&#39;)
+      2 S.rx = RadioNode(_fileini=&#39;w2m1tx.ini&#39;,_fileant=&#39;defant.vsh3&#39;)
+
+
+NameError: name &#39;RadioNode&#39; is not defined
+</pre></div>
+</div>
+<p>The whole simulation setup can then be displayed using the <strong>show</strong>
+method of the Simulation object</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="go">Warning : no furniture file loaded</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-10-36fdbf9a2c26&gt;&quot;, line 3
+    Warning : no furniture file loaded
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>Select Tx and Rx positions</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">10</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">20</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">21</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">23</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">26</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">27</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">31</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">33</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">34</span><span class="p">:</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">35</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">36</span><span class="p">:</span> <span class="mi">38</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">37</span><span class="p">:</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">38</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">39</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">40</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">41</span><span class="p">:</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">42</span><span class="p">:</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">43</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">44</span><span class="p">:</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">45</span><span class="p">:</span> <span class="mi">47</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">46</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">47</span><span class="p">:</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">48</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">49</span><span class="p">:</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">50</span><span class="p">:</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">51</span><span class="p">:</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">52</span><span class="p">:</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">53</span><span class="p">:</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">54</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">55</span><span class="p">:</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">56</span><span class="p">:</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">57</span><span class="p">:</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">58</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">59</span><span class="p">:</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">60</span><span class="p">:</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">61</span><span class="p">:</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">62</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">63</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">64</span><span class="p">:</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">65</span><span class="p">:</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">66</span><span class="p">:</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">67</span><span class="p">:</span> <span class="mi">69</span><span class="p">,</span> <span class="mi">68</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">69</span><span class="p">:</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">70</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">71</span><span class="p">:</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">72</span><span class="p">:</span> <span class="mi">74</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">73</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">74</span><span class="p">:</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">75</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">76</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">77</span><span class="p">:</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">78</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">79</span><span class="p">:</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">80</span><span class="p">:</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">81</span><span class="p">:</span> <span class="mi">83</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">82</span><span class="p">:</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">83</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">84</span><span class="p">:</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">85</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">86</span><span class="p">:</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">87</span><span class="p">:</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">88</span><span class="p">:</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">89</span><span class="p">:</span> <span class="mi">94</span><span class="p">,</span> <span class="mi">90</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span>
+<span class="gp">... </span>      <span class="mi">91</span><span class="p">:</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">92</span><span class="p">:</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">93</span><span class="p">:</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">94</span><span class="p">:</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">95</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">96</span><span class="p">:</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">97</span><span class="p">:</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">98</span><span class="p">:</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">99</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">105</span><span class="p">,</span> <span class="mi">100</span><span class="p">:</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">101</span><span class="p">:</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">102</span><span class="p">:</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">103</span><span class="p">:</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">104</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">105</span><span class="p">:</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">106</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">113</span><span class="p">,</span> <span class="mi">107</span><span class="p">:</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">108</span><span class="p">:</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">109</span><span class="p">:</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">110</span><span class="p">:</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">111</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">112</span><span class="p">:</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">113</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">123</span><span class="p">,</span> <span class="mi">114</span><span class="p">:</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">115</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">116</span><span class="p">:</span> <span class="mi">126</span><span class="p">,</span> <span class="mi">117</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">118</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">119</span><span class="p">:</span> <span class="mi">129</span><span class="p">,</span> <span class="mi">120</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">133</span><span class="p">,</span> <span class="mi">121</span><span class="p">:</span> <span class="mi">134</span><span class="p">,</span> <span class="mi">122</span><span class="p">:</span> <span class="mi">136</span><span class="p">,</span> <span class="mi">123</span><span class="p">:</span> <span class="mi">137</span><span class="p">,</span> <span class="mi">124</span><span class="p">:</span> <span class="mi">138</span><span class="p">,</span> <span class="mi">125</span><span class="p">:</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">126</span><span class="p">:</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">127</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">141</span><span class="p">,</span> <span class="mi">128</span><span class="p">:</span> <span class="mi">142</span><span class="p">,</span> <span class="mi">129</span><span class="p">:</span> <span class="mi">143</span><span class="p">,</span> <span class="mi">130</span><span class="p">:</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">131</span><span class="p">:</span> <span class="mi">145</span><span class="p">,</span> <span class="mi">132</span><span class="p">:</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">133</span><span class="p">:</span> <span class="mi">147</span><span class="p">,</span> <span class="mi">134</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">162</span><span class="p">,</span> <span class="mi">135</span><span class="p">:</span> <span class="mi">163</span><span class="p">,</span> <span class="mi">136</span><span class="p">:</span> <span class="mi">164</span><span class="p">,</span> <span class="mi">137</span><span class="p">:</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">138</span><span class="p">:</span> <span class="mi">166</span><span class="p">,</span> <span class="mi">139</span><span class="p">:</span> <span class="mi">167</span><span class="p">,</span> <span class="mi">140</span><span class="p">:</span> <span class="mi">168</span><span class="p">,</span> <span class="mi">141</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">169</span><span class="p">,</span> <span class="mi">142</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">143</span><span class="p">:</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">144</span><span class="p">:</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">145</span><span class="p">:</span> <span class="mi">173</span><span class="p">,</span> <span class="mi">146</span><span class="p">:</span> <span class="mi">174</span><span class="p">,</span> <span class="mi">147</span><span class="p">:</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">148</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">176</span><span class="p">,</span> <span class="mi">149</span><span class="p">:</span> <span class="mi">177</span><span class="p">,</span> <span class="mi">150</span><span class="p">:</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">151</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">152</span><span class="p">:</span> <span class="mi">181</span><span class="p">,</span> <span class="mi">153</span><span class="p">:</span> <span class="mi">182</span><span class="p">,</span> <span class="mi">154</span><span class="p">:</span> <span class="mi">183</span><span class="p">,</span> <span class="mi">155</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">184</span><span class="p">,</span> <span class="mi">156</span><span class="p">:</span> <span class="mi">185</span><span class="p">,</span> <span class="mi">157</span><span class="p">:</span> <span class="mi">186</span><span class="p">,</span> <span class="mi">158</span><span class="p">:</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">159</span><span class="p">:</span> <span class="mi">189</span><span class="p">,</span> <span class="mi">160</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span> <span class="mi">161</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">162</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">201</span><span class="p">,</span> <span class="mi">163</span><span class="p">:</span> <span class="mi">202</span><span class="p">,</span> <span class="mi">164</span><span class="p">:</span> <span class="mi">203</span><span class="p">,</span> <span class="mi">165</span><span class="p">:</span> <span class="mi">204</span><span class="p">,</span> <span class="mi">166</span><span class="p">:</span> <span class="mi">205</span><span class="p">,</span> <span class="mi">167</span><span class="p">:</span> <span class="mi">206</span><span class="p">,</span> <span class="mi">168</span><span class="p">:</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">169</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">208</span><span class="p">,</span> <span class="mi">170</span><span class="p">:</span> <span class="mi">209</span><span class="p">,</span> <span class="mi">171</span><span class="p">:</span> <span class="mi">210</span><span class="p">,</span> <span class="mi">172</span><span class="p">:</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">173</span><span class="p">:</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">174</span><span class="p">:</span> <span class="mi">213</span><span class="p">,</span> <span class="mi">175</span><span class="p">:</span> <span class="mi">214</span><span class="p">,</span> <span class="mi">176</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">215</span><span class="p">,</span> <span class="mi">177</span><span class="p">:</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">178</span><span class="p">:</span> <span class="mi">217</span><span class="p">,</span> <span class="mi">179</span><span class="p">:</span> <span class="mi">218</span><span class="p">,</span> <span class="mi">180</span><span class="p">:</span> <span class="mi">219</span><span class="p">,</span> <span class="mi">181</span><span class="p">:</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">182</span><span class="p">:</span> <span class="mi">221</span><span class="p">,</span> <span class="mi">183</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">222</span><span class="p">,</span> <span class="mi">184</span><span class="p">:</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">185</span><span class="p">:</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">186</span><span class="p">:</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">187</span><span class="p">:</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">188</span><span class="p">:</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">189</span><span class="p">:</span> <span class="mi">231</span><span class="p">,</span> <span class="mi">190</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">232</span><span class="p">,</span> <span class="mi">191</span><span class="p">:</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">192</span><span class="p">:</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">193</span><span class="p">:</span> <span class="mi">235</span><span class="p">,</span> <span class="mi">194</span><span class="p">:</span> <span class="mi">236</span><span class="p">,</span> <span class="mi">195</span><span class="p">:</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">196</span><span class="p">:</span> <span class="mi">238</span><span class="p">,</span> <span class="mi">197</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">239</span><span class="p">,</span> <span class="mi">198</span><span class="p">:</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">199</span><span class="p">:</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">200</span><span class="p">:</span> <span class="mi">242</span><span class="p">,</span> <span class="mi">201</span><span class="p">:</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">202</span><span class="p">:</span> <span class="mi">244</span><span class="p">,</span> <span class="mi">203</span><span class="p">:</span> <span class="mi">245</span><span class="p">,</span> <span class="mi">204</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">246</span><span class="p">,</span> <span class="mi">205</span><span class="p">:</span> <span class="mi">247</span><span class="p">,</span> <span class="mi">206</span><span class="p">:</span> <span class="mi">248</span><span class="p">,</span> <span class="mi">207</span><span class="p">:</span> <span class="mi">249</span><span class="p">,</span> <span class="mi">208</span><span class="p">:</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">209</span><span class="p">:</span> <span class="mi">251</span><span class="p">,</span> <span class="mi">210</span><span class="p">:</span> <span class="mi">252</span><span class="p">,</span> <span class="mi">211</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">253</span><span class="p">,</span> <span class="mi">212</span><span class="p">:</span> <span class="mi">258</span><span class="p">,</span> <span class="mi">213</span><span class="p">:</span> <span class="mi">259</span><span class="p">,</span> <span class="mi">214</span><span class="p">:</span> <span class="mi">266</span><span class="p">,</span> <span class="mi">215</span><span class="p">:</span> <span class="mi">267</span><span class="p">,</span> <span class="mi">216</span><span class="p">:</span> <span class="mi">268</span><span class="p">,</span> <span class="mi">217</span><span class="p">:</span> <span class="mi">269</span><span class="p">,</span> <span class="mi">218</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">270</span><span class="p">,</span> <span class="mi">219</span><span class="p">:</span> <span class="mi">271</span><span class="p">,</span> <span class="mi">220</span><span class="p">:</span> <span class="mi">272</span><span class="p">,</span> <span class="mi">221</span><span class="p">:</span> <span class="mi">273</span><span class="p">,</span> <span class="mi">222</span><span class="p">:</span> <span class="mi">274</span><span class="p">,</span> <span class="mi">223</span><span class="p">:</span> <span class="mi">275</span><span class="p">,</span> <span class="mi">224</span><span class="p">:</span> <span class="mi">276</span><span class="p">,</span> <span class="mi">225</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">277</span><span class="p">,</span> <span class="mi">226</span><span class="p">:</span> <span class="mi">278</span><span class="p">,</span> <span class="mi">227</span><span class="p">:</span> <span class="mi">279</span><span class="p">,</span> <span class="mi">228</span><span class="p">:</span> <span class="mi">297</span><span class="p">,</span> <span class="mi">229</span><span class="p">:</span> <span class="mi">298</span><span class="p">,</span> <span class="mi">230</span><span class="p">:</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">231</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">232</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">301</span><span class="p">,</span> <span class="mi">233</span><span class="p">:</span> <span class="mi">302</span><span class="p">,</span> <span class="mi">234</span><span class="p">:</span> <span class="mi">303</span><span class="p">,</span> <span class="mi">235</span><span class="p">:</span> <span class="mi">304</span><span class="p">,</span> <span class="mi">236</span><span class="p">:</span> <span class="mi">305</span><span class="p">,</span> <span class="mi">237</span><span class="p">:</span> <span class="mi">306</span><span class="p">,</span> <span class="mi">238</span><span class="p">:</span> <span class="mi">307</span><span class="p">,</span> <span class="mi">239</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">308</span><span class="p">,</span> <span class="mi">240</span><span class="p">:</span> <span class="mi">309</span><span class="p">,</span> <span class="mi">241</span><span class="p">:</span> <span class="mi">310</span><span class="p">,</span> <span class="mi">242</span><span class="p">:</span> <span class="mi">311</span><span class="p">,</span> <span class="mi">243</span><span class="p">:</span> <span class="mi">312</span><span class="p">,</span> <span class="mi">244</span><span class="p">:</span> <span class="mi">313</span><span class="p">,</span> <span class="mi">245</span><span class="p">:</span> <span class="mi">314</span><span class="p">,</span> <span class="mi">246</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">315</span><span class="p">,</span> <span class="mi">247</span><span class="p">:</span> <span class="mi">316</span><span class="p">,</span> <span class="mi">248</span><span class="p">:</span> <span class="mi">317</span><span class="p">,</span> <span class="mi">249</span><span class="p">:</span> <span class="mi">318</span><span class="p">,</span> <span class="mi">250</span><span class="p">:</span> <span class="mi">319</span><span class="p">,</span> <span class="mi">251</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span> <span class="mi">252</span><span class="p">:</span> <span class="mi">321</span><span class="p">,</span> <span class="mi">253</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">322</span><span class="p">,</span> <span class="mi">254</span><span class="p">:</span> <span class="mi">323</span><span class="p">,</span> <span class="mi">255</span><span class="p">:</span> <span class="mi">324</span><span class="p">,</span> <span class="mi">256</span><span class="p">:</span> <span class="mi">325</span><span class="p">,</span> <span class="mi">257</span><span class="p">:</span> <span class="mi">326</span><span class="p">,</span> <span class="mi">258</span><span class="p">:</span> <span class="mi">327</span><span class="p">,</span> <span class="mi">259</span><span class="p">:</span> <span class="mi">328</span><span class="p">,</span> <span class="mi">260</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">329</span><span class="p">,</span> <span class="mi">261</span><span class="p">:</span> <span class="mi">330</span><span class="p">,</span> <span class="mi">262</span><span class="p">:</span> <span class="mi">332</span><span class="p">,</span> <span class="mi">263</span><span class="p">:</span> <span class="mi">333</span><span class="p">,</span> <span class="mi">264</span><span class="p">:</span> <span class="mi">334</span><span class="p">,</span> <span class="mi">265</span><span class="p">:</span> <span class="mi">335</span><span class="p">,</span> <span class="mi">266</span><span class="p">:</span> <span class="mi">336</span><span class="p">,</span> <span class="mi">267</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">337</span><span class="p">,</span> <span class="mi">268</span><span class="p">:</span> <span class="mi">338</span><span class="p">,</span> <span class="mi">269</span><span class="p">:</span> <span class="mi">339</span><span class="p">,</span> <span class="mi">270</span><span class="p">:</span> <span class="mi">340</span><span class="p">,</span> <span class="mi">271</span><span class="p">:</span> <span class="mi">341</span><span class="p">,</span> <span class="mi">272</span><span class="p">:</span> <span class="mi">342</span><span class="p">,</span> <span class="mi">273</span><span class="p">:</span> <span class="mi">343</span><span class="p">,</span> <span class="mi">274</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">344</span><span class="p">,</span> <span class="mi">275</span><span class="p">:</span> <span class="mi">345</span><span class="p">,</span> <span class="mi">276</span><span class="p">:</span> <span class="mi">346</span><span class="p">,</span> <span class="mi">277</span><span class="p">:</span> <span class="mi">347</span><span class="p">,</span> <span class="mi">278</span><span class="p">:</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">279</span><span class="p">:</span> <span class="mi">349</span><span class="p">,</span> <span class="mi">280</span><span class="p">:</span> <span class="mi">350</span><span class="p">,</span> <span class="mi">281</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">351</span><span class="p">,</span> <span class="mi">282</span><span class="p">:</span> <span class="mi">352</span><span class="p">,</span> <span class="mi">283</span><span class="p">:</span> <span class="mi">353</span><span class="p">,</span> <span class="mi">284</span><span class="p">:</span> <span class="mi">354</span><span class="p">,</span> <span class="mi">285</span><span class="p">:</span> <span class="mi">355</span><span class="p">,</span> <span class="mi">286</span><span class="p">:</span> <span class="mi">356</span><span class="p">,</span> <span class="mi">287</span><span class="p">:</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">288</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">361</span><span class="p">,</span> <span class="mi">289</span><span class="p">:</span> <span class="mi">362</span><span class="p">,</span> <span class="mi">290</span><span class="p">:</span> <span class="mi">363</span><span class="p">,</span> <span class="mi">291</span><span class="p">:</span> <span class="mi">364</span><span class="p">,</span> <span class="mi">292</span><span class="p">:</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">293</span><span class="p">:</span> <span class="mi">366</span><span class="p">,</span> <span class="mi">294</span><span class="p">:</span> <span class="mi">367</span><span class="p">,</span> <span class="mi">295</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">368</span><span class="p">,</span> <span class="mi">296</span><span class="p">:</span> <span class="mi">369</span><span class="p">,</span> <span class="mi">297</span><span class="p">:</span> <span class="mi">370</span><span class="p">,</span> <span class="mi">298</span><span class="p">:</span> <span class="mi">371</span><span class="p">,</span> <span class="mi">299</span><span class="p">:</span> <span class="mi">372</span><span class="p">,</span> <span class="mi">300</span><span class="p">:</span> <span class="mi">373</span><span class="p">,</span> <span class="mi">301</span><span class="p">:</span> <span class="mi">374</span><span class="p">,</span> <span class="mi">302</span><span class="p">:</span>
+<span class="gp">... </span>      <span class="mi">375</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">number of Tx : 302</span>
+<span class="go">number of rx : 4</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-12-ba645ddd3af6&gt;&quot;, line 3
+    number of Tx : 302
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>Choose measurement points</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Chose used points here</span>
+<span class="gp">... </span><span class="n">itx</span><span class="o">=</span><span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">irx</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># check points</span>
+<span class="gp">... </span><span class="n">tx</span><span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">itx</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rx</span><span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">irx</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="nb">map</span><span class="p">[</span><span class="n">itx</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">txm</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rxm</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tx</span><span class="p">,</span><span class="n">txm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">rx</span><span class="p">,</span><span class="n">rxm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">tx</span><span class="o">-</span><span class="n">rx</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">tx</span><span class="o">-</span><span class="n">rx</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">txm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">txm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Tx and Txm are not the same !&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span> <span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Txs OK&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">rxm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">rxm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Rx and Rxm are not the same !&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span> <span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Rxs OK&#39;</span>
+<span class="go">[-24.867   12.3097   1.2   ] [-24.867   12.3097   1.2   ]</span>
+<span class="go">[-18.7747  15.178    1.2   ] [-18.7747  15.178    1.2   ]</span>
+<span class="go">Txs OK</span>
+<span class="go">Rxs OK</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-13-d5accc79ec2a&gt;&quot;, line 23
+    [-24.867   12.3097   1.2   ] [-24.867   12.3097   1.2   ]
+                     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(1, 40000)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-14-751768f06eb9&gt; in &lt;module&gt;()
+----&gt; 1 M.tdd.ch1.y.shape
+      2 (1, 40000)
+
+
+NameError: name &#39;M&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;tx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-15-d481e9d73fc4&gt; in &lt;module&gt;()
+----&gt; 1 fig =plt.figure(figsize=(16,8))
+      2 fig,ax=S.L.showG(&#39;s&#39;,fig=fig)
+      3 ax.plot(M.tx[0],M.tx[1],&#39;or&#39;,label=&#39;tx&#39;)
+      4 ax.plot(M.rx[irx][0],M.rx[irx][1],&#39;ob&#39;,label=&#39;rx&#39;)
+      5 ax.legend()
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="signatures-rays-and-radio-channel">
+<h2>Signatures, Rays and Radio Channel<a class="headerlink" href="#signatures-rays-and-radio-channel" title="Permalink to this headline">¶</a></h2>
+<p>A signature is a sequence of layout objects (points and segments) which
+are involved in a given optical ray joint the transmiter and the
+receiver. The signatutre is calculated from a layout cycle to an other
+layout cycle. This means that is is required first to retrieve the cycle
+number from point coordinates. This is done thanks to the <strong>pt2cy</strong>,
+point to cycle function.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ctx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;tx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">ctx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
+<span class="go">tx point belongs to cycle  6</span>
+<span class="go">rx point belongs to cycle  5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-16-b697110dbc0f&gt;&quot;, line 5
+    tx point belongs to cycle  6
+           ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>Then the signature between 2 given cycle can be calculated. This is done
+by instantiating a Signature object with a given layout and the 2 cycle
+number.</p>
+<p>The representaion of a signature objet</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-17-59089d02f636&gt; in &lt;module&gt;()
+----&gt; 1 Si = Signatures(S.L,ctx,crx)
+      2 Si.run5(cutoff=3)
+
+
+NameError: name &#39;Signatures&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mf">1.5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-18-7ea4df4b1661&gt; in &lt;module&gt;()
+----&gt; 1 tx[2]=1.5
+
+
+NameError: name &#39;tx&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r3d</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-19-ef07e5b83169&gt; in &lt;module&gt;()
+----&gt; 1 r2d = Si.rays(tx,rx)
+      2 r3d = r2d.to3D(S.L)
+
+
+NameError: name &#39;Si&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7fe130942810&gt;,</span>
+<span class="go"> &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fe130942690&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-20-78116a219907&gt;&quot;, line 3
+    (&lt;matplotlib.figure.Figure at 0x7fe130942810&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r3d</span>
+<span class="go">Rays3D</span>
+<span class="go">----------</span>
+<span class="go">1 / 1 : [0]</span>
+<span class="go">2 / 6 : [1 2 3 4 5 6]</span>
+<span class="go">3 / 32 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31</span>
+<span class="go"> 32 33 34 35 36 37 38]</span>
+<span class="go">4 / 137 : [ 39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56</span>
+<span class="go">  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72  73  74</span>
+<span class="go">  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90  91  92</span>
+<span class="go">  93  94  95  96  97  98  99 100 101 102 103 104 105 106 107 108 109 110</span>
+<span class="go"> 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128</span>
+<span class="go"> 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146</span>
+<span class="go"> 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164</span>
+<span class="go"> 165 166 167 168 169 170 171 172 173 174 175]</span>
+<span class="go">5 / 227 : [176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193</span>
+<span class="go"> 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211</span>
+<span class="go"> 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229</span>
+<span class="go"> 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247</span>
+<span class="go"> 248 249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265</span>
+<span class="go"> 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283</span>
+<span class="go"> 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 301</span>
+<span class="go"> 302 303 304 305 306 307 308 309 310 311 312 313 314 315 316 317 318 319</span>
+<span class="go"> 320 321 322 323 324 325 326 327 328 329 330 331 332 333 334 335 336 337</span>
+<span class="go"> 338 339 340 341 342 343 344 345 346 347 348 349 350 351 352 353 354 355</span>
+<span class="go"> 356 357 358 359 360 361 362 363 364 365 366 367 368 369 370 371 372 373</span>
+<span class="go"> 374 375 376 377 378 379 380 381 382 383 384 385 386 387 388 389 390 391</span>
+<span class="go"> 392 393 394 395 396 397 398 399 400 401 402]</span>
+<span class="go">6 / 198 : [403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 419 420</span>
+<span class="go"> 421 422 423 424 425 426 427 428 429 430 431 432 433 434 435 436 437 438</span>
+<span class="go"> 439 440 441 442 443 444 445 446 447 448 449 450 451 452 453 454 455 456</span>
+<span class="go"> 457 458 459 460 461 462 463 464 465 466 467 468 469 470 471 472 473 474</span>
+<span class="go"> 475 476 477 478 479 480 481 482 483 484 485 486 487 488 489 490 491 492</span>
+<span class="go"> 493 494 495 496 497 498 499 500 501 502 503 504 505 506 507 508 509 510</span>
+<span class="go"> 511 512 513 514 515 516 517 518 519 520 521 522 523 524 525 526 527 528</span>
+<span class="go"> 529 530 531 532 533 534 535 536 537 538 539 540 541 542 543 544 545 546</span>
+<span class="go"> 547 548 549 550 551 552 553 554 555 556 557 558 559 560 561 562 563 564</span>
+<span class="go"> 565 566 567 568 569 570 571 572 573 574 575 576 577 578 579 580 581 582</span>
+<span class="go"> 583 584 585 586 587 588 589 590 591 592 593 594 595 596 597 598 599 600]</span>
+<span class="go">7 / 30 : [601 602 603 604 605 606 607 608 609 610 611 612 613 614 615 616 617 618</span>
+<span class="go"> 619 620 621 622 623 624 625 626 627 628 629 630]</span>
+<span class="go">8 / 4 : [631 632 633 634]</span>
+<span class="go">-----</span>
+<span class="go">ni : 3222</span>
+<span class="go">nl : 7079</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-21-c45bebf86623&gt;&quot;, line 5
+    ----------
+              ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">freq</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="go">array([ 2.  ,  2.05,  2.1 ,  2.15,  2.2 ,  2.25,  2.3 ,  2.35,  2.4 ,  2.45])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-22-0b2172ec7d4e&gt; in &lt;module&gt;()
+----&gt; 1 S.freq()[0:10]
+      2 array([ 2.  ,  2.05,  2.1 ,  2.15,  2.2 ,  2.25,  2.3 ,  2.35,  2.4 ,  2.45])
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ct</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">freq</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-23-3d2a58b0e4d6&gt; in &lt;module&gt;()
+----&gt; 1 Ct = r3d.eval(S.freq())
+
+
+NameError: name &#39;r3d&#39; is not defined
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">energy</span></tt> method calculates the energy of each ray</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ett</span><span class="p">,</span><span class="n">Epp</span><span class="p">,</span><span class="n">Etp</span><span class="p">,</span><span class="n">Ept</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-24-5a542a3e037f&gt; in &lt;module&gt;()
+----&gt; 1 Ett,Epp,Etp,Ept = Ct.energy()
+
+
+NameError: name &#39;Ct&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ett</span><span class="p">),</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">r&#39;$\theta\theta$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Epp</span><span class="p">),</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">r&#39;$\phi\phi$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">160</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Ray Energy (dB)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ept</span><span class="p">),</span><span class="s">&#39;og&#39;</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span><span class="s">r&#39;$\phi\theta$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Etp</span><span class="p">),</span><span class="s">&#39;oc&#39;</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span> <span class="s">r&#39;$\theta\phi$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">160</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-25-ed03cfaffe60&gt; in &lt;module&gt;()
+----&gt; 1 plt.subplot(121)
+      2 plt.plot(Ct.tauk,10*np.log10(Ett),&#39;ob&#39;,label=r&#39;$\theta\theta$&#39;)
+      3 plt.plot(Ct.tauk,10*np.log10(Epp),&#39;or&#39;,label=r&#39;$\phi\phi$&#39;)
+      4 plt.ylim(-160,-60)
+      5 plt.xlabel(&#39;delay(ns)&#39;)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="apply-waveform">
+<h2>Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Aa</span><span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ab</span><span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-26-48bff1fd1c14&gt; in &lt;module&gt;()
+----&gt; 1 Aa= Antenna(&#39;defant.vsh3&#39;)
+      2 Ab= Antenna(&#39;defant.vsh3&#39;)
+
+
+NameError: name &#39;Antenna&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">freq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sco</span><span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sca</span><span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">Ab</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-27-f59dd2910f4c&gt; in &lt;module&gt;()
+----&gt; 1 Ct.freq = S.freq
+      2 sco= Ct.prop2tran()
+      3 sca= Ct.prop2tran(a=Aa,b=Ab)
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1offset&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#wav = wvf.Waveform({&#39;type&#39; : &#39;generic&#39;,&#39;band&#39;: 0.499,&#39;fc&#39;: 4.493, &#39;fe&#39;: 100, &#39;thresh&#39;: 3, &#39;tw&#39;: 30})</span>
+<span class="gp">... </span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-28-c207f3e76c54&gt; in &lt;module&gt;()
+----&gt; 1 wav = wvf.Waveform(typ=&#39;W1offset&#39;)
+      2 #wav = wvf.Waveform({&#39;type&#39; : &#39;generic&#39;,&#39;band&#39;: 0.499,&#39;fc&#39;: 4.493, &#39;fe&#39;: 100, &#39;thresh&#39;: 3, &#39;tw&#39;: 30})
+      3 wav.show()
+
+
+NameError: name &#39;wvf&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sco</span><span class="o">.</span><span class="n">isFriis</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-29-7a1776c5b8d1&gt; in &lt;module&gt;()
+----&gt; 1 sco.isFriis
+      2 True
+
+
+NameError: name &#39;sco&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sco</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sca</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">cira</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>     <span class="n">cira</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-30-32aad411a377&gt; in &lt;module&gt;()
+----&gt; 1 if sco.isFriis:
+      2     ciro = sco.applywavB(wav.sf)
+      3 else:
+      4     ciro = sco.applywavB(wav.sfg)
+      5 if sca.isFriis:
+
+
+NameError: name &#39;sco&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ciro</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;received waveform without antenna $</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta$&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-31-32970dcb6f93&gt; in &lt;module&gt;()
+----&gt; 1 ciro.plot(typ=&#39;v&#39;)
+      2 f=plt.title(u&#39;received waveform without antenna $\\theta\\theta$&#39;)
+
+
+NameError: name &#39;ciro&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;received waveform with antenna&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-32-ec3ee7283c4d&gt; in &lt;module&gt;()
+----&gt; 1 cira.plot(typ=&#39;v&#39;)
+      2 f=plt.title(&#39;received waveform with antenna&#39;)
+
+
+NameError: name &#39;cira&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#dchan={i:&#39;ch&#39;+str(i) for i in range(1,5)}</span>
+<span class="gp">... </span><span class="n">dchan</span><span class="o">=</span><span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dchan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch3&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dchan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch4&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dchan</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dchan</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch2&#39;</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-34-f18983f6e6f7&gt; in &lt;module&gt;()
+----&gt; 1 M.show()
+
+
+NameError: name &#39;M&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Measurements&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmd</span><span class="o">=</span><span class="s">&#39;M.tdd.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dchan</span><span class="p">[</span><span class="n">irx</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.plot(ax=ax1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">eval</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;WHERE1 measurement&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#M.tdd.ch2.plot()</span>
+<span class="gp">... </span><span class="c"># align for plotting</span>
+<span class="gp">... </span><span class="c">#ciro.x=ciro.x-ciro.x[0]</span>
+<span class="gp">... </span><span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Simulation-with antenna&quot;</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">70</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">95</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Simulation-with antenna - without noise&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#ax3 = fig.add_subplot(313,title=&quot;Simulation-without antenna&quot;,sharex=ax1, sharey=ax1)</span>
+<span class="gp">... </span><span class="c">#ciro.plot()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-35-7ab773200d86&gt; in &lt;module&gt;()
+----&gt; 1 fig = plt.figure(figsize=(10,6))
+      2 ax1 = fig.add_subplot(311,title=&quot;Measurements&quot;)
+      3 cmd=&#39;M.tdd.&#39; + str(dchan[irx]) + &#39;.plot(ax=ax1)&#39;
+      4 eval(cmd)
+      5 plt.title(&#39;WHERE1 measurement&#39;)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r3d</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-36-9db4433723d2&gt; in &lt;module&gt;()
+----&gt; 1 r3d.info(0)
+
+
+NameError: name &#39;r3d&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">),</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;copper&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-37-deb54e4502f7&gt; in &lt;module&gt;()
+----&gt; 1 f,a=Ct.doadod(phi=(-180,180),cmap=&#39;copper&#39;)
+
+
+NameError: name &#39;Ct&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/5-SIM/Where1M1.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

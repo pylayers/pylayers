@@ -1,0 +1,377 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ray Signatures &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Ray Signatures</a></li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ray-signatures">
+<h1>Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h1>
+<p>Signature are calculated from a cycle to an other cycle of the Layout.
+They are used for the determination of rays once the transmitter and
+receiver are known. The best algorithmic manner to get a signature is
+not stabilized yet, a lot of approaches have been implemented so far,
+with very different performances. It is expected that the signature is
+delivering all its utility when dealing with mobile trajectories.</p>
+<p>The evaluation of a signature from one cycle to another is implemented
+in the <tt class="docutils literal"><span class="pre">pylayers.simul.Link.DLink</span></tt> class.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-1-e2cf2ca1f64d&gt;&quot;, line 6
+    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+           ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-2-1b28416d0633&gt; in &lt;module&gt;()
+----&gt; 1 L = Layout(&#39;defstr3.ini&#39;)
+      2 L.build()
+      3 L.dumpw()
+
+
+NameError: name &#39;Layout&#39; is not defined
+</pre></div>
+</div>
+<p>Showing the graph of rooms with 2 rooms separated by a DOOR segment</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;sv&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-3-69f89247822d&gt; in &lt;module&gt;()
+----&gt; 1 L.showG(&#39;sv&#39;,figsize=(8,8))
+      2 a=plt.axis(&#39;off&#39;)
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<p>The graph of interactions is shown below.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;si&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-4-5c11869b119b&gt; in &lt;module&gt;()
+----&gt; 1 L.showG(&#39;si&#39;,figsize=(10,5))
+      2 a=plt.axis(&#39;off&#39;)
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<p>All the interactions of a given cycle are stored as meta information in
+nodes of <tt class="docutils literal"><span class="pre">Gt</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">node</span>
+<span class="go">{(1, 1): {},</span>
+<span class="go"> (1, 1, 2): {},</span>
+<span class="go"> (1, 2): {},</span>
+<span class="go"> (1, 2, 1): {},</span>
+<span class="go"> (2, 1): {},</span>
+<span class="go"> (2, 1, 2): {},</span>
+<span class="go"> (2, 2): {},</span>
+<span class="go"> (2, 2, 1): {},</span>
+<span class="go"> (3, 1): {},</span>
+<span class="go"> (3, 1, 2): {},</span>
+<span class="go"> (3, 2): {},</span>
+<span class="go"> (3, 2, 1): {},</span>
+<span class="go"> (4, 0): {},</span>
+<span class="go"> (4, 0, 2): {},</span>
+<span class="go"> (4, 2): {},</span>
+<span class="go"> (4, 2, 0): {},</span>
+<span class="go"> (5, 0): {},</span>
+<span class="go"> (5, 0, 2): {},</span>
+<span class="go"> (5, 2): {},</span>
+<span class="go"> (5, 2, 0): {},</span>
+<span class="go"> (6, 0): {},</span>
+<span class="go"> (6, 0, 1): {},</span>
+<span class="go"> (6, 1): {},</span>
+<span class="go"> (6, 1, 0): {},</span>
+<span class="go"> (7, 0): {},</span>
+<span class="go"> (7, 0, 1): {},</span>
+<span class="go"> (7, 1): {},</span>
+<span class="go"> (7, 1, 0): {},</span>
+<span class="go"> (8, 0): {},</span>
+<span class="go"> (8, 0, 1): {},</span>
+<span class="go"> (8, 1): {},</span>
+<span class="go"> (8, 1, 0): {},</span>
+<span class="go"> (9, 0): {},</span>
+<span class="go"> (9, 0, 2): {},</span>
+<span class="go"> (9, 2): {},</span>
+<span class="go"> (9, 2, 0): {}}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-5-475bc72d06f6&gt; in &lt;module&gt;()
+----&gt; 1 L.Gi.node
+      2 {(1, 1): {},
+      3  (1, 1, 2): {},
+      4  (1, 2): {},
+      5  (1, 2, 1): {},
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;inter&#39;</span><span class="p">]</span>
+<span class="go">[(6, 0),</span>
+<span class="go"> (6, 0, 1),</span>
+<span class="go"> (6, 1, 0),</span>
+<span class="go"> (7, 0),</span>
+<span class="go"> (7, 0, 1),</span>
+<span class="go"> (7, 1, 0),</span>
+<span class="go"> (8, 0),</span>
+<span class="go"> (8, 0, 1),</span>
+<span class="go"> (8, 1, 0),</span>
+<span class="go"> (9, 0),</span>
+<span class="go"> (9, 0, 2),</span>
+<span class="go"> (9, 2, 0),</span>
+<span class="go"> (4, 0),</span>
+<span class="go"> (4, 0, 2),</span>
+<span class="go"> (4, 2, 0),</span>
+<span class="go"> (5, 0),</span>
+<span class="go"> (5, 0, 2),</span>
+<span class="go"> (5, 2, 0),</span>
+<span class="go"> (-4,),</span>
+<span class="go"> (-3,),</span>
+<span class="go"> (-1,),</span>
+<span class="go"> (-6,)]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-6-81223cded9eb&gt; in &lt;module&gt;()
+----&gt; 1 L.Gt.node[0][&#39;inter&#39;]
+      2 [(6, 0),
+      3  (6, 0, 1),
+      4  (6, 1, 0),
+      5  (7, 0),
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<p>The signature is calculated with as parameters the Layout object and two
+cycle numbers. In example below it is 0 and 1.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-7-e66f0bac9490&gt; in &lt;module&gt;()
+----&gt; 1 Si = Signatures(L,0,1)
+
+
+NameError: name &#39;Signatures&#39; is not defined
+</pre></div>
+</div>
+<p>The cold start determination of the signature is done with a <tt class="docutils literal"><span class="pre">run</span></tt>
+function. The code is not in its final shape here and there is room for
+significant acceleration in incorporating propagation based heuristics.
+The mitigation of graph exploration depth is done in setting a
+<tt class="docutils literal"><span class="pre">cutoff</span></tt> value which limits the exploration in the interaction graph.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-8-d547d93e7556&gt; in &lt;module&gt;()
+----&gt; 1 Si.run5(cutoff=5,diffraction=False,algo=&#39;old&#39;)
+
+
+NameError: name &#39;Si&#39; is not defined
+</pre></div>
+</div>
+<p>The representation method of a signature gives informations about the
+different signatures. Signatures are grouped by number of interactions.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span>
+<span class="go">{0: (758.49, 1111.9),</span>
+<span class="go"> 1: (766.00300113353387, 1113.947479109665),</span>
+<span class="go"> 2: (761.00289669547806, 1113.915769812613)}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-9-e1ae3d494b8e&gt; in &lt;module&gt;()
+----&gt; 1 L.Gt.pos
+      2 {0: (758.49, 1111.9),
+      3  1: (766.00300113353387, 1113.947479109665),
+      4  2: (761.00289669547806, 1113.915769812613)}
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ptx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ptx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">prx</span>
+<span class="go">[  759.3213136   1112.39386191]</span>
+<span class="go">[  766.8885467   1113.98892221]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-10-c94cbc15cbec&gt;&quot;, line 5
+    [  759.3213136   1112.39386191]
+                                 ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/Signatures.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

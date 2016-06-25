@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,19 +86,6 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -123,47 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-antprop-antenna-pattern-eval">
 <h1>pylayers.antprop.antenna.Pattern.eval<a class="headerlink" href="#pylayers-antprop-antenna-pattern-eval" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.antenna.Pattern.eval">
-<code class="descclassname">Pattern.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Pattern.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.eval" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluate pattern functions</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>th:[]</strong> :</p>
-<p><strong>ph:[]</strong> :</p>
-<p><strong>fGHz:[]</strong> :</p>
-<p><strong>nth:90</strong> :</p>
-<p><strong>nph:181</strong> :</p>
-<p><strong>first: boolean True if first call (to define self.param)</strong> :</p>
-<p><strong>grid:  True for pattern mode, False for Ray Tracing mode</strong> :</p>
-<p><strong>th0</strong> : theta initial value</p>
-<p><strong>th1</strong> : theta finale value</p>
-<p><strong>ph0</strong> : phi initial value</p>
-<p class="last"><strong>ph1</strong> : phi final value</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.aarray</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A0</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="n">param</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;t&#39;</span><span class="p">,</span><span class="s1">&#39;GmaxdB&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A1</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Gauss&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A2</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;3gpp&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">=</span><span class="n">ULArray</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A0</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A1</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A2</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -176,9 +126,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Pattern.eval.txt"
 	    rel="nofollow">Show this page source</a>
@@ -186,11 +136,6 @@
     </div>
      <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

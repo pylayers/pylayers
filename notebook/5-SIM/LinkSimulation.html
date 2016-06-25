@@ -1,0 +1,765 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to do Ray Tracing simulation using DLink &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">How to do Ray Tracing simulation using DLink</a></li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">&quot;dark&quot;</span><span class="p">)</span>
+<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-1-50fd33a20283&gt;&quot;, line 5
+    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+           ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="section" id="how-to-do-ray-tracing-simulation-using-dlink">
+<h1>How to do Ray Tracing simulation using DLink<a class="headerlink" href="#how-to-do-ray-tracing-simulation-using-dlink" title="Permalink to this headline">¶</a></h1>
+<p>This section illustrates the
+<tt class="docutils literal"><span class="pre">`link</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html">http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html</a>&gt;`__
+module. A <tt class="docutils literal"><span class="pre">Dlink</span></tt> object is a deterministic (Single Input Single
+Output) SISO link.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">DLink</span><span class="p">()</span>
+<span class="go">This is the first time the Layout is used. Graphs have to be built. Please Wait</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-2-506fa0debed9&gt;&quot;, line 2
+    This is the first time the Layout is used. Graphs have to be built. Please Wait
+                    ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison</span>
+<span class="go">  if self._edgecolors_original != str(&#39;face&#39;):</span>
+
+<span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison</span>
+<span class="go">  if self._edgecolors == str(&#39;face&#39;):</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7feaeb516290&gt;,</span>
+<span class="go"> &lt;matplotlib.axes._subplots.AxesSubplot at 0x7feaeb516a10&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-9c336f9a2740&gt;&quot;, line 2
+    home(/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650:, FutureWarning:, elementwise, comparison, failed;, returning, scalar, instead,, but, in, the, future, will, perform, elementwise, comparison)
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>
+<span class="go">filename: Links_0_defstr.ini.h5</span>
+<span class="go">Link Parameters :</span>
+<span class="go">------- --------</span>
+<span class="go">Layout : defstr.ini</span>
+
+<span class="go">Node a</span>
+<span class="go">------</span>
+<span class="go">position : [  766.00300113  1113.94747911     1.2       ]</span>
+<span class="go">Antenna : Omni</span>
+<span class="go">Rotation matrice :</span>
+<span class="go"> [[ 1.  0.  0.]</span>
+<span class="go"> [ 0.  1.  0.]</span>
+<span class="go"> [ 0.  0.  1.]]</span>
+
+<span class="go">Node b</span>
+<span class="go">------</span>
+<span class="go">position : [  761.0028967   1113.91576981     1.2       ]</span>
+<span class="go">Antenna : Omni</span>
+<span class="go">Rotation matrice :</span>
+<span class="go"> [[ 1.  0.  0.]</span>
+<span class="go"> [ 0.  1.  0.]</span>
+<span class="go"> [ 0.  0.  1.]]</span>
+
+<span class="go">Link evaluation information :</span>
+<span class="go">-----------------------------</span>
+<span class="go">distance :  5.000 m</span>
+<span class="go">delay : 16.667 ns</span>
+<span class="go">fmin (fGHz) : 2.4</span>
+<span class="go">fmax (fGHz) : 2.4</span>
+<span class="go">fstep (fGHz) : 0.0</span>
+<span class="go">Nf : 1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-4-4b5e7feb3d94&gt;&quot;, line 2
+    filename: Links_0_defstr.ini.h5
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; L.eval?
+</pre></div>
+</div>
+<pre class="literal-block">
+Object <cite>L.eval</cite> not found.
+</pre>
+<p>To evaluate a link there is the <tt class="docutils literal"><span class="pre">eval</span></tt> method. This method takes as
+argument + a list of the desired outputs, + the type of algorithm being
+used, + the ceil heigh + the number of multi reflection between ceil and
+floor.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7feae5be9390&gt;,</span>
+<span class="go"> &lt;matplotlib.axes._subplots.AxesSubplot at 0x7feae5b44910&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-6-2b97fb2b9db0&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7feae5be9390&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span>
+<span class="go">array([ 16.66734994,  18.48784882,  20.53778357,  33.33365909,</span>
+<span class="go">        33.3343511 ,  26.03460301,  26.03460301,  31.44237961,</span>
+<span class="go">        31.44261404,  34.28021045,  34.28088335,  35.42785385,</span>
+<span class="go">        35.42850495,  35.89995802,  35.89997275,  35.90181477,</span>
+<span class="go">        35.90184832,  50.00066032,  50.0013426 ,  50.00136179,</span>
+<span class="go">        32.44415565,  32.44438284,  33.65446829,  33.65468731,</span>
+<span class="go">        36.78052454,  36.78053892,  36.78233685,  36.78236959,</span>
+<span class="go">        37.85243698,  37.85245096,  37.85419797,  37.85422979,</span>
+<span class="go">        38.87329197,  38.87329197,  38.87388536,  38.87388536,</span>
+<span class="go">        50.63660763,  50.63728134,  50.63730029,  51.42048261,</span>
+<span class="go">        51.42114606,  51.42116471,  66.66765177,  66.66836297,</span>
+<span class="go">        37.26423534,  37.26423534,  37.26443315,  37.26443315,</span>
+<span class="go">        41.09509686,  41.09509686,  41.09510973,  41.09510973,</span>
+<span class="go">        41.0967189 ,  41.0967189 ,  41.0967482 ,  41.0967482 ,</span>
+<span class="go">        53.85226116,  53.85226116,  53.85289465,  53.85289465,</span>
+<span class="go">        53.85291246,  53.85291246,  55.86686011,  55.8671227 ,</span>
+<span class="go">        56.66325336,  56.66785273,  67.14592909,  67.14663522,</span>
+<span class="go">        67.7390271 ,  67.73972705,  83.33535519,  56.43674387,</span>
+<span class="go">        56.43700381,  57.14110656,  57.14136329,  57.2252067 ,</span>
+<span class="go">        57.2297609 ,  57.91998171,  57.92448129,  69.60298696,</span>
+<span class="go">        69.60298696,  69.60366816,  69.60366816,  83.71846526,</span>
+<span class="go">        84.19490142,  59.33890847,  59.33890847,  59.3391557 ,</span>
+<span class="go">        59.3391557 ,  60.08930256,  60.08930256,  60.09363971,</span>
+<span class="go">        60.09363971,  85.70170024,  85.70170024])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-7-df22251f784c&gt; in &lt;module&gt;()
+----&gt; 1 L.H.taud
+      2 array([ 16.66734994,  18.48784882,  20.53778357,  33.33365909,
+      3         33.3343511 ,  26.03460301,  26.03460301,  31.44237961,
+      4         31.44261404,  34.28021045,  34.28088335,  35.42785385,
+      5         35.42850495,  35.89995802,  35.89997275,  35.90181477,
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[],</span> <span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
+<span class="gp">... </span>            <span class="n">si_algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">ra_ceil_height_meter</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">ra_number_mirror_cf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">checkh5</span>
+<span class="go">Start Signatures</span>
+<span class="go">Signatures&#39;&gt; from 1_2_3 loaded</span>
+<span class="go">load signature</span>
+<span class="go">Stop signature 0.127700805664</span>
+<span class="go">Start Rays</span>
+<span class="go">Rays&#39;&gt; from 3_0_2 loaded</span>
+<span class="go">Stop rays 0.23652100563</span>
+<span class="go">Ctilde&#39;&gt; from 0_2_1 loaded</span>
+<span class="go">Tchannel&#39;&gt; from 0_2_1_0_0_0_0 loaded</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-ef1860d29a89&gt;&quot;, line 4
+    Start Signatures
+                   ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-9-54a8ce6633a9&gt; in &lt;module&gt;()
+----&gt; 1 plt.stem(aktk[1],aktk[0])
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<p>The propagation channel (without antenna) can be vizualized on a ray by
+ray mode.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>
+<span class="go">pylayers.antprop.channel.Ctilde</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-10-7016e3b80bd2&gt; in &lt;module&gt;()
+----&gt; 1 type(L.C)
+      2 pylayers.antprop.channel.Ctilde
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#L._show3()sns.set_style(&quot;dark&quot;)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">C</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l10&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.py:2562: UserWarning: Attempting to set identical left==right results</span>
+<span class="go">in singular transformations; automatically expanding.</span>
+<span class="go">left=2.4, right=2.4</span>
+<span class="go">  &#39;left=%s, right=%s&#39;) % (left, right))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-12-e627aba44a02&gt;&quot;, line 4
+    home(/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes/_base.py:2562:, UserWarning:, Attempting, to, set, identical, left==right, results)
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>It is possible to look at individual ray transfer function, as
+illustrated below.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(95, 181)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-13-b15c3f56d381&gt; in &lt;module&gt;()
+----&gt; 1 C.Ctt.y.shape
+      2 (95, 181)
+
+
+NameError: name &#39;C&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ir</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (linear)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-14-b982fe6f7874&gt; in &lt;module&gt;()
+      1 ir = 80
+----&gt; 2 plt.plot(C.Ctt.x,abs(C.Ctt.y[ir,:]))
+      3 plt.xlabel(&#39;Frequency (GHz)&#39;)
+      4 plt.ylabel(&#39;Level (linear)&#39;)
+      5 plt.title(&#39;Modulus of the ray &#39;+str(ir)+&#39; transfer function&#39;)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ir</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (linear)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-15-cc3e93bb836b&gt; in &lt;module&gt;()
+      1 ir = 30
+----&gt; 2 plt.plot(C.Ctt.x,abs(C.Ctt.y[ir,:]))
+      3 plt.xlabel(&#39;Frequency (GHz)&#39;)
+      4 plt.ylabel(&#39;Level (linear)&#39;)
+      5 plt.title(&#39;Modulus of the ray &#39;+str(ir)+&#39; transfer function&#39;)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<p>In the link we also have the transmission channel accounting for the
+effect of antennas and Friis factor. If the ray transfer function is
+scaled with <img src="../../_images/mathmpl/math-2568d81340.png" style="position: relative; bottom: -7px"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:462: ComplexWarning: Casting complex values to real discards the imaginary part</span>
+<span class="go">  return array(a, dtype, copy=False, order=order)</span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0x7f17b5c56050&gt;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-16-4c95b1e4329e&gt;&quot;, line 2
+    home(/uguen/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:462:, ComplexWarning:, Casting, complex, values, to, real, discards, the, imaginary, part)
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>Notice that in this case the frequency</p>
+<p>The infinite bandwidth channel impulse response is plotted below from
+the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="position: relative; bottom: -7px"/>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Infinite bandwith Channel Impulse response&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay (ns)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-17-fed48e39015b&gt; in &lt;module&gt;()
+----&gt; 1 plt.stem(aktk[1],aktk[0])
+      2 plt.title(&#39;Infinite bandwith Channel Impulse response&#39;)
+      3 plt.xlabel(&#39;delay (ns)&#39;)
+      4 plt.ylabel(&#39;amplitude (linear scale&#39;)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">as</span> <span class="nn">sn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-18-f6ed6fa7963a&gt; in &lt;module&gt;()
+----&gt; 1 import pylayers.simul.simulnet as sn
+      2 import pylayers.simul.simultraj as st
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulnet.py in &lt;module&gt;()
+     62 import pylayers.util.pyutil as pyu
+     63
+---&gt; 64 from pylayers.network.network import Network, Node, PNetwork
+     65 from pylayers.network.communication import Gcom
+     66 from pylayers.network.show import ShowNet, ShowTable
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/network.py in &lt;module&gt;()
+    151 #from PyLayers.Network.Node import Node
+    152 import pylayers.util.pyutil as pyu
+--&gt; 153 from pylayers.network.emsolver import EMSolver
+    154 from pylayers.network.show import ShowNet,ShowTable
+    155 #from pylayers.util.pymysqldb import Database
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/emsolver.py in &lt;module&gt;()
+     42
+     43
+---&gt; 44 class EMSolver(object):
+     45     &quot;&quot;&quot; Invoque an electromagnetic solver
+     46
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/emsolver.py in EMSolver()
+     71     &quot;&quot;&quot;
+     72
+---&gt; 73     def __init__(self,L=Layout()):
+     74
+     75         self.config  = ConfigParser.ConfigParser()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check, build, verbose)
+    422
+    423
+--&gt; 424         self.load(_filename,build=build)
+    425
+    426
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in load(self, _filename, build)
+   1624                     # if ans.lower()==&#39;y&#39;:
+   1625
+-&gt; 1626                     self.build()
+   1627                     self.lbltg.append(&#39;s&#39;)
+   1628                     self.dumpw()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4786             if verbose:
+   4787                 print &quot;Gv&quot;
+-&gt; 4788             self.buildGv()
+   4789             self.lbltg.extend(&#39;v&#39;)
+   4790
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
+   7065                 for idiff in ndiffvalid:
+   7066
+-&gt; 7067                     import ipdb
+   7068                     # ipdb.set_trace()
+   7069                     # if (icycle==2) &amp; (idiff==-2399):
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">sn</span><span class="o">.</span><span class="n">Simul</span><span class="p">()</span>
+<span class="go">Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-19-635ba4584431&gt;&quot;, line 2
+    Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
+                ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">L</span>
+
+<span class="go">----------------</span>
+<span class="go">TA-Office.ini</span>
+<span class="go">Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)</span>
+<span class="go">----------------</span>
+
+<span class="go">Number of points  : 71</span>
+<span class="go">Number of segments  : 87</span>
+<span class="go">Number of sub segments  : 16</span>
+<span class="go">Number of cycles  : 18</span>
+<span class="go">Number of rooms  : 17</span>
+<span class="go">degree 0 : []</span>
+<span class="go">degree 1 : []</span>
+<span class="go">number of node point of degree 2 : 39</span>
+<span class="go">number of node point of degree 3 : 32</span>
+
+<span class="go">xrange :(0.0, 40.0)</span>
+<span class="go">yrange :(0.0, 15.0)</span>
+
+<span class="go">Useful dictionnaries</span>
+<span class="go">----------------</span>
+<span class="go">dca {cycle : []} cycle with an airwall</span>
+<span class="go">sl {slab name : slab dictionary}</span>
+<span class="go">name :  {slab :seglist}</span>
+
+<span class="go">Useful arrays</span>
+<span class="go">----------------</span>
+<span class="go">pt : numpy array of points</span>
+<span class="go">normal : numpy array of normal</span>
+<span class="go">offset : numpy array of offset</span>
+<span class="go">tsg : get segment index in Gs from tahe</span>
+<span class="go">isss :  sub-segment index above Nsmax</span>
+<span class="go">tgs : get segment index in tahe from Gs</span>
+<span class="go">lsss : list of segments with sub-segment</span>
+<span class="go">sla : list of all slab names (Nsmax+Nss+1)</span>
+<span class="go">degree : degree of nodes</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-20-4e9aa9fdf7c0&gt;&quot;, line 3
+    ----------------
+                    ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-21-e96c93b86265&gt; in &lt;module&gt;()
+----&gt; 1 S.runsimul()
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>A trajectories object is a list of trajectories. The loadh5 methods by
+default loads the file &#8216;.h5&#8217; generated by
+<tt class="docutils literal"><span class="pre">`Simulnet</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.simul.simulnet.html">http://pylayers.github.io/pylayers/modules/pylayers.simul.simulnet.html</a>&gt;`__.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-23-c93f9b6c2ae9&gt; in &lt;module&gt;()
+      1 T=Trajectories()
+----&gt; 2 T.loadh5()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/mobility/trajectory.pyc in loadh5(self, _filename, append)
+    148             fil = pd.HDFStore(filename)
+    149         else:
+--&gt; 150             raise NameError(filename + &#39; not found&#39;)
+    151         if not append:
+    152             [self.pop(0) for i in range(len(self))]
+
+
+NameError: /home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5 not found
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span>
+<span class="go">Trajectories performed in Layout : TA-Office.ini</span>
+
+<span class="go">Trajectory of agent John with ID 1</span>
+<span class="go">----------------------------------</span>
+<span class="go">t (s) : 0.00 : 0.20 : 119.80</span>
+<span class="go">dtot (m) : 443.20</span>
+<span class="go">Vmoy (m/s) : 3.70</span>
+<span class="go">                                 x         y        vx        vy        ax  \</span>
+<span class="go">t</span>
+<span class="go">1970-01-01 00:00:00.000  18.907750  2.528547  0.038749  0.155237  0.193744</span>
+<span class="go">1970-01-01 00:00:00.200  18.921699  2.584433  0.069748  0.279427  0.154995</span>
+
+<span class="go">                               ay      s</span>
+<span class="go">t</span>
+<span class="go">1970-01-01 00:00:00.000  0.776185  0.160</span>
+<span class="go">1970-01-01 00:00:00.200  0.620948  0.448</span>
+
+<span class="go">Trajectory of agent Alex with ID 2</span>
+<span class="go">----------------------------------</span>
+<span class="go">t (s) : 0.00 : 0.20 : 119.80</span>
+<span class="go">dtot (m) : 158.60</span>
+<span class="go">Vmoy (m/s) : 1.32</span>
+<span class="go">                                 x          y        vx        vy        ax  \</span>
+<span class="go">t</span>
+<span class="go">1970-01-01 00:00:00.000  24.306132  12.467593  0.030661 -0.157035  0.153303</span>
+<span class="go">1970-01-01 00:00:00.200  24.317170  12.411061  0.055189 -0.282663  0.122642</span>
+
+<span class="go">                               ay      s</span>
+<span class="go">t</span>
+<span class="go">1970-01-01 00:00:00.000 -0.785174  0.160</span>
+<span class="go">1970-01-01 00:00:00.200 -0.628139  0.448</span>
+
+<span class="go">Access point Router with ID 6</span>
+<span class="go">-----------------------------</span>
+<span class="go">t (s) : 0.00</span>
+<span class="go">Vmoy (m/s) : 0.0</span>
+<span class="go">              x  y    z  vx  vy  ax  ay  s</span>
+<span class="go">t</span>
+<span class="go">1970-01-01  0.5  2  2.5   0   0   0   0  0</span>
+
+<span class="go">Access point Router with ID 7</span>
+<span class="go">-----------------------------</span>
+<span class="go">t (s) : 0.00</span>
+<span class="go">Vmoy (m/s) : 0.0</span>
+<span class="go">              x   y    z  vx  vy  ax  ay  s</span>
+<span class="go">t</span>
+<span class="go">1970-01-01  0.7  14  2.5   0   0   0   0  0</span>
+
+<span class="go">Access point Router with ID 8</span>
+<span class="go">-----------------------------</span>
+<span class="go">t (s) : 0.00</span>
+<span class="go">Vmoy (m/s) : 0.0</span>
+<span class="go">             x   y    z  vx  vy  ax  ay  s</span>
+<span class="go">t</span>
+<span class="go">1970-01-01  39  13  2.5   0   0   0   0  0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-24-68836e039c4b&gt;&quot;, line 2
+    Trajectories performed in Layout : TA-Office.ini
+                         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>A SimulTraj object is derived from a trajectory calculated previously in
+simulnet and a body agent description. The Simultraj object get the
+trajectories from the <tt class="docutils literal"><span class="pre">simultaj.ini</span></tt> file.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">St</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">Simul</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-25-ae27233a0375&gt; in &lt;module&gt;()
+----&gt; 1 St=st.Simul(verbose=False)
+
+
+NameError: name &#39;st&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#St.run(t=list(np.arange(0,1,0.1)),OB=True,B2B=True,B2I=True)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#St.data</span>
+</pre></div>
+</div>
+<p>Information about the simulated network is obtained</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">St</span><span class="o">.</span><span class="n">N</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-28-292f54c77c9f&gt; in &lt;module&gt;()
+----&gt; 1 St.N
+
+
+NameError: name &#39;St&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#St._show3()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#St.data.head()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#ak,tk,ek=St._loadh5(2,&#39;0_Alex&#39;,&#39;1_Alex&#39;,&#39;bluetooth-class2&#39;)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#stem(tk,ak)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

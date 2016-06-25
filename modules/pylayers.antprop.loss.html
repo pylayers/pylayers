@@ -28,8 +28,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.antprop.loss.PL0" href="generated/pylayers.antprop.loss.PL0.html" />
-    <link rel="prev" title="pylayers.antprop.slab.calsig" href="generated/pylayers.antprop.slab.calsig.html" />
+    <link rel="next" title="pylayers.gis.cycles" href="pylayers.gis.cycles.html" />
+    <link rel="prev" title="pylayers.antprop.signature" href="pylayers.antprop.signature.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -90,14 +90,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.antprop.slab.calsig.html" title="pylayers.antprop.slab.calsig"
+	<a href="pylayers.antprop.signature.html" title="pylayers.antprop.signature"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antp...
+	    pylayers.antprop...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.slab.calsig
+	    pylayers.antprop.signature
 	    </span>
 	    
 	    </a>
@@ -107,31 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.antprop.loss.PL0.html" title="pylayers.antprop.loss.PL0"
+	<a href="pylayers.gis.cycles.html" title="pylayers.gis.cycles"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antp...
+	    pylayers.gis.cyc...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.loss.PL0
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
+	    pylayers.gis.cycles
 	    </span>
 	    
 	    </a>
@@ -164,10 +147,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.loss</a><ul>
-<li><a class="reference internal" href="#loss-module">Loss module</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.antprop.loss</a></li>
 </ul>
 
     
@@ -179,67 +159,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
-  <div class="section" id="module-pylayers.antprop.loss">
-<span id="pylayers-antprop-loss"></span><h1>pylayers.antprop.loss<a class="headerlink" href="#module-pylayers.antprop.loss" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="loss-module">
-<h2>Loss module<a class="headerlink" href="#loss-module" title="Permalink to this headline">¶</a></h2>
-<p>This module implements path loss models for various situations.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.PL0.html#pylayers.antprop.loss.PL0" title="pylayers.antprop.loss.PL0"><code class="xref py py-obj docutils literal"><span class="pre">PL0</span></code></a>(fGHz[,&nbsp;GtdB,&nbsp;GrdB,&nbsp;R])</td>
-<td>Path Loss at frequency fGHZ &#64; R</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.PL.html#pylayers.antprop.loss.PL" title="pylayers.antprop.loss.PL"><code class="xref py py-obj docutils literal"><span class="pre">PL</span></code></a>(fGHz,&nbsp;pts,&nbsp;p[,&nbsp;n,&nbsp;dB,&nbsp;d0])</td>
-<td>calculate Free Space Path Loss</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Losst.html#pylayers.antprop.loss.Losst" title="pylayers.antprop.loss.Losst"><code class="xref py py-obj docutils literal"><span class="pre">Losst</span></code></a>(L,&nbsp;fGHz,&nbsp;p1,&nbsp;p2[,&nbsp;dB])</td>
-<td>calculate Losses between links p1 p2</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Loss0_v2</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Loss0.html#pylayers.antprop.loss.Loss0" title="pylayers.antprop.loss.Loss0"><code class="xref py py-obj docutils literal"><span class="pre">Loss0</span></code></a>(S,&nbsp;rx,&nbsp;ry,&nbsp;f,&nbsp;p)</td>
-<td>calculate Loss through Layers for theta=0 deg</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Loss_diff.html#pylayers.antprop.loss.Loss_diff" title="pylayers.antprop.loss.Loss_diff"><code class="xref py py-obj docutils literal"><span class="pre">Loss_diff</span></code></a>(u)</td>
-<td>calculate Path Loss of the diffraction</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.OneSlopeMdl.html#pylayers.antprop.loss.OneSlopeMdl" title="pylayers.antprop.loss.OneSlopeMdl"><code class="xref py py-obj docutils literal"><span class="pre">OneSlopeMdl</span></code></a>(D,&nbsp;n,&nbsp;fGHz)</td>
-<td>one slope model</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cost231.html#pylayers.antprop.loss.cost231" title="pylayers.antprop.loss.cost231"><code class="xref py py-obj docutils literal"><span class="pre">cost231</span></code></a>(pBS,&nbsp;pMS,&nbsp;hroof,&nbsp;phir,&nbsp;wr,&nbsp;fMHz[,&nbsp;...])</td>
-<td>Walfish Ikegami model (COST 231)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cost259.html#pylayers.antprop.loss.cost259" title="pylayers.antprop.loss.cost259"><code class="xref py py-obj docutils literal"><span class="pre">cost259</span></code></a>(pMS,&nbsp;pBS,&nbsp;fMHz)</td>
-<td>cost259 model</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cost2100.html#pylayers.antprop.loss.cost2100" title="pylayers.antprop.loss.cost2100"><code class="xref py py-obj docutils literal"><span class="pre">cost2100</span></code></a>(pMS,&nbsp;pBS,&nbsp;fGHz[,&nbsp;nfloor,&nbsp;dB])</td>
-<td>cost 2100 model</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_points.html#pylayers.antprop.loss.Dgrid_points" title="pylayers.antprop.loss.Dgrid_points"><code class="xref py py-obj docutils literal"><span class="pre">Dgrid_points</span></code></a>(points,&nbsp;Px)</td>
-<td>distance point to grid</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_zone.html#pylayers.antprop.loss.Dgrid_zone" title="pylayers.antprop.loss.Dgrid_zone"><code class="xref py py-obj docutils literal"><span class="pre">Dgrid_zone</span></code></a>(zone,&nbsp;Px)</td>
-<td>Distance point to zone</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.calnu.html#pylayers.antprop.loss.calnu" title="pylayers.antprop.loss.calnu"><code class="xref py py-obj docutils literal"><span class="pre">calnu</span></code></a>(h,&nbsp;d1,&nbsp;d2,&nbsp;fGHz)</td>
-<td>Calculate the diffraction Fresnel parameter</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.visuPts.html#pylayers.antprop.loss.visuPts" title="pylayers.antprop.loss.visuPts"><code class="xref py py-obj docutils literal"><span class="pre">visuPts</span></code></a>(S,&nbsp;nu,&nbsp;nd,&nbsp;Pts,&nbsp;Values[,&nbsp;fig,&nbsp;sp,&nbsp;...])</td>
-<td>visuPt  : Visualization of values a given points</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cdf.html#pylayers.antprop.loss.cdf" title="pylayers.antprop.loss.cdf"><code class="xref py py-obj docutils literal"><span class="pre">cdf</span></code></a>(x[,&nbsp;colsym,&nbsp;lab,&nbsp;lw])</td>
-<td>plot the cumulative density function</td>
-</tr>
-</tbody>
-</table>
-</div>
+  <div class="section" id="pylayers-antprop-loss">
+<h1>pylayers.antprop.loss<a class="headerlink" href="#pylayers-antprop-loss" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -252,9 +175,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.antprop.loss.txt"
 	    rel="nofollow">Show this page source</a>
@@ -263,18 +186,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.antprop.slab.calsig.html">
+      <a href="pylayers.antprop.signature.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.antprop.loss.PL0.html">
+      <a href="pylayers.gis.cycles.html">
         Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../py-modindex.html">
-        Previous
       </a>  
     </div>
     

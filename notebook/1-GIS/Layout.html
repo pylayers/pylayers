@@ -1,0 +1,818 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Description of the propagation environment &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Description of the propagation environment</a><ul>
+<li><a class="reference internal" href="#getting-the-list-of-all-available-layouts-the-ls-method">Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
+<li><a class="reference internal" href="#the-useful-numpy-arrays-of-the-layout">The useful numpy arrays of the Layout</a><ul>
+<li><a class="reference internal" href="#pt-the-array-of-points"><tt class="docutils literal"><span class="pre">pt</span></tt> the array of points</a></li>
+<li><a class="reference internal" href="#tahe-tail-head">tahe (tail-head)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; !date
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>vendredi 24 juin 2016, 09:02:07 (UTC+0200)
+</pre></div>
+</div>
+<div class="section" id="description-of-the-propagation-environment">
+<h1>Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">Layout</span></tt> class contains the data structure for describing a
+propagation environment. It contains different graphs helping the
+implementation of the ray tracing. The class is implemented in the</p>
+<p><a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html">layout.py</a></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
+<h2>Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
+<p>Creating a default Layout is as simple as :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>----------------
+defstr.ini
+----------------
+
+Number of points  : 12
+Number of segments  : 13
+Number of sub segments  : 3
+Number of cycles  : 7
+Number of rooms  : 2
+degree 0 : []
+degree 1 : [-8 -7]
+number of node point of degree 2 : 4
+number of node point of degree 3 : 2
+
+xrange :(748.5, 778.5)
+yrange :(1101.6, 1125.9)
+
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
+
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
+
+Useful tip
+----------------
+Point p in Gs =&gt; p_coord:
+p -&gt; u = self.iupnt[-p] -&gt; p_coord = self.pt[:,u]
+
+Segment s in Gs =&gt; s_ab coordinates
+s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]
+</pre></div>
+</div>
+<p>Querying the file name associated with the Layout</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;defstr.ini&#39;</span>
+</pre></div>
+</div>
+<p>The Layout is described in an <tt class="docutils literal"><span class="pre">.ini</span></tt> file.</p>
+<p>The <tt class="docutils literal"><span class="pre">ls()</span></tt> method lists the layout files which are available in the
+<tt class="docutils literal"><span class="pre">struc</span></tt> directory of your current project, which is set up via the
+$BASENAME environment variable which should be defined in order PyLayers
+find the good directories.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;11Dbibli.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;B11.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;CORM1.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DLR2.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Luebbers.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;MOCAP-small.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;MOCAP-small2.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;MOCAP.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;MOCAPext.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Scene.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;TA-Office3.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;TC1_METIS.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;TC1_METIS_old.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;TC2_METIS.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;TC2_METIS_new.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;W2PTIN.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WHERE1-new.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WHERE1.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WHERE1_v1.0.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;defdiff.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;defsthdiff.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;defstr.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;edge.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;klepal.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;scattering.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;test.ini&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>----------------
+defstr.ini
+----------------
+
+Number of points  : 12
+Number of segments  : 13
+Number of sub segments  : 3
+Number of cycles  : 7
+Number of rooms  : 2
+degree 0 : []
+degree 1 : [-8 -7]
+number of node point of degree 2 : 4
+number of node point of degree 3 : 2
+
+xrange :(748.5, 778.5)
+yrange :(1101.6, 1125.9)
+
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
+
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
+
+Useful tip
+----------------
+Point p in Gs =&gt; p_coord:
+p -&gt; u = self.iupnt[-p] -&gt; p_coord = self.pt[:,u]
+
+Segment s in Gs =&gt; s_ab coordinates
+s -&gt; u = self.tgs[s] -&gt; v = self.tahe[:,u] -&gt; s_ab = self.pt[:,v]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">slab</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Layout_11_0.png" src="../../_images/Layout_11_0.png" />
+<p>L.ax provides the boundary of the layout with the following format :
+(xmin,xmax,ymin,ymax)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">748.5</span><span class="p">,</span> <span class="mf">778.5</span><span class="p">,</span> <span class="mf">1101.6</span><span class="p">,</span> <span class="mf">1125.9</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-10-63002b766909&gt; in &lt;module&gt;()
+----&gt; 1 L.build()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4786             if verbose:
+   4787                 print &quot;Gv&quot;
+-&gt; 4788             self.buildGv()
+   4789             self.lbltg.extend(&#39;v&#39;)
+   4790
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
+   7065                 for idiff in ndiffvalid:
+   7066
+-&gt; 7067                     import ipdb
+   7068                     # ipdb.set_trace()
+   7069                     # if (icycle==2) &amp; (idiff==-2399):
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<p>L.ma is the polygon mask of the layout</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ma</span>
+</pre></div>
+</div>
+<img src="../../_images/Layout_16_0.svg" /><p>This Layout has several convex cycles which are stored in the Gt graph.
+The diffraction points are stored in a dictionnary L.ddiff. The keys of
+this diction-nary are the diffraction points and the values are both the
+list of output cycles and the corresponding wedge angles.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gv</span><span class="o">.</span><span class="n">node</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{}</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ddiff</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mf">6.283185307179586</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">7</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mf">6.283185307179586</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="mf">4.7123889803846897</span><span class="p">),</span>
+ <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="mf">4.7723171355059337</span><span class="p">)}</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>{0: {&#39;indoor&#39;: False},
+ 1: {&#39;cycle&#39;: cycle nstr[-8  2 -2  8 -3  7 -4  6 -5  3 -7  1]
+  point number 6
+  segment number 6
+  area : 20.0
+  centroid : [  766.   1113.9],
+  &#39;indoor&#39;: True,
+  &#39;inter&#39;: [(1, 1),
+   (1, 1, 2),
+   (1, 2, 1),
+   (3, 1),
+   (3, 1, 2),
+   (3, 2, 1),
+   (6, 1),
+   (6, 1, 5),
+   (6, 5, 1),
+   (7, 1),
+   (7, 1, 4),
+   (7, 4, 1),
+   (8, 1),
+   (8, 1, 3),
+   (8, 3, 1),
+   (2, 1),
+   (2, 1, 2),
+   (2, 2, 1)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (763.5,1113.432)
+  (763.5,1114.432)
+  (763.5,1115.9)
+  (768.5,1115.9)
+  (768.5,1111.9)
+  (763.5,1111.9)
+
+  vnodes : (-8 1 -7 3 -5 6 -4 7 -3 8 -2 2 )},
+ 2: {&#39;cycle&#39;: cycle nstr[-8  2 -2  9 -1  4 -6  5 -5  3 -7  1]
+  point number 6
+  segment number 6
+  area : -20.75
+  centroid : [  760.96987952  1113.82409639],
+  &#39;indoor&#39;: True,
+  &#39;inter&#39;: [(1, 2),
+   (1, 2, 1),
+   (1, 1, 2),
+   (2, 2),
+   (2, 2, 1),
+   (2, 1, 2),
+   (9, 2),
+   (9, 2, 3),
+   (9, 3, 2),
+   (4, 2),
+   (4, 2, 6),
+   (4, 6, 2),
+   (5, 2),
+   (5, 2, 5),
+   (5, 5, 2),
+   (3, 2),
+   (3, 2, 1),
+   (3, 1, 2)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (763.5,1114.432)
+  (763.5,1113.432)
+  (763.5,1111.9)
+  (758.5,1111.6)
+  (758.5,1115.9)
+  (763.5,1115.9)
+
+  vnodes : (-7 1 -8 2 -2 9 -1 4 -6 5 -5 3 )},
+ 3: {&#39;cycle&#39;: cycle nstr[ -3  18 -10  10  -9  16  -1   9  -2   8]
+  point number 5
+  segment number 5
+  area : -203.75
+  centroid : [  763.57361963  1105.85169734],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(10, 3, 0),
+   (10, 0, 3),
+   (16, 3, 6),
+   (16, 6, 3),
+   (9, 3),
+   (9, 3, 2),
+   (9, 2, 3),
+   (8, 3),
+   (8, 3, 1),
+   (8, 1, 3),
+   (18, 3, 4),
+   (18, 4, 3)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (778.5,1101.6)
+  (748.5,1101.6)
+  (758.5,1111.6)
+  (763.5,1111.9)
+  (768.5,1111.9)
+
+  vnodes : (-10 10 -9 16 -1 9 -2 8 -3 18 )},
+ 4: {&#39;cycle&#39;: cycle nstr[ -4   7  -3  18 -10  11 -11  22]
+  point number 4
+  segment number 4
+  area : 141.5
+  centroid : [  774.69552415  1113.80706714],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(11, 4, 0),
+   (11, 0, 4),
+   (18, 4, 3),
+   (18, 3, 4),
+   (7, 4),
+   (7, 4, 1),
+   (7, 1, 4),
+   (22, 4, 5),
+   (22, 5, 4)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (778.5,1125.9)
+  (778.5,1101.6)
+  (768.5,1111.9)
+  (768.5,1115.9)
+
+  vnodes : (-11 11 -10 18 -3 7 -4 22 )},
+ 5: {&#39;cycle&#39;: cycle nstr[ -6  21 -12  12 -11  22  -4   6  -5   5]
+  point number 5
+  segment number 5
+  area : -200.0
+  centroid : [  763.5         1121.73333333],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(12, 5, 0),
+   (12, 0, 5),
+   (22, 5, 4),
+   (22, 4, 5),
+   (6, 5),
+   (6, 5, 1),
+   (6, 1, 5),
+   (5, 5),
+   (5, 5, 2),
+   (5, 2, 5),
+   (21, 5, 6),
+   (21, 6, 5)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (748.5,1125.9)
+  (778.5,1125.9)
+  (768.5,1115.9)
+  (763.5,1115.9)
+  (758.5,1115.9)
+
+  vnodes : (-12 12 -11 22 -4 6 -5 5 -6 21 )},
+ 6: {&#39;cycle&#39;: cycle nstr[ -6  21 -12  13  -9  16  -1   4]
+  point number 4
+  segment number 4
+  area : 143.0
+  centroid : [  752.33449883  1113.75      ],
+  &#39;indoor&#39;: False,
+  &#39;inter&#39;: [(13, 6, 0),
+   (13, 0, 6),
+   (21, 6, 5),
+   (21, 5, 6),
+   (4, 6),
+   (4, 6, 2),
+   (4, 2, 6),
+   (16, 6, 3),
+   (16, 3, 6)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (748.5,1101.6)
+  (748.5,1125.9)
+  (758.5,1115.9)
+  (758.5,1111.6)
+
+  vnodes : (-9 13 -12 21 -6 4 -1 16 )}}
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">aw</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Layout_22_0.png" src="../../_images/Layout_22_0.png" />
+<p>To check which are the used slabs :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Slabs</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">:</span>
+<span class="go">           print L.sl[s]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.05, 0.05, 0.05]
+       blue3 1
+
+AIR : AIR | [0.05]
+       white 1
+
+DOOR : WOOD | [0.05]
+       red1 1
+
+METAL : METAL | [0.05]
+       black 4
+
+PARTITION : PLASTER | [0.05]
+       grey80 4
+
+WALL : BRICK | [0.05]
+       grey20 3
+</pre></div>
+</div>
+<p>Let&#8217;s load an other layout. This an indoor office where the FP7 WHERE
+project UWB impulse radio measuremnts have been performed.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The showG method provides many possible visualization of the layout</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="../../_images/Layout_28_0.png" src="../../_images/Layout_28_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Layout_30_0.png" src="../../_images/Layout_30_0.png" />
+</div>
+<div class="section" id="the-useful-numpy-arrays-of-the-layout">
+<h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
+<p>The layout data structure is a mix between graph and numpy array. numpy
+arrays are used when high performance is required while graph structure
+is convenient when dealing with different specific tasks. The tricky
+thing for the mind is to have to transcode between node index excluding
+0 and numpy array index including 0. Below are listed various useful
+numpy array which are mostly used internally.</p>
+<ul class="simple">
+<li>tsg : get segment index in Gs from tahe</li>
+<li>isss : sub-segment index above Nsmax</li>
+<li>tgs : get segment index in tahe from Gs</li>
+<li>lsss : list of segments with sub-segment</li>
+<li>sla : list of all slab names (Nsmax+Nss+1)</li>
+<li>degree : degree of nodes</li>
+</ul>
+<div class="section" id="pt-the-array-of-points">
+<h3><tt class="docutils literal"><span class="pre">pt</span></tt> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
+<p>The point coordinates are stored in two different places</p>
+<ul class="simple">
+<li>L.Gs.pos : in a dictionary form (key is the point negative index)</li>
+<li>L.pt : in a numpy array</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">181</span><span class="p">)</span>
+<span class="mi">185</span>
+</pre></div>
+</div>
+<p>This dual storage is chosen for computational efficiency reason. The
+priority goes to the graph and the numpy array is calculated at the end
+of the edition in the <tt class="docutils literal"><span class="pre">Layout.g2npy</span></tt> method (graph to numpy) which is
+in charge of the conversion.</p>
+</div>
+<div class="section" id="tahe-tail-head">
+<h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">tahe</span></tt> is a <img src="../../_images/mathmpl/math-884534ff0d.png" style="position: relative; bottom: -8px"/> where <img src="../../_images/mathmpl/math-9a741fc6d9.png" style="position: relative; bottom: -7px"/> denotes the
+number of segment. The first line is the tail index of the segment
+<img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/> and the second line is the head of the segment <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/>.
+Where <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/> is the index of a given segment (starting in 0).</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-23-63002b766909&gt; in &lt;module&gt;()
+----&gt; 1 L.build()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4786             if verbose:
+   4787                 print &quot;Gv&quot;
+-&gt; 4788             self.buildGv()
+   4789             self.lbltg.extend(&#39;v&#39;)
+   4790
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
+   7065                 for idiff in ndiffvalid:
+   7066
+-&gt; 7067                     import ipdb
+   7068                     # ipdb.set_trace()
+   7069                     # if (icycle==2) &amp; (idiff==-2399):
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<p>The figure below illustrates a Layout and a superimposition of the graph
+of cycles <img src="../../_images/mathmpl/math-7ab57d2327.png" style="position: relative; bottom: -7px"/>. Those cycles are automatically
+extracted from a well defined layout. This concept of <strong>cycles</strong> is
+central in the ray determination algorithm which is implemented in
+PyLayers. Notice that the exterior region is the cycle indexed by 0. All
+the rooms which have a common frontier with the exterior cycle are here
+connected to the origin (corresponding to exterior cycle).</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Layout_36_0.png" src="../../_images/Layout_36_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.collections.LineCollection at 0x7f6cd894f9d0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Layout_37_1.png" src="../../_images/Layout_37_1.png" />
+</div>
+</div>
+<div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
+<h2><tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">tgs</span></tt> is an array with length <img src="../../_images/mathmpl/math-9a741fc6d9.png" style="position: relative; bottom: -7px"/>+1. The index 0 is not used
+because none segment has 0 as an index.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ns</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utahe</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tahe</span> <span class="o">=</span>  <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">utahe</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ptail</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phead</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ptail</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 29.785   6.822]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">phead</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 27.414   6.822]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">139</span><span class="p">],</span>
+ <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
+ <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">33</span><span class="p">],</span>
+ <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+ <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+ <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="o">-</span><span class="mi">139</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">29.785</span><span class="p">,</span> <span class="mf">6.822</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">27.414</span><span class="p">,</span> <span class="mf">6.822</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">aseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">134</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pt</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">aseg</span><span class="p">]][</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">aseg</span><span class="p">]][</span><span class="mi">1</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/1-GIS/Layout.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

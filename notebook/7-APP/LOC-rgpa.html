@@ -1,0 +1,363 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title> Robust Geometric Positioning Algorithm &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">&nbsp;Robust Geometric Positioning Algorithm</a></li>
+<li><a class="reference internal" href="#rgpa-robust-geometric-positioning-algorithm">RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">Exploiting Time of Arrival (ToA) only</a></li>
+<li><a class="reference internal" href="#rss">RSS</a></li>
+<li><a class="reference internal" href="#tdoa">TDOA</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; !date
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>vendredi 24 juin 2016, 09:26:27 (UTC+0200)
+</pre></div>
+</div>
+<div class="section" id="robust-geometric-positioning-algorithm">
+<h1>&nbsp;Robust Geometric Positioning Algorithm<a class="headerlink" href="#robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.cla</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.toa</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.tdoa</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.rss</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<p>Let&#8217;s define 4 anchors in the plane.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pt1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">5</span><span class="p">,</span><span class="mi">28</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Then displaying the scene with anchor nodes (in red) and blind nodes in
+blue</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 4&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;xb&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="../../_images/LOC-rgpa_6_0.png" src="../../_images/LOC-rgpa_6_0.png" />
+<p>The euclidian distance <img src="../../_images/mathmpl/math-eb6bd6e7ff.png" style="position: relative; bottom: -10px"/> between the blind node
+<img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/> and anchors <img src="../../_images/mathmpl/math-bb7f67c6e1.png" style="position: relative; bottom: -10px"/> are then evaluated.</p>
+<p>The associated time of flight is <img src="../../_images/mathmpl/math-4553b31524.png" style="position: relative; bottom: -10px"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt3</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt4</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toa1</span><span class="o">=</span><span class="n">d1</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toa2</span><span class="o">=</span><span class="n">d2</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toa3</span><span class="o">=</span><span class="n">d3</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toa4</span><span class="o">=</span><span class="n">d4</span><span class="o">/</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;distance p1=&#39;</span><span class="p">,</span><span class="n">d1</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span> <span class="s">&#39;/ toa1=&#39;</span><span class="p">,</span><span class="n">toa1</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;distance p2=&#39;</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span><span class="s">&#39;/ toa2=&#39;</span><span class="p">,</span><span class="n">toa2</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;distance p3=&#39;</span><span class="p">,</span><span class="n">d3</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span><span class="s">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa3</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;distance p4=&#39;</span><span class="p">,</span><span class="n">d4</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span><span class="s">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa4</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>distance p1= 5.0  m / toa1= 16.6666666667 ns
+distance p2= 14.1421356237  m / toa2= 47.1404520791 ns
+distance p3= 23.5372045919  m / toa3= 78.4573486396 ns
+distance p4= 18.0277563773  m / toa3= 60.0925212577 ns
+</pre></div>
+</div>
+</div>
+<div class="section" id="rgpa-robust-geometric-positioning-algorithm">
+<h1>RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="exploiting-time-of-arrival-toa-only">
+<h2>Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
+<p>We call <tt class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></tt> (CLA), the object which gathers all
+the geometric constraints of a considered scenario.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Instanciate TOA constraints, notice that their id are different.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T1</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T2</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T3</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T4</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, add the 4 TOA constraints to the CLA.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All the constraints of the CLA can be listed as follows</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]
+</pre></div>
+</div>
+<p>Get information about the CLA :</p>
+<ul class="simple">
+<li>type : TOA / RSS</li>
+<li>p : Position of the origin of the constraint</li>
+<li>value : power ( RSS ) / time in ns ( TOA)</li>
+<li>std : standard deviation <img src="../../_images/mathmpl/math-54bf156f7e.png" style="position: relative; bottom: -3px"/> of value</li>
+<li>runable : does the constraint has a position p ?</li>
+<li>obsolete : does the value has been obtained recently ?</li>
+<li>usuable : runable AND NOT obsolete</li>
+<li>evlauated : obsolete</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
+</pre></div>
+</div>
+<p>Update the CLA</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Compute the cla</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<pre class="literal-block">
+/home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/util/boxn.py:92: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
+  if Lb==None:
+</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+</pre></div>
+</div>
+<p>show the estimated position</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="o">-</span><span class="mf">4.735e-03</span><span class="p">,</span>   <span class="mf">4.992e+00</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>to be compare with the actual position value</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rss">
+<h2>RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
+<p>The RSS is a quantity which is weakly related to distance via a
+parametric model. The better the model, the better would be the
+inference about the associated distance. In that purpose, the Path Loss
+shadowing model is a widely used model.</p>
+<p>To define the classical path loss shadowing model widely used in this
+context the <tt class="docutils literal"><span class="pre">PLSmodel</span></tt> class has been defined.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For simulation purpose : get RSS from distances (or associated delay)
+with the above model</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">toa1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">16.666666666666668</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">8.8530311885002018</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tdoa">
+<h2>TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Td2</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt3</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt4</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.021</span><span class="p">,</span>  <span class="mf">4.987</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/7-APP/LOC-rgpa.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

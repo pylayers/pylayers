@@ -28,8 +28,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.signal.ED.ED.__init__" href="generated/pylayers.signal.ED.ED.__init__.html" />
-    <link rel="prev" title="pylayers.signal.DF.DF.ir" href="generated/pylayers.signal.DF.DF.ir.html" />
+    <link rel="next" title="pylayers.signal.waveform" href="pylayers.signal.waveform.html" />
+    <link rel="prev" title="pylayers.signal.DF" href="pylayers.signal.DF.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -90,14 +90,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.signal.DF.DF.ir.html" title="pylayers.signal.DF.DF.ir"
+	<a href="pylayers.signal.DF.html" title="pylayers.signal.DF"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.sign...
+	    pylayers.signal....
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.signal.DF.DF.ir
+	    pylayers.signal.DF
 	    </span>
 	    
 	    </a>
@@ -107,31 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.signal.ED.ED.__init__.html" title="pylayers.signal.ED.ED.__init__"
+	<a href="pylayers.signal.waveform.html" title="pylayers.signal.waveform"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.sign...
+	    pylayers.signal....
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.signal.ED.ED.__init__
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
+	    pylayers.signal.waveform
 	    </span>
 	    
 	    </a>
@@ -164,13 +147,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.signal.ED</a><ul>
-<li><a class="reference internal" href="#energy-detector">Energy Detector</a><ul>
-<li><a class="reference internal" href="#references">References</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.signal.ED</a></li>
 </ul>
 
     
@@ -182,80 +159,11 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-signal-ed">
 <h1>pylayers.signal.ED<a class="headerlink" href="#pylayers-signal-ed" title="Permalink to this headline">¶</a></h1>
 <p>Implement an energy detector</p>
-<span class="target" id="module-pylayers.signal.ED"></span><p>&#8221;
-.. currentmodule:: pylayers.signal.ED</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="energy-detector">
-<h2>Energy Detector<a class="headerlink" href="#energy-detector" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.__init__.html#pylayers.signal.ED.ED.__init__" title="pylayers.signal.ED.ED.__init__"><code class="xref py py-obj docutils literal"><span class="pre">ED.__init__</span></code></a>(**kwargs)</td>
-<td>Constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.__repr__.html#pylayers.signal.ED.ED.__repr__" title="pylayers.signal.ED.ED.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">ED.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.apply.html#pylayers.signal.ED.ED.apply" title="pylayers.signal.ED.ED.apply"><code class="xref py py-obj docutils literal"><span class="pre">ED.apply</span></code></a>(s[,&nbsp;typ])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.moment.html#pylayers.signal.ED.ED.moment" title="pylayers.signal.ED.ED.moment"><code class="xref py py-obj docutils literal"><span class="pre">ED.moment</span></code></a>([typ])</td>
-<td>evaluate mean and variance of output signal y</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.pdf.html#pylayers.signal.ED.ED.pdf" title="pylayers.signal.ED.ED.pdf"><code class="xref py py-obj docutils literal"><span class="pre">ED.pdf</span></code></a>(E[,&nbsp;Ei])</td>
-<td>calculates decision problem densities under H0 and H1</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.errprob.html#pylayers.signal.ED.ED.errprob" title="pylayers.signal.ED.ED.errprob"><code class="xref py py-obj docutils literal"><span class="pre">ED.errprob</span></code></a>(E[,&nbsp;Ei,&nbsp;thresh,&nbsp;typ])</td>
-<td>calculates error probability</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.roc.html#pylayers.signal.ED.ED.roc" title="pylayers.signal.ED.ED.roc"><code class="xref py py-obj docutils literal"><span class="pre">ED.roc</span></code></a>(E[,&nbsp;typ])</td>
-<td>determines receiver operating curve</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.plot.html#pylayers.signal.ED.ED.plot" title="pylayers.signal.ED.ED.plot"><code class="xref py py-obj docutils literal"><span class="pre">ED.plot</span></code></a>(E)</td>
-<td>plot decision problem densities</td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="references">
-<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div>Cite the relevant literature, e.g. <a class="footnote-reference" href="#id2" id="id1">[2]</a>.  You may also cite these
-references in the notes section above.</div></blockquote>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[2]</a></td><td>O. McNoleg, &#8220;The integration of GIS, remote sensing,
-expert systems and adaptive co-kriging for environmental habitat
-modelling of the Highland Haggis using object-oriented, fuzzy-logic
-and neural-network techniques,&#8221; Computers &amp; Geosciences, vol. 22,
-pp. 585-588, 1996.</td></tr>
-</tbody>
-</table>
-</div>
-</div>
 </div>
 
 
@@ -268,9 +176,9 @@ pp. 585-588, 1996.</td></tr>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.signal.ED.txt"
 	    rel="nofollow">Show this page source</a>
@@ -279,18 +187,13 @@ pp. 585-588, 1996.</td></tr>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.signal.DF.DF.ir.html">
+      <a href="pylayers.signal.DF.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.signal.ED.ED.__init__.html">
+      <a href="pylayers.signal.waveform.html">
         Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../py-modindex.html">
-        Previous
       </a>  
     </div>
     

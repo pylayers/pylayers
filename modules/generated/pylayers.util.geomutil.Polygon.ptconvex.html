@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.util.geomutil" href="../pylayers.util.geomutil.html" />
-    <link rel="next" title="pylayers.util.geomutil.angular" href="pylayers.util.geomutil.angular.html" />
-    <link rel="prev" title="pylayers.util.geomutil.Polygon.showGv" href="pylayers.util.geomutil.Polygon.showGv.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.util.geomutil.Polygon.showGv.html" title="pylayers.util.geomutil.Polygon.showGv"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.geomutil.Polygon.showGv
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.util.geomutil.angular.html" title="pylayers.util.geomutil.angular"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.geomutil.angular
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.util.geomutil.html" title="pylayers.util.geomutil" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.util...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.util.geomutil
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,75 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-util-geomutil-polygon-ptconvex">
 <h1>pylayers.util.geomutil.Polygon.ptconvex<a class="headerlink" href="#pylayers-util-geomutil-polygon-ptconvex" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.util.geomutil.Polygon.ptconvex">
-<code class="descclassname">Polygon.</code><code class="descname">ptconvex</code><span class="sig-paren">(</span><em>display=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#Polygon.ptconvex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Polygon.ptconvex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of booleans indicating points convexity</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>display</strong> : boolean</p>
-<blockquote>
-<div><p>default False</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tcc</strong> : np.array (1x Nseg)</p>
-<blockquote>
-<div><p>1 if convex , -1 if concav , 0 if plane</p>
-</div></blockquote>
-<p><strong>n</strong> :  array(2xNseg)</p>
-<blockquote class="last">
-<div><p>segments normals</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.util.geomutil.Lr2n.html#pylayers.util.geomutil.Lr2n" title="pylayers.util.geomutil.Lr2n"><code class="xref py py-obj docutils literal"><span class="pre">Lr2n</span></code></a></p>
-</div>
-<p class="rubric">Notes</p>
-<p>This function determines the convex and concav points of a polygon.
-As there is no orientation convention for the polygon the sign of the cross
-product can&#8217;t be directly interpreted. So we exploit the following
-property :</p>
-<p>Let N be the number of points of the Polygon. N  = Nx + Nc where
-Nx is the number of convex points and Nc the number of concav points</p>
-<p>We have Nx &gt;= Nc</p>
-<p>If a point is common to two parallel segments, the cross product is = 0</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tcc</span><span class="p">,</span><span class="n">n</span>   <span class="o">=</span> <span class="n">polyg</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#k = 0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#for p in points:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  if tcc[k] == 1 :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;red&#39;,alpha=1)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  else:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;blue&#39;,alpha=0.3)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  k = k+1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#polyg.plot()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#plt.figure()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#poly    = Polygon(points)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#tcc,n   = polyg.ptconvex()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#poly.plot()</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-ptconvex-1.py">Source code</a>)</p>
-</dd></dl>
-
 </div>
 
 
@@ -257,31 +126,16 @@ Nx is the number of convex points and Nc the number of concav points</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.geomutil.Polygon.ptconvex.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.util.geomutil.Polygon.showGv.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.util.geomutil.angular.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

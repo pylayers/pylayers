@@ -28,8 +28,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.signal.DF.DF.__init__" href="generated/pylayers.signal.DF.DF.__init__.html" />
-    <link rel="prev" title="pylayers.signal.device.Device.__init__" href="generated/pylayers.signal.device.Device.__init__.html" />
+    <link rel="next" title="pylayers.signal.ED" href="pylayers.signal.ED.html" />
+    <link rel="prev" title="pylayers.signal.devices" href="pylayers.signal.device.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -90,14 +90,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.signal.device.Device.__init__.html" title="pylayers.signal.device.Device.__init__"
+	<a href="pylayers.signal.device.html" title="pylayers.signal.devices"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.sign...
+	    pylayers.signal....
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.signal.device.Device.__init__
+	    pylayers.signal.devices
 	    </span>
 	    
 	    </a>
@@ -107,31 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.signal.DF.DF.__init__.html" title="pylayers.signal.DF.DF.__init__"
+	<a href="pylayers.signal.ED.html" title="pylayers.signal.ED"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.sign...
+	    pylayers.signal....
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.signal.DF.DF.__init__
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
+	    pylayers.signal.ED
 	    </span>
 	    
 	    </a>
@@ -164,10 +147,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.signal.DF</a><ul>
-<li><a class="reference internal" href="#df-class">DF Class</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.signal.DF</a></li>
 </ul>
 
     
@@ -179,62 +159,11 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-signal-df">
 <h1>pylayers.signal.DF<a class="headerlink" href="#pylayers-signal-df" title="Permalink to this headline">¶</a></h1>
 <p>Implement a digital filter class</p>
-<span class="target" id="module-pylayers.signal.DF"></span><div class="section" id="df-class">
-<h2>DF Class<a class="headerlink" href="#df-class" title="Permalink to this headline">¶</a></h2>
-<p>This class implements a LTI digital filter</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.__init__.html#pylayers.signal.DF.DF.__init__" title="pylayers.signal.DF.DF.__init__"><code class="xref py py-obj docutils literal"><span class="pre">DF.__init__</span></code></a>([b,&nbsp;a])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.filter.html#pylayers.signal.DF.DF.filter" title="pylayers.signal.DF.DF.filter"><code class="xref py py-obj docutils literal"><span class="pre">DF.filter</span></code></a>(s[,&nbsp;causal])</td>
-<td>filter s</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.simplify.html#pylayers.signal.DF.DF.simplify" title="pylayers.signal.DF.DF.simplify"><code class="xref py py-obj docutils literal"><span class="pre">DF.simplify</span></code></a>([tol])</td>
-<td>simplify transfer function</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.flipc.html#pylayers.signal.DF.DF.flipc" title="pylayers.signal.DF.DF.flipc"><code class="xref py py-obj docutils literal"><span class="pre">DF.flipc</span></code></a>()</td>
-<td>z -&gt; 1/z</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.freqz.html#pylayers.signal.DF.DF.freqz" title="pylayers.signal.DF.DF.freqz"><code class="xref py py-obj docutils literal"><span class="pre">DF.freqz</span></code></a>(**kwargs)</td>
-<td>freqz :  evaluation of filter transfer function</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.factorize.html#pylayers.signal.DF.DF.factorize" title="pylayers.signal.DF.DF.factorize"><code class="xref py py-obj docutils literal"><span class="pre">DF.factorize</span></code></a>()</td>
-<td>factorize the filter into a minimal phase and maximal phase</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.wnxcorr.html#pylayers.signal.DF.DF.wnxcorr" title="pylayers.signal.DF.DF.wnxcorr"><code class="xref py py-obj docutils literal"><span class="pre">DF.wnxcorr</span></code></a>(**kwargs)</td>
-<td>filtered noise output autocorrelation</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.match.html#pylayers.signal.DF.DF.match" title="pylayers.signal.DF.DF.match"><code class="xref py py-obj docutils literal"><span class="pre">DF.match</span></code></a>()</td>
-<td>return a match filter</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.butter.html#pylayers.signal.DF.DF.butter" title="pylayers.signal.DF.DF.butter"><code class="xref py py-obj docutils literal"><span class="pre">DF.butter</span></code></a>([order,&nbsp;w,&nbsp;typ])</td>
-<td>Butterwoth digital filter design</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.ellip_bp.html#pylayers.signal.DF.DF.ellip_bp" title="pylayers.signal.DF.DF.ellip_bp"><code class="xref py py-obj docutils literal"><span class="pre">DF.ellip_bp</span></code></a>(wp,&nbsp;ws[,&nbsp;gpass,&nbsp;gstop])</td>
-<td>Elliptic Bandpath filter</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.remez.html#pylayers.signal.DF.DF.remez" title="pylayers.signal.DF.DF.remez"><code class="xref py py-obj docutils literal"><span class="pre">DF.remez</span></code></a>([numtaps,&nbsp;bands,&nbsp;desired])</td>
-<td>FIR design Remez algorithm</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.zplane.html#pylayers.signal.DF.DF.zplane" title="pylayers.signal.DF.DF.zplane"><code class="xref py py-obj docutils literal"><span class="pre">DF.zplane</span></code></a>([title,&nbsp;fontsize])</td>
-<td>Display filter in the complex plane</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.DF.DF.ir.html#pylayers.signal.DF.DF.ir" title="pylayers.signal.DF.DF.ir"><code class="xref py py-obj docutils literal"><span class="pre">DF.ir</span></code></a>([N,&nbsp;show])</td>
-<td>returns impulse response</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 
 
@@ -247,9 +176,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.signal.DF.txt"
 	    rel="nofollow">Show this page source</a>
@@ -258,18 +187,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.signal.device.Device.__init__.html">
+      <a href="pylayers.signal.device.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.signal.DF.DF.__init__.html">
+      <a href="pylayers.signal.ED.html">
         Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../py-modindex.html">
-        Previous
       </a>  
     </div>
     

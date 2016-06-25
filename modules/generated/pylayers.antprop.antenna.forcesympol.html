@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
-    <link rel="next" title="pylayers.antprop.antenna.compdiag" href="pylayers.antprop.antenna.compdiag.html" />
-    <link rel="prev" title="pylayers.antprop.antenna.Antenna.loadvsh2" href="pylayers.antprop.antenna.Antenna.loadvsh2.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.antenna.Antenna.loadvsh2.html" title="pylayers.antprop.antenna.Antenna.loadvsh2"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.antenna.Antenna.loadvsh2
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.antenna.compdiag.html" title="pylayers.antprop.antenna.compdiag"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.antenna.compdiag
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.antenna.html" title="pylayers.antprop.antenna" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.antenna
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,68 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-antprop-antenna-forcesympol">
 <h1>pylayers.antprop.antenna.forcesympol<a class="headerlink" href="#pylayers-antprop-antenna-forcesympol" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pylayers.antprop.antenna.forcesympol">
-<code class="descclassname">pylayers.antprop.antenna.</code><code class="descname">forcesympol</code><span class="sig-paren">(</span><em>A</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#forcesympol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.forcesympol" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot VSH transform vsh basis in 3D plot</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n,m</strong> : integer values (m&lt;=n)</p>
-<p><strong>theta</strong> : ndarray</p>
-<p><strong>phi</strong> : ndarray</p>
-<p><strong>sf</strong> : boolean</p>
-<blockquote class="last">
-<div><p>if sf : plotted figures are saved in a <a href="#id1"><span class="problematic" id="id2">*</span></a>.png file
-else  : plotted figures aren&#8217;t saved</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span>  <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">=</span><span class="mi">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">=</span><span class="mi">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">phi</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">60</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plotVW</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1.py">Source code</a>)</p>
-<div class="figure" id="id3">
-<img alt="../../_images/pylayers-antprop-antenna-forcesympol-1_00.png" src="../../_images/pylayers-antprop-antenna-forcesympol-1_00.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_00.pdf">pdf</a>)</span></p>
-</div>
-<div class="figure" id="id4">
-<img alt="../../_images/pylayers-antprop-antenna-forcesympol-1_01.png" src="../../_images/pylayers-antprop-antenna-forcesympol-1_01.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_01.pdf">pdf</a>)</span></p>
-</div>
-<div class="figure" id="id5">
-<img alt="../../_images/pylayers-antprop-antenna-forcesympol-1_02.png" src="../../_images/pylayers-antprop-antenna-forcesympol-1_02.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_02.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_02.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_02.pdf">pdf</a>)</span></p>
-</div>
-<div class="figure" id="id6">
-<img alt="../../_images/pylayers-antprop-antenna-forcesympol-1_03.png" src="../../_images/pylayers-antprop-antenna-forcesympol-1_03.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_03.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_03.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_03.pdf">pdf</a>)</span></p>
-</div>
-<div class="figure" id="id7">
-<img alt="../../_images/pylayers-antprop-antenna-forcesympol-1_04.png" src="../../_images/pylayers-antprop-antenna-forcesympol-1_04.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_04.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_04.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_04.pdf">pdf</a>)</span></p>
-</div>
-<div class="figure" id="id8">
-<img alt="../../_images/pylayers-antprop-antenna-forcesympol-1_05.png" src="../../_images/pylayers-antprop-antenna-forcesympol-1_05.png" />
-<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_05.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_05.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-forcesympol-1_05.pdf">pdf</a>)</span></p>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -250,31 +126,16 @@ else  : plotted figures aren&#8217;t saved</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.antenna.forcesympol.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.antenna.Antenna.loadvsh2.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.antenna.compdiag.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

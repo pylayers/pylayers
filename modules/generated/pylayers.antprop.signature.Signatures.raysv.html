@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.signature" href="../pylayers.antprop.signature.html" />
-    <link rel="next" title="pylayers.antprop.signature.Signatures.image" href="pylayers.antprop.signature.Signatures.image.html" />
-    <link rel="prev" title="pylayers.antprop.signature.Signatures.rays" href="pylayers.antprop.signature.Signatures.rays.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.signature.Signatures.rays.html" title="pylayers.antprop.signature.Signatures.rays"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.signature.Signatures.rays
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.signature.Signatures.image.html" title="pylayers.antprop.signature.Signatures.image"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.signature.Signatures.image
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.signature.html" title="pylayers.antprop.signature" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.signature
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,62 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-antprop-signature-signatures-raysv">
 <h1>pylayers.antprop.signature.Signatures.raysv<a class="headerlink" href="#pylayers-antprop-signature-signatures-raysv" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.raysv">
-<code class="descclassname">Signatures.</code><code class="descname">raysv</code><span class="sig-paren">(</span><em>ptx=0</em>, <em>prx=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signatures.raysv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.raysv" title="Permalink to this definition">¶</a></dt>
-<dd><p>transfrom dict of signatures into 2D rays - default vectorized version</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ptx</strong> : numpy.array or int</p>
-<blockquote>
-<div><p>Tx coordinates is the center of gravity of the cycle number if
-type(tx)=int</p>
-</div></blockquote>
-<p><strong>prx</strong> :  numpy.array or int</p>
-<blockquote>
-<div><p>Rx coordinates is the center of gravity of the cycle number if
-type(rx)=int</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>rays</strong> : Rays</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.signature.Signatures.image.html#pylayers.antprop.signature.Signatures.image" title="pylayers.antprop.signature.Signatures.image"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.image</span></code></a>, <code class="xref py py-obj docutils literal"><span class="pre">Signatures.backtrace</span></code></p>
-</div>
-<p class="rubric">Notes</p>
-<p>This is a vectorized version of Signatures.rays.
-This implementation takes advantage of the np.ndarray
-and calculates images and backtrace for block of signatures.
-A block of signatures gathers all signatures with the same number of interactions.</p>
-<p>For mathematical details see :</p>
-<dl class="docutils">
-<dt>&#64;phdthesis{amiot:tel-00971809,</dt>
-<dd>TITLE = {{Design of simulation platform joigning site specific radio propagation and human mobility for localization applications}},
-AUTHOR = {Amiot, Nicolas},
-URL = {<a class="reference external" href="https://tel.archives-ouvertes.fr/tel-00971809">https://tel.archives-ouvertes.fr/tel-00971809</a>},
-NUMBER = {2013REN1S125},
-SCHOOL = {{Universit{&#8216;e} Rennes 1}},
-YEAR = {2013},
-MONTH = Dec,
-KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {&#8216;e}lectromagn{&#8216;e}tique ; Simulateur de mobilit{&#8216;e} humaine ; M{&#8216;e}thodes de localisation sans fils ; M{&#8216;e}thodes d&#8217;estimation de la position dans les r{&#8216;e}seaux sans fils ; Calcul informatique vectoris{&#8216;e} ; Outil de trac{&#8216;e} de rayons ; Ultra large bande},
-TYPE = {Theses},
-HAL_ID = {tel-00971809},
-HAL_VERSION = {v1},</dd>
-</dl>
-<p>}</p>
-</dd></dl>
-
 </div>
 
 
@@ -244,31 +126,16 @@ HAL_VERSION = {v1},</dd>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.signature.Signatures.raysv.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.signature.Signatures.rays.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.signature.Signatures.image.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

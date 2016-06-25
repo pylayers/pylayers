@@ -1,0 +1,1211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Handling Body Description and Mobility &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Handling Body Description and Mobility</a><ul>
+<li><a class="reference internal" href="#bodycylinder-data-structure"><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li><a class="reference internal" href="#description-of-a-body-file">Description of a body file</a></li>
+<li><a class="reference internal" href="#example-of-a-body-file">Example of a Body file</a></li>
+<li><a class="reference internal" href="#loading-a-motion-capture-file">Loading a Motion Capture File</a></li>
+<li><a class="reference internal" href="#defining-a-trajectory">Defining a trajectory</a><ul>
+<li><a class="reference internal" href="#settopos-method">settopos () method</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#centering-the-motion">Centering the motion</a></li>
+<li><a class="reference internal" href="#defining-a-large-scale-trajectory">Defining a large scale trajectory</a></li>
+<li><a class="reference internal" href="#trajectory">Trajectory</a></li>
+<li><a class="reference internal" href="#posvel"><tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
+<li><a class="reference internal" href="#definition-of-several-coordinates-systems">Definition of Several Coordinates systems</a><ul>
+<li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">Construction of the Cylinder Coordinate System (CCS)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder">Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="handling-body-description-and-mobility">
+<h1>Handling Body Description and Mobility<a class="headerlink" href="#handling-body-description-and-mobility" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.ban.body</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="n">Trajectory</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.util.mayautil</span> <span class="kn">as</span> <span class="nn">mau</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-1-0125d12214a3&gt;&quot;, line 7
+    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+           ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>The body mobility is imported from motion capture files. This is the
+chosen manner to achieve a high degree of realism for the modeling of
+the human motion. Two kind of files exist :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">c3d</span></tt> files are a set of point which are evolving in time</li>
+<li><tt class="docutils literal"><span class="pre">bvh</span></tt> files are a stuctured version of the motion capture.</li>
+</ul>
+<p>Both type of file will be exploited in the following.</p>
+<div class="section" id="bodycylinder-data-structure">
+<h2><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h2>
+<p>To ease electromagnetic simulation a simplification of the motion
+capture data structure is necessary. Generally there is a large number
+of captured points, not all of them being useful for our modeling.</p>
+<p>The body model is a restriction of key body segments which are
+transformed into <img src="../../_images/mathmpl/math-b43c97c188.png" style="position: relative; bottom: -3px"/> cylinders of radius <img src="../../_images/mathmpl/math-32ed7041d6.png" style="position: relative; bottom: -7px"/>.</p>
+<p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
+two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
+trunk and 1 cylinder for the head.</p>
+<p>The body cylinder model is handled by the dedicated Python class call
+<tt class="docutils literal"><span class="pre">Body</span></tt></p>
+<p>To create a void body, simply instantiate a Body object from the class</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
+<span class="go">**** Processor coding : Intel-PC</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-2-df9088ea8006&gt;&quot;, line 2
+    **** Processor coding : Intel-PC
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>which is equivalent to :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;cm&#39;</span><span class="p">)</span>
+<span class="go">**** Processor coding : Intel-PC</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-597f669313dd&gt;&quot;, line 2
+    **** Processor coding : Intel-PC
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>The default body filename is John.ini and the default motion capture
+filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading a
+<tt class="docutils literal"><span class="pre">_filebody</span></tt> and a <tt class="docutils literal"><span class="pre">_filemocap</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mau</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;John&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&lt;IPython.core.display.Image object&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-4-d1569a3ca84d&gt;&quot;, line 3
+    &lt;IPython.core.display.Image object&gt;
+    ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="description-of-a-body-file">
+<h2>Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h2>
+<p>An example of a body file is given below. It is a file in <tt class="docutils literal"><span class="pre">ini</span></tt> format
+with 4 sections.</p>
+<ul class="simple">
+<li>[nodes]</li>
+</ul>
+<p>This section associates a node number to a c3d fils conventional node
+number</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">NodeId</span> <span class="o">=</span> <span class="n">C3DNODE</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-5-fb12c5303211&gt; in &lt;module&gt;()
+----&gt; 1 NodeId = C3DNODE
+
+
+NameError: name &#39;C3DNODE&#39; is not defined
+</pre></div>
+</div>
+<ul class="simple">
+<li>[cylinder]</li>
+</ul>
+<p>This section associates a cylinder Id to a dictionnary wich contains
+cylinder tail head and radius information</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">CylId</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">NodeId1</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class="n">NodeId2</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="nb">float</span> <span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="s">&#39;name&#39;</span><span class="p">,}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-6-46d3bfd7e067&gt; in &lt;module&gt;()
+----&gt; 1 CylId = {&#39;t&#39;,NodeId1,&#39;h&#39;,NodeId2,&#39;r&#39;,float (m),&#39;name&#39;,}
+
+
+NameError: name &#39;NodeId1&#39; is not defined
+</pre></div>
+</div>
+<ul class="simple">
+<li>[device]</li>
+</ul>
+<p>This section associates a device name to a dictionnary wich contains
+cylinder device related information</p>
+<div class="code python highlight-python"><div class="highlight"><pre>DevId = {&#39;typ&#39; : {static|mobile}
+          &#39;cyl&#39;: CylId
+          &#39;l&#39;  : length coordinate in ccs,
+          &#39;h&#39;  : height coordinate in ccs,
+          &#39;a&#39;  : angle coordinate in ccs,
+          &#39;file&#39; : antenna file ,
+          &#39;T&#39; : Rotation matrix }
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-7-1a50e5204ee7&gt;&quot;, line 2
+    &#39;cyl&#39;: CylId
+        ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-of-a-body-file">
+<h2>Example of a Body file<a class="headerlink" href="#example-of-a-body-file" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre>[nodes]
+0 = [STRN,T10]
+1 = [CLAV,C7]
+2 = [RFHD,LFHD,LBHD,RBHD]
+3 = RSHO
+4 = LSHO
+5 = [RRAD,RHUM]
+6 = [LRAD,LHUM]
+7 = [RWRA,RWRB]
+8 = [LWRA,LWRB]
+9 = [RFWT,RBWT]
+10 = [LFWT,LBWT]
+11 = [RKNE,RKNI]
+12 = [LKNE,LKNI]
+13 = RANI
+14 = LANI
+15 = [RFWT, LFWT,LBWT,RBWT]
+[cylinder]
+; sternum (STRN) - clavicle (CLAV)
+trunku = {&#39;t&#39;:0,&#39;h&#39;:1,&#39;r&#39;:0.18,&#39;i&#39;:0}
+; bottom  (BOTT) sternum (STRN)
+trunkb = {&#39;t&#39;:15,&#39;h&#39;:0,&#39;r&#39;:0.17,&#39;i&#39;:10}
+; clavicle (CLAV)  - head (RFHD)
+headu = {&#39;t&#39;:1,&#39;h&#39;:2,&#39;r&#39;:0.12,&#39;i&#39;:1}
+; right elbow (RELB)  right shoulder (RSHO)
+armr = {&#39;t&#39;:5,&#39;h&#39;:3,&#39;r&#39;:0.05,&#39;i&#39;:2}
+; left elbow (LELB)  left shoulder (LSHO)
+arml  = {&#39;t&#39;:6,&#39;h&#39;:4,&#39;r&#39;:0.05,&#39;i&#39;:3}
+; right wrist (RWRB) right elbow (RELB)
+forearmr = {&#39;t&#39;:7,&#39;h&#39;:5,&#39;r&#39;:0.05,&#39;i&#39;:4}
+; left wrist (LWRB)  left elbow (LELB)
+forearml = {&#39;t&#39;:8,&#39;h&#39;:6,&#39;r&#39;:0.05,&#39;i&#39;:5}
+; right knee (RKNE) right hip (RFWT)
+thighr = {&#39;t&#39;:11,&#39;h&#39;:9,&#39;r&#39;:0.05,&#39;i&#39;:6}
+; left knee (LKNE)  left hip (LFWT)
+thighl = {&#39;t&#39;:12,&#39;h&#39;:10,&#39;r&#39;:0.05,&#39;i&#39;:7}
+; right ankle (RANK) right knee (RKNE)
+calfr = {&#39;t&#39;:13,&#39;h&#39;:11,&#39;r&#39;:0.05,&#39;i&#39;:8}
+; left ankle (LANK) left knee (LKNE)
+calfl = {&#39;t&#39;:14,&#39;h&#39;:12,&#39;r&#39;:0.05,&#39;i&#39;:9}
+[wearable]
+file = real_suit1.ini
+[mocap]
+file = serie_017_noDEC_Real.c3d
+; unit of c3d file
+unit = mm
+; number of frame to consider. if -1 : all frames
+nframes = -1
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-6f05e72414a3&gt;&quot;, line 2
+    0 = [STRN,T10]
+SyntaxError: can&#39;t assign to literal
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Bernard</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Bernard.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;serie_017.c3d&#39;</span><span class="p">)</span>
+<span class="go">**** Processor coding : DEC-VAX</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-9-6a6810cef221&gt;&quot;, line 2
+    **** Processor coding : DEC-VAX
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-a-motion-capture-file">
+<h2>Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h2>
+<p>A <tt class="docutils literal"><span class="pre">.c3d</span></tt> motion capture file is loaded with the method <strong>``loadC3D``</strong>
+with as arguments the motion capture file and the number of frames to
+load.</p>
+<p>The motion is represented as a sequence of frames stored in the
+<strong>``d``</strong> variable member.</p>
+<p>It is possible to get the information from the C3D header by using the
+verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</span></tt> function</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Video Frame Rate</span>
+<span class="gp">... </span><span class="n">Vrate</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Inter Frame</span>
+<span class="gp">... </span><span class="n">Tframe</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">120</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># select a number of frame</span>
+<span class="gp">... </span><span class="n">nframes</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Time duration of the whole selected frame sequence</span>
+<span class="gp">... </span><span class="n">Tfseq</span> <span class="o">=</span> <span class="n">Tframe</span><span class="o">*</span><span class="n">nframes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">... </span><span class="c"># load a .c3dmotion capture file</span>
+<span class="gp">... </span><span class="c"># this update the g.pos</span>
+<span class="gp">... </span><span class="c">#</span>
+<span class="gp">... </span><span class="c">#bc.loadC3D(filename=&#39;07_01.c3d&#39;,nframes=nframes,centered=True)</span>
+</pre></div>
+</div>
+<p>The duration of the capture is</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Duration of the motion capture sequence&quot;</span><span class="p">,</span> <span class="n">Tfseq</span><span class="p">,</span><span class="s">&quot; seconds&quot;</span>
+<span class="go">Duration of the motion capture sequence 2.5  seconds</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-11-444d441a8e14&gt;&quot;, line 2
+    Duration of the motion capture sequence 2.5  seconds
+              ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">d</span></tt> is a MDA of shape <tt class="docutils literal"><span class="pre">(3,npoint,nframe)</span></tt>. It contains all the
+possible configurations of the body. In general it is supposed to be a
+cyclic motion as an integer number of walking steps. This allows to
+instantiate the body configuration anywhere else in space in a given
+trajectory.</p>
+<p>A specific space-time configuration of the body is called a
+<strong>``topos``</strong>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Bernard</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+<span class="go">(3, 16, 11213)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-12-6251b76951c5&gt; in &lt;module&gt;()
+----&gt; 1 np.shape(Bernard.d)
+      2 (3, 16, 11213)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-trajectory">
+<h2>Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h2>
+<p>A Trajectory is a class which :</p>
+<ul class="simple">
+<li>derives from a pandas <tt class="docutils literal"><span class="pre">DataFrame</span></tt></li>
+<li>is a container for time,position,velocity and acceleration.</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-13-bb102923b377&gt; in &lt;module&gt;()
+----&gt; 1 traj = Trajectory()
+
+
+NameError: name &#39;Trajectory&#39; is not defined
+</pre></div>
+</div>
+<p>To define a default trajectory :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-14-59d8f9eb4b80&gt; in &lt;module&gt;()
+----&gt; 1 t = traj.generate()
+
+
+NameError: name &#39;traj&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">traj</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">Index([u&#39;x&#39;, u&#39;y&#39;, u&#39;z&#39;, u&#39;vx&#39;, u&#39;vy&#39;, u&#39;vz&#39;, u&#39;ax&#39;, u&#39;ay&#39;, u&#39;az&#39;, u&#39;s&#39;], dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-15-1955a4bda7f1&gt; in &lt;module&gt;()
+----&gt; 1 print traj.columns
+      2 Index([u&#39;x&#39;, u&#39;y&#39;, u&#39;z&#39;, u&#39;vx&#39;, u&#39;vy&#39;, u&#39;vz&#39;, u&#39;ax&#39;, u&#39;ay&#39;, u&#39;az&#39;, u&#39;s&#39;], dtype=&#39;object&#39;)
+
+
+NameError: name &#39;traj&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">                                   x         y         z        vx  vy  \</span>
+<span class="go">1970-01-01 00:00:00.000000  0.000000  0.000000  0.258768  0.299813   1</span>
+<span class="go">1970-01-01 00:00:00.204082  0.061186  0.204082 -0.073361  0.298689   1</span>
+<span class="go">1970-01-01 00:00:00.408163  0.122143  0.408163  0.472638  0.296446   1</span>
+<span class="go">1970-01-01 00:00:00.612245  0.182642  0.612245  0.230392  0.293093   1</span>
+<span class="go">1970-01-01 00:00:00.816327  0.242457  0.816327 -0.345044  0.288641   1</span>
+
+<span class="go">                                  vz        ax  ay         az         s</span>
+<span class="go">1970-01-01 00:00:00.000000 -1.627431 -0.005505   0  21.083835  0.000000</span>
+<span class="go">1970-01-01 00:00:00.204082  2.675393 -0.010989   0 -18.925740  0.213056</span>
+<span class="go">1970-01-01 00:00:00.408163 -1.187003 -0.016433   0  -7.999922  0.426047</span>
+<span class="go">1970-01-01 00:00:00.612245 -2.819640 -0.021814   0  -9.910813  0.638907</span>
+<span class="go">1970-01-01 00:00:00.816327 -4.842255 -0.027114   0  30.434337  0.851574</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-16-49dc1e1adae1&gt;&quot;, line 2
+    x         y         z        vx  vy  1970-01-01 00:00:00.000000  0.000000  0.000000  0.258768  0.299813   1
+    ^
+IndentationError: unexpected indent
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-17-857ecb065353&gt; in &lt;module&gt;()
+----&gt; 1 f,a = traj.plot()
+
+
+NameError: name &#39;traj&#39; is not defined
+</pre></div>
+</div>
+<div class="section" id="settopos-method">
+<h3>settopos () method<a class="headerlink" href="#settopos-method" title="Permalink to this headline">¶</a></h3>
+<p>Once the trajectory has been defined it is possible to send the body at
+the position corresponding to any time of the trajectory with the
+<strong>``settopos``</strong> method.</p>
+<p>settopos takes as argument</p>
+<ul class="simple">
+<li>A trajectory</li>
+<li>A time index</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+<span class="go">&#39;Trajectory of agent MyNameIsNoBody with ID 1\n--------------------------------------------\nt (s) : 0.00 : 0.20 : 9.59\ndtot (m) : 9.79\nVmoy (m/s) : 1.02\n                                   x         y         z        vx  vy  \\\n1970-01-01 00:00:00.000000  0.000000  0.000000  0.258768  0.299813   1   \n1970-01-01 00:00:00.204082  0.061186  0.204082 -0.073361  0.298689   1   \n\n                                  vz        ax  ay         az         s  \n1970-01-01 00:00:00.000000 -1.627431 -0.005505   0  21.083835  0.000000  \n1970-01-01 00:00:00.204082  2.675393 -0.010989   0 -18.925740  0.213056  \n&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-18-dbb00a516da3&gt; in &lt;module&gt;()
+----&gt; 1 traj.__repr__()
+      2 &#39;Trajectory of agent MyNameIsNoBody with ID 1\n--------------------------------------------\nt (s) : 0.00 : 0.20 : 9.59\ndtot (m) : 9.79\nVmoy (m/s) : 1.02\n                                   x         y         z        vx  vy  \\\n1970-01-01 00:00:00.000000  0.000000  0.000000  0.258768  0.299813   1   \n1970-01-01 00:00:00.204082  0.061186  0.204082 -0.073361  0.298689   1   \n\n                                  vz        ax  ay         az         s  \n1970-01-01 00:00:00.000000 -1.627431 -0.005505   0  21.083835  0.000000  \n1970-01-01 00:00:00.204082  2.675393 -0.010989   0 -18.925740  0.213056  \n&#39;
+
+
+NameError: name &#39;traj&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-19-9a9cc7cb823f&gt; in &lt;module&gt;()
+----&gt; 1 John.settopos(traj,t=5)
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">tmin</span><span class="o">+</span><span class="mf">0.4</span><span class="p">,</span><span class="n">traj</span><span class="o">.</span><span class="n">tmax</span><span class="p">,</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">plane</span><span class="o">=</span><span class="s">&#39;yz&#39;</span><span class="p">,</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-20-2ed97db33ec1&gt; in &lt;module&gt;()
+----&gt; 1 plt.figure(figsize=(15,20))
+      2 for t in np.arange(traj.tmin+0.4,traj.tmax,0.5):
+      3     John.settopos(traj,t=t)
+      4     f,a=John.show(color=&#39;b&#39;,plane=&#39;yz&#39;,topos=True)
+      5     axis(&#39;off&#39;)
+
+
+NameError: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span>
+<span class="go">My name is : John</span>
+
+<span class="go">I have a Galaxy Gear device with id #1 on the left forearm witn antenna defant.vsh3</span>
+<span class="go">I have a cardio device with id #0 on the upper part of trunk witn antenna defant.vsh3</span>
+
+<span class="go">@ t=0.708333333333 (frameID=85),</span>
+<span class="go">My centroid position is [-7.87435024  5.23416696]</span>
+
+<span class="go">filewear : suit2.ini</span>
+<span class="go">filename : 07_01.c3d</span>
+<span class="go">nframes : 316</span>
+<span class="go">Centered : True</span>
+<span class="go">Mocap Speed : 13.649 m/s</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-21-515f2d2050a3&gt;&quot;, line 2
+    My name is : John
+          ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Francois</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Francois.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Francois</span>
+<span class="go">**** Processor coding : Intel-PC</span>
+<span class="go">My name is : Francois</span>
+
+<span class="go">I have a Galaxy Gear device with id #1 on the left forearm witn antenna defant.vsh3</span>
+<span class="go">I have a cardio device with id #0 on the upper part of trunk witn antenna defant.vsh3</span>
+
+<span class="go">I am nowhere yet</span>
+
+<span class="go">filewear : suit2.ini</span>
+<span class="go">filename : 07_01.c3d</span>
+<span class="go">nframes : 300</span>
+<span class="go">Centered : True</span>
+<span class="go">Mocap Speed : 13.702 m/s</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-22-8171543fafee&gt;&quot;, line 3
+    **** Processor coding : Intel-PC
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Francois</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Francois</span>
+<span class="go">My name is : Francois</span>
+
+<span class="go">I have a Galaxy Gear device with id #1 on the left forearm witn antenna defant.vsh3</span>
+<span class="go">I have a cardio device with id #0 on the upper part of trunk witn antenna defant.vsh3</span>
+
+<span class="go">@ t=0.441666666667 (frameID=53),</span>
+<span class="go">My centroid position is [-11.4689352    4.97981336]</span>
+
+<span class="go">filewear : suit2.ini</span>
+<span class="go">filename : 07_01.c3d</span>
+<span class="go">nframes : 300</span>
+<span class="go">Centered : True</span>
+<span class="go">Mocap Speed : 13.702 m/s</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-23-5dda83b6890b&gt;&quot;, line 3
+    My name is : Francois
+          ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<ul class="simple">
+<li>3 : dimension of space</li>
+<li>16 : number of nodes</li>
+<li>300 : number of frames</li>
+</ul>
+<p>The figure below shows the projection in a vertival plane of the body
+nodes.</p>
+</div>
+</div>
+<div class="section" id="centering-the-motion">
+<h2>Centering the motion<a class="headerlink" href="#centering-the-motion" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">centered</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-24-7b22a282a12b&gt; in &lt;module&gt;()
+----&gt; 1 John.centered
+      2 True
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<p>In order to translate the motion in any point in space-time, a
+distinction is made between the real motion or topos and the centered
+motion capture which acts as a virtual motion.</p>
+<p>Let <img src="../../_images/mathmpl/math-a17f99bd79.png" style="position: relative; bottom: -7px"/> denotes the center of gravity of the body in
+the (O,x,y) plane</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-25-ebfbcfdb5097&gt; in &lt;module&gt;()
+----&gt; 1 John.center()
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-26-62fe445082ba&gt; in &lt;module&gt;()
+----&gt; 1 a = np.hstack((John.vg,John.vg[:,-1][:,np.newaxis]))
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<p><img src="../../_images/mathmpl/math-d9d9cee03b.png" style="position: relative; bottom: -10px"/> is the velocity vector of the gravity center of the
+body.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
+<span class="go">(3, 316)</span>
+<span class="go">(3, 316)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-27-405d7b6ec7fb&gt; in &lt;module&gt;()
+----&gt; 1 print np.shape(John.pg)
+      2 print np.shape(John.vg)
+      3 (3, 316)
+      4 (3, 316)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">145</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">298</span><span class="p">]</span>
+<span class="go">[ 0.11498696 -0.00263353  0.        ]</span>
+<span class="go">[ 0.10812351  0.00072441  0.        ]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-28-61352f67f530&gt;&quot;, line 3
+    [ 0.11498696 -0.00263353  0.        ]
+                               ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>At that point the body structure is centered.</p>
+<p>The frame is centered in the xy plane by substracting from the
+configuration of points the projection of the body in the xy plane.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+<span class="go">(3, 16, 316)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-29-15c7b1850afe&gt; in &lt;module&gt;()
+----&gt; 1 np.shape(John.d)
+      2 (3, 16, 316)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">npoints</span>
+<span class="go">16</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-30-8d72d237bd62&gt; in &lt;module&gt;()
+----&gt; 1 John.npoints
+      2 16
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<p>Each frame is centered above the origin. For example for a walk motion
+the effect of the centering is just like if the body was still walking
+but not moving forward exactly in the same manner as a walk on a
+conveyor belt.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pgc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg0</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;True center of gravity&quot;</span><span class="p">,</span> <span class="n">pg0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Center of gravity of the centered frame&quot;</span><span class="p">,</span><span class="n">pgc</span>
+<span class="go">True center of gravity [-17.42515686   4.93730766   0.        ]</span>
+<span class="go">Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.94887349e+00]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-31-2a0792541303&gt;&quot;, line 5
+    True center of gravity [-17.42515686   4.93730766   0.        ]
+              ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+<span class="go">(3, 316)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-32-a514f05b4de7&gt; in &lt;module&gt;()
+----&gt; 1 np.shape(John.pg)
+      2 (3, 316)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<p>The current file contains 300 frames</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tframe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">nframes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-33-a3c618a1cd37&gt; in &lt;module&gt;()
+----&gt; 1 tframe = np.arange(John.nframes)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+<span class="go">(2, 316)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-34-6856dba40a3e&gt; in &lt;module&gt;()
+----&gt; 1 np.shape(John.pg[0:-1,:])
+      2 (2, 316)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">yg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">xg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="p">(</span><span class="s">&#39;x component&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="p">(</span><span class="s">&#39;y component&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">yg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">xg</span><span class="p">,</span><span class="n">yg</span><span class="p">,</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smocap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Vmocap</span> <span class="o">=</span> <span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">Tfseq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Length = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; V = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Vmocap</span><span class="o">*</span><span class="mf">3.6</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; km/h&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-35-c2e826e9024b&gt; in &lt;module&gt;()
+----&gt; 1 xg = John.pg[0,:]
+      2 yg = John.pg[1,:]
+      3 zg = John.pg[2,:]
+      4 figure(figsize=(8,8))
+      5 subplot(311)
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">smocap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="p">(</span><span class="s">&#39;evolution of curvilinear abscisse from motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-36-105ab687e339&gt; in &lt;module&gt;()
+----&gt; 1 plot(smocap)
+      2 title(&#39;evolution of curvilinear abscisse from motion capture centroid trajectory&#39;)
+      3 xlabel(&#39;frame index&#39;)
+      4 ylabel(&#39;distance (meters)&#39;)
+
+
+NameError: name &#39;plot&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-large-scale-trajectory">
+<h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
+<p>A large scale trajectory is defined in the <img src="../../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
+<p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
+<span class="go">51.5920052862 Kmph</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-37-44979d6b75b7&gt;&quot;, line 3
+    51.5920052862 Kmph
+                     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># time in seconds</span>
+<span class="gp">... </span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">tmax</span>
+<span class="go">9.591837</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-38-1f973ff14291&gt; in &lt;module&gt;()
+      1 # time in seconds
+----&gt; 2 time = np.arange(0,10,0.01)
+      3 x = v*time
+      4 y = np.zeros(len(time))
+      5 z = np.zeros(len(time))
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">                                   x         y         z        vx  vy  \</span>
+<span class="go">1970-01-01 00:00:00.000000  0.000000  0.000000 -0.693310  0.299813   1</span>
+<span class="go">1970-01-01 00:00:00.204082  0.061186  0.204082 -0.163032  0.298689   1</span>
+<span class="go">1970-01-01 00:00:00.408163  0.122143  0.408163  0.333526  0.296446   1</span>
+<span class="go">1970-01-01 00:00:00.612245  0.182642  0.612245  0.072201  0.293093   1</span>
+<span class="go">1970-01-01 00:00:00.816327  0.242457  0.816327  1.596583  0.288641   1</span>
+
+<span class="go">                                   vz        ax  ay         az         s</span>
+<span class="go">1970-01-01 00:00:00.000000   2.598362 -0.005505   0  -0.809629  0.000000</span>
+<span class="go">1970-01-01 00:00:00.204082   2.433132 -0.010989   0 -18.196762  0.213056</span>
+<span class="go">1970-01-01 00:00:00.408163  -1.280493 -0.016433   0  42.874848  0.426047</span>
+<span class="go">1970-01-01 00:00:00.612245   7.469476 -0.021814   0 -94.011202  0.638907</span>
+<span class="go">1970-01-01 00:00:00.816327 -11.716484 -0.027114   0  77.964982  0.851574</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-39-5c0ab9e6ed20&gt;&quot;, line 3
+    x         y         z        vx  vy  1970-01-01 00:00:00.000000  0.000000  0.000000 -0.693310  0.299813   1
+    ^
+IndentationError: unexpected indent
+</pre></div>
+</div>
+</div>
+<div class="section" id="trajectory">
+<h2>Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="posvel">
+<h2><tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">posvel()</span></tt> method (position and velocity) takes as arguments the
+following parameters</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
+<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
+<li><img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
+</ul>
+<p>and returns</p>
+<ul class="simple">
+<li>the frame index
+<img src="../../_images/mathmpl/math-fa8df6427f.png" /></li>
+<li>the trajectory index <img src="../../_images/mathmpl/math-bd16204c95.png" style="position: relative; bottom: -7px"/></li>
+<li>velocity unitary vector along motion capture frame
+<img src="../../_images/mathmpl/math-3925c359b0.png" style="position: relative; bottom: -17px"/></li>
+<li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
+<li>velocity unitary vector along trajectory
+<img src="../../_images/mathmpl/math-bbc160cffd.png" style="position: relative; bottom: -17px"/></li>
+<li>:math:<a href="#id3"><span class="problematic" id="id4">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
+</ul>
+<p><img src="../../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
+period, it is equal to the whole duration of the motion sequence
+<img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
+<p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
+<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
+</ul>
+<p>In further version of the class, this function will be modified to avoid
+passing the whole trajectory.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-40-d448890daedc&gt; in &lt;module&gt;()
+----&gt; 1 John.settopos(traj=traj,t=3)
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<p>There is now a new data structure in the Body objet. This data structure
+is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
+<span class="go">(3, 16)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-41-03e6a6632455&gt; in &lt;module&gt;()
+----&gt; 1 print np.shape(John.topos)
+      2 (3, 16)
+
+
+NameError: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">topos</span>
+<span class="go">array([[  0.74198686,   0.76931593,   1.80846633,   2.26719915,</span>
+<span class="go">         -0.91675363,   3.25586636,  -1.86053098,   3.82194596,</span>
+<span class="go">         -2.06245933,   2.15021298,  -0.55180885,   2.02586803,</span>
+<span class="go">         -0.94510502,   1.36586716,  -0.57366714,   0.79920206],</span>
+<span class="go">       [  3.75720113,   3.13644711,   2.8414143 ,   2.20063108,</span>
+<span class="go">          2.6901425 ,   1.78826275,   3.20212316,   1.7696506 ,</span>
+<span class="go">          4.042258  ,   3.29688912,   3.60268634,   2.76571804,</span>
+<span class="go">          3.90430304,   2.24259271,   1.0241781 ,   3.44978773],</span>
+<span class="go">       [ 12.24457275,  13.88075684,  16.00988037,  14.0978418 ,</span>
+<span class="go">         14.3736377 ,  10.74208496,  11.07206543,   7.98268372,</span>
+<span class="go">          8.47460388,   9.31935974,   9.1988916 ,   4.30262299,</span>
+<span class="go">          4.54000305,   0.44698982,   1.7794635 ,   9.25912567]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-42-0622d00683be&gt; in &lt;module&gt;()
+----&gt; 1 John.topos
+      2 array([[  0.74198686,   0.76931593,   1.80846633,   2.26719915,
+      3          -0.91675363,   3.25586636,  -1.86053098,   3.82194596,
+      4          -2.06245933,   2.15021298,  -0.55180885,   2.02586803,
+      5          -0.94510502,   1.36586716,  -0.57366714,   0.79920206],
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#87CEEB&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#7EC0EE&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#6A5ACD&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#7A67EE&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#473C8B&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f9882d7c6d0&gt;,</span>
+<span class="go"> &lt;matplotlib.axes._subplots.Axes3DSubplot at 0x7f9882c0f990&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-43-2f87b04ce92a&gt;&quot;, line 11
+    (&lt;matplotlib.figure.Figure at 0x7f9882d7c6d0&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="definition-of-several-coordinates-systems">
+<h2>Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h2>
+<p>Each cylinder of the <tt class="docutils literal"><span class="pre">Body</span></tt> model bears one specific coordinate
+system.</p>
+<p>One or several cylinder coordinate systems can be chosen to define the
+Body Local Coordinates System (BLCS) which is required for motion
+capture (BLCS) applications.</p>
+<p>In general, the origin will be chosen on a position which is the most
+time invariant as on the chest or the back.</p>
+<p>Those frames of references are all defined in the Global Coordinate
+System (GCS) of the scene.</p>
+<div class="section" id="construction-of-the-cylinder-coordinate-system-ccs">
+<h3>Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
+<p>The method <tt class="docutils literal"><span class="pre">setccs()</span></tt> is used to associate a Cylinder Coordinate
+System (CCS) to each cylinder of the bodyCylinder model. Notice that
+those cylinders coordinates systems are not known by the localization
+application. The localization application will define the BLCS from the
+position of radiating devices placed on the body surface.</p>
+<p>Each basis is constructed with the function from
+<tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
+takes 2 sets of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
+<img src="../../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
+output.</p>
+<p>3 unitary vectors are constructed :</p>
+<img src="../../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
+actual trajectory.</p>
+<p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
+<img src="../../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
+along axis 1</p>
+<img src="../../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-44-84a77b2d6e2b&gt; in &lt;module&gt;()
+----&gt; 1 John.setccs()
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;ccs dimensions : &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Check determinant : &quot;</span><span class="p">,</span> <span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:])</span>
+<span class="go">ccs dimensions :  (11, 3, 3)</span>
+<span class="go">[[ 0.94678656  0.05306765 -0.31745715]</span>
+<span class="go"> [-0.06834689  0.99696857 -0.03718026]</span>
+<span class="go"> [ 0.31452173  0.05689898  0.94754345]]</span>
+<span class="go">Check determinant :  1.0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-45-7702e01f11e3&gt;&quot;, line 5
+    ccs dimensions :  (11, 3, 3)
+                 ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>Create a Wireframe body representation from the body graph model</p>
+</div>
+</div>
+<div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
+<h2>Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h2>
+<p>A DCS is refered by 4 numbers <img src="../../_images/mathmpl/math-d859882232.png" style="position: relative; bottom: -8px"/></p>
+<ul class="simple">
+<li>Id : Cylinder Id</li>
+<li>l : length along cylinder</li>
+<li>h : height above cylinder generatrix</li>
+<li>alpha : angle from front direction (degrees)</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Id</span> <span class="o">=</span> <span class="mi">4</span> <span class="c"># 4 Left Arm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="c"># Longitudinal coordinates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span>  <span class="o">=</span> <span class="mf">0.03</span> <span class="c"># height</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span> <span class="c"># angle degrees</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+<span class="go">{&#39;arml&#39;: 3,</span>
+<span class="go"> &#39;armr&#39;: 2,</span>
+<span class="go"> &#39;calfl&#39;: 9,</span>
+<span class="go"> &#39;calfr&#39;: 8,</span>
+<span class="go"> &#39;forearml&#39;: 5,</span>
+<span class="go"> &#39;forearmr&#39;: 4,</span>
+<span class="go"> &#39;headu&#39;: 1,</span>
+<span class="go"> &#39;thighl&#39;: 7,</span>
+<span class="go"> &#39;thighr&#39;: 6,</span>
+<span class="go"> &#39;trunkb&#39;: 10,</span>
+<span class="go"> &#39;trunku&#39;: 0}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-47-2e7f2d84246d&gt; in &lt;module&gt;()
+----&gt; 1 John.dcyl
+      2 {&#39;arml&#39;: 3,
+      3  &#39;armr&#39;: 2,
+      4  &#39;calfl&#39;: 9,
+      5  &#39;calfr&#39;: 8,
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<p>Rotate Matrix around z</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-48-c370666e2cfd&gt; in &lt;module&gt;()
+----&gt; 1 John.settopos(traj=traj,t=6,cs=True)
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+<span class="go">{&#39;arml&#39;: 3,</span>
+<span class="go"> &#39;armr&#39;: 2,</span>
+<span class="go"> &#39;calfl&#39;: 9,</span>
+<span class="go"> &#39;calfr&#39;: 8,</span>
+<span class="go"> &#39;forearml&#39;: 5,</span>
+<span class="go"> &#39;forearmr&#39;: 4,</span>
+<span class="go"> &#39;headu&#39;: 1,</span>
+<span class="go"> &#39;thighl&#39;: 7,</span>
+<span class="go"> &#39;thighr&#39;: 6,</span>
+<span class="go"> &#39;trunkb&#39;: 10,</span>
+<span class="go"> &#39;trunku&#39;: 0}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-49-2e7f2d84246d&gt; in &lt;module&gt;()
+----&gt; 1 John.dcyl
+      2 {&#39;arml&#39;: 3,
+      3  &#39;armr&#39;: 2,
+      4  &#39;calfl&#39;: 9,
+      5  &#39;calfr&#39;: 8,
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">dcs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-50-031da074d021&gt; in &lt;module&gt;()
+----&gt; 1 John.show3(topos=True,dcs=True)
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-51-a9fdbef0bd42&gt; in &lt;module&gt;()
+----&gt; 1 John.show3(topos=True,pattern=True)
+
+
+NameError: name &#39;John&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/4-MOB/Body.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

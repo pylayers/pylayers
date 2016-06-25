@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
-    <link rel="next" title="pylayers.antprop.channel.Tchannel.frombuf" href="pylayers.antprop.channel.Tchannel.frombuf.html" />
-    <link rel="prev" title="pylayers.antprop.channel.Tchannel.plot3d" href="pylayers.antprop.channel.Tchannel.plot3d.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.channel.Tchannel.plot3d.html" title="pylayers.antprop.channel.Tchannel.plot3d"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.Tchannel.plot3d
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.channel.Tchannel.frombuf.html" title="pylayers.antprop.channel.Tchannel.frombuf"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.Tchannel.frombuf
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.channel.html" title="pylayers.antprop.channel" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.channel
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,39 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-antprop-channel-tchannel-ft2">
 <h1>pylayers.antprop.channel.Tchannel.ft2<a class="headerlink" href="#pylayers-antprop-channel-tchannel-ft2" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.channel.Tchannel.ft2">
-<code class="descclassname">Tchannel.</code><code class="descname">ft2</code><span class="sig-paren">(</span><em>df=0.01</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.ft2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.ft2" title="Permalink to this definition">¶</a></dt>
-<dd><p>build channel transfer function (frequency domain)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df</strong> : float</p>
-<blockquote class="last">
-<div><p>frequency step (default 0.01)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<ol class="arabic simple">
-<li>get  fmin and fmax</li>
-<li>build a new base with frequency step df</li>
-<li>Initialize a FUsignal with the new frequency base</li>
-<li>build  matrix tau * f  (Nray x Nf)</li>
-<li>buildl matrix E= exp(-2 j pi f tau)</li>
-<li>resampling of FUDsignal according to f &#8211;&gt; S</li>
-<li>apply the element wise product E .* S</li>
-<li>add all rays</li>
-</ol>
-</dd></dl>
-
 </div>
 
 
@@ -221,31 +126,16 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.ft2.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.channel.Tchannel.plot3d.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.channel.Tchannel.frombuf.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

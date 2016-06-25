@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.util.geomutil" href="../pylayers.util.geomutil.html" />
-    <link rel="next" title="pylayers.util.geomutil.Polygon.showGv" href="pylayers.util.geomutil.Polygon.showGv.html" />
-    <link rel="prev" title="pylayers.util.geomutil.Polygon.simplify" href="pylayers.util.geomutil.Polygon.simplify.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.util.geomutil.Polygon.simplify.html" title="pylayers.util.geomutil.Polygon.simplify"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.geomutil.Polygon.simplify
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.util.geomutil.Polygon.showGv.html" title="pylayers.util.geomutil.Polygon.showGv"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.geomutil.Polygon.showGv
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.util.geomutil.html" title="pylayers.util.geomutil" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.util...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.util.geomutil
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,68 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-util-geomutil-polygon-buildgv">
 <h1>pylayers.util.geomutil.Polygon.buildGv<a class="headerlink" href="#pylayers-util-geomutil-polygon-buildgv" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.util.geomutil.Polygon.buildGv">
-<code class="descclassname">Polygon.</code><code class="descname">buildGv</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#Polygon.buildGv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Polygon.buildGv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create  visibility graph for a polygon</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>display</strong> : boolean</p>
-<blockquote>
-<div><p>default : False</p>
-</div></blockquote>
-<p><strong>fig</strong> : matplotlib.figure.pyplot</p>
-<p><strong>ax</strong> : axes</p>
-<p><strong>udeg2</strong> : np.array indexes of points of degree 2</p>
-<blockquote>
-<div><p>default = []</p>
-</div></blockquote>
-<p><strong>eded</strong> : boolean</p>
-<blockquote>
-<div><p>default True</p>
-</div></blockquote>
-<p><strong>indoor</strong> : boolean</p>
-<blockquote class="last">
-<div><p>default True</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.gis.layout.Layout.buildGv.html#pylayers.gis.layout.Layout.buildGv" title="pylayers.gis.layout.Layout.buildGv"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout.Layout.buildGv</span></code></a></p>
-</div>
-<p class="rubric">Notes</p>
-<p>Segment k and (k+1)%N share segment (k+1)%N
-The degree of a point is dependent from other polygons around</p>
-<p>Topological error can be raised if the point coordinates accuracy
-is not limited.</p>
-<p>Nodes of polygon are numbered in the global graph in vnodes member.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>                                           <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span>                                           <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Gv</span>      <span class="o">=</span> <span class="n">polyg</span><span class="o">.</span><span class="n">buildGv</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="go">(-0.5, 4.0, -0.5, 2.5)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Testing buildGv&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../../_images/pylayers-util-geomutil-Polygon-buildGv-1.png" src="../../_images/pylayers-util-geomutil-Polygon-buildGv-1.png" />
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -250,31 +126,16 @@ is not limited.</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.geomutil.Polygon.buildGv.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.util.geomutil.Polygon.simplify.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.util.geomutil.Polygon.showGv.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

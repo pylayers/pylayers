@@ -28,8 +28,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.network.network.Node.__init__" href="generated/pylayers.network.network.Node.__init__.html" />
-    <link rel="prev" title="pylayers.network.net.Network.connect" href="generated/pylayers.network.net.Network.connect.html" />
+    <link rel="next" title="pylayers.network.show" href="pylayers.network.show.html" />
+    <link rel="prev" title="pylayers.network.net" href="pylayers.network.net.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -90,14 +90,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.network.net.Network.connect.html" title="pylayers.network.net.Network.connect"
+	<a href="pylayers.network.net.html" title="pylayers.network.net"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.netw...
+	    pylayers.network...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.network.net.Network.connect
+	    pylayers.network.net
 	    </span>
 	    
 	    </a>
@@ -107,31 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.network.network.Node.__init__.html" title="pylayers.network.network.Node.__init__"
+	<a href="pylayers.network.show.html" title="pylayers.network.show"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.netw...
+	    pylayers.network...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.network.network.Node.__init__
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
+	    pylayers.network.show
 	    </span>
 	    
 	    </a>
@@ -164,19 +147,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.network.network</a><ul>
-<li><a class="reference internal" href="#node-class">Node Class</a></li>
-<li><a class="reference internal" href="#network-class">Network Class</a><ul>
-<li><a class="reference internal" href="#network-creation">Network creation</a></li>
-<li><a class="reference internal" href="#network-attributes-queries">Network attributes queries</a></li>
-<li><a class="reference internal" href="#network-update">Network update</a></li>
-<li><a class="reference internal" href="#network-utilities">Network Utilities</a></li>
-<li><a class="reference internal" href="#network-save">Network save</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pnetwork-class">PNetwork Class</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.network.network</a></li>
 </ul>
 
     
@@ -188,220 +159,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
-  <div class="section" id="module-pylayers.network.network">
-<span id="pylayers-network-network"></span><h1>pylayers.network.network<a class="headerlink" href="#module-pylayers.network.network" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="node-class">
-<h2>Node Class<a class="headerlink" href="#node-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Node.__init__.html#pylayers.network.network.Node.__init__" title="pylayers.network.network.Node.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Node.__init__</span></code></a>(**kwargs)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Node.randomMAC.html#pylayers.network.network.Node.randomMAC" title="pylayers.network.network.Node.randomMAC"><code class="xref py py-obj docutils literal"><span class="pre">Node.randomMAC</span></code></a>()</td>
-<td>Generate a random MAC address</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="network-class">
-<h2>Network Class<a class="headerlink" href="#network-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.__init__.html#pylayers.network.network.Network.__init__" title="pylayers.network.network.Network.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Network.__init__</span></code></a>([owner,&nbsp;EMS,&nbsp;PN])</td>
-<td>object constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.__repr__.html#pylayers.network.network.Network.__repr__" title="pylayers.network.network.Network.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Network.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="network-creation">
-<h3>Network creation<a class="headerlink" href="#network-creation" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.add_devices.html#pylayers.network.network.Network.add_devices" title="pylayers.network.network.Network.add_devices"><code class="xref py py-obj docutils literal"><span class="pre">Network.add_devices</span></code></a>(dev[,&nbsp;p,&nbsp;grp])</td>
-<td>add devices to the current network</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.create.html#pylayers.network.network.Network.create" title="pylayers.network.network.Network.create"><code class="xref py py-obj docutils literal"><span class="pre">Network.create</span></code></a>()</td>
-<td>create the network</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network._get_edges_typ.html#pylayers.network.network.Network._get_edges_typ" title="pylayers.network.network.Network._get_edges_typ"><code class="xref py py-obj docutils literal"><span class="pre">Network._get_edges_typ</span></code></a>()</td>
-<td>apply specific type on edges</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network._get_grp.html#pylayers.network.network.Network._get_grp" title="pylayers.network.network.Network._get_grp"><code class="xref py py-obj docutils literal"><span class="pre">Network._get_grp</span></code></a>()</td>
-<td>get group of the nodes of a network</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Network._get_llink</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network._get_wstd.html#pylayers.network.network.Network._get_wstd" title="pylayers.network.network.Network._get_wstd"><code class="xref py py-obj docutils literal"><span class="pre">Network._get_wstd</span></code></a>()</td>
-<td>get wireless standards from nodes of the network</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network._get_SubNet.html#pylayers.network.network.Network._get_SubNet" title="pylayers.network.network.Network._get_SubNet"><code class="xref py py-obj docutils literal"><span class="pre">Network._get_SubNet</span></code></a>([wstd])</td>
-<td>get SubNetworks of a network</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network._connect.html#pylayers.network.network.Network._connect" title="pylayers.network.network.Network._connect"><code class="xref py py-obj docutils literal"><span class="pre">Network._connect</span></code></a>()</td>
-<td>connect nodes</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network._init_PN.html#pylayers.network.network.Network._init_PN" title="pylayers.network.network.Network._init_PN"><code class="xref py py-obj docutils literal"><span class="pre">Network._init_PN</span></code></a>()</td>
-<td>Initializing personnal networks</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="network-attributes-queries">
-<h3>Network attributes queries<a class="headerlink" href="#network-attributes-queries" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.get_pos.html#pylayers.network.network.Network.get_pos" title="pylayers.network.network.Network.get_pos"><code class="xref py py-obj docutils literal"><span class="pre">Network.get_pos</span></code></a>([wstd])</td>
-<td>get node positions</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.get_orient.html#pylayers.network.network.Network.get_orient" title="pylayers.network.network.Network.get_orient"><code class="xref py py-obj docutils literal"><span class="pre">Network.get_orient</span></code></a>([wstd])</td>
-<td>get node orientations</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.get_pos_est.html#pylayers.network.network.Network.get_pos_est" title="pylayers.network.network.Network.get_pos_est"><code class="xref py py-obj docutils literal"><span class="pre">Network.get_pos_est</span></code></a>([wstd])</td>
-<td>get node estimated  positions ( only available in PN network)</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.overview.html#pylayers.network.network.Network.overview" title="pylayers.network.network.Network.overview"><code class="xref py py-obj docutils literal"><span class="pre">Network.overview</span></code></a>()</td>
-<td>overview of the network</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.haspe.html#pylayers.network.network.Network.haspe" title="pylayers.network.network.Network.haspe"><code class="xref py py-obj docutils literal"><span class="pre">Network.haspe</span></code></a>(n)</td>
-<td>Test if a node has an estimated point  pe key</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.pp.html#pylayers.network.network.Network.pp" title="pylayers.network.network.Network.pp"><code class="xref py py-obj docutils literal"><span class="pre">Network.pp</span></code></a>()</td>
-<td>pretty print information</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="network-update">
-<h3>Network update<a class="headerlink" href="#network-update" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.update_pos.html#pylayers.network.network.Network.update_pos" title="pylayers.network.network.Network.update_pos"><code class="xref py py-obj docutils literal"><span class="pre">Network.update_pos</span></code></a>(n,&nbsp;p[,&nbsp;now,&nbsp;p_pe])</td>
-<td>Update Position(s) of Device(s)/node(s)</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.update_orient.html#pylayers.network.network.Network.update_orient" title="pylayers.network.network.Network.update_orient"><code class="xref py py-obj docutils literal"><span class="pre">Network.update_orient</span></code></a>(n,&nbsp;T[,&nbsp;now])</td>
-<td>Update Orientation(s) of a Device(s)/node(s)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.update_edges.html#pylayers.network.network.Network.update_edges" title="pylayers.network.network.Network.update_edges"><code class="xref py py-obj docutils literal"><span class="pre">Network.update_edges</span></code></a>(d,&nbsp;wstd[,&nbsp;nodes])</td>
-<td>update edges information for a given wstd</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.update_PN.html#pylayers.network.network.Network.update_PN" title="pylayers.network.network.Network.update_PN"><code class="xref py py-obj docutils literal"><span class="pre">Network.update_PN</span></code></a>()</td>
-<td>update personnal network</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.compute_LDPs.html#pylayers.network.network.Network.compute_LDPs" title="pylayers.network.network.Network.compute_LDPs"><code class="xref py py-obj docutils literal"><span class="pre">Network.compute_LDPs</span></code></a>(wstd)</td>
-<td>compute edge LDP</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.update_LDPs.html#pylayers.network.network.Network.update_LDPs" title="pylayers.network.network.Network.update_LDPs"><code class="xref py py-obj docutils literal"><span class="pre">Network.update_LDPs</span></code></a>(ln,&nbsp;wstd,&nbsp;lD)</td>
-<td>Set a value between 2 nodes (n1 and n2) for a specific LDP from a wstd</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="network-utilities">
-<h3>Network Utilities<a class="headerlink" href="#network-utilities" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.perm.html#pylayers.network.network.Network.perm" title="pylayers.network.network.Network.perm"><code class="xref py py-obj docutils literal"><span class="pre">Network.perm</span></code></a>(iterable,&nbsp;r,&nbsp;key[,&nbsp;d])</td>
-<td>calculate permutation</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.combi.html#pylayers.network.network.Network.combi" title="pylayers.network.network.Network.combi"><code class="xref py py-obj docutils literal"><span class="pre">Network.combi</span></code></a>(iterable,&nbsp;r,&nbsp;key[,&nbsp;d])</td>
-<td>calculate combination</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.Gen_tuple.html#pylayers.network.network.Network.Gen_tuple" title="pylayers.network.network.Network.Gen_tuple"><code class="xref py py-obj docutils literal"><span class="pre">Network.Gen_tuple</span></code></a>(gene,&nbsp;wstd,&nbsp;var)</td>
-<td>generate a specific tuple</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.dist_edge.html#pylayers.network.network.Network.dist_edge" title="pylayers.network.network.Network.dist_edge"><code class="xref py py-obj docutils literal"><span class="pre">Network.dist_edge</span></code></a>(e,&nbsp;dp)</td>
-<td>compute distance to edge</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.show.html#pylayers.network.network.Network.show" title="pylayers.network.network.Network.show"><code class="xref py py-obj docutils literal"><span class="pre">Network.show</span></code></a>(**kwargs)</td>
-<td>Show the network</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="network-save">
-<h3>Network save<a class="headerlink" href="#network-save" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.csv_save.html#pylayers.network.network.Network.csv_save" title="pylayers.network.network.Network.csv_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.csv_save</span></code></a>(filename,&nbsp;S)</td>
-<td>save node positions into csv file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.init_save.html#pylayers.network.network.Network.init_save" title="pylayers.network.network.Network.init_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.init_save</span></code></a>([height])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.mat_save.html#pylayers.network.network.Network.mat_save" title="pylayers.network.network.Network.mat_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.mat_save</span></code></a>(S)</td>
-<td>DEPRECATED</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.txt_save.html#pylayers.network.network.Network.txt_save" title="pylayers.network.network.Network.txt_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.txt_save</span></code></a>(S)</td>
-<td>DEPRECATED</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.loc_save.html#pylayers.network.network.Network.loc_save" title="pylayers.network.network.Network.loc_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.loc_save</span></code></a>(S[,&nbsp;node,&nbsp;p])</td>
-<td>save node estimated positions into ini file,</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.pyray_save.html#pylayers.network.network.Network.pyray_save" title="pylayers.network.network.Network.pyray_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.pyray_save</span></code></a>(S)</td>
-<td>save node positions into ini file, compliant with pyray standard</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.loc_save.html#pylayers.network.network.Network.loc_save" title="pylayers.network.network.Network.loc_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.loc_save</span></code></a>(S[,&nbsp;node,&nbsp;p])</td>
-<td>save node estimated positions into ini file,</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.ini_save.html#pylayers.network.network.Network.ini_save" title="pylayers.network.network.Network.ini_save"><code class="xref py py-obj docutils literal"><span class="pre">Network.ini_save</span></code></a>(S[,&nbsp;filename,&nbsp;height])</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="section" id="pnetwork-class">
-<h2>PNetwork Class<a class="headerlink" href="#pnetwork-class" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>SimPy Process compliant version of the Network class</div></blockquote>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.PNetwork.__init__.html#pylayers.network.network.PNetwork.__init__" title="pylayers.network.network.PNetwork.__init__"><code class="xref py py-obj docutils literal"><span class="pre">PNetwork.__init__</span></code></a>(**args)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.PNetwork.run.html#pylayers.network.network.PNetwork.run" title="pylayers.network.network.PNetwork.run"><code class="xref py py-obj docutils literal"><span class="pre">PNetwork.run</span></code></a>()</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
+  <div class="section" id="pylayers-network-network">
+<h1>pylayers.network.network<a class="headerlink" href="#pylayers-network-network" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -414,9 +175,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.network.network.txt"
 	    rel="nofollow">Show this page source</a>
@@ -425,18 +186,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.network.net.Network.connect.html">
+      <a href="pylayers.network.net.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.network.network.Node.__init__.html">
+      <a href="pylayers.network.show.html">
         Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../py-modindex.html">
-        Previous
       </a>  
     </div>
     

@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
-    <link rel="next" title="pylayers.antprop.antenna.Antenna.__repr__" href="pylayers.antprop.antenna.Antenna.__repr__.html" />
-    <link rel="prev" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="../pylayers.antprop.antenna.html" title="pylayers.antprop.antenna"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.antenna
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.antenna.Antenna.__repr__.html" title="pylayers.antprop.antenna.Antenna.__repr__"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.antenna.Antenna.__repr__
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.antenna.html" title="pylayers.antprop.antenna" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.antenna
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,59 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-antprop-antenna-antenna-init">
 <h1>pylayers.antprop.antenna.Antenna.__init__<a class="headerlink" href="#pylayers-antprop-antenna-antenna-init" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.__init__">
-<code class="descclassname">Antenna.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>typ='S1R1.sh3'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>class constructor</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : &#8216;Omni&#8217;,&#8217;Gauss&#8217;,&#8217;WirePlate&#8217;,&#8216;3GPP&#8217;</p>
-<p><strong>_filename</strong> : string</p>
-<blockquote>
-<div><p>antenna file name</p>
-</div></blockquote>
-<p><strong>directory</strong> : str</p>
-<blockquote>
-<div><p>antenna subdirectory of the current project
-the file is seek in the $BASENAME/ant directory</p>
-</div></blockquote>
-<p><strong>nf</strong> : integer</p>
-<blockquote>
-<div><p>number of frequency (default 104)</p>
-</div></blockquote>
-<p><strong>ntheta</strong> : integer</p>
-<blockquote>
-<div><p>number of theta (default 181)</p>
-</div></blockquote>
-<p><strong>nphi</strong> : integer</p>
-<blockquote>
-<div><p>number of phi (default 90)</p>
-</div></blockquote>
-<p><strong>source</strong> : string</p>
-<blockquote class="last">
-<div><p>source of data { &#8216;satimo&#8217; | &#8216;cst&#8217; | &#8216;hfss&#8217; }</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>The supported data formats for storing antenna patterns are</p>
-<p>&#8216;mat&#8217;: Matlab File
-&#8216;vsh2&#8217;: unthresholded vector spherical coefficients
-&#8216;vsh3&#8217;: thresholded vector spherical cpoefficients
-&#8216;trx&#8217; : Satimo NFC raw data
-&#8216;trx1&#8217; : Satimo NFC raw data  (deprecated)</p>
-<blockquote>
-<div>A = Antenna(&#8216;my_antenna.mat&#8217;)</div></blockquote>
-</dd></dl>
-
 </div>
 
 
@@ -241,31 +126,16 @@ the file is seek in the $BASENAME/ant directory</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.__init__.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="../pylayers.antprop.antenna.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.antenna.Antenna.__repr__.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

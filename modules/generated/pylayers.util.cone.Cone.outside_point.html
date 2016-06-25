@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,19 +86,6 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -123,46 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-util-cone-cone-outside-point">
 <h1>pylayers.util.cone.Cone.outside_point<a class="headerlink" href="#pylayers-util-cone-cone-outside-point" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.outside_point">
-<code class="descclassname">Cone.</code><code class="descname">outside_point</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/cone.html#Cone.outside_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.outside_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>check if p is outside cone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : np.array  (2xNp)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>~b1 &amp; ~b2</strong> : boolean (outside on the left)  (,Np)</p>
-<p class="last"><strong>b1 &amp; b2</strong> : boolean (outside on the right)  (,Np)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>If one of the two output booleans is True the point is outside 
-There are 2 output bits but only 3 states due to (uv) convention.</p>
-<blockquote>
-<div>v    u</div></blockquote>
-<dl class="docutils">
-<dt>p     /       lv &amp; lu</dt>
-<dd><blockquote class="first">
-<div>/</div></blockquote>
-<dl class="last docutils">
-<dt>p /</dt>
-<dd>/        ~lv &amp; lu</dd>
-<dt> /  p</dt>
-<dd>/        ~lu &amp; ~lv</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -175,9 +126,9 @@ There are 2 output bits but only 3 states due to (uv) convention.</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.cone.Cone.outside_point.txt"
 	    rel="nofollow">Show this page source</a>
@@ -185,11 +136,6 @@ There are 2 output bits but only 3 states due to (uv) convention.</p>
     </div>
      <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

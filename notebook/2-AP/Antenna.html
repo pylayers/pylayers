@@ -1,0 +1,421 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Description of antennas &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Description of antennas</a><ul>
+<li><a class="reference internal" href="#synthesis-of-the-radiation-pattern">Synthesis of the radiation pattern</a></li>
+<li><a class="reference internal" href="#defining-antenna-gain-from-analytic-formulas">Defining Antenna gain from analytic formulas</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="description-of-antennas">
+<h1>Description of antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers has a very rich set of tools for handling antenna radiation
+pattern. Antennas can be described in different manners and read from
+different specific file formats.</p>
+<p>The description goes from a simple antenna gain formula to a full
+polarization description, compressed or not, using scalar or vector
+spherical harmonics decomposition.</p>
+<p>In the following, some features of the <tt class="docutils literal"><span class="pre">Antenna</span></tt> class are
+illustrated. The <tt class="docutils literal"><span class="pre">Antenna</span></tt> class is stored in the
+<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.antenna.html">antenna.py</a>
+module which is placed in the <tt class="docutils literal"><span class="pre">antprop</span></tt> module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<p>An antenna object can not be loaded in specifying an existing antenna
+file name as argument of the constructor. Lets start by loading an
+antenna from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file which correspond to a vector spherical
+harmonics representation of an antenna measured in SATIMO near field
+chamber.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The object antenna can show itself just by typing it&#8217;s name.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>
+<span class="go">Antenna type : vsh3</span>
+<span class="go">------------------------</span>
+<span class="go">file name : S1R1.vsh3</span>
+<span class="go">fmin : 0.80GHz</span>
+<span class="go">fmax : 5.95GHz</span>
+<span class="go">step : 50.00MHz</span>
+<span class="go">Nf : 104</span>
+<span class="go">Not evaluated</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-8622ceb93fe9&gt;&quot;, line 2
+    Antenna type : vsh3
+               ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>We got information about the antenna filename and the frequency band
+where it has been defined.</p>
+<p>At loading time the antenna is not evaluated. It means that there is not
+internally any instanciation of the pattern for a set of angular and
+frequency values.</p>
+<p>To list all the available antenna files in the dedicated directory of
+the project it is possible to invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
+<p>Antenna files should be stored in the sub-directory <tt class="docutils literal"><span class="pre">ant</span></tt> of the
+current project. The current project is located with the <tt class="docutils literal"><span class="pre">$BASENAME</span></tt>
+environment variable.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; !echo $BASENAME
+/home/uguen/Bureau/P1
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-4-a699c56867f8&gt;&quot;, line 2
+    home(/uguen/Bureau/P1)
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>We can use the <tt class="docutils literal"><span class="pre">ls</span></tt> method to determine the number of files of
+different type</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lvsh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lssh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmat</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Number of antenna in .vsh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lvsh3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Number of antenna in .sh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lssh3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lvsh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lssh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="go">Number of antenna in .vsh3 format :  2</span>
+<span class="go">Number of antenna in .sh3 format :  4</span>
+<span class="go">[&#39;S1R1.vsh3&#39;, &#39;defant.vsh3&#39;]</span>
+<span class="go">[&#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;, &#39;S2R2.sh3&#39;]</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-5-b1e6701d70dc&gt;&quot;, line 9
+    Number of antenna in .vsh3 format :  2
+            ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>As already mentionned, the radiation pattern of the antenna has not yet
+been evaluated. The method to evaluate the pattern is <tt class="docutils literal"><span class="pre">eval()</span></tt> with
+the <tt class="docutils literal"><span class="pre">grid</span></tt> option set to true. If the <tt class="docutils literal"><span class="pre">grid</span></tt> option is set to False,
+the antenna is evaluated for only the specified direction. This mode is
+used in the ray tracing, while the former is used to visualize the whole
+antenna pattern.</p>
+<p>The vector spherical coefficient are strored in <tt class="docutils literal"><span class="pre">A.C</span></tt>. This C refers
+to the coefficients. Those coefficients are obtained thanks to the
+<a class="reference external" href="http://nldr.library.ucar.edu/repository/assets/technotes/TECH-NOTE-000-000-000-380.pdf">Spherepack
+Module</a>.</p>
+<p>Adams, J.C., and P.N. Swarztrauber, 1997: Spherepack 2.0: A Model
+Development Facility. NCAR Technical Note NCAR/TN-436+STR, DOI:
+10.5065/D6Z899CF.</p>
+<p>We are here using the same notations. See Formula 4-10- to 4-13 of the
+above reference document. Only the vector spherical analysis is done
+using the <tt class="docutils literal"><span class="pre">vha</span></tt> function <tt class="docutils literal"><span class="pre">Spherepack</span></tt>, the vector spherical
+synthesis has been numpyfied in the
+<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.spharm.html">pylayers.antprop.spharm.py</a>
+module.</p>
+<p><a class="reference external" href="./AntennaVSH.html">Description of Vector Spherical Harmonics</a></p>
+<p>The coefficients of the antenna also have a <strong>repr</strong></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+<span class="go">Br</span>
+<span class="go">-------------</span>
+<span class="go">Nf   : 104</span>
+<span class="go">fmin (GHz) : 0.8</span>
+<span class="go">fmax (GHz) : 5.95</span>
+<span class="go">Ncoeff s3 : 72</span>
+
+<span class="go">Bi</span>
+<span class="go">-------------</span>
+<span class="go">Nf   : 104</span>
+<span class="go">fmin (GHz) : 0.8</span>
+<span class="go">fmax (GHz) : 5.95</span>
+<span class="go">Ncoeff s3 : 72</span>
+
+<span class="go">Cr</span>
+<span class="go">-------------</span>
+<span class="go">Nf   : 104</span>
+<span class="go">fmin (GHz) : 0.8</span>
+<span class="go">fmax (GHz) : 5.95</span>
+<span class="go">Ncoeff s3 : 72</span>
+
+<span class="go">Ci</span>
+<span class="go">-------------</span>
+<span class="go">Nf   : 104</span>
+<span class="go">fmin (GHz) : 0.8</span>
+<span class="go">fmax (GHz) : 5.95</span>
+<span class="go">Ncoeff s3 : 72</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-6-1c85cece9bf9&gt;&quot;, line 3
+    -------------
+                 ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="section" id="synthesis-of-the-radiation-pattern">
+<h2>Synthesis of the radiation pattern<a class="headerlink" href="#synthesis-of-the-radiation-pattern" title="Permalink to this headline">¶</a></h2>
+<p>The radiation pattern is synthetized with the following call</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">sqG</span><span class="p">))</span>
+<span class="go">2.2267467105871743</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-8-6b5768b333ca&gt; in &lt;module&gt;()
+----&gt; 1 20*log10(np.max(A.sqG))
+      2 2.2267467105871743
+
+
+NameError: name &#39;log10&#39; is not defined
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">plotG()</span></tt> method allow to superpose different pattern for a list
+of frequencies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> (phi in degree) is specified the
+diagram is given as a function of <img src="../../_images/mathmpl/math-5dc8912759.png" style="position: relative; bottom: -3px"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> (theta in
+degree) is specified the diagram is given as a function of <img src="../../_images/mathmpl/math-e22cc525ec.png" style="position: relative; bottom: -7px"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s">&#39;polar&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s">&#39;polar&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_16_0.png" src="../../_images/Antenna_16_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_17_0.png" src="../../_images/Antenna_17_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">96</span><span class="p">]</span>
+<span class="go">5.6000000000000005</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">5.6000000000000005</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f140c466090&gt;,</span>
+<span class="go"> &lt;matplotlib.projections.polar.PolarAxes at 0x7f140c4663d0&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-12-a50e1281f288&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f140c466090&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">pol3d</span><span class="p">(</span><span class="n">R</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">St</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">Sp</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The vector spherical coefficients can be dispalayed as follows</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison</span>
+<span class="go">  if self._edgecolors == str(&#39;face&#39;):</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-14-126674ed8ed5&gt;&quot;, line 4
+    home(/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590:, FutureWarning:, elementwise, comparison, failed;, returning, scalar, instead,, but, in, the, future, will, perform, elementwise, comparison)
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-antenna-gain-from-analytic-formulas">
+<h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
+<p>An antenna can also be defined from closed-form expressions. Available
+antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ag</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ag</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f140978add0&gt;,</span>
+<span class="go"> &lt;matplotlib.projections.polar.PolarAxes at 0x7f13ff5b7c90&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-16-a39c3acd4a57&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f140978add0&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ao</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Ao</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f13ff4f0e90&gt;,</span>
+<span class="go"> &lt;matplotlib.projections.polar.PolarAxes at 0x7f14881dcc90&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-18-94e1e6f5f0b1&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f13ff4f0e90&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;3gpp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f13ff41f710&gt;,</span>
+<span class="go"> &lt;matplotlib.projections.polar.PolarAxes at 0x7f13ff410650&gt;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-20-dec534729d0b&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f13ff41f710&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/Antenna.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

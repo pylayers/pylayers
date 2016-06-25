@@ -28,7 +28,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.location.geometric.constraints.cla.CLA.__init__" href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html" />
+    <link rel="next" title="pylayers.location.geometric.constraints.constraint" href="pylayers.location.geometric.constraints.constraint.html" />
     <link rel="prev" title="pylayers.location.algebraic.algebraic" href="pylayers.location.algebraic.algebraic.html" />
 <script type="text/javascript">
 
@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -94,7 +94,7 @@
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.loca...
+	    pylayers.locatio...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.location.algebraic.algebraic
@@ -107,31 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html" title="pylayers.location.geometric.constraints.cla.CLA.__init__"
+	<a href="pylayers.location.geometric.constraints.constraint.html" title="pylayers.location.geometric.constraints.constraint"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.loca...
+	    pylayers.locatio...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.location.geometric.constraints.cla.CLA.__init__
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
+	    pylayers.location.geometric.constraints.constraint
 	    </span>
 	    
 	    </a>
@@ -164,10 +147,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.location.geometric.constraints.cla</a><ul>
-<li><a class="reference internal" href="#constraint-layer-array-cla-class">Constraint Layer Array (CLA) Class</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.location.geometric.constraints.cla</a></li>
 </ul>
 
     
@@ -179,81 +159,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
-  <div class="section" id="module-pylayers.location.geometric.constraints.cla">
-<span id="pylayers-location-geometric-constraints-cla"></span><h1>pylayers.location.geometric.constraints.cla<a class="headerlink" href="#module-pylayers.location.geometric.constraints.cla" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="constraint-layer-array-cla-class">
-<h2>Constraint Layer Array (CLA) Class<a class="headerlink" href="#constraint-layer-array-cla-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html#pylayers.location.geometric.constraints.cla.CLA.__init__" title="pylayers.location.geometric.constraints.cla.CLA.__init__"><code class="xref py py-obj docutils literal"><span class="pre">CLA.__init__</span></code></a>([parmsh])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.__repr__.html#pylayers.location.geometric.constraints.cla.CLA.__repr__" title="pylayers.location.geometric.constraints.cla.CLA.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">CLA.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.info.html#pylayers.location.geometric.constraints.cla.CLA.info" title="pylayers.location.geometric.constraints.cla.CLA.info"><code class="xref py py-obj docutils literal"><span class="pre">CLA.info</span></code></a>()</td>
-<td>get information about constraint</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.update.html#pylayers.location.geometric.constraints.cla.CLA.update" title="pylayers.location.geometric.constraints.cla.CLA.update"><code class="xref py py-obj docutils literal"><span class="pre">CLA.update</span></code></a>()</td>
-<td>update all constraints of the CLA</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.compute.html#pylayers.location.geometric.constraints.cla.CLA.compute" title="pylayers.location.geometric.constraints.cla.CLA.compute"><code class="xref py py-obj docutils literal"><span class="pre">CLA.compute</span></code></a>([pe,&nbsp;mergeRSS,&nbsp;refineRSS,&nbsp;...])</td>
-<td>Compute the cla to estimate the postion</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.rescale.html#pylayers.location.geometric.constraints.cla.CLA.rescale" title="pylayers.location.geometric.constraints.cla.CLA.rescale"><code class="xref py py-obj docutils literal"><span class="pre">CLA.rescale</span></code></a>(f_vcw[,&nbsp;cid])</td>
-<td>idem setvcw but update current vcw with a multiplier factor</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.annulus_bound.html#pylayers.location.geometric.constraints.cla.CLA.annulus_bound" title="pylayers.location.geometric.constraints.cla.CLA.annulus_bound"><code class="xref py py-obj docutils literal"><span class="pre">CLA.annulus_bound</span></code></a>([cid])</td>
-<td>adapt cmin and cmax of constraints</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.append.html#pylayers.location.geometric.constraints.cla.CLA.append" title="pylayers.location.geometric.constraints.cla.CLA.append"><code class="xref py py-obj docutils literal"><span class="pre">CLA.append</span></code></a>(c)</td>
-<td>add a constraint into the CLA</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.remove.html#pylayers.location.geometric.constraints.cla.CLA.remove" title="pylayers.location.geometric.constraints.cla.CLA.remove"><code class="xref py py-obj docutils literal"><span class="pre">CLA.remove</span></code></a>(k)</td>
-<td>OBSOLETE/ TO BE DEVELOPPED</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.setvcw.html#pylayers.location.geometric.constraints.cla.CLA.setvcw" title="pylayers.location.geometric.constraints.cla.CLA.setvcw"><code class="xref py py-obj docutils literal"><span class="pre">CLA.setvcw</span></code></a>(vcw)</td>
-<td>update scale factor of all constraint</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.merge2.html#pylayers.location.geometric.constraints.cla.CLA.merge2" title="pylayers.location.geometric.constraints.cla.CLA.merge2"><code class="xref py py-obj docutils literal"><span class="pre">CLA.merge2</span></code></a>([vcw_init,&nbsp;RSS])</td>
-<td>Merge all constraints from the CLA2_reduc2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.valid_v.html#pylayers.location.geometric.constraints.cla.CLA.valid_v" title="pylayers.location.geometric.constraints.cla.CLA.valid_v"><code class="xref py py-obj docutils literal"><span class="pre">CLA.valid_v</span></code></a>(lv,&nbsp;N[,&nbsp;RSS])</td>
-<td>test a vertex list with constraints</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.refine.html#pylayers.location.geometric.constraints.cla.CLA.refine" title="pylayers.location.geometric.constraints.cla.CLA.refine"><code class="xref py py-obj docutils literal"><span class="pre">CLA.refine</span></code></a>(l[,&nbsp;NBOXMAX,&nbsp;VOLMIN,&nbsp;RSS])</td>
-<td>refine the l layer of the CLA</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.show3.html#pylayers.location.geometric.constraints.cla.CLA.show3" title="pylayers.location.geometric.constraints.cla.CLA.show3"><code class="xref py py-obj docutils literal"><span class="pre">CLA.show3</span></code></a>([l,&nbsp;amb,&nbsp;sc])</td>
-<td>Display constraints and theirs boxes through geomview.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.prob.html#pylayers.location.geometric.constraints.cla.CLA.prob" title="pylayers.location.geometric.constraints.cla.CLA.prob"><code class="xref py py-obj docutils literal"><span class="pre">CLA.prob</span></code></a>(c,&nbsp;d)</td>
-<td>determine probability of list of vertex</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect" title="pylayers.location.geometric.constraints.cla.CLA.gapdetect"><code class="xref py py-obj docutils literal"><span class="pre">CLA.gapdetect</span></code></a>(l,&nbsp;dlindx)</td>
-<td>basic gap detection</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect2.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect2" title="pylayers.location.geometric.constraints.cla.CLA.gapdetect2"><code class="xref py py-obj docutils literal"><span class="pre">CLA.gapdetect2</span></code></a>(l,&nbsp;dlindx)</td>
-<td>basic gap detection</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.min_dist.html#pylayers.location.geometric.constraints.cla.CLA.min_dist" title="pylayers.location.geometric.constraints.cla.CLA.min_dist"><code class="xref py py-obj docutils literal"><span class="pre">CLA.min_dist</span></code></a>(a,&nbsp;b)</td>
-<td>OBSOLETE</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.estpos.html#pylayers.location.geometric.constraints.cla.CLA.estpos" title="pylayers.location.geometric.constraints.cla.CLA.estpos"><code class="xref py py-obj docutils literal"><span class="pre">CLA.estpos</span></code></a>([l,&nbsp;amb,&nbsp;test])</td>
-<td>DEPRECATED !</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.estpos2.html#pylayers.location.geometric.constraints.cla.CLA.estpos2" title="pylayers.location.geometric.constraints.cla.CLA.estpos2"><code class="xref py py-obj docutils literal"><span class="pre">CLA.estpos2</span></code></a>([l,&nbsp;amb,&nbsp;HT])</td>
-<td>Position estimation</td>
-</tr>
-</tbody>
-</table>
-</div>
+  <div class="section" id="pylayers-location-geometric-constraints-cla">
+<h1>pylayers.location.geometric.constraints.cla<a class="headerlink" href="#pylayers-location-geometric-constraints-cla" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -266,9 +175,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.location.geometric.constraints.cla.txt"
 	    rel="nofollow">Show this page source</a>
@@ -282,13 +191,8 @@
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html">
+      <a href="pylayers.location.geometric.constraints.constraint.html">
         Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../py-modindex.html">
-        Previous
       </a>  
     </div>
     

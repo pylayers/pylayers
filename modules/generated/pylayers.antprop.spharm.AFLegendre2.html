@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.spharm" href="../pylayers.antprop.spharm.html" />
-    <link rel="next" title="pylayers.antprop.spharm.AFLegendre" href="pylayers.antprop.spharm.AFLegendre.html" />
-    <link rel="prev" title="pylayers.antprop.spharm.AFLegendre3" href="pylayers.antprop.spharm.AFLegendre3.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.spharm.AFLegendre3.html" title="pylayers.antprop.spharm.AFLegendre3"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.spharm.AFLegendre3
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.spharm.AFLegendre.html" title="pylayers.antprop.spharm.AFLegendre"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.spharm.AFLegendre
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.spharm.html" title="pylayers.antprop.spharm" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.spharm
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,58 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-antprop-spharm-aflegendre2">
 <h1>pylayers.antprop.spharm.AFLegendre2<a class="headerlink" href="#pylayers-antprop-spharm-aflegendre2" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pylayers.antprop.spharm.AFLegendre2">
-<code class="descclassname">pylayers.antprop.spharm.</code><code class="descname">AFLegendre2</code><span class="sig-paren">(</span><em>L</em>, <em>M</em>, <em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/spharm.html#AFLegendre2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.AFLegendre2" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate Pmm1l and Pmp1l</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : int</p>
-<blockquote>
-<div><blockquote>
-<div><p>max order  (theta)   (also called l or level )</p>
-</div></blockquote>
-<dl class="docutils">
-<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">max degree (phi)</p>
-</dd>
-<dt>x <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
-<dd><p class="first last">function argument</p>
-</dd>
-</dl>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Pmm1l</strong> : ndarray (Nx , L , M )</p>
-<blockquote>
-<div><p><img src="../../_images/mathmpl/math-bc6c1f2060.png" style="position: relative; bottom: -8px"/></p>
-</div></blockquote>
-<p><strong>Pmp1l</strong> : ndarray (Nx , L , M )</p>
-<blockquote class="last">
-<div><p><img src="../../_images/mathmpl/math-2e82aa502f.png" style="position: relative; bottom: -8px"/></p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.spharm.VW.html#pylayers.antprop.spharm.VW" title="pylayers.antprop.spharm.VW"><code class="xref py py-obj docutils literal"><span class="pre">VW</span></code></a></p>
-</div>
-<p class="rubric">Notes</p>
-<p>L has to be greater or equal than M</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pmm1l</span><span class="p">,</span><span class="n">Pmp1l</span> <span class="o">=</span> <span class="n">AFLegendre2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -240,31 +126,16 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.spharm.AFLegendre2.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.spharm.AFLegendre3.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.spharm.AFLegendre.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

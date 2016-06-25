@@ -1,0 +1,419 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Handling time and frequency domain signals : Bsignal Class &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Handling time and frequency domain signals : <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class</a><ul>
+<li><a class="reference internal" href="#fhsignal-in-cir-mode">FHsignal in CIR mode</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="handling-time-and-frequency-domain-signals-bsignal-class">
+<h1>Handling time and frequency domain signals : <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class<a class="headerlink" href="#handling-time-and-frequency-domain-signals-bsignal-class" title="Permalink to this headline">¶</a></h1>
+<p>This section presents some features of the classes implemented in the
+<tt class="docutils literal"><span class="pre">`pylayers.signal.bsignal.py</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html">http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html</a>&gt;`__
+module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">Bsignal</span></tt> class is a container for a signal with a base which can
+be either in time domain or frequency domain.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>As a first example, let construct an impulse signal normalized in
+energy. To do so there exist a specialized function :
+<tt class="docutils literal"><span class="pre">`EnImpulse</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo">http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo</a>&gt;`__</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">E</span><span class="o">=</span><span class="n">TUsignal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">E</span><span class="o">.</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">feGHz</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">E</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8b08493810&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad8a32b10&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-4-b8188bec7e2d&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f8b08493810&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">E</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+<span class="go">array([ 1.00000008])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-5-174dc6ac1499&gt; in &lt;module&gt;()
+      1 E.energy()
+----&gt; 2 array([ 1.00000008])
+
+
+NameError: name &#39;array&#39; is not defined
+</pre></div>
+</div>
+<p>The Fourier transform of this signal exhibits the Hermitian Symmetry.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad89e0c50&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad8a05e90&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-6-1b3eb1d96d0c&gt;&quot;, line 3
+    (&lt;matplotlib.figure.Figure at 0x7f8ad89e0c50&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<p>We then extract the non redundant part of the signal with the <tt class="docutils literal"><span class="pre">ft</span></tt>
+method</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">ft</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">GH</span><span class="o">=</span><span class="n">G</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="s">&#39;extract&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">GH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">GH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">(-0.0014441784194-4.88037298122e-05j)</span>
+<span class="go">(-0.0014441784194+4.88037298122e-05j)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.0014441784194</span><span class="o">-</span><span class="mf">4.88037298122e-05j</span><span class="p">)</span>
+<span class="p">(</span><span class="o">-</span><span class="mf">0.0014441784194</span><span class="o">+</span><span class="mf">4.88037298122e-05j</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.0014441784194</span><span class="o">+</span><span class="mf">4.88037298122e-05j</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip2</span><span class="o">=</span> <span class="n">GH</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-10-ae009e105e46&gt; in &lt;module&gt;()
+----&gt; 1 ip = F.ifft()
+      2 ip2= GH.ifft()
+
+
+NameError: name &#39;F&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;original&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;no zero padding&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">ip2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;zero padding&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span><span class="p">(</span><span class="s">&#39;extract mode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-11-883c18d72357&gt; in &lt;module&gt;()
+      1 f,a=E.plot(typ=&#39;v&#39;,labels=[&#39;original&#39;])
+----&gt; 2 f,a=ip.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;no zero padding&#39;])
+      3 f,a=ip2.plot(typ=&#39;v&#39;,fig=f,ax=a[0][0],labels=[&#39;zero padding&#39;])
+      4 title(&#39;extract mode&#39;)
+
+
+NameError: name &#39;ip&#39; is not defined
+</pre></div>
+</div>
+<img alt="../../_images/Bsignal_15_1.png" src="../../_images/Bsignal_15_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+<span class="go">array([ 1.00000008])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-12-e6e568d2f2a7&gt; in &lt;module&gt;()
+----&gt; 1 ip.energy()
+      2 array([ 1.00000008])
+
+
+NameError: name &#39;ip&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ip2</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+<span class="go">array([ 3.18478273])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-13-4359c1b169c8&gt; in &lt;module&gt;()
+----&gt; 1 ip2.energy()
+      2 array([ 3.18478273])
+
+
+NameError: name &#39;ip2&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="fhsignal-in-cir-mode">
+<h2>FHsignal in CIR mode<a class="headerlink" href="#fhsignal-in-cir-mode" title="Permalink to this headline">¶</a></h2>
+<p>We create a Fusignal which corresponds to the signal</p>
+<img src="../../_images/mathmpl/math-1b7ffcc130.png" class="center" /><img src="../../_images/mathmpl/math-68d5044302.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tau</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Hu</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad84b6050&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad84630d0&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-16-657abc9f240b&gt;&quot;, line 3
+    (&lt;matplotlib.figure.Figure at 0x7f8ad84b6050&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hu</span> <span class="o">=</span> <span class="n">Hu</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The inverse Fourier transform allows to recover perfectly the amplitude
+<img src="../../_images/mathmpl/math-5149852f08.png" style="position: relative; bottom: -3px"/> and the delay <img src="../../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/> of the channel</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad838ec90&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad84b6c90&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-18-b15cd1d053cd&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f8ad838ec90&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">real</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tau</span> <span class="o">=</span> <span class="n">hu</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="n">Hu</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="s">&#39;cir&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad8282450&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad8312f10&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-21-4831ff917ddd&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f8ad8282450&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad81c6890&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad83565d0&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-23-dcd459f2597c&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f8ad81c6890&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">real</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tau</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="go">array([[ -1.50593859e-15 -6.41964563e-20j,</span>
+<span class="go">          1.22745263e-04 -1.36427337e-19j,</span>
+<span class="go">          8.94216494e-05 -1.03247967e-19j, ...,</span>
+<span class="go">          1.05839739e-05 +7.80645228e-20j,</span>
+<span class="go">         -1.37135712e-04 -1.94405223e-19j,</span>
+<span class="go">          8.17123442e-05 +3.02799103e-19j]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-25-36e1760b7cc0&gt;&quot;, line 4
+    8.94216494e-05 -1.03247967e-19j, ...,
+                                     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">203</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="o">-</span><span class="mi">203</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="go">[-0.10108118-0.07343977j]</span>
+<span class="go">[-0.10108118+0.07343977j]</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="o">-</span><span class="mf">0.10108118</span><span class="o">-</span><span class="mf">0.07343977j</span><span class="p">]</span>
+<span class="p">[</span><span class="o">-</span><span class="mf">0.10108118</span><span class="o">+</span><span class="mf">0.07343977j</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span><span class="o">=</span><span class="n">h</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad836ec90&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad8491590&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-28-4130b11ec3d3&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7f8ad836ec90&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/3-PHY/Bsignal.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

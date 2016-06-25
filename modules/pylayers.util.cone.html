@@ -28,6 +28,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
+    <link rel="next" title="pylayers.util.geomutil" href="pylayers.util.geomutil.html" />
     <link rel="prev" title="pylayers.util.CDF" href="pylayers.util.CDF.html" />
 <script type="text/javascript">
 
@@ -44,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -93,7 +94,7 @@
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.util...
+	    pylayers.util.CD...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.util.CDF
@@ -106,14 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="../py-modindex.html" title="Python Module Index"
-	    >Modules
+	<a href="pylayers.util.geomutil.html" title="pylayers.util.geomutil"
+	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    pylayers.util.ge...
 	    </span>
 	    <span class="hiddenrellink">
-	    Python Module Index
+	    pylayers.util.geomutil
 	    </span>
 	    
 	    </a>
@@ -146,10 +147,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.util.cone</a><ul>
-<li><a class="reference internal" href="#class-cone">Class Cone</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.util.cone</a></li>
 </ul>
 
     
@@ -161,68 +159,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
-  <div class="section" id="module-pylayers.util.cone">
-<span id="pylayers-util-cone"></span><h1>pylayers.util.cone<a class="headerlink" href="#module-pylayers.util.cone" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="class-cone">
-<h2>Class Cone<a class="headerlink" href="#class-cone" title="Permalink to this headline">¶</a></h2>
-<p>The following conventions are adopted</p>
-<ul class="simple">
-<li>A Cone has an <strong>apex</strong> which is a point in the plane.</li>
-<li>A cone has two vectors which define the cone aperture. Those two vectors can</li>
-</ul>
-<p>always been distinguished as a starting vector (u) and a ending vector (v).</p>
-<p>The cone region is defined by the convex angular sector going from starting
-vector  <img src="../_images/mathmpl/math-12e4bd6b8a.png" style="position: relative; bottom: -3px"/> to ending vector <img src="../_images/mathmpl/math-2c0fa972ba.png" style="position: relative; bottom: -3px"/>
-rotating in the plane in folllowing the trigonometric convention.
-The modulus of the cross product between <img src="../_images/mathmpl/math-12e4bd6b8a.png" style="position: relative; bottom: -3px"/> and <img src="../_images/mathmpl/math-2c0fa972ba.png" style="position: relative; bottom: -3px"/> is positive.</p>
-<p><img src="../_images/mathmpl/math-33c7e942df.png" /></p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.__init__.html#pylayers.util.cone.Cone.__init__" title="pylayers.util.cone.Cone.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Cone.__init__</span></code></a>([a,&nbsp;b,&nbsp;apex])</td>
-<td>a : np.array (,2)</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.upd_angle.html#pylayers.util.cone.Cone.upd_angle" title="pylayers.util.cone.Cone.upd_angle"><code class="xref py py-obj docutils literal"><span class="pre">Cone.upd_angle</span></code></a>()</td>
-<td>update cone angle attribute</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.belong_seg.html#pylayers.util.cone.Cone.belong_seg" title="pylayers.util.cone.Cone.belong_seg"><code class="xref py py-obj docutils literal"><span class="pre">Cone.belong_seg</span></code></a>(pta,&nbsp;phe[,&nbsp;prob])</td>
-<td>test if segment belong to cone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.aboveseg.html#pylayers.util.cone.Cone.aboveseg" title="pylayers.util.cone.Cone.aboveseg"><code class="xref py py-obj docutils literal"><span class="pre">Cone.aboveseg</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.outside_point.html#pylayers.util.cone.Cone.outside_point" title="pylayers.util.cone.Cone.outside_point"><code class="xref py py-obj docutils literal"><span class="pre">Cone.outside_point</span></code></a>(p)</td>
-<td>check if p is outside cone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.belong_point2.html#pylayers.util.cone.Cone.belong_point2" title="pylayers.util.cone.Cone.belong_point2"><code class="xref py py-obj docutils literal"><span class="pre">Cone.belong_point2</span></code></a>(p)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.belong_point.html#pylayers.util.cone.Cone.belong_point" title="pylayers.util.cone.Cone.belong_point"><code class="xref py py-obj docutils literal"><span class="pre">Cone.belong_point</span></code></a>(p)</td>
-<td>test if p belongs to Cone</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.above.html#pylayers.util.cone.Cone.above" title="pylayers.util.cone.Cone.above"><code class="xref py py-obj docutils literal"><span class="pre">Cone.above</span></code></a>(p)</td>
-<td>check if above</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.fromptseg.html#pylayers.util.cone.Cone.fromptseg" title="pylayers.util.cone.Cone.fromptseg"><code class="xref py py-obj docutils literal"><span class="pre">Cone.fromptseg</span></code></a>(pt,&nbsp;seg)</td>
-<td>creates a Cone from one point and one segment</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.from2segs.html#pylayers.util.cone.Cone.from2segs" title="pylayers.util.cone.Cone.from2segs"><code class="xref py py-obj docutils literal"><span class="pre">Cone.from2segs</span></code></a>(seg0,&nbsp;seg1)</td>
-<td>creates a Cone from 2 segments</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.from2csegs.html#pylayers.util.cone.Cone.from2csegs" title="pylayers.util.cone.Cone.from2csegs"><code class="xref py py-obj docutils literal"><span class="pre">Cone.from2csegs</span></code></a>(seg0,&nbsp;seg1)</td>
-<td>creates a Cone from 2 connected segments</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.show.html#pylayers.util.cone.Cone.show" title="pylayers.util.cone.Cone.show"><code class="xref py py-obj docutils literal"><span class="pre">Cone.show</span></code></a>(**kwargs)</td>
-<td>show cone</td>
-</tr>
-</tbody>
-</table>
-</div>
+  <div class="section" id="pylayers-util-cone">
+<h1>pylayers.util.cone<a class="headerlink" href="#pylayers-util-cone" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -235,9 +175,9 @@ The modulus of the cross product between <img src="../_images/mathmpl/math-12e4b
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.util.cone.txt"
 	    rel="nofollow">Show this page source</a>
@@ -251,7 +191,7 @@ The modulus of the cross product between <img src="../_images/mathmpl/math-12e4b
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../py-modindex.html">
+      <a href="pylayers.util.geomutil.html">
         Next
       </a>  
     </div>

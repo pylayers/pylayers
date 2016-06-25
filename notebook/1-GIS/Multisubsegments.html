@@ -1,0 +1,873 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Effect of Modifying the Nature of Sub-Segments &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Effect of Modifying the Nature of Sub-Segments</a></li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre>!date
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>vendredi 24 juin 2016, 09:02:50 (UTC+0200)
+</pre></div>
+</div>
+<div class="section" id="effect-of-modifying-the-nature-of-sub-segments">
+<h1>Effect of Modifying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modifying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
+<p>This notebook illustrates a simple ray tracing simulation with different
+material properties for a single segment separating 2 rooms which
+contains multi subsegments. The notebook illustrates in details the
+whole steps.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
+from pylayers.antprop.rays import *
+from pylayers.antprop.aarray import *
+from pylayers.antprop.channel import *
+from pylayers.gis.layout import *
+from pylayers.antprop.signature import *
+import pylayers.signal.bsignal as bs
+import pylayers.signal.waveform as wvf
+from pylayers.simul.simulem import *
+import matplotlib.pyplot as plt
+%matplotlib inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-2-fb5ed322f1e7&gt; in &lt;module&gt;()
+      1 from pylayers.simul.link import *
+      2 from pylayers.antprop.rays import *
+----&gt; 3 from pylayers.antprop.aarray import *
+      4 from pylayers.antprop.channel import *
+      5 from pylayers.gis.layout import *
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/aarray.py in &lt;module&gt;()
+      4 import matplotlib.pyplot as plt
+      5 import doctest
+----&gt; 6 import ipdb
+      7
+      8 r&quot;&quot;&quot;
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<p>Let&#8217;s start by loading a simple layout with 2 single rooms. The multi
+subsegment appears in the middle with the red vertical lines. Each
+subsegment is materialized by a segment.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The studied configuration is composed of a simple 2 rooms building
+separated by a subsegment which has a multi subsegment attribute. The
+attribute of the subsegment can be changed with the method
+<tt class="docutils literal"><span class="pre">`chgmss</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/%20pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html">http://pylayers.github.io/%20pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html</a>&gt;`__
+(change multisubsegment). In the example WOOD in the lower part then
+10cm of AIR then wood again until the ceiling.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>As the Layout structure has been modified it is required to rebuild the
+structure.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-5-de0401164687&gt; in &lt;module&gt;()
+----&gt; 1 L.build()
+      2 L.save()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4786             if verbose:
+   4787                 print &quot;Gv&quot;
+-&gt; 4788             self.buildGv()
+   4789             self.lbltg.extend(&#39;v&#39;)
+   4790
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
+   7065                 for idiff in ndiffvalid:
+   7066
+-&gt; 7067                     import ipdb
+   7068                     # ipdb.set_trace()
+   7069                     # if (icycle==2) &amp; (idiff==-2399):
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<p>The <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> graph dictionary has the following structure</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">12</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">11</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">10</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">8</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">7</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">5</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+ <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]},</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;WOOD&#39;</span><span class="p">],</span>
+  <span class="s">&#39;ss_offset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+  <span class="s">&#39;ss_z&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">7</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">8</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.05989229</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99820485</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
+ <span class="mi">10</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">11</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">12</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">13</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">16</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.70710678</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">18</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.71747829</span><span class="p">,</span>  <span class="mf">0.69658087</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">21</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.70710678</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.70710678</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]},</span>
+ <span class="mi">22</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;_AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.70710678</span><span class="p">,</span>  <span class="mf">0.70710678</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]}}</span>
+</pre></div>
+</div>
+<p>We define now two points which are the termination of a radio link.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#tx=np.array([759,1114,1.5])</span>
+<span class="c">#rx=np.array([767,1114,1.5])</span>
+<span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+<span class="n">rx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">767</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr.ini
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="c">#Aa = Antenna(&#39;S1R1.vsh3&#39;)</span>
+<span class="c">#Ab = Antenna(&#39;S1R1.vsh3&#39;)</span>
+<span class="n">Aa</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Ab</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Ab</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">Aa</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="c">#Aa = AntArray(N=[8,1,1],fGHz=fGHz)</span>
+<span class="c">#Ab = AntArray(N=[4,1,1],fGHz=fGHz)</span>
+<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">Ab</span><span class="o">=</span><span class="n">Ab</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-9-aa04b6c9fa2a&gt; in &lt;module&gt;()
+      8 #Aa = AntArray(N=[8,1,1],fGHz=fGHz)
+      9 #Ab = AntArray(N=[4,1,1],fGHz=fGHz)
+---&gt; 10 Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=fGHz,cutoff=5)
+     11 ak,tauk=Lk.eval(force=True,verbose=False)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.pyc in __init__(self, **kwargs)
+    348         Link.__init__(self)
+    349
+--&gt; 350         defaults={ &#39;L&#39;:Layout(),
+    351                    &#39;a&#39;:np.array(()),
+    352                    &#39;b&#39;:np.array(()),
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check, build, verbose)
+    422
+    423
+--&gt; 424         self.load(_filename,build=build)
+    425
+    426
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in load(self, _filename, build)
+   1624                     # if ans.lower()==&#39;y&#39;:
+   1625
+-&gt; 1626                     self.build()
+   1627                     self.lbltg.append(&#39;s&#39;)
+   1628                     self.dumpw()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4786             if verbose:
+   4787                 print &quot;Gv&quot;
+-&gt; 4788             self.buildGv()
+   4789             self.lbltg.extend(&#39;v&#39;)
+   4790
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
+   7065                 for idiff in ndiffvalid:
+   7066
+-&gt; 7067                     import ipdb
+   7068                     # ipdb.set_trace()
+   7069                     # if (icycle==2) &amp; (idiff==-2399):
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ak</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-10-00240c0c276b&gt; in &lt;module&gt;()
+----&gt; 1 ak.shape
+
+
+NameError: name &#39;ak&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">ak</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-11-5c6f3e4c6c80&gt; in &lt;module&gt;()
+----&gt; 1 plt.stem(tauk,ak[:,0,0])
+
+
+NameError: name &#39;tauk&#39; is not defined
+</pre></div>
+</div>
+<p>A link is the set of a layout and 2 termination points.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Aa</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">Aa</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fcd43bf0bd0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fcd43c77bd0&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-13-0b62f36fc912&gt; in &lt;module&gt;()
+----&gt; 1 Lk.C.Ctt
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#f,a=Lk.show(rays=True)</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">rays</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">aw</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-14-2b2ee2f3162d&gt; in &lt;module&gt;()
+      1 #f,a=Lk.show(rays=True)
+----&gt; 2 f,a=Lk.show(rays=True,aw=0)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<p>On the figure above, we can see the Tx and Rx each placed in a different
+room apart from a wall with a subsegment placed in the middle. Then for
+evaluating the radio link, simply type:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">applywav</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-15-d9efa0c5005d&gt; in &lt;module&gt;()
+----&gt; 1 ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-16-08f49e889d34&gt; in &lt;module&gt;()
+----&gt; 1 Lk.C
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l20&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-17-ef1e84aff51a&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(10,10))
+----&gt; 2 f,a=Lk.C.show(cmap=&#39;jet&#39;,fig=f,typ=&#39;l20&#39;,vmin=-120,vmax=-10)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-19-2f11f76fac43&gt; in &lt;module&gt;()
+----&gt; 1 Lk = DLink(L=L,a=tx,b=rx,fGHz=fGHz)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.pyc in __init__(self, **kwargs)
+    348         Link.__init__(self)
+    349
+--&gt; 350         defaults={ &#39;L&#39;:Layout(),
+    351                    &#39;a&#39;:np.array(()),
+    352                    &#39;b&#39;:np.array(()),
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check, build, verbose)
+    422
+    423
+--&gt; 424         self.load(_filename,build=build)
+    425
+    426
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in load(self, _filename, build)
+   1624                     # if ans.lower()==&#39;y&#39;:
+   1625
+-&gt; 1626                     self.build()
+   1627                     self.lbltg.append(&#39;s&#39;)
+   1628                     self.dumpw()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
+   4786             if verbose:
+   4787                 print &quot;Gv&quot;
+-&gt; 4788             self.buildGv()
+   4789             self.lbltg.extend(&#39;v&#39;)
+   4790
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
+   7065                 for idiff in ndiffvalid:
+   7066
+-&gt; 7067                     import ipdb
+   7068                     # ipdb.set_trace()
+   7069                     # if (icycle==2) &amp; (idiff==-2399):
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">a</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-20-7f012f925fcc&gt; in &lt;module&gt;()
+----&gt; 1 Lk.a
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">b</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-21-6142b9bad81d&gt; in &lt;module&gt;()
+----&gt; 1 Lk.b
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-22-74e87499760f&gt; in &lt;module&gt;()
+----&gt; 1 cir = Lk.H.applywavB(wav.sf)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="c">#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)</span>
+<span class="c">#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)</span>
+<span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="c">#plt.stem(Lk.H.taud,Lk.H.ak)</span>
+<span class="c">#plt.stem(Lk.H.taud,Lk.H.ak[:,0,50])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-23-bd8f84143198&gt; in &lt;module&gt;()
+      1 layer = [&#39;AIR&#39;,&#39;AIR&#39;,&#39;AIR&#39;]
+----&gt; 2 Lk.L.chgmss(1,ss_name=layer)
+      3 Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
+      4 Lk.L.g2npy()
+      5 Lk.L.save()
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-24-1ef58d341060&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.ak.shape
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cirair</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-25-c6ef9fd0c1d5&gt; in &lt;module&gt;()
+----&gt; 1 cirair = Lk.H.applywavB(wav.sf)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">cirmet</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+<span class="n">cirmet</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-26-56144135b207&gt; in &lt;module&gt;()
+      1 layer = [&#39;METAL&#39;,&#39;METAL&#39;,&#39;METAL&#39;]
+----&gt; 2 Lk.L.chgmss(1,ss_name=layer)
+      3 Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
+      4 Lk.L.g2npy()
+      5 Lk.L.save()
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;A simple illustration of shadowing effect&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;air&#39;</span><span class="p">])</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirmet</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-27-b1089494013d&gt; in &lt;module&gt;()
+      1 #fig2=plt.figure()
+----&gt; 2 f,a=cirair.plot(typ=[&#39;l20&#39;],color=&#39;b&#39;)
+      3 plt.axis([0,120,-120,-40])
+      4 plt.title(&#39;A simple illustration of shadowing effect&#39;)
+      5 plt.legend([&#39;air&#39;])
+
+
+NameError: name &#39;cirair&#39; is not defined
+</pre></div>
+</div>
+<p>We have modified successively the nature of the 3 surfaces in the sub
+segment placed in the separation partition. The first was AIR, the
+second WOOD and the third METAL. As the subsegment is placed on the LOS
+path the blockage effect is clearly visible. The chosen antennas were
+omni directional <tt class="docutils literal"><span class="pre">Antenna('Omni')</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">ir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-28-ab27beb5072b&gt; in &lt;module&gt;()
+----&gt; 1 Lk.ir.plot(typ=&#39;v&#39;)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/1-GIS/Multisubsegments.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

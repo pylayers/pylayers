@@ -1,0 +1,1058 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Slabs and Materials &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Slabs and Materials</a><ul>
+<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">Defining a new Slab and a new Material</a></li>
+<li><a class="reference internal" href="#information-necessary-to-define-a-slab">Information necessary to define a Slab</a></li>
+<li><a class="reference internal" href="#evaluation-of-a-slab">Evaluation of a Slab</a></li>
+<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">Transmission and Reflexion coefficients</a><ul>
+<li><a class="reference internal" href="#ploting-reflection-and-transmission-coefficients">Ploting Reflection and Transmission Coefficients</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evaluation-without-phase-compensation">Evaluation without phase compensation</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="slabs-and-materials">
+<h1>Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<p>A slab is a set ol several layers of materials with specified thickness.
+Slabs are used to describe properties of the different constitutive
+elements of a building such as wall, windows ,...</p>
+<p>In practice when describing a specific building, it is necessary to
+specify a set of different slabs with different characteristics.</p>
+<p>The structure which gathers this set is <tt class="docutils literal"><span class="pre">SlabDB</span></tt>. If no file argument
+is given, this structure is initialized with the default file:
+<a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini">slabDB.ini</a></p>
+<p>This section demonstrates some features of the <tt class="docutils literal"><span class="pre">pylayers.antprop.slab</span></tt>
+module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>The Class <tt class="docutils literal"><span class="pre">SlabDB</span></tt> contains a dictionnary of all available Slabs. This
+information is read in the file <tt class="docutils literal"><span class="pre">slabDB.ini</span></tt> of the current project
+pointed by environment variable <tt class="docutils literal"><span class="pre">$BASENAME</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NoSectionErrorTraceback (most recent call last)
+
+&lt;ipython-input-3-cb2f70fe64c2&gt; in &lt;module&gt;()
+----&gt; 1 S = SlabDB()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, filemat, fileslab, ds, dm)
+   1895         self.fileslab = fileslab
+   1896         if ds=={}:
+-&gt; 1897             self.mat = MatDB()
+   1898             if (filemat != &#39;&#39;):
+   1899                 self.mat.load(filemat)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, _fileini, dm)
+    865         self.filemat = self.fileini.replace(&#39;.ini&#39;,&#39;.mat&#39;)
+    866         if dm=={}:
+--&gt; 867             self.load(_fileini)
+    868         else:
+    869             #self.update(dm)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in load(self, _fileini)
+   1110         config.read(fileini)
+   1111
+-&gt; 1112         di = dict(config.items(&quot;dict&quot;) )
+   1113
+   1114         self.di={}
+
+
+/home/uguen/anaconda2/lib/python2.7/ConfigParser.pyc in items(self, section, raw, vars)
+    640         except KeyError:
+    641             if section != DEFAULTSECT:
+--&gt; 642                 raise NoSectionError(section)
+    643         # Update with the entry specific variables
+    644         if vars:
+
+
+NoSectionError: No section: &#39;dict&#39;
+</pre></div>
+</div>
+<p>A SlabDB is a dictionnary, the keys are for the current file are shown
+below</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;WINDOW_GLASS&#39;,</span>
+<span class="go"> &#39;PLASTERBOARD_7CM&#39;,</span>
+<span class="go"> &#39;WALL&#39;,</span>
+<span class="go"> &#39;AIR&#39;,</span>
+<span class="go"> &#39;WINDOW&#39;,</span>
+<span class="go"> &#39;METALIC&#39;,</span>
+<span class="go"> &#39;PLASTERBOARD_14CM&#39;,</span>
+<span class="go"> &#39;DOOR&#39;,</span>
+<span class="go"> &#39;FLOOR&#39;,</span>
+<span class="go"> &#39;METAL&#39;,</span>
+<span class="go"> &#39;PARTITION&#39;,</span>
+<span class="go"> &#39;CONCRETE_20CM3D&#39;,</span>
+<span class="go"> &#39;PLASTERBOARD_10CM&#39;,</span>
+<span class="go"> &#39;CEIL&#39;,</span>
+<span class="go"> &#39;CONCRETE_6CM3D&#39;,</span>
+<span class="go"> &#39;CONCRETE_15CM3D&#39;,</span>
+<span class="go"> &#39;3D_WINDOW_GLASS&#39;,</span>
+<span class="go"> &#39;WALLS&#39;,</span>
+<span class="go"> &#39;WOOD&#39;,</span>
+<span class="go"> &#39;CONCRETE_7CM3D&#39;,</span>
+<span class="go"> &#39;PILLAR&#39;,</span>
+<span class="go"> &#39;ABSORBENT&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-4-26f2383d1d12&gt; in &lt;module&gt;()
+----&gt; 1 S.keys()
+      2 [&#39;WINDOW_GLASS&#39;,
+      3  &#39;PLASTERBOARD_7CM&#39;,
+      4  &#39;WALL&#39;,
+      5  &#39;AIR&#39;,
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="section" id="defining-a-new-slab-and-a-new-material">
+<h2>Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;slab2&#39;</span><span class="p">,[</span><span class="s">&#39;STONE&#39;</span><span class="p">],[</span><span class="mf">0.15</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-5-fae06e1f2f1e&gt; in &lt;module&gt;()
+----&gt; 1 S.add(&#39;slab2&#39;,[&#39;STONE&#39;],[0.15])
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;STONE&#39;</span><span class="p">]</span>
+<span class="go">{&#39;epr&#39;: (8.69999980927+0j),</span>
+<span class="go"> &#39;index&#39;: 8,</span>
+<span class="go"> &#39;mur&#39;: (1+0j),</span>
+<span class="go"> &#39;name&#39;: &#39;STONE&#39;,</span>
+<span class="go"> &#39;roughness&#39;: 0.0,</span>
+<span class="go"> &#39;sigma&#39;: 3.0}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-6-bdc2ac8a5a7c&gt; in &lt;module&gt;()
+----&gt; 1 S.mat[&#39;STONE&#39;]
+      2 {&#39;epr&#39;: (8.69999980927+0j),
+      3  &#39;index&#39;: 8,
+      4  &#39;mur&#39;: (1+0j),
+      5  &#39;name&#39;: &#39;STONE&#39;,
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+<span class="go">[&#39;STONE&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-7-945e339e663d&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;slab2&#39;][&#39;lmatname&#39;]
+      2 [&#39;STONE&#39;]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+<span class="go">[0.15]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-8-915148531a85&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;slab2&#39;][&#39;lthick&#39;]
+      2 [0.15]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-9-3c345a0cc4dd&gt; in &lt;module&gt;()
+      1 fGHz= np.arange(3,5,0.01)
+      2 theta = np.arange(0,np.pi/2,0.01)
+----&gt; 3 S[&#39;slab2&#39;].ev(fGHz,theta)
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-10-6d2006d41c5d&gt; in &lt;module&gt;()
+      1 fig = plt.figure(figsize=(10,10))
+----&gt; 2 S[&#39;slab2&#39;].pcolor()
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fac6988e250&gt;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">=</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-11-345b32278613&gt; in &lt;module&gt;()
+----&gt; 1 A=S[&#39;slab2&#39;]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<p>As any PyLayers object there is an help function for remembering which
+methods are implemented in the class.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+<span class="go">clear: D.clear() -&gt; None.  Remove all items from D.</span>
+<span class="go">conv:  build lmat and thick</span>
+<span class="go">copy: D.copy() -&gt; a shallow copy of D</span>
+<span class="go">editgui:  edit a Slab in the DB</span>
+<span class="go">ev:  evaluation of the Slab</span>
+<span class="go">excess_grdelay:  calculate transmission excess delay in ns</span>
+<span class="go">filter:  filtering waveform</span>
+<span class="go">fromkeys: dict.fromkeys(S[,v]) -&gt; New dict with keys from S and values equal to v.</span>
+<span class="go">get: D.get(k[,d]) -&gt; D[k] if k in D, else d.  d defaults to None.</span>
+<span class="go">has_key: D.has_key(k) -&gt; True if D has a key k, else False</span>
+<span class="go">help:  generic help</span>
+<span class="go">info:  display Slab Info</span>
+<span class="go">items: D.items() -&gt; list of D&#39;s (key, value) pairs, as 2-tuples</span>
+<span class="go">iteritems: D.iteritems() -&gt; an iterator over the (key, value) items of D</span>
+<span class="go">iterkeys: D.iterkeys() -&gt; an iterator over the keys of D</span>
+<span class="go">itervalues: D.itervalues() -&gt; an iterator over the values of D</span>
+<span class="go">keys: D.keys() -&gt; list of D&#39;s keys</span>
+<span class="go">loss0:  calculate loss for theta=0 at frequency (fGHz)</span>
+<span class="go">losst:  Calculate loss w.r.t angle and frequency</span>
+<span class="go">pcolor:  display of R &amp; T coefficients wrt frequency an angle</span>
+<span class="go">plotwrt:  plot R &amp; T coefficients with respect to angle or frequency</span>
+<span class="go">pop: D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.</span>
+<span class="go">popitem: D.popitem() -&gt; (k, v), remove and return some (key, value) pair as a</span>
+<span class="go">setdefault: D.setdefault(k[,d]) -&gt; D.get(k,d), also set D[k]=d if k not in D</span>
+<span class="go">show:  show slab Reflection and Transmission coefficient</span>
+<span class="go">tocolor:   convert slab properrties into a color</span>
+<span class="go">update: D.update([E, ]**F) -&gt; None.  Update D from dict/iterable E and F.</span>
+<span class="go">values: D.values() -&gt; list of D&#39;s values</span>
+<span class="go">viewitems: D.viewitems() -&gt; a set-like object providing a view on D&#39;s items</span>
+<span class="go">viewkeys: D.viewkeys() -&gt; a set-like object providing a view on D&#39;s keys</span>
+<span class="go">viewvalues: D.viewvalues() -&gt; an object providing a view on D&#39;s values</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-12-754c57e015f9&gt;&quot;, line 2
+    clear: D.clear() -&gt; None.  Remove all items from D.
+         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="information-necessary-to-define-a-slab">
+<h2>Information necessary to define a Slab<a class="headerlink" href="#information-necessary-to-define-a-slab" title="Permalink to this headline">¶</a></h2>
+<p>Each slab contains informations about its constitutive materials
+electromagnetic properties.</p>
+<p>Below an example for a simple slab, constituted with a single material
+slab. The slab &#8216;WOOD&#8217; is a layer of 4cm &#8216;WOOD&#8217; material.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+<span class="go">[&#39;WOOD&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-13-01d0a1d5effb&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;WOOD&#39;][&#39;lmatname&#39;]
+      2 [&#39;WOOD&#39;]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<p>thickness is expressed in meters</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+<span class="go">[0.04]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-14-9c080e318609&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;WOOD&#39;][&#39;lthick&#39;]
+      2 [0.04]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+<span class="go">&#39;maroon&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-15-12f410f1cfa0&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;WOOD&#39;][&#39;color&#39;]
+      2 &#39;maroon&#39;
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-16-c8eb7fc48345&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;WOOD&#39;][&#39;linewidth&#39;]
+      2 2
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<p>Multi layers Slab, using different stacks of materials can be easily
+defined using the two lists <strong>lmatname</strong> and <strong>lthick</strong>.</p>
+<blockquote>
+<div>Notice the adopted convention naming lists starting with letter &#8216;l&#8217;
+and dictionnaries starting with letter &#8216;d&#8217;</div></blockquote>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+<span class="go">[&#39;GLASS&#39;, &#39;AIR&#39;, &#39;GLASS&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-17-11579d70aa70&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;3D_WINDOW_GLASS&#39;][&#39;lmatname&#39;]
+      2 [&#39;GLASS&#39;, &#39;AIR&#39;, &#39;GLASS&#39;]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+<span class="go">[0.005, 0.005, 0.005]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-18-eb06d9183ef7&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;3D_WINDOW_GLASS&#39;][&#39;lthick&#39;]
+      2 [0.005, 0.005, 0.005]
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<p>For each constitutive material of a slab, their electromagnetic
+properties can be obtained as:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmat&#39;</span><span class="p">]</span>
+<span class="go">[{&#39;epr&#39;: (3.79999995232+0j),</span>
+<span class="go">  &#39;index&#39;: 4,</span>
+<span class="go">  &#39;mur&#39;: (1+0j),</span>
+<span class="go">  &#39;name&#39;: &#39;GLASS&#39;,</span>
+<span class="go">  &#39;roughness&#39;: 0.0,</span>
+<span class="go">  &#39;sigma&#39;: 0.0},</span>
+<span class="go"> {&#39;epr&#39;: (1+0j),</span>
+<span class="go">  &#39;index&#39;: 1,</span>
+<span class="go">  &#39;mur&#39;: (1+0j),</span>
+<span class="go">  &#39;name&#39;: &#39;AIR&#39;,</span>
+<span class="go">  &#39;roughness&#39;: 0.0,</span>
+<span class="go">  &#39;sigma&#39;: 0.0},</span>
+<span class="go"> {&#39;epr&#39;: (3.79999995232+0j),</span>
+<span class="go">  &#39;index&#39;: 4,</span>
+<span class="go">  &#39;mur&#39;: (1+0j),</span>
+<span class="go">  &#39;name&#39;: &#39;GLASS&#39;,</span>
+<span class="go">  &#39;roughness&#39;: 0.0,</span>
+<span class="go">  &#39;sigma&#39;: 0.0}]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-19-b5c81e9090d0&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;3D_WINDOW_GLASS&#39;][&#39;lmat&#39;]
+      2 [{&#39;epr&#39;: (3.79999995232+0j),
+      3   &#39;index&#39;: 4,
+      4   &#39;mur&#39;: (1+0j),
+      5   &#39;name&#39;: &#39;GLASS&#39;,
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="evaluation-of-a-slab">
+<h2>Evaluation of a Slab<a class="headerlink" href="#evaluation-of-a-slab" title="Permalink to this headline">¶</a></h2>
+<p>Each Slab can be evaluated to obtain the Transmission and Reflexion
+coefficients for</p>
+<ul class="simple">
+<li>a given frequency range</li>
+<li>a given incidence angle range (<img src="../../_images/mathmpl/math-583b4bed9e.png" />)</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, slab is evaluted for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
+
+<span class="go">Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-20-f80213024988&gt;&quot;, line 8
+    Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)
+                             ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+</div>
+<div class="section" id="transmission-and-reflexion-coefficients">
+<h2>Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
+<p>Reflexion and transmission coefficient are computed for the given
+frequency range and theta range</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ithet</span><span class="o">=</span><span class="mi">10</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Reflection coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> R=&#39;</span><span class="p">,</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Transmission coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> T=&#39;</span><span class="p">,</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+<span class="go">Reflection coefficient @ 3.01 GHz and theta= 0.1 :</span>
+
+<span class="go"> R= [[-0.39396205-0.17289585j  0.00000000+0.j        ]</span>
+<span class="go"> [ 0.00000000+0.j          0.39396205+0.17289585j]]</span>
+
+<span class="go">Transmission coefficient @ 3.01 GHz and theta= 0.1 :</span>
+
+<span class="go"> T= [[-0.17594898-0.86927604j -0.00000000+0.j        ]</span>
+<span class="go"> [-0.00000000+0.j         -0.17594898-0.86927604j]]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-21-0832af7bd288&gt;&quot;, line 7
+    Reflection coefficient @ 3.01 GHz and theta= 0.1 :
+                         ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="section" id="ploting-reflection-and-transmission-coefficients">
+<h3>Ploting Reflection and Transmission Coefficients<a class="headerlink" href="#ploting-reflection-and-transmission-coefficients" title="Permalink to this headline">¶</a></h3>
+<p>The method <tt class="docutils literal"><span class="pre">plotwrt</span></tt> can plot the different calculated coefficients
+with respect to angle or frequency.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.02</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-22-54d2566bd9cd&gt; in &lt;module&gt;()
+----&gt; 1 S[&#39;WOOD&#39;][&#39;lthick&#39;]=[0.02]
+      2 S[&#39;WOOD&#39;].ev()
+      3 S[&#39;WOOD&#39;].ev()
+      4 f,a=S[&#39;WOOD&#39;].plotwrt()
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.006</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.006</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#S[&#39;3D_WINDOW_GLASS&#39;][&#39;lmatname&#39;]=[&#39;GLASS&#39;,&#39;AIR&#39;,&#39;GLASS&#39;]</span>
+<span class="gp">... </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-23-05339df79104&gt; in &lt;module&gt;()
+      2 theta = np.arange(0,np.pi/2,0.01)
+      3
+----&gt; 4 S[&#39;3D_WINDOW_GLASS&#39;][&#39;lthick&#39;]=[0.006,0.01,0.006]
+      5 #S[&#39;3D_WINDOW_GLASS&#39;][&#39;lmatname&#39;]=[&#39;GLASS&#39;,&#39;AIR&#39;,&#39;GLASS&#39;]
+      6 S[&#39;3D_WINDOW_GLASS&#39;].ev(fGHz,theta)
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-24-cc8035c90c3f&gt; in &lt;module&gt;()
+----&gt; 1 fig,ax = S[&#39;3D_WINDOW_GLASS&#39;].plotwrt(var=&#39;f&#39;,coeff=&#39;T&#39;,polar=&#39;o&#39;)
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;R&#39;</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-25-ee7c78de1b07&gt; in &lt;module&gt;()
+----&gt; 1 fig,ax = S[&#39;WOOD&#39;].plotwrt(var=&#39;a&#39;,coeff=&#39;R&#39;,polar=&#39;p&#39;)
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<p>plot with respect to angle</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;R&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-26-0685a6d65227&gt; in &lt;module&gt;()
+      1 fig = plt.figure(figsize=(20,20))
+      2 fGHz= np.array([2.4])
+----&gt; 3 S[&#39;WOOD&#39;].ev(fGHz,theta)
+      4 fig,ax = S[&#39;WOOD&#39;].plotwrt(var=&#39;a&#39;,coeff=&#39;R&#39;,fig=fig)
+      5 plt.tight_layout()
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fac6976d3d0&gt;
+</pre></div>
+</div>
+<p>wrt to angle and frequency</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-27-60f28c086001&gt; in &lt;module&gt;()
+      1 plt.figure(figsize=(10,10))
+      2 fGHz= np.arange(0.7,5.2,0.1)
+----&gt; 3 S[&#39;WOOD&#39;].ev(fGHz,theta)
+      4 S[&#39;WOOD&#39;].pcolor()
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fac697bb150&gt;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span>   <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmat</span>  <span class="o">=</span> <span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">],</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span>    <span class="o">=</span> <span class="n">MatInterface</span><span class="p">(</span><span class="n">lmat</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">air</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brick</span>  <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span>  <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">air</span><span class="p">,</span><span class="n">brick</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NoSectionErrorTraceback (most recent call last)
+
+&lt;ipython-input-28-49900197fa9a&gt; in &lt;module&gt;()
+      1 theta = np.arange(0,np.pi/2,0.01)
+      2 fGHz = np.arange(0.1,10,0.2)
+----&gt; 3 sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+      4 mat   = sl.mat
+      5 lmat  = [mat[&#39;AIR&#39;],mat[&#39;WOOD&#39;]]
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, filemat, fileslab, ds, dm)
+   1895         self.fileslab = fileslab
+   1896         if ds=={}:
+-&gt; 1897             self.mat = MatDB()
+   1898             if (filemat != &#39;&#39;):
+   1899                 self.mat.load(filemat)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, _fileini, dm)
+    865         self.filemat = self.fileini.replace(&#39;.ini&#39;,&#39;.mat&#39;)
+    866         if dm=={}:
+--&gt; 867             self.load(_fileini)
+    868         else:
+    869             #self.update(dm)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in load(self, _fileini)
+   1110         config.read(fileini)
+   1111
+-&gt; 1112         di = dict(config.items(&quot;dict&quot;) )
+   1113
+   1114         self.di={}
+
+
+/home/uguen/anaconda2/lib/python2.7/ConfigParser.pyc in items(self, section, raw, vars)
+    640         except KeyError:
+    641             if section != DEFAULTSECT:
+--&gt; 642                 raise NoSectionError(section)
+    643         # Update with the entry specific variables
+    644         if vars:
+
+
+NoSectionError: No section: &#39;dict&#39;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Adding new materials</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR2&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">1.00000001</span><span class="o">+</span><span class="mi">0j</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;AIR2&#39;</span><span class="p">,</span><span class="s">&#39;AIR2&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;AIR2&#39;</span><span class="p">,</span><span class="s">&#39;AIR2&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.10</span><span class="p">,</span><span class="mf">0.10</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;AIR2&#39;</span><span class="p">,</span><span class="s">&#39;AIR2&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.15</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#figure(figsize=(8,8))</span>
+<span class="gp">... </span><span class="c"># These Tessereau page 50</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># by default var=&#39;a&#39; and kv = 0</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;5cm&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;10cm&#39;</span><span class="p">],</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;15cm&#39;</span><span class="p">],</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NoSectionErrorTraceback (most recent call last)
+
+&lt;ipython-input-30-92bb85976ba5&gt; in &lt;module&gt;()
+      1 theta = np.arange(0,np.pi/2,0.01)
+      2 fGHz = np.arange(0.1,10,0.2)
+----&gt; 3 sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+      4 sl.mat.add(name=&#39;AIR2&#39;,cval=1.00000001+0j,sigma=0.00,typ=&#39;epsr&#39;)
+      5
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, filemat, fileslab, ds, dm)
+   1895         self.fileslab = fileslab
+   1896         if ds=={}:
+-&gt; 1897             self.mat = MatDB()
+   1898             if (filemat != &#39;&#39;):
+   1899                 self.mat.load(filemat)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, _fileini, dm)
+    865         self.filemat = self.fileini.replace(&#39;.ini&#39;,&#39;.mat&#39;)
+    866         if dm=={}:
+--&gt; 867             self.load(_fileini)
+    868         else:
+    869             #self.update(dm)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in load(self, _fileini)
+   1110         config.read(fileini)
+   1111
+-&gt; 1112         di = dict(config.items(&quot;dict&quot;) )
+   1113
+   1114         self.di={}
+
+
+/home/uguen/anaconda2/lib/python2.7/ConfigParser.pyc in items(self, section, raw, vars)
+    640         except KeyError:
+    641             if section != DEFAULTSECT:
+--&gt; 642                 raise NoSectionError(section)
+    643         # Update with the entry specific variables
+    644         if vars:
+
+
+NoSectionError: No section: &#39;dict&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="evaluation-without-phase-compensation">
+<h2>Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#print ax</span>
+<span class="gp">... </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># by default var=&#39;a&#39; and kv = 0</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-31-c99e7182b882&gt; in &lt;module&gt;()
+      2 theta = 0
+      3
+----&gt; 4 sl[&#39;AIR-5cm&#39;].ev(fGHz,theta,compensate=False)
+      5 sl[&#39;AIR-10cm&#39;].ev(fGHz,theta,compensate=False)
+      6 sl[&#39;AIR-50cm&#39;].ev(fGHz,theta,compensate=False)
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span><span class="o">=</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">f</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-33-da0b07493155&gt; in &lt;module&gt;()
+----&gt; 1 sl[&#39;AIR-5cm&#39;].ev(fGHz,theta,compensate=False)
+      2
+      3 S = sl[&#39;AIR-5cm&#39;]
+      4 f=S.fGHz
+      5 y = S.T[:,0,0,0]
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="n">ffts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-34-8ee5f6980ebe&gt; in &lt;module&gt;()
+----&gt; 1 g=F.ift(ffts=1)
+
+
+NameError: name &#39;F&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x7fccdfd0fe90&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fccdfd1d510&gt;]], dtype=object))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-35-a36be946445c&gt;&quot;, line 2
+    (&lt;matplotlib.figure.Figure at 0x7fccdfd0fe90&gt;,
+     ^
+SyntaxError: invalid syntax
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#print ax</span>
+<span class="gp">... </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;AIR-50cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-36-b66adc42f3b2&gt; in &lt;module&gt;()
+----&gt; 1 sl[&#39;AIR-5cm&#39;].ev(fGHz,theta,compensate=True)
+      2 sl[&#39;AIR-10cm&#39;].ev(fGHz,theta,compensate=True)
+      3 sl[&#39;AIR-50cm&#39;].ev(fGHz,theta,compensate=True)
+      4
+      5 fig,ax = sl[&#39;AIR-5cm&#39;].plotwrt(&#39;f&#39;,coeff=&#39;T&#39;,typ=[&#39;ru&#39;],labels=[&#39;&#39;],color=&#39;k&#39;)
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.55</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">],[</span><span class="mf">0.049</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-37-76050b84c6f2&gt; in &lt;module&gt;()
+----&gt; 1 sl.mat.add(name=&#39;ConcreteJc&#39;,cval=3.5,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
+      2 sl.mat.add(name=&#39;GlassJc&#39;,cval=2.55,alpha_cmm1=2.4,fGHz=120,typ=&#39;THz&#39;)
+      3 sl.add(&#39;ConcreteJc&#39;,[&#39;ConcreteJc&#39;],[0.049])
+      4
+      5 theta = np.linspace(20,60,100)*np.pi/180
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">,[</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;GlassJc&#39;</span><span class="p">],[</span><span class="mf">0.0029</span><span class="p">,</span><span class="mf">0.0102</span><span class="p">,</span><span class="mf">0.0029</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-38-1089ffa80239&gt; in &lt;module&gt;()
+      1 plt.figure(figsize=(20,10))
+      2 fGHz = np.linspace(110,135,50)
+----&gt; 3 sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[0.0029,0.0102,0.0029])
+      4 sl[&#39;DoubleGlass&#39;].ev(fGHz,theta)
+      5 sl[&#39;DoubleGlass&#39;].pcolor(dB=True)
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fac6988e150&gt;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-39-accc30f21d67&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(4,4))
+----&gt; 2 f = sl[&#39;DoubleGlass&#39;].ev(120,theta)
+      3 fig,ax = sl[&#39;DoubleGlass&#39;].plotwrt(&#39;a&#39;,figsize=(10,10))
+      4 plt.tight_layout()
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fac697cd510&gt;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>  <span class="c"># @20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+
+&lt;ipython-input-40-38e515fdfb7d&gt; in &lt;module&gt;()
+      1 freq = np.linspace(110,135,50)
+----&gt; 2 sl[&#39;DoubleGlass&#39;].ev(freq,theta)
+      3 fig,ax = sl[&#39;DoubleGlass&#39;].plotwrt(&#39;f&#39;,figsize=(10,10))  # @20
+      4 plt.tight_layout()
+
+
+NameError: name &#39;sl&#39; is not defined
+</pre></div>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>[1]. <a class="reference external" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&amp;arnumber=5505315&amp;queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation">Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. &#8220;Reflection
+ant Transmission Properties of Building Materials in D-Band for Modeling
+Future mm-Wave Communication Systems&#8221; Antennas and Propagation (EuCAP),
+2010 Proceedings of the Fourth European Conference
+on</a></p>
+<p>[2]. <a class="reference external" href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCwQFjAA&amp;url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&amp;ei=Tr_eUe6EG-OM0AWA0IAw&amp;usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&amp;sig2=QLZlhoTJtiuHAW5Zzg_xOw&amp;bvm=bv.48705608,d.d2k">R.Piesiewicz &#8216;Terahertz characterization of building materials&#8217;
+Electronics .Letters Jan 2005 Vol 41
+N18</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/SlabsMaterials.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

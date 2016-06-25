@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,19 +86,6 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -123,20 +110,69 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="control-of-the-4-axes-scanner">
 <h1>Control of the 4 axes Scanner<a class="headerlink" href="#control-of-the-4-axes-scanner" title="Permalink to this headline">¶</a></h1>
-<p>The 4 axes scanner is controlled via the module <code class="docutils literal"><span class="pre">smparker</span></code>. To load
+<p>The 4 axes scanner is controlled via the module <tt class="docutils literal"><span class="pre">smparker</span></tt>. To load
 this module :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.parker.smparker</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.parker.smparker</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
+
+&lt;ipython-input-1-8c110b6cc3f8&gt; in &lt;module&gt;()
+----&gt; 1 from pylayers.measures.parker.smparker import *
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/measures/parker/smparker.py in &lt;module&gt;()
+     11 import seaborn as sns
+     12 from pylayers.util.project import *
+---&gt; 13 from pylayers.antprop.aarray import *
+     14 from pylayers.measures.exploith5 import *
+     15 from pylayers.measures.vna.E5072A import *
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/aarray.py in &lt;module&gt;()
+      4 import matplotlib.pyplot as plt
+      5 import doctest
+----&gt; 6 import ipdb
+      7
+      8 r&quot;&quot;&quot;
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
+      5 # https://opensource.org/licenses/BSD-3-Clause
+      6
+----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
+      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
+      9
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
+     56     # the instance method will create a new one without loading the config.
+     57     # i.e: if we are in an embed instance we do not want to load the config.
+---&gt; 58     ipapp = TerminalIPythonApp.instance()
+     59     shell = get_ipython()
+     60     def_colors = shell.colors
+
+
+/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
+    414             raise MultipleInstanceError(
+    415                 &#39;Multiple incompatible subclass instances of &#39;
+--&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
+    417             )
+    418
+
+
+MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
 </pre></div>
 </div>
 <p>The scanner is connected to the control PC via a serial port. This
 control PC is itself connected to a Vector Network Analyzer via an
 ethernet connection.</p>
 <p>For testing purpose, the scanner can be emulated.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="n">Scanner</span><span class="p">(</span><span class="n">emulated</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Scanner</span><span class="p">(</span><span class="n">emulated</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -151,9 +187,9 @@ ethernet connection.</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/A-MES/scanner.txt"
 	    rel="nofollow">Show this page source</a>
@@ -161,11 +197,6 @@ ethernet connection.</p>
     </div>
      <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">

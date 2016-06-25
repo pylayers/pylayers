@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.util.pyutil" href="../pylayers.util.pyutil.html" />
-    <link rel="next" title="pylayers.util.pyutil.sqrte" href="pylayers.util.pyutil.sqrte.html" />
-    <link rel="prev" title="pylayers.util.pyutil.nbint" href="pylayers.util.pyutil.nbint.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +42,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,74 +82,11 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.util.pyutil.nbint.html" title="pylayers.util.pyutil.nbint"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.pyutil.nbint
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.util.pyutil.sqrte.html" title="pylayers.util.pyutil.sqrte"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.pyutil.sqrte
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="../../py-modindex.html" title="Python Module Index"
-	    >Modules
-	    <br>
-	    <span class="smallrellink">
-	    Python Module...
-	    </span>
-	    <span class="hiddenrellink">
-	    Python Module Index
-	    </span>
-	    
-	    </a>
-	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.util.pyutil.html" title="pylayers.util.pyutil" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.util...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.util.pyutil
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -176,37 +110,10 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pylayers-util-pyutil-encodmtlb">
 <h1>pylayers.util.pyutil.encodmtlb<a class="headerlink" href="#pylayers-util-pyutil-encodmtlb" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pylayers.util.pyutil.encodmtlb">
-<code class="descclassname">pylayers.util.pyutil.</code><code class="descname">encodmtlb</code><span class="sig-paren">(</span><em>lin</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/pyutil.html#encodmtlb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pyutil.encodmtlb" title="Permalink to this definition">¶</a></dt>
-<dd><p>encode python list of string in Matlab format</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lin</strong> : input list</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>lout</strong> : output list</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>The List is read column by column and written line by line in a same NxM matrix.
-If char does not exist it is replaced by space.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">io</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span><span class="s1">&#39;bbbbbbb&#39;</span><span class="p">,</span><span class="s1">&#39;ccc&#39;</span><span class="p">,</span><span class="s1">&#39;dd&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span><span class="p">[</span><span class="s1">&#39;lin&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">encodmtlb</span><span class="p">(</span><span class="n">lin</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="s1">&#39;encodmtlb_ex.mat&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -219,31 +126,16 @@ If char does not exist it is replaced by space.</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jun 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.pyutil.encodmtlb.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.util.pyutil.nbint.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.util.pyutil.sqrte.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
-      <a href="../../py-modindex.html">
-        Previous
-      </a>  
-    </div>
     
      </div>
      <script type="text/javascript">
