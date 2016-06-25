@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
-    <link rel="next" title="pylayers.gis.layout.Layout.closest_edge" href="pylayers.gis.layout.Layout.closest_edge.html" />
-    <link rel="prev" title="pylayers.gis.layout.Layout.seginline" href="pylayers.gis.layout.Layout.seginline.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -85,44 +82,10 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.gis.layout.Layout.seginline.html" title="pylayers.gis.layout.Layout.seginline"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.gis....
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.gis.layout.Layout.seginline
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.gis.layout.Layout.closest_edge.html" title="pylayers.gis.layout.Layout.closest_edge"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.gis....
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.gis.layout.Layout.closest_edge
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -137,22 +100,6 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.gis.layout.html" title="pylayers.gis.layout" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.gis....
-	</span>
-	<span class="hiddenrellink">
-	pylayers.gis.layout
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -180,53 +127,6 @@
             
   <div class="section" id="pylayers-gis-layout-layout-visilist">
 <h1>pylayers.gis.layout.Layout.visilist<a class="headerlink" href="#pylayers-gis-layout-layout-visilist" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.gis.layout.Layout.visilist">
-<code class="descclassname">Layout.</code><code class="descname">visilist</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.visilist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.visilist" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the list of nodes which are visible from point p</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> :</p>
-<blockquote class="last">
-<div><p>np.array point</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>AAS = [0:2pi]
-While (AAS != void set)</p>
-<blockquote>
-<div><blockquote>
-<div><ol class="arabic simple">
-<li>Find segment ns either
-i)  the closest segment from p in AAS
-ii) neighbor of prec(ns)</li>
-<li>Find the edgelist visible from ns</li>
-</ol>
-</div></blockquote>
-<dl class="docutils">
-<dt>edgelist = vedgelist(ns)</dt>
-<dd><ol class="first last arabic" start="3">
-<li><p class="first">Check_occultation(p,ns,edgelist)
-Occultation 8  situations
-[p1,pM,p2] = [T,T,T]  : fully occulted</p>
-<blockquote>
-<div><p>[     ]    partially visible
-[F,F,F]  : fully visible</p>
-</div></blockquote>
-</li>
-<li><p class="first">Update Allowed Angular Sector  (AAS)</p>
-</li>
-</ol>
-</dd>
-</dl>
-</div></blockquote>
-</dd></dl>
-
 </div>
 
 
@@ -240,25 +140,15 @@ Occultation 8  situations
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
+      Last updated on juin 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.gis.layout.Layout.visilist.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.gis.layout.Layout.seginline.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.gis.layout.Layout.closest_edge.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous
