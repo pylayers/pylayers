@@ -811,7 +811,7 @@ class Layout(PyLayers):
             logging.critical("points at index(es) %s in self.Gs.pos are similar",str(similar))
             consistent =False
 
-        return(consistent)
+        return(consistent,deg1)
 
 
 
@@ -1107,10 +1107,42 @@ class Layout(PyLayers):
         nss = 0
         
         # Reading points  (<0 index)
+
+        # Reorganize points coordinates for dedecting 
+        # duplicate nodes
+        # duplicate nodes are saved in dict dup 
+
+        kp = [ k for k in coords.xy ]
+        
+        x = np.array(map(lambda x : coords.xy[x][0],kp ))
+        y = np.array(map(lambda x : coords.xy[x][1],kp ))
+        ux = np.argsort(x) 
+        x_prev = -100
+        y_prev = -100 
+        dup = {} # dictionnary of duplicate nodes     
+        for u in ux: 
+            # if node is not already a duplicate
+            if x[u]==x_prev: 
+                # 2 consecutive points with same lon => check lat
+                if y[u]==y_prev:
+                    # node u is a duplicate
+                    # udate dup dictionnary
+                    # print u_prev ,k_prev, x_prev,y_prev
+                    # print " ",u ,kp[u], x[u],y[u]        
+                    dup[kp[u]]=k_prev
+            else:
+                x_prev = x[u]
+                y_prev = y[u]
+                u_prev = u
+                k_prev = kp[u] 
+            
+
         for npt in coords.xy:
-            self.Gs.add_node(npt)
-            self.Gs.pos[npt] = tuple(coords.xy[npt])
-            _np+=1
+            # if node is not duplicated add node 
+            if npt not in dup:
+                self.Gs.add_node(npt)
+                self.Gs.pos[npt] = tuple(coords.xy[npt])
+                _np+=1
 
         # Reading segments
         # 
@@ -1120,6 +1152,11 @@ class Layout(PyLayers):
             for l in range(len(tahe)-1):
                 nta = tahe[l]
                 nhe = tahe[l+1]
+                # if duplicate recover original node
+                if nta in dup:
+                    nta = dup[nta]
+                if nhe in dup:
+                    nhe = dup[nhe]
                 d  = ways.way[nseg].tags
 
                 for key in d:
@@ -1150,6 +1187,7 @@ class Layout(PyLayers):
                         offset = ways.way[nseg].tags['offset']
                     else:
                         offset = 0   
+
                     ns = self.add_segment(nta,nhe,name=slab,z=z,offset=offset)
                 #
                 # The segment do already exists the create a sub_segment
