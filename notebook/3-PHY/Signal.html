@@ -151,12 +151,12 @@ electromagnetic simulation.</p>
 <p>One possible manner to define an energy normalized short UWB impulse is
 as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
-<img src="../../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/>. The normalization term depends on the exponential scaling
-factor <img src="../../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/>.</p>
-<p><img src="../../_images/mathmpl/math-2c117aeff6.png" style="position: relative; bottom: -12px"/></p>
-<p><img src="../../_images/mathmpl/math-a1202c7aca.png" style="position: relative; bottom: -11px"/></p>
-<p>where <img src="../../_images/mathmpl/math-957afab571.png" style="position: relative; bottom: -3px"/> is the desired bandwidth defined at <img src="../../_images/mathmpl/math-7b431e1910.png" style="position: relative; bottom: -7px"/>
-below the spectrum maximum and <img src="../../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/> is the central frequency of
+. The normalization term depends on the exponential scaling
+factor .</p>
+<p></p>
+<p></p>
+<p>where  is the desired bandwidth defined at 
+below the spectrum maximum and  is the central frequency of
 the pulse.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
@@ -475,7 +475,7 @@ NameError: name &#39;ctx&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Evaluate the propagation channel <img src="../../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/>. Here the
+<p>Evaluate the propagation channel . Here the
 meaning of tilde is that the complex value of the channel do not include
 the phase term due to delay along the ray.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
@@ -494,7 +494,7 @@ NameError: name &#39;r3d&#39; is not defined
 <div class="section" id="construction-of-the-transmission-channel">
 <h1>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h1>
 <p>The transmission channel is obtained from the combination of the
-propagation channel <img src="../../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/> and the vector antenna
+propagation channel  and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
 the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method of the <tt class="docutils literal"><span class="pre">Ctilde</span></tt> class.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
@@ -615,8 +615,8 @@ NameError: name &#39;r&#39; is not defined
 <h1>Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h1>
 <p>If the number of point for the transmission channel and the waveform
 were the same the mathematical operation is an Hadamrd-Shur product
-between <img src="../../_images/mathmpl/math-c7217de4b7.png" style="position: relative; bottom: -3px"/> and <img src="../../_images/mathmpl/math-9b5e528324.png" style="position: relative; bottom: -3px"/>.</p>
-<p><img src="../../_images/mathmpl/math-50aab38b79.png" style="position: relative; bottom: -4px"/></p>
+between  and .</p>
+<p></p>
 <p>In practice this is what is done after a resampling of the time base
 with a reinterpolated time step.</p>
 <p>The process which consists in going from time domain to frequency domain
@@ -673,7 +673,7 @@ NameError: name &#39;tau&#39; is not defined
 NameError: name &#39;tau&#39; is not defined
 </pre></div>
 </div>
-<p>Direction of arrival <img src="../../_images/mathmpl/math-69ee887da1.png" style="position: relative; bottom: -8px"/> in radians</p>
+<p>Direction of arrival  in radians</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;doa = &quot;</span><span class="p">,</span> <span class="n">doa</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,:]</span>
 </pre></div>
 </div>

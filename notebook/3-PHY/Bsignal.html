@@ -262,7 +262,7 @@ NameError: name &#39;ip2&#39; is not defined
 <div class="section" id="fhsignal-in-cir-mode">
 <h2>FHsignal in CIR mode<a class="headerlink" href="#fhsignal-in-cir-mode" title="Permalink to this headline">¶</a></h2>
 <p>We create a Fusignal which corresponds to the signal</p>
-<img src="../../_images/mathmpl/math-1b7ffcc130.png" class="center" /><img src="../../_images/mathmpl/math-68d5044302.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tau</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Hu</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
@@ -284,7 +284,7 @@ SyntaxError: invalid syntax
 </pre></div>
 </div>
 <p>The inverse Fourier transform allows to recover perfectly the amplitude
-<img src="../../_images/mathmpl/math-5149852f08.png" style="position: relative; bottom: -3px"/> and the delay <img src="../../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/> of the channel</p>
+ and the delay  of the channel</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 <span class="go">(&lt;matplotlib.figure.Figure at 0x7f8ad838ec90&gt;,</span>
 <span class="go"> array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad84b6c90&gt;]], dtype=object))</span>

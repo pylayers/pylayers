@@ -135,7 +135,7 @@
 <tt class="docutils literal"><span class="pre">`Cone</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html">http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html</a>&gt;`__
 class implements several methods for handling planar cones.</p>
 <p>A planar cone is defined as being composed of : + an apex
-<img src="../../_images/mathmpl/math-a7f83b41e6.png" style="position: relative; bottom: -7px"/> + two vectors <img src="../../_images/mathmpl/math-7f74f2117c.png" style="position: relative; bottom: -7px"/> and <img src="../../_images/mathmpl/math-bc8d915143.png" style="position: relative; bottom: -7px"/>
+ + two vectors  and 
 not necessarily normalized.</p>
 <p>Let create a cone.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">va</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -144,12 +144,12 @@ not necessarily normalized.</p>
 </pre></div>
 </div>
 <p>From those parameters the Cone <tt class="docutils literal"><span class="pre">__init__</span></tt> constructs 2 unitary vectors
-<img src="../../_images/mathmpl/math-45a9cb8a6a.png" style="position: relative; bottom: -3px"/> and <img src="../../_images/mathmpl/math-7e4d2cc386.png" style="position: relative; bottom: -3px"/> such that :</p>
+ and  such that :</p>
 <ul class="simple">
-<li><img src="../../_images/mathmpl/math-8360c8b6ef.png" /></li>
+<li></li>
 </ul>
 <p>This can be interpreted as applying an anticlockwise rotation from
-<img src="../../_images/mathmpl/math-45a9cb8a6a.png" style="position: relative; bottom: -3px"/> to <img src="../../_images/mathmpl/math-7e4d2cc386.png" style="position: relative; bottom: -3px"/>.</p>
+ to .</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Unitary vector u&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">u</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Unitary vector v&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">v</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;dot(u,v)&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">dot</span>
@@ -359,9 +359,9 @@ to a segment.</p>
 </div>
 <div class="section" id="conditional-graph">
 <h2>Conditional Graph<a class="headerlink" href="#conditional-graph" title="Permalink to this headline">¶</a></h2>
-<p><img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/> is a <tt class="docutils literal"><span class="pre">conditional</span> <span class="pre">graph</span></tt> meaning that the edge
+<p> is a <tt class="docutils literal"><span class="pre">conditional</span> <span class="pre">graph</span></tt> meaning that the edge
 indicates which is the list of authorized next edge for the output. A
-ray being a sequence <img src="../../_images/mathmpl/math-5d7b3f6d20.png" style="position: relative; bottom: -7px"/> of nodes of <img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/>.
+ray being a sequence  of nodes of .
 The cone angular sector represents the whole set and each intercepting
 segment, is a part or this whole set. This can be interpreted as a
 probability. This means that the research of rays could be done

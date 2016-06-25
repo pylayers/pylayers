@@ -162,7 +162,7 @@ the human motion. Two kind of files exist :</p>
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for our modeling.</p>
 <p>The body model is a restriction of key body segments which are
-transformed into <img src="../../_images/mathmpl/math-b43c97c188.png" style="position: relative; bottom: -3px"/> cylinders of radius <img src="../../_images/mathmpl/math-32ed7041d6.png" style="position: relative; bottom: -7px"/>.</p>
+transformed into  cylinders of radius .</p>
 <p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
 two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
 trunk and 1 cylinder for the head.</p>
@@ -621,7 +621,7 @@ NameError: name &#39;John&#39; is not defined
 <p>In order to translate the motion in any point in space-time, a
 distinction is made between the real motion or topos and the centered
 motion capture which acts as a virtual motion.</p>
-<p>Let <img src="../../_images/mathmpl/math-a17f99bd79.png" style="position: relative; bottom: -7px"/> denotes the center of gravity of the body in
+<p>Let  denotes the center of gravity of the body in
 the (O,x,y) plane</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 </pre></div>
@@ -647,7 +647,7 @@ NameError: name &#39;John&#39; is not defined
 NameError: name &#39;np&#39; is not defined
 </pre></div>
 </div>
-<p><img src="../../_images/mathmpl/math-d9d9cee03b.png" style="position: relative; bottom: -10px"/> is the velocity vector of the gravity center of the
+<p> is the velocity vector of the gravity center of the
 body.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
@@ -832,7 +832,7 @@ NameError: name &#39;plot&#39; is not defined
 </div>
 <div class="section" id="defining-a-large-scale-trajectory">
 <h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
-<p>A large scale trajectory is defined in the <img src="../../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
+<p>A large scale trajectory is defined in the  plane.</p>
 <p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
@@ -902,28 +902,28 @@ IndentationError: unexpected indent
 following parameters</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
-<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
-<li><img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
+<li> time for evaluation of topos</li>
+<li> duration of the periodic motion frame sequence</li>
 </ul>
 <p>and returns</p>
 <ul class="simple">
 <li>the frame index
-<img src="../../_images/mathmpl/math-fa8df6427f.png" /></li>
-<li>the trajectory index <img src="../../_images/mathmpl/math-bd16204c95.png" style="position: relative; bottom: -7px"/></li>
+</li>
+<li>the trajectory index </li>
 <li>velocity unitary vector along motion capture frame
-<img src="../../_images/mathmpl/math-3925c359b0.png" style="position: relative; bottom: -17px"/></li>
+</li>
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
 <li>velocity unitary vector along trajectory
-<img src="../../_images/mathmpl/math-bbc160cffd.png" style="position: relative; bottom: -17px"/></li>
+</li>
 <li>:math:<a href="#id3"><span class="problematic" id="id4">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
 </ul>
-<p><img src="../../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
+<p> is the interframe time or frame sampling
 period, it is equal to the whole duration of the motion sequence
-<img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
+ divided by the number of frames</p>
 <p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
-<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
+<li> time for evaluation of topos</li>
 </ul>
 <p>In further version of the class, this function will be modified to avoid
 passing the whole trajectory.</p>
@@ -1024,16 +1024,16 @@ application. The localization application will define the BLCS from the
 position of radiating devices placed on the body surface.</p>
 <p>Each basis is constructed with the function from
 <tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
-takes 2 sets of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
-<img src="../../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
+takes 2 sets of  points  and
+ as input and provides an orthonormal basis as
 output.</p>
 <p>3 unitary vectors are constructed :</p>
-<img src="../../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
+<p>Where  is the unit velocity vector along
 actual trajectory.</p>
 <p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
-<img src="../../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
+ of  unitary matrices aggregated
 along axis 1</p>
-<img src="../../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
+<p>To create the CCS :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1068,7 +1068,7 @@ SyntaxError: invalid syntax
 </div>
 <div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
 <h2>Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h2>
-<p>A DCS is refered by 4 numbers <img src="../../_images/mathmpl/math-d859882232.png" style="position: relative; bottom: -8px"/></p>
+<p>A DCS is refered by 4 numbers </p>
 <ul class="simple">
 <li>Id : Cylinder Id</li>
 <li>l : length along cylinder</li>

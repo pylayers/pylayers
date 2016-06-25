@@ -382,7 +382,7 @@ NameError: name &#39;plt&#39; is not defined
 </div>
 <p>In the link we also have the transmission channel accounting for the
 effect of antennas and Friis factor. If the ray transfer function is
-scaled with <img src="../../_images/mathmpl/math-2568d81340.png" style="position: relative; bottom: -7px"/></p>
+scaled with </p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="mf">0.3</span><span class="p">)</span>
 <span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:462: ComplexWarning: Casting complex values to real discards the imaginary part</span>
 <span class="go">  return array(a, dtype, copy=False, order=order)</span>
@@ -397,7 +397,7 @@ SyntaxError: invalid syntax
 </div>
 <p>Notice that in this case the frequency</p>
 <p>The infinite bandwidth channel impulse response is plotted below from
-the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="position: relative; bottom: -7px"/>.</p>
+the extrated set .</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Infinite bandwith Channel Impulse response&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay (ns)&#39;</span><span class="p">)</span>

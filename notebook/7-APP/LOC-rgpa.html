@@ -157,9 +157,9 @@ blue</p>
 </pre></div>
 </div>
 <img alt="../../_images/LOC-rgpa_6_0.png" src="../../_images/LOC-rgpa_6_0.png" />
-<p>The euclidian distance <img src="../../_images/mathmpl/math-eb6bd6e7ff.png" style="position: relative; bottom: -10px"/> between the blind node
-<img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/> and anchors <img src="../../_images/mathmpl/math-bb7f67c6e1.png" style="position: relative; bottom: -10px"/> are then evaluated.</p>
-<p>The associated time of flight is <img src="../../_images/mathmpl/math-4553b31524.png" style="position: relative; bottom: -10px"/></p>
+<p>The euclidian distance  between the blind node
+ and anchors  are then evaluated.</p>
+<p>The associated time of flight is </p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt3</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -223,7 +223,7 @@ the geometric constraints of a considered scenario.</p>
 <li>type : TOA / RSS</li>
 <li>p : Position of the origin of the constraint</li>
 <li>value : power ( RSS ) / time in ns ( TOA)</li>
-<li>std : standard deviation <img src="../../_images/mathmpl/math-54bf156f7e.png" style="position: relative; bottom: -3px"/> of value</li>
+<li>std : standard deviation  of value</li>
 <li>runable : does the constraint has a position p ?</li>
 <li>obsolete : does the value has been obtained recently ?</li>
 <li>usuable : runable AND NOT obsolete</li>

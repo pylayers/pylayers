@@ -1063,8 +1063,8 @@ Get link value (<em>S.getlink</em>)
 <p>The value of a link <em>a</em> and <em>b</em> at a specific time or range or time can
 be obtained by specifying:</p>
 <ul class="simple">
-<li>The device <img src="../../_images/mathmpl/math-e269772661.png" style="position: relative; bottom: -3px"/> (Name in dataframe OR real id OR body id)</li>
-<li>The device <img src="../../_images/mathmpl/math-777531578f.png" style="position: relative; bottom: -3px"/> (Name in dataframe OR real id OR body id)</li>
+<li>The device  (Name in dataframe OR real id OR body id)</li>
+<li>The device  (Name in dataframe OR real id OR body id)</li>
 <li>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
 except when an ambiguity occurs, therefore error is raised)</li>
 <li>a given time in second or a [start time,stop time]. If no time is
@@ -1108,8 +1108,8 @@ Get link distance (<em>S.getlinkd</em>)
 <p>The ground truth distance separating a device <em>a</em> and device <em>b</em> at a
 specific time or range or time can be obtained by specifying:</p>
 <ul class="simple">
-<li>The device <img src="../../_images/mathmpl/math-e269772661.png" style="position: relative; bottom: -3px"/> (Name in dataframe OR real id OR body id)</li>
-<li>The device <img src="../../_images/mathmpl/math-777531578f.png" style="position: relative; bottom: -3px"/> (Name in dataframe OR real id OR body id)</li>
+<li>The device  (Name in dataframe OR real id OR body id)</li>
+<li>The device  (Name in dataframe OR real id OR body id)</li>
 <li>The radio <em>technoa</em> and <em>technob</em> (Precising the techno is optional
 except when an ambiguity occurs, therefore error is raised)</li>
 <li>a given time in second or a [start time,stop time]. If no time is
@@ -1182,8 +1182,8 @@ includes extra features.</p>
 <p>The plot function allows to display the radio values of a link. The main
 parameters are always the same:</p>
 <ul class="simple">
-<li>The device <img src="../../_images/mathmpl/math-e269772661.png" style="position: relative; bottom: -3px"/> (Name in dataframe OR real id OR body id)</li>
-<li>The device <img src="../../_images/mathmpl/math-777531578f.png" style="position: relative; bottom: -3px"/> (Name in dataframe OR real id OR body id)</li>
+<li>The device  (Name in dataframe OR real id OR body id)</li>
+<li>The device  (Name in dataframe OR real id OR body id)</li>
 <li>The radio <em>techno</em> (Precising the techno is optional except when an
 ambiguity occurs, therefore error is raised)</li>
 <li>A given time in second or a [start time,stop time]. If no time is
@@ -1256,8 +1256,8 @@ denoted <strong>NLOS</strong> wheras <strong>clear</strong> area denotes <strong
 <hr class="docutils" />
 <p>As well it is possible to determine and indicate whether the subject is
 static or not by using the plot mobility method (<em>S.pltmob</em>). The
-succession of Static and Mobile sequences are denoted <img src="../../_images/mathmpl/math-6a62933770.png" style="position: relative; bottom: -7px"/> and
-<img src="../../_images/mathmpl/math-f0be7cf7e8.png" style="position: relative; bottom: -7px"/> resplectively, where <img src="../../_images/mathmpl/math-4e155c67a6.png" style="position: relative; bottom: -3px"/> is an index of the sequence.</p>
+succession of Static and Mobile sequences are denoted  and
+ resplectively, where  is an index of the sequence.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
@@ -1311,8 +1311,8 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 <h3>Specify time (<em>bodytime</em> parameter)<a class="headerlink" href="#specify-time-bodytime-parameter" title="Permalink to this headline">¶</a></h3>
 <p>In order to display scene at specific timestamps, the parameter
 <em>bodytime</em> can be used</p>
-<p>Example: to show the body position at <img src="../../_images/mathmpl/math-43536b6479.png" style="position: relative; bottom: -3px"/>, <img src="../../_images/mathmpl/math-5be1d21f70.png" style="position: relative; bottom: -3px"/> and
-<img src="../../_images/mathmpl/math-7cf25ba665.png" style="position: relative; bottom: -3px"/>.</p>
+<p>Example: to show the body position at ,  and
+.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
 
 <span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
@@ -1350,7 +1350,7 @@ timestamp to vizualize.</p>
 <p>For that purpose a visibility/occultation matrix is computed the first
 time the vizualization is called. The following code displays the
 tisibility matrix and associated 3D scene at the inital time
-<img src="../../_images/mathmpl/math-0ff5bef1b9.png" style="position: relative; bottom: -3px"/></p>
+</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">imshowvisibility_i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
 
 <span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
