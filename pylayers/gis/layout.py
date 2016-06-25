@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 .. currentmodule:: pylayers.gis.layout
 
@@ -811,7 +811,7 @@ class Layout(PyLayers):
             logging.critical("points at index(es) %s in self.Gs.pos are similar",str(similar))
             consistent =False
 
-        return(consistent,deg1)
+        return(consistent)
 
 
 
@@ -1126,7 +1126,7 @@ class Layout(PyLayers):
                 # 2 consecutive points with same lon => check lat
                 if y[u]==y_prev:
                     # node u is a duplicate
-                    # udate dup dictionnary
+                    #udate dup dictionnary
                     # print u_prev ,k_prev, x_prev,y_prev
                     # print " ",u ,kp[u], x[u],y[u]        
                     dup[kp[u]]=k_prev
@@ -2143,8 +2143,9 @@ class Layout(PyLayers):
         ----------
         None
 
-        Return
-        ------
+        Returns
+        -------
+
 
         (u,a)
         u : int (Np)
@@ -4128,12 +4129,13 @@ class Layout(PyLayers):
 
 
     def seginline(self, p1, p2):
-        """
-        Returns the intersection between a given line and all segments
+        """ returns the intersection between a given line and all segments
+        
         Parameters
         ----------
             p1 : numpy.ndarray
             p2 : numpy.ndarray
+        
         Returns
         -------
             I : numpy.ndarray
@@ -5724,8 +5726,8 @@ class Layout(PyLayers):
             polyhole : list of sh.Polygon
 
 
-        Return
-        ------
+        Returns
+        -------
             ncpol : list
                 list of new created geu.Polygons
 
@@ -6443,8 +6445,13 @@ class Layout(PyLayers):
         Add air walls to the layout enveloppe in self.Gs 
         in order the hull of the Layout to be convex.
 
-        Return
-        ------
+        Parameters
+        ----------
+        
+        mask : Polygon
+
+        Returns
+        -------
 
         polys : list of geu.Polygon
             new polygon of the convex hull
@@ -10117,7 +10124,7 @@ class Layout(PyLayers):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('defstr.str')
+        >>> L = Layout('defstr.ini')
         >>> L.boundary()
 
         """

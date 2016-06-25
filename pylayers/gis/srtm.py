@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Pylint: Disable name warningsos.path.join(self.directory,continent)
 # pylint: disable-msg=C0103

@@ -1,4 +1,5 @@
-#-*- coding:Utf-8 -*-
+# -*- coding: utf-8 -*-
+
 """
 
 Way Class
