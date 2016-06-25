@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 
 module ezone
@@ -362,7 +362,7 @@ class DEM(PyLayers):
 
 class Ezone(PyLayers):
     """
-        An Ezone is a region of earth delimited by
+        An Ezone is a class related to a region of Earth delimited by
         (lonmin,lonmax,latmin,latmax)
 
         An Ezone is stored in hdf5 format
@@ -380,6 +380,12 @@ class Ezone(PyLayers):
     """
     def __init__(self,prefix):
         """
+        Parameters
+        ----------
+
+        prefix : string 
+            filename without extension
+
         """
         self.prefix = prefix
 
@@ -398,6 +404,7 @@ class Ezone(PyLayers):
                          resolution = 'i',projection='cass',
                          lon_0 = self.lon_0,
                          lat_0 = self.lat_0)
+
         self.pll = self.m(self.extent[0],self.extent[2])
         self.pur = self.m(self.extent[1],self.extent[3])
         self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])

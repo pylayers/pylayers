@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import struct
 
 def get_sample(filename, n, e):

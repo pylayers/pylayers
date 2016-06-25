@@ -1016,7 +1016,7 @@ class Pattern(PyLayers):
             fig = kwargs['fig']
 
         if 'ax' not in kwargs:
-            #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
+            #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, facecolor='#d5de9c')
             if kwargs['polar']:
                 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
             else:

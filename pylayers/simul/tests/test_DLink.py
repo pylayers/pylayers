@@ -19,3 +19,7 @@ if DL.R.los:
     Friss= 20*np.log10(2.4)+20*np.log10(dist_a_b) + 32.4
     assert np.allclose(-lak0,Friss,0.1), 'issue in Friss'
 
+# Point outside
+DL.b=np.array([755,1110,1.2])
+#DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True,ra_ceil_H=0)
+ak,tauk = DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
