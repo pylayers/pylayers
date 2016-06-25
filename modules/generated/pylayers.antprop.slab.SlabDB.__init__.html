@@ -182,14 +182,22 @@
 <h1>pylayers.antprop.slab.SlabDB.__init__<a class="headerlink" href="#pylayers-antprop-slab-slabdb-init" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.__init__">
-<code class="descclassname">SlabDB.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>filemat='matDB.ini'</em>, <em>fileslab='slabDB.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#SlabDB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">SlabDB.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>filemat='matDB.ini'</em>, <em>fileslab='slabDB.ini'</em>, <em>ds={}</em>, <em>dm={}</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#SlabDB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>class constructor</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filemat</strong> : string</p>
-<p class="last"><strong>fileslab</strong> : string</p>
+<p><strong>fileslab</strong> : string</p>
+<p><strong>ds</strong> : dict</p>
+<blockquote>
+<div><p>slab dict read from layout file. if ds == {}   load from files</p>
+</div></blockquote>
+<p><strong>dm</strong> : dict</p>
+<blockquote class="last">
+<div><p>mat dict read from layout file.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -209,7 +217,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
+      Last updated on juin 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.slab.SlabDB.__init__.txt"

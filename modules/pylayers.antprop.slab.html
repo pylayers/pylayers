@@ -189,13 +189,15 @@
             
   <div class="section" id="module-pylayers.antprop.slab">
 <span id="pylayers-antprop-slab"></span><h1>pylayers.antprop.slab<a class="headerlink" href="#module-pylayers.antprop.slab" title="Permalink to this headline">¶</a></h1>
-<p>This module exploits heavily numpy broadcasting mechanism :</p>
-<p>axis convention</p>
+<p>This module implements the Material and Slab class which are used 
+in the ray tracing engine rays.py. 
+It exploits heavily numpy broadcasting mechanism :</p>
+<p>The adopted axis convention is the following</p>
 <ul class="simple">
 <li>nf : axis = 0 frequency axis</li>
 <li>nt : axis = 1 angular axis</li>
-<li>p  : axis = 2 parallel axis</li>
-<li>o  : axis = 3 orhogonal axis</li>
+<li>p  : axis = 2 parallel polarization axis</li>
+<li>o  : axis = 3 orhogonal polarization axis</li>
 </ul>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -282,7 +284,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.__init__.html#pylayers.antprop.slab.MatDB.__init__" title="pylayers.antprop.slab.MatDB.__init__"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.__init__</span></code></a>([_fileini])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.__init__.html#pylayers.antprop.slab.MatDB.__init__" title="pylayers.antprop.slab.MatDB.__init__"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.__init__</span></code></a>([_fileini,&nbsp;dm])</td>
 <td>class constructor</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.info.html#pylayers.antprop.slab.MatDB.info" title="pylayers.antprop.slab.MatDB.info"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.info</span></code></a>()</td>
@@ -312,14 +314,11 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.load.html#pylayers.antprop.slab.MatDB.load" title="pylayers.antprop.slab.MatDB.load"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.load</span></code></a>(_fileini)</td>
 <td>Load a Material from a .ini file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.loadmat.html#pylayers.antprop.slab.MatDB.loadmat" title="pylayers.antprop.slab.MatDB.loadmat"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.loadmat</span></code></a>(_filemat)</td>
-<td>Load a Material from a .mat file</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.save.html#pylayers.antprop.slab.MatDB.save" title="pylayers.antprop.slab.MatDB.save"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.save</span></code></a>([_fileini])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.save.html#pylayers.antprop.slab.MatDB.save" title="pylayers.antprop.slab.MatDB.save"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.save</span></code></a>([_fileini])</td>
 <td>save MatDB in an ini file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.savemat.html#pylayers.antprop.slab.MatDB.savemat" title="pylayers.antprop.slab.MatDB.savemat"><code class="xref py py-obj docutils literal"><span class="pre">MatDB.savemat</span></code></a>(_filemat)</td>
-<td>save a .mat file (PulsRay format)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">MatDB.savemat</span></code></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -342,7 +341,7 @@
 <td>display Slab Info</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv" title="pylayers.antprop.slab.Slab.conv"><code class="xref py py-obj docutils literal"><span class="pre">Slab.conv</span></code></a>()</td>
-<td>build lmat and thick</td>
+<td>build lmat</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.ev.html#pylayers.antprop.slab.Slab.ev" title="pylayers.antprop.slab.Slab.ev"><code class="xref py py-obj docutils literal"><span class="pre">Slab.ev</span></code></a>([fGHz,&nbsp;theta,&nbsp;compensate,&nbsp;RT])</td>
 <td>evaluation of the Slab</td>
@@ -362,8 +361,8 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.losst.html#pylayers.antprop.slab.Slab.losst" title="pylayers.antprop.slab.Slab.losst"><code class="xref py py-obj docutils literal"><span class="pre">Slab.losst</span></code></a>(fGHz,&nbsp;theta)</td>
 <td>Calculate loss w.r.t angle and frequency</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.editgui.html#pylayers.antprop.slab.Slab.editgui" title="pylayers.antprop.slab.Slab.editgui"><code class="xref py py-obj docutils literal"><span class="pre">Slab.editgui</span></code></a>()</td>
-<td>edit a Slab in the DB</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Slab.editgui</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.show.html#pylayers.antprop.slab.Slab.show" title="pylayers.antprop.slab.Slab.show"><code class="xref py py-obj docutils literal"><span class="pre">Slab.show</span></code></a>([fGHz,&nbsp;theta,&nbsp;dtype,&nbsp;dB])</td>
 <td>show slab Reflection and Transmission coefficient</td>
@@ -379,7 +378,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__" title="pylayers.antprop.slab.SlabDB.__init__"><code class="xref py py-obj docutils literal"><span class="pre">SlabDB.__init__</span></code></a>([filemat,&nbsp;fileslab])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__" title="pylayers.antprop.slab.SlabDB.__init__"><code class="xref py py-obj docutils literal"><span class="pre">SlabDB.__init__</span></code></a>([filemat,&nbsp;fileslab,&nbsp;ds,&nbsp;dm])</td>
 <td>class constructor</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.showall.html#pylayers.antprop.slab.SlabDB.showall" title="pylayers.antprop.slab.SlabDB.showall"><code class="xref py py-obj docutils literal"><span class="pre">SlabDB.showall</span></code></a>()</td>
@@ -451,7 +450,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
+      Last updated on juin 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.antprop.slab.txt"

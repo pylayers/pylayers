@@ -28,7 +28,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.simul.link.Link.__add__" href="generated/pylayers.simul.link.Link.__add__.html" />
+    <link rel="next" title="pylayers.simul.exploit" href="pylayers.simul.exploit.html" />
     <link rel="prev" title="PyLayers" href="pylayers.html" />
 <script type="text/javascript">
 
@@ -107,14 +107,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.simul.link.Link.__add__.html" title="pylayers.simul.link.Link.__add__"
+	<a href="pylayers.simul.exploit.html" title="pylayers.simul.exploit"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
 	    pylayers.simu...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.simul.link.Link.__add__
+	    pylayers.simul.exploit
 	    </span>
 	    
 	    </a>
@@ -164,18 +164,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.simul.link</a><ul>
-<li><a class="reference internal" href="#link-class">Link Class</a></li>
-<li><a class="reference internal" href="#slink-class">SLink Class</a></li>
-<li><a class="reference internal" href="#dlink-class">DLink Class</a><ul>
-<li><a class="reference internal" href="#dlink-simulation">DLink simulation</a></li>
-<li><a class="reference internal" href="#dlink-init">DLink init</a></li>
-<li><a class="reference internal" href="#search-in-hdf5-file">search in hdf5 file</a></li>
-<li><a class="reference internal" href="#modify-hdf5-file">Modify hdf5 file</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.simul.link</a></li>
 </ul>
 
     
@@ -189,144 +178,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-pylayers.simul.link">
-<span id="pylayers-simul-link"></span><h1>pylayers.simul.link<a class="headerlink" href="#module-pylayers.simul.link" title="Permalink to this headline">¶</a></h1>
-<p>This module runs the electromagnetic simulation for a link.
-A deterministic link has two termination points and an associated Layout
-whereas a statistical link do not need any of those precursor object.</p>
-<p>It stores simulated objects in <cite>hdf5</cite> format.</p>
-<div class="section" id="link-class">
-<h2>Link Class<a class="headerlink" href="#link-class" title="Permalink to this headline">¶</a></h2>
-<p>Link is a MetaClass, which derives from <cite>Tchannel</cite>.
-Tchannel is a transmission channel i.e a radio channel
-which includes both link termination antennas.</p>
-<p>A common factor of both statistical (SLink) and deterministic channel (DLink)
-is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="position: relative; bottom: -6px"/> and <img src="../_images/mathmpl/math-2517e81469.png" style="position: relative; bottom: -6px"/></p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.__add__.html#pylayers.simul.link.Link.__add__" title="pylayers.simul.link.Link.__add__"><code class="xref py py-obj docutils literal"><span class="pre">Link.__add__</span></code></a>(l)</td>
-<td>merge ak and tauk of 2 Links</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="slink-class">
-<h2>SLink Class<a class="headerlink" href="#slink-class" title="Permalink to this headline">¶</a></h2>
-<p>Slink is for statistical links.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.SLink.onbody.html#pylayers.simul.link.SLink.onbody" title="pylayers.simul.link.SLink.onbody"><code class="xref py py-obj docutils literal"><span class="pre">SLink.onbody</span></code></a>(B,&nbsp;dida,&nbsp;didb,&nbsp;a,&nbsp;b)</td>
-<td>Statistical evaluation of a on-body link</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="dlink-class">
-<h2>DLink Class<a class="headerlink" href="#dlink-class" title="Permalink to this headline">¶</a></h2>
-<p>Dlink is for deterministic links</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="section" id="dlink-simulation">
-<h3>DLink simulation<a class="headerlink" href="#dlink-simulation" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.eval.html#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal"><span class="pre">DLink.eval</span></code></a>(**kwargs)</td>
-<td>evaluate the link</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink._show3.html#pylayers.simul.link.DLink._show3" title="pylayers.simul.link.DLink._show3"><code class="xref py py-obj docutils literal"><span class="pre">DLink._show3</span></code></a>([rays,&nbsp;lay,&nbsp;ant,&nbsp;newfig])</td>
-<td>display the simulation scene using Mayavi</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="dlink-init">
-<h3>DLink init<a class="headerlink" href="#dlink-init" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.__init__.html#pylayers.simul.link.DLink.__init__" title="pylayers.simul.link.DLink.__init__"><code class="xref py py-obj docutils literal"><span class="pre">DLink.__init__</span></code></a>(**kwargs)</td>
-<td>deterministic link evaluation</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.__repr__.html#pylayers.simul.link.DLink.__repr__" title="pylayers.simul.link.DLink.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">DLink.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.reset_config.html#pylayers.simul.link.DLink.reset_config" title="pylayers.simul.link.DLink.reset_config"><code class="xref py py-obj docutils literal"><span class="pre">DLink.reset_config</span></code></a>()</td>
-<td>reset configuration when a new layout is loaded</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.check_grpname.html#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal"><span class="pre">DLink.check_grpname</span></code></a>(key,&nbsp;grpname)</td>
-<td>Check if the key&#8217;s data with a given groupname</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="search-in-hdf5-file">
-<h3>search in hdf5 file<a class="headerlink" href="#search-in-hdf5-file" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.checkh5.html#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal"><span class="pre">DLink.checkh5</span></code></a>()</td>
-<td>check existence of previous simulations run with the same parameters.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.array_exist.html#pylayers.simul.link.DLink.array_exist" title="pylayers.simul.link.DLink.array_exist"><code class="xref py py-obj docutils literal"><span class="pre">DLink.array_exist</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
-<td>check if an array of a given key (h5py group)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.get_grpname.html#pylayers.simul.link.DLink.get_grpname" title="pylayers.simul.link.DLink.get_grpname"><code class="xref py py-obj docutils literal"><span class="pre">DLink.get_grpname</span></code></a>()</td>
-<td>Determine the data group name for the given configuration</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.get_idx.html#pylayers.simul.link.DLink.get_idx" title="pylayers.simul.link.DLink.get_idx"><code class="xref py py-obj docutils literal"><span class="pre">DLink.get_idx</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
-<td>try to get the index of the requested array in the group key</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="modify-hdf5-file">
-<h3>Modify hdf5 file<a class="headerlink" href="#modify-hdf5-file" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.save_init.html#pylayers.simul.link.DLink.save_init" title="pylayers.simul.link.DLink.save_init"><code class="xref py py-obj docutils literal"><span class="pre">DLink.save_init</span></code></a>(filename_long)</td>
-<td>initialize save Link</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.save.html#pylayers.simul.link.DLink.save" title="pylayers.simul.link.DLink.save"><code class="xref py py-obj docutils literal"><span class="pre">DLink.save</span></code></a>(obj,&nbsp;key,&nbsp;grpname[,&nbsp;force])</td>
-<td>Save a given object in the correct group</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.load.html#pylayers.simul.link.DLink.load" title="pylayers.simul.link.DLink.load"><code class="xref py py-obj docutils literal"><span class="pre">DLink.load</span></code></a>(obj,&nbsp;grpname)</td>
-<td>Load a given object in the correct grp</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.stack.html#pylayers.simul.link.DLink.stack" title="pylayers.simul.link.DLink.stack"><code class="xref py py-obj docutils literal"><span class="pre">DLink.stack</span></code></a>(key,&nbsp;array)</td>
-<td>stack new array in h5py file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink._delete.html#pylayers.simul.link.DLink._delete" title="pylayers.simul.link.DLink._delete"><code class="xref py py-obj docutils literal"><span class="pre">DLink._delete</span></code></a>(key,&nbsp;grpname)</td>
-<td>Delete a key and associated data into h5py file</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+  <div class="section" id="pylayers-simul-link">
+<h1>pylayers.simul.link<a class="headerlink" href="#pylayers-simul-link" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -340,7 +193,7 @@ is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="posi
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
+      Last updated on juin 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.link.txt"
@@ -355,7 +208,7 @@ is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="posi
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.simul.link.Link.__add__.html">
+      <a href="pylayers.simul.exploit.html">
         Next
       </a>  
     </div>

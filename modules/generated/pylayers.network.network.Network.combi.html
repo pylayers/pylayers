@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.network.network" href="../pylayers.network.network.html" />
-    <link rel="next" title="pylayers.network.network.Network.Gen_tuple" href="pylayers.network.network.Network.Gen_tuple.html" />
-    <link rel="prev" title="pylayers.network.network.Network.perm" href="pylayers.network.network.Network.perm.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -85,44 +82,10 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.network.network.Network.perm.html" title="pylayers.network.network.Network.perm"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.netw...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.network.network.Network.perm
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.network.network.Network.Gen_tuple.html" title="pylayers.network.network.Network.Gen_tuple"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.netw...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.network.network.Network.Gen_tuple
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -137,22 +100,6 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.network.network.html" title="pylayers.network.network" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.netw...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.network.network
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -180,62 +127,6 @@
             
   <div class="section" id="pylayers-network-network-network-combi">
 <h1>pylayers.network.network.Network.combi<a class="headerlink" href="#pylayers-network-network-network-combi" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.network.network.Network.combi">
-<code class="descclassname">Network.</code><code class="descname">combi</code><span class="sig-paren">(</span><em>iterable</em>, <em>r</em>, <em>key</em>, <em>d={}</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.combi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.combi" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate combination</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iterable</strong> : list</p>
-<blockquote>
-<div><p>list of node</p>
-</div></blockquote>
-<p><strong>r</strong> : int</p>
-<blockquote>
-<div><p>number of node gathered in the output tuple ( always set 2 ! )</p>
-</div></blockquote>
-<p><strong>d</strong> : dict</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : tuple(node_list,r,wstd,d):</p>
-<p><strong>node_list</strong> : list of node1</p>
-<p><strong>r</strong> : gather r node in the tuple</p>
-<p><strong>wstd</strong> : the specified wstd</p>
-<p class="last"><strong>d</strong> : dictionnary of wstd attribute</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>combi = itertools.combination(iterable,r) adapted</p>
-<p>This is an adapted version of itertools.combinations in order
-to comply with the networkx.add_edges_from method.
-itertools.combinations(&#8216;ABCD&#8217;, 2) &#8211;&gt; AB AC AD BC BD CD
-itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
-<dl class="docutils">
-<dt>self.combi([10,11,12],2,&#8217;wifi&#8217;) &#8211;&gt;     (10, 11, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []}) </dt>
-<dd><blockquote class="first">
-<div>(10, 12, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []})</div></blockquote>
-<p class="last">(11, 12, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []})</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;toto&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">key1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">key2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">comb</span><span class="o">=</span><span class="n">N</span><span class="o">.</span><span class="n">combi</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">comb</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-<span class="go">(0, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">comb</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-<span class="go">(0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -249,25 +140,15 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 03, 2016.
+      Last updated on juin 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.network.network.Network.combi.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.network.network.Network.perm.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.network.network.Network.Gen_tuple.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous

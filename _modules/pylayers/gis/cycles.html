@@ -478,7 +478,7 @@
             <span class="k">if</span> <span class="n">lnode</span> <span class="o">==</span> <span class="p">[]:</span>
                 <span class="n">cycle</span><span class="o">=</span><span class="n">cycles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># determine which cycle basis corresponds to the lnode list</span>
+                <span class="c1">#determine which cycle basis corresponds to the lnode list</span>
                 <span class="n">lln</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lnode</span><span class="p">)</span>
                 <span class="n">lcy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cycles</span><span class="p">])</span>
                 <span class="n">dif</span> <span class="o">=</span> <span class="n">lln</span><span class="o">-</span><span class="n">lcy</span>
@@ -780,9 +780,9 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">path</span>
                 <span class="k">else</span><span class="p">:</span> <span class="c1">#cycles share a point </span>
-                    <span class="c1"># signed area is not sufficent to determien if </span>
-                    <span class="c1"># 2 polygon connect by a single point </span>
-                    <span class="c1"># are inclusive or external</span>
+                    <span class="c1">#signed area is not sufficent to determien if </span>
+                    <span class="c1">#2 polygon connect by a single point </span>
+                    <span class="c1">#are inclusive or external</span>
 
                     <span class="c1"># areabig   = abs(self.area)</span>
                     <span class="c1"># #areasmall = abs(Cy.area)</span>
