@@ -14,4 +14,5 @@ brick = mat['BRICK']
 II = MatInterface([air,brick],0,fGHz,theta)
 II.RT()
 fig,ax = II.plotwrt(var='f',color='k',typ=['m'])
+plt.ion()
 plt.show()
