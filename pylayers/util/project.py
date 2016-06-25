@@ -1,11 +1,3 @@
-# -*- coding: latin1 -*-
-#class Project(object)
-#       """
-#       Création d'une arborescence de projet
-#       """
-#       def __init__(self):
-#       def
-
 #-*- coding:Utf-8 -*-
 """
 """

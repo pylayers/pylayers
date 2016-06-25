@@ -6,8 +6,6 @@ Class Coverage
 .. autosummary::
     :toctree: generated/
 
-    Coverage.__init__
-    Coverage.__repr__
     Coverage.creategrid
     Coverage.cover
     Coverage.sinr
