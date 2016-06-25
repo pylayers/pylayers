@@ -7695,7 +7695,7 @@ class Layout(PyLayers):
                     'width': 2,
                     'node_color':'w',
                     'edge_color':'k',
-                    'node_size':20,
+                    'node_size':200,
                     'font_size':30,
                     'nodelist': [],
                     'figsize': (5,5),
@@ -7705,17 +7705,32 @@ class Layout(PyLayers):
             if key not in kwargs:
                 kwargs[key] = value
 
-        lair = self.name['AIR']+self.name['_AIR']
+        lair = []
+        if 'AIR' in self.name:
+            lair = self.name['AIR']
+        if '_AIR' in self.name:
+            lair = lair+self.name['_AIR']
+
+        
+        #
+        # tsg : list of segment index for mapping with self.tahe 
+        #
         segfilt = filter(lambda x : x not in lair, self.tsg)
         # get the association between segment and nx edges
         edges = self.Gs.edges()
         Ne = len(edges)
-        segments = np.array(edges)[:,0]
+
+
+        # segments = np.array(edges)[:,0]
+        # segments are >0 index so max in necesssarily 
+        # a segment number whatever the order
+        segments = np.array([ max(x) for x in edges ])
+
         dse = {k:v for k,v in zip(segments,range(Ne))}
 
         edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))
 
-        # edgelist is to be understood as edge of graph and not segments of layout
+        # edgelist is to be understood as edges of Graph and not segments of Layout
 
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
