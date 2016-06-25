@@ -737,12 +737,13 @@ class Layout(PyLayers):
                 f,a = self.showG('s',aw=1)
                 deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
                 deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+                
                 if len(deg0)>0:
                     print("It exists degree 0 points :  %r" % deg0)
-                    f,a = self.pltvnodes(deg0,color='black',fig=f,ax=a)
+                    f,a = self.pltvnodes(deg0,fig=f,ax=a)
                 if len(deg1)>0:
                     print("It exists degree 1 points : %r" % deg1)
-                    f,a = self.pltvnodes(deg0,color='red',fig=f,ax=a)
+                    f,a = self.pltvnodes(deg1,fig=f,ax=a)
 
             self.deg={}
             for deg in range(degmax+1):
@@ -777,18 +778,22 @@ class Layout(PyLayers):
                useg  = filter(lambda x : x>0,nodes)
                upnt  = filter(lambda x : x<0,nodes)
 
-
+            # iterate on useg : list of segments
+            # s : n1 <--> n2
             for s in useg:
                 n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
                 p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
                 p2 = np.array(self.Gs.pos[n2])           #     s
+                # 
+                # iterate on upnt : list of points
                 for n in upnt:
-                    if (n < 0) & (n1 != n) & (n2 != n):
+                    if (n1 != n) & (n2 != n):
                         p = np.array(self.Gs.pos[n])
                         if geu.isBetween(p1, p2, p):
-                            print p1
-                            print p
-                            print p2
+                            print n1,p1
+                            print n2,p2
+                            print n,p
+                            
                             logging.critical("segment %d contains point %d",s,n)
                             consistent =False
                 if level>0:
@@ -5388,7 +5393,7 @@ class Layout(PyLayers):
         plt.axis(self.ax)
         plt.draw()
 
-    def pltvnodes(self,vn,color='red',fig=[],ax=[],):
+    def pltvnodes(self,vn,fig=[],ax=[],):
         """ plot vnodes 
 
         Parameters
