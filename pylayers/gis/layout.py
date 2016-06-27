@@ -1218,7 +1218,7 @@ class Layout(PyLayers):
             self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
                         urcrnrlon=bd[2], urcrnrlat=bd[3],
                 resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
-            x,y = m(lon,lat)
+            x,y = self.m(lon,lat)
             self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
             self.coordinates ='cart'
         #del coords
