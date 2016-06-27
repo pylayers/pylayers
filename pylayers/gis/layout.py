@@ -1069,7 +1069,7 @@ class Layout(PyLayers):
         self.extrseg()
 
 
-    def loadosm(self, _fileosm , typ ='floorplan',cartesian=False):
+    def loadosm(self, _fileosm , typ ='floorplan',cartesian=True):
         """ load layout from an osm file 
 
         Parameters
@@ -1136,7 +1136,7 @@ class Layout(PyLayers):
                 u_prev = u
                 k_prev = kp[u] 
             
-
+        
         for npt in coords.xy:
             # if node is not duplicated add node 
             if npt not in dup:
