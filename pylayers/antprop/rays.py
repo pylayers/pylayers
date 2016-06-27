@@ -57,6 +57,7 @@ from pylayers.antprop.slab import *
 from pylayers.antprop.channel import Ctilde
 from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
+import shapely.geometry as shg
 import h5py
 
 class Rays(PyLayers,dict):
@@ -743,7 +744,7 @@ class Rays(PyLayers,dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1):
+    def to3D(self,L,H=3, N=1,rmoutceilR=True):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -757,6 +758,9 @@ class Rays(PyLayers,dict):
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
+        rmoutceilR ; bool
+            Remove Ceil reflexions in cycles (Gt nodes) 
+            with indoor=False attribute 
 
         returns
         -------
@@ -892,17 +896,34 @@ class Rays(PyLayers,dict):
                     #  l >0 corresponds to last reflexion on ceil
                     #
                     # u =0 (floor) or 1 (ceil)
-                    if l < 0:
+                    # if l < 0:
+                    #     u = np.mod(range(Nint), 2)
+                    # else:
+                    #     u = 1 - np.mod(range(Nint), 2)
+
+
+                    if l < 0 and Nint%2 ==1: # l<0 Nint odd
                         u = np.mod(range(Nint), 2)
-                    else:
+
+                    elif l > 0 and Nint%2 ==1: # l>0 Nint odd
                         u = 1 - np.mod(range(Nint), 2)
+
+
+                    elif l < 0 and Nint%2 ==0: # l<0 Nint even
+                        u = 1 - np.mod(range(Nint), 2)
+
+                    elif l > 0 and Nint%2 ==0: # l>0 Nint even
+                        u = np.mod(range(Nint), 2)
+                    
+
+
                     #
                     u = u + 4
                     #
                     # At that point we introduce the signature of the new
-                    # introced points on the ceil and/or floor.
+                    # introduced points on the ceil and/or floor.
                     #
-                    # A signature is compose of two lines
+                    # A signature is composed of two lines
                     # esigs sup line : interaction number
                     # esigi inf line : interaction type
                     #
@@ -924,6 +945,7 @@ class Rays(PyLayers,dict):
                     #
                     ptees = ptee[:, ks, range(Nrayk)]
                     siges = sige[:, ks, range(Nrayk)]
+
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
                     iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
@@ -972,6 +994,9 @@ class Rays(PyLayers,dict):
                     #iintp_c = iint_c + 1
 
 
+                    #
+                    # If there are floor points
+                    #
                     if len(iint_f)>0:
                         a1esm_f = a1es[iintm_f, iray_f]
                         a1esc_f = a1es[iint_f, iray_f]
@@ -984,6 +1009,9 @@ class Rays(PyLayers,dict):
                         coeff_f = (a1esc_f-a1esm_f)/(a1esp_f-a1esm_f)
                         ptees[0:2, iint_f, iray_f] = pteesm_f + coeff_f*(pteesp_f-pteesm_f)
 
+                    #
+                    # If there are ceil points
+                    #
                     if len(iint_c)>0:
                         a1esm_c = a1es[iintm_c, iray_c]
                         a1esc_c = a1es[iint_c, iray_c]
@@ -994,33 +1022,6 @@ class Rays(PyLayers,dict):
 
                         coeff_c = (a1esc_c-a1esm_c)/(a1esp_c-a1esm_c)
                         ptees[0:2, iint_c, iray_c] = pteesm_c + coeff_c*(pteesp_c-pteesm_c)
-
-
-                    #    a1es[iint_f+1, iray_f]-a1es[iint_f-1, iray_f])
-                    #coeff_f = (a1es[iint_f, iray_f]-a1es[iint_f-1, iray_f])/(
-                    #    a1es[iint_f+1, iray_f]-a1es[iint_f-1, iray_f])
-
-                    #coeff_c = (a1es[iint_c, iray_c]-a1es[iint_c-1, iray_c])/(
-                    #    a1es[iint_c+1, iray_c]-a1es[iint_c-1, iray_c])
-                    #
-                    # Update coordinate in the horizontal plane
-                    #
-                    #
-                    #ptees[0:2, iint_f, iray_f] = ptees[0:2, iint_f-1, iray_f] + coeff_f*(
-                    #    ptees[0:2, iint_f+1, iray_f]-ptees[0:2, iint_f-1, iray_f])
-                    #ptees[0:2, iint_c, iray_c] = ptees[0:2, iint_c-1, iray_c] + coeff_c*(
-                    #    ptees[0:2, iint_c+1, iray_c]-ptees[0:2, iint_c-1, iray_c])
-
-
-                    # vertical plane
-                    # WARNING !!
-                    #
-                    # ptees[2,iint_f,iray_f]   = 0
-                    # ptees[2,iint_c,iray_c]   = H
-                    #
-
-                    #
-                    # case where ceil reflection exists
 
                     if H != 0:
                         z  = np.mod(l+a1es*(rx[2]-l), 2*H)
@@ -1152,20 +1153,49 @@ class Rays(PyLayers,dict):
                     #   z --> kl subseg level 
                     #   siges[0,:] --> Ms + nstr *Mss + (kl)
                     #
-                try:
+
+                if rmoutceilR:
+                    # 1 determine Ceil reflexion index
+                    # uc (inter x ray)
+                    uc = np.where(siges[1,:,:]==5)
+                    ptc = ptees[:,uc[0],uc[1]]
+                    if len(uc[0]) !=0:
+                        P = shg.MultiPoint(ptc[:2,:].T)
+                        # 2 determine the cycle where ceil reflexions append
+                        # uinter(nb pt x nb cycles)
+                        uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in L.Gt.nodes() if x>0] for p in P])
+
+                        # find points are indoor/outdoor cycles
+                        upt,ucy = np.where(uinter)
+                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] # ucy+1 is to manage cycle 0
+                        
+                        # 3 remove ceil reflexion of outdoor cycles
+                        if len(uout)>0:
+                        
+                            ptees = np.delete(ptees,uc[1][uout],axis=2)
+                            siges = np.delete(siges,uc[1][uout],axis=2)
+                            sigsave = np.delete(sigsave,uc[1][uout],axis=2)
+
+                
+                if r3d.has_key(k+Nint):
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
                     r3d[k+Nint]['sig2d'].append(sigsave)
-                except:
-                    r3d[k+Nint] = {}
-                    # r3d[k+Nint]['alpha'] = a1es
-                    # r3d[k+Nint]['ks'] = ks
-                    r3d[k+Nint]['pt'] = ptees
-                    r3d[k+Nint]['sig'] = siges
-                    r3d[k+Nint]['sig2d'] = [sigsave]
-
+                else:
+                    if ptees.shape[2]!=0:
+                        r3d[k+Nint] = {}
+                        # r3d[k+Nint]['alpha'] = a1es
+                        # r3d[k+Nint]['ks'] = ks
+                        r3d[k+Nint]['pt'] = ptees
+                        r3d[k+Nint]['sig'] = siges
+                        r3d[k+Nint]['sig2d'] = [sigsave]
+                # ax=plt.gca()
+                # uu = np.where(ptees[2,...]==3.0)
+                # ax.plot(ptees[0,uu[0],uu[1]],ptees[1,uu[0],uu[1]],'ok')
+                # import ipdb
+                # ipdb.set_trace()
         #
         # Add Line Of Sight ray information
         #   pt =  [tx,rx]
@@ -1195,6 +1225,7 @@ class Rays(PyLayers,dict):
             r3d[k]['rayidx'] = np.arange(nrayk)+val
             r3d.nray = r3d.nray + nrayk
             val=r3d[k]['rayidx'][-1]+1
+
             # 3 : x,y,z
             # i : interaction index
             # r : ray index
@@ -1608,7 +1639,8 @@ class Rays(PyLayers,dict):
                     ptdiff = L.pt[:,L.iupnt[-diffupt]]
                     self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
-                    aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
+                    lair = L.name['AIR']+L.name['_AIR']
+                    aseg = map(lambda x : filter(lambda y : y not in lair,
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)
                     #manage flat angle : diffraction by flat segment e.g. door limitation)
@@ -1621,7 +1653,13 @@ class Rays(PyLayers,dict):
                     # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
                     #diffslab = [ idslab0-idslabn ]
 
-                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'_'+str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
+                    #
+                    # slab name are converted in lower case since v1.0 file format of layout
+                    #
+                    #self[k]['diffslabs']=[str(L.sl[L.sla[x[0]].lower()]['index'])+'_'
+                    #                    + str(L.sl[L.sla[x[1]].lower()]['index']) for x in aseg]
+                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'_'
+                                        + str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)
 
@@ -1847,23 +1885,23 @@ class Rays(PyLayers,dict):
             self.raypt = 0
 
         # stacked interactions
-        I = Interactions()
+        I = Interactions(slab=L.sl)
 
         # rotation basis
-        B  = IntB()
-        B0 = IntB()
+        B  = IntB(slab=L.sl)
+        B0 = IntB(slab=L.sl)
 
         # # LOS Interaction
         # Los = IntL()
 
         # Reflexion
-        R = IntR()
+        R = IntR(slab=L.sl)
 
         # Transmission
-        T = IntT()
+        T = IntT(slab=L.sl)
 
         # Diffraction
-        D = IntD()
+        D = IntD(slab=L.sl)
 
         idx = np.array(())
 
@@ -2038,10 +2076,12 @@ class Rays(PyLayers,dict):
 
                 slT=L.sla[nstrf[uT]]
                 slR=L.sla[nstrf[uR]]
+
                 # WARNING
                 # in future version floor and ceil could be different for each cycle.
                 # this information would be directly obtained from L.Gs
                 # then the two following lines would have to be  modified
+
                 slRf=np.array(['FLOOR']*len(uRf))
                 slRc=np.array(['CEIL']*len(uRc))
 
@@ -2150,14 +2190,14 @@ class Rays(PyLayers,dict):
         self.filled = True
 
     def eval(self,fGHz=np.array([2.4]),ib=[]):
-        """  docstring for eval
+        """  field evaluation of rays  
 
         Parameters
         ----------
 
         fGHz : array
             frequency in GHz array
-        ib : list of intercation block
+        ib : list of interactions block
 
         """
 
@@ -2700,6 +2740,7 @@ class Rays(PyLayers,dict):
             else : use the current
 
         """
+
         if newfig:
             mlab.clf()
             f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
@@ -2725,6 +2766,7 @@ class Rays(PyLayers,dict):
                 # current number of interactions
                 cnbi = i + 2
                 pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
+
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
                 lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
                 mesh = tvtk.PolyData(points=pt.T, polys=lines)

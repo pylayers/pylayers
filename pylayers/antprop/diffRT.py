@@ -141,8 +141,8 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
 #--------------------------------------------------
 #calcul des 4 termes du coeff diff
 #--------------------------------------------------
-    # by construction
-    # 0 < KLA < 2*k*L
+    #by construction
+    #0 < KLA < 2*k*L
     klamax = 2*np.max(k)*np.max(L)
     if mode == 'tab':
         #xF0 = np.logspace(-6,-2,1000)

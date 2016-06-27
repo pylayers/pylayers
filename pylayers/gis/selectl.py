@@ -1,5 +1,5 @@
 #!usr/bin/python
-# -*- coding: latin1 -*-
+# -*- coding: utf-8 -*-
 import os
 import pdb
 import Image
