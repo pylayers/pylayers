@@ -533,15 +533,32 @@ class DLink(Link):
     @L.setter
     def L(self,L):
         # change layout and build/load
-        self._L = L
+        plotfig=False
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            mlab.clf()
+            plotfig=True
+
+        if isinstance(L,str):
+            self._L = Layout(L)
+            self._Lname = L
+        elif isinstance(L,Layout):
+            self._L = L
+            self._Lname = L.filename
+
         self.reset_config()
+
+        if plotfig:
+            self._show3()
 
     @Lname.setter
     def Lname(self,Lname):
         # change layout and build/load
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            mlab.clf()
         self._L = Layout(Lname)
         self._Lname = Lname
         self.reset_config()
+
 
     @a.setter
     def a(self,position):
