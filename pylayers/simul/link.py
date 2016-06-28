@@ -563,7 +563,15 @@ class DLink(Link):
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            raise NameError ('Warning : point a is not inside the Layout')
+            if position[0]<self.L.ax[0]:
+                position[0]=self.L.ax[0]
+            if position[0]>self.L.ax[1]:
+                position[0]=self.L.ax[1]
+            if position[1]<self.L.ax[2]:
+                position[1]=self.L.ax[2]
+            if position[1]>self.L.ax[3]:
+                position[1]=self.L.ax[3]
+            # raise NameError ('Warning : point a is not inside the Layout')
             # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
@@ -575,7 +583,15 @@ class DLink(Link):
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            raise NameError ('Warning : point b is not inside the Layout')
+            if position[0]<self.L.ax[0]:
+                position[0]=self.L.ax[0]
+            if position[0]>self.L.ax[1]:
+                position[0]=self.L.ax[1]
+            if position[1]<self.L.ax[2]:
+                position[1]=self.L.ax[2]
+            if position[1]>self.L.ax[3]:
+                position[1]=self.L.ax[3]
+            # raise NameError ('Warning : point b is not inside the Layout')
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
