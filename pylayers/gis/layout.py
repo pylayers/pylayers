@@ -320,7 +320,7 @@ class Layout(PyLayers):
                       check=True,
                       build=False,
                       verbose=False,
-                      cartesian=False):
+                      cartesian=True):
 
         """ object constructor
 
@@ -1236,19 +1236,31 @@ class Layout(PyLayers):
 
         _fileosm : string
 
+        Notes
+        -----
+
+        See Also 
+        --------
+
+        layout.loadosm
+        layout.loadini
+        layout.saveini 
+        layout.check
+
         """
         fileosm = pyu.getlong(_fileosm,'struc')
         #
         #
         #
-        lonmin = -2
-        lonmax = -1
-        latmin = 47
-        latmax = 48
-        lon_0 = -1.5
-        lat_0 = 47.5
-        m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
-            resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
+        #lonmin = -2
+        #lonmax = -1
+        #latmin = 47
+        #latmax = 48
+        #lon_0 = -1.5
+        #lat_0 = 47.5
+        #m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
+        #    resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
+
         fd = open(fileosm,"w")
         fd.write("<?xml version='1.0' encoding='UTF-8'?>\n")
         fd.write("<osm version='0.6' upload='false' generator='PyLayers'>\n")
@@ -1257,7 +1269,7 @@ class Layout(PyLayers):
             if n <0:
                 if n not in self.lboundary:
                     x,y = self.Gs.pos[n]
-                    lon,lat = m(x,y,inverse=True)
+                    lon,lat = self.m(x,y,inverse=True)
                     fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
 
         for n in self.Gs.pos:
