@@ -8457,9 +8457,9 @@ class Layout(PyLayers):
         y= np.array((self.ax[2:]))
 
         # being   in [xmin xmax]
-        c0 = pt[0]<x[1] and  pt[0]>x[0]
+        c0 = pt[0]<=x[1] and  pt[0]>=x[0]
         # being   in [ymin ymax]
-        c1 = pt[1]<y[1] and  pt[1]>y[0]
+        c1 = pt[1]<=y[1] and  pt[1]>=y[0]
 
 
         return (c0 & c1)
