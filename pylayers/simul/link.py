@@ -533,33 +533,70 @@ class DLink(Link):
     @L.setter
     def L(self,L):
         # change layout and build/load
-        self._L = L
+        plotfig=False
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            mlab.clf()
+            plotfig=True
+
+        if isinstance(L,str):
+            self._L = Layout(L)
+            self._Lname = L
+        elif isinstance(L,Layout):
+            self._L = L
+            self._Lname = L.filename
+
         self.reset_config()
+
+        if plotfig:
+            self._show3()
 
     @Lname.setter
     def Lname(self,Lname):
         # change layout and build/load
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            mlab.clf()
         self._L = Layout(Lname)
         self._Lname = Lname
         self.reset_config()
 
+
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            raise NameError ('Warning : point a is not inside the Layout')
+            if position[0]<self.L.ax[0]:
+                position[0]=self.L.ax[0]
+            if position[0]>self.L.ax[1]:
+                position[0]=self.L.ax[1]
+            if position[1]<self.L.ax[2]:
+                position[1]=self.L.ax[2]
+            if position[1]>self.L.ax[3]:
+                position[1]=self.L.ax[3]
+            # raise NameError ('Warning : point a is not inside the Layout')
             # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
         self._a = position
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            self._update_show3(ant='a')
         
 
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            raise NameError ('Warning : point b is not inside the Layout')
+            if position[0]<self.L.ax[0]:
+                position[0]=self.L.ax[0]
+            if position[0]>self.L.ax[1]:
+                position[0]=self.L.ax[1]
+            if position[1]<self.L.ax[2]:
+                position[1]=self.L.ax[2]
+            if position[1]>self.L.ax[3]:
+                position[1]=self.L.ax[3]
+            # raise NameError ('Warning : point b is not inside the Layout')
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            self._update_show3(ant='b')
         
 
     @ca.setter
@@ -579,34 +616,46 @@ class DLink(Link):
 
     @Aa.setter
     def Aa(self,Ant):
-       
+
+        if hasattr(self.Aa,'_mayamesh'):
+            self.Aa._mayamesh.remove()
+
+        # save rot
         rot = self.Ta
-        
         self._Aa = Ant
-       
         self.Ta = rot
         self.initfreq()
 
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            self._update_show3(ant='a')
+
+
     @Ab.setter
     def Ab(self,Ant):
-       
+        if hasattr(self.Ab,'_mayamesh'):
+           self.Ab._mayamesh.remove()
+
+        # save rot
         rot = self.Tb
-        
         self._Ab = Ant
-        
         self.Tb = rot
         self.initfreq()
+
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            self._update_show3(ant='b')
 
 
     @Ta.setter
     def Ta(self,orientation):
         self._Ta = orientation
-        
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            self._update_show3(ant='a')
 
     @Tb.setter
     def Tb(self,orientation):
         self._Tb = orientation
-        
+        if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
+            self._update_show3(ant='b')
 
     @fGHz.setter
     def fGHz(self,freq):
@@ -1602,7 +1651,7 @@ class DLink(Link):
         """
 
         if not newfig:
-            f=mlab.gcf()
+            self._maya_fig=mlab.gcf()
 
         if 'centered' in kwargs:
             centered = kwargs['centered']
@@ -1621,6 +1670,9 @@ class DLink(Link):
             ptx = self.a
             prx = self.b
 
+        self._maya_fig.scene.disable_render = True
+
+
         if ant :
             Atx = self.Aa
             Arx = self.Ab
@@ -1632,20 +1684,20 @@ class DLink(Link):
                 Atx.eval()
             try:
                 Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,colorbar=False,newfig=False)
+                title=False,colorbar=False,newfig=False,interact=False)
             except:
                 Atx.eval()
                 Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,colorbar=False,newfig=False)
+                title=False,colorbar=False,newfig=False,interact=False)
             if not Arx.evaluated:
                 Arx.eval()
             try:
                 Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,colorbar=False,newfig=False,name = '')
+                title=False,colorbar=False,newfig=False,name = '',interact=False)
             except:
                 Arx.eval()
                 Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,colorbar=False,newfig=False,name = '')
+                title=False,colorbar=False,newfig=False,name = '',interact=False)
 
         if lay:
             self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
@@ -1667,6 +1719,27 @@ class DLink(Link):
                 self.R._show3(**kwargs)
             except:
                 print 'Rays not computed yet'
+
+        self._maya_fig.scene.disable_render = False
+
+
+    def _update_show3(self,ant='a'):
+        """
+        """
+        antenna = eval('self.A'+ant)
+        rot = eval('self.T'+ant).reshape(3,3)
+        pos = eval('self.'+ant)
+
+        if hasattr(antenna,'_mayamesh'):
+            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
+            antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
+        else:
+            antenna.eval()
+            antenna._show3(T=rot,po=pos,
+                title=False,colorbar=False,newfig=False,name = '',interact=False)
+
+
+
 
 if (__name__ == "__main__"):
     #plt.ion()

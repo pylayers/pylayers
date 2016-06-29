@@ -89,13 +89,13 @@ def draw(G,**kwargs):
     #
 
     if kwargs['fig'] == []:
-        fig = plt.figure(figsize=kwargs['figsize'])
+        fig = plt.figure(figsize=kwargs['figsize'],facecolor='white')
         fig.set_frameon(True)
     else:
         fig = kwargs['fig']
 
     if kwargs['ax'] == []:
-        ax = fig.add_subplot(111,axisbg='white')
+        ax = fig.add_subplot(111)
     else:
         ax = kwargs['ax']
 
@@ -117,7 +117,9 @@ def draw(G,**kwargs):
         #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
         pno = filter(lambda x : x>0,nodelist)
         # node == air
-        na = filter(lambda x : G.node[x]['name']=='AIR',pno)
+        na1 = filter(lambda x : G.node[x]['name']=='AIR',pno)
+        na2 = filter(lambda x : G.node[x]['name']=='_AIR',pno)
+        na = na1 + na2
         # edge == air
         ea=[]
         [[ea.append((n1,n2)) for n2 in G.edge[n1].keys()] for n1 in na]

@@ -105,8 +105,8 @@ class RadioNode(PyLayers):
     def __init__(self, name = '',typ='undefined',
                  _fileini='radionode.ini',
                  _filetraj='pos.csv',
-                 _fileant='defant.vsh3',
-                 _filestr='defstr.str2'):
+                 _fileant='defant.vsh3'
+                 ):
         """
 
         the _fileini file must be placed in the ini directory
@@ -120,8 +120,6 @@ class RadioNode(PyLayers):
             2 : rx
         _fileini : string
             file of RadioNode coordinates
-        _filestr : string
-            file of layout structure
 
         Notes
         -----
@@ -158,7 +156,6 @@ class RadioNode(PyLayers):
         self.fileini = prefix + '.ini'
         self.filespa = prefix + '.spa'
         self.filegeom = prefix + '.vect'
-        self.filestr = _filestr
         fileini = pyu.getlong(self.fileini,'ini')
         # if file _fileini exists it is loaded
         try:
@@ -223,10 +220,6 @@ class RadioNode(PyLayers):
         print "filespa    : ", self.filespa
         print "filegeom   : ", self.filegeom
         print "fileant    : ", self.fileant
-        try:
-            print "filestr    : ", self.filestr
-        except:
-            pass
 
     def clear(self):
         """ clear positions
@@ -876,30 +869,30 @@ class RadioNode(PyLayers):
         ax.scatter(x, y,s=size,c=color,linewidth=0)
         return fig,ax
 
-    def show3(self, _filestr='DLR.off'):
-        """ display RadioNode position in geomview
-
-        Parameters
-        ----------
-
-        _filestr : string
-            structure file
-        """
-        filename = pyu.getlong("strucRN.off", pstruc['DIRGEOM'])
-        fo = open(filename, "w")
-        filegeom = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
-
-        # get .off filename from .str or .str2 filename
-        _fileoff, ext = os.path.splitext(self.filestr)
-        _fileoff = _fileoff + '.off'
-        fo.write("LIST\n")
-        if os.path.isfile(pyu.getlong(_fileoff,'geom')):
-            fo.write("{<" + _fileoff + "}\n")
-        fo.write("{<" + self.filegeom + "}\n")
-        fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
-        fo.close()
-        chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
-        os.system(chaine)
+#    def show3(self, _filestr='DLR.off'):
+#        """ display RadioNode position in geomview
+#
+#        Parameters
+#        ----------
+#
+#        _filestr : string
+#            structure file
+#        """
+#        filename = pyu.getlong("strucRN.off", pstruc['DIRGEOM'])
+#        fo = open(filename, "w")
+#        filegeom = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
+#
+#        # get .off filename from .str or .str2 filename
+#        _fileoff, ext = os.path.splitext(self.filestr)
+#        _fileoff = _fileoff + '.off'
+#        fo.write("LIST\n")
+#        if os.path.isfile(pyu.getlong(_fileoff,'geom')):
+#            fo.write("{<" + _fileoff + "}\n")
+#        fo.write("{<" + self.filegeom + "}\n")
+#        fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
+#        fo.close()
+#        chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
+#        os.system(chaine)
 
     def move(self, dx, dy, dz):
         """ move RadioNode with a specified offset over each cartesian axis

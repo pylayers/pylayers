@@ -219,7 +219,7 @@ def showsig2(lsig,L,tahe):
                       
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
-    pta = tahe[:,0,:].T  # 2 x Nseg
+    pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
     seq = lsig[:,0]
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
@@ -259,7 +259,7 @@ def valid(lsig,L,tahe=[]):
     Parameters
     ----------
 
-    lsig : list of tuple from run  | signatures
+    lsig : list of tuple from run  |signatures
     L : layout
     tahe : 
         lensig , ta|he , x,y
@@ -344,7 +344,7 @@ def valid(lsig,L,tahe=[]):
     # else:
 
     tahe = np.array(tahe) # Nseg x tahe x xy 
-    pta = tahe[:,0,:].T  # 2 x Nseg
+    pta = tahe[:,0,:].T  #2 x Nseg
     phe = tahe[:,1,:].T  # 2 x Nseg 
 
 
@@ -390,7 +390,7 @@ def valid(lsig,L,tahe=[]):
     #     ipdb.set_trace()
     
     # determine the 2 side of the polygon ( top/bottom = tahe[0]/tahe[-1])
-    # vl and vr are 2 director vector lying on the polygon side.
+    #vl and vr are 2 director vector lying on the polygon side.
     if not (geu.ccw(pta[:,0],phe[:,0],phe[:,-1]) ^
             geu.ccw(phe[:,0],phe[:,-1],pta[:,-1]) ):
         vr = ( pta[:,0],pta[:,-1])
@@ -414,7 +414,7 @@ def valid(lsig,L,tahe=[]):
 
     # looking situation where Tail and head are not inside the polygon
     # => both tahe are left of vr and vl
-    # =>   both tahe are right of vr and vl
+    #=>   both tahe are right of vr and vl
     lta = geu.isleft(pta[:,1:-1],vl[0][:,None],vl[1][:,None])
     rta = geu.isleft(pta[:,1:-1],vr[0][:,None],vr[1][:,None])
     lhe = geu.isleft(phe[:,1:-1],vl[0][:,None],vl[1][:,None])
@@ -423,7 +423,7 @@ def valid(lsig,L,tahe=[]):
     out = (lta & lhe ) | (~rta & ~rhe)
     inside = ~out
 
-    # # debug
+    # #debug
     # plt.ion()
     # plt.gcf()
     # #plt.title(str(cond))
@@ -2784,12 +2784,12 @@ class Signatures(PyLayers,dict):
 
                 # if source and target interaction are different
                 # and R | T
-                #if ((type(eval(s))==tuple) & (s != t)):
+                # if ((type(eval(s))==tuple) & (s != t)):
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
-                # R is a list which contains reflextion matrices(Sn) and translation matrices(vn)
-                # for mirror
-                # R=[[S0,v0],[S1,v1],...]
+                # R is a list which contains reflextion matrices(Sn) and translation matrices(vn)
+                # for mirror
+                # R=[[S0,v0],[S1,v1],...]
                 R=[(np.eye(2),np.array([0,0]))]
 
                 if (s != t):
@@ -2869,18 +2869,18 @@ class Signatures(PyLayers,dict):
                                 # and a translation vector for doing the mirroring 
                                 # operation
 
-                                # diff
+                                #diff
                                
                                 if len(visited[-2]) == 1:
                                     th = self.L.Gs.pos[seg]
                                     th = np.array([th,th])
                                     R.append((np.eye(2),np.array([0,0])))
 
-                                # refl
+                                #refl
                                 if len(visited[-2])==2 and len(visited)> 2:
 
                                     pts = self.L.Gs[seg].keys()
-                                    # th (Npt x xy)
+                                    #th (Npt x xy)
                                     th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
                                     R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
   
@@ -3051,9 +3051,9 @@ class Signatures(PyLayers,dict):
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
             else:
                 tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
-            # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-            # for mirroring 
-            # R=[[S0,v0],[S1,v1],...]
+            #R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
+            #for mirroring 
+            #R=[[S0,v0],[S1,v1],...]
             R = [(np.eye(2),np.array([0,0]))]
 
             visited = [s]
@@ -3103,7 +3103,7 @@ class Signatures(PyLayers,dict):
                         # and a translation vector for doing the mirroring 
                         # operation
 
-                        # diffraction (retrieve a point)
+                        #diffraction (retrieve a point)
                         if len(visited[-2]) == 1:
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
@@ -3112,7 +3112,7 @@ class Signatures(PyLayers,dict):
                         if len(visited[-2])==2:
 
                             pts = self.L.Gs[nstr].keys()
-                            # th (Npt x xy)
+                            #th (Npt x xy)
                             th = np.array([self.L.Gs.pos[pts[0]],
                                            self.L.Gs.pos[pts[1]]])
                             # reverse order
@@ -3886,13 +3886,13 @@ class Signatures(PyLayers,dict):
             pt = np.empty((2,2,nsig,ninter))
 
 
-            # 1 negative points
+            #1 negative points
             # seek for diffraction 
             # negative index points are diffraction points
             upoint = np.where(nid<0)
             unipoint,idx = np.unique(nid[upoint],return_inverse=True)
 
-            # get their coordinates
+            #get their coordinates
             upointcoord = self.L.iupnt[-unipoint]
             pointcoord = self.L.pt[:,upointcoord]
 
@@ -3908,8 +3908,8 @@ class Signatures(PyLayers,dict):
                 pass
 
 
-            # 2 poisive points
-            # seek for segments
+            #2 poisive points
+            #seek for segments
             useg = np.where(nid>0)
             # removing duplicates ( for increasing speed)
             uniseg,idxp = np.unique(nid[useg],return_inverse=True)
@@ -4091,13 +4091,13 @@ class Signatures(PyLayers,dict):
             # 3 : nb interactions
             pt = np.nan*np.empty((2,2,nsig,ninter))
 
-            # 1 negative points
+            #1 negative points
             # seek for diffraction 
             # negative index points are diffraction points
             upoint = np.where(nid<0)
             unipoint,idxpt = np.unique(nid[upoint],return_inverse=True)
 
-            # get their coordinates
+            #get their coordinates
             upointcoord = self.L.iupnt[-unipoint]
             pointcoord = self.L.pt[:,upointcoord]
 
@@ -4109,8 +4109,8 @@ class Signatures(PyLayers,dict):
                 pass
 
 
-            # 2 poisive points
-            # seek for segments
+            #2 poisive points
+            #seek for segments
             useg = np.where(nid>0)
             # removing duplicates ( for increasing speed)
             uniseg,idxseg = np.unique(nid[useg],return_inverse=True)

@@ -117,7 +117,13 @@ class Inter(PyLayers):
 
     """
 
-    def __init__(self, typ=0, data=np.array(()), idx=[], _filemat='matDB.ini',_fileslab='slabDB.ini'):
+    def __init__(self, 
+            typ=0, 
+            data=np.array(()), 
+            idx=[],
+            _filemat='matDB.ini',
+            _fileslab='slabDB.ini',
+            slab={}):
         """ Inter object constructor
 
         Parameters
@@ -128,14 +134,17 @@ class Inter(PyLayers):
         idx : list
         _filemat : string
         _fileslab : string
+        slab : SlabDB
 
         """
 
         self.typ = typ
         self.data = data
         self.idx = idx
-
-        self.slab = SlabDB(filemat=_filemat, fileslab=_fileslab)
+        if slab=={}:
+            self.slab = SlabDB(filemat=_filemat, fileslab=_fileslab)
+        else:
+            self.slab = slab
 
         self.idx = []
         if idx != []:
@@ -291,10 +300,10 @@ class Interactions(Inter,dict):
 
     """
 
-    def __init__(self):
+    def __init__(self,slab={}):
         """ object constructor
         """
-        Inter.__init__(self)
+        Inter.__init__(self,slab=slab)
         self['B'] = []
         self['L'] = []
         self[''] = []
@@ -415,40 +424,40 @@ class Interactions(Inter,dict):
 
         # evaluate R and fill I
         if len(self.R.data)!=0:
-            try:
-                self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
-                self.sout[self.R.idx] = self.R.sout
-                self.si0[self.R.idx] = self.R.si0
-                self.alpha[self.R.idx] = self.R.alpha
-                self.gamma[self.R.idx] = self.R.gamma
-            except:
-                print Warning('Warning Interaction.eval: No R interaction Evaluated,\
-whereas Reflection rays found')
+            #try:
+            self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
+            self.sout[self.R.idx] = self.R.sout
+            self.si0[self.R.idx] = self.R.si0
+            self.alpha[self.R.idx] = self.R.alpha
+            self.gamma[self.R.idx] = self.R.gamma
+            #except:
+            #    print Warning('Warning Interaction.eval: No R interaction Evaluated,\ whereas Reflection rays found')
+            #    pdb.set_trace()
         # evaluate T and fill I
         if len(self.T.data)!=0:
-            try:
-                self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
-                self.sout[self.T.idx] = self.T.sout
-                self.si0[self.T.idx] = self.T.si0
-                self.alpha[self.T.idx] = self.T.alpha
-                self.gamma[self.T.idx] = self.T.gamma
+            #try:
+            self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
+            self.sout[self.T.idx] = self.T.sout
+            self.si0[self.T.idx] = self.T.si0
+            self.alpha[self.T.idx] = self.T.alpha
+            self.gamma[self.T.idx] = self.T.gamma
 
-            except:
-                print Warning('Warning Interaction.eval: No T interaction Evaluated,\
-whereas Transmission rays found')
+            #except:
+            #     print Warning('Warning Interaction.eval: No T interaction Evaluated,\ whereas Transmission rays found')
+            #    pdb.set_trace()
         # evaluate D and fill I
 
         if len(self.D.data)!=0:
-            try:
-                self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
-                self.sout[self.D.idx] = self.D.sout
-                self.si0[self.D.idx] = self.D.si0
+            #try:
+            self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
+            self.sout[self.D.idx] = self.D.sout
+            self.si0[self.D.idx] = self.D.si0
 
                 # self.alpha[self.D.idx] = self.D.alpha
                 # self.gamma[self.D.idx] = self.D.gamma
-            except:
-                print Warning('Warning Interaction.eval: No D interaction Evaluated,\
-whereas Diffraction rays found')
+            #except:
+            #    print Warning('Warning Interaction.eval: No D interaction Evaluated,\ whereas Diffraction rays found')
+            #    pdb.set_trace()
 
         self.evaluated = True
 
@@ -479,8 +488,8 @@ class IntB(Inter):
         The interaction object is np.array with shape (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()), idx=[]):
-        Inter.__init__(self, data=data, idx=idx, typ=-1)
+    def __init__(self, data=np.array(()), idx=[],slab={}):
+        Inter.__init__(self, data=data, idx=idx, typ=-1,slab=slab)
 
     def __repr__(self):
         s = 'number of B basis :' + str(np.shape(self.data)[0])
@@ -609,11 +618,11 @@ class IntR(Inter):
 
 
     """
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],slab={}):
 #        self.theta = data[0]
 #        self.si = data[1]
 #        self.sr = data[2]
-        Inter.__init__(self, data=data, idx=idx, typ=2)
+        Inter.__init__(self, data=data, idx=idx, typ=2,slab=slab)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index of self.idx
@@ -708,6 +717,8 @@ class IntR(Inter):
                 ut = self.data[self.dusl[m], 0]
                 if not ut.size == 0:
                     # find the index of angles which satisfied the data
+                    #if m not in self.slab:
+                    #    m = m.lower()
                     self.slab[m].ev(fGHz=fGHz, theta=ut, RT='R')
                     try:
                         R = np.concatenate((R, self.slab[m].R), axis=1)
@@ -738,9 +749,9 @@ class IntT(Inter):
 
     """
 
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],slab={}):
 
-        Inter.__init__(self, data=data, idx=idx, typ=3)
+        Inter.__init__(self, data=data, idx=idx, typ=3,slab=slab)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
@@ -778,7 +789,7 @@ class IntT(Inter):
         array([ 0.1 ,  4.  ,  3.15])
         >>> T.stack(data2,idx=1)
         >>> T.uslidx=1
-        >>> T.dusl['WOOD']=[0,1]
+        >>> T.dusl['AIR']=[0,1]
 
         >>> # evaluation parameters (normally read from config.ini)
         >>> T.f = np.array([  2.,  11.])
@@ -793,8 +804,8 @@ class IntT(Inter):
         >>> np.shape(eT)
         (1, 2, 2, 2)
         >>> eT[0,0]
-        array([[-0.94187991+0.26299468j,  0.00000000+0.j        ],
-               [ 0.00000000+0.j        , -0.94234012+0.26232713j]])
+        array([[ 1.+0.j,  0.+0.j],
+               [ 0.+0.j,  1.+0.j]])
         """
 
         self.sinsout()
@@ -816,6 +827,8 @@ class IntT(Inter):
                 # used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
                 if ut.size != 0:
+                    #if m not in self.slab:
+                    #    m = m.lower()
                     # get alpha and gamma for divergence factor
                     if len(self.slab[m]['lmat']) > 1:
                         print 'Warning : IntR class implemented for mat with only 1 layer '
@@ -854,9 +867,8 @@ class IntT(Inter):
 class IntD(Inter):
     """ diffraction interaction class
     """
-    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
-
-        Inter.__init__(self, data=data, idx=idx, typ=1)
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4]),slab={}):
+        Inter.__init__(self, data=data, idx=idx, typ=1,slab=slab)
         self.dusl = {}
     def __repr__(self):
         s = 'number of D interaction :' + str(np.shape(self.data)[0])

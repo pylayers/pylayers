@@ -15,21 +15,7 @@ setup(name='pylayers' ,
       url='https://github.com/pylayers/pylayers',
       include_dirs = [numpy.get_include()],
       install_requires=[
-        'numpy>=1.9.0',
-        'scipy>=0.17.1',
-        'networkx>=1.10',
-        'matplotlib>=1.5.0',
-        'SimPy==2.2',
-        'PIL>=1.1.7',
-        'bitstring>=3.1.3',
-        'descartes>=1.0.1',
-        'osmapi>=0.3.1',
-        'GDAL>=2.0.0',
-        'h5py>=2.5.0',
-        'seaborn>=0.7.0',
-        'basemap>=1.0.7',
-        'protobuf==2.6.1',
-        'mayavi>=4.4.0'
+        
 
 
 

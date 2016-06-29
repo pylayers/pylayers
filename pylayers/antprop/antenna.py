@@ -1016,7 +1016,7 @@ class Pattern(PyLayers):
             fig = kwargs['fig']
 
         if 'ax' not in kwargs:
-            #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
+            #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, facecolor='#d5de9c')
             if kwargs['polar']:
                 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
             else:
@@ -1288,6 +1288,10 @@ class Antenna(Pattern):
 
         if 'fGHz' in kwargs:
             self.fGHz=kwargs['fGHz']
+
+        # mayavi selection
+        self._is_selected=False
+
 
         self.source = kwargs['source']
 
@@ -2199,7 +2203,7 @@ class Antenna(Pattern):
 
     #@mlab.show
     def _show3(self,newfig = True,colorbar =True,
-                    name=[],title=True,**kwargs ):
+                    name=[],interact=False,title=True,**kwargs ):
         """ show3 mayavi
 
         fGHz : float
@@ -2208,6 +2212,15 @@ class Antenna(Pattern):
             display title
         colorbar :
             display colorbar
+        interact :
+            enable interactive mode
+
+
+        see also
+        --------
+
+        antprop.antenna._computemesh
+
         """
 
 
@@ -2244,6 +2257,20 @@ class Antenna(Pattern):
             mlab.colorbar()
         if title:
             mlab.title(self._filename + ' @ ' + str(self.fGHz[k]) + ' GHz',height=1,size=0.5)
+
+        if interact:
+            self._outline = mlab.outline(self._mayamesh, color=(.7, .7, .7))
+            self._outline.visible=False
+            def picker_callback(picker):
+                """ Picker callback: this get called when on pick events.
+                """
+                if picker.actor in self._mayamesh.actor.actors:
+                    self._outline.visible = not self._outline.visible
+                    self._is_selected=self._outline.visible
+            picker = f.on_mouse_pick(picker_callback)
+
+
+
 
     def _computemesh(self,**kwargs):
         """ compute mesh from theta phi

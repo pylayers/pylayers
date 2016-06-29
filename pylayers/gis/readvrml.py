@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 
 Utility Functions

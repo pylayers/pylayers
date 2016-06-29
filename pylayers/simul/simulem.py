@@ -17,31 +17,6 @@ Utility Functions
      rename
      spafile
 
-Palch class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    Palch.__init__
-    Palch.info
-    Palch.info2
-    Palch.load
-    Palch.save
-    Palch.gui
-
-Patra class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-     Patra.__init__
-     Patra.info
-     Patra.load
-     Patra.save
-     Patra.gui
-
 Pafreq class
 =============
 
@@ -56,27 +31,6 @@ Pafreq class
 
 
 
-Patud class
-============
-
-.. autosummary::
-    :toctree: generated/
-
-     Patud.__init__
-     Patud.info
-     Patud.gui
-
-
-Launch class
-============
-
-.. autosummary::
-    :toctree: generated/
-
-     Launch.info
-     Launch.choose
-     Launch.load
-     Launch.show
 
 Simul class
 ============
@@ -217,488 +171,6 @@ def spafile(_filename, point, sdir):
     fspa.close()
 
 
-class Palch(object):
-    """ Launching parameters class
-
-    Methods
-    -------
-
-    info
-    load
-        load from Project launch directory
-    save
-        save to Project launch directory
-    gui
-
-    """
-    def __init__(self, filename):
-        self.filename = filename
-        self.load()
-
-    def info(self):
-        """ display information
-        """
-        print "----------------------------------------------"
-        print "            Launching Parameter               "
-        print "----------------------------------------------"
-
-        print "angTx      : Tx angular step ( degrees)     : ", self.angTx
-        print "ISBang     : ISB angular sector ( degrees ) : ", self.ISBang
-        print "ethreshold : Exploration Threshold (linear) : ", self.ethreshold
-        print "maxdeep    : Tree deep max (integer value)  : ", self.maxdeep
-        print "typalgo    : Type of algo (default 0)       : ", self.typalgo
-
-    def info2(self):
-        for i, j in enumerate(self.__dict__.keys()):
-            print j, ':', self.__dict__.values()[i]
-
-    def load(self):
-        filepalch = pyu.getlong(self.filename, pstruc['DIRTUD'])
-        fi = open(filepalch)
-        l = fi.read()
-        u = l.split()
-        self.angTx = eval(u[0])
-        self.ISBang = eval(u[1])
-        self.ethreshold = eval(u[2])
-        self.maxdeep = eval(u[3])
-        self.typalgo = eval(u[4])
-        fi.close()
-
-    def save(self):
-        filepalch = pyu.getlong(self.filename, pstruc['DIRTUD'])
-        fi = open(filepalch, 'w')
-        fi.write(str(self.angTx) + '\n')
-        fi.write(str(self.ISBang) + '\n')
-        fi.write(str(self.ethreshold) + '\n')
-        fi.write(str(self.maxdeep) + '\n')
-        fi.write(str(self.typalgo) + '\n')
-        fi.close()
-
-    def gui(self):
-        """
-        Get the Launching parameter .palch
-        """
-        palchgui = multenterbox('', 'Launching Parameter',
-                                ('Tx angular step (degrees)',
-                                 'ISB angular sector (degrees)',
-                                 'Exploration threshold (linear)',
-                                 'Tree deep max (integer value)',
-                                 'type of algo (default 0)'),
-                                (self.angTx, self.ISBang, self.ethreshold,
-                                 self.maxdeep, self.typalgo))
-
-        if palchgui is not None:
-            self.angTx = eval(palchgui[0])
-            self.ISBang = eval(palchgui[1])
-            self.ethreshold = eval(palchgui[2])
-            self.maxdeep = eval(palchgui[3])
-            self.typalgo = eval(palchgui[4])
-            self.save()
-
-
-class Patra(object):
-    """
-    Tracing parameters class
-    """
-    def __init__(self, filename):
-        self.filename = filename
-        self.load()
-
-    def info(self):
-        print "----------------------------------------------"
-        print "            Tracing  Parameter                "
-        print "----------------------------------------------"
-        print "Max deep     : ", self.maxdeep
-        print "distdiff     : ", self.distdiff
-        print "var2D3D  0=2D 1=3D    : ", self.var2D3D
-        for i, j in enumerate(self.__dict__.keys()):
-            print j, ':', self.__dict__.values()[i]
-
-    def load(self):
-        filepatra = pyu.getlong(self.filename, pstruc['DIRTRA'])
-        fi = open(filepatra)
-        l = fi.read()
-        u = l.split()
-        self.maxdeep = eval(u[0])
-        self.distdiff = eval(u[1])
-        self.var2D3D = eval(u[2])
-
-    def save(self):
-        """ save
-        """
-        filepatra = pyu.getlong(self.filename, pstruc['DIRTRA'])
-        fi = open(filepatra, 'w')
-        fi.write(str(self.maxdeep) + '\n')
-        fi.write(str(self.distdiff) + '\n')
-        fi.write(str(self.var2D3D) + '\n')
-        fi.close()
-
-    def gui(self):
-        """ get the Launching parameter .palch
-        """
-        patragui = multenterbox('', 'Launching Parameter',
-                                ('Max Deep ',
-                                 'DistDiff',
-                                 '2D3D '),
-                                (self.maxdeep, self.distdiff, self.var2D3D))
-        if patragui is not None:
-            self.maxdeep = eval(patragui[0])
-            self.distdiff = eval(patragui[1])
-            self.var2D3D = eval(patragui[2])
-            self.save()
-
-
-class Pafreq(object):
-    """ frequency setting
-    """
-    def __init__(self, filename):
-        self.filename = filename
-        self.load()
-
-    def info(self):
-        """ display frequency range information
-        """
-        print "----------------------------------------------"
-        print "    Channel frequency range                   "
-        print "----------------------------------------------"
-        print "fGHz min : ", self.fghzmin
-        print "fGHz max : ", self.fghzmax
-        print "Number of points : ", self.nf
-
-    def load(self):
-        filefreq = pyu.getlong(self.filename, pstruc['DIRTUD'])
-        fi = open(filefreq)
-        l = fi.read()
-        u = l.split()
-        self.fghzmin = eval(u[0])
-        self.fghzmax = eval(u[1])
-        self.nf = eval(u[2])
-
-    def save(self):
-        filefreq = pyu.getlong(self.filename, pstruc['DIRTUD'])
-        fi = open(filefreq, 'w')
-        fi.write(str(self.fghzmin) + ' ')
-        fi.write(str(self.fghzmax) + ' ')
-        fi.write(str(self.nf) + '\n')
-        fi.close()
-
-    def gui(self):
-        """
-        Get the Launching parameter .palch
-        """
-        pafreqgui = multenterbox('', 'Propagation Channel frequency ',
-                                 ('fp_min (GHz) ',
-                                  'fp_max (GHz) ',
-                                  'nfp  '),
-                                 (self.fghzmin, self.fghzmax, self.nf))
-        if pafreqgui is not None:
-            self.fghzmin = eval(pafreqgui[0])
-            self.fghzmax = eval(pafreqgui[1])
-            self.nf = eval(pafreqgui[2])
-            self.save()
-
-
-class Patud(object):
-    """ tratotud parameters
-    """
-    def __init__(self, purc=100, num=-1, nrmax=500):
-        self.purc = purc
-        self.num = num
-        self.nrmax = nrmax
-
-    def info(self):
-        """ info
-
-        Examples
-        --------
-        >>> from pylayers.simul.simulem import *
-        >>> p=Patud()
-        >>> p.info()
-
-        """
-        print "----------------------------------------------"
-        print "            tratotud  parameters              "
-        print "----------------------------------------------"
-        print "num (-1 all rays) : ", self.num
-        print "nrmax : ", self.nrmax
-        print "purc : ", self.purc
-
-    def gui(self):
-        """ gui for tratotud parameters
-        """
-        tudgui = multenterbox('', 'Launching Parameter',
-                              ('num',
-                               'nrmax',
-                               'purc'),
-                              (self.num, self.nrmax, self.purc))
-        self.num = eval(tudgui[0])
-        self.nrmax = eval(tudgui[1])
-        self.purc = eval(tudgui[2])
-
-
-class Launch(object):
-    """ container to handle data from .lch files
-
-    Attributes
-    ----------
-
-    Tx        array 1x3
-    Ray_exist
-    nstr
-    deep
-    x
-    y
-    node_phii
-    node_phir
-    edge_length
-    edge_type
-    tail
-    head
-
-
-    Methods
-    ------
-    load      : load a .lch file
-    show      : view a .lch file
-    info      : info about .lch
-    launching :
-
-    """
-    def info(self):
-        """ get __dict__ info
-        """
-        print len(self.x)
-        print len(self.tail)
-        for i, j in enumerate(self.__dict__.keys()):
-            print j, ':', self.__dict__.values()[i]
-
-    def choose(self):
-        """ Choose a Launching  file in launchdir
-
-        """
-        import tkFileDialog
-        FD = tkFileDialog
-        filelch = FD.askopenfilename(filetypes=[("Fichiers Launching ", "*.lch"),
-                                                ("All", "*")],
-                                     title="Please choose a Launching file",
-                                     initialdir=lchdir)
-        _filelch = pyu.getshort(filelch)
-        self.load(_filelch)
-
-    def load(self, _filelch):
-        """ load a .lch file
-
-        Parameters
-        ----------
-        _filelch : string
-        """
-
-        filelch = pyu.getlong(_filelch, pstruc['DIRLCH'])
-        fd = open(filelch, "rb")
-        data = fd.read()
-        fd.close()
-
-        start = 0
-        stop = start + 1024
-        dt = data[start:stop]
-        filestr = dt.replace("\x00", "")
-        self.filestr = pyu.getshort(filestr)
-
-        start = stop
-        stop = start + 1024
-        dt = data[start:stop]
-        fileslab = dt.replace("\x00", "")
-        self.fileslab = pyu.getshort(fileslab)
-
-        start = stop
-        stop = start + 1024
-        dt = data[start:stop]
-        filepalch = dt.replace("\x00", "")
-        self.filepalch = pyu.getshort(filepalch)
-
-        start = stop
-        stop = start + 1024
-        dt = data[start:stop]
-        filespa = dt.replace("\x00", "")
-        self.filespa = pyu.getshort(filespa)
-
-        self.Tx = np.array([0.0, 0.0, 0.0])
-        start = stop
-        stop = start + 8
-        dt = data[start:stop]
-        self.Tx[0] = stru.unpack('d', dt)[0]
-
-        start = stop
-        stop = start + 8
-        dt = data[start:stop]
-        self.Tx[1] = stru.unpack('d', dt)[0]
-
-        start = stop
-        stop = start + 8
-        dt = data[start:stop]
-        self.Tx[2] = stru.unpack('d', dt)[0]
-
-        start = stop
-        stop = start + 4
-        dt = data[start:stop]
-        self.Ray_exist = stru.unpack('i', dt)[0]
-
-        start = stop
-        stop = start + 4
-        dt = data[start:stop]
-        self.node_num = stru.unpack('i', dt)[0]
-        node_num = self.node_num
-
-        self.tail = np.zeros(node_num - 1, dtype='int')
-        self.head = np.zeros(node_num - 1, dtype='int')
-        self.nstr = np.zeros(node_num, dtype='int')
-        self.deep = np.zeros(node_num, dtype='int')
-        self.x = np.zeros(node_num, dtype='float')
-        self.y = np.zeros(node_num, dtype='float')
-        self.node_phii = np.zeros(node_num, dtype='float')
-        self.node_phid = np.zeros(node_num, dtype='float')
-        self.edge_length = np.zeros(node_num - 1, dtype='float')
-        self.edge_type = np.zeros(node_num - 1, dtype='float')
-
-        for k in range(node_num - 1):
-            start = stop
-            stop = start + 4
-            dt = data[start:stop]
-            self.tail[k] = stru.unpack('i', dt)[0]
-
-        for k in range(node_num - 1):
-            start = stop
-            stop = start + 4
-            dt = data[start:stop]
-            self.head[k] = stru.unpack('i', dt)[0]
-
-        for k in range(node_num):
-            start = stop
-            stop = start + 4
-            dt = data[start:stop]
-            self.nstr[k] = stru.unpack('i', dt)[0]
-
-        for k in range(node_num):
-            start = stop
-            stop = start + 4
-            dt = data[start:stop]
-            self.deep[k] = stru.unpack('i', dt)[0]
-
-        for k in range(node_num):
-            start = stop
-            stop = start + 8
-            dt = data[start:stop]
-            self.x[k] = stru.unpack('d', dt)[0]
-
-        for k in range(node_num):
-            start = stop
-            stop = start + 8
-            dt = data[start:stop]
-            self.y[k] = stru.unpack('d', dt)[0]
-
-        for k in range(node_num):
-            start = stop
-            stop = start + 8
-            dt = data[start:stop]
-            self.node_phii[k] = stru.unpack('d', dt)[0]
-
-        for k in range(node_num):
-            start = stop
-            stop = start + 8
-            dt = data[start:stop]
-            self.node_phid[k] = stru.unpack('d', dt)[0]
-
-        for k in range(node_num - 1):
-            start = stop
-            stop = start + 8
-            dt = data[start:stop]
-            self.edge_length[k] = stru.unpack('d', dt)[0]
-
-        for k in range(node_num - 1):
-            start = stop
-            stop = start + 4
-            dt = data[start:stop]
-            self.edge_type[k] = stru.unpack('i', dt)[0]
-
-    def show(self, L, deepmax=1 ,f = []):
-        """ show ray launching until a given depth
-
-        Parameters
-        ----------
-
-        L        : Layout
-        deepmax  : display until deepmax (def=1)
-
-        Returns
-        -------
-        fig : pyplot figure descriptor
-        ax  : pyplot Axes descriptor
-
-        """
-#        sl = SlabDB()
-#        sl.mat = MatDB()
-#        sl.mat.load(self.fileslab.replace('.slab', '.mat'))
-#        sl.load(self.fileslab)
-        #L      = Layout()
-        #L.sl   = sl
-        #G      = Graph(sl,filename=self.filestr)
-        #fig    = figure(facecolor='white')
-        #sp     = fig.add_subplot(111)
-        if f == []:
-            fig = plt.gcf()
-        fig, ax = L.showGs(fig = f,ax=plt.gca())
-        #indoor.display['Visu']=False
-        #indoor.display['alpha']=1.0
-        #indoor.display['Node']=True
-        #indoor.display['Edge']=True
-        #indoor.show(fig,sp)
-
-        Nseg = self.node_num - 1
-        ita = self.tail - 1
-        ihe = self.head - 1
-        sdeep = self.deep[1::]
-        usdeep = np.unique(sdeep)
-        Mdeep = max(usdeep)
-        plt.axis('scaled')
-        plt.axis('off')
-        fig = plt.gcf()
-        ax = plt.gca()
-        for k in usdeep:
-            if k <= deepmax:
-                u = np.nonzero(sdeep == k)
-                itak = ita[u[0]]
-                ihek = ihe[u[0]]
-                pt = np.vstack((self.x[itak], self.y[itak]))
-                ph = np.vstack((self.x[ihek], self.y[ihek]))
-                fig, ax = plu.displot(pt, ph, str(k / (1.0 * Mdeep)))
-        return fig, ax
-        """
-        pz   =  empty((2,))
-        pn   = zeros((2,))
-        for i in range(Nseg):
-            pz = vstack((pz,pt[:,i],ph[:,i],pn))
-            m1   = np.array([0,0,1])
-                mask = np.kron(ones((2,Nseg)),m1)
-                pzz  = pz[1:,:].T
-                vertices = np.ma.masked_np.array(pzz,mask)
-                plot(vertices[0,:],vertices[1,:],color='black')
-                show()
-
-
-        for i in range(self.node_num-1):
-            ita = self.tail[i]-1
-            ihe = self.head[i]-1
-            xt = self.x[ita]
-            yt = self.y[ita]
-            xh = self.x[ihe]
-            yh = self.y[ihe]
-            plot([xt,xh],[yt,yh],color='black',linewidth=1)
-
-        show()
-        """
-
-
-
 
 class Simul(PyLayers):
     """ Simulation Class
@@ -720,8 +192,6 @@ class Simul(PyLayers):
         get .str2 file (ASCII description structure)
     freq()
         return the frequency base
-    getlaunch(k)
-        return the launching tree kth Transmittter
     save()
         save Simulation file
     layout
@@ -734,14 +204,6 @@ class Simul(PyLayers):
         geomview vizualization of link itx irx
     show()
         2D visualization of simulation with furniture
-    launching()
-        ray launching
-    tracing(k)
-        ray tracing
-    tratotud(k,l)
-        convert ray for tud
-    field(l)
-        evaluate field
     run(itx,irx)
         run simulation for links (itx,irx)
     cir(itx,irx,store_level=0,alpha=1.0)
@@ -752,15 +214,7 @@ class Simul(PyLayers):
     ----------
 
     fileconf
-    filestr
-    filemat
-    fileslab
-    filepalch
-    filepatra
-    filefreq
 
-
-    filefield
     filetauk
     filetang
     filerang
@@ -805,15 +259,10 @@ class Simul(PyLayers):
         self.filesimul = _filesimul
         self.config = ConfigParser.ConfigParser()
         self.config.add_section("files")
-        self.config.add_section("tud")
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
 
-        self.dout = {}
-        self.dlch = {}
-        self.dtra = {}
-        self.dtud = {}
         self.dtang = {}
         self.drang = {}
         self.dtauk = {}
@@ -821,13 +270,6 @@ class Simul(PyLayers):
         self.dcir = {}
         self.output = {}
 
-        #if os.path.isfile(pyu.getlong(_filesimul,'ini')):
-        self.filematini = "matDB.ini"
-        self.fileslabini = "slabDB.ini"
-        self.filemat = self.filematini.replace('.ini','.mat')
-        self.fileslab = self.fileslabini.replace('.ini','.slab')
-        self.slab=SlabDB(self.filematini, self.fileslabini)
-        self.filestr = 'defstr.str2'
         #
         # Here was a nasty bug : Rule for the future
         #    "Always precise the key value of the passed argument"
@@ -838,46 +280,31 @@ class Simul(PyLayers):
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
                             _fileant = 'defant.vsh3',
-                            _filestr = self.filestr)
+                            )
 
         self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
                             _fileant = 'defant.vsh3',
-                            _filestr = self.filestr)
+                            )
 
-        self.filepatra = "def.patra"
-        self.filepalch = "def.palch"
         self.filefreq = "def.freq"
-        self.patud = Patud()
-        self.palch = Palch(self.filepalch)
-        self.patra = Patra(self.filepatra)
-        self.pafreq = Pafreq(self.filefreq)
 
         self.progress = -1  # simulation not loaded
-        self.filelch = []
 
-        self.filetra = []
-        self.filetud = []
         self.filetang = []
         self.filerang = []
         self.filetauk = []
         self.filefield = []
 
-        self.claunching = []
-        self.ctracing = []
-        self.ctratotud = []
         self.fileconf = "project.conf"
         self.cfield = []
-#        self.freq = np.linspace(2, 11, 181, endpoint=True)
         self.fGHz = np.linspace(2, 11, 181, endpoint=True)
         self.wav = wvf.Waveform()
         try:
             self.load(_filesimul)
         except:
             pass
-            #self.updcfg()
-        #self.load(self.filesimul)
 
 
     def gui(self):
@@ -912,8 +339,6 @@ class Simul(PyLayers):
         """
         self.config.set("files", "struc", self.filestr)
         self.config.set("files", "conf", self.fileconf)
-        self.config.set("files", "patra", self.filepatra)
-        self.config.set("files", "palch", self.filepalch)
         self.config.set("files", "txant", self.tx.fileant)
         self.config.set("files", "rxant", self.rx.fileant)
         self.config.set("files", "tx", self.tx.fileini)
@@ -1483,7 +908,7 @@ class Simul(PyLayers):
         self.wav = wvf.Waveform()
         self.wav.read(self.config)
 
-    def layout(self, _filestruc, _filematini='matDB.ini', _fileslabini='slabDB.ini'):
+    def layout(self, _filestruc):
         """ load a layout in the simulation oject
 
         Parameters
@@ -1491,10 +916,6 @@ class Simul(PyLayers):
 
         _filestruc : string
             short file name of the Layout object
-        _filematini   : string
-            short file name of the Mat object  (default matDB.ini)
-        _fileslab  : string
-            short file name of the Slab object (default slabDB.ini)
 
         Examples
         --------
@@ -1505,14 +926,10 @@ class Simul(PyLayers):
 
         """
         self.filestr = _filestruc
-        self.filematini = _filematini
-        self.fileslabini = _fileslabini
 
-        self.L = Layout(_filestruc,_filematini, _fileslabini)
+        self.L = Layout(_filestruc)
         # update config
         self.config.set("files", "struc", self.filestr)
-        self.config.set("files", "slab", self.fileslabini)
-        self.config.set("files", "mat", self.filematini)
         self.save()
 
     def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
