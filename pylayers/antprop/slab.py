@@ -1787,9 +1787,11 @@ class SlabDB(dict):
             self.mat = MatDB(_fileini=filemat,dm=dm)
             for slabname in ds:
                 S = Slab(name=slabname,mat=self.mat)
+
                 for k in ds[slabname]:
                     S[k]=ds[slabname][k]
                 S['nmat']=len(ds[slabname]['lmatname'])
+                S.conv()
                 self[slabname]=S
 
         self.dass()
