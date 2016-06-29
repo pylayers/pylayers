@@ -1709,7 +1709,7 @@ class Layout(PyLayers):
                     if self._hash != self.Gt.node[0]['hash']:
                         rebuild = True 
                     else:
-                        self.dumpr('tvirw')
+                        self.dumpr('stvirw')
                 else: 
                     rebuild = True
 
