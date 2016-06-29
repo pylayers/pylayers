@@ -171,7 +171,7 @@ class Rays(PyLayers,dict):
                     s = s + str(k) + ': '+ str(self[k]['sig'][0,:])+'\n'
                     #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
         except:
-            print "problem"
+            print "problem in _repr__"
             return(s)
 
         return(s)
