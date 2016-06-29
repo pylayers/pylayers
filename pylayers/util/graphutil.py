@@ -89,13 +89,13 @@ def draw(G,**kwargs):
     #
 
     if kwargs['fig'] == []:
-        fig = plt.figure(figsize=kwargs['figsize'])
+        fig = plt.figure(figsize=kwargs['figsize'],facecolor='white')
         fig.set_frameon(True)
     else:
         fig = kwargs['fig']
 
     if kwargs['ax'] == []:
-        ax = fig.add_subplot(111,facecolor='white')
+        ax = fig.add_subplot(111)
     else:
         ax = kwargs['ax']
 
