@@ -1206,13 +1206,13 @@ class Slab(Interface,dict):
     evaluated : Boolean
 
     """
-    def __init__(self, mat=[], name='NEWSLAB'):
+    def __init__(self, mat=[], name='NEWSLAB',ds={}):
         """ class constructor
 
         Parameters
         ----------
 
-        mat :
+        mat : matdb
         name : string
         slab name
 
@@ -1225,12 +1225,20 @@ class Slab(Interface,dict):
         else:
             self.mat = mat
         self['name'] = name
-        self['index'] = 0
-        # lmatname has to be set before lthick
-        self['lmatname'] = ['AIR']
-        self['lthick'] = [0.1]
-        self['color'] = 'black'
-        self['linewidth'] = 1.0
+        if ds=={}:
+            self['index'] = 0
+            # lmatname has to be set before lthick
+            self['lmatname'] = ['AIR']
+            self['lthick'] = [0.1]
+            self['color'] = 'black'
+            self['linewidth'] = 1.0
+        else:
+            self['index'] = ds['index']
+            # lmatname has to be set before lthick
+            self['lmatname'] = ds['lmatname']
+            self['lthick'] = ds['lthick']
+            self['color'] = ds['color']
+            self['linewidth'] = ds['linewidth']
         self['evaluated'] = False
         self.conv()
 
@@ -1773,6 +1781,7 @@ class SlabDB(dict):
         """
 
         self.fileslab = fileslab
+
         if ds=={}:
             self.mat = MatDB()
             if (filemat != ''):
@@ -1786,9 +1795,10 @@ class SlabDB(dict):
             #self.update(ds)
             self.mat = MatDB(_fileini=filemat,dm=dm)
             for slabname in ds:
-                S = Slab(name=slabname,mat=self.mat)
+                S = Slab(name=slabname,mat=self.mat,ds=ds[slabname])
                 for k in ds[slabname]:
                     S[k]=ds[slabname][k]
+
                 S['nmat']=len(ds[slabname]['lmatname'])
                 self[slabname]=S
 
@@ -2019,6 +2029,7 @@ class SlabDB(dict):
             S['index']=eval(config.get(slabname,'index'))
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
+            S['lmat']=eval(config.get(slabname,'lmat'))
 
             S.conv()
             self[slabname] = S
