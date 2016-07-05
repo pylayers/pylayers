@@ -2073,6 +2073,7 @@ class Rays(PyLayers,dict):
                 # assign floor and ceil slab
                 ############################
 
+
                 slT=L.sla[nstrf[uT]]
                 slR=L.sla[nstrf[uR]]
 

@@ -7,4 +7,5 @@ conda install seaborn --yes
 conda install PIL --yes
 conda install basemap --yes
 pip install protobuf 
+pip install tqdm
 python setup.py install

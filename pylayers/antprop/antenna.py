@@ -257,13 +257,16 @@ class Pattern(PyLayers):
             self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
             self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
             self.grid = True
+            self.full_evaluated = True
         else :
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
             self.phi = kwargs['ph']
+            self.full_evaluated = False
         if self.typ=='azel':
             self.theta=np.linspace(-np.pi,np.pi,360)
             self.phi=np.linspace(-np.pi,np.pi,360)
+            self.full_evaluated = False
         self.nth = len(self.theta)
         self.nph = len(self.phi)
 
@@ -1314,6 +1317,8 @@ class Antenna(Pattern):
 
         self.tau = 0
         self.evaluated = False
+        # determine if pattern for all theta/phi is constructed
+        self.full_evaluated = False
 
         if self.fromfile:
             if isinstance(typ,str):

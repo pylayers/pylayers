@@ -492,7 +492,7 @@ class Bsignal(PyLayers):
         if ndim > 1:
             nl = len(self.y)
             for k in range(nl):
-                ax.stem(self.x, self.y[k], **kwargs)
+                ax.stem(self.x, self.y[k].squeeze(), **kwargs)
         else:
             ax.stem(self.x, self.y,**kwargs)
         return(fig,ax)
@@ -2649,11 +2649,11 @@ class FBsignal(Bsignal):
             for k in range(nl):
 
                 plt.subplot(211)
-                plt.stem(self.x, np.real(self.y[k]), color)
+                plt.stem(self.x, np.real(self.y[k].squeeze()), color)
                 plt.xlabel('Frequency (GHz)')
                 plt.ylabel('real part)')
                 plt.subplot(212)
-                plt.stem(self.x, np.imag(self.y[k]), color)
+                plt.stem(self.x, np.imag(self.y[k].squeeze()), color)
                 plt.xlabel('Frequency (GHz)')
                 plt.ylabel('imaginary part)')
         else:
