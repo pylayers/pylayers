@@ -2030,7 +2030,6 @@ class SlabDB(dict):
             S['index']=eval(config.get(slabname,'index'))
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
-            S['lmat']=eval(config.get(slabname,'lmat'))
 
             S.conv()
             self[slabname] = S

@@ -1069,14 +1069,21 @@ class Layout(PyLayers):
         self.extrseg()
 
 
-    def loadosm(self, _fileosm , typ ='floorplan',cartesian=True):
+    def loadosm(self, **kwargs):
         """ load layout from an osm file 
 
         Parameters
         ----------
 
         _fileosm : string
-
+        adress : string 
+            address to be geocoded
+        latlon : tuple 
+            (latitude,longitude) degrees 
+        dist_m : float
+            distance in meter from the geocoded address
+        cart : boolean 
+            conversion in cartesian coordinates
 
         Notes
         -----
@@ -1093,13 +1100,34 @@ class Layout(PyLayers):
         pylayers.gis.osmparser.osmparse
 
         """
+        defaults = { '_fileosm' : '',
+                    'address' : 'Rennes',
+                    'typ' : 'flooplan',
+                    'latlon' : 0,
+                    'dist_m' : 400,
+                    'cart' : True
+                    }
 
-        self.filename = _fileosm
-        self.coordinates = 'latlon'
-        fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['_fileosm']=='':
+            coords,nodes,ways,m = osm.getosm(typ=kwargs['typ'],
+                                            address=kwargs['address'],
+                                            latlon=kwargs['latlon'],
+                                            dist_m=kwargs['dist_m'],
+                                            cart=kwargs['cart'])
+        else:
+            self.filename = _fileosm
+            fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
+            coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=typ)
+            self.coordinates = 'latlon'
+        
         
         # 2 valid typ : 'floorplan' and 'building' 
-        coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=typ)
+        
+        
 
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
@@ -1648,7 +1676,7 @@ class Layout(PyLayers):
             self.lfur.append(F)
         self.filefur=_filefur
 
-    def load(self,_filename,build=True,cartesian=False):
+    def load(self,arg,build=True,cartesian=False,dist_m=400):
         """ load a Layout in different formats
 
         Parameters
@@ -1659,41 +1687,40 @@ class Layout(PyLayers):
         Notes
         -----
 
-        Available formats are :
-
-        +  .ini   : ini file format (natural one) DIRINI
+        Available file formats are :
+        
         +  .osm   : opens street map format  DIROSM
+        +  .ini   : ini file format (natural one) DIRINI
 
-        (Deprecated format)
-
-        +  .str2  : native Pyray (C implementation) DIRSTRUC
-        +  .str   : binary file with visibility DIRSTRUC
-        layout files are stored in the directory pstruc['DIRxxx']
 
         """
 
 
-        filename,ext=os.path.splitext(_filename)
+        filename,ext=os.path.splitext(arg)
         newfile=False
         if ext=='.osm':
-            filename = pyu.getlong(_filename,pstruc['DIROSM'])
+            filename = pyu.getlong(arg,pstruc['DIROSM'])
             if os.path.exists(filename):
                 self.loadosm(_filename,cartesian=cartesian)
             else:
-                self.filename = _filename
+                self.filename = arg
                 newfile=True
                 print "new file",self.filename
         
         elif ext=='.ini':
-            filename = pyu.getlong(_filename,pstruc['DIRINI'])
+            filename = pyu.getlong(arg,pstruc['DIRINI'])
             if os.path.exists(filename):
-                self.loadini(_filename)
+                self.loadini(arg)
             else:
-                self.filename = _filename
+                self.filename = arg
                 newfile=True
                 print "new file",self.filename
         else:
-            raise NameError('layout filename extension not recognized')
+            if '(' in arg:
+                latlon = eval(arg)
+                self.loadosm(latlon=latlon,dist_m=dist_m,cartesian=cartesian)
+            else:
+                self.loadosm(address=arg,dist_m=dist_m,cartesian=cartesian)
 
        
         
