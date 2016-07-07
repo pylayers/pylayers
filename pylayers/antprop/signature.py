@@ -3886,7 +3886,7 @@ class Signatures(PyLayers,dict):
             pt = np.empty((2,2,nsig,ninter))
 
 
-            #1 negative points
+            # 1 negative points
             # seek for diffraction 
             # negative index points are diffraction points
             upoint = np.where(nid<0)
@@ -3896,7 +3896,7 @@ class Signatures(PyLayers,dict):
             upointcoord = self.L.iupnt[-unipoint]
             pointcoord = self.L.pt[:,upointcoord]
 
-            # ####WARNING BIG TRICK HERE :
+            # #### WARNING BIG TRICK HERE :
             # #### pa and pb are not set as the same value 
             # #### to avoid a singular matrixnext.
             # #### set pa =-pb has no incidence but avoid complex and vain code 
@@ -3908,8 +3908,8 @@ class Signatures(PyLayers,dict):
                 pass
 
 
-            #2 poisive points
-            #seek for segments
+            # 2 positive points
+            # seek for segments
             useg = np.where(nid>0)
             # removing duplicates ( for increasing speed)
             uniseg,idxp = np.unique(nid[useg],return_inverse=True)

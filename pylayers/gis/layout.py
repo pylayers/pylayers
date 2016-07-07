@@ -231,6 +231,7 @@ except:
     print 'Layout:Mayavi is not installed'
 import pdb
 import os
+import time 
 import copy
 import glob
 import pickle
@@ -320,7 +321,8 @@ class Layout(PyLayers):
                       check=True,
                       build=False,
                       verbose=False,
-                      cartesian=True):
+                      cartesian=True,
+                      dist_m = 400):
 
         """ object constructor
 
@@ -420,14 +422,8 @@ class Layout(PyLayers):
 
         self.zmin = 0
 
-        
-        
-        self.load(_filename,build=build,cartesian=cartesian)
+        self.load(_filename,build=build,cartesian=cartesian,dist_m=dist_m)
 
-
-        
-
-    
 
     def __repr__(self):
         st = '\n'
@@ -475,8 +471,8 @@ class Layout(PyLayers):
             st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
         if hasattr(self,'upnt'):
             st = st + "upnt : get point id index from self.pt"+"\n"
-        if hasattr(self,'iupnt'):
-            st = st + "iupnt : get point index in self.pt from point id  "+"\n"
+        #if hasattr(self,'iupnt'):
+        #    st = st + "iupnt : get point index in self.pt from point id  "+"\n"
         if hasattr(self,'lsss'):
             st = st + "lsss : list of segments with sub-segment"+"\n"
         if hasattr(self,'sridess'):
@@ -487,7 +483,7 @@ class Layout(PyLayers):
             st = st + "degree : degree of nodes " +"\n"
         st = st + "\nUseful tip" + "\n----------------\n"
         st = st + "Point p in Gs => p_coord:\n"
-        st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
+        #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
         st = st + "Segment s in Gs => s_ab coordinates \n"
         st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
@@ -856,7 +852,7 @@ class Layout(PyLayers):
         iseg = np.arange(self.Ns)
 
         return np.setdiff1d(iseg, u)
-
+    
     def g2npy(self):
         """ conversion from graphs to numpy arrays
 
@@ -865,7 +861,7 @@ class Layout(PyLayers):
 
         This function updates the following arrays:
 
-        self.pt (2xNp)
+        self.pt   (2xNp)
         self.tahe (2xNs)
         self.tgs
         self.dca  : dictionnary of cycle with an airwall
@@ -884,12 +880,17 @@ class Layout(PyLayers):
 
         #points index
         upnt  = filter(lambda x : x<0,nodes)
-
+        
+        # conversion in numpy array 
         self.upnt = np.array((upnt))
-        utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
-        mutmp = max(utmp[:,0])
-        self.iupnt = -np.ones((mutmp+1),dtype='int')
-        self.iupnt[utmp[:,0]]=utmp[:,1]
+
+        # association 
+        #pdb.set_trace()
+
+        #utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
+        #mutmp = max(utmp[:,0])
+        #self.iupnt = -np.ones((mutmp+1),dtype='int')
+        #self.iupnt[utmp[:,0]]=utmp[:,1]
 
 
         # degree of segment nodes
@@ -909,8 +910,16 @@ class Layout(PyLayers):
 
         if 'AIR' in self.name:
             lairwall+=self.name['AIR']
+        else:
+            self.name['AIR']=[]
+
         if '_AIR' in self.name:
             lairwall+=self.name['_AIR']
+        else:
+            self.name['_AIR']=[]
+
+        # as self.name['AIR'] and self.name['_AIR'] are tested 
+        # we define them as void list if not defined
 
         #
         #  function to count airwall connected to a point
@@ -1068,7 +1077,6 @@ class Layout(PyLayers):
         # calculate extremum of segments
         self.extrseg()
 
-
     def loadosm(self, **kwargs):
         """ load layout from an osm file 
 
@@ -1088,11 +1096,7 @@ class Layout(PyLayers):
         Notes
         -----
 
-        In JOSM nodes are numbered with negative indexes.
-        A positive node number is not valid. To remain compliant with the PyLayers
-        convention which assumes that <0 nodes are points and >0 nodes are segments,
-        in the osm format, segments are numbered negatively with a known offset
-        of 1e7=10000000. The convention is set back when loading the osm file.
+        In josm editor, nodes are numbered with negative indexes.
 
         See Also
         --------
@@ -1105,7 +1109,7 @@ class Layout(PyLayers):
                     'typ' : 'flooplan',
                     'latlon' : 0,
                     'dist_m' : 400,
-                    'cart' : True
+                    'cart' : False
                     }
 
         for k in defaults:
@@ -1124,11 +1128,9 @@ class Layout(PyLayers):
             coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=typ)
             self.coordinates = 'latlon'
         
-        
         # 2 valid typ : 'floorplan' and 'building' 
         
         
-
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
         ns  = 0
@@ -1202,7 +1204,7 @@ class Layout(PyLayers):
                 # The segment do not exist yet then create  a new segment
                 #
                 if len(inter_u1_u2)==0:
-                    #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
                     if 'name' in ways.way[nseg].tags:
                         slab = ways.way[nseg].tags['name']
                     else:
@@ -1237,22 +1239,39 @@ class Layout(PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
-        if cartesian:
-            lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
-            lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
-            bd = [lon.min(),lat.min(),lon.max(),lat.max()]
-            lon_0 = (bd[0]+bd[2])/2.
-            lat_0 = (bd[1]+bd[3])/2.
-            self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
-                        urcrnrlon=bd[2], urcrnrlat=bd[3],
-                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
-            x,y = self.m(lon,lat)
-            self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
+        #if kwargs['cart']:
+        #    lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
+        #    lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+        #    bd = [lon.min(),lat.min(),lon.max(),lat.max()]
+        #    lon_0 = (bd[0]+bd[2])/2.
+        #    lat_0 = (bd[1]+bd[3])/2.
+        #self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
+        #                urcrnrlon=bd[2], urcrnrlat=bd[3],
+        #        resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+        #    x,y = self.m(lon,lat)
+        #    self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
+        self.m  = m 
+        if kwargs['cart']:
             self.coordinates ='cart'
+        else:
+            self.coordinates ='lonlat'
+
         #del coords
         #del nodes
         #del ways
         #del relations
+
+        # 
+        # get slab and materials 
+        #
+        mat = sb.MatDB()
+        mat.load(self.filematini)
+        self.sl = sb.SlabDB()
+        self.sl.mat = mat
+        self.sl.load(self.fileslabini)
+        for k in self.sl.keys():
+            self.name[k] = []
+        
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
 
@@ -1675,7 +1694,7 @@ class Layout(PyLayers):
             F.load(_filefur, name)
             self.lfur.append(F)
         self.filefur=_filefur
-
+    
     def load(self,arg,build=True,cartesian=False,dist_m=400):
         """ load a Layout in different formats
 
@@ -1695,13 +1714,13 @@ class Layout(PyLayers):
 
         """
 
-
+        
         filename,ext=os.path.splitext(arg)
         newfile=False
         if ext=='.osm':
             filename = pyu.getlong(arg,pstruc['DIROSM'])
             if os.path.exists(filename):
-                self.loadosm(_filename,cartesian=cartesian)
+                self.loadosm(_filename,cart=cartesian)
             else:
                 self.filename = arg
                 newfile=True
@@ -1718,9 +1737,10 @@ class Layout(PyLayers):
         else:
             if '(' in arg:
                 latlon = eval(arg)
-                self.loadosm(latlon=latlon,dist_m=dist_m,cartesian=cartesian)
+                self.loadosm(latlon=latlon,dist_m=dist_m,cart=cartesian)
             else:
-                self.loadosm(address=arg,dist_m=dist_m,cartesian=cartesian)
+                self.loadosm(address=arg,dist_m=dist_m,cart=cartesian)
+                self.filename = arg.replace(' ','_')
 
        
         
@@ -1738,7 +1758,11 @@ class Layout(PyLayers):
         self.boundary(dx=10,dy=10)
 
         rebuild = False
-        
+        #from guppy import hpy
+        #hp = hpy()
+        #h = hp.heap()
+        #print h
+        #pdb.set_trace()
         if ext!='.osm':
             if not newfile :
 
@@ -1754,7 +1778,7 @@ class Layout(PyLayers):
 
                 
                 # build and dump
-                if build or rebuild:  
+                if build and rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
 
@@ -2092,14 +2116,11 @@ class Layout(PyLayers):
         v1=vptpan
         v2=vptpbn
 
-        import ipdb
-        ipdb.set_trace()
         ang = geu.vecang(vptpbn,vptpan)
         ang[~uleft] = geu.vecang(vptpan,vptpan)
         
 
     def get_singlGt_angles(self, cy, unit= 'rad', inside=True):
-
         """ find angles of a single Gt cycle of the layout. 
 
         Parameters
@@ -2140,11 +2161,22 @@ class Layout(PyLayers):
             except:
                 self.ma = self.mask()
                 cycle = self.ma.vnodes
-        upt = cycle[cycle<0]
 
-        # rupt=np.roll(upt,1)         # for debug
-        # rupt2=np.roll(upt,-1)         # for debug
-        pt = self.pt[:,self.iupnt[-upt]]
+        # point indices (<0) of the cycle
+        upt = cycle[cycle<0]
+        
+        #pt = self.pt[:,self.iupnt[-upt]]
+        #
+        # fixing OSM numbering bug 
+        # point coordinates extraction from Gs 
+        #
+
+        pt2 = np.array([ (x,self.Gs.pos[x][0],self.Gs.pos[x][1])  for x in self.Gs.pos if x in upt ]).T
+        
+        upt = pt2[0,:] 
+        pt  = pt2[1:,:]
+
+        # flip orientation in case of negative area
         if geu.SignedArea(pt)<0:
             upt = upt[::-1]
             pt = pt [:,::-1]
@@ -4312,13 +4344,18 @@ class Layout(PyLayers):
         if _filename==[]:
             racine, ext = os.path.splitext(self.filename)
             _fileini = racine + '.ini'
+            _fileosm = racine + '.osm'
             self.saveini(_fileini)
             print "structure saved in ", _fileini
+            self.saveosm(_fileosm)
+            print "structure saved in ", _fileosm
         else:
             racine, ext = os.path.splitext(_filename)
             if ext == '.ini':
                 self.saveini(_filename)
-                print "structure saved in ", _filename
+            if ext == '.osm':
+                self.savesom(_filename)
+            print "structure saved in ", _filename
 
    
 
@@ -5141,7 +5178,7 @@ class Layout(PyLayers):
         return P
 
     def getangles(self,poly, unit= 'rad', inside=True):
-        """ find angles of a polygo_n
+        """ find angles of a polygon
 
         Parameters
         ----------
@@ -5186,6 +5223,9 @@ class Layout(PyLayers):
 
         # rupt=np.roll(upt,1)         # for debug
         # rupt2=np.roll(upt,-1)         # for debug
+        #
+        # See OSM bug fix 
+        #
         pt = self.pt[:,self.iupnt[-upt]]
         if geu.SignedArea(pt)<0:
             upt = upt[::-1]
@@ -6493,7 +6533,7 @@ class Layout(PyLayers):
         -------
 
         polys : list of geu.Polygon
-            new polygon of the convex hull
+            nsew polygon of the convex hull
 
         self.macvx : convex mask of the layout
 
@@ -10250,5 +10290,5 @@ class Layout(PyLayers):
 
 if __name__ == "__main__":
     #plt.ion()
-    doctest.testmod()
-    #L = Layout('defstr3.ini')
+    #doctest.testmod()
+    L = Layout('Rennes',verbose=True,build=False)

@@ -116,7 +116,7 @@ class Way(object):
           1 LineString
 
     """
-    def __init__(self,refs,tags,coords,nodes_sign=1):
+    def __init__(self,refs,tags,coords):
         """ object constructor
 
         Parameters
@@ -137,12 +137,8 @@ class Way(object):
         self.valid = True
         for k, nid in enumerate(refs):
             try:
-                if nodes_sign>0:
-                    p[0, k] = coords.xy[-nid][0]
-                    p[1, k] = coords.xy[-nid][1]
-                else:
-                    p[0, k] = coords.xy[nid][0]
-                    p[1, k] = coords.xy[nid][1]
+                p[0, k] = coords.xy[nid][0]
+                p[1, k] = coords.xy[nid][1]
             except:
                 self.valid=False
                 break
@@ -202,6 +198,13 @@ class Coords(object):
     maxlon = -1000
     minlat = 1000
     maxlat = -1000
+    
+    def __init__(self,idx=[],latlon=[]):
+        """
+        """
+        if latlon!=[]:
+            for k,ix in enumerate(idx):
+                self.latlon[k]=np.array(latlon[k][0],latlon[k][1])
 
     def __repr__(self):
         st = ''
@@ -209,6 +212,12 @@ class Coords(object):
             st = st + str(k)+ ':' + str(self.xy[k])+'\n'
         st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
         return(st)
+    
+    def filter(self,lexcluded):
+        for ix in lexcluded:
+            self.latlon.pop(-np.abs(ix))
+            self.xy.pop(-np.abs(ix))
+            self.cpt-=1
 
     def clean(self):
         self.cpt = 0
@@ -557,9 +566,10 @@ class Ways(object):
                 way = item['data']
                 osmid = way['id']
                 refs  = way['nd']
+                refs_neg = [-x for x in refs]
                 tags  = way['tag']
                 if typ in tags:
-                    self.w[osmid] = [refs,tags]
+                    self.w[osmid] = [refs_neg,tags]
                     self.cpt += 1
         
         self.eval(coords)
@@ -726,13 +736,20 @@ def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
     ways.clean()
     ways.readmap(osmmap,coords)
     
+    # list of nodes involved in buildings
     lnodes_id=[]
     for iw in ways.w:
         lnodes_id+=ways.w[iw][0]
-
-    lnodes_id = np.array(lnodes_id)
-    lnodes_id = np.unique(lnodes_id)
-    pdb.set_trace()
+    # list of all nodes of coords
+    lnodes_id   = np.unique(np.array(lnodes_id))
+    lnodes_full = np.unique(np.array(coords.latlon.keys()))
+    mask = np.in1d(lnodes_full,lnodes_id,invert=True)
+    # nodes not involved in buildings
+    lexcluded = lnodes_full[mask]
+    coords.filter(lexcluded)
+    for iw in ways.w:
+        ways.way[iw].tags = {'name':'WALL',
+                          'z':(0,12)}
     return coords,nodes,ways,m
 
 
