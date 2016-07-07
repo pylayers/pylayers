@@ -1636,7 +1636,12 @@ class Rays(PyLayers,dict):
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
-                    ptdiff = L.pt[:,L.iupnt[-diffupt]]
+                    #
+                    # TO BE FIXED 
+                    #
+                    #ptdiff = L.pt[:,L.iupnt[-diffupt]]
+                    ptdiff = np.array([ (L.Gs.pos[x][0],L.Gs.pos[x][1])  for x in diffupt ]).T
+
                     self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
                     lair = L.name['AIR']+L.name['_AIR']
