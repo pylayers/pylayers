@@ -1295,7 +1295,7 @@ class Layout(PyLayers):
         layout.check
 
         """
-        fileosm = pyu.getlong(_fileosm,'struc')
+        fileosm = pyu.getlong(_fileosm,'struc/osm')
         #
         #
         #
