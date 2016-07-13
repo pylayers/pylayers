@@ -1123,7 +1123,7 @@ class Layout(PyLayers):
                 kwargs[k] = defaults[k]
 
         if kwargs['_fileosm']=='':  # by using osmapi address or latlon 
-            coords,nodes,ways,m = osm.getosm(typ=kwargs['typ'],
+            coords,nodes,ways,dpoly,m = osm.getosm(typ=kwargs['typ'],
                                             address=kwargs['address'],
                                             latlon=kwargs['latlon'],
                                             dist_m=kwargs['dist_m'],
