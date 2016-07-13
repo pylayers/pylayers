@@ -747,10 +747,14 @@ def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
     # nodes not involved in buildings
     lexcluded = lnodes_full[mask]
     coords.filter(lexcluded)
+    dpoly={}
     for iw in ways.w:
         ways.way[iw].tags = {'name':'WALL',
                           'z':(0,12)}
-    return coords,nodes,ways,m
+        ptpoly=[coords.xy[x] for x in ways.w[iw][0]]
+        dpoly[iw]=geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+        dpoly[iw].coorddeter()
+    return coords,nodes,ways,dpoly,m
 
 
 def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True,cart=False):

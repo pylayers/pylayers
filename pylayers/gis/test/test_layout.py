@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #doctest.testmod(layout)
 #L = Layout('TA-Office.ini')
-L = Layout()
+L =  Layout()
 lL = L.ls()
 for tL in lL:
     print  'Layout :',tL

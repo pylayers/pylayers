@@ -1122,13 +1122,13 @@ class Layout(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        if kwargs['_fileosm']=='':
+        if kwargs['_fileosm']=='':  # by using osmapi address or latlon 
             coords,nodes,ways,m = osm.getosm(typ=kwargs['typ'],
                                             address=kwargs['address'],
                                             latlon=kwargs['latlon'],
                                             dist_m=kwargs['dist_m'],
                                             cart=kwargs['cart'])
-        else:
+        else: # by reading an osm file
             self.filename = kwargs['_fileosm']
             fileosm = pyu.getlong(kwargs['_fileosm'],os.path.join('struc','osm'))
             coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=kwargs['typ'])
@@ -1213,7 +1213,7 @@ class Layout(PyLayers):
                 #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
                     if 'name' in ways.way[nseg].tags:
                         slab = ways.way[nseg].tags['name']
-                    else:
+                    else: # the default slab name is WALL 
                         slab = "WALL"
                     if 'z' in ways.way[nseg].tags:
                         z = ways.way[nseg].tags['z']
@@ -5669,6 +5669,7 @@ class Layout(PyLayers):
             polys = []
             naw = []
             popo = []
+
             for t in tri:
                 ts = geu.Polygon(pucs[t])
                 # check if the new polygon is contained into
