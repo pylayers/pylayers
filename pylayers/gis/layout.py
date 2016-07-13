@@ -1456,6 +1456,9 @@ class Layout(PyLayers):
         if "FLOOR" not in lslab:
             floor = {'color': 'grey40', 'index': 7, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs","FLOOR",floor)
+        if "WALL" not in lslab:
+            wall = {'color': 'black', 'index': 2, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+            config.set("slabs","WALL",wall)
 
         for m in lmat:
             dm = self.sl.mat[m]
