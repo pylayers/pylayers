@@ -188,8 +188,6 @@ class Simul(PyLayers):
         show a single ray
     help()
         help on using Simulation object
-    structure2()
-        get .str2 file (ASCII description structure)
     freq()
         return the frequency base
     save()
@@ -222,9 +220,6 @@ class Simul(PyLayers):
     tx
     rx
 
-    palch
-    patra
-    patud
     progress
 
     indoor
@@ -335,7 +330,9 @@ class Simul(PyLayers):
             self.fileantRx = simulgui[10]
 
     def updcfg(self):
-        """ update simulation .ini config file with values currently in use.
+        """ update simulation .ini config file 
+        
+        with values currently in use.
         """
         self.config.set("files", "struc", self.filestr)
         self.config.set("files", "conf", self.fileconf)
@@ -762,14 +759,6 @@ class Simul(PyLayers):
             raise NameError('Error in section rxant from '+ _filesimul)
 
         try:
-            self.filestr = self.config.get("files", "struc")
-            # force .str extension
-            f,e = self.filestr.split('.')
-            self.filestr = f+'.str'
-        except:
-            raise NameError('Error in section struc from '+ _filesimul)
-
-        try:
             self.tx = RadioNode(name = '',
                                 typ = 'tx',
                                 _fileini = _filetx,
@@ -784,52 +773,12 @@ class Simul(PyLayers):
         except:
             raise NameError('Error during Radionode load')
 #
-# Launching and Tracing parameters
-#
-
+# Load Layout
+# 
         try:
-            self.palch = Palch(self.config.get("files", "palch"))
-            self.filepalch = self.config.get("files", "palch")
-        except:
-            raise NameError('Error in section palch from '+ _filesimul)
-
-        try:
-            self.patra = Patra(self.config.get("files", "patra"))
-            self.filepatra = self.config.get("files", "patra")
-        except:
-            raise NameError('Error in section patra from '+ _filesimul)
-        #_outfilename = "out"+self.ntx+".ini"
-        #self.outfilename = pyu.getlong(_outfilename,"simul")
-#  Load Simulation Mat File
-#
-        self.filematini = self.config.get("files", "mat")
-        self.mat = MatDB()
-        self.mat.load(self.filematini)
-#
-#  Load Simulation Slab File
-#
-        try:
-            self.fileslabini = self.config.get("files", "slab")
-            self.sl = SlabDB()
-            self.sl.mat = self.mat
-            self.sl.load(self.fileslabini)
-        except:
-            raise NameError('Slab load error')
-#
-# Load layout from .str or .str2 file
-#
-        try:
-            self.L = Layout(self.filestr,self.filematini, self.fileslabini)
-#            self.L.load(self.filestr)
+            self.L = Layout(self.filestr)
         except:
             raise NameError('Layout load error')
-
-        try:
-            self.patud.nrmax = self.config.get("tud", "nrmax")
-            self.patud.num = self.config.get("tud", "num")
-            self.patud.purc = self.config.get("tud", "purc")
-        except:
-            pass
 
 #
 # Frequency base
@@ -922,7 +871,7 @@ class Simul(PyLayers):
 
         >>> from pylayers.simul.simulem import *
         >>> S = Simul()
-        >>> S.layout('defstr.str')
+        >>> S.layout('defstr.ini')
 
         """
         self.filestr = _filestruc
@@ -1038,8 +987,7 @@ class Simul(PyLayers):
         for irx in self.dcir[itx].keys():
             d = self.delay(itx, irx) * 0.3
             cira, ciro = self.loadcir(itx, irx)
-            Ea = cira.energy()[0]
-            Eo = ciro.energy()[0]
+
             td.append(d)
             tEa.append(Ea)
             tEo.append(Eo)
@@ -1528,368 +1476,7 @@ class Simul(PyLayers):
         command = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(command)
 
-    def freq(self, GUI=False):
-        """
-            return the frequency base from the content of filefreq
-
-        Parameters
-        ----------
-        GUI
-            Boolean
-
-
-        """
-        filefreq = self.filefreq
-        filefreq = pyu.getlong(filefreq, pstruc['DIRTUD'])
-        fo = open(filefreq)
-        l = fo.readline().split()
-        fmin = eval(l[0])
-        fmax = eval(l[1])
-        Nf = eval(l[2])
-        fo.close()
-        if GUI:
-            val = multenterbox('Enter frequency (GHz)', '',
-                               ('start', 'stop', 'N'),
-                               (str(fmin), str(fmax), str(Nf)))
-            fmin = eval(val[0])
-            fmax = eval(val[1])
-            Nf = eval(val[2])
-            fo = open(filefreq, 'w')
-            data = val[0] + ' ' + val[1] + ' ' + val[2] + '\n'
-            fo.write(data)
-            fo.close()
-
-        fGHz = np.linspace(fmin, fmax, Nf, endpoint=True)
-        return(fGHz)
-
-    def getlaunch(self, k=1):
-        """
-         get the kth launch
-
-        Parameters
-        ----------
-        k :  int
-            launching index (default 1)
-
-        Launching index starts at 1
-
-        """
-        if k in self.dlch.keys():
-            filename = self.dlch[k]
-            L = Launch()
-            L.load(filename)
-            return(L)
-        else:
-            print("Tx not available")
-
-    def gettra(self, itx, irx):
-        """
-         Gtra = S.gettra(itx,irx)
-        """
-        if (itx < self.tx.N) & (irx < self.rx.N):
-            Gtra = GrRay3D()
-            Gtra.load(self.filetra[itx][irx], self.indoor)
-            return Gtra
-        else:
-            print "gettra warning : wrong tx or rx index"
-
-    def gettud(self, itx, irx):
-        """
-         Gtud = S.gettud(itx,irx)
-        """
-        if (itx < self.tx.N) & (irx < self.rx.N):
-            Gtud = GrRayTud()
-            Gtud.load(self.filetud[itx][irx], self.sl)
-            return Gtud
-        else:
-            print "gettud warning : wrong tx or rx index"
-    #def gettud(self,k,l):
-    #def getfield(self,k,l):
-
-    def launching(self, itx=1,verbose=False):
-        """ start the launching program and get the results files
-
-        Parameters
-        ----------
-        itx : int
-            transmiter index
-
-        """
-
-        filestr = os.path.splitext(self.filestr)[0] + '.str'
-
-        if not os.path.exists(pyu.getlong(filestr,pstruc['DIRSTRUC'])):
-            chaine = 'newstruc -str2 ' + filestr +'2 ' + filestr + ' -conf ' + basename +'/'+self.fileconf
-            os.system(chaine)
-
-
-        chaine = "launching -str  " + self.filestr + \
-            " -slab " + self.fileslab + \
-            " -palch " + self.filepalch + \
-            " -spa " + self.tx.filespa + \
-            " -conf " + basename + '/' + self.fileconf
-
-        if verbose:
-            print chaine
-
-        self.claunching.append(chaine)
-        os.system(chaine)
-        aux = os.popen(chaine, "r")
-        recup = aux.read()
-        aux.close()
-        if verbose:
-            print recup
-
-        self.recup = recup
-        aux = recup.splitlines()
-        len_aux = recup.count("\n")
-
-        filelch = []
-        for i in range(len_aux):
-            if aux[i].find("filelchout") != -1:
-                aux[i] = aux[i].replace('filelchout : ', '')
-                fshort = pyu.getshort(aux[i])
-                filelch.append(fshort)
-                self.dlch[itx] = fshort
-
-        self.filelch = filelch
-        self.progress = 1
-        self.nTx = len(self.filelch)
-        self.dtra[itx] = {}
-        self.dtud[itx] = {}
-        self.dtang[itx] = {}
-        self.drang[itx] = {}
-        self.dtauk[itx] = {}
-        self.dfield[itx] = {}
-        self.dcir[itx] = {}
-        # create a configuration file for Tx itx
-        self.output[itx] = ConfigParser.ConfigParser()
-        self.output[itx].add_section("launch")
-        self.output[itx].add_section("trace")
-        self.output[itx].add_section("tud")
-        self.output[itx].add_section("rang")
-        self.output[itx].add_section("tang")
-        self.output[itx].add_section("field")
-        self.output[itx].add_section("tauk")
-        self.output[itx].set("launch", str(itx), self.dlch[itx])
-        #
-        # append output filename in section output
-        #
-        _outfilename = self.filesimul.replace('.ini', '') + str(itx) + ".ini"
-        self.dout[itx] = _outfilename
-        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        self.config.set("output", str(itx), self.dout[itx])
-
-        fd = open(outfilename, "w")
-        self.output[itx].write(fd)
-        fd.close()
-
-        filesimul = pyu.getlong(self.filesimul,'ini')
-        fd = open(filesimul, "w")
-        self.config.write(fd)
-        fd.close()
-
-    def tracing(self, itx, irx,verbose=False):
-        """ exec tracing
-
-        Parameters
-        ----------
-        itx  : tx index
-        irx  : rx index
-
-        Notes
-        -----
-        This function should not be used for more than one rx.
-        .. todo extend properly this function in order to handle properly
-            multi-nodes in irx. The problem is to keep the association
-            between the index number of the rx in the ini file and the 
-            rx in dtra. 
-
-        """
-        #
-        # Verify 
-        #
-        if (self.progress >= 1):
-            chaine = "tracing -lch " + self.dlch[itx] + \
-                " -patra " + self.filepatra + \
-                "  -spa " + self.rx.filespa + \
-                " -conf " + basename + '/' + self.fileconf
-            if verbose:
-                print chaine
-            self.ctracing.append(chaine)
-            aux = os.popen(chaine, "r")
-            recup = aux.read()
-            #if verbose:
-                #print recup
-            aux.close()
-            self.recup = recup
-            aux = recup.splitlines()
-            len_aux = recup.count("\n")
-            #
-            # set list of .tra files empty 
-            #filetra = []
-            #for i in range(len_aux):
-            #    if aux[i].find("filetraout") != -1:
-            #        aux[i] = aux[i].replace('filetraout : ', '')
-            #        filetra.append(pyu.getshort(aux[i]))
-            #
-            # Warning : this is a bad fix  
-            #
-            #for filename in filetra:
-            for i in range(len_aux):
-                if aux[i].find("filetraout") != -1:
-                    aux[i] = aux[i].replace('filetraout : ', '')
-                    self.dtra[itx][irx] = pyu.getshort(aux[i])
-
-            #if verbose:
-                #print filetra
-            #self.filetra.insert(ntx,filetra)
-            self.progress = 2
-        else:
-            print "No launching available"
-
-        _outfilename = self.config.get('output', str(itx))
-        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        if irx in self.dtra[itx].keys():
-            self.output[itx].set("trace", str(irx), self.dtra[itx][irx])
-            fd = open(outfilename, "w")
-            self.output[itx].write(fd)
-            fd.close()
-
-    def tratotud(self, itx, irx,verbose=False):
-        """ convert tracing in .tud
-
-        Parameters
-        ----------
-
-         itx : integer
-            transmitter index
-         irx : integer
-            receiver index
-
-        """
-        #
-        # .. todo:: take value from the simulation class
-        #
-        nrmin = self.config.get("tud", "nrmax")
-        num = self.config.get("tud", "num")
-        purc = self.config.get("tud", "purc")
-        chaine = "tratotud -tra " + self.dtra[itx][irx] + \
-            " -min " + nrmin + \
-            " -purc " + purc + \
-            " -num " + num +  \
-            " -conf " + basename + '/' + self.fileconf
-        print 'DEBUG '+chaine
-        self.ctratotud.append(chaine)
-        if verbose:
-            print chaine
-        aux = os.popen(chaine, "r")
-        os.system('echo $?')
-        recup = aux.read()
-        aux.close()
-        aux = recup.splitlines()
-        if verbose:
-            print aux
-        len_aux = recup.count("\n")
-        for i in range(len_aux):
-            if aux[i].find("filetudout") != -1:
-                aux[i] = aux[i].replace('filetudout : ', '')
-                filename = pyu.getshort(aux[i])
-                # fix
-                #filename = rename(filename,itx,irx,'output')
-                if verbose:
-                    print filename
-                self.dtud[itx][irx] = filename
-            elif aux[i].find("filetangout") != -1:
-                aux[i] = aux[i].replace('filetangout : ', '')
-                filename = pyu.getshort(aux[i])
-                # fix
-                #filename = rename(filename,itx,irx,'output')
-                if verbose:
-                    print filename
-                self.dtang[itx][irx] = filename
-            elif aux[i].find("filerangout") != -1:
-                aux[i] = aux[i].replace('filerangout : ', '')
-                filename = pyu.getshort(aux[i])
-                # fix
-                #filename = rename(filename,itx,irx,'output')
-                if verbose:
-                    print filename
-                self.drang[itx][irx] = filename
-
-        _outfilename = self.config.get('output', str(itx))
-        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        if irx in self.dtud[itx].keys():
-            self.output[itx].set("tud", str(irx), self.dtud[itx][irx])
-        if irx in self.dtang[itx].keys():
-            self.output[itx].set("tang", str(irx), self.dtang[itx][irx])
-        if irx in self.drang[itx].keys():
-            self.output[itx].set("rang", str(irx), self.drang[itx][irx])
-        fd = open(outfilename, "w")
-        try:
-            self.output[itx].write(fd)
-        except:
-            raise NameError('error writing output ini file')
-        fd.close()
-
-
-    def field(self, itx, irx,verbose=False):
-        """ field calculation for Tx Rx using evalfield command
-
-        Parameters
-        ----------
-
-        ntx : integer
-                 launching index
-        nrx : integer
-                 tracing index
-        verbose : Boolean
-            
-
-        """
-        chaine = "evalfield -tud " + self.dtud[itx][irx] + \
-                 " -slab " + self.fileslab + \
-                 " -mat " + self.filemat + \
-                 " -freq " + self.filefreq + \
-                 " -conf " + basename + '/' + self.fileconf
-
-        self.cfield.append(chaine)
-        if verbose:
-            print chaine
-        os.system(chaine)
-        aux = os.popen(chaine, "r")
-        recup = aux.read()
-        aux.close()
-        aux = recup.splitlines()
-        len_aux = recup.count("\n")
-        for i in range(len_aux):
-            if aux[i].find("filefieldout") != -1:
-                aux[i] = aux[i].replace('filefieldout : ', '')
-                filename = pyu.getshort(aux[i]).replace(' ', '')
-                # fix
-                # filename = rename(filename,itx,irx,'output')
-                self.dfield[itx][irx] = filename
-            elif aux[i].find("filetaukout") != -1:
-                aux[i] = aux[i].replace('filetaukout : ', '')
-                filename = pyu.getshort(aux[i]).replace(' ', '')
-                # fix
-                # filename = rename(filename,itx,irx,'output')
-                self.dtauk[itx][irx] = filename
-        _outfilename = self.config.get('output', str(itx))
-        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        if irx in self.dtauk[itx].keys():
-            self.output[itx].set("tauk", str(irx), self.dtauk[itx][irx])
-        if irx in self.dfield[itx].keys():
-            self.output[itx].set("field", str(irx), self.dfield[itx][irx])
-        fd = open(outfilename, "w")
-        try:
-            self.output[itx].write(fd)
-        except:
-            raise NameError('error writing output ini file')
-        fd.close()
-
-
-    def run2(self, link, cirforce=True,verbose=False,cutoff=4):
+    def run(self, link, cirforce=True,verbose=False,cutoff=4):
         """ run the simulation for 1 tx and a set of rx
 
             Parameters
@@ -1916,24 +1503,26 @@ class Simul(PyLayers):
 
 
         """
+        
+        # get file prefix
 
+        link = DLink(force=True,L=self.L,fGHz=self.fGHz, verbose=False)
         prefix = self.filesimul.replace('.ini', '') 
-        #
-        #
-        #
         lsig = []
-        for k,il  in enumerate(link):
+        for k,il in enumerate(link):
             tx = self.tx.points[il[0]]
             rx = self.rx.points[il[1]]
-
             ctx = S.L.pt2cy(tx)
             crx = S.L.pt2cy(rx)
-            
             _filecir = prefix +'-cir-'+str(k)+'-'+str(link)+'-'+str((ctx,crx))
             D = {}
             D['Tx'] = tx
             D['Rx'] = rx
 
+            
+            link.a = tx
+            link.b = rx
+            ak,tauk = link.eval(verbose=False,diffrction=True)
             if (ctx,crx) not in lsig:
                 Si  = signature.Signatures(S.L,ctx,crx)
                 #
@@ -1973,131 +1562,8 @@ class Simul(PyLayers):
             filename = pyu.getlong(_filename, cirdir)
             spio.savemat(filename, D)
             
-    def run(self, itx, srx=[], cirforce=True,verbose=False):
-        """ run the simulation for 1 tx and a set of rx
-
-            Parameters
-            ----------
-
-            itx      : tx index
-            srx      : list of rx index
-            cirforce : boolean
-
-            Warnings
-            --------
-
-            index point start with 1
-
-            Example
-            -------
-
-            >>> from pylayers.simul.simulem import *
-            >>> itx = 1
-            >>> srx = [1,2,3]
-            >>> S   = Simul()
-            >>> S.load('where2.ini')
-            >>> out = S.run(itx,srx)
-
-
-        """
-
-        self.updcfg()
-        #t0 = time.clock()
-        if type(srx) == int:
-            srx = [srx]
-
-        if srx == []:
-            srx = self.rx.points.keys()
-
-        if itx not in self.dlch.keys():
-            # launching itx does not exist
-            self.tx.filespa = 'tx' + str(itx) + '.spa'
-            point = self.tx.points[itx]
-            spafile(self.tx.filespa, point, pstruc['DIRLCH'])
-            if verbose:
-                print "---------------"
-                print "Start Launching Tx : " + str(itx)
-                print "---------------"
-            self.launching(itx)
-
-        #
-        # Loop over a set of rx
-        #
-        #pdb.set_trace()
-        for irx in srx:
-            tracingabort = False
-            if irx not in self.dtra[itx].keys():
-                self.rx.filespa = 'rx' + str(irx) + '.spa'
-                point = self.rx.points[irx]
-                spafile(self.rx.filespa, point, pstruc['DIRTRA'])
-                if verbose:
-                    print "--------------------"
-                    print "Start tracing  Rx : " + str(irx)
-                    print "--------------------"
-                tracingabort = self.tracing(itx, irx,verbose)
-
-            if not tracingabort:
-                if irx not in self.dtud[itx].keys():
-                    if verbose:
-                        print "---------------"
-                        print "Start tratotud ", irx
-                        print "---------------"
-
-                    self.tratotud(itx, irx,verbose)
-                if irx not in self.dfield[itx].keys():
-                    if verbose:
-                        print "---------------"
-                        print "Start field  ", irx
-                        print "---------------"
-                    self.field(itx, irx,verbose)
-
-                if ((irx not in self.dcir[itx].keys()) | cirforce):
-                    if verbose:
-                        print "---------------"
-                        print "Start cir      ", irx
-                        print "---------------"
-                    if "waveform" in self.config.sections():
-                        par = self.config.items("waveform")
-                        self.wparam = {}
-                        for k in range(len(par)):
-                            key = par[k][0]
-                            val = par[k][1]
-                            if key == "band":
-                                self.wparam[key] = float(val)
-                            if key == "fcGHz":
-                                self.wparam[key] = float(val)
-                            if key == "feGHz":
-                                self.wparam[key] = float(val)
-                            if key == "threshdB":
-                                self.wparam[key] = float(val)
-                            if key == "twns":
-                                self.wparam[key] = float(val)
-                            if key == "typ":
-                                self.wparam[key] = val
-
-                        self.wav = wvf.Waveform(**self.wparam)
-                        alpha = np.sqrt(1. / 30.0)
-                        print "run debug ",itx,irx
-                        self.cir([itx], [irx],
-                                 store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)
-                    else:
-                        raise("Error no waveform in the config file ")
-                        return(False)
-
-        return(True)
-    def gt(self, itx, irx):
-        """ gtud
-        """
-        gt = GrRayTud()
-        filetud = self.dtud[itx][irx]
-        filetang = self.dtang[itx][irx]
-        filerang = self.drang[itx][irx]
-        gt.load(filetud, filetang, filerang, self.sl)
-        return(gt)
-
     def delay(self, itx, irx):
-        """
-            calculate LOS link delay
+        """ calculate LOS link delay
 
             Parameters
             ----------
@@ -2105,157 +1571,18 @@ class Simul(PyLayers):
             itx
             irx
 
+            Returns
+            -------
+
+            delay : float 
+                delay in ns
+
         """
         tx = self.tx.points[itx]
         rx = self.rx.points[irx]
         df = tx - rx
         dist = np.sqrt(np.dot(df, df))
         return(dist / 0.3)
-
-    def gr(self, itx, irx):
-        """
-           return a  cluster or fays from link itx-irx
-        """
-        gr = GrRay3D()
-        gr.load(self.dtra[itx][irx], self.L)
-        return(gr)
-
-    def VC(self, itx, irx):
-        """
-            return Vect Channel for link itx irx
-        """
-
-        VCl = channelc.VectChannel(self, itx, irx, False)
-        return(VCl)
-
-    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR'],format='a'):
-        """
-        Calculate a set of channel impulse responses
-
-        Parameters
-        ----------
-            itx : transmitter index iterable set
-            irx : receiver index iterable set
-            wav : applied waveform (st,sf,sfg)
-                this waveform includes the gamma factor
-            store_level : binary mask
-                             bit  0 : save CVC
-                             bit  1 : save CVCO
-                             bit  2 : save CSCA
-                             bit  3 : save CIRo
-                             bit  4 : save CIRa
-            alpha : normalization factor
-            ext :
-            rep :
-            format : string
-                a : with antenna
-                o : omnidirectionnal
-         Notes
-         -----
-         A factor ::math`\\sqrt{1}{30}` is necessary when applying the antenna
-
-         Examples
-         --------
-
-        """
-        if type(itx) == int:
-            itx = [itx]
-
-        if type(irx) == int:
-            irx = [irx]
-
-        if (store_level) & 1 == 1:
-            self.CVC = []
-        if (store_level) & 2 == 2:
-            self.CSCO = []
-        if (store_level) & 4 == 4:
-            self.CSCA = []
-        if (store_level) & 8 == 8:
-            self.CIRo = []
-        if (store_level) & 16 == 16:
-            self.CIRa = []
-        racine = self.filesimul.replace('.ini', '') + 'cir-'
-        for l in itx:
-            # create cir entry in outputTx if required
-            _outfilename = self.config.get('output', str(l))
-            outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-            if "cir" not in  self.output[l].sections():
-                self.output[l].add_section("cir")
-
-            CVC = []
-            CSCO = []
-            CSCA = []
-            CIRo = []
-            CIRa = []
-            for k in irx:
-                D = {}
-                D['Tx'] = self.tx.points[l]
-                if ext == '':
-                    if (self.tx.name == '') and (self.rx.name == ''):
-                        txrx = 'tx' + str('%0.3d' % l) + '-rx' + str('%0.3d' % k)
-                    else :
-                        txrx = self.tx.name +'-' + self.rx.name + str('-p%0.3d' % k)
-                else:
-                    txrx = ext
-
-                _filename = racine + txrx
-                self.dcir[l][k] = _filename
-                if self.tx.name == '':
-                    rep = rep + '/Tx' + str('%0.3d' % l)
-                else :
-                    rep = rep +'/' + self.tx.name
-                if not os.path.isdir(basename+'/'+rep):
-                    try:
-                        os.mkdir(basename+'/'+rep)
-                    except:
-                        raise NameError(basename+'/'+rep)
-
-
-                filename = pyu.getlong(_filename, rep)
-                VCl = channelc.VectChannel(self, l, k, False)
-                CVC.append(VCl)
-                if not VCl.fail:
-                    #SCO = VCl.vec2scal()
-                    SCO = VCl.prop2tran(a='theta',b='theta')
-                    CSCO.append(SCO)
-                    #SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
-                    #
-                    #  Apply the apha factor on waveform 
-                    #
-                    SCA = VCl.prop2tran(a=self.tx.A,b=self.rx.A)
-                    CSCA.append(SCA)
-                    ciro = SCO.applywavB(self.wav.sfg)
-                    CIRo.append(ciro)
-                    cira = SCA.applywavB(self.wav.sfg)
-                    CIRa.append(cira)
-                    D['Rx' + str(k)] = self.rx.points[int(k)]
-                    if 'o' in format:
-                        D['to'] = ciro.x
-                        D['ciro'] = ciro.y
-                    if 'a' in format:
-                        D['t'] = cira.x
-                        D['cir'] = cira.y
-                    spio.savemat(filename, D)
-                    self.output[l].set("cir", str(k), self.dcir[l][k])
-                    fd = open(outfilename, "w")
-                    self.output[l].write(fd)
-                    fd.close()
-                else:
-                    CSCO.append([])
-                    CSCA.append([])
-                    CIRo.append([])
-                    CIRa.append([])
-
-            if (store_level) & 1 == 1:
-                self.CVC.append(CVC)
-                self.CSCO.append(CSCO)
-            if (store_level) & 4 == 4:
-                self.CSCA.append(CSCA)
-            if (store_level) & 8 == 8:
-                self.CIRo.append(CIRo)
-            if (store_level) & 16 == 16:
-                self.CIRa.append(CIRa)
-
 
 if (__name__ == "__main__"):
     #plt.ion()

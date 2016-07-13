@@ -4315,6 +4315,220 @@ bernard
         ldf.to_csv(filename, sep = ' ',index=False)
 
 
+    def savemat(self):
+        """ save in Matlab Format 
+        """
+        d ={}
+        # Access Point Coordinates 
+
+        pAP1 = self.getdevp(1,t=[0,100])
+        pAP2 = self.getdevp(2,t=[0,100])
+        pAP3 = self.getdevp(3,t=[0,100])
+        pAP4 = self.getdevp(4,t=[0,100])
+
+        t = self.hkb.index.values
+
+
+        AP=np.array([[pAP1['x'][0],pAP1['y'][0]],
+              [pAP2['x'][0],pAP2['y'][0]],
+              [pAP3['x'][0],pAP3['y'][0]],
+              [pAP4['x'][0],pAP4['y'][0]]
+             ])
+
+
+        pTTR = self.getdevp('TorsoTopRight',techno='HKB',t=[0,100])
+        pTTL = self.getdevp('TorsoTopLeft',techno='HKB',t=[0,100])
+        pBC  = self.getdevp('BackCenter',techno='HKB',t=[0,100])
+
+
+        d['AP']=AP
+ 
+        d['pTTR'] = np.array([pTTR['x'],pTTR['y']])
+        d['pTTL'] = np.array([pTTL['x'],pTTL['y']])
+        d['pBC']  = np.array([pBC['x'],pBC['y']])
+        
+        # observables radios TTR/TTL/BC
+
+        TTR_1 = self.hkb['AP1-TorsoTopRight'].values
+        TTL_1 = self.hkb['AP1-TorsoTopLeft'].values
+        BC_1  = self.hkb['AP1-BackCenter'].values
+
+        Rho1R = BC_1-TTR_1
+        Rho1L = BC_1-TTL_1
+
+        RhoM1R = np.nanmax(Rho1R)
+        Rhom1R = np.nanmin(Rho1R)
+        RhoM1L = np.nanmax(Rho1L)
+        Rhom1L = np.nanmin(Rho1L)
+
+
+        ### AP2 
+
+        TTR_2= self.hkb['AP2-TorsoTopRight'].values
+        TTL_2= self.hkb['AP2-TorsoTopLeft'].values
+        BC_2 = self.hkb['AP2-BackCenter'].values
+
+        Rho2R = BC_2-TTR_2
+        Rho2L = BC_2-TTL_2
+
+        RhoM2R=np.nanmax(Rho2R)
+        Rhom2R=np.nanmin(Rho2R)
+        RhoM2L=np.nanmax(Rho2L)
+        Rhom2L=np.nanmin(Rho2L)
+
+
+        ### AP3
+
+        TTR_3= self.hkb['AP3-TorsoTopRight'].values
+        TTL_3= self.hkb['AP3-TorsoTopLeft'].values
+        BC_3 = self.hkb['AP3-BackCenter'].values
+        Rho3R = BC_3-TTR_3
+        Rho3L = BC_3-TTL_3
+
+        RhoM3R=np.nanmax(Rho3R)
+        Rhom3R=np.nanmin(Rho3R)
+        RhoM3L=np.nanmax(Rho3L)
+        Rhom3L=np.nanmin(Rho3L)
+
+        ### AP4 
+
+        TTR_4= self.hkb['AP4-TorsoTopRight'].values
+        TTL_4= self.hkb['AP4-TorsoTopLeft'].values
+        BC_4 = self.hkb['AP4-BackCenter'].values
+
+        Rho4R = BC_4-TTR_4
+        Rho4L = BC_4-TTL_4
+
+        RhoM4R=np.nanmax(Rho4R)
+        Rhom4R=np.nanmin(Rho4R)
+        RhoM4L=np.nanmax(Rho4L)
+        Rhom4L=np.nanmin(Rho4L)
+
+        
+        d['ttr1'] = TTR_1
+        d['ttr2'] = TTR_2
+        d['ttr3'] = TTR_3
+        d['ttr4'] = TTR_4
+        d['ttl1'] = TTL_1
+        d['ttl2'] = TTL_2
+        d['ttl3'] = TTL_3
+        d['ttl4'] = TTL_4
+        d['bc1']  = BC_1
+        d['bc2']  = BC_2
+        d['bc3']  = BC_3
+        d['bc4']  = BC_4
+
+        d['time']=t[0:10001]
+        
+        vpRC = (pTTR-pBC)
+        vpLC = (pTTL-pBC)
+        vp = (pTTR-pBC)+(pTTL-pBC)
+
+        # unitary vectors 
+        vpRC = array([vpRC['x'],vpRC['y']])
+        vpLC = array([vpLC['x'],vpLC['y']])
+        vp = array([vp['x'],vp['y']])
+
+        # unitary vectors 
+
+        vpn = vp/np.sqrt(np.sum(vp*vp,axis=0))
+        vpRCn = vpRC/np.sqrt(np.sum(vpRC*vpRC,axis=0))
+        vpLCn = vpLC/np.sqrt(np.sum(vpLC*vpLC,axis=0))
+
+        # coord des AP
+        p1 = pAP1.ix[0]
+        p2 = pAP2.ix[0]
+        p3 = pAP3.ix[0]
+        p4 = pAP4.ix[0]
+
+
+        v1C = p1-pBC
+        v2C = p2-pBC
+        v3C = p3-pBC
+        v4C = p4-pBC
+
+        v1C = np.array((v1C.x.values,v1C.y.values))
+        v2C = np.array((v2C.x.values,v2C.y.values))
+        v3C = np.array((v3C.x.values,v3C.y.values))
+        v4C = np.array((v4C.x.values,v4C.y.values))
+
+
+        v1Cn = v1C/(sqrt(np.sum(v1C*v1C,axis=0)))
+        v2Cn = v2C/(sqrt(np.sum(v2C*v2C,axis=0)))
+        v3Cn = v3C/(sqrt(np.sum(v3C*v3C,axis=0)))
+        v4Cn = v4C/(sqrt(np.sum(v4C*v4C,axis=0)))
+
+
+        cr1 = np.cross(vpn,v1Cn,axis=0)
+        cr2 = np.cross(vpn,v2Cn,axis=0)
+        cr3 = np.cross(vpn,v3Cn,axis=0)
+        cr4 = np.cross(vpn,v4Cn,axis=0)
+
+        cr1R = np.cross(vpRCn,v1Cn,axis=0)
+        cr2R = np.cross(vpRCn,v2Cn,axis=0)
+        cr3R = np.cross(vpRCn,v3Cn,axis=0)
+        cr4R = np.cross(vpRCn,v4Cn,axis=0)
+
+        cr1L = np.cross(vpLCn,v1Cn,axis=0)
+        cr2L = np.cross(vpLCn,v2Cn,axis=0)
+        cr3L = np.cross(vpLCn,v3Cn,axis=0)
+        cr4L = np.cross(vpLCn,v4Cn,axis=0)
+
+
+        dvpnv1n = sum(vpn*v1Cn,axis=0)
+        dvpnv2n = sum(vpn*v2Cn,axis=0)
+        dvpnv3n = sum(vpn*v3Cn,axis=0)
+        dvpnv4n = sum(vpn*v4Cn,axis=0)
+
+
+        dvpnv1Rn = sum(vpRCn*v1Cn,axis=0)
+        dvpnv2Rn = sum(vpRCn*v2Cn,axis=0)
+        dvpnv3Rn = sum(vpRCn*v3Cn,axis=0)
+        dvpnv4Rn = sum(vpRCn*v4Cn,axis=0)
+
+
+        dvpnv1Ln = sum(vpLCn*v1Cn,axis=0)
+        dvpnv2Ln = sum(vpLCn*v2Cn,axis=0)
+        dvpnv3Ln = sum(vpLCn*v3Cn,axis=0)
+        dvpnv4Ln = sum(vpLCn*v4Cn,axis=0)
+
+    
+        alf1R = np.arctan2(cr1R,dvpnv1Rn)
+        alf2R = np.arctan2(cr2R,dvpnv2Rn)
+        alf3R = np.arctan2(cr3R,dvpnv3Rn)
+        alf4R = np.arctan2(cr4R,dvpnv4Rn)
+
+
+        alf1L = np.arctan2(cr1L,dvpnv1Ln)
+        alf2L = np.arctan2(cr2L,dvpnv2Ln)
+        alf3L = np.arctan2(cr3L,dvpnv3Ln)
+        alf4L = np.arctan2(cr4L,dvpnv4Ln)
+
+    
+
+        d['al1R_gt'] = alf1R
+        d['al2R_gt'] = alf2R
+        d['al3R_gt'] = alf3R
+        d['al4R_gt'] = alf4R
+
+        d['al1L_gt'] = alf1L
+        d['al2L_gt'] = alf2L
+        d['al3L_gt'] = alf3L
+        d['al4L_gt'] = alf4L
+
+        d['al1R_est']=np.nan_to_num(al1ebR[0:10001])
+        d['al2R_est']=np.nan_to_num(al2ebR[0:10001])
+        d['al3R_est']=np.nan_to_num(al3ebR[0:10001])
+        d['al4R_est']=np.nan_to_num(al4ebR[0:10001])
+        d['al1L_est']=np.nan_to_num(al1ebL[0:10001])
+        d['al2L_est']=np.nan_to_num(al2ebL[0:10001])
+        d['al3L_est']=np.nan_to_num(al3ebL[0:10001])
+        d['al4L_est']=np.nan_to_num(al4ebL[0:10001])
+
+        _filename = self.filemocap.replace('.c3d','.mat')
+        savemat(_filename,d)
+
+
     def getlinkd(self,a,b,techno='',t=''):
         """    get the distance for a link between devices
 

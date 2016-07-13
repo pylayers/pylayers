@@ -89,7 +89,6 @@ class Cone(PyLayers):
         self.angle = np.arccos(self.dot)
         self.pcone = self.angle/(1.0*np.pi)
 
-
     def belong_seg(self,pta,phe,prob=True):
         """ test if segment belong to cone
 

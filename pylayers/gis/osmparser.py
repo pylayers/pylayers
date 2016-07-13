@@ -87,6 +87,7 @@ Utility Functions
 
 
 from osmapi import OsmApi
+import geocoder as geo
 import urllib
 import urllib2 as url
 from pylayers.util.project import *
@@ -124,6 +125,9 @@ class Way(object):
         refs  :
         tags  :
         coords :
+        nodes_sign : int 
+            if data comes from osm nodes are >0 in ways sequence 
+            if data comes from josm editor nodes are <0 ways sequence
 
         """
         self.refs  = refs
@@ -194,6 +198,13 @@ class Coords(object):
     maxlon = -1000
     minlat = 1000
     maxlat = -1000
+    
+    def __init__(self,idx=[],latlon=[]):
+        """
+        """
+        if latlon!=[]:
+            for k,ix in enumerate(idx):
+                self.latlon[k]=np.array(latlon[k][0],latlon[k][1])
 
     def __repr__(self):
         st = ''
@@ -201,6 +212,12 @@ class Coords(object):
             st = st + str(k)+ ':' + str(self.xy[k])+'\n'
         st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
         return(st)
+    
+    def filter(self,lexcluded):
+        for ix in lexcluded:
+            self.latlon.pop(-np.abs(ix))
+            self.xy.pop(-np.abs(ix))
+            self.cpt-=1
 
     def clean(self):
         self.cpt = 0
@@ -240,7 +257,7 @@ class Coords(object):
         cart : Boolean 
             conversion to cartesian 
         delta : offset 
- +            default 0 : in this case the origin corresponds to the lower left point
+            default 0 : in this case the origin corresponds to the lower left point
  
         Notes
         -----
@@ -285,6 +302,31 @@ class Coords(object):
 
         return(m)
 
+    def from_nodes(self,nodes):
+        """ read coordinates from a map 
+
+        Parameters
+        ----------
+
+        nodes : Nodes 
+
+
+        """
+        for osmid in nodes.node:
+            lon = nodes.node[osmid]['lonlat'][0]
+            lat = nodes.node[osmid]['lonlat'][1]
+            self.latlon[osmid] = np.array([lon,lat])
+            # find extrema
+            self.minlon = min(lon,self.minlon)
+            self.maxlon = max(lon,self.maxlon)
+            self.minlat = min(lat,self.minlat)
+            self.maxlat = max(lat,self.maxlat)
+
+            self.cpt += 1
+        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])
+        
+
+
 class Nodes(object):
     """
 
@@ -310,6 +352,19 @@ class Nodes(object):
         self.node= {}
         self.cpt = 0
 
+    def readmap(self,osmmap):
+        """ read nodes from a map 
+        """
+        for item in osmmap:
+            if item['type']=='node':
+                osmid = -item['data']['id']
+                lon = item['data']['lon']
+                lat = item['data']['lat']
+                self.node[osmid]={}
+                self.node[osmid]['tags'] = item['data']['tag']
+                self.node[osmid]['lonlat'] = (lon,lat)
+                self.cpt += 1
+
 class Ways(object):
     """
 
@@ -319,7 +374,7 @@ class Ways(object):
     w : dict
     way : dict
     cpt : int
-
+        way counter 
     Methods
     -------
 
@@ -344,7 +399,7 @@ class Ways(object):
         self.way = {}
         self.cpt = 0
 
-    def building(self, ways):
+    def building(self, ways , height=8.5):
         """ building callback function
         """
         for osmid, tags, refs in ways:
@@ -352,7 +407,7 @@ class Ways(object):
                 if 'height' in tags:
                     tags = {'height':tags['height']}
                 else:
-                    tags = {'height':8.5}
+                    tags = {'height': height}
 
                 self.w[osmid] = [refs,tags]
                 self.cpt += 1
@@ -397,6 +452,7 @@ class Ways(object):
         else:
             ax = kwargs['ax']
 
+        lpoly  = []
         lonmin = 360
         lonmax = -360
         latmin = 360
@@ -412,6 +468,8 @@ class Ways(object):
                 p = self.way[b].shp
 
             lpoly.append(p)
+
+        pdb.set_trace()
         city = PolyCollection(lpoly,closed=False)
 
         ax.axis((lonmin,lonmax,latmin,latmax))
@@ -494,6 +552,28 @@ class Ways(object):
                     print "building: ",b," is not a polygon"
         plt.axis('scaled')
         return(fig,ax)
+
+    def readmap(self,osmmap,coords,typ='building'):
+        """ read ways from a map 
+        
+        osmmap : OSM Map in json from OsmAPI
+        coords : coords object previously parsed
+        typ  : string 
+            building or floorplan
+        """
+        for item in osmmap:
+            if item['type']=='way':
+                way = item['data']
+                osmid = way['id']
+                refs  = way['nd']
+                refs_neg = [-x for x in refs]
+                tags  = way['tag']
+                if typ in tags:
+                    self.w[osmid] = [refs_neg,tags]
+                    self.cpt += 1
+        
+        self.eval(coords)
+        pass
 
 class Relations(object):
     relation = {}
@@ -614,6 +694,69 @@ class FloorPlan(nx.DiGraph):
 #     getbdg
 #
 #
+def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
+    """ get osm region from osmapi
+
+    Parameters
+    ----------
+
+    typ : string 
+    address : string 
+    latlon : tuple
+    dist_m : float 
+    cart : boolean 
+
+    """
+    rad_to_deg = (180/np.pi)
+    deg_to_rad = (np.pi/180)
+    if latlon==0:
+        place = geo.google(address)
+        lat,lon = place.latlng
+    else:
+        lat = latlon[0]
+        lon = latlon[1]
+
+    r_earth = 6370e3
+    alpha = (dist_m/r_earth)*rad_to_deg
+    Osm = OsmApi()
+
+    # Get Map around coordinate 
+    osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
+    
+    nodes = Nodes()
+    nodes.clean()
+    nodes.readmap(osmmap)
+   
+    coords = Coords()
+    coords.clean()
+    coords.from_nodes(nodes)
+    m = coords.cartesian(cart=cart)
+
+    ways = Ways()
+    ways.clean()
+    ways.readmap(osmmap,coords)
+    
+    # list of nodes involved in buildings
+    lnodes_id=[]
+    for iw in ways.w:
+        lnodes_id+=ways.w[iw][0]
+    # list of all nodes of coords
+    lnodes_id   = np.unique(np.array(lnodes_id))
+    lnodes_full = np.unique(np.array(coords.latlon.keys()))
+    mask = np.in1d(lnodes_full,lnodes_id,invert=True)
+    # nodes not involved in buildings
+    lexcluded = lnodes_full[mask]
+    coords.filter(lexcluded)
+    dpoly={}
+    for iw in ways.w:
+        ways.way[iw].tags = {'name':'WALL',
+                          'z':(0,12)}
+        ptpoly=[coords.xy[x] for x in ways.w[iw][0]]
+        dpoly[iw]=geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
+        dpoly[iw].coorddeter()
+    return coords,nodes,ways,dpoly,m
+
+
 def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True,cart=False):
     """ parse osm files
 
@@ -630,16 +773,18 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
         read nodes
     w : boolean
         read  ways
-    r : boolean
+    r : booleanif c:
+        coords = Coords()
+        coords.clean()
         read relations
 
     Returns
     -------
 
-    coords :
-    nodes  :
-    ways   :
-    relations :
+    coords : Coords
+    nodes  : Nodes
+    ways   : Ways
+    relations : Relations
 
     """
 

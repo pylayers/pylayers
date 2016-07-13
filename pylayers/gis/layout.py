@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#monstrous mooshine -*- coding: utf-8 -*-
 """
 .. currentmodule:: pylayers.gis.layout
 
@@ -231,6 +231,7 @@ except:
     print 'Layout:Mayavi is not installed'
 import pdb
 import os
+import time 
 import copy
 import glob
 import pickle
@@ -312,7 +313,7 @@ class Layout(PyLayers):
 
     """
     
-    def __init__(self,_filename='defstr.ini',
+    def __init__(self,arg='defstr.ini',
                       _filematini='matDB.ini',
                       _fileslabini='slabDB.ini',
                       _filefur='',
@@ -320,15 +321,16 @@ class Layout(PyLayers):
                       check=True,
                       build=False,
                       verbose=False,
-                      cartesian=False):
+                      cartesian=True,
+                      dist_m = 400):
 
         """ object constructor
 
         Parameters
         ----------
 
-        _filename : string
-            layout file name
+        arg : string
+            layout file name, address or '(lat,lon)'
         _filematini :
             material dB file name
         _fileslabini :
@@ -368,11 +370,17 @@ class Layout(PyLayers):
 
 
         self.Gt.pos = {}
+        
+        #
+        # Layout main argument
+        #
+
+        self.arg = arg 
+
         #
         # related file names
         #
 
-        self.filename = _filename
         self.fileslabini = _fileslabini
         self.filematini = _filematini
         self.filefur = _filefur
@@ -420,14 +428,8 @@ class Layout(PyLayers):
 
         self.zmin = 0
 
-        
-        
-        self.load(_filename,build=build,cartesian=cartesian)
+        self.load(arg,build=build,cartesian=cartesian,dist_m=dist_m)
 
-
-        
-
-    
 
     def __repr__(self):
         st = '\n'
@@ -475,8 +477,8 @@ class Layout(PyLayers):
             st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
         if hasattr(self,'upnt'):
             st = st + "upnt : get point id index from self.pt"+"\n"
-        if hasattr(self,'iupnt'):
-            st = st + "iupnt : get point index in self.pt from point id  "+"\n"
+        #if hasattr(self,'iupnt'):
+        #    st = st + "iupnt : get point index in self.pt from point id  "+"\n"
         if hasattr(self,'lsss'):
             st = st + "lsss : list of segments with sub-segment"+"\n"
         if hasattr(self,'sridess'):
@@ -487,7 +489,7 @@ class Layout(PyLayers):
             st = st + "degree : degree of nodes " +"\n"
         st = st + "\nUseful tip" + "\n----------------\n"
         st = st + "Point p in Gs => p_coord:\n"
-        st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
+        #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
         st = st + "Segment s in Gs => s_ab coordinates \n"
         st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
@@ -856,7 +858,7 @@ class Layout(PyLayers):
         iseg = np.arange(self.Ns)
 
         return np.setdiff1d(iseg, u)
-
+    
     def g2npy(self):
         """ conversion from graphs to numpy arrays
 
@@ -865,7 +867,7 @@ class Layout(PyLayers):
 
         This function updates the following arrays:
 
-        self.pt (2xNp)
+        self.pt   (2xNp)
         self.tahe (2xNs)
         self.tgs
         self.dca  : dictionnary of cycle with an airwall
@@ -884,12 +886,17 @@ class Layout(PyLayers):
 
         #points index
         upnt  = filter(lambda x : x<0,nodes)
-
+        
+        # conversion in numpy array 
         self.upnt = np.array((upnt))
-        utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
-        mutmp = max(utmp[:,0])
-        self.iupnt = -np.ones((mutmp+1),dtype='int')
-        self.iupnt[utmp[:,0]]=utmp[:,1]
+
+        # association 
+        #pdb.set_trace()
+
+        #utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
+        #mutmp = max(utmp[:,0])
+        #self.iupnt = -np.ones((mutmp+1),dtype='int')
+        #self.iupnt[utmp[:,0]]=utmp[:,1]
 
 
         # degree of segment nodes
@@ -909,8 +916,16 @@ class Layout(PyLayers):
 
         if 'AIR' in self.name:
             lairwall+=self.name['AIR']
+        else:
+            self.name['AIR']=[]
+
         if '_AIR' in self.name:
             lairwall+=self.name['_AIR']
+        else:
+            self.name['_AIR']=[]
+
+        # as self.name['AIR'] and self.name['_AIR'] are tested 
+        # we define them as void list if not defined
 
         #
         #  function to count airwall connected to a point
@@ -1068,24 +1083,26 @@ class Layout(PyLayers):
         # calculate extremum of segments
         self.extrseg()
 
-
-    def loadosm(self, _fileosm , typ ='floorplan',cartesian=False):
+    def loadosm(self, **kwargs):
         """ load layout from an osm file 
 
         Parameters
         ----------
 
         _fileosm : string
-
+        adress : string 
+            address to be geocoded
+        latlon : tuple 
+            (latitude,longitude) degrees 
+        dist_m : float
+            distance in meter from the geocoded address
+        cart : boolean 
+            conversion in cartesian coordinates
 
         Notes
         -----
 
-        In JOSM nodes are numbered with negative indexes.
-        A positive node number is not valid. To remain compliant with the PyLayers
-        convention which assumes that <0 nodes are points and >0 nodes are segments,
-        in the osm format, segments are numbered negatively with a known offset
-        of 1e7=10000000. The convention is set back when loading the osm file.
+        In josm editor, nodes are numbered with negative indexes.
 
         See Also
         --------
@@ -1093,14 +1110,33 @@ class Layout(PyLayers):
         pylayers.gis.osmparser.osmparse
 
         """
+        defaults = {'_fileosm':'',
+                    'address' : 'Rennes',
+                    'typ' : 'floorplan',
+                    'latlon' : 0,
+                    'dist_m' : 400,
+                    'cart' : False
+                    }
 
-        self.filename = _fileosm
-        self.coordinates = 'latlon'
-        fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['_fileosm']=='':  # by using osmapi address or latlon 
+            coords,nodes,ways,dpoly,m = osm.getosm(typ=kwargs['typ'],
+                                            address=kwargs['address'],
+                                            latlon=kwargs['latlon'],
+                                            dist_m=kwargs['dist_m'],
+                                            cart=kwargs['cart'])
+        else: # by reading an osm file
+            self.filename = kwargs['_fileosm']
+            fileosm = pyu.getlong(kwargs['_fileosm'],os.path.join('struc','osm'))
+            coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=kwargs['typ'])
+            self.coordinates = 'latlon'
         
         # 2 valid typ : 'floorplan' and 'building' 
-        coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=typ)
-
+        
+        
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
         ns  = 0
@@ -1136,7 +1172,7 @@ class Layout(PyLayers):
                 u_prev = u
                 k_prev = kp[u] 
             
-
+        
         for npt in coords.xy:
             # if node is not duplicated add node 
             if npt not in dup:
@@ -1174,10 +1210,10 @@ class Layout(PyLayers):
                 # The segment do not exist yet then create  a new segment
                 #
                 if len(inter_u1_u2)==0:
-                    #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+                #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
                     if 'name' in ways.way[nseg].tags:
                         slab = ways.way[nseg].tags['name']
-                    else:
+                    else: # the default slab name is WALL 
                         slab = "WALL"
                     if 'z' in ways.way[nseg].tags:
                         z = ways.way[nseg].tags['z']
@@ -1209,22 +1245,39 @@ class Layout(PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
-        if cartesian:
-            lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
-            lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
-            bd = [lon.min(),lat.min(),lon.max(),lat.max()]
-            lon_0 = (bd[0]+bd[2])/2.
-            lat_0 = (bd[1]+bd[3])/2.
-            self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
-                        urcrnrlon=bd[2], urcrnrlat=bd[3],
-                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
-            x,y = m(lon,lat)
-            self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
+        #if kwargs['cart']:
+        #    lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
+        #    lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+        #    bd = [lon.min(),lat.min(),lon.max(),lat.max()]
+        #    lon_0 = (bd[0]+bd[2])/2.
+        #    lat_0 = (bd[1]+bd[3])/2.
+        #self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
+        #                urcrnrlon=bd[2], urcrnrlat=bd[3],
+        #        resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+        #    x,y = self.m(lon,lat)
+        #    self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
+        self.m  = m 
+        if kwargs['cart']:
             self.coordinates ='cart'
+        else:
+            self.coordinates ='lonlat'
+
         #del coords
         #del nodes
         #del ways
         #del relations
+
+        # 
+        # get slab and materials 
+        #
+        mat = sb.MatDB()
+        mat.load(self.filematini)
+        self.sl = sb.SlabDB()
+        self.sl.mat = mat
+        self.sl.load(self.fileslabini)
+        for k in self.sl.keys():
+            self.name[k] = []
+        
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
 
@@ -1236,19 +1289,31 @@ class Layout(PyLayers):
 
         _fileosm : string
 
+        Notes
+        -----
+
+        See Also 
+        --------
+
+        layout.loadosm
+        layout.loadini
+        layout.saveini 
+        layout.check
+
         """
-        fileosm = pyu.getlong(_fileosm,'struc')
+        fileosm = pyu.getlong(_fileosm,'struc/osm')
         #
         #
         #
-        lonmin = -2
-        lonmax = -1
-        latmin = 47
-        latmax = 48
-        lon_0 = -1.5
-        lat_0 = 47.5
-        m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
-            resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
+        #lonmin = -2
+        #lonmax = -1
+        #latmin = 47
+        #latmax = 48
+        #lon_0 = -1.5
+        #lat_0 = 47.5
+        #m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
+        #    resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
+
         fd = open(fileosm,"w")
         fd.write("<?xml version='1.0' encoding='UTF-8'?>\n")
         fd.write("<osm version='0.6' upload='false' generator='PyLayers'>\n")
@@ -1257,7 +1322,7 @@ class Layout(PyLayers):
             if n <0:
                 if n not in self.lboundary:
                     x,y = self.Gs.pos[n]
-                    lon,lat = m(x,y,inverse=True)
+                    lon,lat = self.m(x,y,inverse=True)
                     fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
 
         for n in self.Gs.pos:
@@ -1391,6 +1456,9 @@ class Layout(PyLayers):
         if "FLOOR" not in lslab:
             floor = {'color': 'grey40', 'index': 7, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs","FLOOR",floor)
+        if "WALL" not in lslab:
+            wall = {'color': 'black', 'index': 2, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+            config.set("slabs","WALL",wall)
 
         for m in lmat:
             dm = self.sl.mat[m]
@@ -1635,8 +1703,8 @@ class Layout(PyLayers):
             F.load(_filefur, name)
             self.lfur.append(F)
         self.filefur=_filefur
-
-    def load(self,_filename,build=True,cartesian=False):
+    
+    def load(self,arg,build=True,cartesian=False,dist_m=400):
         """ load a Layout in different formats
 
         Parameters
@@ -1647,41 +1715,42 @@ class Layout(PyLayers):
         Notes
         -----
 
-        Available formats are :
-
-        +  .ini   : ini file format (natural one) DIRINI
+        Available file formats are :
+        
         +  .osm   : opens street map format  DIROSM
+        +  .ini   : ini file format (natural one) DIRINI
 
-        (Deprecated format)
-
-        +  .str2  : native Pyray (C implementation) DIRSTRUC
-        +  .str   : binary file with visibility DIRSTRUC
-        layout files are stored in the directory pstruc['DIRxxx']
 
         """
 
-
-        filename,ext=os.path.splitext(_filename)
+        
+        filename,ext=os.path.splitext(arg)
         newfile=False
-        if ext=='.osm':
-            filename = pyu.getlong(_filename,pstruc['DIROSM'])
-            if os.path.exists(filename):
-                self.loadosm(_filename,cartesian=cartesian)
-            else:
-                self.filename = _filename
+        if ext=='.osm':  # osm file with extension
+            filename = pyu.getlong(arg,pstruc['DIROSM'])
+            if os.path.exists(filename): # which exists
+                # force the cartesian conversion 
+                self.loadosm(_fileosm=arg,cart=cartesian)
+            else: # which do not exist
+                self.filename = arg
                 newfile=True
                 print "new file",self.filename
         
-        elif ext=='.ini':
-            filename = pyu.getlong(_filename,pstruc['DIRINI'])
-            if os.path.exists(filename):
-                self.loadini(_filename)
-            else:
-                self.filename = _filename
+        elif ext=='.ini': # ini file with extension
+            filename = pyu.getlong(arg,pstruc['DIRINI'])
+            if os.path.exists(filename):# which exists
+                self.loadini(arg)
+            else: # which do not exist
+                self.filename = arg
                 newfile=True
                 print "new file",self.filename
-        else:
-            raise NameError('layout filename extension not recognized')
+        else: # address or (lat,lon) 
+            if '(' in arg: # latlon
+                latlon = eval(arg)
+                self.loadosm(latlon=latlon,dist_m=dist_m,cart=cartesian)
+            else: # address 
+                self.loadosm(address=arg,dist_m=dist_m,cart=cartesian)
+                self.filename = arg.replace(' ','_')
 
        
         
@@ -1697,9 +1766,16 @@ class Layout(PyLayers):
         
         
         self.boundary(dx=10,dy=10)
+        
+        # create shapely polygons L._shseg 
+        self.updateshseg()
 
         rebuild = False
-        
+        #from guppy import hpy
+        #hp = hpy()
+        #h = hp.heap()
+        #print h
+        #pdb.set_trace()
         if ext!='.osm':
             if not newfile :
 
@@ -1715,7 +1791,7 @@ class Layout(PyLayers):
 
                 
                 # build and dump
-                if build or rebuild:  
+                if build and rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
 
@@ -2053,14 +2129,11 @@ class Layout(PyLayers):
         v1=vptpan
         v2=vptpbn
 
-        import ipdb
-        ipdb.set_trace()
         ang = geu.vecang(vptpbn,vptpan)
         ang[~uleft] = geu.vecang(vptpan,vptpan)
         
 
     def get_singlGt_angles(self, cy, unit= 'rad', inside=True):
-
         """ find angles of a single Gt cycle of the layout. 
 
         Parameters
@@ -2101,11 +2174,22 @@ class Layout(PyLayers):
             except:
                 self.ma = self.mask()
                 cycle = self.ma.vnodes
-        upt = cycle[cycle<0]
 
-        # rupt=np.roll(upt,1)         # for debug
-        # rupt2=np.roll(upt,-1)         # for debug
-        pt = self.pt[:,self.iupnt[-upt]]
+        # point indices (<0) of the cycle
+        upt = cycle[cycle<0]
+        
+        #pt = self.pt[:,self.iupnt[-upt]]
+        #
+        # fixing OSM numbering bug 
+        # point coordinates extraction from Gs 
+        #
+
+        pt2 = np.array([ (x,self.Gs.pos[x][0],self.Gs.pos[x][1])  for x in self.Gs.pos if x in upt ]).T
+        
+        upt = pt2[0,:] 
+        pt  = pt2[1:,:]
+
+        # flip orientation in case of negative area
         if geu.SignedArea(pt)<0:
             upt = upt[::-1]
             pt = pt [:,::-1]
@@ -2342,7 +2426,7 @@ class Layout(PyLayers):
         # 3) updating structures
         self.g2npy()
 
-    def del_segment(self,le,verbose=True):
+    def del_segment(self,le,verbose=True,g2npy=True):
         """ delete segment e
 
         Parameters
@@ -2354,6 +2438,11 @@ class Layout(PyLayers):
         --------
 
         pylayers.gis.layout.Layout.del_node
+
+        Notes
+        -----
+
+        100% of time is in g2npy
 
         """
         if (type(le) == np.ndarray):
@@ -2377,7 +2466,8 @@ class Layout(PyLayers):
                 self.pop._shseg(e)
             except:
                 pass
-        self.g2npy()
+        if g2npy:
+            self.g2npy()
 
 
     def mask(self):
@@ -4273,13 +4363,18 @@ class Layout(PyLayers):
         if _filename==[]:
             racine, ext = os.path.splitext(self.filename)
             _fileini = racine + '.ini'
+            _fileosm = racine + '.osm'
             self.saveini(_fileini)
             print "structure saved in ", _fileini
+            self.saveosm(_fileosm)
+            print "structure saved in ", _fileosm
         else:
             racine, ext = os.path.splitext(_filename)
             if ext == '.ini':
                 self.saveini(_filename)
-                print "structure saved in ", _filename
+            if ext == '.osm':
+                self.savesom(_filename)
+            print "structure saved in ", _filename
 
    
 
@@ -4923,9 +5018,10 @@ class Layout(PyLayers):
                         self.dca[cy[1]]=[cy[0]]
 
         # add hash to node 0 of Gt 
-        fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
-        _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
-        self.Gt.add_node(0,hash=_hash)
+        #pdb.set_trace()
+        #fileini = pyu.getlong(self.filename,pstruc['DIRINI'])
+        #_hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
+        #self.Gt.add_node(0,hash=_hash)
         
         # f=os.path.splitext(self.filename)
         # if f[1] =='.ini':
@@ -5102,7 +5198,7 @@ class Layout(PyLayers):
         return P
 
     def getangles(self,poly, unit= 'rad', inside=True):
-        """ find angles of a polygo_n
+        """ find angles of a polygon
 
         Parameters
         ----------
@@ -5147,6 +5243,9 @@ class Layout(PyLayers):
 
         # rupt=np.roll(upt,1)         # for debug
         # rupt2=np.roll(upt,-1)         # for debug
+        #
+        # See OSM bug fix 
+        #
         pt = self.pt[:,self.iupnt[-upt]]
         if geu.SignedArea(pt)<0:
             upt = upt[::-1]
@@ -5177,214 +5276,6 @@ class Layout(PyLayers):
             return upt,ang
             # atan2(cross(a,b)), dot(a,b))
 
-
-    # def _delaunay(self,poly,polyholes=[]):
-    #     """ make a Delaunay partitioning of a polygon
-
-    #         If polyhole == []
-
-                       
-    #             if a cycle is non convex
-
-    #             1- find its polygon
-    #             2- partition polygon into convex polygons (Delaunay)
-    #             3- try to merge partitioned polygons in order to obtain
-    #                the minimal number of convex polygons
-
-
-    #         If polyholes != []
-    
-    #             polygon poly contains holes (polyholes)
-
-    #         This methods returns a partitioning of the polygon poly 
-    #         into several convex polygons (voronoi). 
-
-    #     Parameters
-    #     ----------
-
-    #         poly : geu.Polygon
-    #         polyhole : list of geu.Polygon
-
-
-    #     Return
-    #     ------
-    #         ncpol : list
-    #             list of new created polygons
-
-    #     Notes
-    #     -----
-
-    #     The algorithm updates the Gt nodes and edges created into self.buildGt
-    #     by adding new nodes and new AIR segments.
-
-    #     Called In 
-    #     ---------
-
-    #     pylayers.gis.layout.buildGt
-    
-
-    #     See Also
-    #     --------
-
-    #     pylayers.gis.layout.buildGt
-    #     pylayers.gis.layout.add_segment
-    #     pylayers.gis.layout.del_segment
-    #     pylayers.util.geomutil.Polygon
-    #     sp.spatial.Delaunay
-
-    #     """
-
-    #     cvex,ccve = poly.ptconvex2()
-    #     ucs = cvex+ccve
-
-    #     # keep all convex points (in + out) to build a Delaunay triangulation
-
-    #     if polyholes != []:
-    #         #sum up polyholes to their gathered polygone
-    #         cp = cascaded_union(polyholes)
-    #         if isinstance(cp,sh.Polygon):
-    #             cp=[cp]
-    #         cp=[geu.Polygon(c) for c in cp]
-    #         [c.setvnodes(self) for c in cp]
-    #         tmp=[]
-    #         for c in cp :
-    #             cvexh,ccveh = c.ptconvex2()
-    #             tmp = tmp + cvexh +ccveh
-    #         # tmp=[]
-    #         # for p in polyholes:
-    #         #     cvexh,ccveh = p.ptconvex2()
-    #         #     tmp = tmp + cvexh +ccveh
-
-    #         ucs=ucs+tmp
-
-
-    #     if len(ucs) !=0 :
-    #         try:
-    #             pucs = array(map(lambda x: self.Gs.pos[x], ucs))
-    #         except:
-    #             import ipdb
-    #             ipdb.set_trace()
-    #         pucs = np.vstack((pucs,pucs[-1]))
-    #         ####
-    #         #### perform a Delaunay Partioning
-    #         ####
-    #         if len(ucs) >2:
-    #             trid=sp.spatial.Delaunay(pucs)
-    #             tri =trid.simplices
-    #             polys = []
-    #             naw = []
-    #             for t in tri:
-    #                 ts = geu.Polygon(pucs[t])
-    #                 # check if the new polygon is contained into
-    #                 #the original polygon (non guarantee by Delaunay)
-    #                 C0 = poly.contains(ts)
-    #                 if polyholes == []:
-    #                     C=[False]
-    #                     I=0
-    #                 else: 
-    #                     C = [isinstance(ii.intersection(ts),sh.Polygon) for ii in polyholes]
-
-    #                 # if poly contains triangle but not the polyholes
-    #                 # self.pltpoly([ts],color='b')
-    #                 if C0 and (not np.any(C) ):
-    #                     # self.pltpoly([ts],color='r')
-    #                     # plt.draw()
-    #                     # import ipdb
-    #                     # ipdb.set_trace()
-    #                     cp =ts
-    #                     cp.setvnodes(self)
-    #                     uaw = np.where(cp.vnodes == 0)[0]
-    #                     lvn = len(cp.vnodes)
-    #                     for i in uaw:
-    #                         #keep track of created airwalls, because some
-    #                         #of them will be destroyed in step 3.
-    #                         naw.append(self.add_segment(
-    #                                    cp.vnodes[np.mod(i-1,lvn)],
-    #                                    cp.vnodes[np.mod(i+1,lvn)]
-    #                                    ,name='AIR'))
-    #                     polys.append(cp)
-    #         #
-    #         # 3. merge delaunay triangulation in order to obtain
-    #         #   the larger convex polygons partioning
-    #         #
-
-    #         cpolys = []
-    #         nbpolys = len(polys)
-
-    #         while polys !=[]:
-    #             p = polys.pop(0)
-    #             for ip2,p2 in enumerate(polys):
-    #                 conv=False
-    #                 inter = p.intersection(p2)
-    #                 # if 2 triangles have a common segment
-    #                 pold = p
-    #                 if isinstance(inter,sh.LineString):
-    #                     p = p + p2
-    #                     if p.isconvex():
-    #                         polys.pop(ip2)
-    #                         polys.insert(0, p)
-    #                         conv=True
-    #                         break
-    #                     else:
-    #                         # if pold not in cpolys:
-    #                         #     cpolys.append(pold)
-    #                         p = pold
-    #             # if (ip2 >= len(polys)):# and (conv):
-    #             # if conv :
-    #             #     if p not in cpolys:
-    #             #         cpolys.append(p)
-    #             if not conv:#else:
-    #                 if pold not in cpolys:
-    #                     cpolys.append(pold)
-    #             if len(polys) == 0:
-    #                 cpolys.append(p)
-
-    #         #### 4. ensure the correct vnode numerotation of the polygons
-    #         #### and remove unecessary airwalls
-
-    #         # ncpol : new created polygons
-    #         ncpol = []
-    #         vnodes = []
-    #         for p in cpolys:
-    #             interpoly = poly.intersection(p)
-    #             if isinstance(interpoly,sh.MultiPolygon):
-    #                 raise AttributeError('multi polygon encountered')
-    #             else :
-    #                 try:
-    #                     ptmp = geu.Polygon(interpoly)
-    #                     # ptmp = self.polysh2geu(interpoly)
-    #                 except:
-    #                     import ipdb
-    #                     ipdb.set_trace()
-
-    #             ptmp.setvnodes(self)
-    #             ncpol.append(ptmp)
-    #             vnodes.extend(ptmp.vnodes)
-
-
-    #         # if no polyholes
-    #         if polyholes == []:
-    #             ### 4bis 
-    #             # Check if all the original area is covered 
-    #             # sometimes, area surrounded by 2 new airwalls is not found
-    #             #the following code re-add it.
-    #             cpdiff=poly.difference(cascaded_union(cpolys))
-    #             if isinstance(cpdiff,sh.Polygon):
-    #                 cpdiff=sh.MultiPolygon([cpdiff])
-    #             if isinstance(cpdiff,sh.MultiPolygon):
-    #                 for cp in cpdiff:
-    #                     ptmp = geu.Polygon(cp)
-    #                     ptmp.setvnodes(self)
-    #                     ncpol.append(ptmp)
-    #                     vnodes.extend(ptmp.vnodes)
-
-
-
-    #         daw = filter(lambda x: x not in vnodes,naw)
-
-    #         for d in daw:
-    #             self.del_segment(d,verbose=False)
-    #     return ncpol
 
     def pltlines(self,lines,fig=[],ax=[],color='r',alpha=1):
         """  plot a line with a specified color and transparency
@@ -5462,7 +5353,7 @@ class Layout(PyLayers):
 
         build a shapely object for all segments
 
-        This function is called at the beginning of buildGt
+        This function is called at the beginning of buildGt.
 
         See Also
         --------
@@ -5473,6 +5364,7 @@ class Layout(PyLayers):
 
         seg_connect = {x:self.Gs.node[x]['connect'] for x in self.Gs.nodes() if x >0}
         dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
     def buildGt(self,check=False):
@@ -5482,6 +5374,7 @@ class Layout(PyLayers):
         ----------
 
         check : booolean
+            if check 
 
 
         """
@@ -5492,6 +5385,8 @@ class Layout(PyLayers):
         # pdb.set_trace()
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+
+        # create polygon from shapely
         self.updateshseg()
 
         X = sho.polygonize(self._shseg.values())
@@ -5697,7 +5592,6 @@ class Layout(PyLayers):
             assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
             print "passed"
 
-
     def _delaunay(self,poly,polyholes=[]):
         """ make a Delaunay partitioning of a polygon
 
@@ -5735,7 +5629,7 @@ class Layout(PyLayers):
         -----
 
         The algorithm updates the Gt nodes and edges created into self.buildGt
-        by adding new nodes and new AIR segments.
+        by adding new nodes and new _AIR segments.
 
         Called In 
         ---------
@@ -5761,9 +5655,9 @@ class Layout(PyLayers):
         # keep all convex points (in + out) to build a Delaunay triangulation
         if polyholes != []:
             if not isinstance(polyholes,list):
-                polyholes=[polyholes]
+                polyholes = [polyholes]
             for ph in polyholes:
-            #sum up polyholes to their gathered polygone
+            #sum up polyholes to their gathered polygones
                 pucsh  = np.array(ph.exterior.xy).T
                 pucs = np.vstack((pucs,pucsh))
 
@@ -5773,11 +5667,12 @@ class Layout(PyLayers):
             #### perform a Delaunay Partioning
             ####
 
-            trid=sp.spatial.Delaunay(pucs)
-            tri =trid.simplices
+            trid = sp.spatial.Delaunay(pucs)
+            tri = trid.simplices
             polys = []
             naw = []
-            popo=[]
+            popo = []
+
             for t in tri:
                 ts = geu.Polygon(pucs[t])
                 # check if the new polygon is contained into
@@ -5904,8 +5799,8 @@ class Layout(PyLayers):
             daw = filter(lambda x: x not in vnodes,naw)
 
             for d in daw:
-                self.del_segment(d,verbose=False)
-
+                self.del_segment(d,verbose=False,g2npy=False)
+            self.g2npy()
 
         return ncpol
 
@@ -6454,7 +6349,7 @@ class Layout(PyLayers):
         -------
 
         polys : list of geu.Polygon
-            new polygon of the convex hull
+            nsew polygon of the convex hull
 
         self.macvx : convex mask of the layout
 
@@ -7447,9 +7342,6 @@ class Layout(PyLayers):
 
         self.Gi = rGi
         self.Gi.pos = rGi.pos
-
-
-
 
 
     def outputGi(self):
@@ -9840,19 +9732,22 @@ class Layout(PyLayers):
 
 
     def plot(self,**kwargs):
-        """ plot the layout
+        """ plot the layout with shapely polygons
 
         Parameters
         ---------
 
         fig 
         ax 
+        labels : list
+        nodes : boolean
 
         """
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
                     'labels':[],
+                    'nodes':False
                     }
 
         for key, value in defaults.items():
@@ -9888,8 +9783,9 @@ class Layout(PyLayers):
         
         if 's' in labels:
             [ ax.text(vv[i,0],vv[i,1],w[i]) for i in range(len(w)) ]
-        
-        ax.scatter(vv[:,0],vv[:,1])
+       
+        if kwargs['nodes']:
+            ax.scatter(vv[:,0],vv[:,1])
         ML = sh.MultiLineString(self._shseg.values())
         
         self.pltlines(ML,color='k',fig=fig,ax=ax)
@@ -10211,5 +10107,6 @@ class Layout(PyLayers):
 
 if __name__ == "__main__":
     #plt.ion()
-    doctest.testmod()
-    #L = Layout('defstr3.ini')
+    #doctest.testmod()
+    L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
+    L.build()
