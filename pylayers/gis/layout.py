@@ -313,7 +313,7 @@ class Layout(PyLayers):
 
     """
     
-    def __init__(self,_filename='defstr.ini',
+    def __init__(self,arg='defstr.ini',
                       _filematini='matDB.ini',
                       _fileslabini='slabDB.ini',
                       _filefur='',
@@ -329,8 +329,8 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        _filename : string
-            layout file name
+        arg : string
+            layout file name, address or '(lat,lon)'
         _filematini :
             material dB file name
         _fileslabini :
@@ -370,11 +370,17 @@ class Layout(PyLayers):
 
 
         self.Gt.pos = {}
+        
+        #
+        # Layout main argument
+        #
+
+        self.arg = arg 
+
         #
         # related file names
         #
 
-        self.filename = _filename
         self.fileslabini = _fileslabini
         self.filematini = _filematini
         self.filefur = _filefur
@@ -422,7 +428,7 @@ class Layout(PyLayers):
 
         self.zmin = 0
 
-        self.load(_filename,build=build,cartesian=cartesian,dist_m=dist_m)
+        self.load(arg,build=build,cartesian=cartesian,dist_m=dist_m)
 
 
     def __repr__(self):
@@ -1104,9 +1110,9 @@ class Layout(PyLayers):
         pylayers.gis.osmparser.osmparse
 
         """
-        defaults = { '_fileosm' : '',
+        defaults = {'_fileosm':'',
                     'address' : 'Rennes',
-                    'typ' : 'flooplan',
+                    'typ' : 'floorplan',
                     'latlon' : 0,
                     'dist_m' : 400,
                     'cart' : False
@@ -1123,9 +1129,9 @@ class Layout(PyLayers):
                                             dist_m=kwargs['dist_m'],
                                             cart=kwargs['cart'])
         else:
-            self.filename = _fileosm
-            fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
-            coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=typ)
+            self.filename = kwargs['_fileosm']
+            fileosm = pyu.getlong(kwargs['_fileosm'],os.path.join('struc','osm'))
+            coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=kwargs['typ'])
             self.coordinates = 'latlon'
         
         # 2 valid typ : 'floorplan' and 'building' 
@@ -1717,28 +1723,29 @@ class Layout(PyLayers):
         
         filename,ext=os.path.splitext(arg)
         newfile=False
-        if ext=='.osm':
+        if ext=='.osm':  # osm file with extension
             filename = pyu.getlong(arg,pstruc['DIROSM'])
-            if os.path.exists(filename):
-                self.loadosm(_filename,cart=cartesian)
-            else:
+            if os.path.exists(filename): # which exists
+                # force the cartesian conversion 
+                self.loadosm(_fileosm=arg,cart=cartesian)
+            else: # which do not exist
                 self.filename = arg
                 newfile=True
                 print "new file",self.filename
         
-        elif ext=='.ini':
+        elif ext=='.ini': # ini file with extension
             filename = pyu.getlong(arg,pstruc['DIRINI'])
-            if os.path.exists(filename):
+            if os.path.exists(filename):# which exists
                 self.loadini(arg)
-            else:
+            else: # which do not exist
                 self.filename = arg
                 newfile=True
                 print "new file",self.filename
-        else:
-            if '(' in arg:
+        else: # address or (lat,lon) 
+            if '(' in arg: # latlon
                 latlon = eval(arg)
                 self.loadosm(latlon=latlon,dist_m=dist_m,cart=cartesian)
-            else:
+            else: # address 
                 self.loadosm(address=arg,dist_m=dist_m,cart=cartesian)
                 self.filename = arg.replace(' ','_')
 
