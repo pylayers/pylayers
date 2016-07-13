@@ -8,4 +8,5 @@ conda install PIL --yes
 conda install basemap --yes
 pip install protobuf 
 pip install tqdm
+pip install geocoder
 python setup.py install
