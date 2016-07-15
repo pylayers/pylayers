@@ -432,14 +432,27 @@ class Layout(PyLayers):
        
 
         filename = pyu.getlong(self._filename,pstruc['DIRINI'])
-        pdb.set_trace()
+       
         if os.path.exists(filename):# which exists
             self.load()
+            self.boundary()
+            self.subseg()
             self.updateshseg()
         else: # which do not exist
             newfile = True
             print "new file - creating a void Layout",self._filename
 
+
+        if not newfile:
+            try:
+                self.geomfile()
+            except:
+                print "problem to construct geomfile"
+        
+        if not newfile:
+            if check:
+                self.check()
+            
         if not newfile :
             # check if the graph gpickle files have been built
             if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
@@ -1460,8 +1473,11 @@ class Layout(PyLayers):
                                 d['transition']=True
                         except:
                             pass
-                    # remove normal information from the strucure        
-                    d.pop('norm')
+                    # remove normal information from the strucure 
+                    try:       
+                        d.pop('norm')
+                    except:
+                        pass
                     config.set("segments",str(n),d)
 
         # list of used slab 
@@ -1473,6 +1489,7 @@ class Layout(PyLayers):
         if not hasattr(self,'sl'):
             self.sl = sb.SlabDB(filemat='matDB.ini',fileslab='slabDB.ini')
 
+        pdb.set_trace()
         for s in lslab:
             ds = {}
             ds['index'] = self.sl[s]['index']
@@ -5492,7 +5509,7 @@ class Layout(PyLayers):
 
 
         
-        self._find_diffraciotns()
+        self._find_diffractions()
         #
         #   VIII -  Construct the list of interactions associated to each cycle
         #
