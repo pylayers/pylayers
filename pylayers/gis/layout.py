@@ -1764,8 +1764,8 @@ class Layout(PyLayers):
         # if check:
         #     self.check()
         
-        
-        self.boundary(dx=10,dy=10)
+        if not newfile :
+            self.boundary(dx=10,dy=10)
         
         # create shapely polygons L._shseg 
         self.updateshseg()
@@ -4966,6 +4966,11 @@ class Layout(PyLayers):
 
         """
         # list of built graphs
+
+        if not hasboundary:
+            self.boundary()
+
+
         print "building Layout ..." 
         if 't' in graph:
             if verbose:
@@ -10003,16 +10008,16 @@ class Layout(PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, dx=0, dy=0,xlim=()):
+    def boundary(self, dx=10, dy=10,xlim=(),force=False):
         """ add a blank boundary around layout
 
         Parameters
         ----------
 
         dx : float
-            x offset (default 0)
+            percentage of x offset (default 0)
         dy : float
-            y offset (default 0 )
+            percentage of y offset  (default 0 )
 
         self.ax is updated
 
@@ -10024,7 +10029,7 @@ class Layout(PyLayers):
         >>> L.boundary()
 
         """
-        if not self.hasboundary:
+        if not self.hasboundary or force:
             if len(self.Gs.pos.values())!=0:
                 xmax = max(p[0] for p in self.Gs.pos.values())
                 xmin = min(p[0] for p in self.Gs.pos.values())
@@ -10041,10 +10046,13 @@ class Layout(PyLayers):
                 ymin = xlim[2]
                 ymax = xlim[3]
 
-            n1 = self.add_fnod((xmin-dx,ymin-dy))
-            n2 = self.add_fnod((xmax+dx,ymin-dy))
-            n3 = self.add_fnod((xmax+dx,ymax+dy))
-            n4 = self.add_fnod((xmin-dx,ymax+dy))
+            pdx = (xmax-xmin)*dx/100.
+            pdy = (ymax-ymin)*dy/100.
+
+            n1 = self.add_fnod((xmin-pdx,ymin-pdy))
+            n2 = self.add_fnod((xmax+pdx,ymin-pdy))
+            n3 = self.add_fnod((xmax+pdx,ymax+pdy))
+            n4 = self.add_fnod((xmin-pdx,ymax+pdy))
 
             self.lboundary=[n1,n2,n3,n4]
 
