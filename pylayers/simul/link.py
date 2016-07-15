@@ -349,7 +349,7 @@ class DLink(Link):
 
         Link.__init__(self)
 
-        defaults={ 'L':Layout(),
+        defaults={ 'L':Layout('defstr.ini'),
                    'a':np.array(()),
                    'b':np.array(()),
                    'Aa':[],
@@ -404,11 +404,8 @@ class DLink(Link):
         
 
 
-        try:
-            self._Lname = self._L.filename
-        except:
-            self._L=Layout(self._L)
-            self._Lname = self._L.filename
+       
+        self._Lname = self._L._filename
     
 
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
@@ -953,7 +950,7 @@ class DLink(Link):
             groupe name of the h5py file
         """
 
-
+        
         if not force :
             obj._saveh5(self.filename,grpname)
         # if save is forced, previous existing data are removed and

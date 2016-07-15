@@ -476,7 +476,7 @@ class Signatures(PyLayers,dict):
         self.source = source
         self.target = target
         self.cutoff = cutoff
-        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
     def __repr__(self):
 
@@ -600,7 +600,7 @@ class Signatures(PyLayers,dict):
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
-            f.attrs['L']=self.L.filename
+            f.attrs['L']=self.L._filename
             f.attrs['source']=self.source
             f.attrs['target']=self.target
             f.attrs['cutoff']=self.cutoff
@@ -669,7 +669,7 @@ class Signatures(PyLayers,dict):
             f=fh5['sig/'+grpname]
 
             # write data
-            f.attrs['L']=self.L.filename
+            f.attrs['L']=self.L._filename
             f.attrs['source']=self.source
             f.attrs['target']=self.target
             f.attrs['cutoff']=self.cutoff
@@ -2600,7 +2600,7 @@ class Signatures(PyLayers,dict):
         """
         print "run old"
         self.cutoff   = cutoff
-        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         # list of interactions visible from source
         lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
@@ -2724,7 +2724,7 @@ class Signatures(PyLayers,dict):
         """
         print "run"
         self.cutoff   = cutoff
-        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         # list of interactions visible from source
         lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
@@ -2998,7 +2998,7 @@ class Signatures(PyLayers,dict):
 
         """
         self.cutoff   = cutoff
-        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         # list of interactions visible from source
         lisR,lisT,lisD = self.L.intercy(self.source,typ='source')

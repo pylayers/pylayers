@@ -1262,8 +1262,8 @@ class Rays(PyLayers,dict):
             r3d[k]['dis'] = rlength[u]
 
         r3d.origin_sig_name = self.origin_sig_name
-        r3d.Lfilename = L.filename
-        r3d.filename = L.filename.split('.')[0] + '_' + str(r3d.nray)
+        r3d.Lfilename = L._filename
+        r3d.filename = L._filename.split('.')[0] + '_' + str(r3d.nray)
         return(r3d)
 
     def length(self,typ=2):
@@ -2755,7 +2755,7 @@ class Rays(PyLayers,dict):
 
         if L != []:
             try:
-                L.filename
+                L._filename
             except:
                 raise NameError('L argument must be a layout object')
 
@@ -2840,14 +2840,14 @@ class Rays(PyLayers,dict):
         """
 
         try:
-            L.filename
+            L._filename
         except:
             raise NameError('L argument must be a layout object')
 
         if not centered:
             pg=np.array([[0],[0],[0]])
 
-        strucname= L.filename.split('.')[0]
+        strucname= L._filename.split('.')[0]
         pg = L.geomfile(centered=centered)
         pg = np.hstack((pg,0.)).reshape(3,1)
 
