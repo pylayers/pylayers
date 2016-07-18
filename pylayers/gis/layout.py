@@ -250,6 +250,7 @@ import networkx as nx
 from networkx.readwrite import write_gpickle,read_gpickle
 import shapely.geometry as sh
 import shapely.ops as sho
+import triangle
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
@@ -5372,7 +5373,122 @@ class Layout(PyLayers):
 
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
-    def buildGt(self,check=False):
+    # def _triangle(self,poly_surround,poly_holes=[],mesh_holes=False):
+    #     """
+    #     perfome a delaunay partitioning on shapely polygons
+    
+    #     Parameters
+    #     ----------
+
+    #         poly_surround : sh.Polygon 
+    #             A single polygon to be partitionned
+    #         poly_holes : list of sh.Polygon
+    #             A list of polygon contained inside poly_surround. they are considered as holes
+    #         mesh_holes : bool
+    #             If True make the delaunay partition of poly_holes
+    #             else : only partitioning poly_surround  and traits poly_holes as holes
+
+    #     Notes
+    #     -----
+
+    #     uses triangle library
+
+    #     """
+
+
+    #     lP = [poly_surround] + poly_holes
+
+    #     vertices=np.ndarray(shape=(2,0))
+    #     segments=np.ndarray(shape=(2,0))
+    #     holes=np.ndarray(shape=(2,0))
+    #     segcpt=0
+    #     for p in lP:
+
+    #         pts = np.array(p.exterior.xy)[:,:-1]
+    #         vertices=np.hstack((vertices,pts))
+    #         nbv= pts.shape[1]
+
+    #         segments = np.hstack((segments,np.array([np.arange(nbv),np.mod(range(1,nbv+1),nbv)])+segcpt))
+    #         segcpt=segcpt+nbv
+    #         if not mesh_holes :
+    #             holes = np.hstack((holes,np.array(p.centroid.xy)))
+
+    #     if not mesh_holes:
+    #         C={'vertices':vertices.T,'segments':segments.T,'holes':holes.T}
+    #     else:
+    #         C={'vertices':vertices.T,'segments':segments.T}
+
+    #     T=triangle.triangulate(C,'pa')
+
+    #     # import triangle.plot as plot
+    #     # ax=plt.gca()
+    #     # plot.plot(ax,**T)
+
+    #     return T
+
+    def _triangle(self,poly_surround,poly_holes=[],mesh_holes=False):
+        """
+        perfome a delaunay partitioning on shapely polygons
+    
+        Parameters
+        ----------
+
+            poly_surround : sh.Polygon 
+                A single polygon to be partitionned
+            poly_holes : list of sh.Polygon
+                A list of polygon contained inside poly_surround. they are considered as holes
+            mesh_holes : bool
+                If True make the delaunay partition of poly_holes
+                else : only partitioning poly_surround  and traits poly_holes as holes
+
+
+        Return
+        ------
+            T : dict 
+                dictionnary from triangle.triangulate library
+                >>> T.keys()
+                ['segment_markers', 'segments', 'holes', 'vertices', 'vertex_markers', 'triangles']
+
+
+        Notes
+        -----
+
+        uses triangle library
+
+        """
+
+
+        lP = [poly_surround] + poly_holes
+
+        vertices=np.ndarray(shape=(2,0))
+        segments=np.ndarray(shape=(2,0))
+        holes=np.ndarray(shape=(2,0))
+        segcpt=0
+        for p in lP:
+
+            pts = np.array(p.exterior.xy)[:,:-1]
+            vertices=np.hstack((vertices,pts))
+            nbv= pts.shape[1]
+
+            segments = np.hstack((segments,np.array([np.arange(nbv),np.mod(range(1,nbv+1),nbv)])+segcpt))
+            segcpt=segcpt+nbv
+            if not mesh_holes :
+                holes = np.hstack((holes,np.array(p.centroid.xy)))
+
+        if not mesh_holes:
+            C={'vertices':vertices.T,'segments':segments.T,'holes':holes.T}
+        else:
+            C={'vertices':vertices.T,'segments':segments.T}
+
+        T=triangle.triangulate(C,'pa')
+
+        # import triangle.plot as plot
+        # ax=plt.gca()
+        # plot.plot(ax,**T)
+
+        return T
+
+    def buildGt(self,check=False,mesh_indoor=False):
         """  build Gt the graph of convex cycles 
 
         Parameters
@@ -5380,7 +5496,8 @@ class Layout(PyLayers):
 
         check : booolean
             if check 
-
+        mesh_indoor : bool
+            if True make a delaunay partiioning inside building
 
         """
 
@@ -5391,12 +5508,90 @@ class Layout(PyLayers):
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
-        # create polygon from shapely
+
+        # update shapely segments
         self.updateshseg()
 
-        X = sho.polygonize(self._shseg.values())
-        P = [x for x in X]
-        NP = []
+
+        ## PERFORM DELAUNAY
+
+        # # boundary polygon
+        BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
+        BP=[p for p in BP][0]
+
+        # list of polygon inside boundaries
+        lP= sho.polygonize([self._shseg[p] for p in self._shseg if p not in self.segboundary])
+        lP = [geu.Polygon(x) for x in lP]
+
+
+        # delaunay triangluation 
+        T  = self._triangle(BP,lP,mesh_holes=False)
+
+        ptri = T['vertices'][T['triangles']]
+        # create polygons from delaunay triangulation
+        NP=[geu.Polygon(x) for x in ptri]
+
+
+        # new created polygon after merging
+        NCP = lP
+        # import ipdb
+        # ipdb.set_trace()
+
+        # MERGE POLYGONS
+        # move from delaunay triangles to convex polygons
+        while NP !=[]:
+            p = NP.pop(0)
+            # restrict research to polygon that are touching themself
+            restp = [(ix,x) for ix,x in enumerate(NP) if p.intersects(x)]
+            # self.pltpoly(p,ax=plt.gca())
+            # import ipdb
+            # ipdb.set_trace()
+            # for ip2,p2 in restp:
+            for ip2,p2 in restp:
+                conv=False
+                inter = p.intersection(p2)
+                # if 2 triangles have a common segment
+                pold = p
+                if isinstance(inter,sh.LineString):
+                    p = p + p2
+                    if p.isconvex():
+                        NP.pop(ip2)
+                        NP.insert(0, p)
+                        conv = True
+                        break
+                    else:
+                        # if pold not in cpolys:
+                        #     cpolys.append(pold)
+                        p = pold
+            # if (ip2 >= len(polys)):# and (conv):
+            # if conv :
+            #     if p not in cpolys:
+            #         cpolys.append(p)
+            if restp ==[] and conv == True:
+                NCP.append(p)
+            if not conv:#else:
+                if pold not in NCP:
+                    NCP.append(pold)
+            if len(NP) == 0:
+                NCP.append(p)
+
+        # ADD AIRWALLS
+
+        # find coordinates of vertices
+        [p.setvnodes(self) for p in NCP]
+        # find where vnodes == 0 <=> a new segment has been added => need to create airwall
+        luaw = [(p,np.where(p.vnodes == 0)[0]) for p in NCP]
+        # for each polygon
+        for p,uaw in luaw :
+            # determine number of vnodes
+            lvn = len(p.vnodes)
+            # for each vnodes == 0, add an _AIR
+            for aw in uaw:
+                self.add_segment(  p.vnodes[np.mod(aw-1,lvn)],
+                                   p.vnodes[np.mod(aw+1,lvn)]
+                                   ,name='_AIR')
+            # update polygon segments with new added airwalls
+            p.setvnodes(self)
 
         # remove cycle 0 (exterior) if it exists
         try:
@@ -5413,28 +5608,34 @@ class Layout(PyLayers):
         #           - no : Delaunay on the polygon
         #
         
-        for p in P:
-            pin = [z for z in sho.polygonize(p.interiors)]
-            #no holes in polygon
-            if pin == []:
-                #Delaunay only if polygon not convex
-                if not geu.isconvex(p):
-                    A=self._delaunay(p)
-                    NP.extend(A)
-                else:
-
-                    A=geu.Polygon(p)
-                    A.setvnodes(self)
-                    NP.extend([A])
-            # hole in polygon
-            else:
-                # print 'hole'
-                A=self._delaunay(p,pin)
-                NP.extend(A)
 
 
+        # import ipdb
+        # ipdb.set_trace()
+        # for p in P:
+        #     pin = [z for z in sho.polygonize(p.interiors)]
+        #     print pin
+        #     #no holes in polygon
+        #     if pin == []:
+        #         #Delaunay only if polygon not convex
+        #         if not geu.isconvex(p):
+        #             A=self._delaunay(p)
+        #             NP.extend(A)
+        #         else:
+
+        #             A=geu.Polygon(p)
+        #             A.setvnodes(self)
+        #             NP.extend([A])
+        #     # hole in polygon
+        #     else:
+        #         # print 'hole'
+        #         A=self._delaunay(p,pin)
+        #         NP.extend(A)
+
+        import ipdb
+        ipdb.set_trace()
         #III . create Gt nodes
-        for ui,p in enumerate(NP):
+        for ui,p in enumerate(NCP):
             cyid = ui+1
             outdoor = False
             # III 1.a get vnode associated to the polygon
