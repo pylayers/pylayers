@@ -5461,26 +5461,25 @@ class Layout(PyLayers):
         while lP !=[]:
             p = lP.pop(0)
             # restrict research to polygon that are touching themself
-            restp = [(ix,x) for ix,x in enumerate(lP) if p.intersects(x)]
+            restp = [(ix,x) for ix,x in enumerate(lP) if  isinstance(p.intersection(x),sh.LineString)]
             # self.pltpoly(p,ax=plt.gca())
 
+            conv=False
+            pold = p
             # for ip2,p2 in restp:
             for ip2,p2 in restp:
-                conv=False
-                inter = p.intersection(p2)
+                # inter = p.intersection(p2)
                 # if 2 triangles have a common segment
-                pold = p
-                if isinstance(inter,sh.LineString):
-                    p = p + p2
-                    if p.isconvex():
-                        lP.pop(ip2)
-                        lP.insert(0, p)
-                        conv = True
-                        break
-                    else:
-                        # if pold not in cpolys:
-                        #     cpolys.append(pold)
-                        p = pold
+                p = p + p2
+                if p.isconvex():
+                    lP.pop(ip2)
+                    lP.insert(0, p)
+                    conv = True
+                    break
+                else:
+                    # if pold not in cpolys:
+                    #     cpolys.append(pold)
+                    p = pold
             # if (ip2 >= len(polys)):# and (conv):
             # if conv :
             #     if p not in cpolys:
@@ -5644,6 +5643,8 @@ class Layout(PyLayers):
 
 
         lMP = lMPout + lMPin
+        import ipdb
+        ipdb.set_trace()
         # index of polygon representing indoor/outdoor situation
         uindoor = np.zeros(len(lMP),dtype='bool')
         uindoor[len(lMPout):]=True
@@ -5674,8 +5675,7 @@ class Layout(PyLayers):
         except:
             pass
 
-        import ipdb
-        ipdb.set_trace()
+
         #III . create Gt nodes
         for ui,p in enumerate(lMP):
             cyid = ui+1
@@ -5804,8 +5804,7 @@ class Layout(PyLayers):
 
 
 
-        import ipdb
-        ipdb.set_trace()
+
         self._find_diffractions()
         #
         #   VIII -  Construct the list of interactions associated to each cycle
@@ -5840,6 +5839,34 @@ class Layout(PyLayers):
             assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
             assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
             print "passed"
+
+    def _visual_check(self):
+        fig,axs=plt.subplots(2,2)
+
+        ax = axs[0,0]
+        self.showG('s',aw=1,ax=ax,fig=fig)
+        indoor = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes() if p!=0 and self.Gt.node[p]['indoor'] ]
+        outdoor = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes() if p!=0 and not self.Gt.node[p]['indoor'] ]
+        self.pltpoly(indoor,color='r',ax=ax,fig=fig)
+        self.pltpoly(outdoor,color='g',ax=ax,fig=fig)
+        ax.set_title('indoor red,outdoor green')
+
+        ax = axs[0,1]
+        f,ax=self.showG('s',aw=1,ax=ax,fig=fig)
+        isopen = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes() if p !=0 and self.Gt.node[p]['isopen'] ]
+        self.pltpoly(isopen,ax=ax,fig=fig)
+        ax.set_title('isopen red')
+
+        ax = axs[1,0]
+        f,ax=self.showG('s',aw=1,ax=ax,fig=fig)
+        diffpos = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
+        ax.scatter(diffpos[:,0],diffpos[:,1])
+        ax.set_title('diffraction points')        
+
+        ax = axs[1,1]
+        f,ax=self.showG('st',labels='t',aw=1,ax=ax,fig=fig)
+        ax.set_title('Gt')        
+
 
     def _delaunay(self,poly,polyholes=[]):
         """ make a Delaunay partitioning of a polygon
