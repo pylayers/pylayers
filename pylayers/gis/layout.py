@@ -5458,14 +5458,16 @@ class Layout(PyLayers):
         """
 
 
-        lP = [poly_surround] + poly_holes
+        if not isinstance(poly_surround,list ):
+            poly_surround=[poly_surround]
+
+        lP = poly_surround + poly_holes
 
         vertices=np.ndarray(shape=(2,0))
         segments=np.ndarray(shape=(2,0))
         holes=np.ndarray(shape=(2,0))
         segcpt=0
         for p in lP:
-
             pts = np.array(p.exterior.xy)[:,:-1]
             vertices=np.hstack((vertices,pts))
             nbv= pts.shape[1]
