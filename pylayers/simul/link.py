@@ -129,6 +129,8 @@ from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
 from pylayers.antprop.channel import Ctilde, Tchannel
 from pylayers.antprop.statModel import getchannel
+import tqdm
+
 
 import h5py
 import pdb
@@ -360,7 +362,7 @@ class DLink(Link):
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
-                   'verbose':True,
+                   'verbose':False,
                    'graph':'tcvirw'
                 }
 
@@ -577,7 +579,7 @@ class DLink(Link):
             self.ca = self.L.pt2cy(position)
         self._a = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
-            self._update_show3(ant='a')
+            self._update_show3(ant='a',delrays=True)
         
 
     @b.setter
@@ -596,7 +598,7 @@ class DLink(Link):
             self.cb = self.L.pt2cy(position)
         self._b = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
-            self._update_show3(ant='b')
+            self._update_show3(ant='b',delrays=True)
         
 
     @ca.setter
@@ -1255,6 +1257,9 @@ class DLink(Link):
                 If -1 : neither ceil nor floor reflection (2D case) 
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
+        progressbar: str
+            None: no progress bar
+            python : progress bar in ipython
 
 
         Returns
@@ -1315,6 +1320,7 @@ class DLink(Link):
                    'si_reverb':4,
                    'threshold':0.1,
                    'verbose':[],
+                   'progressbar':None,
                    }
 
         for key, value in defaults.items():
@@ -1342,6 +1348,16 @@ class DLink(Link):
         if self.verbose :
             print "checkh5"
         self.checkh5()
+
+        if isinstance(kwargs['progressbar'],str):
+            if kwargs['progressbar'] =='notebook':
+                pbar = tqdm.tqdm_notebook(total=100)
+            elif kwargs['progressbar']=='python':
+                pbar = tqdm.tqdm(total=100)
+        elif isinstance(kwargs['progressbar'],tqdm.tqdm):
+            pbar = kwargs['progressbar']
+
+
 
         ############
         # Signatures
@@ -1376,7 +1392,6 @@ class DLink(Link):
                 if self.verbose :
                     print "algo exp2 ( ex 20152)"
 
-
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
             
@@ -1386,6 +1401,10 @@ class DLink(Link):
         toc = time.time()
         if self.verbose :
             print "Stop signature",toc-tic
+        try:
+            pbar.update(20)
+        except: 
+            pass
 
 
 
@@ -1428,10 +1447,13 @@ class DLink(Link):
         toc = time.time()
         if self.verbose :
             print "Stop rays",toc-tic
-
+        
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
-
+        try:
+            pbar.update(20)
+        except: 
+            pass
         ############
         # Ctilde
         ############
@@ -1452,6 +1474,10 @@ class DLink(Link):
 
         self.C = C
 
+        try:
+            pbar.update(20)
+        except: 
+            pass
         ############
         # H
         ############
@@ -1467,12 +1493,20 @@ class DLink(Link):
             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
         self.H = H
+        try:
+            pbar.update(20)
+        except: 
+            pass
+
         if kwargs['applywav']:
             if self.H.isFriis:
                 self.ir = self.H.get_cir(self.wav.sf)
             else:
                 self.ir = self.H.get_cir(self.wav.sfg)
-
+        try:
+            pbar.update(20)
+        except: 
+            pass
         return self.H.ak, self.H.tk
 
     def show(self,**kwargs):
@@ -1723,21 +1757,31 @@ class DLink(Link):
         self._maya_fig.scene.disable_render = False
 
 
-    def _update_show3(self,ant='a'):
+    def _update_show3(self,ant='a',delrays=False):
         """
         """
+
         antenna = eval('self.A'+ant)
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
+
+        if not antenna.full_evaluated:
+            antenna.eval()
+
 
         if hasattr(antenna,'_mayamesh'):
             x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
-            antenna.eval()
             antenna._show3(T=rot,po=pos,
                 title=False,colorbar=False,newfig=False,name = '',interact=False)
 
+        if delrays:
+            import time
+            for x in self._maya_fig.children[::-1]:
+                if 'Rays' in x.name:
+                    x.remove()
+             # [x.remove() for x in self._maya_fig.children ]
 
 
 

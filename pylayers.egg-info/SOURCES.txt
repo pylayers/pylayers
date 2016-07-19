@@ -59,8 +59,7 @@ pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
-pylayers/gis/test_loc.py
-pylayers/gui/__editorsel_toberemoved.py
+pylayers/gui/TEST.py
 pylayers/gui/__init__.py
 pylayers/gui/cycles.py
 pylayers/gui/editor.py

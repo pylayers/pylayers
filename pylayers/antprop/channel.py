@@ -2245,10 +2245,8 @@ class Tchannel(bs.FUsignal):
 
 
 
-        if self.isFriis :
-            Etot = self.energy(mode=mode) + 1e-15
-        else :
-            Etot = self.energy(mode=mode) + 1e-15
+        Etot = self.energy(mode=mode) + 1e-15
+
 
 
         if normalize:

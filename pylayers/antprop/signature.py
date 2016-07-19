@@ -3886,17 +3886,21 @@ class Signatures(PyLayers,dict):
             pt = np.empty((2,2,nsig,ninter))
 
 
-            #1 negative points
+            # 1 negative points
             # seek for diffraction 
             # negative index points are diffraction points
             upoint = np.where(nid<0)
             unipoint,idx = np.unique(nid[upoint],return_inverse=True)
 
             #get their coordinates
-            upointcoord = self.L.iupnt[-unipoint]
-            pointcoord = self.L.pt[:,upointcoord]
+            #
+            # TO BE FIXED 
+            #
+            #upointcoord = self.L.iupnt[-unipoint]
+            #pointcoord = self.L.pt[:,upointcoord]
 
-            # ####WARNING BIG TRICK HERE :
+            pointcoord = np.array([ (self.L.Gs.pos[x][0],self.L.Gs.pos[x][1])  for x in unipoint ]).T
+            # #### WARNING BIG TRICK HERE :
             # #### pa and pb are not set as the same value 
             # #### to avoid a singular matrixnext.
             # #### set pa =-pb has no incidence but avoid complex and vain code 
@@ -3908,8 +3912,8 @@ class Signatures(PyLayers,dict):
                 pass
 
 
-            #2 poisive points
-            #seek for segments
+            # 2 positive points
+            # seek for segments
             useg = np.where(nid>0)
             # removing duplicates ( for increasing speed)
             uniseg,idxp = np.unique(nid[useg],return_inverse=True)
@@ -4098,10 +4102,15 @@ class Signatures(PyLayers,dict):
             unipoint,idxpt = np.unique(nid[upoint],return_inverse=True)
 
             #get their coordinates
-            upointcoord = self.L.iupnt[-unipoint]
-            pointcoord = self.L.pt[:,upointcoord]
+            #
+            # To be FIXED
+            #
+            #upointcoord = self.L.iupnt[-unipoint]
+            #pointcoord = self.L.pt[:,upointcoord]
 
-            # try except if there is no diffraction
+            pointcoord = np.array([ (self.L.Gs.pos[x][0],self.L.Gs.pos[x][1])  for x in unipoint ]).T
+        
+            # try except to handle the case where there is no diffraction point
             try:
                 pt[:,0,upoint[0],upoint[1]] = pointcoord[:,idxpt]
                 pt[:,1,upoint[0],upoint[1]] = pointcoord[:,idxpt]
@@ -4109,7 +4118,7 @@ class Signatures(PyLayers,dict):
                 pass
 
 
-            #2 poisive points
+            #2 positive points
             #seek for segments
             useg = np.where(nid>0)
             # removing duplicates ( for increasing speed)

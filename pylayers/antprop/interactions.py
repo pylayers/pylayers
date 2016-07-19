@@ -882,7 +882,10 @@ class IntD(Inter):
 
         fGHz : np.array
 
+
         """
+
+
         self.fGHz=fGHz
         self.nf=len(fGHz)
         self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
