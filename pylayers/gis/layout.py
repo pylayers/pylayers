@@ -5373,60 +5373,7 @@ class Layout(PyLayers):
 
         self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
-    # def _triangle(self,poly_surround,poly_holes=[],mesh_holes=False):
-    #     """
-    #     perfome a delaunay partitioning on shapely polygons
-    
-    #     Parameters
-    #     ----------
-
-    #         poly_surround : sh.Polygon 
-    #             A single polygon to be partitionned
-    #         poly_holes : list of sh.Polygon
-    #             A list of polygon contained inside poly_surround. they are considered as holes
-    #         mesh_holes : bool
-    #             If True make the delaunay partition of poly_holes
-    #             else : only partitioning poly_surround  and traits poly_holes as holes
-
-    #     Notes
-    #     -----
-
-    #     uses triangle library
-
-    #     """
-
-
-    #     lP = [poly_surround] + poly_holes
-
-    #     vertices=np.ndarray(shape=(2,0))
-    #     segments=np.ndarray(shape=(2,0))
-    #     holes=np.ndarray(shape=(2,0))
-    #     segcpt=0
-    #     for p in lP:
-
-    #         pts = np.array(p.exterior.xy)[:,:-1]
-    #         vertices=np.hstack((vertices,pts))
-    #         nbv= pts.shape[1]
-
-    #         segments = np.hstack((segments,np.array([np.arange(nbv),np.mod(range(1,nbv+1),nbv)])+segcpt))
-    #         segcpt=segcpt+nbv
-    #         if not mesh_holes :
-    #             holes = np.hstack((holes,np.array(p.centroid.xy)))
-
-    #     if not mesh_holes:
-    #         C={'vertices':vertices.T,'segments':segments.T,'holes':holes.T}
-    #     else:
-    #         C={'vertices':vertices.T,'segments':segments.T}
-
-    #     T=triangle.triangulate(C,'pa')
-
-    #     # import triangle.plot as plot
-    #     # ax=plt.gca()
-    #     # plot.plot(ax,**T)
-
-    #     return T
-
-    def _triangle(self,poly_surround,poly_holes=[],mesh_holes=False):
+    def _triangle_old(self,poly_surround,poly_holes=[],mesh_holes=False):
         """
         perfome a delaunay partitioning on shapely polygons
     
@@ -5464,7 +5411,7 @@ class Layout(PyLayers):
         lP = poly_surround + poly_holes
 
         vertices=np.ndarray(shape=(2,0))
-        segments=np.ndarray(shape=(2,0))
+        segments=np.ndarray(shape=(2,0),dtype='int')
         holes=np.ndarray(shape=(2,0))
         segcpt=0
         for p in lP:
@@ -5472,7 +5419,7 @@ class Layout(PyLayers):
             vertices=np.hstack((vertices,pts))
             nbv= pts.shape[1]
 
-            segments = np.hstack((segments,np.array([np.arange(nbv),np.mod(range(1,nbv+1),nbv)])+segcpt))
+            segments = np.hstack((segments,np.array([np.arange(nbv),np.mod(range(1,nbv+1),nbv)],dtype='int')+segcpt))
             segcpt=segcpt+nbv
             if not mesh_holes :
                 holes = np.hstack((holes,np.array(p.centroid.xy)))
@@ -5481,7 +5428,8 @@ class Layout(PyLayers):
             C={'vertices':vertices.T,'segments':segments.T,'holes':holes.T}
         else:
             C={'vertices':vertices.T,'segments':segments.T}
-
+        import ipdb
+        ipdb.set_trace()
         T=triangle.triangulate(C,'pa')
 
         # import triangle.plot as plot
@@ -5489,6 +5437,133 @@ class Layout(PyLayers):
         # plot.plot(ax,**T)
 
         return T
+
+
+    def _merge_polygons(self,lP):
+        """ merge triangle (polygon object) to cvx polygon
+
+        Parameters
+        ----------
+            lP : list
+                list of polygon to be merged
+
+        Return
+        ------
+
+            lMP : list
+                list of merged polygons
+
+        """
+
+        lMP=[]
+        # MERGE POLYGONS
+        # move from delaunay triangles to convex polygons
+        while lP !=[]:
+            p = lP.pop(0)
+            # restrict research to polygon that are touching themself
+            restp = [(ix,x) for ix,x in enumerate(lP) if p.intersects(x)]
+            # self.pltpoly(p,ax=plt.gca())
+
+            # for ip2,p2 in restp:
+            for ip2,p2 in restp:
+                conv=False
+                inter = p.intersection(p2)
+                # if 2 triangles have a common segment
+                pold = p
+                if isinstance(inter,sh.LineString):
+                    p = p + p2
+                    if p.isconvex():
+                        lP.pop(ip2)
+                        lP.insert(0, p)
+                        conv = True
+                        break
+                    else:
+                        # if pold not in cpolys:
+                        #     cpolys.append(pold)
+                        p = pold
+            # if (ip2 >= len(polys)):# and (conv):
+            # if conv :
+            #     if p not in cpolys:
+            #         cpolys.append(p)
+            if restp ==[] and conv == True:
+                lMP.append(p)
+            if not conv:#else:
+                if pold not in lMP:
+                    lMP.append(pold)
+            if len(lP) == 0:
+                if p not in lMP:
+                    lMP.append(p)
+
+            # self.pltpoly(lMP,ax=plt.gca())
+            # import ipdb
+            # ipdb.set_trace()
+        return lMP
+
+    def _triangle(self,holes=[],vnodes=[]):
+        """
+        perfom a delaunay partitioning on shapely polygons
+    
+        Parameters
+        ----------
+
+            holes : ndarray
+                if holes ==[] : it means the merge is apply on the interior of the layout (indoor)
+                if holes == np.ndarray (centroid of polygon). indoor is discarded and delaunay
+                        is applied on outdoor
+
+
+        Return
+        ------
+            T : dict 
+                dictionnary from triangle.triangulate library
+                >>> T.keys()
+                ['segment_markers', 'segments', 'holes', 'vertices', 'vertex_markers', 'triangles']
+
+
+        Notes
+        -----
+
+        uses triangle library
+
+        """
+
+        # this means delaunay is applied on exterior
+        # and inside polygon will be discarded
+        segbounds=[]
+        ptbounds=[]
+        if holes == []:
+            # remove air segments around layout
+            [segbounds.extend(nx.neighbors(self.Gs,x)) for x in self.lboundary]
+            ptbounds = self.lboundary
+
+        if vnodes ==[]:
+            vnodes=self.Gs.nodes()
+        # find segments of layout
+        seg=np.array([nx.neighbors(self.Gs,x) for x in vnodes 
+                                                if x>0 
+                                                and x not in segbounds ])
+        # get vertices/points of layout
+        ivertices = np.array([(x,self.Gs.pos[x][0],self.Gs.pos[x][1]) for x in vnodes 
+                                                                        if x<0 
+                                                                        and x not in ptbounds])
+        idx=ivertices[:,0]
+        vertices=ivertices[:,1:]
+
+        sorter=np.argsort(idx)
+        # mapping between Gs segments and triangle segments
+        segments = sorter[np.searchsorted(idx, seg, sorter=sorter)]
+        if holes == []:
+            C={'vertices':vertices,'segments':segments}
+        else:
+            C={'vertices':vertices,'segments':segments,'holes':holes}
+        T=triangle.triangulate(C,'pa')
+
+        # import triangle.plot as plot
+        # ax=plt.gca()
+        # plot.plot(ax,**T)
+
+        return T
+
 
     def buildGt(self,check=False,mesh_indoor=False):
         """  build Gt the graph of convex cycles 
@@ -5514,75 +5589,71 @@ class Layout(PyLayers):
         # update shapely segments
         self.updateshseg()
 
-
         ## PERFORM DELAUNAY
 
         # # boundary polygon
         BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
         BP=[p for p in BP][0]
 
+
         # list of polygon inside boundaries
         lP= sho.polygonize([self._shseg[p] for p in self._shseg if p not in self.segboundary])
         lP = [geu.Polygon(x) for x in lP]
 
 
-        # delaunay triangluation 
-        T  = self._triangle(BP,lP,mesh_holes=False)
+        # determine center of polygons
+        holes=np.array([p.centroid.xy for p in lP ])[:,:,0]
 
-        ptri = T['vertices'][T['triangles']]
-        # create polygons from delaunay triangulation
-        NP=[geu.Polygon(x) for x in ptri]
+        # delaunay triangluation of exterior polygon
+        Tout  = self._triangle(holes=holes)
+        #Tout  = self._triangle_old(BP,lP,mesh_holes=False)
+
+        ptri = Tout['vertices'][Tout['triangles']]
+        # create Triangle Polygons from delaunay triangulation
+        TP=[geu.Polygon(x) for x in ptri]
+        # list of Merged Polygons outdoor
+        lMPout = self._merge_polygons(TP)
 
 
-        # new created polygon after merging
-        NCP = lP
-        # import ipdb
-        # ipdb.set_trace()
+        if mesh_indoor:
 
-        # MERGE POLYGONS
-        # move from delaunay triangles to convex polygons
-        while NP !=[]:
-            p = NP.pop(0)
-            # restrict research to polygon that are touching themself
-            restp = [(ix,x) for ix,x in enumerate(NP) if p.intersects(x)]
-            # self.pltpoly(p,ax=plt.gca())
-            # import ipdb
-            # ipdb.set_trace()
-            # for ip2,p2 in restp:
-            for ip2,p2 in restp:
-                conv=False
-                inter = p.intersection(p2)
-                # if 2 triangles have a common segment
-                pold = p
-                if isinstance(inter,sh.LineString):
-                    p = p + p2
-                    if p.isconvex():
-                        NP.pop(ip2)
-                        NP.insert(0, p)
-                        conv = True
-                        break
-                    else:
-                        # if pold not in cpolys:
-                        #     cpolys.append(pold)
-                        p = pold
-            # if (ip2 >= len(polys)):# and (conv):
-            # if conv :
-            #     if p not in cpolys:
-            #         cpolys.append(p)
-            if restp ==[] and conv == True:
-                NCP.append(p)
-            if not conv:#else:
-                if pold not in NCP:
-                    NCP.append(pold)
-            if len(NP) == 0:
-                NCP.append(p)
+            # only non convex polygon will be merged
+            lncP = [p for p in lP if not p.isconvex()]
+            lcP = [p for p in lP if p.isconvex()]
+            lMPin=[]
+            if len(lncP) >0:
+                [p.setvnodes(self) for p in lncP]
+                vnodes=[]
+                [vnodes.extend(p.vnodes) for p in lncP]
+                vnodes=np.unique(vnodes)
+                # delaunay triangluat ion of interior of polygons
+                Tin  = self._triangle(holes=[],vnodes=vnodes)
+                # Tin  = self._triangle_old(lP,mesh_holes=True)
+                ptri = Tin['vertices'][Tin['triangles']]
+                # create polygons from delaunay triangulation
+                TP=[geu.Polygon(x) for x in ptri]
+                # list of Merged Polygons indoor
+                lMPin = self._merge_polygons(TP)
+                [lP.remove(p) for p in lncP]
+            # conserve convex polygons
+            lMPin.extend(lP)
+        else:
+            # if indoor not meshed, the polygon inside 
+            # are directly the list of polygon inside boundaries (a.k.a. holes)
+            lMPin = lP
+
+
+        lMP = lMPout + lMPin
+        # index of polygon representing indoor/outdoor situation
+        uindoor = np.zeros(len(lMP),dtype='bool')
+        uindoor[len(lMPout):]=True
+
 
         # ADD AIRWALLS
-
         # find coordinates of vertices
-        [p.setvnodes(self) for p in NCP]
+        [p.setvnodes(self) for p in lMP]
         # find where vnodes == 0 <=> a new segment has been added => need to create airwall
-        luaw = [(p,np.where(p.vnodes == 0)[0]) for p in NCP]
+        luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lMP]
         # for each polygon
         for p,uaw in luaw :
             # determine number of vnodes
@@ -5595,51 +5666,20 @@ class Layout(PyLayers):
             # update polygon segments with new added airwalls
             p.setvnodes(self)
 
+        self.g2npy()
+
         # remove cycle 0 (exterior) if it exists
         try:
             self.Gt.remove_node(0)
         except:
             pass
-        #II . make polygon convex
-        #for each polygon :
-        # - is polygon convex ?: 
-        #   - yes : you're done !
-        #  - no :
-        #       - has polygon an inner hole ? 
-        #           - yes : Delaunay on polygon, excluding the polygon inside ( polyhole)
-        #           - no : Delaunay on the polygon
-        #
-        
-
-
-        # import ipdb
-        # ipdb.set_trace()
-        # for p in P:
-        #     pin = [z for z in sho.polygonize(p.interiors)]
-        #     print pin
-        #     #no holes in polygon
-        #     if pin == []:
-        #         #Delaunay only if polygon not convex
-        #         if not geu.isconvex(p):
-        #             A=self._delaunay(p)
-        #             NP.extend(A)
-        #         else:
-
-        #             A=geu.Polygon(p)
-        #             A.setvnodes(self)
-        #             NP.extend([A])
-        #     # hole in polygon
-        #     else:
-        #         # print 'hole'
-        #         A=self._delaunay(p,pin)
-        #         NP.extend(A)
 
         import ipdb
         ipdb.set_trace()
         #III . create Gt nodes
-        for ui,p in enumerate(NCP):
+        for ui,p in enumerate(lMP):
             cyid = ui+1
-            outdoor = False
+            
             # III 1.a get vnode associated to the polygon
             #get vnodes not in the correct order
             # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
@@ -5674,7 +5714,7 @@ class Layout(PyLayers):
                 isopen = False
 
             # III 1.e add nodes
-            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
+            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=uindoor[ui])
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
         #IV  create Gt edges
@@ -5764,7 +5804,8 @@ class Layout(PyLayers):
 
 
 
-        
+        import ipdb
+        ipdb.set_trace()
         self._find_diffractions()
         #
         #   VIII -  Construct the list of interactions associated to each cycle

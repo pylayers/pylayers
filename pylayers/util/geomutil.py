@@ -4870,11 +4870,16 @@ def get_pol_angles(poly, unit= 'rad', inside=True):
         http://www.mathopenref.com/polygonexteriorangles.html
 
         """
-        pt = np.array(poly.exterior.xy)[:,:-1]
 
+
+        pt = np.array(poly.exterior.xy)[:,:-1]
+        if hasattr(poly,'vnodes'):
+            upt = poly.vnodes[poly.vnodes<0]
+        else:
+            upt = range(np.array(poly.exterior.xy).shape[1])
         # flip orientation in case of negative area
         if SignedArea(pt)<0:
-            # upt = upt[::-1]
+            upt = upt[::-1]
             pt = pt [:,::-1]
 
 
@@ -4897,9 +4902,9 @@ def get_pol_angles(poly, unit= 'rad', inside=True):
 
 
         if unit == 'deg':
-            return ang*180/np.pi
+            return upt,ang*180/np.pi
         elif unit == 'rad':
-            return ang
+            return upt,ang
 
 
 if __name__ == "__main__":
