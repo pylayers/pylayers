@@ -5643,8 +5643,6 @@ class Layout(PyLayers):
 
 
         lMP = lMPout + lMPin
-        import ipdb
-        ipdb.set_trace()
         # index of polygon representing indoor/outdoor situation
         uindoor = np.zeros(len(lMP),dtype='bool')
         uindoor[len(lMPout):]=True
@@ -5865,8 +5863,7 @@ class Layout(PyLayers):
 
         ax = axs[1,1]
         f,ax=self.showG('st',labels='t',aw=1,ax=ax,fig=fig)
-        ax.set_title('Gt')        
-
+        ax.set_title('Gt')
 
     def _delaunay(self,poly,polyholes=[]):
         """ make a Delaunay partitioning of a polygon
@@ -8870,7 +8867,6 @@ class Layout(PyLayers):
         #
         #ldiff = list(np.hstack((self.degree[1],self.degree[2])).astype('int'))
         lpnt = [x for x in self.Gs.node if (x <0 and x not in self.degree[0]) ]
-        dl
         self.ddiff = {}
 
         for k in lpnt:
