@@ -2134,124 +2134,6 @@ class Layout(PyLayers):
         ang[~uleft] = geu.vecang(vptpan,vptpan)
         
 
-    def get_singlGt_angles(self, cy, unit= 'rad', inside=True):
-        """ find angles of a single Gt cycle of the layout. 
-
-        Parameters
-        ----------
-        cy : int
-            Gt cyle number
-        unit : str
-            'deg' : degree values
-            'rad' : radian values
-        inside : bollean
-            True :  compute the inside angles of the cycle.
-                    (a.k.a. in regard of the interior of the polygon) 
-            False : compute the outside angles of the cycle.
-                    (a.k.a.  in regard of the exterior of the polygon)
-
-        Return
-        ------
-
-        (u,a)
-        u : int (Np)
-            point number
-        a : float (Np)
-            associated angle to the point
-
-
-        Notes
-        -----
-
-        http://www.mathopenref.com/polygonexteriorangles.html
-
-        """
-
-        if cy > 0:
-            cycle = self.Gt.node[cy]['cycle'].cycle
-        else: #handle outdoorcycle 0
-            try:
-                cycle = self.ma.vnodes
-            except:
-                self.ma = self.mask()
-                cycle = self.ma.vnodes
-
-        # point indices (<0) of the cycle
-        upt = cycle[cycle<0]
-        
-        #pt = self.pt[:,self.iupnt[-upt]]
-        #
-        # fixing OSM numbering bug 
-        # point coordinates extraction from Gs 
-        #
-
-        pt2 = np.array([ (x,self.Gs.pos[x][0],self.Gs.pos[x][1])  for x in self.Gs.pos if x in upt ]).T
-        
-        upt = pt2[0,:] 
-        pt  = pt2[1:,:]
-
-        # flip orientation in case of negative area
-        if geu.SignedArea(pt)<0:
-            upt = upt[::-1]
-            pt = pt [:,::-1]
-
-
-        ptroll = np.roll(pt,1,axis=1)
-
-        v = pt-ptroll
-        v = np.hstack((v,v[:,0][:,None]))
-        vn = v / np.sqrt(np.sum((v)*(v),axis=0))
-        v0 = vn[:,:-1]
-        v1 = vn[:,1:]
-        cross = np.cross(v0.T,v1.T)
-        dot = np.sum(v0*v1,axis=0)
-        ang = np.arctan2(cross,dot)
-        uneg = ang <0
-        ang[uneg] = -ang[uneg]+np.pi
-        ang[~uneg] = np.pi-ang[~uneg]
-
-        if not inside : 
-            ang = 2*np.pi-ang
-
-
-        if unit == 'deg':
-            return upt,ang*180/np.pi
-        elif unit == 'rad':
-            return upt,ang
-        # atan2(cross(a,b)), dot(a,b))
-
-
-    def get_Gt_angles(self):
-        """ find angles of all Gt cycles of the layout. 
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-
-
-        (u,a)
-        u : int (Np)
-            point number
-        a : float (Np)
-            associated angle to the point
-
-
-        See Also
-        --------
-
-        pylayer.layout.get_singlGt_angles
-        pylayer.layout.g2npy
-        
-        """
-
-        dangles = {}
-        for cy in self.Gt.nodes():
-            uc,ac = self.get_singlGt_angles(cy,inside=True)
-            dangles[cy]=np.array(([uc,ac]))
-        return dangles
 
     def wedge(self,lpnt):
         """ calculate wedge angle of a point
@@ -5633,6 +5515,7 @@ class Layout(PyLayers):
                 TP=[geu.Polygon(x) for x in ptri]
                 # list of Merged Polygons indoor
                 lMPin = self._merge_polygons(TP)
+                # remove old non convex polygon and replace by the convexify-ed ones
                 [lP.remove(p) for p in lncP]
             # conserve convex polygons
             lMPin.extend(lP)
@@ -5651,7 +5534,8 @@ class Layout(PyLayers):
         # ADD AIRWALLS
         # find coordinates of vertices
         [p.setvnodes(self) for p in lMP]
-        # find where vnodes == 0 <=> a new segment has been added => need to create airwall
+        # find where vnodes == 0 <=> a new segment has been added 
+        #=> need to create airwall
         luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lMP]
         # for each polygon
         for p,uaw in luaw :
@@ -5722,7 +5606,7 @@ class Layout(PyLayers):
                 if n1!= n2:
                     if self.Gt.node[n1]['polyg'].touches(self.Gt.node[n2]['polyg']):
                         # find common segments
-                        seg = np.array([n for n in self.Gt.node[n1]['cycle'].cycle if (n in self.Gt.node[n2]['cycle'].cycle) and (n>0)])
+                        seg = np.array([n for n in self.Gt.node[n1]['polyg'].vnodes if (n in self.Gt.node[n2]['polyg'].vnodes) and (n>0)])
                         #if cycle are connected by at least a segmnet but not a point
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
@@ -5740,70 +5624,21 @@ class Layout(PyLayers):
         for s in self.segboundary:
             self.Gs.node[s]['ncycles'].append(0)
 
-        #   VI - Connect cycle 0 to each cycle connected to the layout
-        #   boundary
-        #
-
-        bp = sho.polygonize([self._shseg[x] for x in self.segboundary])
-        bp = [p for p in bp]
-        boundary=geu.Polygon(bp[0])
-        boundary.setvnodes(self)
-        # all segments of the Layout boundary
-        nseg = filter(lambda x : x >0 , boundary.vnodes)
-        # air segments of the Layout boundary
-        nsegair = filter(lambda x : x in (self.name['AIR']+self.name['_AIR']),nseg)
-        # wall segments of the Layout boundary
-        nsegwall = filter(lambda x : x not in (self.name['AIR']+self.name['_AIR']),nseg)
-
-        #
-        # ldiffin  : list of indoor diffraction points
-        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
-        #
-
-        # self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
-        # self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
-
         #
         # boundary adjascent cycles
         #
         adjcyair = np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],nsegair))
-        adjcwall = np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],nsegwall))
-        # pdb.set_trace()
-        # adjcyair = np.unique(adjcyair)
-        # adjcwall = np.unique(adjcwall)
-
+                                      self.Gs.node[x]['ncycles'])[0],self.segboundary))
         # connect cycles separated by air wall to cycle 0  
-        for cy,seg in zip(adjcyair,nsegair):
+        for cy,seg in zip(adjcyair,self.segboundary):
             self.Gt.node[cy]['indoor'] = False
             self.Gt.node[cy]['isopen'] = True
             self.Gt.add_edge(0,cy,segment=np.array([seg]))
 
-        # connect cycles separated by wall to cycle 0      
-        for cy,seg in zip(adjcwall,nsegwall):
-            self.Gt.add_edge(0,cy,segment=np.array([seg]))
-        
-        # VII Handle indoor/outdoor cycle 
-        #
-        # Rule : A cycle is outdoor if it is separated from an outdoor cycle by an AIR segment 
-        #
-        # An outdoor cycle has no associated ceil
-        #
-        for cy in self.Gt.nodes():
-            if cy != 0:
-                lncy = nx.neighbors(self.Gt,cy)  
-                for ncy in lncy:
-                    segnum = self.Gt.edge[cy][ncy]['segment'][0]
-                    if ((self.Gs.node[segnum]['name']=='AIR')
-                    or (self.Gs.node[segnum]['name']=='_AIR')):  
-                        if not self.Gt.node[cy]['indoor']:
-                            self.Gt.node[ncy]['indoor']=False
-
-
-
 
         self._find_diffractions()
+
+
         #
         #   VIII -  Construct the list of interactions associated to each cycle
         #
@@ -5837,6 +5672,8 @@ class Layout(PyLayers):
             assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
             assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
             print "passed"
+
+
 
     def _visual_check(self):
         fig,axs=plt.subplots(2,2)
@@ -6496,7 +6333,7 @@ class Layout(PyLayers):
         for ncy in Gtnodes:
             #vnodes = np.array(self.Gt.node[k]['vnodes'])
 
-            vnodes = np.array(self.Gt.node[ncy]['cycle'].cycle)
+            vnodes = np.array(self.Gt.node[ncy]['polyg'].vnodes)
             
             #vnodes = self.Gt.node[k]['polyg'].vnodes
             for n in vnodes:
@@ -8859,8 +8696,9 @@ class Layout(PyLayers):
         Update self.ddiff {nseg : ([ncy1,ncy2],wedge_angle)}
 
         """
-        dangles = self.get_Gt_angles()
-
+        # dangles = self.get_Gt_angles()
+        dangles = {cy:np.array(geu.get_pol_angles(self.Gt.node[cy]['polyg'])) 
+                    for cy in self.Gt.nodes() if cy !=0 }
         #
         # The canditate points for being diffraction points have degree 1 or 2
         # A point diffracts toward one or several cycles
@@ -8870,6 +8708,7 @@ class Layout(PyLayers):
         self.ddiff = {}
 
         for k in lpnt:
+
             # list of cycles associated with point k
             lcyk = self.Gs.node[k]['ncycles']
             if len(lcyk)>2:
@@ -8908,12 +8747,13 @@ class Layout(PyLayers):
 
 
                 dagtot = {s:0 for s in range(nsector)} 
+                save=[]
                 for s in dsector:
                     for cy in dsector[s]:
                         da = dangles[cy]
                         u  = np.where(da[0,:].astype('int')==k)[0][0]
+                        save.append((cy, da[1,u]))
                         dagtot[s] = dagtot[s] + da[1,u]
-                
                 for s in dagtot:
                     if dagtot[s]>(np.pi+tol):
                         self.ddiff[k]=(dsector[s],dagtot[s])
