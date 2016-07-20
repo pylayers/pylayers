@@ -243,6 +243,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as clr
 import networkx as nx
 from networkx.readwrite import write_gpickle,read_gpickle
+from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapely.ops as sho
 from shapely.ops import cascaded_union
@@ -279,7 +280,6 @@ from itertools import combinations
 import pdb
 import ast
 import pylayers.util.graphutil as gph
-from mpl_toolkits.basemap import Basemap
 
 
 
