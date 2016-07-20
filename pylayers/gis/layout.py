@@ -428,11 +428,13 @@ class Layout(PyLayers):
         
         _filename,ext=os.path.splitext(_filename)
         # force .ini extension
-        self._filename = _filename+'.ini'
+        if _filename != '':
+            self._filename = _filename+'.ini'
+        else:
+            self._filename = 'newfile.ini'
        
-
         filename = pyu.getlong(self._filename,pstruc['DIRINI'])
-       
+        
         if os.path.exists(filename):# which exists
             self.load()
             self.boundary()
@@ -1129,12 +1131,12 @@ class Layout(PyLayers):
         ----------
 
         _fileosm : string
-        adress : string 
+        address : string 
             address to be geocoded
         latlon : tuple 
             (latitude,longitude) degrees 
         dist_m : float
-            distance in meter from the geocoded address
+            distance in meter from the geocoded address (def 200 m ) 
         cart : boolean 
             conversion in cartesian coordinates
 
@@ -1153,7 +1155,7 @@ class Layout(PyLayers):
                     'address' : 'Rennes',
                     'typ' : 'floorplan',
                     'latlon' : 0,
-                    'dist_m' : 400,
+                    'dist_m' : 200,
                     'cart' : False
                     }
 
@@ -1167,10 +1169,16 @@ class Layout(PyLayers):
                                             latlon=kwargs['latlon'],
                                             dist_m=kwargs['dist_m'],
                                             cart=kwargs['cart'])
+            if kwargs['latlon']==0:
+                self._filename=kwargs['address'].replace(' ','_')+'.ini'
+            else:
+                lat,lon = eval(kwargs['latlon'])
+                self._filename='lat_'+str(lat).replace('.','_')+'_lon_'+str(lon).replace('.','_')+'.ini'
         else: # by reading an osm file
             fileosm = pyu.getlong(kwargs['_fileosm'],os.path.join('struc','osm'))
             coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=kwargs['typ'])
             self.coordinates = 'latlon'
+            self._filename=kwargs['_fileosm'].replace('osm','ini')
         
         # 2 valid typ : 'floorplan' and 'building' 
         
@@ -1404,13 +1412,8 @@ class Layout(PyLayers):
     def save(self):
         """ save structure in an ini file
 
-        Parameters
-        ----------
-
-        _fileini : string
-                   short filemame with extension
-
         """
+        print self._filename
         current_version = 1.0
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
@@ -1489,7 +1492,6 @@ class Layout(PyLayers):
         if not hasattr(self,'sl'):
             self.sl = sb.SlabDB(filemat='matDB.ini',fileslab='slabDB.ini')
 
-        pdb.set_trace()
         for s in lslab:
             ds = {}
             ds['index'] = self.sl[s]['index']

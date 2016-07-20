@@ -196,6 +196,7 @@ class LPRS(object):
                     tic = time.time()
                     break
 
+
     def slave(self,delay=0.005):
         """ slave wait for A and send B
 
@@ -222,6 +223,21 @@ class LPRS(object):
                 self.send('B')
                 time.sleep(delay)
                 cpt = cpt+1
+
+    def listencmd(self,delay=0.005):
+        """ slave wait for command 
+
+        Parameters
+        ----------
+
+        """
+        while True:
+        # In buffer is not empty
+            resp = ''
+            while self.ser.inWaiting()>0:
+                resp = self.ser.read(20)
+                if (resp[-1]=='\r'):
+                    return(resp)
 
     def STx(self):
         """ Sounder Tx automate
