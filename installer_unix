@@ -8,4 +8,5 @@ conda install PIL --yes
 conda install basemap --yes
 pip install protobuf 
 pip install tqdm
+pip install triangle
 python setup.py install
