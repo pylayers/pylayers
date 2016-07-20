@@ -4850,7 +4850,7 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-        if not hasboundary:
+        if not self.hasboundary:
             self.boundary()
 
 
@@ -5446,7 +5446,7 @@ class Layout(PyLayers):
         return T
 
 
-    def buildGt(self,check=False,mesh_indoor=False):
+    def buildGt(self,check=False,mesh_indoor=True):
         """  build Gt the graph of convex cycles 
 
         Parameters
@@ -5466,15 +5466,19 @@ class Layout(PyLayers):
         # dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
         # self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
 
+        if len(self.Gt.nodes()) != 0:
+            self.Gt = nx.Graph()
+            self.Gt.pos = {}
+
 
         # update shapely segments
         self.updateshseg()
 
         ## PERFORM DELAUNAY
 
-        # # boundary polygon
-        BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
-        BP=[p for p in BP][0]
+        # # # boundary polygon
+        # BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
+        # BP=[p for p in BP][0]
 
 
         # list of polygon inside boundaries
@@ -5550,6 +5554,7 @@ class Layout(PyLayers):
             p.setvnodes(self)
 
         self.g2npy()
+        self.updateshseg()
 
         # remove cycle 0 (exterior) if it exists
         try:
@@ -5651,15 +5656,7 @@ class Layout(PyLayers):
         #   At that stage the diffraction points are not included
         #   not enough information available.
         #   The diffraction points are not known yet
-        
-        
-
         self._interlist()
-
-
-        #TO DO : remove this one and manage add/deletion of seg lines at
-        #the end of  self._delaunay
-        self.updateshseg()
 
 
 
