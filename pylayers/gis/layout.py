@@ -5674,7 +5674,7 @@ class Layout(PyLayers):
 
 
     def _visual_check(self):
-        fig,axs=plt.subplots(2,2)
+        fig,axs=plt.subplots(3,2)
 
         ax = axs[0,0]
         self.showG('s',aw=1,ax=ax,fig=fig)
@@ -5699,6 +5699,11 @@ class Layout(PyLayers):
         ax = axs[1,1]
         f,ax=self.showG('st',labels='t',aw=1,ax=ax,fig=fig)
         ax.set_title('Gt')
+
+        ax = axs[2,0]
+        f,ax=self.showG('sv',aw=1,ax=ax,fig=fig)
+        ax.set_title('Gv')
+
 
     def _delaunay(self,poly,polyholes=[]):
         """ make a Delaunay partitioning of a polygon
