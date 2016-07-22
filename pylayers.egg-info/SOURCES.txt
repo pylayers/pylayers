@@ -49,9 +49,12 @@ pylayers/gis/cycles.py
 pylayers/gis/editor_select_old.py
 pylayers/gis/ezone.py
 pylayers/gis/furniture.py
+pylayers/gis/gist_osmparse.py
 pylayers/gis/gisutil.py
 pylayers/gis/graph.py
 pylayers/gis/layout.py
+pylayers/gis/layoutSAVE.py
+pylayers/gis/layout_TMPGT.py
 pylayers/gis/lireifc.py
 pylayers/gis/lireifc2.py
 pylayers/gis/osmparser.py
