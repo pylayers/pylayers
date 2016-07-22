@@ -5448,12 +5448,17 @@ class Layout(PyLayers):
 
     def buildGt(self):
         """
-        to go :
+        todo :
         - add ncycles information to Gs nodes
         - add indoor parmaeter in Gt nodes
         - add isopen parameter in Gt nodes
         - add node 0 in Gt with connection cycle connected to L.segboundary
-        - find diffraction
+        - add self.find diffractions
+        - add checks
+
+        - add an option to only take outiside polygon 
+            => pass to self._triangle a hole coreesponding to centroid of
+            polygon except those of boundary ( see buildGtold )
         """
 
 
