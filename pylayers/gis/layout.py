@@ -308,7 +308,7 @@ class Layout(PyLayers):
 
     """
     
-    def __init__(self,_filename='',
+    def __init__(self,string='',
                       _filematini='matDB.ini',
                       _fileslabini='slabDB.ini',
                       _filefur='',
@@ -420,66 +420,78 @@ class Layout(PyLayers):
         self.zmin = 0
 
         newfile  = False
-
+        loadini  = False
+        loadosm  = False
         #
         # Layout main argument
         #   If no .ini extension provided it is added
         #
-        
-        _filename,ext=os.path.splitext(_filename)
+        arg,ext=os.path.splitext(string)
         # force .ini extension
-        if _filename != '':
-            self._filename = _filename+'.ini'
-        else:
+        if arg != '':
+            if ext == '.ini':
+                self._filename = string 
+                loadini = True
+            elif ext == '.osm':
+                self._filename = arg + '.ini' 
+                loadosm = True
+        else: # No argument 
             self._filename = 'newfile.ini'
-       
-        filename = pyu.getlong(self._filename,pstruc['DIRINI'])
-        
-        if os.path.exists(filename):# which exists
-            self.load()
-            self.boundary()
-            self.subseg()
-            self.updateshseg()
-        else: # which do not exist
             newfile = True
-            print "new file - creating a void Layout",self._filename
-
-
-        if not newfile:
-            try:
-                self.geomfile()
-            except:
-                print "problem to construct geomfile"
         
         if not newfile:
-            if check:
-                self.check()
-            
-        if not newfile :
-            # check if the graph gpickle files have been built
-            if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
-                path = os.path.join(basename,'struc','gpickle',self._filename)
-                # load graph Gt 
-                # and compare the self._hash from ini file 
-                #        with the hash store in node 0 of Gt at time of the last build
-                # If they are different a rebuild is needeed
-                # Otherwise all the stored graphs are loaded 
-                #  
-                self.dumpr('t')
-                if self._hash != self.Gt.node[0]['hash']:
-                    rebuild = True 
-                else:
-                    self.dumpr('stvirw')
+            if loadini:
+                filename = pyu.getlong(self._filename,pstruc['DIRINI'])
+                if os.path.exists(filename):# which exists
+                    self.load()
+                else: # which do not exist
+                    newfile = True
+                    print "new file - creating a void Layout",self._filename
+            elif loadosm:
+                self.importosm(_fileosm=string,cart=True)
+            elif '(' in string:
+                self.importosm(latlon=string,dist_m=dist_m,cart=True)
             else: 
-                rebuild = True
+                self.importosm(address=string,dist_m=dist_m,cart=True)
 
-            # build and dump
-            if build and rebuild:  
-                # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                # if ans.lower()=='y':
-                self.build()
-                self.lbltg.append('s')
-                self.dumpw()
+
+                self.boundary()
+                self.subseg()
+                self.updateshseg()
+                try:
+                    self.geomfile()
+                except:
+                    print "problem to construct geomfile"
+            
+            if not newfile:
+                if check:
+                    self.check()
+                
+            if not newfile :
+                # check if the graph gpickle files have been built
+                if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
+                    path = os.path.join(basename,'struc','gpickle',self._filename)
+                    # load graph Gt 
+                    # and compare the self._hash from ini file 
+                    #        with the hash store in node 0 of Gt at time of the last build
+                    # If they are different a rebuild is needeed
+                    # Otherwise all the stored graphs are loaded 
+                    #  
+                    self.dumpr('t')
+                    if self._hash != self.Gt.node[0]['hash']:
+                        rebuild = True 
+                    else:
+                        self.dumpr('stvirw')
+                else: 
+                    rebuild = True
+
+                # build and dump
+                if build and rebuild:  
+                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                    # if ans.lower()=='y':
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
 
 
     def __repr__(self):
@@ -768,10 +780,11 @@ class Layout(PyLayers):
             # degree of points
             # maximum degree of points
             #
+
             degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
             degmin = min(degpnt)
             degmax = max(degpnt)
-
+            
             #
             #  No isolated points (degree 0)
             #  No points of degree 1
@@ -1154,7 +1167,7 @@ class Layout(PyLayers):
         defaults = {'_fileosm':'',
                     'address' : 'Rennes',
                     'typ' : 'floorplan',
-                    'latlon' : 0,
+                    'latlon' : '0',
                     'dist_m' : 200,
                     'cart' : False
                     }
@@ -1163,13 +1176,19 @@ class Layout(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+        typ = kwargs['typ']
+        address = kwargs['address']
+        latlon = eval(kwargs['latlon'])
+        dist_m = kwargs['dist_m'] 
+        cart = kwargs['cart']
+
         if kwargs['_fileosm']=='':  # by using osmapi address or latlon 
-            coords,nodes,ways,dpoly,m = osm.getosm(typ=kwargs['typ'],
-                                            address=kwargs['address'],
-                                            latlon=eval(kwargs['latlon']),
-                                            dist_m=kwargs['dist_m'],
-                                            cart=kwargs['cart'])
-            if kwargs['latlon']==0:
+            coords,nodes,ways,dpoly,m = osm.getosm(typ=typ,
+                                            address=address,
+                                            latlon=latlon,
+                                            dist_m=dist_m,
+                                            cart=cart)
+            if kwargs['latlon']=='0':
                 self._filename=kwargs['address'].replace(' ','_')+'.ini'
             else:
                 lat,lon = eval(kwargs['latlon'])
@@ -1492,7 +1511,6 @@ class Layout(PyLayers):
         if not hasattr(self,'sl'):
             self.sl = sb.SlabDB(filemat='matDB.ini',fileslab='slabDB.ini')
 
-        pdb.set_trace()
         for s in lslab:
             ds = {}
             ds['index'] = self.sl[s]['index']
