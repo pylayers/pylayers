@@ -1106,22 +1106,17 @@ class MatDB(PyLayers,dict):
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
-        config = ConfigParser.ConfigParser()
-        config.read(fileini)
-
-        di = dict(config.items("dict") )
-
-        self.di={}
-        for d in di:
-            self.di[eval(d)]=di[d]
-
-        for matname in self.di.values():
-            M=Mat(name=matname)
-            M['sigma'] = eval(config.get(matname,'sigma'))
-            M['roughness'] = eval(config.get(matname,'roughness'))
-            M['epr'] = eval(config.get(matname,'epr'))
-            M['index'] = eval(config.get(matname,'index'))
-            M['mur'] = eval(config.get(matname,'mur'))
+        materials = ConfigParser.ConfigParser()
+        materials.read(fileini)
+        self.di = {}
+        for k,matname in enumerate(materials.sections()):
+            M = Mat(name=matname)
+            M['sigma'] = eval(materials.get(matname,'sigma'))
+            M['roughness'] = eval(materials.get(matname,'roughness'))
+            M['epr'] = eval(materials.get(matname,'epr'))
+            M['index'] = k
+            self.di[k]=matname
+            M['mur'] = eval(materials.get(matname,'mur'))
             self[matname] = M
 
     def save(self,_fileini='matDB.ini'):
@@ -2017,17 +2012,15 @@ class SlabDB(dict):
         config = ConfigParser.ConfigParser()
         config.read(fileini)
 
-        di = dict(config.items("dict") )
         self.di={}
-        for d in di:
-            self.di[eval(d)]=di[d]
-        for slabname in self.di.values():
+        for k,slabname in enumerate(config.sections()):
             # warning the Slab takes the whole Material Database
             S = Slab(name=slabname,mat=self.mat)
             S['lmatname']=eval(config.get(slabname,'lmatname'))
             S['nbmat']=len(S['lmatname'])
             S['color']=config.get(slabname,'color')
-            S['index']=eval(config.get(slabname,'index'))
+            S['index']= k 
+            self.di[k] = slabname
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
 
