@@ -1492,6 +1492,7 @@ class Layout(PyLayers):
         if not hasattr(self,'sl'):
             self.sl = sb.SlabDB(filemat='matDB.ini',fileslab='slabDB.ini')
 
+        pdb.set_trace()
         for s in lslab:
             ds = {}
             ds['index'] = self.sl[s]['index']

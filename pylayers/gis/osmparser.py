@@ -707,6 +707,7 @@ def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
     cart : boolean 
 
     """
+    level_height = 3.45
     rad_to_deg = (180/np.pi)
     deg_to_rad = (np.pi/180)
     if latlon==0:
@@ -748,8 +749,26 @@ def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
     coords.filter(lexcluded)
     dpoly={}
     for iw in ways.w:
-        ways.way[iw].tags = {'name':'WALL',
-                          'z':(0,12)}
+        ways.way[iw].tags = {}
+        # material 
+        if ways.w[iw][1].has_key('material'):
+            ways.way[iw].tags['name']=ways.w[iw][1]['material']
+        elif ways.w[iw][1].has_key('building:material'):
+            ways.way[iw].tags['name']=ways.w[iw][1]['building:material']
+        else:
+            ways.way[iw].tags['name']='WALL'
+        # height 
+        if ways.w[iw][1].has_key('height'):
+            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['height']))
+        elif ways.w[iw][1].has_key('building:height'):
+            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['building:height']))
+        elif ways.w[iw][1].has_key('building:levels'):
+            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['building:levels'])*level_height)
+        elif ways.w[iw][1].has_key('levels'):
+            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['levels'])*level_height)
+        else:
+            ways.way[iw].tags['z']=(0,12)
+                          
         ptpoly=[coords.xy[x] for x in ways.w[iw][0]]
         dpoly[iw]=geu.Polygon(ptpoly,vnodes=ways.w[iw][0])
         dpoly[iw].coorddeter()
