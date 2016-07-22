@@ -719,7 +719,6 @@ def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
     r_earth = 6370e3
     alpha = (dist_m/r_earth)*rad_to_deg
     Osm = OsmApi()
-
     # Get Map around coordinate 
     osmmap  = Osm.Map(lon-alpha,lat-alpha,lon+alpha,lat+alpha)
     
