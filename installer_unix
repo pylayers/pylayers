@@ -9,4 +9,5 @@ conda install basemap --yes
 pip install protobuf 
 pip install tqdm
 pip install geocoder
+pip install triangle
 python setup.py install

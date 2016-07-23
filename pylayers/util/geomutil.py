@@ -4838,6 +4838,75 @@ def check_point_unicity(A):
     return similar
 
 
+def get_pol_angles(poly, unit= 'rad', inside=True):
+        """ find angles of a single Gt cycle of the layout. 
+
+        Parameters
+        ----------
+        poly : polygon
+            
+        unit : str
+            'deg' : degree values
+            'rad' : radian values
+        inside : bollean
+            True :  compute the inside angles of the cycle.
+                    (a.k.a. in regard of the interior of the polygon) 
+            False : compute the outside angles of the cycle.
+                    (a.k.a.  in regard of the exterior of the polygon)
+
+        Returns
+        -------
+
+        (u,a)
+        u : int (Np)
+            point number
+        a : float (Np)
+            associated angle to the point
+
+
+        Notes
+        -----
+
+        http://www.mathopenref.com/polygonexteriorangles.html
+
+        """
+
+
+        pt = np.array(poly.exterior.xy)[:,:-1]
+        if hasattr(poly,'vnodes'):
+            upt = poly.vnodes[poly.vnodes<0]
+        else:
+            upt = range(np.array(poly.exterior.xy).shape[1])
+        # flip orientation in case of negative area
+        if SignedArea(pt)<0:
+            upt = upt[::-1]
+            pt = pt[:,::-1]
+
+
+        ptroll = np.roll(pt,1,axis=1)
+
+        v = pt-ptroll
+        v = np.hstack((v,v[:,0][:,None]))
+        vn = v / np.sqrt(np.sum((v)*(v),axis=0))
+        v0 = vn[:,:-1]
+        v1 = vn[:,1:]
+        cross = np.cross(v0.T,v1.T)
+        dot = np.sum(v0*v1,axis=0)
+        ang = np.arctan2(cross,dot)
+        uneg = ang <0
+        ang[uneg] = -ang[uneg]+np.pi
+        ang[~uneg] = np.pi-ang[~uneg]
+
+        if not inside : 
+            ang = 2*np.pi-ang
+
+        
+        if unit == 'deg':
+            return upt.astype(int),ang*180/np.pi
+        elif unit == 'rad':
+            return upt.astype(int),ang
+
+
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
