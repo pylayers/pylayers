@@ -5421,7 +5421,7 @@ class Layout(PyLayers):
         return T,map_vertices
 
 
-    def buildGt(self,mesh_indoor=True):
+    def buildGt(self,mesh_indoor=True,check=True):
         """
         todo :
         - add indoor parameter in Gt nodes
@@ -5593,6 +5593,26 @@ class Layout(PyLayers):
 
         # update ncycles in Gs
         self._updGsncy()
+
+        #add cycle 0 to boundaries segments
+        for s in self.segboundary:
+            self.Gs.node[s]['ncycles'].append(0)
+
+        # find diffraction points : updating self.ddiff
+        self._find_diffractions()
+
+        self.g2npy()
+
+        if check : 
+            print "check len(ncycles) == 2",
+            nodes = [i for i in self.Gs.nodes() if i>0]
+            cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
+            ucncyl = np.where(cncy<2)[0]
+            ucncym = np.where(cncy>2)[0]
+            assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
+            assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
+            print "passed"
+
 
     def buildGtold(self,check=False,mesh_indoor=True):
         """  build Gt the graph of convex cycles 
@@ -7620,11 +7640,12 @@ class Layout(PyLayers):
 
 
         # updating the list of interactions of a given cycle
-        for c in self.Gt.node:
-            if c != 0:
-                vnodes = self.Gt.node[c]['polyg'].vnodes
-                for k in npt:
-                    self.Gt.node[c]['inter']+= [(k,)]
+        # pdb.set_trace()
+        # for c in self.Gt.node:
+        #     if c != 0:
+        #         vnodes = self.Gt.node[c]['polyg'].vnodes
+        #         for k in npt:
+        #             self.Gt.node[c]['inter']+= [(k,)]
 
     def filterGi(self, situ = 'outdoor'):
         """ Filter Gi to manage indoor/ outdoor situations
@@ -8912,7 +8933,7 @@ class Layout(PyLayers):
         lpnt = [x for x in self.Gs.node if (x <0 and x not in self.degree[0]) ]
         
         self.ddiff = {}
-        pdb.set_trace()
+        #pdb.set_trace()
         for k in lpnt:
 
             # list of cycles associated with point k
@@ -8941,7 +8962,8 @@ class Layout(PyLayers):
                 ct = 0
                 for ccy in lccyk:
 
-                    segsep = self.Gt[ccy[0]][ccy[1]]['segment'][0]
+                    #segsep = self.Gt[ccy[0]][ccy[1]]['segment'][0]
+                    segsep = self.Gt[ccy[0]][ccy[1]]['segment']
                     typslab = self.Gs.node[segsep]['name']
                     if (typslab=='AIR' or typslab=='_AIR'): # same sector
                         dsector[ct].append(ccy[1])
