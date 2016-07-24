@@ -456,43 +456,43 @@ class Layout(PyLayers):
                 self.importosm(address=string,dist_m=dist_m,cart=True)
 
 
-                self.boundary()
-                self.subseg()
-                self.updateshseg()
-                try:
-                    self.geomfile()
-                except:
-                    print "problem to construct geomfile"
+            self.boundary()
+            self.subseg()
+            self.updateshseg()
+            try:
+                self.geomfile()
+            except:
+                print "problem to construct geomfile"
             
-            if not newfile:
-                if check:
-                    self.check()
-                
-            if not newfile :
-                # check if the graph gpickle files have been built
-                if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
-                    path = os.path.join(basename,'struc','gpickle',self._filename)
-                    # load graph Gt 
-                    # and compare the self._hash from ini file 
-                    #        with the hash store in node 0 of Gt at time of the last build
-                    # If they are different a rebuild is needeed
-                    # Otherwise all the stored graphs are loaded 
-                    #  
-                    self.dumpr('t')
-                    if self._hash != self.Gt.node[0]['hash']:
-                        rebuild = True 
-                    else:
-                        self.dumpr('stvirw')
-                else: 
-                    rebuild = True
+        
+            if check:
+                self.check()
+            
+       
+            # check if the graph gpickle files have been built
+            if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
+                path = os.path.join(basename,'struc','gpickle',self._filename)
+                # load graph Gt 
+                # and compare the self._hash from ini file 
+                #        with the hash store in node 0 of Gt at time of the last build
+                # If they are different a rebuild is needeed
+                # Otherwise all the stored graphs are loaded 
+                #  
+                self.dumpr('t')
+                if self._hash != self.Gt.node[0]['hash']:
+                    rebuild = True 
+                else:
+                    self.dumpr('stvirw')
+            else: 
+                rebuild = True
 
-                # build and dump
-                if build and rebuild:  
-                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                    # if ans.lower()=='y':
-                    self.build()
-                    self.lbltg.append('s')
-                    self.dumpw()
+            # build and dump
+            if build and rebuild:  
+                # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                # if ans.lower()=='y':
+                self.build()
+                self.lbltg.append('s')
+                self.dumpw()
 
 
     def __repr__(self):
@@ -2927,8 +2927,19 @@ class Layout(PyLayers):
 
 
     def have_subseg(self, e1):
-        """
-        have_subseg
+        """ check if edge e1 have subseg
+
+        Parameters
+        ----------
+
+        e1 : int 
+
+        Returns
+        -------
+
+        boolean 
+
+
         """
         dk = self.Gs.node[e1]
         if 'ss_name' in dk:
@@ -7520,6 +7531,7 @@ class Layout(PyLayers):
         #
         
         for cy in self.Gt.node:
+            # fot all convex cycles 
             if cy >0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
                 # indoor = self.Gt.node[cy]['indoor']
@@ -7641,11 +7653,11 @@ class Layout(PyLayers):
 
         # updating the list of interactions of a given cycle
         # pdb.set_trace()
-        # for c in self.Gt.node:
-        #     if c != 0:
-        #         vnodes = self.Gt.node[c]['polyg'].vnodes
-        #         for k in npt:
-        #             self.Gt.node[c]['inter']+= [(k,)]
+        for c in self.Gt.node:
+            if c != 0:
+                vnodes = self.Gt.node[c]['polyg'].vnodes
+                for k in npt:
+                    self.Gt.node[c]['inter']+= [(k,)]
 
     def filterGi(self, situ = 'outdoor'):
         """ Filter Gi to manage indoor/ outdoor situations
