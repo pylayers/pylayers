@@ -5437,42 +5437,49 @@ class Layout(PyLayers):
         todo :
         - add indoor parameter in Gt nodes
         - add isopen parameter in Gt nodes
-        - add node 0 in Gt with connection cycle connected to L.segboundary
-        - add self.find_diffractions
-        - add checks
-
         - add an option to only take outside polygon 
             => pass to self._triangle a hole coreesponding to centroid of
             polygon except those of boundary ( see buildGtold )
         """
 
 
-        ### 1.Delaunay triangulation
-        
+        ### 1. Do a Delaunay triangulation
+        ###     build a list of triangle polygons : lTP
+        ###     vnodes refers to the nodes of Gs
+        ###     if vnodes == 0 it means this is a created
+        ###     segment which is tagged as _AIR
+        ###
         T,map_vertices = self._triangle()
         ptri = T['vertices'][T['triangles']]
-        # List of Polygons
-        TP = [ geu.Polygon(x) for x in ptri ]
+        # List of Triangle Polygons
+        lTP = [ geu.Polygon(x) for x in ptri ]
         # update vnodes of Polygons
-        [ p.setvnodes(self) for p in TP ]
+        [ p.setvnodes(self) for p in lTP ]
 
         ### 2.add air walls to triangle poly
-        
-        luaw = [(p,np.where(p.vnodes == 0)[0]) for p in TP]
-               # for each polygon
+        ### 
+        ###     luaw  : list of tuples 
+        ####       ( polygon , array of _AIR segments)
+        luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lTP]
+       
+        #
+        # For a triangle polygon the number of vnodes = 6
+        # 
+        #
+        # WARNING : What about AIR segments ? 
+        #
         _airseg = []
         for p,uaw in luaw :
-            # determine number of vnodes
-            lvn = len(p.vnodes)
             # for each vnodes == 0, add an _AIR
             for aw in uaw:
-                _airseg.append(self.add_segment(  p.vnodes[np.mod(aw-1,lvn)],
-                                   p.vnodes[np.mod(aw+1,lvn)]
-                                   ,name='_AIR',verbose=False))
+                _airseg.append(self.add_segment( p.vnodes[np.mod(aw-1,6)],
+                                                 p.vnodes[np.mod(aw+1,6)]
+                                                ,name='_AIR',
+                                                verbose=False))
             # update polygon segments with new added airwalls
             p.setvnodes(self)
 
-
+        
         tri = T['triangles']
         nbtri = len(T['triangles'])
         # temporary name/node_index of triangles
@@ -5481,21 +5488,24 @@ class Layout(PyLayers):
         ### 3. Create a temporary graph
         ### where : positive nodes (>0) are triangles segments
         ###         negative nodes (<0) are triangles centroids 
-        ### edges will link triangle centroids to their respective segments
+        ### edges link triangle centroids to their respective segments
 
 
         # Ex represent list of points in Gs corresponging to segments
         # [pt_head pt_tail]
+
         E0 = map_vertices[tri[:,1:]]
         E1 = map_vertices[tri[:,:2]]
         E2 = map_vertices[tri[:,0::2]]
+
         # from [pt_tail pt_head] get segment id in Gs
+
         n0 = [self.numseg(e[0],e[1]) for e in E0]
         n1 = [self.numseg(e[0],e[1]) for e in E1]
         n2 = [self.numseg(e[0],e[1]) for e in E2]
 
 
-        # create a temprorary graph HERE
+        # creation of a temporary graph
         
         G = nx.Graph()
         G.add_edges_from(zip(n0,MT))
@@ -5505,9 +5515,10 @@ class Layout(PyLayers):
 
 
         ### 4. search in the temporary graph 
+        ###
         ### nodes of degree 2  :
-        ### they correspond to Gs segments that link to triangle centroid
-        ### their neighbors are the triangles centroids
+        ###     - they correspond to Gs segments that link to triangle centroid
+        ###     - their neighbors are the triangles centroids
 
         # find nodes of degree 2 (corresponding to segments link to triangle centroid)
         rn = []
@@ -5515,9 +5526,12 @@ class Layout(PyLayers):
         rn.extend([un for un in n1 if nx.degree(G,un)==2 ])
         rn.extend([un for un in n2 if nx.degree(G,un)==2 ])
         rn = np.unique(rn)
-        # determine the neighbors of those segments (the 2 connectedtriangles centroids)
+        
+        # determine the neighbors of those segments (the 2 connected triangles centroids)
         neigh = [nx.neighbors(G,un) for un in rn]
+        
         # store into networkx compliant format
+
         uE = [(neigh[un][0],neigh[un][1],{'segment':rn[un]}) for un in xrange(len(rn))]
         iuE = {rn[un]:[-neigh[un][0],-neigh[un][1]] for un in xrange(len(rn))}
 
@@ -5529,8 +5543,11 @@ class Layout(PyLayers):
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt,lambda x:-x)
         
-        # add polyg to nodes
-        nno = [(n,{'polyg':TP[n-1],'indoor':True,'isopen':True}) for n in self.Gt.nodes()]
+        # add polyg  to nodes
+        # add indoor to nodes
+        # add isopen to nodes
+
+        nno = [(n,{'polyg':lTP[n-1],'indoor':True,'isopen':True}) for n in self.Gt.nodes()]
         
         self.Gt.add_nodes_from(nno)
         self.Gt.pos={}
@@ -5543,11 +5560,13 @@ class Layout(PyLayers):
         # # G.add_edges_from(E1)
         # # G.add_edges_from(E2)
 
-        _airseg=np.unique(_airseg)
-        _airseg=_airseg[_airseg!=np.array(None)].astype('int')
+        _airseg = np.unique(_airseg)
+        _airseg = _airseg[_airseg!=np.array(None)].astype('int')
 
         #
-        # Mikado like progression for simplification in a set of convex nodes
+        # Mikado like progression for simplification of a set of convex polygons
+        #
+        #    Loop over AIR segments
         #
         mapoldcy={c:c for c in self.Gt.nodes() }
         for a in _airseg:
@@ -5583,7 +5602,7 @@ class Layout(PyLayers):
                 # get segments information from cycle n0 
                 dne = self.Gt[n0]
                 # remove connection to n0 to avoid a cycle being 
-                # connectred to itself
+                # connected to itself
                 self.Gt[n1].pop(n0)
                 # add information from adjacent cycle n1
                 dne.update(self.Gt[n1])
@@ -5602,6 +5621,24 @@ class Layout(PyLayers):
                 self.del_segment(a,verbose=False,g2npy=False)
                 mapoldcy[n1]=n0
 
+        #
+        # Find open convex cycles
+        #
+        #    A convex cycle is open if is has at least one segment which is _AIR or AIR
+        for ccy in self.Gt.node:
+            # get the polygon 
+            poly = self.Gt.node[ccy]['polyg']
+            # get segment of the polygon
+            seg = poly.vnodes[poly.vnodes>0]
+            # get list of AIR or _AIR segment of the polygon
+            lair = [x in (self.name['AIR']+self.name['_AIR']) for x in seg]
+            
+            if sum(lair)>0:
+                isopen = True
+            else:
+                isopen = False
+            # update ispoen staus 
+            self.Gt.node[ccy]['isopen']=isopen
         # update ncycles in Gs
         self._updGsncy()
 
@@ -5611,6 +5648,20 @@ class Layout(PyLayers):
 
         # find diffraction points : updating self.ddiff
         self._find_diffractions()
+
+        #
+        #   VIII -  Construct the list of interactions associated to each cycle
+        #
+        # Interaction labeling convention
+        #
+        #   tuple (npoint,)  : Diffraction on point npoint
+        #   tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
+        #   tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
+        #
+        #   At that stage the diffraction points are not included
+        #   not enough information available.
+        #   The diffraction points are not known yet
+        self._interlist(indoor=mesh_indoor)
 
         self.g2npy()
 
@@ -5693,7 +5744,7 @@ class Layout(PyLayers):
         holes=np.array(holesc+holesnc).squeeze()
         # holes=np.array([p.centroid.xy for p in lP ])[:,:,0]
 
-        # delaunay triangluation of exterior polygon
+        # delaunay triangluation of exterior polygons
         Tout  = self._triangle(holes=holes)
         #Tout  = self._triangle_old(BP,lP,mesh_holes=False)
 
@@ -5720,7 +5771,7 @@ class Layout(PyLayers):
                 # Tin  = self._triangle_old(lP,mesh_holes=True)
                 ptri = Tin['vertices'][Tin['triangles']]
                 # create polygons from delaunay triangulation
-                TP=[geu.Polygon(x) for x in ptri]
+                TP = [geu.Polygon(x) for x in ptri]
                 # list of Merged Polygons indoor
                 lMPin = self._merge_polygons(TP)
                 # remove old non convex polygon and replace by the convexify-ed ones
@@ -9375,7 +9426,7 @@ class Layout(PyLayers):
 
 
     def ispoint(self, pt, tol=0.05):
-        """ verify if pt is a point of Layout
+        """ check if pt is a point of the Layout
 
         Parameters
         ----------
@@ -9390,7 +9441,7 @@ class Layout(PyLayers):
         Returns
         -------
 
-        pt : point number
+        pt : point number if point exists 0 otherwise
 
         See Also
         --------
