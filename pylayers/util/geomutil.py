@@ -193,6 +193,7 @@ def isconvex(poly,tol = 1e-2):
 
     Parameters
     ----------
+
     tol : tolerence on aligned point
 
     Returns
@@ -213,8 +214,8 @@ def isconvex(poly,tol = 1e-2):
     a = p
     b = np.roll(p,1,axis=1)
     c = np.roll(p,2,axis=1)
-    return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
-            (np.sum(isleft(c,b,a,tol=tol)) == 0)
+    return ( np.sum(np.abs(isleft(a,b,c,tol=tol))) < tol ) or \
+            (np.sum(np.abs(isleft(c,b,a,tol=tol))) < tol )
 
 
 
