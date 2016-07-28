@@ -193,6 +193,7 @@ def isconvex(poly,tol = 1e-2):
 
     Parameters
     ----------
+
     tol : tolerence on aligned point
 
     Returns
@@ -213,8 +214,8 @@ def isconvex(poly,tol = 1e-2):
     a = p
     b = np.roll(p,1,axis=1)
     c = np.roll(p,2,axis=1)
-    return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
-            (np.sum(isleft(c,b,a,tol=tol)) == 0)
+    return ( np.sum(np.abs(isleft(a,b,c,tol=tol))) < tol ) or \
+            (np.sum(np.abs(isleft(c,b,a,tol=tol))) < tol )
 
 
 
@@ -468,6 +469,7 @@ class Polygon(PyLayers,shg.Polygon):
 
     Methods
     -------
+
     plot
     ptconvex
     buildGv
@@ -697,24 +699,28 @@ class Polygon(PyLayers,shg.Polygon):
 
         self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
 
+
+
     def isconvex(self,tol = 1e-2):
         """ Determine if a polygon is convex
 
         Parameters
         ----------
-        tol : tolerence on aligned point
+
+        tol : tolerance on aligned point
 
         Returns
         -------
-         True if convex
+
+        boolean : True if convex
 
         Notes
         -----
 
-        the algorithm tests all triplet of point and L.determine 
-        if the third point is left to the 2 first.
-        a tolerance can be introduce in cases where the polygon is 
-        almost convex.
+        the algorithm tests all triplet of points and determines 
+        if the third point is at the left to the 2 first.
+        a tolerance can be introduce in cases the polygon is 
+        *almost* convex.
 
         """
         self.coorddeter()
@@ -725,41 +731,96 @@ class Polygon(PyLayers,shg.Polygon):
         return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
                 (np.sum(isleft(c,b,a,tol=tol)) == 0)
 
-    def coorddeter(self):
-        """ determine polygon coordinates
-        """
-
-        self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
-
-    def isconvex(self,tol = 1e-2):
-        """ Determine if a polygon is convex
+    
+    def reverberation(self,fGHz,L):
+        """ calculate reverberation time of the polygon
 
         Parameters
         ----------
-        tol : tolerence on aligned point
+
+        fGHz : frequency GHz
+        L : Layout
 
         Returns
         -------
-        True if convex
 
-        Notes
-        -----
+        V    : Volume
+        A    : Area
+        eta  : absorption coefficient
+        tau_sab  :
+        tau_eyr  :
 
-        the algorithm tests all triplet of point and L.determine
-        if the third point is left to the 2 first.
-        a tolerance can be introduce in cases where the polygon is
-        almost convex.
+        
+        $$\tau_g = \frac{4V}{c\eta A}$$
+        Sabine's Model
+        where $\eta$ is the absorbtion coefficient
 
         """
-        self.coorddeter()
-        p = self.xy[:,:-1]
-        a = p
-        b = np.roll(p,1,axis=1)
-        c = np.roll(p,2,axis=1)
-        return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
-                (np.sum(isleft(c,b,a,tol=tol)) == 0)
+        # get the sequence of segments 
+        # handle subsegments
+        lseg  = filter(lambda x: x>0, self.vnodes)
+        S1 = []
+        S2 = []
+        AS2 = []
+        AS1 = []
 
+        # S unsigned polygon area
+        # P polygon Perimeter
+        # A unsigned room area
+        # V room Volume
+        # H room Height
 
+        S  = abs(self.area)
+        P  = 0
+        for k in lseg:
+            npt = L.Gs.node[k]['connect']
+            slname = L.Gs.node[k]['name']
+            sl = L.sl[slname]
+            # calculate Loss
+            Lo,Lp = sl.loss0(fGHz)
+            Abs = 10**(-Lo[0]/10.)
+            #print slname,Abs
+            n1 = npt[0]
+            n2 = npt[1]
+            p1 = L.Gs.pos[n1]
+            p2 = L.Gs.pos[n2]
+            Lseg = np.sqrt((p2[0]-p1[0])**2+(p2[1]-p1[1])**2)
+            P = P+Lseg
+            H = L.Gs.node[k]['z'][1]- L.Gs.node[k]['z'][0]
+            if L.Gs.node[k].has_key('ss_z'):
+                SS = 0
+                for k2,ss in enumerate(L.Gs.node[k]['ss_z']):
+                    ssname =  L.Gs.node[k]['ss_name'][k2]
+                    sssl = L.sl[ssname]
+                    Loss,Lpss = sssl.loss0(fGHz)
+                    Absss = 10**(-Loss[0]/10.)
+                    #print ssname,Absss
+                    val = Lseg*(ss[1]-ss[0])
+                    SS = SS+val
+                    S1.append(val)
+                    AS1.append(val*Absss)
+
+                St = H*Lseg
+                S1.append(St-SS)
+                AS1.append((St-SS)*Abs)
+
+            else:
+                S2.append(H*Lseg)
+                AS2.append(H*Lseg*Abs)
+        V = S*H
+        A = P*H+2*S
+        sfloor = L.sl['FLOOR']
+        sceil = L.sl['CEIL']
+        Lofloor,Lpfloor = sfloor.loss0(fGHz)
+        Loceil,Lpceil = sceil.loss0(fGHz)
+        etaFloor = S*10**(-Lofloor[0]/10.)
+        etaCeil  = S*10**(-Loceil[0]/10.)
+        eta = (sum(AS1)+sum(AS2)+etaFloor+etaCeil)/A
+        tau_sab = 4*V/(0.3*A*eta)
+        tau_eyr = -4*V/(0.3*A*np.log(1-eta))
+ 
+        return(V,A,eta,tau_sab,tau_eyr)
+ 
     def plot(self,**kwargs):
         """ plot function
 
@@ -772,6 +833,7 @@ class Polygon(PyLayers,shg.Polygon):
             transparency   (default 0.8)
         vnodes : bool
             display vnodes
+
         Examples
         --------
 
@@ -839,11 +901,7 @@ class Polygon(PyLayers,shg.Polygon):
 
         return fig,ax
 
-    def coorddeter(self):
-        """ determine polygon coordinates
-        """
-
-        self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
+    
 
     def simplify(self):
         """ simplify polygon - suppress adjacent colinear segments
@@ -944,7 +1002,7 @@ class Polygon(PyLayers,shg.Polygon):
                     'indoor':True
                     }
 
-##       initialize function attributes
+        ## initialize function attributes
 
         for key, value in defaults.items():
             if key in kwargs:
@@ -4836,6 +4894,75 @@ def check_point_unicity(A):
         if any((A[ua] == x).all() for x in rA[1:]):
             similar.append(ua)
     return similar
+
+
+def get_pol_angles(poly, unit= 'rad', inside=True):
+        """ find angles of a single Gt cycle of the layout. 
+
+        Parameters
+        ----------
+        poly : polygon
+            
+        unit : str
+            'deg' : degree values
+            'rad' : radian values
+        inside : bollean
+            True :  compute the inside angles of the cycle.
+                    (a.k.a. in regard of the interior of the polygon) 
+            False : compute the outside angles of the cycle.
+                    (a.k.a.  in regard of the exterior of the polygon)
+
+        Returns
+        -------
+
+        (u,a)
+        u : int (Np)
+            point number
+        a : float (Np)
+            associated angle to the point
+
+
+        Notes
+        -----
+
+        http://www.mathopenref.com/polygonexteriorangles.html
+
+        """
+
+
+        pt = np.array(poly.exterior.xy)[:,:-1]
+        if hasattr(poly,'vnodes'):
+            upt = poly.vnodes[poly.vnodes<0]
+        else:
+            upt = range(np.array(poly.exterior.xy).shape[1])
+        # flip orientation in case of negative area
+        if SignedArea(pt)<0:
+            upt = upt[::-1]
+            pt = pt[:,::-1]
+
+
+        ptroll = np.roll(pt,1,axis=1)
+
+        v = pt-ptroll
+        v = np.hstack((v,v[:,0][:,None]))
+        vn = v / np.sqrt(np.sum((v)*(v),axis=0))
+        v0 = vn[:,:-1]
+        v1 = vn[:,1:]
+        cross = np.cross(v0.T,v1.T)
+        dot = np.sum(v0*v1,axis=0)
+        ang = np.arctan2(cross,dot)
+        uneg = ang <0
+        ang[uneg] = -ang[uneg]+np.pi
+        ang[~uneg] = np.pi-ang[~uneg]
+
+        if not inside : 
+            ang = 2*np.pi-ang
+
+        
+        if unit == 'deg':
+            return upt.astype(int),ang*180/np.pi
+        elif unit == 'rad':
+            return upt.astype(int),ang
 
 
 if __name__ == "__main__":

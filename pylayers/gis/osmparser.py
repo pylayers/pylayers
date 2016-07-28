@@ -763,9 +763,21 @@ def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
         elif ways.w[iw][1].has_key('building:height'):
             ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['building:height']))
         elif ways.w[iw][1].has_key('building:levels'):
-            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['building:levels'])*level_height)
+            nb_levels = eval(ways.w[iw][1]['building:levels'])
+            if type(nb_levels)!=int:
+                try:
+                    nb_levels=max(nb_levels)
+                except:
+                    nb_levels=2
+            ways.way[iw].tags['z']=(0,nb_levels*level_height)
         elif ways.w[iw][1].has_key('levels'):
-            ways.way[iw].tags['z']=(0,eval(ways.w[iw][1]['levels'])*level_height)
+            nb_levels = eval(ways.w[iw][1]['levels'])
+            if type(nb_levels)!=int:
+                try:
+                    nb_levels=max(nb_levels)
+                except:
+                    nb_levels=2
+            ways.way[iw].tags['z']=(0,nb_levels*level_height)
         else:
             ways.way[iw].tags['z']=(0,12)
                           
