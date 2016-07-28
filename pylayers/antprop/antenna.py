@@ -1292,7 +1292,7 @@ class Antenna(Pattern):
         if 'fGHz' in kwargs:
             self.fGHz=kwargs['fGHz']
 
-        # mayavi selection
+        #mayavi selection
         self._is_selected=False
 
 
@@ -1317,7 +1317,7 @@ class Antenna(Pattern):
 
         self.tau = 0
         self.evaluated = False
-        # determine if pattern for all theta/phi is constructed
+        #determine if pattern for all theta/phi is constructed
         self.full_evaluated = False
 
         if self.fromfile:

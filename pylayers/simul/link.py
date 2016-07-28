@@ -219,6 +219,10 @@ class SLink(Link):
 
 
 class DLink(Link):
+    """ Deterministic Link Class
+
+
+    """
 
     def __init__(self, **kwargs):
         """ deterministic link evaluation
@@ -366,9 +370,9 @@ class DLink(Link):
                    'graph':'tcvirw'
                 }
 
-        self._ca=-1
-        self._cb=-1
-        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
+        self._ca = -1
+        self._cb = -1
+        specset  = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         # set default attribute
         for key, value in defaults.items():
@@ -389,7 +393,7 @@ class DLink(Link):
         delattr(self,'force_create')
 
        
-        # The frequency range is dependent from the antenna frequency range
+        # The link frequency range depends on the antenna frequency range
 
         if self.fGHz == []:
             self.initfreq()
@@ -412,7 +416,7 @@ class DLink(Link):
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
-            print 'Links save file for ' + self.L.filename + ' does not exist.'
+            print 'Links save file for ' + self.L._filename + ' does not exist.'
             print 'Creating file. You\'ll see this message only once per Layout'
             self.save_init(filenameh5)
 
@@ -1506,6 +1510,27 @@ class DLink(Link):
             pass
         return self.H.ak, self.H.tk
 
+    def select(self):
+        fig,ax = self.show()
+        self.cid = fig.canvas.mpl_connect('button_press_event',self.OnClick)
+        return(fig,ax)
+
+    def OnClick(self,event):
+        x = event.xdata
+        y = event.ydata
+        if event.button==1:
+            self.a=np.array([x,y,1.2])
+            self.caf.set_offsets(np.array([[x,y]]))
+            plt.draw()
+        if event.button==3:
+            self.b=np.array([x,y,1.2])
+            self.cbf.set_offsets(np.array([[x,y]]))
+            plt.draw()
+        if event.button==2:
+            self.eval()
+            self._show3()
+        print (x,y)
+
     def show(self,**kwargs):
         """ show the link
 
@@ -1578,14 +1603,14 @@ class DLink(Link):
         #
         # Point A
         #
-        ax.scatter(self.a[0],
+        self.caf = ax.scatter(self.a[0],
                    self.a[1], c=kwargs['ca'], s=kwargs['s'],
                    alpha=kwargs['alpha'])
         ax.text(self.a[0]+0.1,self.a[1]+0.1,'A',fontsize=kwargs['fontsize'])
         #
         # Point B
         #
-        ax.scatter(self.b[0],
+        self.cbf = ax.scatter(self.b[0],
                    self.b[1], c=kwargs['cb'], s=kwargs['s'],
                    alpha=kwargs['alpha'])
         ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])

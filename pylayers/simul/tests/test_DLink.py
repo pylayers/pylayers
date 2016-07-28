@@ -1,8 +1,12 @@
 from pylayers.simul.link import *
 import pylayers.signal.waveform as wvf
 import pdb
+
+# set the frequency range
 fGHz=np.arange(2.41,10.,0.05)
+# set the layout
 L=Layout('defstr.ini')
+# set the link
 DL=DLink(L=L,fGHz=fGHz)
 #DL.Aa=Antenna(typ='Omni')
 #DL.Ab=Antenna(typ='Omn')

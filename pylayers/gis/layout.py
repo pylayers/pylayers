@@ -281,7 +281,7 @@ from itertools import combinations
 import pdb
 import ast
 import pylayers.util.graphutil as gph
-
+ 
 
 
 class Layout(PyLayers):
@@ -4861,15 +4861,15 @@ class Layout(PyLayers):
             self.outputGi()
             self.lbltg.extend('i')
 
-        if 'r' in graph:
-            if verbose:
-                print "Gr"
-            self.buildGr()
-            self.lbltg.extend('r')
+        # if 'r' in graph:
+        #     if verbose:
+        #         print "Gr"
+        #     self.buildGr()
+        #     self.lbltg.extend('r')
 
-        if 'w' in graph and len(self.Gr.nodes())>1:
-            self.buildGw()
-            self.lbltg.extend('w')
+        # if 'w' in graph and len(self.Gr.nodes())>1:
+        #     self.buildGw()
+        #     self.lbltg.extend('w')
 
 
         # add hash to node 0 of Gt 
@@ -5414,11 +5414,19 @@ class Layout(PyLayers):
 
 
     def buildGt(self,mesh_indoor=True,check=True):
-        """
+        """ build graph of convex cycle 
+
+        Parameters
+        ----------
+
+        mesh_indoor : boolean 
+        check : boolean 
+
         todo :
         - add an option to only take outside polygon 
             => pass to self._triangle a hole coreesponding to centroid of
             polygon except those of boundary ( see buildGtold )
+
         """
 
 
@@ -5628,7 +5636,9 @@ class Layout(PyLayers):
 
         #
         # add cycle 0 to boundaries segments
+        # cycle 0 is necessarily outdoor
         #
+        self.Gt.add_node(0,indoor=False)
         for s in self.segboundary:
             self.Gs.node[s]['ncycles'].append(0)
         #
@@ -5640,7 +5650,7 @@ class Layout(PyLayers):
         for cy,seg in zip(adjcyair,self.segboundary):
             self.Gt.node[cy]['indoor'] = False
             self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(0,cy,segment=np.array([seg]))
+            self.Gt.add_edge(0,cy,segment=seg)
         
         if check : 
             print "check len(ncycles) == 2",
@@ -9081,6 +9091,48 @@ class Layout(PyLayers):
                     self.ddiff[k]=(lcyk,2*np.pi)
 
 
+    # def buildGr(self):
+    #     """ build the graph of rooms Gr 
+
+    #     Notes
+    #     -----
+
+    #     + A room is a set of convex cycles connected together through _AIR or AIR segment  
+    #     + A room is not necessarily convex
+       
+    #     This graph is used for room electromagnetics evaluation 
+
+    #     """
+       
+    #     # list of all indoor convex cycle
+    #     to_visit = [ x for x in self.Gt.node.keys() if self.Gt.node[x]['indoor']]
+    #     # list of cycles already in a room 
+    #     visited = []
+    #     # law : list of air walls
+    #     law = self.name['AIR']+self.name['_AIR']
+    #     room_cnt = 1
+    #     r = {}
+    #     cur_cy = to_visit[0]
+    #     while len(to_visit)>0:
+    #         cur_cy = to_visit.pop()
+    #         #print cur_cy
+    #         # get neighbors of current_cycle
+    #         neighbors = nx.neighbors(self.Gt,cur_cy)
+    #         # get neighbors separated from the current cycle by an air_wall
+    #         neighbors_aw = [ x for x in neighbors if self.Gt[cur_cy][x]['segment'] in law ]
+    #         # if at least one of the neighbors is already in a room --> same room 
+    #         # else --> new room 
+    #         neighbors_already_in_a_room = [ x for x in neighbors if x in visited ]
+    #         for cy in neighbors:
+    #             if len(already_in_a_room) >0 :  
+    #                 r[cy] = r[already_in_a_room[0]]
+    #             else:
+    #                 r[cy] = room_cnt
+    #                 room_cnt += 1 
+    #             visited.append(cy)
+    #         cur_cy = neighbors_aw[0]    
+    #     return r,to_visit,visited
+
     def buildGr(self):
         """ build the graph of rooms Gr
 
@@ -9098,76 +9150,101 @@ class Layout(PyLayers):
         """
         
         self.Gr = copy.deepcopy(self.Gt)
+        self.Gr.remove_node(0)
+       
+
+        to_visit = [ x for x in self.Gr.node.keys() if self.Gr.node[x]['indoor'] ] 
         
-        # delete node 0 which cannot be a room 
-        try:
-            self.Gr.remove_node(0)
-        except:
-            pass
+        law = self.name['AIR']+self.name['_AIR']
+        while len(to_visit)>0:
+            remaining_nodes = self.Gr.node.keys()
+            to_visit = [ x for x in to_visit if x in remaining_nodes]
+            cur_cy = to_visit.pop()
+            ln = nx.neighbors(self.Gr,cur_cy)
+            ln = [ x for x in ln if self.Gr.node[x]['indoor'] ]
+            # ls : list of segment
+            ls = [ self.Gr[cur_cy][x]['segment'] for x in ln]
+            for x in zip(ln,ls):
+                if x[1] in law:
+                    p1 = self.Gr.node[cur_cy]['polyg']
+                    p2 = self.Gr.node[x[0]]['polyg']
+                    P  = p1+p2
+                    P.setvnodes(self)
+                    ine = nx.neighbors(self.Gr,x[0])
+                    sne = [self.Gr[x[0]][y]['segment'] for y in ine]
+                    self.Gr.add_node(cur_cy,polyg=P)
+                    self.Gt.pos[cur_cy] = np.array((P.centroid.xy)).squeeze()
+                    self.Gr.add_edges_from([(cur_cy,y) for y in ine if y != cur_cy])
+                    for k in zip(ine,sne):
+                        if k[0]!=cur_cy:
+                            self.Gr[cur_cy][k[0]]['segment']=k[1]
+                    self.Gr.remove_node(x[0])
+                    del(self.Gr.pos[x[0]])
+                   
 
         #
         #  Connected components might not be all contiguous
         #  this is a problem because the concatenation of cycles
         #  operation requires cycles contiguity
         #
-        for n in self.Gr.nodes():
-            self.Gr.node[n]['transition'] = []
-        ltrans = self.listtransition
-        ltmp = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-        ldoors = filter(lambda x:self.Gs.node[x]['name']!='_AIR',ltmp)
-        keys = self.Gr.node.keys()
+        # for n in self.Gr.nodes():
+        #     self.Gr.node[n]['transition'] = []
+        # ltrans = self.listtransition
+        # ltmp = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
+        # ldoors = filter(lambda x:self.Gs.node[x]['name']!='_AIR',ltmp)
+        # keys = self.Gr.node.keys()
 
-        for a in _airseg:
-            n0,n1=iuE[a]
-            found=False
-            while not found:
-                nn0 = mapoldcy[n0]
-                if n0==nn0:
-                    found=True
-                else:
-                    n0=nn0
-            found=False
-            while not found:
-                nn1 = mapoldcy[n1]
-                if n1==nn1:
-                    found=True
-                else:
-                    n1=nn1
+        # for a in _airseg:
+        #     n0,n1=iuE[a]
+        #     found=False
+        #     while not found:
+        #         nn0 = mapoldcy[n0]
+        #         if n0==nn0:
+        #             found=True
+        #         else:
+        #             n0=nn0
+        #     found=False
+        #     while not found:
+        #         nn1 = mapoldcy[n1]
+        #         if n1==nn1:
+        #             found=True
+        #         else:
+        #             n1=nn1
 
-            p0=self.Gt.node[n0]['polyg']
-            p1=self.Gt.node[n1]['polyg']
+        #     p0=self.Gt.node[n0]['polyg']
+        #     p1=self.Gt.node[n1]['polyg']
 
-            # Merge polygon 
-            P = p0+p1
-            # If the new Polygon is convex update Gt
-            #
-            if geu.isconvex(P):
-                # updates vnodes of the new merged polygon
-                P.setvnodes(self)
-                # update edge
-                n0s = n0
-                n1s = n1
-                # get segments information from cycle n0 
-                dne = self.Gt[n0]
-                # remove connection to n0 to avoid a cycle being 
-                # connected to itself
-                self.Gt[n1].pop(n0)
-                # add information from adjacent cycle n1
-                dne.update(self.Gt[n1])
-                # list of items of the merged dictionnary
-                ine = dne.items()
-                # update n0 with the new merged polygon 
-                self.Gt.add_node(n0,polyg=P)
-                # connect new cycle n0 to neighbors 
-                self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-                # remove old cycle n1 
-                self.Gt.remove_node(n1)
-                # update pos of the cycle with merged polygon centroid
-                self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
-                # delete _air segment a
-                # do not apply g2npy  
-                self.del_segment(a,verbose=False,g2npy=False)
-                mapoldcy[n1]=n0
+        #     # Merge polygon 
+        #     P = p0+p1
+        #     # If the new Polygon is convex update Gt
+        #     #
+        #     if geu.isconvex(P):
+        #         # updates vnodes of the new merged polygon
+        #         P.setvnodes(self)
+        #         # update edge
+        #         n0s = n0
+        #         n1s = n1
+        #         # get segments information from cycle n0 
+        #         dne = self.Gt[n0]
+        #         # remove connection to n0 to avoid a cycle being 
+        #         # connected to itself
+        #         self.Gt[n1].pop(n0)
+        #         # add information from adjacent cycle n1
+        #         dne.update(self.Gt[n1])
+        #         # list of items of the merged dictionnary
+        #         ine = dne.items()
+        #         # update n0 with the new merged polygon 
+        #         self.Gt.add_node(n0,polyg=P)
+        #         # connect new cycle n0 to neighbors 
+        #         self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
+        #         # remove old cycle n1 
+        #         self.Gt.remove_node(n1)
+        #         # update pos of the cycle with merged polygon centroid
+        #         self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
+        #         # delete _air segment a
+        #         # do not apply g2npy  
+        #         self.del_segment(a,verbose=False,g2npy=False)
+        #         mapoldcy[n1]=n0
         # for cy in keys:
         #     p = self.Gr.node[cy]['polyg']
         #     lseg = [ x for x in p.vnodes if x > 0 ]
@@ -9583,8 +9660,9 @@ class Layout(PyLayers):
     def facet3D(self, e, subseg=False):
         """ calculate 3D facet from segment
 
+
         Parameters
-        ----------
+        ---------
 
         s : int
             segment number
@@ -9854,7 +9932,9 @@ class Layout(PyLayers):
 
         """
 
-        # calculate center of gravity
+        #
+        # calculate center of gravity of the layout
+        #
         if centered:
             pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
         else:
@@ -9878,7 +9958,7 @@ class Layout(PyLayers):
 
         sl = self.sl
 #
-#        Create a polygon for each segment and subsegment
+#        Create a 3D polygon for each segment and subsegment
 #
         P1 = np.array(np.zeros([3, en + cen], dtype=np.float64))
         P2 = np.array(np.zeros([3, en + cen], dtype=np.float64))
@@ -9888,6 +9968,9 @@ class Layout(PyLayers):
         ik   = 0
         dikn = {}
 
+        #
+        # segments which are not _AIR or AIR
+        #
         for i in self.Gs.node.keys():
             if i > 0:  # segment
                 if ((self.Gs.node[i]['name']!='AIR') and
@@ -9907,7 +9990,7 @@ class Layout(PyLayers):
                     P4[0:2, ik] = np.array(self.Gs.pos[n2])-pg
                     P4[2, ik] = self.Gs.node[i]['z'][0]
 
-                    dikn[ik]=i
+                    dikn[ik] = i
                     ik = ik + 1
 
                 else:
@@ -9955,9 +10038,11 @@ class Layout(PyLayers):
         points = np.hstack((P1[:,0:npt_s],P2[:,0:npt_s]))
         points = np.hstack((points,P3[:,0:npt_s]))
         points = np.hstack((points,P4[:,0:npt_s]))
-        points=points.T
-        boxes=np.empty((npt/4,4),dtype='int')
+        points = points.T
+        
+        boxes = np.empty((npt/4,4),dtype='int')
         b = np.arange(npt/4)
+        
         boxes[:,0]=b
         boxes[:,1]=b+npt_s
         boxes[:,2]=b+2*npt_s
@@ -10022,12 +10107,15 @@ class Layout(PyLayers):
         try:
             self.ma.coorddeter()
             # z=np.ones(self.ma.xy.shape[1])
-            z=np.zeros(self.ma.xy.shape[1])
-            F=np.vstack((self.ma.xy,z))
+            z = np.zeros(self.ma.xy.shape[1])
+            F = np.vstack((self.ma.xy,z))
+            
             tri = np.arange(len(z))
             meshf = tvtk.PolyData(points=F.T, polys=np.array([tri]))
+            
             meshf.point_data.scalars = sc
             meshf.point_data.scalars.name = 'scalars'
+            
             surff = mlab.pipeline.surface(meshf, opacity=opacity)
             mlab.pipeline.surface(mlab.pipeline.extract_edges(surff),
                                         color=(0, 0, 0), )
@@ -10062,6 +10150,7 @@ class Layout(PyLayers):
             f = mlab.gcf()
             f.scene.background=(1,1,1)
 
+
         f.scene.disable_render = True
 
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
@@ -10069,6 +10158,7 @@ class Layout(PyLayers):
                                     color=(0, 0, 0), )
         f.children[-1].name='Layout ' + self._filename
 
+        
         if cyid:
             if len(self.Gt.nodes())>0:
                 pk=self.Gt.pos.keys()

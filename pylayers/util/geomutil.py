@@ -469,6 +469,7 @@ class Polygon(PyLayers,shg.Polygon):
 
     Methods
     -------
+
     plot
     ptconvex
     buildGv
@@ -731,7 +732,95 @@ class Polygon(PyLayers,shg.Polygon):
                 (np.sum(isleft(c,b,a,tol=tol)) == 0)
 
     
+    def reverberation(self,fGHz,L):
+        """ calculate reverberation time of the polygon
 
+        Parameters
+        ----------
+
+        fGHz : frequency GHz
+        L : Layout
+
+        Returns
+        -------
+
+        V    : Volume
+        A    : Area
+        eta  : absorption coefficient
+        tau_sab  :
+        tau_eyr  :
+
+        
+        $$\tau_g = \frac{4V}{c\eta A}$$
+        Sabine's Model
+        where $\eta$ is the absorbtion coefficient
+
+        """
+        # get the sequence of segments 
+        # handle subsegments
+        lseg  = filter(lambda x: x>0, self.vnodes)
+        S1 = []
+        S2 = []
+        AS2 = []
+        AS1 = []
+
+        # S unsigned polygon area
+        # P polygon Perimeter
+        # A unsigned room area
+        # V room Volume
+        # H room Height
+
+        S  = abs(self.area)
+        P  = 0
+        for k in lseg:
+            npt = L.Gs.node[k]['connect']
+            slname = L.Gs.node[k]['name']
+            sl = L.sl[slname]
+            # calculate Loss
+            Lo,Lp = sl.loss0(fGHz)
+            Abs = 10**(-Lo[0]/10.)
+            #print slname,Abs
+            n1 = npt[0]
+            n2 = npt[1]
+            p1 = L.Gs.pos[n1]
+            p2 = L.Gs.pos[n2]
+            Lseg = np.sqrt((p2[0]-p1[0])**2+(p2[1]-p1[1])**2)
+            P = P+Lseg
+            H = L.Gs.node[k]['z'][1]- L.Gs.node[k]['z'][0]
+            if L.Gs.node[k].has_key('ss_z'):
+                SS = 0
+                for k2,ss in enumerate(L.Gs.node[k]['ss_z']):
+                    ssname =  L.Gs.node[k]['ss_name'][k2]
+                    sssl = L.sl[ssname]
+                    Loss,Lpss = sssl.loss0(fGHz)
+                    Absss = 10**(-Loss[0]/10.)
+                    #print ssname,Absss
+                    val = Lseg*(ss[1]-ss[0])
+                    SS = SS+val
+                    S1.append(val)
+                    AS1.append(val*Absss)
+
+                St = H*Lseg
+                S1.append(St-SS)
+                AS1.append((St-SS)*Abs)
+
+            else:
+                S2.append(H*Lseg)
+                AS2.append(H*Lseg*Abs)
+        V = S*H
+        A = P*H+2*S
+        sfloor = L.sl['FLOOR']
+        sceil = L.sl['CEIL']
+        Lofloor,Lpfloor = sfloor.loss0(fGHz)
+        Loceil,Lpceil = sceil.loss0(fGHz)
+        etaFloor = S*10**(-Lofloor[0]/10.)
+        etaCeil  = S*10**(-Loceil[0]/10.)
+        eta = (sum(AS1)+sum(AS2)+etaFloor+etaCeil)/A
+        tau_sab = 4*V/(0.3*A*eta)
+        tau_eyr = -4*V/(0.3*A*np.log(1-eta))
+ 
+        return(V,A,eta,tau_sab,tau_eyr)
+ 
     def plot(self,**kwargs):
         """ plot function
 
