@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #-*- coding:Utf-8 -*-
 r""""
 .. currentmodule:: pylayers.signal.ED
@@ -141,6 +140,8 @@ class ED(PyLayers):
         self.update()
 
     def update(self):
+        """ updating 
+        """
         #
         # calculates ED moments, order and scale
         #
@@ -172,7 +173,7 @@ class ED(PyLayers):
         return(st)
 
     def apply(self,s,typ='ideal'):
-        r"""
+        r""" apply signal 
 
         Parameters
         ----------
@@ -416,7 +417,7 @@ class ED(PyLayers):
             include-source:
 
             >>> from pylayers.signal.ED import *
-            >>> EnDet = ED(BHGz=0.5,Tns=20)
+            >>> EnDet = ED(BGHz=0.5,Tns=20)
 
 
         """

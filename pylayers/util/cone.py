@@ -6,32 +6,16 @@ Class Cone
 
 The following conventions are adopted
 
-+ A Cone has an **apex** which is a point in the plane.
-+ A cone has two vectors which define the cone aperture. Those two vectors can
-always been distinguished as a starting vector (u) and a ending vector (v).
++ A cone has an **apex** which is a point in the plane.
++ A cone has two vectors which define the cone aperture. The order of those two vectors 
+matters (u) is the starting vector (u) and (v) the ending vector.
 
 The cone region is defined by the convex angular sector going from starting
-vector  :math:`\mathbf{u}` to ending vector :math:`\mathbf{v}`
-rotating in the plane in folllowing the trigonometric convention.
+vector  :math:`\mathbf{u}` to the ending vector :math:`\mathbf{v}`
+rotating in the plane in following the trigonometric rotation convention.
 The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v}` is positive.
 
 :math:`\mathbf{u} \times \mathbf{v} = \alpha \mathbf{z} \;\; \textrm{with} \;\;\alpha > 0`
-
-.. autosummary::
-    :toctree:
-
-    Cone.__init__
-    Cone.upd_angle
-    Cone.belong_seg
-    Cone.aboveseg
-    Cone.outside_point
-    Cone.belong_point2
-    Cone.belong_point
-    Cone.above
-    Cone.fromptseg
-    Cone.from2segs
-    Cone.from2csegs
-    Cone.show
 
 
 """
@@ -236,7 +220,7 @@ class Cone(PyLayers):
 
         return(typ,proba)
 
-    def aboveseg(self):
+    def above_seg(self):
         """
         """
         vc  = (self.u+self.v)/2
@@ -294,6 +278,12 @@ class Cone(PyLayers):
 
     def belong_point2(self,p):
         """
+
+        Parameters
+        ----------
+
+         p  : np.array (Ndim x Npoints)
+         
         """
 
         a = self.apex[:,np.newaxis]
@@ -665,3 +655,7 @@ class Cone(PyLayers):
         # ax.set_ylim(-2,2)
 
         return(fig, ax)
+        
+        if __name__ == '__main__':
+            plt.ion()
+            doctest.    

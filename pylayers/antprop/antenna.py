@@ -226,7 +226,7 @@ class Pattern(PyLayers):
         >>> A0.eval()
         >>> A1.eval()
         >>> A2.eval()
-        >>> A3.eval()
+        >>> #A3.eval()
 
         """
         defaults = {'th':[],
@@ -2210,6 +2210,9 @@ class Antenna(Pattern):
     def _show3(self,newfig = True,colorbar =True,
                     name=[],interact=False,title=True,**kwargs ):
         """ show3 mayavi
+
+        Parameters
+        ----------
 
         fGHz : float
             frequency

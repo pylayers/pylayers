@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
 r"""
@@ -638,7 +637,7 @@ class DLink(Link):
         if hasattr(self.Ab,'_mayamesh'):
            self.Ab._mayamesh.remove()
 
-        # save rot
+        #save rot
         rot = self.Tb
         self._Ab = Ant
         self.Tb = rot

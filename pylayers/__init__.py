@@ -9,17 +9,12 @@ import sys
 __version__ = '0.12-git'
 
 try:
-    # This variable is injected in the __builtins__ by the build
-    # process. It used to enable importing subpackages of sklearn when
-    # the binaries are not built
     __PYLAYERS_SETUP__
 except NameError:
     __PYLAYERS_SETUP__ = False
 
 if __PYLAYERS_SETUP__:
     sys.stderr.write('Partial import of pylayers during the build process.\n')
-    # We are not importing the rest of the scikit during the build
-    # process, as it may not be compiled yet
 else:
     try:
         from numpy.testing import nosetester

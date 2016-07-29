@@ -902,10 +902,10 @@ class Rays(PyLayers,dict):
                     #     u = 1 - np.mod(range(Nint), 2)
 
 
-                    if l < 0 and Nint%2 ==1: # l<0 Nint odd
+                    if l < 0 and Nint%2 ==1: #l<0 Nint odd
                         u = np.mod(range(Nint), 2)
 
-                    elif l > 0 and Nint%2 ==1: # l>0 Nint odd
+                    elif l > 0 and Nint%2 ==1: #l>0 Nint odd
                         u = 1 - np.mod(range(Nint), 2)
 
 
@@ -1167,7 +1167,7 @@ class Rays(PyLayers,dict):
 
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
-                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] # ucy+1 is to manage cycle 0
+                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
                         
                         # 3 remove ceil reflexion of outdoor cycles
                         if len(uout)>0:

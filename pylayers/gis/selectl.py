@@ -1,5 +1,9 @@
-#!usr/bin/python
 # -*- coding: utf-8 -*-
+r"""
+
+.. currentmodule:: pylayers.gis.selectL
+
+"""
 import os
 import pdb
 import Image
@@ -1218,4 +1222,7 @@ class SelectL(object):
             print self.selectpt, self.selectseg
             #print self.selectsl
             # plt.connect('key_press_event', toggle_selector)
- 
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

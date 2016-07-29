@@ -68,7 +68,6 @@ Members
     Tchannel.sort
     Tchannel.showtap
     Tchannel.tap
-    Tchannel.minphas
     Tchannel.ifft
     Tchannel.totime
     Tchannel.iftd
@@ -270,7 +269,7 @@ class TBchannel(bs.TBsignal):
         >>> from pylayers.antprop.channel import *
         >>> C=TBchannel()
         >>> C.SalehValenzuela()
-        >>> C.stem()
+        >>> f,a = C.stem()
 
         """
         defaults = { 'Lam' : .1,
@@ -1002,9 +1001,9 @@ class TUchannel(TBchannel,bs.TUsignal):
             >>> tauk = 100*np.random.rand(7)
             >>> tau = np.arange(0,150,0.1)
             >>> y = np.zeros(len(tau))
-            >>> CIR = TUsignal(tau,y)
-            >>> CIR.aggcir(alphak,tauk)
-            >>> f,a =CIR.plot(typ=['v'])
+            >>> # CIR = TUsignal(tau,y)
+            >>> # CIR.aggcir(alphak,tauk)
+            >>> # f,a =CIR.plot(typ=['v'])
 
         """
         shy = np.shape(self.y)
@@ -2741,58 +2740,55 @@ class Tchannel(bs.FUsignal):
         corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
         return(htap,Et_htap,Er_htap,corrtap)
 
-    def minphas(self):
-        """ construct a minimal phase FUsignal
+    # def minphas(self):
+    #     """ construct a minimal phase FUsignal
 
-        Notes
-        -----
+    #     - Evaluate slope of the phase
+    #     - deduce delay
+    #     - update delay of FUDSignal
+    #     - Compensation of phase slope to obtain minimal phase
 
-        - Evaluate slope of the phase
-        - deduce delay
-        - update delay of FUDSignal
-        - Compensation of phase slope to obtain minimal phase
+    #     This methods updates the excess delay taue member.
 
-        This methods updates the excess delay `taue` member.
+    #     The samplinf frequency step should be
 
-        The samplinf frequency step should be
+    #     # Examples
+    #     # --------
 
-        Examples
-        --------
+    #     # .. plot::
+    #     #     :include-source:
 
-        .. plot::
-            :include-source:
+    #     #     >>> from pylayers.signal.bsignal import *
+    #     #     >>> import numpy as np
+    #     #     >>> fGHz = np.arange(2,11,0.1)
+    #     #     >>> tau1 = np.array([1,2,3])[:,np.newaxis]
+    #     #     >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
+    #     #     >>> H = Tchannel(x=fGHz,y=y,tau=np.array([15,17,18]))
+    #     #     >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
+    #     #     >>> t1 = plt.suptitle('Before minimal phase compensation')
+    #     #     >>> H.minphas()
+    #     #     >>> H.taue
+    #     #     array([ 1.,  2.,  3.])
+    #     #     >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
+    #     #     >>> t2 = plt.suptitle('After minimal phase compensation')
 
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> fGHz = np.arange(2,11,0.1)
-            >>> tau1 = np.array([1,2,3])[:,np.newaxis]
-            >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
-            >>> H = Tchannel(x=fGHz,y=y,taud=np.array([15,17,18]))
-            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
-            >>> t1 = plt.suptitle('Before minimal phase compensation')
-            >>> H.minphas()
-            >>> H.taue
-            array([ 1.,  2.,  3.])
-            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
-            >>> t2 = plt.suptitle('After minimal phase compensation')
+    #     """
 
-        """
-
-        f = self.x
-        phase = np.unwrap(np.angle(self.y))
-        dphi = phase[:, -1] - phase[:, 0]
-        df = self.x[-1] - self.x[0]
-        slope = dphi / df
-        #if slope >0:
-        #   print 'm  inphas Warning : non causal FUSignal'
-        #phi0      = +1j*slope*(f[-1]+f[0]/2)
-        F, S = np.meshgrid(f, slope)
-        #E   = exp(-1j*slope*f+phi0)
-        E = np.exp(-1j * S * F)
-        self.y = self.y * E
-        self.taue = -slope / (2 * np.pi)
-        # update total delay
-        #self.tau = self.tau+self.taue
+    #     f = self.x
+    #     phase = np.unwrap(np.angle(self.y))
+    #     dphi = phase[:, -1] - phase[:, 0]
+    #     df = self.x[-1] - self.x[0]
+    #     slope = dphi / df
+    #     #if slope >0:
+    #     #   print 'm  inphas Warning : non causal FUSignal'
+    #     #phi0      = +1j*slope*(f[-1]+f[0]/2)
+    #     F, S = np.meshgrid(f, slope)
+    #     #E   = exp(-1j*slope*f+phi0)
+    #     E = np.exp(-1j * S * F)
+    #     self.y = self.y * E
+    #     self.taue = -slope / (2 * np.pi)
+    #     # update total delay
+    #     #self.tau = self.tau+self.taue
 
     def ifft(self):
         """ inverse Fourier Transform
@@ -2802,13 +2798,13 @@ class Tchannel(bs.FUsignal):
 
         >>> from pylayers.simul.link import *
         >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
+        >>> aktk = L.eval(force=True)
         >>> L.H.cut()
-        >>> T1 = L.H.totime()
-        >>> f,a = T1.plot(typ='v')
-        >>> L.H.minphas()
-        >>> T2 = L.H.totime()
-        >>> f,a = T2.plot(typ='v')
+        >>> #T1 = L.H.totime()
+        >>> #f,a = T1.plot(typ='v')
+        >>> #L.H.minphas()
+        >>> #T2 = L.H.totime()
+        >>> #f,a = T2.plot(typ='v')
 
 
         """
@@ -2833,15 +2829,15 @@ class Tchannel(bs.FUsignal):
         Examples
         --------
 
-        >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
-        >>> L.H.cut()
-        >>> T1 = L.H.totime()
-        >>> f,a = T1.plot(typ='v')
-        >>> L.H.minphas()
-        >>> T2 = L.H.totime()
-        >>> f,a = T2.plot(typ='v')
+        >>> #from pylayers.simul.link import *
+        >>> #L = DLink(verbose=False)
+        >>> #aktk = L.eval()
+        >>> #L.H.cut()
+        >>> #T1 = L.H.totime()
+        >>> #f,a = T1.plot(typ='v')
+        >>> #L.H.minphas()
+        >>> #T2 = L.H.totime()
+        >>> #f,a = T2.plot(typ='v')
 
         See Also
         --------
@@ -3047,8 +3043,8 @@ class Tchannel(bs.FUsignal):
             >>> fGHz = np.arange(1,3,1)
             >>> taud = np.sort(np.random.rand(N))
             >>> alpha = np.random.rand(N,len(fGHz))
-            >>> s = Tchannel(x=fGHz,y=alpha,taud=taud)
-            >>> s.plot3d()
+            >>> #s = Tchannel(x=fGHz,y=alpha,tau=taud)
+            >>> #s.plot3d()
 
         """
         Ntau = np.shape(self.y)[0]
@@ -3526,123 +3522,123 @@ class Ctilde(PyLayers):
             fh5.close()
             raise NameError('Channel.Ctilde: issue when reading h5py file')
 
-    def load(self, filefield, transpose=False):
-        """ load a Ctilde from a .field file
+#     def load(self, filefield, transpose=False):
+#         """ load a Ctilde from a .field file
 
-        Load the three files .tauk .tang .rang which contain respectively
-        delay , angle of departure , angle of arrival.
-maicher
-        Parameters
-        ----------
+#         Load the three files .tauk .tang .rang which contain respectively
+#         delay , angle of departure , angle of arrival.
+# maicher
+#         Parameters
+#         ----------
 
-        filefield  : string
-        transpose  : boolean
-            default False
+#         filefield  : string
+#         transpose  : boolean
+#             default False
 
-        Examples
-        --------
+#         Examples
+#         --------
 
-        >>> from pylayers.antprop.channel import *
-        >>> from pylayers.simul.simulem import *
-        >>> S = Simul()
-        >>> S.load('default.ini')
-        >>> C = Ctilde()
-        >>> out = C.load(pyu.getlong(S.dtud[1][1],'output'))
+#         >>> from pylayers.antprop.channel import *
+#         >>> from pylayers.simul.simulem import *
+#         >>> S = Simul()
+#         >>> S.load('default.ini')
+#         >>> C = Ctilde()
+#         >>> out = C.load(pyu.getlong(S.dtud[1][1],'output'))
 
-        """
-        filetauk = filefield.replace('.field', '.tauk')
-        filetang = filefield.replace('.field', '.tang')
-        filerang = filefield.replace('.field', '.rang')
-        try:
-            fo = open(filefield, "rb")
-        except:
-            raise NameError( "file " + filefield + " is unreachable")
+#         """
+#         filetauk = filefield.replace('.field', '.tauk')
+#         filetang = filefield.replace('.field', '.tang')
+#         filerang = filefield.replace('.field', '.rang')
+#         try:
+#             fo = open(filefield, "rb")
+#         except:
+#             raise NameError( "file " + filefield + " is unreachable")
 
-        # decode filename (*.field file obtained from evalfield simulation)
-        nray = stru.unpack('i', fo.read(4))[0]
-        nfreq = stru.unpack('i', fo.read(4))[0]
-        if nfreq == 0:
-            print " Error : incorrect number of frequency points in .field"
-            self.fail = True
-            return
+#         # decode filename (*.field file obtained from evalfield simulation)
+#         nray = stru.unpack('i', fo.read(4))[0]
+#         nfreq = stru.unpack('i', fo.read(4))[0]
+#         if nfreq == 0:
+#             print " Error : incorrect number of frequency points in .field"
+#             self.fail = True
+#             return
 
-        n = nray * nfreq
-        buf = fo.read()
-        fo.close()
+#         n = nray * nfreq
+#         buf = fo.read()
+#         fo.close()
 
-        CMat = np.ndarray(shape=(n, 8), buffer=buf)
-        c11 = CMat[:, 0] + CMat[:, 1]*1j
-        c12 = CMat[:, 2] + CMat[:, 3]*1j
-        c21 = CMat[:, 4] + CMat[:, 5]*1j
-        c22 = CMat[:, 6] + CMat[:, 7]*1j
+#         CMat = np.ndarray(shape=(n, 8), buffer=buf)
+#         c11 = CMat[:, 0] + CMat[:, 1]*1j
+#         c12 = CMat[:, 2] + CMat[:, 3]*1j
+#         c21 = CMat[:, 4] + CMat[:, 5]*1j
+#         c22 = CMat[:, 6] + CMat[:, 7]*1j
 
-        c11 = c11.reshape(nray, nfreq)
-        c12 = c12.reshape(nray, nfreq)
-        c21 = c21.reshape(nray, nfreq)
-        c22 = c22.reshape(nray, nfreq)
+#         c11 = c11.reshape(nray, nfreq)
+#         c12 = c12.reshape(nray, nfreq)
+#         c21 = c21.reshape(nray, nfreq)
+#         c22 = c22.reshape(nray, nfreq)
 
-        if transpose:
-            c11 = c11.transpose()
-            c12 = c12.transpose()
-            c21 = c21.transpose()
-            c22 = c22.transpose()
+#         if transpose:
+#             c11 = c11.transpose()
+#             c12 = c12.transpose()
+#             c21 = c21.transpose()
+#             c22 = c22.transpose()
 
-        #
-        # Temporary freq --> read filefreq
-        #
-        fGHz = np.linspace(2, 11, nfreq)
+#         #
+#         # Temporary freq --> read filefreq
+#         #
+#         fGHz = np.linspace(2, 11, nfreq)
 
-        self.Ctt = bs.FUsignal(fGHz, c11)
-        self.Ctp = bs.FUsignal(fGHz, c12)
-        self.Cpt = bs.FUsignal(fGHz, c21)
-        self.Cpp = bs.FUsignal(fGHz, c22)
-        self.nfreq = nfreq
-        self.nray = nray
+#         self.Ctt = bs.FUsignal(fGHz, c11)
+#         self.Ctp = bs.FUsignal(fGHz, c12)
+#         self.Cpt = bs.FUsignal(fGHz, c21)
+#         self.Cpp = bs.FUsignal(fGHz, c22)
+#         self.nfreq = nfreq
+#         self.nray = nray
 
-        try:
-            fo = open(filetauk, "rb")
-        except:
-            self.fail = True
-            print "file ", filetauk, " is unreachable"
-        # decode filetauk
-        if not self.fail:
-            nray_tauk = stru.unpack('i', fo.read(4))[0]
-            #print "nb rays in .tauk file: ", nray_tauk
-            buf = fo.read()
-            fo.close()
-            nray = len(buf) / 8
-            #print "nb rays 2: ", nray
-            self.tauk = np.ndarray(shape=nray, buffer=buf)
-            #if nray_tauk != nray:
-            #    print nray_tauk - nray
-        self.tauk = self.tauk
+#         try:
+#             fo = open(filetauk, "rb")
+#         except:
+#             self.fail = True
+#             print "file ", filetauk, " is unreachable"
+#         # decode filetauk
+#         if not self.fail:
+#             nray_tauk = stru.unpack('i', fo.read(4))[0]
+#             #print "nb rays in .tauk file: ", nray_tauk
+#             buf = fo.read()
+#             fo.close()
+#             nray = len(buf) / 8
+#             #print "nb rays 2: ", nray
+#             self.tauk = np.ndarray(shape=nray, buffer=buf)
+#             #if nray_tauk != nray:
+#             #    print nray_tauk - nray
+#         self.tauk = self.tauk
 
-        # decode the angular files (.tang and .rang)
-        try:
-            fo = open(filetang, "rb")
-        except:
-            self.fail = True
-            print "file ", filetang, " is unreachable"
-        if not self.fail:
-            nray_tang = stru.unpack('i', fo.read(4))[0]
-            buf = fo.read()
-            fo.close()
-            # coorectif Bug evalfield
-            tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
-            self.tang = tmp[0:nray,:]
-        try:
-            fo = open(filerang, "rb")
-        except:
-            self.fail = True
-            print "file ", filerang, " is unreachable"
+#         # decode the angular files (.tang and .rang)
+#         try:
+#             fo = open(filetang, "rb")
+#         except:
+#             self.fail = True
+#             print "file ", filetang, " is unreachable"
+#         if not self.fail:
+#             nray_tang = stru.unpack('i', fo.read(4))[0]
+#             buf = fo.read()
+#             fo.close()
+#             # coorectif Bug evalfield
+#             tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
+#             self.tang = tmp[0:nray,:]
+#         try:
+#             fo = open(filerang, "rb")
+#         except:
+#             self.fail = True
+#             print "file ", filerang, " is unreachable"
 
-        if not self.fail:
-            nray_rang = stru.unpack('i', fo.read(4))[0]
-            buf = fo.read()
-            fo.close()
-            # corectif Bug evalfield
-            tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
-            self.rang = tmp[0:nray,:]
+#         if not self.fail:
+#             nray_rang = stru.unpack('i', fo.read(4))[0]
+#             buf = fo.read()
+#             fo.close()
+#             # corectif Bug evalfield
+#             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
+#             self.rang = tmp[0:nray,:]
 
     def mobility(self, v, dt):
         """ modify channel for uniform mobility

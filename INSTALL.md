@@ -64,7 +64,6 @@ If you try to re-install PyLayers on an existing version:
 
 
 
-
 # Usual Install Issues
 
 Most of the issue encountered during the install is due to 

@@ -860,11 +860,11 @@ class Overset(QMainWindow):
 
         mx = (self.x0[0] + self.x)/2.
         my = (self.x0[1] + self.y)/2.
-        # da
+        #da
         self.a0 = self.ax.annotate('', xy=(self.x0[0], self.x0[1]), xycoords='data',xytext=(self.x, self.x0[1]), textcoords='data',arrowprops={'arrowstyle': '<->'})
         # self.a1 = self.ax.annotate('a'+str(self.da.value()) + ' m', xy=(mx, self.x0[1]-100), xycoords='data',xytext=(5, 0), textcoords='offset points')
         self.a1 = self.ax.text(mx, self.x0[1]-50, 'x='+str(self.da.value()) + ' m', fontsize=15)
-        # db
+        #db
         self.b0 =self.ax.annotate('', xy=(self.x0[0], self.x0[1]), xycoords='data',xytext=(self.x0[0], self.y), textcoords='data',arrowprops={'arrowstyle': '<->'})
         # self.b1 =self.ax.annotate('b'+str(self.db.value()) + ' m', xy=(self.x0[0]-100,my), xycoords='data',xytext=(5, 0), textcoords='offset points')
         self.b1 = self.ax.text(self.x0[0]-50,my, 'y='+str(self.db.value()) + ' m', fontsize=15,rotation=90)

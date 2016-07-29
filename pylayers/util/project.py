@@ -1,6 +1,4 @@
 #-*- coding:Utf-8 -*-
-"""
-"""
 import numpy as np
 import os
 import sys
@@ -86,11 +84,11 @@ def _writedotpylayers(typ,path):
 home = os.path.expanduser('~')
 currentdir = os.getcwd()
 
-# if .pylayers exists
+#if .pylayers exists
 if os.path.isfile(os.path.join(home,'.pylayers')):
     with open(os.path.join(home,'.pylayers'),'r') as f:
         lines = f.readlines()
-    # ''.join... to remove the '\n' character
+    #''.join... to remove the '\n' character
 
     pylayersdir = ''.join(lines[1].splitlines()) 
     basename = ''.join(lines[3].splitlines()) 
@@ -116,7 +114,7 @@ else:
 # # if os.path.isfile(os.path.join(home,'.pylayers')):
 # #     with open(os.path.join(home,'.pylayers'),'r') as f:
 # #         lines = f.readlines()
-# #     # [:-1] to remove the '\n' character
+# #     #[:-1] to remove the '\n' character
 # #     pylayersdir = lines[1][:-1]
 # #     basename = lines[3]
 

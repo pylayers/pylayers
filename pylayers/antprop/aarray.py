@@ -75,7 +75,8 @@ class Array(ant.Pattern):
         self.w = w
 
         self.typ = 'Array'
-        self.param = {'param': {}}
+        #self.param = {'param': {}}
+        self.param = {}
 
         ant.Pattern.__init__(self)
 

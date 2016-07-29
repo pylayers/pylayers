@@ -1195,7 +1195,7 @@ class Layout(PyLayers):
             else:
                 lat,lon = eval(kwargs['latlon'])
                 self._filename='lat_'+str(lat).replace('.','_')+'_lon_'+str(lon).replace('.','_')+'.ini'
-        else: # by reading an osm file
+        else: #by reading an osm file
             fileosm = pyu.getlong(kwargs['_fileosm'],os.path.join('struc','osm'))
             coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=kwargs['typ'])
             self.coordinates = 'latlon'
@@ -1280,7 +1280,7 @@ class Layout(PyLayers):
                 #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
                     if 'name' in ways.way[nseg].tags:
                         slab = ways.way[nseg].tags['name']
-                    else: # the default slab name is WALL 
+                    else: #the default slab name is WALL 
                         slab = "WALL"
                     if 'z' in ways.way[nseg].tags:
                         z = ways.way[nseg].tags['z']
@@ -5305,11 +5305,11 @@ class Layout(PyLayers):
         """
 
         lMP=[]
-        # MERGE POLYGONS
-        # move from delaunay triangles to convex polygons
+        #MERGE POLYGONS
+        #move from delaunay triangles to convex polygons
         while lP !=[]:
             p = lP.pop(0)
-            # restrict research to polygon that are touching themself
+            #restrict research to polygon that are touching themself
             restp = [(ix,x) for ix,x in enumerate(lP) if  isinstance(p.intersection(x),sh.LineString)]
             # self.pltpoly(p,ax=plt.gca())
 
@@ -5377,7 +5377,7 @@ class Layout(PyLayers):
         segbounds = []
         ptbounds = []
         if holes == []:
-            # remove air segments around layout
+            #remove air segments around layout
             pass
             # [segbounds.extend(nx.neighbors(L.Gs,x)) for x in L.lboundary]
             # ptbounds = L.lboundary
@@ -5396,7 +5396,7 @@ class Layout(PyLayers):
         vertices = ivertices[:,1:]
         sorter = np.argsort(map_vertices)
         
-        # mapping between Gs graph segments and triangle segments
+        #mapping between Gs graph segments and triangle segments
         segments = sorter[np.searchsorted(map_vertices, seg, sorter=sorter)]
 
         if holes == []:
@@ -5430,9 +5430,9 @@ class Layout(PyLayers):
         """
 
 
-        ### 1. Do a Delaunay triangulation
+        ###1. Do a Delaunay triangulation
         ###     build a list of triangle polygons : lTP
-        ###     vnodes refers to the nodes of Gs
+        ###    vnodes refers to the nodes of Gs
         ###     if vnodes == 0 it means this is a created
         ###     segment which is tagged as _AIR
         ###
@@ -5480,7 +5480,7 @@ class Layout(PyLayers):
 
 
         # Ex represent list of points in Gs corresponging to segments
-        # [pt_head pt_tail]
+        #[pt_head pt_tail]
 
         E0 = map_vertices[tri[:,1:]]
         E1 = map_vertices[tri[:,:2]]
@@ -5506,19 +5506,19 @@ class Layout(PyLayers):
         ###
         ### nodes of degree 2  :
         ###     - they correspond to Gs segments that link to triangle centroid
-        ###     - their neighbors are the triangles centroids
+        ###    - their neighbors are the triangles centroids
 
-        # find nodes of degree 2 (corresponding to segments linked to a triangle centroid)
+        #find nodes of degree 2 (corresponding to segments linked to a triangle centroid)
         rn = []
         rn.extend([un for un in n0 if nx.degree(G,un)==2 ])
         rn.extend([un for un in n1 if nx.degree(G,un)==2 ])
         rn.extend([un for un in n2 if nx.degree(G,un)==2 ])
         rn = np.unique(rn)
         
-        # determine the neighbors of those segments (the 2 connected triangles centroids)
+        #determine the neighbors of those segments (the 2 connected triangles centroids)
         neigh = [ nx.neighbors(G,un) for un in rn ]
         
-        # store into networkx compliant format
+        #store into networkx compliant format
 
         uE = [(neigh[un][0],neigh[un][1],{'segment':rn[un]}) for un in xrange(len(rn))]
         iuE = {rn[un]:[-neigh[un][0],-neigh[un][1]] for un in xrange(len(rn))}
@@ -5528,7 +5528,7 @@ class Layout(PyLayers):
 
         #pdb.set_trace()
 
-        # create graph Gt
+        #create graph Gt
         self.Gt = nx.Graph()
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt,lambda x:-x)
@@ -5598,11 +5598,11 @@ class Layout(PyLayers):
                 dne.update(self.Gt[n1])
                 # list of items of the merged dictionnary
                 ine = dne.items()
-                # update n0 with the new merged polygon 
+                #update n0 with the new merged polygon 
                 self.Gt.add_node(n0,polyg=P)
                 # connect new cycle n0 to neighbors 
                 self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-                # remove old cycle n1 
+                #remove old cycle n1 
                 self.Gt.remove_node(n1)
                 # update pos of the cycle with merged polygon centroid
                 self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
@@ -5742,7 +5742,7 @@ class Layout(PyLayers):
 
         """
 
-        # remove possible previous Gt information (2nd build)
+        #remove possible previous Gt information (2nd build)
         if len(self.Gt.nodes()) != 0:
             self.Gt = nx.Graph()
             self.Gt.pos = {}
@@ -5753,7 +5753,7 @@ class Layout(PyLayers):
         # update shapely segments
         self.updateshseg()
 
-        ## Perform Delaunay Triangulation 
+        ##Perform Delaunay Triangulation 
 
         # # # boundary polygon
         # BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
@@ -5765,7 +5765,7 @@ class Layout(PyLayers):
         lP = [geu.Polygon(x) for x in lP]
 
 
-        # take a vnode of polygon to set it as hole
+        #take a vnode of polygon to set it as hole
         # the centroid point is a bad choice because, it is not necessarily inside
         # solution is : - take a point of polygon
         #               - turn around of this point and when found a point inside keep it
@@ -5797,12 +5797,12 @@ class Layout(PyLayers):
         holes=np.array(holesc+holesnc).squeeze()
         # holes=np.array([p.centroid.xy for p in lP ])[:,:,0]
 
-        # delaunay triangluation of exterior polygons
+        #delaunay triangluation of exterior polygons
         Tout  = self._triangle(holes=holes)
         #Tout  = self._triangle_old(BP,lP,mesh_holes=False)
 
         ptri = Tout['vertices'][Tout['triangles']]
-        # create Triangle Polygons from delaunay triangulation
+        #create Triangle Polygons from delaunay triangulation
         TP=[geu.Polygon(x) for x in ptri]
         # list of Merged Polygons outdoor
         lMPout = self._merge_polygons(TP)
@@ -5819,34 +5819,34 @@ class Layout(PyLayers):
                 vnodes=[]
                 [vnodes.extend(p.vnodes) for p in lncP]
                 vnodes=np.unique(vnodes)
-                # delaunay triangluat ion of interior of polygons
+                #delaunay triangluat ion of interior of polygons
                 Tin  = self._triangle(holes=holesc,vnodes=vnodes)
                 # Tin  = self._triangle_old(lP,mesh_holes=True)
                 ptri = Tin['vertices'][Tin['triangles']]
-                # create polygons from delaunay triangulation
+                #create polygons from delaunay triangulation
                 TP = [geu.Polygon(x) for x in ptri]
                 # list of Merged Polygons indoor
                 lMPin = self._merge_polygons(TP)
                 # remove old non convex polygon and replace by the convexify-ed ones
                 [lP.remove(p) for p in lncP]
-            # conserve convex polygons
+            #conserve convex polygons
             lMPin.extend(lP)
         else:
             # if indoor not meshed, the polygon inside 
-            # are directly the list of polygon inside boundaries (a.k.a. holes)
+            #are directly the list of polygon inside boundaries (a.k.a. holes)
             lMPin = lP
 
 
         lMP = lMPout + lMPin
-        # index of polygon representing indoor/outdoor situation
+        #index of polygon representing indoor/outdoor situation
         uindoor = np.zeros(len(lMP),dtype='bool')
         uindoor[len(lMPout):]=True
 
 
-        # ADD AIRWALLS
-        # find coordinates of vertices
+        #ADD AIRWALLS
+        #find coordinates of vertices
         [p.setvnodes(self) for p in lMP]
-        # find where vnodes == 0 <=> a new segment has been added 
+        #find where vnodes == 0 <=> a new segment has been added 
         #=> need to create airwall
         luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lMP]
         # for each polygon
@@ -5855,7 +5855,7 @@ class Layout(PyLayers):
         for p,uaw in luaw :
             # determine number of vnodes
             lvn = len(p.vnodes)
-            # for each vnodes == 0, add an _AIR
+            #for each vnodes == 0, add an _AIR
             for aw in uaw:
                 self.add_segment(  p.vnodes[np.mod(aw-1,lvn)],
                                    p.vnodes[np.mod(aw+1,lvn)]
@@ -9233,11 +9233,11 @@ class Layout(PyLayers):
         #         dne.update(self.Gt[n1])
         #         # list of items of the merged dictionnary
         #         ine = dne.items()
-        #         # update n0 with the new merged polygon 
+        #         #update n0 with the new merged polygon 
         #         self.Gt.add_node(n0,polyg=P)
         #         # connect new cycle n0 to neighbors 
         #         self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-        #         # remove old cycle n1 
+        #         #remove old cycle n1 
         #         self.Gt.remove_node(n1)
         #         # update pos of the cycle with merged polygon centroid
         #         self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
@@ -10630,7 +10630,7 @@ class Layout(PyLayers):
     def off_overlay(self,dx=0,dy=0):
         """ offset overlay image
 
-        Paramaters
+        Parameters
         ----------
 
         dx : float
@@ -10643,7 +10643,7 @@ class Layout(PyLayers):
     def scl_overlay(self,ax=1.0,ay=1.0):
         """ scale overlay image
 
-        Paramaters
+        Parameters
         ----------
 
         ax : float
@@ -10672,9 +10672,8 @@ class Layout(PyLayers):
         paths = gph.find_all_paths(self.Gs, nd_in, nd_fin)
         return paths
 
-
 if __name__ == "__main__":
-    #plt.ion()
-    #doctest.testmod()
-    L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
-    L.build()
+    plt.ion()
+    doctest.testmod()
+    #L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
+    #L.build()

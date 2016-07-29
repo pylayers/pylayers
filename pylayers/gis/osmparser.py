@@ -101,7 +101,7 @@ import matplotlib.pyplot as plt
 try:
     from imposm.parser import OSMParser
 except:
-    print "Warning : OSM Parser seems to be not installed"
+    print "Warning : imposm seems to be not installed"
 import networkx as nx
 import numpy as np
 import pdb
