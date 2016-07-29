@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,40 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-simul-simulem-simul-pltcir">
 <h1>pylayers.simul.simulem.Simul.pltcir<a class="headerlink" href="#pylayers-simul-simulem-simul-pltcir" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.simulem.Simul.pltcir">
+<code class="descclassname">Simul.</code><code class="descname">pltcir</code><span class="sig-paren">(</span><em>itx=1</em>, <em>irx=1</em>, <em>mode='linear'</em>, <em>noise=False</em>, <em>color='b'</em>, <em>format='a'</em>, <em>fig=[]</em>, <em>ax=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/simulem.html#Simul.pltcir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simulem.Simul.pltcir" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot Channel Impulse Response</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>itx</strong> : Tx index</p>
+<p><strong>irx</strong> : Rx index</p>
+<p><strong>mode</strong> : str</p>
+<blockquote>
+<div><p>{&#8216;linear&#8217;,&#8217;dB&#8217;}
+noise : boolean</p>
+</div></blockquote>
+<p><strong>color</strong> : string</p>
+<blockquote>
+<div><p>default &#8216;b&#8217;</p>
+</div></blockquote>
+<p><strong>&gt;&gt;&gt; from pylayers.simul.simulem import *</strong></p>
+<p><strong>&gt;&gt;&gt; S = Simul()</strong></p>
+<p><strong>&gt;&gt;&gt; S.load(&#8216;where2.ini&#8217;)</strong></p>
+<p><strong>&gt;&gt;&gt; S.run(1,1)</strong></p>
+<p class="last"><strong>&gt;&gt;&gt; S.pltcir(1,1,mode=&#8217;linear&#8217;,noise=False,color=&#8217;k&#8217;)</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +171,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.simul.simulem.Simul.pltcir.txt"
+    <a href="../../_sources/modules/generated/pylayers.simul.simulem.Simul.pltcir.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -27,9 +28,6 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.location.geometric.constraints.exclude" href="pylayers.location.geometric.constraints.exclude.html" />
-    <link rel="prev" title="pylayers.location.geometric.constraints.cla" href="pylayers.location.geometric.constraints.cla.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,57 +83,24 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.location.geometric.constraints.cla.html" title="pylayers.location.geometric.constraints.cla"
-	    accesskey="P">Previous
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.locatio...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.location.geometric.constraints.cla
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.location.geometric.constraints.exclude.html" title="pylayers.location.geometric.constraints.exclude"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.locatio...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.location.geometric.constraints.exclude
+	    Python Module Index
 	    </span>
 	    
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
-	Up
-	<br>
-	<span class="smallrellink">
-	PyLayers
-	</span>
-	<span class="hiddenrellink">
-	PyLayers
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -147,7 +112,10 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.location.geometric.constraints.constraint</a></li>
+<li><a class="reference internal" href="#">pylayers.location.geometric.constraints.constraint</a><ul>
+<li><a class="reference internal" href="#constraint-class">Constraint Class</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -159,10 +127,36 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="pylayers-location-geometric-constraints-constraint">
-<h1>pylayers.location.geometric.constraints.constraint<a class="headerlink" href="#pylayers-location-geometric-constraints-constraint" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.location.geometric.constraints.constraint">
+<span id="pylayers-location-geometric-constraints-constraint"></span><h1>pylayers.location.geometric.constraints.constraint<a class="headerlink" href="#module-pylayers.location.geometric.constraints.constraint" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="constraint-class">
+<h2>Constraint Class<a class="headerlink" href="#constraint-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__init__.html#pylayers.location.geometric.constraints.constraint.Constraint.__init__" title="pylayers.location.geometric.constraints.constraint.Constraint.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.__init__</span></code></a>(type[,&nbsp;id,&nbsp;p,&nbsp;dtype,&nbsp;origin])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__repr__.html#pylayers.location.geometric.constraints.constraint.Constraint.__repr__" title="pylayers.location.geometric.constraints.constraint.Constraint.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.updc.html#pylayers.location.geometric.constraints.constraint.Constraint.updc" title="pylayers.location.geometric.constraints.constraint.Constraint.updc"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.updc</span></code></a>([name,&nbsp;value,&nbsp;dtype])</td>
+<td>update values of a constraint</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.info.html#pylayers.location.geometric.constraints.constraint.Constraint.info" title="pylayers.location.geometric.constraints.constraint.Constraint.info"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.info</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.show3.html#pylayers.location.geometric.constraints.constraint.Constraint.show3" title="pylayers.location.geometric.constraints.constraint.Constraint.show3"><code class="xref py py-obj docutils literal"><span class="pre">Constraint.show3</span></code></a>()</td>
+<td>display constraint on Geomview</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -176,23 +170,18 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.location.geometric.constraints.constraint.txt"
+    <a href="../_sources/modules/pylayers.location.geometric.constraints.constraint.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
     <div class="buttonPrevious">
-      <a href="pylayers.location.geometric.constraints.cla.html">
+      <a href="../py-modindex.html">
         Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.location.geometric.constraints.exclude.html">
-        Next
       </a>  
     </div>
     

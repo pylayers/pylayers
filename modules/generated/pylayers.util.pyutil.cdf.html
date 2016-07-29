@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,58 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-pyutil-cdf">
 <h1>pylayers.util.pyutil.cdf<a class="headerlink" href="#pylayers-util-pyutil-cdf" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.pyutil.cdf">
+<code class="descclassname">pylayers.util.pyutil.</code><code class="descname">cdf</code><span class="sig-paren">(</span><em>x</em>, <em>color='b'</em>, <em>label=' '</em>, <em>lw=1</em>, <em>xlabel='x'</em>, <em>ylabel='CDF'</em>, <em>logx=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/pyutil.html#cdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pyutil.cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot the cumulative density function of x</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> :  np.array  (N)</p>
+<p><strong>color</strong> : string</p>
+<blockquote>
+<div><p>color symbol</p>
+</div></blockquote>
+<p><strong>label</strong> : string</p>
+<blockquote>
+<div><p>label</p>
+</div></blockquote>
+<p><strong>lw: float</strong></p>
+<blockquote>
+<div><p>linewidth</p>
+</div></blockquote>
+<p><strong>xlabel</strong> : string</p>
+<blockquote>
+<div><p>xlabel</p>
+</div></blockquote>
+<p><strong>ylabel</strong> : string</p>
+<blockquote class="last">
+<div><p>ylabel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from matplotlib.pyplot import *
+&gt;&gt;&gt; import pylayers.util.pyutil as pyu
+&gt;&gt;&gt; from scipy import *
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; x = randn(100)
+&gt;&gt;&gt; pyu.cdf(x)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-pyutil-cdf-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-util-pyutil-cdf-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-pyutil-cdf-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-pyutil-cdf-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-pyutil-cdf-1.png" src="../../_images/pylayers-util-pyutil-cdf-1.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +189,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.pyutil.cdf.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.pyutil.cdf.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

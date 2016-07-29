@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,19 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-constraints-cla-cla-estpos">
 <h1>pylayers.location.geometric.constraints.cla.CLA.estpos<a class="headerlink" href="#pylayers-location-geometric-constraints-cla-cla-estpos" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.estpos">
+<code class="descclassname">CLA.</code><code class="descname">estpos</code><span class="sig-paren">(</span><em>l=-1</em>, <em>amb=False</em>, <em>test=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/location/geometric/constraints/cla.html#CLA.estpos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.estpos" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED !
+estpos(l,amb=True) : estimate position</p>
+<p>l : layer number
+amb : if True include ambigous boxes of VA in gravity center computation</p>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +150,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.estpos.txt"
+    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.estpos.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

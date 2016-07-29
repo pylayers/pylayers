@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -27,9 +28,6 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.antprop.loss" href="pylayers.antprop.loss.html" />
-    <link rel="prev" title="pylayers.antprop.interactions" href="pylayers.antprop.interactions.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,57 +83,24 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.interactions.html" title="pylayers.antprop.interactions"
-	    accesskey="P">Previous
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.interactions
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.loss.html" title="pylayers.antprop.loss"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antprop...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.loss
+	    Python Module Index
 	    </span>
 	    
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
-	Up
-	<br>
-	<span class="smallrellink">
-	PyLayers
-	</span>
-	<span class="hiddenrellink">
-	PyLayers
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -147,7 +112,12 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.signature</a></li>
+<li><a class="reference internal" href="#">pylayers.antprop.signature</a><ul>
+<li><a class="reference internal" href="#class-signatures">Class Signatures</a></li>
+<li><a class="reference internal" href="#class-signature">Class Signature</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility functions</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -159,10 +129,211 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="pylayers-antprop-signature">
-<h1>pylayers.antprop.signature<a class="headerlink" href="#pylayers-antprop-signature" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.antprop.signature">
+<span id="pylayers-antprop-signature"></span><h1>pylayers.antprop.signature<a class="headerlink" href="#module-pylayers.antprop.signature" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-signatures">
+<h2>Class Signatures<a class="headerlink" href="#class-signatures" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__init__.html#pylayers.antprop.signature.Signatures.__init__" title="pylayers.antprop.signature.Signatures.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.__init__</span></code></a>(L,&nbsp;source,&nbsp;target[,&nbsp;cutoff])</td>
+<td>object constructor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__repr__.html#pylayers.antprop.signature.Signatures.__repr__" title="pylayers.antprop.signature.Signatures.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__len__.html#pylayers.antprop.signature.Signatures.__len__" title="pylayers.antprop.signature.Signatures.__len__"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.__len__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.num.html#pylayers.antprop.signature.Signatures.num" title="pylayers.antprop.signature.Signatures.num"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.num</span></code></a>()</td>
+<td>determine the number of signatures</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.info.html#pylayers.antprop.signature.Signatures.info" title="pylayers.antprop.signature.Signatures.info"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.info</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.saveh5.html#pylayers.antprop.signature.Signatures.saveh5" title="pylayers.antprop.signature.Signatures.saveh5"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.saveh5</span></code></a>()</td>
+<td>save signatures in hdf5 format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.loadh5.html#pylayers.antprop.signature.Signatures.loadh5" title="pylayers.antprop.signature.Signatures.loadh5"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.loadh5</span></code></a>([filename])</td>
+<td>load signatures hdf5 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures._saveh5.html#pylayers.antprop.signature.Signatures._saveh5" title="pylayers.antprop.signature.Signatures._saveh5"><code class="xref py py-obj docutils literal"><span class="pre">Signatures._saveh5</span></code></a>(filenameh5,&nbsp;grpname)</td>
+<td>Save in hdf5 compliant with Links</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures._loadh5.html#pylayers.antprop.signature.Signatures._loadh5" title="pylayers.antprop.signature.Signatures._loadh5"><code class="xref py py-obj docutils literal"><span class="pre">Signatures._loadh5</span></code></a>(filenameh5,&nbsp;grpname)</td>
+<td>load signatures in hdf5 format compliant with class Links</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.load.html#pylayers.antprop.signature.Signatures.load" title="pylayers.antprop.signature.Signatures.load"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.load</span></code></a>([filename])</td>
+<td>load signatures</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.save.html#pylayers.antprop.signature.Signatures.save" title="pylayers.antprop.signature.Signatures.save"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.save</span></code></a>()</td>
+<td>save signatures</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.sp.html#pylayers.antprop.signature.Signatures.sp" title="pylayers.antprop.signature.Signatures.sp"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.sp</span></code></a>(G,&nbsp;source,&nbsp;target[,&nbsp;cutoff])</td>
+<td>algorithm for signature determination</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone.html#pylayers.antprop.signature.Signatures.procone" title="pylayers.antprop.signature.Signatures.procone"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.procone</span></code></a>(L,&nbsp;G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target looking backward</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths.html#pylayers.antprop.signature.Signatures.propaths" title="pylayers.antprop.signature.Signatures.propaths"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.propaths</span></code></a>(G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.short_propath.html#pylayers.antprop.signature.Signatures.short_propath" title="pylayers.antprop.signature.Signatures.short_propath"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.short_propath</span></code></a>(G,&nbsp;source[,&nbsp;...])</td>
+<td>updated dijkstra</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2.html#pylayers.antprop.signature.Signatures.propaths2" title="pylayers.antprop.signature.Signatures.propaths2"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.propaths2</span></code></a>(G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths3.html#pylayers.antprop.signature.Signatures.propaths3" title="pylayers.antprop.signature.Signatures.propaths3"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.propaths3</span></code></a>(Gi,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek shortest path from source to target</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2015_2.html#pylayers.antprop.signature.Signatures.propaths2015_2" title="pylayers.antprop.signature.Signatures.propaths2015_2"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.propaths2015_2</span></code></a>(G,&nbsp;source,&nbsp;target)</td>
+<td>seek all simple_path from source to target</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone2.html#pylayers.antprop.signature.Signatures.procone2" title="pylayers.antprop.signature.Signatures.procone2"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.procone2</span></code></a>(L,&nbsp;G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target looking backward</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.calsig.html#pylayers.antprop.signature.Signatures.calsig" title="pylayers.antprop.signature.Signatures.calsig"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.calsig</span></code></a>(G[,&nbsp;dia,&nbsp;cutoff])</td>
+<td>calculates signature</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.exist.html#pylayers.antprop.signature.Signatures.exist" title="pylayers.antprop.signature.Signatures.exist"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.exist</span></code></a>(seq)</td>
+<td>verifies if seq exists in signatures</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Signatures.run2015</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Signatures.run2015_2</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Signatures.dido</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run" title="pylayers.antprop.signature.Signatures.run"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.run</span></code></a>([cutoff,&nbsp;bt,&nbsp;progress,&nbsp;...])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_old.html#pylayers.antprop.signature.Signatures.run_old" title="pylayers.antprop.signature.Signatures.run_old"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.run_old</span></code></a>([cutoff,&nbsp;algo,&nbsp;bt,&nbsp;...])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_exp.html#pylayers.antprop.signature.Signatures.run_exp" title="pylayers.antprop.signature.Signatures.run_exp"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.run_exp</span></code></a>([source,&nbsp;target,&nbsp;cutoff,&nbsp;...])</td>
+<td>EXPERIMENTAL</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_exp2.html#pylayers.antprop.signature.Signatures.run_exp2" title="pylayers.antprop.signature.Signatures.run_exp2"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.run_exp2</span></code></a>([source,&nbsp;target,&nbsp;...])</td>
+<td>EXPERIMENTAL</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Signatures.meta</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Signatures.lineofcycle</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Signatures.cones</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.unfold.html#pylayers.antprop.signature.Signatures.unfold" title="pylayers.antprop.signature.Signatures.unfold"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.unfold</span></code></a>(L[,&nbsp;i,&nbsp;s])</td>
+<td>unfold a given signature</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.show.html#pylayers.antprop.signature.Signatures.show" title="pylayers.antprop.signature.Signatures.show"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.show</span></code></a>(L,&nbsp;**kwargs)</td>
+<td>plot signatures within the simulated environment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.showi.html#pylayers.antprop.signature.Signatures.showi" title="pylayers.antprop.signature.Signatures.showi"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.showi</span></code></a>([uni,&nbsp;us])</td>
+<td>interactive show</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.rays.html#pylayers.antprop.signature.Signatures.rays" title="pylayers.antprop.signature.Signatures.rays"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.rays</span></code></a>([ptx,&nbsp;prx])</td>
+<td>from signatures dict to 2D rays</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.raysv.html#pylayers.antprop.signature.Signatures.raysv" title="pylayers.antprop.signature.Signatures.raysv"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.raysv</span></code></a>([ptx,&nbsp;prx])</td>
+<td>transfrom dict of signatures into 2D rays - default vectorized version</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.image.html#pylayers.antprop.signature.Signatures.image" title="pylayers.antprop.signature.Signatures.image"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.image</span></code></a>([tx])</td>
+<td>Warning : This is an attempt to vectorize the image process.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.image2.html#pylayers.antprop.signature.Signatures.image2" title="pylayers.antprop.signature.Signatures.image2"><code class="xref py py-obj docutils literal"><span class="pre">Signatures.image2</span></code></a>(tx)</td>
+<td>determine rays from images (second implementation)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-signature">
+<h2>Class Signature<a class="headerlink" href="#class-signature" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__init__.html#pylayers.antprop.signature.Signature.__init__" title="pylayers.antprop.signature.Signature.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Signature.__init__</span></code></a>(sig)</td>
+<td>object constructor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__repr__.html#pylayers.antprop.signature.Signature.__repr__" title="pylayers.antprop.signature.Signature.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Signature.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.info.html#pylayers.antprop.signature.Signature.info" title="pylayers.antprop.signature.Signature.info"><code class="xref py py-obj docutils literal"><span class="pre">Signature.info</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Signature.split</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev2.html#pylayers.antprop.signature.Signature.ev2" title="pylayers.antprop.signature.Signature.ev2"><code class="xref py py-obj docutils literal"><span class="pre">Signature.ev2</span></code></a>(L)</td>
+<td>evaluation of Signature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evf.html#pylayers.antprop.signature.Signature.evf" title="pylayers.antprop.signature.Signature.evf"><code class="xref py py-obj docutils literal"><span class="pre">Signature.evf</span></code></a>(L)</td>
+<td>evaluation of Signature (fast version)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev.html#pylayers.antprop.signature.Signature.ev" title="pylayers.antprop.signature.Signature.ev"><code class="xref py py-obj docutils literal"><span class="pre">Signature.ev</span></code></a>(L)</td>
+<td>evaluation of Signature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.unfold.html#pylayers.antprop.signature.Signature.unfold" title="pylayers.antprop.signature.Signature.unfold"><code class="xref py py-obj docutils literal"><span class="pre">Signature.unfold</span></code></a>()</td>
+<td>unfold a given signature</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evtx.html#pylayers.antprop.signature.Signature.evtx" title="pylayers.antprop.signature.Signature.evtx"><code class="xref py py-obj docutils literal"><span class="pre">Signature.evtx</span></code></a>(L,&nbsp;tx,&nbsp;rx)</td>
+<td>evaluate transmitter</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.image.html#pylayers.antprop.signature.Signature.image" title="pylayers.antprop.signature.Signature.image"><code class="xref py py-obj docutils literal"><span class="pre">Signature.image</span></code></a>(tx)</td>
+<td>compute the tx&#8217;s images with respect to the signature segments</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Signature.backtrace</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Signature.sig2beam</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Signature.sig2ray</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.showsig.html#pylayers.antprop.signature.showsig" title="pylayers.antprop.signature.showsig"><code class="xref py py-obj docutils literal"><span class="pre">showsig</span></code></a>(L,&nbsp;s[,&nbsp;tx,&nbsp;rx])</td>
+<td>show signature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.gidl.html#pylayers.antprop.signature.gidl" title="pylayers.antprop.signature.gidl"><code class="xref py py-obj docutils literal"><span class="pre">gidl</span></code></a>(g)</td>
+<td>gi without diffraction</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">frontline</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">edgeout2</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">edgeout</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -176,23 +347,18 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.antprop.signature.txt"
+    <a href="../_sources/modules/pylayers.antprop.signature.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.interactions.html">
+      <a href="../py-modindex.html">
         Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.loss.html">
-        Next
       </a>  
     </div>
     

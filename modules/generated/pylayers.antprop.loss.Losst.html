@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,66 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-loss-losst">
 <h1>pylayers.antprop.loss.Losst<a class="headerlink" href="#pylayers-antprop-loss-losst" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.antprop.loss.Losst">
+<code class="descclassname">pylayers.antprop.loss.</code><code class="descname">Losst</code><span class="sig-paren">(</span><em>L</em>, <em>fGHz</em>, <em>p1</em>, <em>p2</em>, <em>dB=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/loss.html#Losst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.Losst" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate Losses between links p1 p2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout object</p>
+<p><strong>fGHz</strong> : np.array</p>
+<blockquote>
+<div><p>frequency GHz</p>
+</div></blockquote>
+<p><strong>p1</strong> : source points</p>
+<blockquote>
+<div><p>(2 x Np1) array or (2,) array</p>
+</div></blockquote>
+<p><strong>p2</strong> : observation point</p>
+<blockquote>
+<div><p>(2 x Np2) array or (2,) array</p>
+</div></blockquote>
+<p class="last"><strong>dB</strong> : boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.coverage</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.slab.Interface.losst</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; from pylayers.simul.simulem import *
+&gt;&gt;&gt; from pylayers.measures.mesuwb import *
+&gt;&gt;&gt; from pylayers.antprop.loss import *
+&gt;&gt;&gt; S = Simul()
+&gt;&gt;&gt; S.layout(&#39;WHERE1.ini&#39;)
+&gt;&gt;&gt; fGHz = 4
+&gt;&gt;&gt; Tx,Rx = ptw1()
+&gt;&gt;&gt; Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2],dB=True)
+&gt;&gt;&gt; fig=plt.figure(figsize=(20,10))
+&gt;&gt;&gt; fig,ax = S.L.showGs(fig=fig)
+&gt;&gt;&gt; tit = plt.title(&#39;test Losst&#39;)
+&gt;&gt;&gt; sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker=&#39;x&#39;,c=&#39;k&#39;)
+&gt;&gt;&gt; sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=20,c=Lwo,linewidth=0)
+&gt;&gt;&gt; cb = plt.colorbar(sc1)
+&gt;&gt;&gt; cb.set_label(&#39;dB&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-loss-Losst-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-loss-Losst-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-loss-Losst-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-loss-Losst-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-loss-Losst-1.png" src="../../_images/pylayers-antprop-loss-Losst-1.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +197,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.loss.Losst.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.loss.Losst.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

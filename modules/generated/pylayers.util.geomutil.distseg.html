@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,54 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-geomutil-distseg">
 <h1>pylayers.util.geomutil.distseg<a class="headerlink" href="#pylayers-util-geomutil-distseg" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.geomutil.distseg">
+<code class="descclassname">pylayers.util.geomutil.</code><code class="descname">distseg</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>alpha</em>, <em>beta</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#distseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.distseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>distance to segments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : (3xN) initial point segment 1</p>
+<p><strong>b</strong> : (3xN) end point segment 1</p>
+<p><strong>c</strong> : (3xN) starting point segment 2</p>
+<p><strong>d</strong> : (3xN) end point segment 2</p>
+<p><strong>alpha :</strong></p>
+<p><strong>beta  :</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>f</strong> : square of the distance to the segment</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; np.random.seed(0)
+&gt;&gt;&gt; a = np.random.rand(3,10)
+&gt;&gt;&gt; b = np.random.rand(3,10)
+&gt;&gt;&gt; c = np.random.rand(3,10)
+&gt;&gt;&gt; d = np.random.rand(3,10)
+&gt;&gt;&gt; alpha,beta,dmin = dmin3d(a,b,c,d)
+&gt;&gt;&gt; alpha[alpha&lt;0]=0
+&gt;&gt;&gt; alpha[alpha&gt;1]=1
+&gt;&gt;&gt; beta[beta&lt;0]=0
+&gt;&gt;&gt; beta[beta&gt;1]=1
+&gt;&gt;&gt; f = distseg(a,b,c,d,alpha,beta)
+&gt;&gt;&gt; p1 = a - alpha*(a-b)
+&gt;&gt;&gt; p2 = c + beta*(d-c)
+&gt;&gt;&gt; v = p1-p2
+&gt;&gt;&gt; g = np.sum(v*v,axis=0)
+&gt;&gt;&gt; diff = np.sum(f-g,axis=0)
+&gt;&gt;&gt; np.testing.assert_almost_equal(diff,0)
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +185,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.geomutil.distseg.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.geomutil.distseg.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

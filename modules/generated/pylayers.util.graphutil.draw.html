@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,46 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-graphutil-draw">
 <h1>pylayers.util.graphutil.draw<a class="headerlink" href="#pylayers-util-graphutil-draw" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.graphutil.draw">
+<code class="descclassname">pylayers.util.graphutil.</code><code class="descname">draw</code><span class="sig-paren">(</span><em>G</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/graphutil.html#draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.graphutil.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw a networkx graph</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : Graph with pos (geometric graph)</p>
+<p><strong>show</strong> : False</p>
+<p><strong>fig</strong> : []</p>
+<p><strong>ax</strong> : []</p>
+<p><strong>&#8216;nodes&#8217;:True,</strong></p>
+<p><strong>&#8216;edges&#8217;:True,</strong></p>
+<p><strong>&#8216;airwalls&#8217;:False,</strong></p>
+<p><strong>&#8216;labels&#8217;:True,</strong></p>
+<p><strong>&#8216;width&#8217;: 2,</strong></p>
+<p><strong>&#8216;node_color&#8217;:&#8217;w&#8217;,</strong></p>
+<p><strong>&#8216;edge_color&#8217;:&#8217;k&#8217;,</strong></p>
+<p><strong>&#8216;node_size&#8217;: 200,</strong></p>
+<p><strong>&#8216;font_size&#8217;: 30,</strong></p>
+<p><strong>&#8216;alphan&#8217;: 0.8,</strong></p>
+<p><strong>&#8216;alphae&#8217;: 1.0,</strong></p>
+<p><strong>&#8216;nodelist&#8217;: [],</strong></p>
+<p><strong>&#8216;edgelist&#8217;: [],</strong></p>
+<p class="last"><strong>&#8216;figsize&#8217;: (8,8)</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout.showG</span></code></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +177,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.graphutil.draw.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.graphutil.draw.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

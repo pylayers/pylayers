@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,38 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-interactions-interactions-eval">
 <h1>pylayers.antprop.interactions.Interactions.eval<a class="headerlink" href="#pylayers-antprop-interactions-interactions-eval" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Interactions.eval">
+<code class="descclassname">Interactions.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/interactions.html#Interactions.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate all the interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fGHz</strong> : np.array()</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>self.I</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.shape(self.I) = (self.nf,self.nimax,2,2)</span><dd>with self.nf :  number of frequences
+self.nimax : the total number of interactions ( of all rays)</dd>
+<dt>self.sout :</dt>
+<dd>distance from one interaction to the next one</dd>
+<dt>self.si0 :</dt>
+<dd>distance from the previous interaction to the one</dd>
+<dt>self.alpha :</dt>
+<dd>alpha as described in JFL Thesis</dd>
+<dt>self.gamma :</dt>
+<dd>!! gamma**2 !!! (squared included) as described</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +169,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.interactions.Interactions.eval.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.interactions.Interactions.eval.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

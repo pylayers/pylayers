@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,62 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-geomutil-valid-wedge">
 <h1>pylayers.util.geomutil.valid_wedge<a class="headerlink" href="#pylayers-util-geomutil-valid-wedge" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.geomutil.valid_wedge">
+<code class="descclassname">pylayers.util.geomutil.</code><code class="descname">valid_wedge</code><span class="sig-paren">(</span><em>ps</em>, <em>pw</em>, <em>p1</em>, <em>p2</em>, <em>grazing</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#valid_wedge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.valid_wedge" title="Permalink to this definition">¶</a></dt>
+<dd><p>check set of N wedge sector validity for point ps</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ps</strong> : source point</p>
+<blockquote>
+<div><p>pw       : np.array (Nx2) wedge apex point
+p1       : np.array (Nx2) point 1 of wedge
+p2       : np.array (Nx2) point 2 of wedge
+grazing  : 0 (without grazing)</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>1 (authorize grazing)</p>
+<blockquote>
+<div><p>xps</p>
+</div></blockquote>
+</div></blockquote>
+<p>x pw</p>
+</div></blockquote>
+<p>/           /            /             x p1    x p2</p>
+</div></blockquote>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>valid</strong> : np.array (Nx1)</p>
+<blockquote class="last">
+<div><p>valid = 1 if ps is in the convex sector
+valid = 0 if ps is in the concav sector</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; p1 = np.array([-2,-2]).reshape(1,2)
+&gt;&gt;&gt; p2 = np.array([2,-2]).reshape(1,2)
+&gt;&gt;&gt; pw = np.array([0,0]).reshape(1,2)
+&gt;&gt;&gt; ps1 = np.array([3,3]).reshape(1,2)
+&gt;&gt;&gt; ps2 = np.array([0,-3]).reshape(1,2)
+&gt;&gt;&gt; valid_wedge(ps1,pw,p1,p2,0)[0][0]
+1.0
+&gt;&gt;&gt; valid_wedge(ps2,pw,p1,p2,0)[0][0]
+1.0
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +193,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.geomutil.valid_wedge.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.geomutil.valid_wedge.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

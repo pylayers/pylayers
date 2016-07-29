@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -181,7 +182,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.simul.simulem</span>
 <span class="kn">import</span> <span class="nn">pylayers.measures.mesuwb</span>
 <span class="kn">import</span> <span class="nn">pylayers.gis.gisutil</span> <span class="kn">as</span> <span class="nn">gu</span>
-
+<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 <div class="viewcode-block" id="PL0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.PL0.html#pylayers.antprop.loss.PL0">[docs]</a><span class="k">def</span> <span class="nf">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">GtdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GrdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">R</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -249,6 +250,362 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">D</span><span class="p">)</span></div>
 
+
+<span class="k">def</span> <span class="nf">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; F Metis shadowing function</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    fGHz : np.array(Nf)</span>
+<span class="sd">        frequency GHz</span>
+<span class="sd">    r : np.array(Nseg,)</span>
+<span class="sd">        distance between Tx and Rx</span>
+<span class="sd">    D : np.array(Nseg,Nscreen)</span>
+<span class="sd">        indirect distance between Tx and Rx (screen effect)</span>
+<span class="sd">    sign : np.array(Nseg,Nscreen)</span>
+<span class="sd">        == 1  : Shadowing NLOS situation</span>
+<span class="sd">        ==-1  : No shadowing LOS situation   </span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    F : np.array(Nseg,Nscreen,Nf)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Provides an implementation of formula (6.6) in D1.4 of METIS project</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    LossMetisShadowing</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lamda</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">sign</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lamda</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">D</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">r</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]))))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; F Metis shadowing function</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    fGHz : float </span>
+<span class="sd">        frequency GHz</span>
+<span class="sd">    r : float</span>
+<span class="sd">        distance between Tx and Rx</span>
+<span class="sd">    D : float </span>
+<span class="sd">        indirect distance between Tx and Rx (screen effect)</span>
+<span class="sd">    sign : int</span>
+<span class="sd">        == 1  : Shadowing NLOS situation</span>
+<span class="sd">        ==-1  : No shadowing LOS situation   </span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Provides an implementation of formula (6.6) in D1.4 of METIS project</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    LossMetisShadowing</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lamda</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lamda</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">D</span><span class="o">-</span><span class="n">r</span><span class="p">))))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">LossMetisShadowing</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">uw</span><span class="p">,</span><span class="n">uh</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculate the Loss from </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fGHz : float</span>
+<span class="sd">        </span>
+<span class="sd">    tx  : np.array (,3) of floats  </span>
+<span class="sd">        transmiter coordinates </span>
+<span class="sd">    rx  : np.array (,3) of floats  </span>
+<span class="sd">        receiver coordinates </span>
+<span class="sd">    pg  : np.array (,3) of floats </span>
+<span class="sd">        center of gravity of the screen </span>
+<span class="sd">    uw  : np.array (,3) of floats </span>
+<span class="sd">        unitary vector along width dimension</span>
+<span class="sd">    uh  : np.array (,3) of floats </span>
+<span class="sd">        unitary vector along height dimension</span>
+<span class="sd">    w   : float </span>
+<span class="sd">        width in meters</span>
+<span class="sd">    h   : float </span>
+<span class="sd">        height in meters </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Lsh : float </span>
+<span class="sd">        Loss in dB to add to the FS path Loss</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    This function provides an implementation of formula 6.5 of D1.4 deliverable of METIS project</span>
+
+<span class="sd">    [Metis D1.4](Ahttps://www.metis2020.com/wp-content/uploads/METIS_D1.4_v3.pdf)</span>
+
+<span class="sd">    # geometry parametric issue : find M in [tx-rx] defined as M = alpha*rx + (1-alpha)tx where alpha in [0-1].</span>
+<span class="sd">    # if alpha = 0 then M = tx ; if alpha = 1 then M = rx.</span>
+<span class="sd">    # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh</span>
+<span class="sd">    # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx &lt;==&gt; Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and</span>
+
+<span class="sd">    TODO</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    To be vectorized </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
+
+    <span class="n">rxtx</span> <span class="o">=</span> <span class="n">rx</span> <span class="o">-</span> <span class="n">tx</span> <span class="c1"># LOS distance</span>
+   
+    <span class="c1"># x[2]=gamma.</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">rxtx</span><span class="p">,</span><span class="o">-</span><span class="n">uw</span><span class="p">,</span><span class="o">-</span><span class="n">uh</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> 
+    <span class="n">b</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">-</span> <span class="n">tx</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+    
+    <span class="c1"># condition of shadowing</span>
+    <span class="n">condseg</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span> 
+    <span class="n">condw</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;-</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span> 
+    <span class="n">condh</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;-</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span> 
+    
+    <span class="n">visi</span> <span class="o">=</span> <span class="n">condseg</span> <span class="ow">or</span> <span class="n">condw</span> <span class="ow">or</span> <span class="n">condh</span>
+    <span class="k">if</span> <span class="n">visi</span><span class="p">:</span>
+        <span class="n">shad</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shad</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rxtx</span><span class="p">,</span><span class="n">rxtx</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">w1</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">+</span> <span class="n">uw</span><span class="o">*</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">w2</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">-</span> <span class="n">uw</span><span class="o">*</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">+</span> <span class="n">uh</span><span class="o">*</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">h2</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">-</span> <span class="n">uh</span><span class="o">*</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span>
+
+    
+    <span class="n">Dtw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tx</span><span class="o">-</span><span class="n">w1</span><span class="p">,</span><span class="n">tx</span><span class="o">-</span><span class="n">w1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rx</span><span class="o">-</span><span class="n">w1</span><span class="p">,</span><span class="n">rx</span><span class="o">-</span><span class="n">w1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Dtw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tx</span><span class="o">-</span><span class="n">w2</span><span class="p">,</span><span class="n">tx</span><span class="o">-</span><span class="n">w2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rx</span><span class="o">-</span><span class="n">w2</span><span class="p">,</span><span class="n">rx</span><span class="o">-</span><span class="n">w2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Dth1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tx</span><span class="o">-</span><span class="n">h1</span><span class="p">,</span><span class="n">tx</span><span class="o">-</span><span class="n">h1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drh1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rx</span><span class="o">-</span><span class="n">h1</span><span class="p">,</span><span class="n">rx</span><span class="o">-</span><span class="n">h1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Dth2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tx</span><span class="o">-</span><span class="n">h2</span><span class="p">,</span><span class="n">tx</span><span class="o">-</span><span class="n">h2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rx</span><span class="o">-</span><span class="n">h2</span><span class="p">,</span><span class="n">rx</span><span class="o">-</span><span class="n">h2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    
+    <span class="n">D1w</span> <span class="o">=</span> <span class="n">Dtw1</span><span class="o">+</span><span class="n">Drw1</span>
+    <span class="n">D1h</span> <span class="o">=</span> <span class="n">Dth1</span><span class="o">+</span><span class="n">Drh1</span>
+    <span class="n">D2w</span> <span class="o">=</span> <span class="n">Dtw2</span><span class="o">+</span><span class="n">Drw2</span>
+    <span class="n">D2h</span> <span class="o">=</span> <span class="n">Dth2</span><span class="o">+</span><span class="n">Drh2</span>
+    
+
+    <span class="k">if</span> <span class="n">shad</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">signw1</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">signw2</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">signh1</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">signh2</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">condw</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">D1w</span><span class="o">&gt;</span><span class="n">D2w</span><span class="p">:</span>
+                <span class="n">signw1</span><span class="o">=</span><span class="mi">1</span>
+                <span class="n">signw2</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">signw1</span><span class="o">=-</span><span class="mi">1</span>
+                <span class="n">signw2</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">signw1</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">signw2</span> <span class="o">=</span> <span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="n">condh</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">D1h</span><span class="o">&gt;</span><span class="n">D2h</span><span class="p">:</span>
+                <span class="n">signh1</span><span class="o">=</span><span class="mi">1</span>
+                <span class="n">signh2</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">signh1</span><span class="o">=-</span><span class="mi">1</span>
+                <span class="n">signh2</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="n">signh1</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">signh2</span> <span class="o">=</span> <span class="mi">1</span>
+
+    
+            
+    <span class="n">Fw1</span> <span class="o">=</span> <span class="n">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D1w</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signw1</span><span class="p">)</span>
+    <span class="n">Fh1</span> <span class="o">=</span> <span class="n">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D1h</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signh1</span><span class="p">)</span>
+    <span class="n">Fw2</span> <span class="o">=</span> <span class="n">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D2w</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signw2</span><span class="p">)</span>
+    <span class="n">Fh2</span> <span class="o">=</span> <span class="n">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D2h</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signh2</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">Fh1</span><span class="o">+</span><span class="n">Fh2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Fw1</span><span class="o">+</span><span class="n">Fw2</span><span class="p">)</span>
+    <span class="n">Lsh</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="c1">#return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Lsh</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">LossMetisShadowing2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">uw</span><span class="p">,</span><span class="n">uh</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculate the Loss from </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    fGHz : np.array(,Nf)</span>
+<span class="sd">        </span>
+<span class="sd">    tx  : np.array (3,Nseg) of floats  </span>
+<span class="sd">        transmiter coordinates </span>
+<span class="sd">    rx  : np.array (3,Nseg) of floats  </span>
+<span class="sd">        receiver coordinates </span>
+<span class="sd">    pg  : np.array (3,Nscreen) of floats </span>
+<span class="sd">        center of gravity of the screen </span>
+<span class="sd">    uw  : np.array (3,Nscreen) of floats </span>
+<span class="sd">        unitary vector along width dimension</span>
+<span class="sd">    uh  : np.array (3,Nscreen) of floats </span>
+<span class="sd">        unitary vector along height dimension</span>
+<span class="sd">    w   : np.array (,Nscreen)</span>
+<span class="sd">        width in meters</span>
+<span class="sd">    h   : np.array (,Nscreen)</span>
+<span class="sd">        height in meters </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Lsh : np.array (Nseg,Nscreen,Nf)</span>
+<span class="sd">        Loss in dB to add to the FS path Loss</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    This function provides an implementation of formula 6.5 of D1.4 deliverable of METIS project</span>
+
+<span class="sd">    [Metis D1.4](Ahttps://www.metis2020.com/wp-content/uploads/METIS_D1.4_v3.pdf)</span>
+
+<span class="sd">    # geometry parametric issue : find M in [tx-rx] defined as M = alpha*rx + (1-alpha)tx where alpha in [0-1].</span>
+<span class="sd">    # if alpha = 0 then M = tx ; if alpha = 1 then M = rx.</span>
+<span class="sd">    # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh</span>
+<span class="sd">    # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx &lt;==&gt; Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and</span>
+
+<span class="sd">    TODO</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    To be vectorized </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Nseg</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Nscreen</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">rxtx</span> <span class="o">=</span> <span class="n">rx</span> <span class="o">-</span> <span class="n">tx</span> <span class="c1"># (3,Nseg) LOS distance</span>
+   
+
+    <span class="c1"># A : (Nseg,Nscreen,3,3)</span>
+    <span class="c1"># b : (Nseg,Nscreen,3)</span>
+    <span class="c1"># rxtx.T (Nseg,3)</span>
+    <span class="c1"># uw.T (Nscreen, 3)</span>
+    <span class="c1"># uh.T (Nscreen, 3)</span>
+
+    <span class="n">U</span> <span class="o">=</span> <span class="n">rxtx</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,:,</span><span class="bp">None</span><span class="p">]</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">uh</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,:,</span><span class="bp">None</span><span class="p">]</span>
+
+    <span class="n">We</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">He</span> <span class="o">=</span> <span class="n">H</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">Ue</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">He</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Ue</span><span class="p">,</span><span class="o">-</span><span class="n">We</span><span class="p">,</span><span class="o">-</span><span class="n">He</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="c1">#A = np.vstack((rxtx,-uw,-uh)).T </span>
+
+    <span class="c1"># pg.T Nscreen, 3</span>
+    <span class="c1"># tx.T Nseg,3</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">tx</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]</span> 
+    <span class="c1">#b = pg - tx</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+    
+    
+    <span class="c1"># condition of shadowing</span>
+    <span class="n">condseg</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span> 
+    <span class="n">condw</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">w</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;-</span><span class="n">w</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span> 
+    <span class="n">condh</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">h</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;-</span><span class="n">h</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span> 
+    
+    <span class="n">visi</span> <span class="o">=</span> <span class="p">(</span><span class="n">condseg</span> <span class="o">+</span> <span class="n">condw</span> <span class="o">+</span> <span class="n">condh</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span>
+
+    
+    <span class="c1"># if visi:</span>
+    <span class="c1">#     shad = -1</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     shad = 1</span>
+    <span class="c1">#shad = - visi    </span>
+    
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rxtx</span><span class="o">*</span><span class="n">rxtx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+
+    <span class="n">w1</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">+</span> <span class="n">uw</span><span class="o">*</span><span class="n">w</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">w2</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">-</span> <span class="n">uw</span><span class="o">*</span><span class="n">w</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">+</span> <span class="n">uh</span><span class="o">*</span><span class="n">h</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">h2</span> <span class="o">=</span> <span class="n">pg</span> <span class="o">-</span> <span class="n">uh</span><span class="o">*</span><span class="n">h</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span>
+
+
+    
+    <span class="n">Dtw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Dtw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">w2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="n">Dth1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drh1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Dth2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">Drh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">h2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="c1"># Drw1 = np.dot(rx-w1,rx-w1)**0.5</span>
+    <span class="c1"># Dtw2 = np.dot(tx-w2,tx-w2)**0.5</span>
+    <span class="c1"># Drw2 = np.dot(rx-w2,rx-w2)**0.5</span>
+    <span class="c1"># Dth1 = np.dot(tx-h1,tx-h1)**0.5</span>
+    <span class="c1"># Drh1 = np.dot(rx-h1,rx-h1)**0.5</span>
+    <span class="c1"># Dth2 = np.dot(tx-h2,tx-h2)**0.5</span>
+    <span class="c1"># Drh2 = np.dot(rx-h2,rx-h2)**0.5</span>
+    
+    
+    <span class="n">D1w</span> <span class="o">=</span> <span class="n">Dtw1</span><span class="o">+</span><span class="n">Drw1</span>
+    <span class="n">D1h</span> <span class="o">=</span> <span class="n">Dth1</span><span class="o">+</span><span class="n">Drh1</span>
+    <span class="n">D2w</span> <span class="o">=</span> <span class="n">Dtw2</span><span class="o">+</span><span class="n">Drw2</span>
+    <span class="n">D2h</span> <span class="o">=</span> <span class="n">Dth2</span><span class="o">+</span><span class="n">Drh2</span>
+    
+    <span class="n">signw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nseg</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">))</span>
+    <span class="n">signw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nseg</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">))</span>
+    <span class="n">signh1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nseg</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">))</span>
+    <span class="n">signh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Nseg</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">))</span>
+
+
+    <span class="n">condw1</span> <span class="o">=</span> <span class="p">(</span><span class="n">visi</span><span class="o">*</span><span class="n">condw</span><span class="o">*</span><span class="p">(</span><span class="n">D1w</span><span class="o">&lt;=</span><span class="n">D2w</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">condw2</span> <span class="o">=</span> <span class="p">(</span><span class="n">visi</span><span class="o">*</span><span class="n">condw</span><span class="o">*</span><span class="p">(</span><span class="n">D1w</span><span class="o">&gt;</span><span class="n">D2w</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">signw1</span><span class="p">[</span><span class="n">condw1</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="n">signw2</span><span class="p">[</span><span class="n">condw2</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="n">condh1</span> <span class="o">=</span> <span class="p">(</span><span class="n">visi</span><span class="o">*</span><span class="n">condh</span><span class="o">*</span><span class="p">(</span><span class="n">D1h</span><span class="o">&lt;=</span><span class="n">D2h</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">condh2</span> <span class="o">=</span> <span class="p">(</span><span class="n">visi</span><span class="o">*</span><span class="n">condh</span><span class="o">*</span><span class="p">(</span><span class="n">D1h</span><span class="o">&gt;</span><span class="n">D2h</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">signh1</span><span class="p">[</span><span class="n">condh1</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="n">signh2</span><span class="p">[</span><span class="n">condh2</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span>
+    
+            
+    <span class="n">Fw1</span> <span class="o">=</span> <span class="n">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D1w</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signw1</span><span class="p">)</span>
+    <span class="n">Fh1</span> <span class="o">=</span> <span class="n">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D1h</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signh1</span><span class="p">)</span>
+    <span class="n">Fw2</span> <span class="o">=</span> <span class="n">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D2w</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signw2</span><span class="p">)</span>
+    <span class="n">Fh2</span> <span class="o">=</span> <span class="n">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D2h</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="n">signh2</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">Fh1</span><span class="o">+</span><span class="n">Fh2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Fw1</span><span class="o">+</span><span class="n">Fw2</span><span class="p">)</span>
+    <span class="n">Lsh</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="c1">#return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Lsh</span><span class="p">)</span>
 <div class="viewcode-block" id="Dgrid_zone"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Dgrid_zone.html#pylayers.antprop.loss.Dgrid_zone">[docs]</a><span class="k">def</span> <span class="nf">Dgrid_zone</span><span class="p">(</span><span class="n">zone</span><span class="p">,</span><span class="n">Px</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Distance point to zone</span>
 
@@ -1376,9 +1733,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

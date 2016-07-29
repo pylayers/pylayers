@@ -3,5 +3,5 @@
 .. toctree::
    :hidden:
 
-   notebook/index.rst
-   modules/pylayers
+.. automodule:: pylayers.gis.layout
+    :members:

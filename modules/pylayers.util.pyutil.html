@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -27,9 +28,6 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.util.save" href="pylayers.util.save.html" />
-    <link rel="prev" title="pylayers.util.pymysqldb" href="pylayers.util.pymysqldb.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,57 +83,24 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.util.pymysqldb.html" title="pylayers.util.pymysqldb"
-	    accesskey="P">Previous
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.util.py...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.util.pymysqldb
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.util.save.html" title="pylayers.util.save"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util.sa...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.save
+	    Python Module Index
 	    </span>
 	    
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
-	Up
-	<br>
-	<span class="smallrellink">
-	PyLayers
-	</span>
-	<span class="hiddenrellink">
-	PyLayers
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -159,10 +124,157 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="pylayers-util-pyutil">
-<h1>pylayers.util.pyutil<a class="headerlink" href="#pylayers-util-pyutil" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.util.pyutil">
+<span id="pylayers-util-pyutil"></span><h1>pylayers.util.pyutil<a class="headerlink" href="#module-pylayers.util.pyutil" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.delay.html#pylayers.util.pyutil.delay" title="pylayers.util.pyutil.delay"><code class="xref py py-obj docutils literal"><span class="pre">delay</span></code></a>(p1,&nbsp;p2)</td>
+<td>calculate delay in ns between 2 points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.lt2idic.html#pylayers.util.pyutil.lt2idic" title="pylayers.util.pyutil.lt2idic"><code class="xref py py-obj docutils literal"><span class="pre">lt2idic</span></code></a>(lt)</td>
+<td>convert list of tuple to dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.getlong.html#pylayers.util.pyutil.getlong" title="pylayers.util.pyutil.getlong"><code class="xref py py-obj docutils literal"><span class="pre">getlong</span></code></a>(shortname,&nbsp;directory)</td>
+<td>get a long name</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.getshort.html#pylayers.util.pyutil.getshort" title="pylayers.util.pyutil.getshort"><code class="xref py py-obj docutils literal"><span class="pre">getshort</span></code></a>(longname)</td>
+<td>get a short name</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.getdir.html#pylayers.util.pyutil.getdir" title="pylayers.util.pyutil.getdir"><code class="xref py py-obj docutils literal"><span class="pre">getdir</span></code></a>(longname)</td>
+<td>get directory of a long name</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.shp.html#pylayers.util.pyutil.shp" title="pylayers.util.pyutil.shp"><code class="xref py py-obj docutils literal"><span class="pre">shp</span></code></a>(arr)</td>
+<td>return dimension of an array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.dimcmp.html#pylayers.util.pyutil.dimcmp" title="pylayers.util.pyutil.dimcmp"><code class="xref py py-obj docutils literal"><span class="pre">dimcmp</span></code></a>(ar1,&nbsp;ar2)</td>
+<td>compare shape of arrays</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.tstincl.html#pylayers.util.pyutil.tstincl" title="pylayers.util.pyutil.tstincl"><code class="xref py py-obj docutils literal"><span class="pre">tstincl</span></code></a>(ar1,&nbsp;ar2)</td>
+<td>test wheteher ar1 interval is included in interval ar2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.ininter.html#pylayers.util.pyutil.ininter" title="pylayers.util.pyutil.ininter"><code class="xref py py-obj docutils literal"><span class="pre">ininter</span></code></a>(ar,&nbsp;val1,&nbsp;val2)</td>
+<td>ininter(ar,val1,val2):</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.cshift.html#pylayers.util.pyutil.cshift" title="pylayers.util.pyutil.cshift"><code class="xref py py-obj docutils literal"><span class="pre">cshift</span></code></a>(l,&nbsp;offset)</td>
+<td>ndarray circular shift</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.LegFunc.html#pylayers.util.pyutil.LegFunc" title="pylayers.util.pyutil.LegFunc"><code class="xref py py-obj docutils literal"><span class="pre">LegFunc</span></code></a>(nn,&nbsp;ntrunc,&nbsp;theta,&nbsp;phi)</td>
+<td>Compute Legendre functions Ylm(theta,phi)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.ExpFunc.html#pylayers.util.pyutil.ExpFunc" title="pylayers.util.pyutil.ExpFunc"><code class="xref py py-obj docutils literal"><span class="pre">ExpFunc</span></code></a>(x,&nbsp;y)</td>
+<td>exponential fitting</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.InvFunc.html#pylayers.util.pyutil.InvFunc" title="pylayers.util.pyutil.InvFunc"><code class="xref py py-obj docutils literal"><span class="pre">InvFunc</span></code></a>(x,&nbsp;z)</td>
+<td>inverse fitting</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.PowFunc.html#pylayers.util.pyutil.PowFunc" title="pylayers.util.pyutil.PowFunc"><code class="xref py py-obj docutils literal"><span class="pre">PowFunc</span></code></a>(x,&nbsp;y)</td>
+<td>power fitting</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.randcol.html#pylayers.util.pyutil.randcol" title="pylayers.util.pyutil.randcol"><code class="xref py py-obj docutils literal"><span class="pre">randcol</span></code></a>(Nc)</td>
+<td>get random color</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.coldict.html#pylayers.util.pyutil.coldict" title="pylayers.util.pyutil.coldict"><code class="xref py py-obj docutils literal"><span class="pre">coldict</span></code></a>()</td>
+<td>Color dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.createtrxfile.html#pylayers.util.pyutil.createtrxfile" title="pylayers.util.pyutil.createtrxfile"><code class="xref py py-obj docutils literal"><span class="pre">createtrxfile</span></code></a>(_filename,&nbsp;freq,&nbsp;phi,&nbsp;theta,&nbsp;...)</td>
+<td>Create antenna trx file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.rgb.html#pylayers.util.pyutil.rgb" title="pylayers.util.pyutil.rgb"><code class="xref py py-obj docutils literal"><span class="pre">rgb</span></code></a>(valex[,&nbsp;out])</td>
+<td>convert a hexadecimal color into a (r,g,b) array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.nbint.html#pylayers.util.pyutil.nbint" title="pylayers.util.pyutil.nbint"><code class="xref py py-obj docutils literal"><span class="pre">nbint</span></code></a>(a)</td>
+<td>calculate the number of distinct contiguous sets in a sequence of integer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.encodmtlb.html#pylayers.util.pyutil.encodmtlb" title="pylayers.util.pyutil.encodmtlb"><code class="xref py py-obj docutils literal"><span class="pre">encodmtlb</span></code></a>(lin)</td>
+<td>encode python list of string in Matlab format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.sqrte.html#pylayers.util.pyutil.sqrte" title="pylayers.util.pyutil.sqrte"><code class="xref py py-obj docutils literal"><span class="pre">sqrte</span></code></a>(z)</td>
+<td>Evanescent SQRT for waves problems</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.untie.html#pylayers.util.pyutil.untie" title="pylayers.util.pyutil.untie"><code class="xref py py-obj docutils literal"><span class="pre">untie</span></code></a>(a,&nbsp;b)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.corrcy.html#pylayers.util.pyutil.corrcy" title="pylayers.util.pyutil.corrcy"><code class="xref py py-obj docutils literal"><span class="pre">corrcy</span></code></a>(a,&nbsp;b)</td>
+<td>cyclic matching correlation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.foo.html#pylayers.util.pyutil.foo" title="pylayers.util.pyutil.foo"><code class="xref py py-obj docutils literal"><span class="pre">foo</span></code></a>(var1,&nbsp;var2[,&nbsp;long_var_name])</td>
+<td>A one-line summary that does not use variable names or the function name.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.cdf.html#pylayers.util.pyutil.cdf" title="pylayers.util.pyutil.cdf"><code class="xref py py-obj docutils literal"><span class="pre">cdf</span></code></a>(x[,&nbsp;color,&nbsp;label,&nbsp;lw,&nbsp;xlabel,&nbsp;ylabel,&nbsp;logx])</td>
+<td>plot the cumulative density function of x</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.bitreverse.html#pylayers.util.pyutil.bitreverse" title="pylayers.util.pyutil.bitreverse"><code class="xref py py-obj docutils literal"><span class="pre">bitreverse</span></code></a>([N,&nbsp;nbit])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.timestamp.html#pylayers.util.pyutil.timestamp" title="pylayers.util.pyutil.timestamp"><code class="xref py py-obj docutils literal"><span class="pre">timestamp</span></code></a>(now)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.writemeca.html#pylayers.util.pyutil.writemeca" title="pylayers.util.pyutil.writemeca"><code class="xref py py-obj docutils literal"><span class="pre">writemeca</span></code></a>(ID,&nbsp;time,&nbsp;p,&nbsp;v,&nbsp;a)</td>
+<td>write mecanic information into text file:</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.writenet.html#pylayers.util.pyutil.writenet" title="pylayers.util.pyutil.writenet"><code class="xref py py-obj docutils literal"><span class="pre">writenet</span></code></a>(net,&nbsp;t)</td>
+<td>write network information into text file:</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.writenode.html#pylayers.util.pyutil.writenode" title="pylayers.util.pyutil.writenode"><code class="xref py py-obj docutils literal"><span class="pre">writenode</span></code></a>(agent)</td>
+<td>write Nodes.txt</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.writeDetails.html#pylayers.util.pyutil.writeDetails" title="pylayers.util.pyutil.writeDetails"><code class="xref py py-obj docutils literal"><span class="pre">writeDetails</span></code></a>(t[,&nbsp;description,&nbsp;location])</td>
+<td>write MeasurementsDetails.txt</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.zipd.html#pylayers.util.pyutil.zipd" title="pylayers.util.pyutil.zipd"><code class="xref py py-obj docutils literal"><span class="pre">zipd</span></code></a>(path,&nbsp;zipfilename)</td>
+<td>add a folder to a zipfile</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.unzipd.html#pylayers.util.pyutil.unzipd" title="pylayers.util.pyutil.unzipd"><code class="xref py py-obj docutils literal"><span class="pre">unzipd</span></code></a>(path,&nbsp;zipfilename)</td>
+<td>unzip a zipfile to a folder</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.unzipf.html#pylayers.util.pyutil.unzipf" title="pylayers.util.pyutil.unzipf"><code class="xref py py-obj docutils literal"><span class="pre">unzipf</span></code></a>(path,&nbsp;filepath,&nbsp;zipfilename)</td>
+<td>unzip a file from zipfile to a folder</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.rotate_line.html#pylayers.util.pyutil.rotate_line" title="pylayers.util.pyutil.rotate_line"><code class="xref py py-obj docutils literal"><span class="pre">rotate_line</span></code></a>(A,&nbsp;B,&nbsp;theta)</td>
+<td>rotation of a line [AB] of an angle theta with A fixed</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.extract_block_diag.html#pylayers.util.pyutil.extract_block_diag" title="pylayers.util.pyutil.extract_block_diag"><code class="xref py py-obj docutils literal"><span class="pre">extract_block_diag</span></code></a>(A,&nbsp;M[,&nbsp;k])</td>
+<td>Extracts blocks of size M from the kth diagonal of square matrix A, whose size must be a multiple of M.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.fill_block_diag.html#pylayers.util.pyutil.fill_block_diag" title="pylayers.util.pyutil.fill_block_diag"><code class="xref py py-obj docutils literal"><span class="pre">fill_block_diag</span></code></a>(A,&nbsp;blocks,&nbsp;M[,&nbsp;k])</td>
+<td>fill A with blocks of size M from the kth diagonal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.fill_block_diagMDA.html#pylayers.util.pyutil.fill_block_diagMDA" title="pylayers.util.pyutil.fill_block_diagMDA"><code class="xref py py-obj docutils literal"><span class="pre">fill_block_diagMDA</span></code></a>(A,&nbsp;blocks,&nbsp;M[,&nbsp;k])</td>
+<td>fill A with blocks of size M from the kth diagonal</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.has_colours.html#pylayers.util.pyutil.has_colours" title="pylayers.util.pyutil.has_colours"><code class="xref py py-obj docutils literal"><span class="pre">has_colours</span></code></a></td>
+<td>bool(x) -&gt; bool</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.pyutil.printout.html#pylayers.util.pyutil.printout" title="pylayers.util.pyutil.printout"><code class="xref py py-obj docutils literal"><span class="pre">printout</span></code></a>(text[,&nbsp;colour])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.pyutil.in_ipynb.html#pylayers.util.pyutil.in_ipynb" title="pylayers.util.pyutil.in_ipynb"><code class="xref py py-obj docutils literal"><span class="pre">in_ipynb</span></code></a>()</td>
+<td>check if program is run in ipython notebook</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
@@ -176,23 +288,18 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.util.pyutil.txt"
+    <a href="../_sources/modules/pylayers.util.pyutil.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
     <div class="buttonPrevious">
-      <a href="pylayers.util.pymysqldb.html">
+      <a href="../py-modindex.html">
         Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.util.save.html">
-        Next
       </a>  
     </div>
     

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,54 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-simul-link-dlink-get-idx">
 <h1>pylayers.simul.link.DLink.get_idx<a class="headerlink" href="#pylayers-simul-link-dlink-get-idx" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.link.DLink.get_idx">
+<code class="descclassname">DLink.</code><code class="descname">get_idx</code><span class="sig-paren">(</span><em>key</em>, <em>array</em>, <em>tol=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/link.html#DLink.get_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.get_idx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>try to get the index of the requested array in the group key</dt>
+<dd>of the hdf5 file.
+If array doesn&#8217;t exist, the hdf5file[key] array is stacked</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key: string</strong></p>
+<blockquote>
+<div><p>key of the h5py group</p>
+</div></blockquote>
+<p><strong>array</strong> : np.ndarray</p>
+<blockquote>
+<div><p>array to check existence</p>
+</div></blockquote>
+<p><strong>tol</strong> : np.float64</p>
+<blockquote>
+<div><p>tolerance (in meters for key == &#8216;p_map&#8217;)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(u_opt, u): tuple</p>
+<p><strong>u</strong> : np.ndarray</p>
+<blockquote>
+<div><p>the index in the array of the file[key] group</p>
+</div></blockquote>
+<p><strong>u_opt</strong> : string (&#8216;r&#8217;|&#8217;s&#8217;)</p>
+<blockquote>
+<div><p>return &#8216;r&#8217; if array has been read into h5py file
+return &#8216;s&#8217; if array has been stacked into the array of group key</p>
+</div></blockquote>
+<p>See Also:</p>
+<p class="last">Links.array_exist</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +185,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.get_idx.txt"
+    <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.get_idx.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

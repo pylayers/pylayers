@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,59 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-interactions-intt-eval">
 <h1>pylayers.antprop.interactions.IntT.eval<a class="headerlink" href="#pylayers-antprop-interactions-intt-eval" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.IntT.eval">
+<code class="descclassname">IntT.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>fGHz=array([ 2.4])</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/interactions.html#IntT.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntT.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate transmission</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.rays import *
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # generate input data
+&gt;&gt;&gt; theta1 = 0.1
+&gt;&gt;&gt; theta2 = 0.4
+&gt;&gt;&gt; si01 = 4
+&gt;&gt;&gt; si02 = 0.6
+&gt;&gt;&gt; sir1 = 3.15
+&gt;&gt;&gt; sir2 = 3.4
+&gt;&gt;&gt; data1=np.array((theta1,si01,sir1))
+&gt;&gt;&gt; data2=np.array((theta2,si02,sir2))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # store input data to Instance
+&gt;&gt;&gt; T = IntT(data1,idx=0)
+&gt;&gt;&gt; T.data
+array([ 0.1 ,  4.  ,  3.15])
+&gt;&gt;&gt; T.stack(data2,idx=1)
+&gt;&gt;&gt; T.uslidx=1
+&gt;&gt;&gt; T.dusl[&#39;AIR&#39;]=[0,1]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # evaluation parameters (normally read from config.ini)
+&gt;&gt;&gt; T.f = np.array([  2.,  11.])
+&gt;&gt;&gt; T.nf = len(T.f)
+&gt;&gt;&gt; T.olf = np.ones((T.nf))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # evaluation
+&gt;&gt;&gt; eT=T.eval()
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; # examples
+&gt;&gt;&gt; ninter = len(T.idx)
+&gt;&gt;&gt; np.shape(eT)
+(1, 2, 2, 2)
+&gt;&gt;&gt; eT[0,0]
+array([[ 1.+0.j,  0.+0.j],
+       [ 0.+0.j,  1.+0.j]])
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +190,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.interactions.IntT.eval.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.interactions.IntT.eval.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

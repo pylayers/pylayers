@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,53 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-rays-rays-show3d">
 <h1>pylayers.antprop.rays.Rays.show3d<a class="headerlink" href="#pylayers-antprop-rays-rays-show3d" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.show3d">
+<code class="descclassname">Rays.</code><code class="descname">show3d</code><span class="sig-paren">(</span><em>ray</em>, <em>bdis=True</em>, <em>bbas=False</em>, <em>bstruc=True</em>, <em>col=array([1</em>, <em>0</em>, <em>1])</em>, <em>id=0</em>, <em>linewidth=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/rays.html#Rays.show3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot a set of 3D rays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ray :</strong></p>
+<p><strong>block</strong> : int</p>
+<blockquote>
+<div><p>interaction block</p>
+</div></blockquote>
+<p><strong>bdis</strong> : Boolean</p>
+<blockquote>
+<div><p>if False return .vect filename (True)</p>
+</div></blockquote>
+<p><strong>bbas</strong> : Boolean</p>
+<blockquote>
+<div><p>display local basis (False)</p>
+</div></blockquote>
+<p><strong>bstruc</strong> : Boolean</p>
+<blockquote>
+<div><p>display structure (True)</p>
+</div></blockquote>
+<p><strong>col</strong> : ndarray() 1x3</p>
+<blockquote>
+<div><p>color of the ray  ([1,0,1])</p>
+</div></blockquote>
+<p><strong>id</strong> : Integer</p>
+<blockquote>
+<div><p>id of the ray (default 0)</p>
+</div></blockquote>
+<p><strong>linewidth</strong> : Integer</p>
+<blockquote class="last">
+<div><p>default 1</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +184,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.rays.Rays.show3d.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.rays.Rays.show3d.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

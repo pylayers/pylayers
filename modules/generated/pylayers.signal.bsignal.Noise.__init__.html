@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,49 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-bsignal-noise-init">
 <h1>pylayers.signal.bsignal.Noise.__init__<a class="headerlink" href="#pylayers-signal-bsignal-noise-init" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.Noise.__init__">
+<code class="descclassname">Noise.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>ti=0</em>, <em>tf=100</em>, <em>fsGHz=50</em>, <em>PSDdBmpHz=-174</em>, <em>NF=0</em>, <em>R=50</em>, <em>seed=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Noise.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Noise.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>object constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ti</strong> : float</p>
+<blockquote>
+<div><p>time start (ns)</p>
+</div></blockquote>
+<p><strong>tf</strong> : float</p>
+<blockquote>
+<div><p>time stop (ns)</p>
+</div></blockquote>
+<p><strong>fsGHZ</strong> : float</p>
+<blockquote>
+<div><p>sampling frequency</p>
+</div></blockquote>
+<p><strong>PSDdBmpHz</strong> : float</p>
+<blockquote>
+<div><p>Power Spectral Density Noise (dBm/Hz)</p>
+</div></blockquote>
+<p><strong>R</strong> : float</p>
+<blockquote>
+<div><p>50 Ohms</p>
+</div></blockquote>
+<p><strong>NF</strong> : float</p>
+<blockquote>
+<div><p>(Default Value : 0)</p>
+</div></blockquote>
+<p class="last"><strong>seed</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +180,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.Noise.__init__.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.Noise.__init__.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

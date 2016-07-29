@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -114,7 +128,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-mobility-package">
 <h1>pylayers.mobility package<a class="headerlink" href="#pylayers-mobility-package" title="Permalink to this headline">¶</a></h1>
@@ -140,7 +154,34 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.mobility.agent.html">pylayers.mobility.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.mobility.trajectory.html">pylayers.mobility.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.mobility.trajectory.html">pylayers.mobility.trajectory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.mobility.trajectory.html#trajectories-class">Trajectories Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.__init__.html">pylayers.mobility.trajectory.Trajectories.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.__repr__.html">pylayers.mobility.trajectory.Trajectories.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.loadh5.html">pylayers.mobility.trajectory.Trajectories.loadh5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.ishow.html">pylayers.mobility.trajectory.Trajectories.ishow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.mobility.trajectory.html#trajectory-class">Trajectory Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.__init__.html">pylayers.mobility.trajectory.Trajectory.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.__repr__.html">pylayers.mobility.trajectory.Trajectory.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.update.html">pylayers.mobility.trajectory.Trajectory.update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.generate.html">pylayers.mobility.trajectory.Trajectory.generate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.resample.html">pylayers.mobility.trajectory.Trajectory.resample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.rescale.html">pylayers.mobility.trajectory.Trajectory.rescale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.replay.html">pylayers.mobility.trajectory.Trajectory.replay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.distance.html">pylayers.mobility.trajectory.Trajectory.distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.space.html">pylayers.mobility.trajectory.Trajectory.space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.time.html">pylayers.mobility.trajectory.Trajectory.time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.plot.html">pylayers.mobility.trajectory.Trajectory.plot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.mobility.trajectory.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.mobility.trajectory.importsn.html">pylayers.mobility.trajectory.importsn</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -157,15 +198,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.mobility.txt"
+    <a href="../_sources/modules/pylayers.mobility.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

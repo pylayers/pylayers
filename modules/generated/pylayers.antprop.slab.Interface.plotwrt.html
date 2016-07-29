@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,65 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-slab-interface-plotwrt">
 <h1>pylayers.antprop.slab.Interface.plotwrt<a class="headerlink" href="#pylayers-antprop-slab-interface-plotwrt" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.slab.Interface.plotwrt">
+<code class="descclassname">Interface.</code><code class="descname">plotwrt</code><span class="sig-paren">(</span><em>var='a'</em>, <em>kv=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#Interface.plotwrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.plotwrt" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot R &amp; T coefficients with respect to angle or frequency</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kv</strong> : int</p>
+<p><strong>variable index</strong></p>
+<p><strong>polar: string</strong></p>
+<p><strong>&#8216;po&#8217;, # po | p | o (parallel+ortho | parallel | ortogonal)</strong></p>
+<p><strong>coeff: string</strong></p>
+<p><strong>&#8216;RT&#8217;, # RT | R | T (Reflexion &amp; Transmission ) | Reflexion | Transmission</strong></p>
+<p><strong>var: string</strong></p>
+<p><strong>&#8216;a&#8217;, # a | f angle | frequency</strong></p>
+<p><strong>typ</strong> : string</p>
+<p><strong>&#8216;m&#8217; | &#8216;r&#8217; | &#8216;d&#8217; | &#8216;l20&#8217;</strong></p>
+<p class="last"><strong>mod rad deg dB</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)
+&gt;&gt;&gt; fGHz = np.arange(0.1,10,0.2)
+&gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+&gt;&gt;&gt; mat = sl.mat
+&gt;&gt;&gt; lmatname = [mat[&#39;AIR&#39;],mat[&#39;WOOD&#39;]]
+&gt;&gt;&gt; II = MatInterface(lmatname,0,fGHz,theta)
+&gt;&gt;&gt; II.RT()
+&gt;&gt;&gt; fig,ax = II.plotwrt(var=&#39;a&#39;,kv=10,typ=[&#39;m&#39;])
+&gt;&gt;&gt; air = mat[&#39;AIR&#39;]
+&gt;&gt;&gt; brick = mat[&#39;BRICK&#39;]
+&gt;&gt;&gt; II = MatInterface([air,brick],0,fGHz,theta)
+&gt;&gt;&gt; II.RT()
+&gt;&gt;&gt; fig,ax = II.plotwrt(var=&#39;f&#39;,color=&#39;k&#39;,typ=[&#39;m&#39;])
+&gt;&gt;&gt; plt.ion()
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1.py">Source code</a>)</p>
+<div class="figure" id="id1">
+<img alt="../../_images/pylayers-antprop-slab-Interface-plotwrt-1_00.png" src="../../_images/pylayers-antprop-slab-Interface-plotwrt-1_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1_00.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id2">
+<img alt="../../_images/pylayers-antprop-slab-Interface-plotwrt-1_01.png" src="../../_images/pylayers-antprop-slab-Interface-plotwrt-1_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-Interface-plotwrt-1_01.pdf">pdf</a>)</span></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +196,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.slab.Interface.plotwrt.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.slab.Interface.plotwrt.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,28 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-channel-tchannel-ifft">
 <h1>pylayers.antprop.channel.Tchannel.ifft<a class="headerlink" href="#pylayers-antprop-channel-tchannel-ifft" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.ifft">
+<code class="descclassname">Tchannel.</code><code class="descname">ifft</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.ifft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.ifft" title="Permalink to this definition">¶</a></dt>
+<dd><p>inverse Fourier Transform</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.link import *
+&gt;&gt;&gt; L = DLink(verbose=False)
+&gt;&gt;&gt; aktk = L.eval(force=True)
+&gt;&gt;&gt; L.H.cut()
+&gt;&gt;&gt; #T1 = L.H.totime()
+&gt;&gt;&gt; #f,a = T1.plot(typ=&#39;v&#39;)
+&gt;&gt;&gt; #L.H.minphas()
+&gt;&gt;&gt; #T2 = L.H.totime()
+&gt;&gt;&gt; #f,a = T2.plot(typ=&#39;v&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +159,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.ifft.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.ifft.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

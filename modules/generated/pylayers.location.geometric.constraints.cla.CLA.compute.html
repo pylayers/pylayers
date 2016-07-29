@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,75 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-constraints-cla-cla-compute">
 <h1>pylayers.location.geometric.constraints.cla.CLA.compute<a class="headerlink" href="#pylayers-location-geometric-constraints-cla-cla-compute" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.compute">
+<code class="descclassname">CLA.</code><code class="descname">compute</code><span class="sig-paren">(</span><em>pe=True</em>, <em>mergeRSS=False</em>, <em>refineRSS=True</em>, <em>NBOXMAX=50</em>, <em>VOLMIN=0.001</em>, <em>HT=True</em>, <em>forceamb=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/location/geometric/constraints/cla.html#CLA.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.compute" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Compute the cla to estimate the postion</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pe</strong> : boolean</p>
+<blockquote>
+<div><p>set to True to compute the position estimation store into self.pe</p>
+</div></blockquote>
+<p><strong>mergeRSS</strong> : boolean</p>
+<blockquote>
+<div><p>True  if there is RSS in cla, they are used to find the smallest merge
+False (default) even if there is RSS in cla, they are neglected during the merge process</p>
+</div></blockquote>
+<p><strong>refineRSS :boolean</strong></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True (default) if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous</dt>
+<dd><p class="first last">during the refine process</p>
+</dd>
+</dl>
+<p>False if there is RSS in cla, they are ignore during the refine process</p>
+</div></blockquote>
+<p><strong>NBOXMAX</strong> : integer</p>
+<blockquote>
+<div><p>Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)</p>
+</div></blockquote>
+<p><strong>NVOLMIN</strong> : float</p>
+<blockquote>
+<div><p>Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)</p>
+</div></blockquote>
+<p><strong>HT</strong> : boolean</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True  if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</dt>
+<dd><p class="first last">in estpos2 method</p>
+</dd>
+</dl>
+<p>False  no HT method is applied</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>return</strong> : boolean</p>
+<blockquote>
+<div><p>True if the position estimation has been performed.</p>
+</div></blockquote>
+<p class="last">update a self.pe which contain the estimated position</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="aplu2012" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[APLU2012]</td><td>N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen.
+A Hybrid Positioning Method Based on Hypothesis Testing
+,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012 <a class="reference external" href="http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&amp;arnumber=6205594">http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&amp;arnumber=6205594</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +206,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.compute.txt"
+    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.compute.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -210,7 +211,6 @@
 <span class="sd">    Tchannel.sort</span>
 <span class="sd">    Tchannel.showtap</span>
 <span class="sd">    Tchannel.tap</span>
-<span class="sd">    Tchannel.minphas</span>
 <span class="sd">    Tchannel.ifft</span>
 <span class="sd">    Tchannel.totime</span>
 <span class="sd">    Tchannel.iftd</span>
@@ -412,7 +412,7 @@
 <span class="sd">        &gt;&gt;&gt; from pylayers.antprop.channel import *</span>
 <span class="sd">        &gt;&gt;&gt; C=TBchannel()</span>
 <span class="sd">        &gt;&gt;&gt; C.SalehValenzuela()</span>
-<span class="sd">        &gt;&gt;&gt; C.stem()</span>
+<span class="sd">        &gt;&gt;&gt; f,a = C.stem()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Lam&#39;</span> <span class="p">:</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span>
@@ -1144,9 +1144,9 @@
 <span class="sd">            &gt;&gt;&gt; tauk = 100*np.random.rand(7)</span>
 <span class="sd">            &gt;&gt;&gt; tau = np.arange(0,150,0.1)</span>
 <span class="sd">            &gt;&gt;&gt; y = np.zeros(len(tau))</span>
-<span class="sd">            &gt;&gt;&gt; CIR = TUsignal(tau,y)</span>
-<span class="sd">            &gt;&gt;&gt; CIR.aggcir(alphak,tauk)</span>
-<span class="sd">            &gt;&gt;&gt; f,a =CIR.plot(typ=[&#39;v&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; # CIR = TUsignal(tau,y)</span>
+<span class="sd">            &gt;&gt;&gt; # CIR.aggcir(alphak,tauk)</span>
+<span class="sd">            &gt;&gt;&gt; # f,a =CIR.plot(typ=[&#39;v&#39;])</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -2387,10 +2387,7 @@
 
 
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span> <span class="p">:</span>
-            <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
-        <span class="k">else</span> <span class="p">:</span>
-            <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
+        <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
 
 
         <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
@@ -2886,58 +2883,55 @@
         <span class="n">corrtap</span> <span class="o">=</span> <span class="n">correlate</span><span class="p">(</span><span class="n">Er_htap</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Er_htap</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">return</span><span class="p">(</span><span class="n">htap</span><span class="p">,</span><span class="n">Et_htap</span><span class="p">,</span><span class="n">Er_htap</span><span class="p">,</span><span class="n">corrtap</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Tchannel.minphas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.minphas.html#pylayers.antprop.channel.Tchannel.minphas">[docs]</a>    <span class="k">def</span> <span class="nf">minphas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; construct a minimal phase FUsignal</span>
+    <span class="c1"># def minphas(self):</span>
+    <span class="c1">#     &quot;&quot;&quot; construct a minimal phase FUsignal</span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
+    <span class="c1">#     - Evaluate slope of the phase</span>
+    <span class="c1">#     - deduce delay</span>
+    <span class="c1">#     - update delay of FUDSignal</span>
+    <span class="c1">#     - Compensation of phase slope to obtain minimal phase</span>
 
-<span class="sd">        - Evaluate slope of the phase</span>
-<span class="sd">        - deduce delay</span>
-<span class="sd">        - update delay of FUDSignal</span>
-<span class="sd">        - Compensation of phase slope to obtain minimal phase</span>
+    <span class="c1">#     This methods updates the excess delay taue member.</span>
 
-<span class="sd">        This methods updates the excess delay `taue` member.</span>
+    <span class="c1">#     The samplinf frequency step should be</span>
 
-<span class="sd">        The samplinf frequency step should be</span>
+    <span class="c1">#     # Examples</span>
+    <span class="c1">#     # --------</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
+    <span class="c1">#     # .. plot::</span>
+    <span class="c1">#     #     :include-source:</span>
 
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
+    <span class="c1">#     #     &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+    <span class="c1">#     #     &gt;&gt;&gt; import numpy as np</span>
+    <span class="c1">#     #     &gt;&gt;&gt; fGHz = np.arange(2,11,0.1)</span>
+    <span class="c1">#     #     &gt;&gt;&gt; tau1 = np.array([1,2,3])[:,np.newaxis]</span>
+    <span class="c1">#     #     &gt;&gt;&gt; y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]</span>
+    <span class="c1">#     #     &gt;&gt;&gt; H = Tchannel(x=fGHz,y=y,tau=np.array([15,17,18]))</span>
+    <span class="c1">#     #     &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;],xlabels=[&#39;Frequency GHz&#39;])</span>
+    <span class="c1">#     #     &gt;&gt;&gt; t1 = plt.suptitle(&#39;Before minimal phase compensation&#39;)</span>
+    <span class="c1">#     #     &gt;&gt;&gt; H.minphas()</span>
+    <span class="c1">#     #     &gt;&gt;&gt; H.taue</span>
+    <span class="c1">#     #     array([ 1.,  2.,  3.])</span>
+    <span class="c1">#     #     &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;],xlabels=[&#39;Frequency GHz&#39;])</span>
+    <span class="c1">#     #     &gt;&gt;&gt; t2 = plt.suptitle(&#39;After minimal phase compensation&#39;)</span>
 
-<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
-<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">            &gt;&gt;&gt; fGHz = np.arange(2,11,0.1)</span>
-<span class="sd">            &gt;&gt;&gt; tau1 = np.array([1,2,3])[:,np.newaxis]</span>
-<span class="sd">            &gt;&gt;&gt; y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]</span>
-<span class="sd">            &gt;&gt;&gt; H = Tchannel(x=fGHz,y=y,taud=np.array([15,17,18]))</span>
-<span class="sd">            &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;],xlabels=[&#39;Frequency GHz&#39;])</span>
-<span class="sd">            &gt;&gt;&gt; t1 = plt.suptitle(&#39;Before minimal phase compensation&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; H.minphas()</span>
-<span class="sd">            &gt;&gt;&gt; H.taue</span>
-<span class="sd">            array([ 1.,  2.,  3.])</span>
-<span class="sd">            &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;],xlabels=[&#39;Frequency GHz&#39;])</span>
-<span class="sd">            &gt;&gt;&gt; t2 = plt.suptitle(&#39;After minimal phase compensation&#39;)</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-        <span class="n">dphi</span> <span class="o">=</span> <span class="n">phase</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">phase</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">slope</span> <span class="o">=</span> <span class="n">dphi</span> <span class="o">/</span> <span class="n">df</span>
-        <span class="c1">#if slope &gt;0:</span>
-        <span class="c1">#   print &#39;m  inphas Warning : non causal FUSignal&#39;</span>
-        <span class="c1">#phi0      = +1j*slope*(f[-1]+f[0]/2)</span>
-        <span class="n">F</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>
-        <span class="c1">#E   = exp(-1j*slope*f+phi0)</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">F</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">E</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">taue</span> <span class="o">=</span> <span class="o">-</span><span class="n">slope</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
-        <span class="c1"># update total delay</span>
-        <span class="c1">#self.tau = self.tau+self.taue</span>
+    <span class="c1">#     f = self.x</span>
+    <span class="c1">#     phase = np.unwrap(np.angle(self.y))</span>
+    <span class="c1">#     dphi = phase[:, -1] - phase[:, 0]</span>
+    <span class="c1">#     df = self.x[-1] - self.x[0]</span>
+    <span class="c1">#     slope = dphi / df</span>
+    <span class="c1">#     #if slope &gt;0:</span>
+    <span class="c1">#     #   print &#39;m  inphas Warning : non causal FUSignal&#39;</span>
+    <span class="c1">#     #phi0      = +1j*slope*(f[-1]+f[0]/2)</span>
+    <span class="c1">#     F, S = np.meshgrid(f, slope)</span>
+    <span class="c1">#     #E   = exp(-1j*slope*f+phi0)</span>
+    <span class="c1">#     E = np.exp(-1j * S * F)</span>
+    <span class="c1">#     self.y = self.y * E</span>
+    <span class="c1">#     self.taue = -slope / (2 * np.pi)</span>
+    <span class="c1">#     # update total delay</span>
+    <span class="c1">#     #self.tau = self.tau+self.taue</span>
 
 <div class="viewcode-block" id="Tchannel.ifft"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.ifft.html#pylayers.antprop.channel.Tchannel.ifft">[docs]</a>    <span class="k">def</span> <span class="nf">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; inverse Fourier Transform</span>
@@ -2947,13 +2941,13 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
 <span class="sd">        &gt;&gt;&gt; L = DLink(verbose=False)</span>
-<span class="sd">        &gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">        &gt;&gt;&gt; aktk = L.eval(force=True)</span>
 <span class="sd">        &gt;&gt;&gt; L.H.cut()</span>
-<span class="sd">        &gt;&gt;&gt; T1 = L.H.totime()</span>
-<span class="sd">        &gt;&gt;&gt; f,a = T1.plot(typ=&#39;v&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; L.H.minphas()</span>
-<span class="sd">        &gt;&gt;&gt; T2 = L.H.totime()</span>
-<span class="sd">        &gt;&gt;&gt; f,a = T2.plot(typ=&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #T1 = L.H.totime()</span>
+<span class="sd">        &gt;&gt;&gt; #f,a = T1.plot(typ=&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #L.H.minphas()</span>
+<span class="sd">        &gt;&gt;&gt; #T2 = L.H.totime()</span>
+<span class="sd">        &gt;&gt;&gt; #f,a = T2.plot(typ=&#39;v&#39;)</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2978,15 +2972,15 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
-<span class="sd">        &gt;&gt;&gt; L = DLink(verbose=False)</span>
-<span class="sd">        &gt;&gt;&gt; aktk = L.eval()</span>
-<span class="sd">        &gt;&gt;&gt; L.H.cut()</span>
-<span class="sd">        &gt;&gt;&gt; T1 = L.H.totime()</span>
-<span class="sd">        &gt;&gt;&gt; f,a = T1.plot(typ=&#39;v&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; L.H.minphas()</span>
-<span class="sd">        &gt;&gt;&gt; T2 = L.H.totime()</span>
-<span class="sd">        &gt;&gt;&gt; f,a = T2.plot(typ=&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #from pylayers.simul.link import *</span>
+<span class="sd">        &gt;&gt;&gt; #L = DLink(verbose=False)</span>
+<span class="sd">        &gt;&gt;&gt; #aktk = L.eval()</span>
+<span class="sd">        &gt;&gt;&gt; #L.H.cut()</span>
+<span class="sd">        &gt;&gt;&gt; #T1 = L.H.totime()</span>
+<span class="sd">        &gt;&gt;&gt; #f,a = T1.plot(typ=&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; #L.H.minphas()</span>
+<span class="sd">        &gt;&gt;&gt; #T2 = L.H.totime()</span>
+<span class="sd">        &gt;&gt;&gt; #f,a = T2.plot(typ=&#39;v&#39;)</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
@@ -3192,8 +3186,8 @@
 <span class="sd">            &gt;&gt;&gt; fGHz = np.arange(1,3,1)</span>
 <span class="sd">            &gt;&gt;&gt; taud = np.sort(np.random.rand(N))</span>
 <span class="sd">            &gt;&gt;&gt; alpha = np.random.rand(N,len(fGHz))</span>
-<span class="sd">            &gt;&gt;&gt; s = Tchannel(x=fGHz,y=alpha,taud=taud)</span>
-<span class="sd">            &gt;&gt;&gt; s.plot3d()</span>
+<span class="sd">            &gt;&gt;&gt; #s = Tchannel(x=fGHz,y=alpha,tau=taud)</span>
+<span class="sd">            &gt;&gt;&gt; #s.plot3d()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Ntau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -3671,123 +3665,123 @@
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when reading h5py file&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filefield</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load a Ctilde from a .field file</span>
+<span class="c1">#     def load(self, filefield, transpose=False):</span>
+<span class="c1">#         &quot;&quot;&quot; load a Ctilde from a .field file</span>
 
-<span class="sd">        Load the three files .tauk .tang .rang which contain respectively</span>
-<span class="sd">        delay , angle of departure , angle of arrival.</span>
-<span class="sd">maicher</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+<span class="c1">#         Load the three files .tauk .tang .rang which contain respectively</span>
+<span class="c1">#         delay , angle of departure , angle of arrival.</span>
+<span class="c1"># maicher</span>
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
 
-<span class="sd">        filefield  : string</span>
-<span class="sd">        transpose  : boolean</span>
-<span class="sd">            default False</span>
+<span class="c1">#         filefield  : string</span>
+<span class="c1">#         transpose  : boolean</span>
+<span class="c1">#             default False</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
+<span class="c1">#         Examples</span>
+<span class="c1">#         --------</span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.antprop.channel import *</span>
-<span class="sd">        &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
-<span class="sd">        &gt;&gt;&gt; S = Simul()</span>
-<span class="sd">        &gt;&gt;&gt; S.load(&#39;default.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; C = Ctilde()</span>
-<span class="sd">        &gt;&gt;&gt; out = C.load(pyu.getlong(S.dtud[1][1],&#39;output&#39;))</span>
+<span class="c1">#         &gt;&gt;&gt; from pylayers.antprop.channel import *</span>
+<span class="c1">#         &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
+<span class="c1">#         &gt;&gt;&gt; S = Simul()</span>
+<span class="c1">#         &gt;&gt;&gt; S.load(&#39;default.ini&#39;)</span>
+<span class="c1">#         &gt;&gt;&gt; C = Ctilde()</span>
+<span class="c1">#         &gt;&gt;&gt; out = C.load(pyu.getlong(S.dtud[1][1],&#39;output&#39;))</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filetauk</span> <span class="o">=</span> <span class="n">filefield</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.field&#39;</span><span class="p">,</span> <span class="s1">&#39;.tauk&#39;</span><span class="p">)</span>
-        <span class="n">filetang</span> <span class="o">=</span> <span class="n">filefield</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.field&#39;</span><span class="p">,</span> <span class="s1">&#39;.tang&#39;</span><span class="p">)</span>
-        <span class="n">filerang</span> <span class="o">=</span> <span class="n">filefield</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.field&#39;</span><span class="p">,</span> <span class="s1">&#39;.rang&#39;</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filefield</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span> <span class="s2">&quot;file &quot;</span> <span class="o">+</span> <span class="n">filefield</span> <span class="o">+</span> <span class="s2">&quot; is unreachable&quot;</span><span class="p">)</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         filetauk = filefield.replace(&#39;.field&#39;, &#39;.tauk&#39;)</span>
+<span class="c1">#         filetang = filefield.replace(&#39;.field&#39;, &#39;.tang&#39;)</span>
+<span class="c1">#         filerang = filefield.replace(&#39;.field&#39;, &#39;.rang&#39;)</span>
+<span class="c1">#         try:</span>
+<span class="c1">#             fo = open(filefield, &quot;rb&quot;)</span>
+<span class="c1">#         except:</span>
+<span class="c1">#             raise NameError( &quot;file &quot; + filefield + &quot; is unreachable&quot;)</span>
 
-        <span class="c1"># decode filename (*.field file obtained from evalfield simulation)</span>
-        <span class="n">nray</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">nfreq</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">nfreq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot; Error : incorrect number of frequency points in .field&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">True</span>
-            <span class="k">return</span>
+<span class="c1">#         # decode filename (*.field file obtained from evalfield simulation)</span>
+<span class="c1">#         nray = stru.unpack(&#39;i&#39;, fo.read(4))[0]</span>
+<span class="c1">#         nfreq = stru.unpack(&#39;i&#39;, fo.read(4))[0]</span>
+<span class="c1">#         if nfreq == 0:</span>
+<span class="c1">#             print &quot; Error : incorrect number of frequency points in .field&quot;</span>
+<span class="c1">#             self.fail = True</span>
+<span class="c1">#             return</span>
 
-        <span class="n">n</span> <span class="o">=</span> <span class="n">nray</span> <span class="o">*</span> <span class="n">nfreq</span>
-        <span class="n">buf</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c1">#         n = nray * nfreq</span>
+<span class="c1">#         buf = fo.read()</span>
+<span class="c1">#         fo.close()</span>
 
-        <span class="n">CMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="nb">buffer</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
-        <span class="n">c11</span> <span class="o">=</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">1j</span>
-        <span class="n">c12</span> <span class="o">=</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="mi">1j</span>
-        <span class="n">c21</span> <span class="o">=</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">]</span><span class="o">*</span><span class="mi">1j</span>
-        <span class="n">c22</span> <span class="o">=</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">CMat</span><span class="p">[:,</span> <span class="mi">7</span><span class="p">]</span><span class="o">*</span><span class="mi">1j</span>
+<span class="c1">#         CMat = np.ndarray(shape=(n, 8), buffer=buf)</span>
+<span class="c1">#         c11 = CMat[:, 0] + CMat[:, 1]*1j</span>
+<span class="c1">#         c12 = CMat[:, 2] + CMat[:, 3]*1j</span>
+<span class="c1">#         c21 = CMat[:, 4] + CMat[:, 5]*1j</span>
+<span class="c1">#         c22 = CMat[:, 6] + CMat[:, 7]*1j</span>
 
-        <span class="n">c11</span> <span class="o">=</span> <span class="n">c11</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
-        <span class="n">c12</span> <span class="o">=</span> <span class="n">c12</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
-        <span class="n">c21</span> <span class="o">=</span> <span class="n">c21</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
-        <span class="n">c22</span> <span class="o">=</span> <span class="n">c22</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
+<span class="c1">#         c11 = c11.reshape(nray, nfreq)</span>
+<span class="c1">#         c12 = c12.reshape(nray, nfreq)</span>
+<span class="c1">#         c21 = c21.reshape(nray, nfreq)</span>
+<span class="c1">#         c22 = c22.reshape(nray, nfreq)</span>
 
-        <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
-            <span class="n">c11</span> <span class="o">=</span> <span class="n">c11</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-            <span class="n">c12</span> <span class="o">=</span> <span class="n">c12</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-            <span class="n">c21</span> <span class="o">=</span> <span class="n">c21</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-            <span class="n">c22</span> <span class="o">=</span> <span class="n">c22</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="c1">#         if transpose:</span>
+<span class="c1">#             c11 = c11.transpose()</span>
+<span class="c1">#             c12 = c12.transpose()</span>
+<span class="c1">#             c21 = c21.transpose()</span>
+<span class="c1">#             c22 = c22.transpose()</span>
 
-        <span class="c1">#</span>
-        <span class="c1"># Temporary freq --&gt; read filefreq</span>
-        <span class="c1">#</span>
-        <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
+<span class="c1">#         #</span>
+<span class="c1">#         # Temporary freq --&gt; read filefreq</span>
+<span class="c1">#         #</span>
+<span class="c1">#         fGHz = np.linspace(2, 11, nfreq)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c11</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c12</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c21</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c22</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span> <span class="o">=</span> <span class="n">nfreq</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="n">nray</span>
+<span class="c1">#         self.Ctt = bs.FUsignal(fGHz, c11)</span>
+<span class="c1">#         self.Ctp = bs.FUsignal(fGHz, c12)</span>
+<span class="c1">#         self.Cpt = bs.FUsignal(fGHz, c21)</span>
+<span class="c1">#         self.Cpp = bs.FUsignal(fGHz, c22)</span>
+<span class="c1">#         self.nfreq = nfreq</span>
+<span class="c1">#         self.nray = nray</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filetauk</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">True</span>
-            <span class="k">print</span> <span class="s2">&quot;file &quot;</span><span class="p">,</span> <span class="n">filetauk</span><span class="p">,</span> <span class="s2">&quot; is unreachable&quot;</span>
-        <span class="c1"># decode filetauk</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">:</span>
-            <span class="n">nray_tauk</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c1">#print &quot;nb rays in .tauk file: &quot;, nray_tauk</span>
-            <span class="n">buf</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span>
-            <span class="c1">#print &quot;nb rays 2: &quot;, nray</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">nray</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
-            <span class="c1">#if nray_tauk != nray:</span>
-            <span class="c1">#    print nray_tauk - nray</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span>
+<span class="c1">#         try:</span>
+<span class="c1">#             fo = open(filetauk, &quot;rb&quot;)</span>
+<span class="c1">#         except:</span>
+<span class="c1">#             self.fail = True</span>
+<span class="c1">#             print &quot;file &quot;, filetauk, &quot; is unreachable&quot;</span>
+<span class="c1">#         # decode filetauk</span>
+<span class="c1">#         if not self.fail:</span>
+<span class="c1">#             nray_tauk = stru.unpack(&#39;i&#39;, fo.read(4))[0]</span>
+<span class="c1">#             #print &quot;nb rays in .tauk file: &quot;, nray_tauk</span>
+<span class="c1">#             buf = fo.read()</span>
+<span class="c1">#             fo.close()</span>
+<span class="c1">#             nray = len(buf) / 8</span>
+<span class="c1">#             #print &quot;nb rays 2: &quot;, nray</span>
+<span class="c1">#             self.tauk = np.ndarray(shape=nray, buffer=buf)</span>
+<span class="c1">#             #if nray_tauk != nray:</span>
+<span class="c1">#             #    print nray_tauk - nray</span>
+<span class="c1">#         self.tauk = self.tauk</span>
 
-        <span class="c1"># decode the angular files (.tang and .rang)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filetang</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">True</span>
-            <span class="k">print</span> <span class="s2">&quot;file &quot;</span><span class="p">,</span> <span class="n">filetang</span><span class="p">,</span> <span class="s2">&quot; is unreachable&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">:</span>
-            <span class="n">nray_tang</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">buf</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="c1"># coorectif Bug evalfield</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nray_tang</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">buffer</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nray</span><span class="p">,:]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filerang</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">True</span>
-            <span class="k">print</span> <span class="s2">&quot;file &quot;</span><span class="p">,</span> <span class="n">filerang</span><span class="p">,</span> <span class="s2">&quot; is unreachable&quot;</span>
+<span class="c1">#         # decode the angular files (.tang and .rang)</span>
+<span class="c1">#         try:</span>
+<span class="c1">#             fo = open(filetang, &quot;rb&quot;)</span>
+<span class="c1">#         except:</span>
+<span class="c1">#             self.fail = True</span>
+<span class="c1">#             print &quot;file &quot;, filetang, &quot; is unreachable&quot;</span>
+<span class="c1">#         if not self.fail:</span>
+<span class="c1">#             nray_tang = stru.unpack(&#39;i&#39;, fo.read(4))[0]</span>
+<span class="c1">#             buf = fo.read()</span>
+<span class="c1">#             fo.close()</span>
+<span class="c1">#             # coorectif Bug evalfield</span>
+<span class="c1">#             tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)</span>
+<span class="c1">#             self.tang = tmp[0:nray,:]</span>
+<span class="c1">#         try:</span>
+<span class="c1">#             fo = open(filerang, &quot;rb&quot;)</span>
+<span class="c1">#         except:</span>
+<span class="c1">#             self.fail = True</span>
+<span class="c1">#             print &quot;file &quot;, filerang, &quot; is unreachable&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">:</span>
-            <span class="n">nray_rang</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">buf</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="c1"># corectif Bug evalfield</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nray_rang</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">buffer</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nray</span><span class="p">,:]</span>
+<span class="c1">#         if not self.fail:</span>
+<span class="c1">#             nray_rang = stru.unpack(&#39;i&#39;, fo.read(4))[0]</span>
+<span class="c1">#             buf = fo.read()</span>
+<span class="c1">#             fo.close()</span>
+<span class="c1">#             # corectif Bug evalfield</span>
+<span class="c1">#             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)</span>
+<span class="c1">#             self.rang = tmp[0:nray,:]</span>
 
     <span class="k">def</span> <span class="nf">mobility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; modify channel for uniform mobility</span>
@@ -4639,9 +4633,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

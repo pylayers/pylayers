@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,45 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-cone-cone-belong-seg">
 <h1>pylayers.util.cone.Cone.belong_seg<a class="headerlink" href="#pylayers-util-cone-cone-belong-seg" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.util.cone.Cone.belong_seg">
+<code class="descclassname">Cone.</code><code class="descname">belong_seg</code><span class="sig-paren">(</span><em>pta</em>, <em>phe</em>, <em>prob=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/cone.html#Cone.belong_seg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.belong_seg" title="Permalink to this definition">¶</a></dt>
+<dd><p>test if segment belong to cone</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pta</strong> : np.array (2xNseg)</p>
+<p><strong>phe</strong> : np.array (2xNseg)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
+<blockquote>
+<div><p>0 : no visibility 
+1 : full visibility 
+2 : he.v 
+3 : ta.v
+4 : ta.u  
+5 : he.u  
+6 : inside</p>
+</div></blockquote>
+<p><strong>proba</strong> : float</p>
+<blockquote class="last">
+<div><p>geometric probability</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A segment belongs to the cone if not all termination points 
+lie in the same side outside the cone.</p>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +176,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.cone.Cone.belong_seg.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.cone.Cone.belong_seg.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

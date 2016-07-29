@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,46 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-ed-ed-errprob">
 <h1>pylayers.signal.ED.ED.errprob<a class="headerlink" href="#pylayers-signal-ed-ed-errprob" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.ED.ED.errprob">
+<code class="descclassname">ED.</code><code class="descname">errprob</code><span class="sig-paren">(</span><em>E</em>, <em>Ei=0</em>, <em>thresh=2e-09</em>, <em>typ='thresh'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/ED.html#ED.errprob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.ED.ED.errprob" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates error probability</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>E</strong> : float</p>
+<blockquote>
+<div><p>Legitimate Signal Energy</p>
+</div></blockquote>
+<p><strong>Ei</strong> : float</p>
+<blockquote>
+<div><p>Interferer Signal Energy</p>
+</div></blockquote>
+<p><strong>thresh</strong> : float</p>
+<p><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;thresh&#8217;
+&#8216;scale&#8217;: for IEEE.802.11.6 standard
+&#8216;both&#8217; : both kind of decision</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>errp</strong> : error probability</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">scipy.stats.ncf</span></code>, <a class="reference internal" href="pylayers.signal.ED.ED.pdf.html#pylayers.signal.ED.ED.pdf" title="pylayers.signal.ED.ED.pdf"><code class="xref py py-obj docutils literal"><span class="pre">ED.pdf</span></code></a></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +177,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.ED.ED.errprob.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.ED.ED.errprob.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

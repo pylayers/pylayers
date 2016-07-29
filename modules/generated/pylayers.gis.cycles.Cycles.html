@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -98,7 +112,9 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.gis.cycles.Cycles</a></li>
+<li><a class="reference internal" href="#">pylayers.gis.cycles.Cycles</a><ul>
+</ul>
+</li>
 </ul>
 
     
@@ -110,10 +126,250 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-gis-cycles-cycles">
 <h1>pylayers.gis.cycles.Cycles<a class="headerlink" href="#pylayers-gis-cycles-cycles" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.gis.cycles.Cycles">
+<em class="property">class </em><code class="descclassname">pylayers.gis.cycles.</code><code class="descname">Cycles</code><a class="reference internal" href="../../_modules/pylayers/gis/cycles.html#Cycles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Graph of Cycles</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.cycles.Cycles.inclusion.html#pylayers.gis.cycles.Cycles.inclusion" title="pylayers.gis.cycles.Cycles.inclusion"><code class="xref py py-obj docutils literal"><span class="pre">inclusion</span></code></a>([full])</td>
+<td>Inform the inclusion relations between cycles</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pylayers.gis.cycles.Cycles.decompose.html#pylayers.gis.cycles.Cycles.decompose" title="pylayers.gis.cycles.Cycles.decompose"><code class="xref py py-obj docutils literal"><span class="pre">decompose</span></code></a>()</td>
+<td>recursive function to transform the cycle basis</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycles.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/cycles.html#Cycles.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycles.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>graph of cycle</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.cycles.Cycles.__init__.html#pylayers.gis.cycles.Cycles.__init__" title="pylayers.gis.cycles.Cycles.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>()</td>
+<td>graph of cycle</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_cycle</span></code>(nodes,&nbsp;**attr)</td>
+<td>Add a cycle.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_edge</span></code>(u,&nbsp;v[,&nbsp;attr_dict])</td>
+<td>Add an edge between u and v.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_edges_from</span></code>(ebunch[,&nbsp;attr_dict])</td>
+<td>Add all the edges in ebunch.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_node</span></code>(n[,&nbsp;attr_dict])</td>
+<td>Add a single node n and update node attributes.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_nodes_from</span></code>(nodes,&nbsp;**attr)</td>
+<td>Add multiple nodes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_path</span></code>(nodes,&nbsp;**attr)</td>
+<td>Add a path.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_star</span></code>(nodes,&nbsp;**attr)</td>
+<td>Add a star.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_weighted_edges_from</span></code>(ebunch[,&nbsp;weight])</td>
+<td>Add all the edges in ebunch as weighted edges with specified weights.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">adjacency_iter</span></code>()</td>
+<td>Return an iterator of (node, adjacency dict) tuples for all nodes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">adjacency_list</span></code>()</td>
+<td>Return an adjacency list representation of the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">check</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">clear</span></code>()</td>
+<td>Remove all nodes and edges from the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
+<td>Return a copy of the graph.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.cycles.Cycles.decompose.html#pylayers.gis.cycles.Cycles.decompose" title="pylayers.gis.cycles.Cycles.decompose"><code class="xref py py-obj docutils literal"><span class="pre">decompose</span></code></a>()</td>
+<td>recursive function to transform the cycle basis</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">degree</span></code>([nbunch,&nbsp;weight])</td>
+<td>Return the degree of a node or nodes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degree_iter</span></code>([nbunch,&nbsp;weight])</td>
+<td>Return an iterator for (node, degree).</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">edges</span></code>([nbunch,&nbsp;data,&nbsp;default])</td>
+<td>Return a list of edges.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">edges_iter</span></code>([nbunch,&nbsp;data,&nbsp;default])</td>
+<td>Return an iterator over the edges.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_edge_data</span></code>(u,&nbsp;v[,&nbsp;default])</td>
+<td>Return the attribute dictionary associated with edge (u,v).</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_edge</span></code>(u,&nbsp;v)</td>
+<td>Return True if the edge (u,v) is in the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_node</span></code>(n)</td>
+<td>Return True if the graph contains the node n.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_predecessor</span></code>(u,&nbsp;v)</td>
+<td>Return True if node u has predecessor v.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">has_successor</span></code>(u,&nbsp;v)</td>
+<td>Return True if node u has successor v.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">in_degree</span></code>([nbunch,&nbsp;weight])</td>
+<td>Return the in-degree of a node or nodes.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">in_degree_iter</span></code>([nbunch,&nbsp;weight])</td>
+<td>Return an iterator for (node, in-degree).</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">in_edges</span></code>([nbunch,&nbsp;data])</td>
+<td>Return a list of the incoming edges.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">in_edges_iter</span></code>([nbunch,&nbsp;data])</td>
+<td>Return an iterator over the incoming edges.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.cycles.Cycles.inclusion.html#pylayers.gis.cycles.Cycles.inclusion" title="pylayers.gis.cycles.Cycles.inclusion"><code class="xref py py-obj docutils literal"><span class="pre">inclusion</span></code></a>([full])</td>
+<td>Inform the inclusion relations between cycles</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">is_directed</span></code>()</td>
+<td>Return True if graph is directed, False otherwise.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">is_multigraph</span></code>()</td>
+<td>Return True if graph is a multigraph, False otherwise.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">nbunch_iter</span></code>([nbunch])</td>
+<td>Return an iterator of nodes contained in nbunch that are also in the graph.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">neighbors</span></code>(n)</td>
+<td>Return a list of successor nodes of n.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">neighbors_iter</span></code>(n)</td>
+<td>Return an iterator over successor nodes of n.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes</span></code>([data])</td>
+<td>Return a list of the nodes in the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes_iter</span></code>([data])</td>
+<td>Return an iterator over the nodes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">nodes_with_selfloops</span></code>()</td>
+<td>Return a list of nodes with self loops.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_edges</span></code>([u,&nbsp;v])</td>
+<td>Return the number of edges between two nodes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_nodes</span></code>()</td>
+<td>Return the number of nodes in the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">number_of_selfloops</span></code>()</td>
+<td>Return the number of selfloop edges.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">order</span></code>()</td>
+<td>Return the number of nodes in the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">out_degree</span></code>([nbunch,&nbsp;weight])</td>
+<td>Return the out-degree of a node or nodes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">out_degree_iter</span></code>([nbunch,&nbsp;weight])</td>
+<td>Return an iterator for (node, out-degree).</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">out_edges</span></code>([nbunch,&nbsp;data,&nbsp;default])</td>
+<td>Return a list of edges.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">out_edges_iter</span></code>([nbunch,&nbsp;data,&nbsp;default])</td>
+<td>Return an iterator over the edges.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">predecessors</span></code>(n)</td>
+<td>Return a list of predecessor nodes of n.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">predecessors_iter</span></code>(n)</td>
+<td>Return an iterator over predecessor nodes of n.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_edge</span></code>(u,&nbsp;v)</td>
+<td>Remove the edge between u and v.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_edges_from</span></code>(ebunch)</td>
+<td>Remove all edges specified in ebunch.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_node</span></code>(n)</td>
+<td>Remove node n.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_nodes_from</span></code>(nbunch)</td>
+<td>Remove multiple nodes.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reverse</span></code>([copy])</td>
+<td>Return the reverse of the graph.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">selfloop_edges</span></code>([data,&nbsp;default])</td>
+<td>Return a list of selfloop edges.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">show</span></code>(**kwargs)</td>
+<td>show cycles</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">size</span></code>([weight])</td>
+<td>Return the number of edges.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">subgraph</span></code>(nbunch)</td>
+<td>Return the subgraph induced on nodes in nbunch.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">successors</span></code>(n)</td>
+<td>Return a list of successor nodes of n.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">successors_iter</span></code>(n)</td>
+<td>Return an iterator over successor nodes of n.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_directed</span></code>()</td>
+<td>Return a directed copy of the graph.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">to_undirected</span></code>([reciprocal])</td>
+<td>Return an undirected representation of the digraph.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">name</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +383,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.gis.cycles.Cycles.txt"
+    <a href="../../_sources/modules/generated/pylayers.gis.cycles.Cycles.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -113,7 +127,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-package">
 <h1>pylayers.antprop package<a class="headerlink" href="#pylayers-antprop-package" title="Permalink to this headline">¶</a></h1>
@@ -121,38 +135,902 @@
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antenna.html">pylayers.antprop.antenna</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.channelc.html">pylayers.antprop.channelc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.channel.html">pylayers.antprop.channel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.coeffModel.html">pylayers.antprop.coeffModel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.interactions.html">pylayers.antprop.interactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.raysc.html">pylayers.antprop.raysc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.rays.html">pylayers.antprop.rays</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">pylayers.antprop package</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.antssh.html#scalar-spherical-harmonics-functions">Scalar Spherical Harmonics Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.antssh.SSHFunc.html">pylayers.antprop.antssh.SSHFunc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.antssh.SSHFunc2.html">pylayers.antprop.antssh.SSHFunc2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.antssh.SphereToCart.html">pylayers.antprop.antssh.SphereToCart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.antssh.CartToSphere.html">pylayers.antprop.antssh.CartToSphere</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.channelc.html">pylayers.antprop.channelc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channelc.html#vectchannel-class">VectChannel Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectChannel.__init__.html">pylayers.antprop.channelc.VectChannel.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectChannel.show3_old.html">pylayers.antprop.channelc.VectChannel.show3_old</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectChannel.show3.html">pylayers.antprop.channelc.VectChannel.show3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channelc.html#scalchannel-class">ScalChannel Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.__init__.html">pylayers.antprop.channelc.ScalChannel.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.info.html">pylayers.antprop.channelc.ScalChannel.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.imshow.html">pylayers.antprop.channelc.ScalChannel.imshow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.apply.html">pylayers.antprop.channelc.ScalChannel.apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.applywavC.html">pylayers.antprop.channelc.ScalChannel.applywavC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.applywavB.html">pylayers.antprop.channelc.ScalChannel.applywavB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.applywavA.html">pylayers.antprop.channelc.ScalChannel.applywavA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.doddoa.html">pylayers.antprop.channelc.ScalChannel.doddoa</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.wavefig.html">pylayers.antprop.channelc.ScalChannel.wavefig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.rayfig.html">pylayers.antprop.channelc.ScalChannel.rayfig</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channelc.html#vectlos-class">VectLOS Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectLOS.__init__.html">pylayers.antprop.channelc.VectLOS.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectLOS.cir.html">pylayers.antprop.channelc.VectLOS.cir</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.channel.html">pylayers.antprop.channel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channel.html#tbchannel-class">TBchannel class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.tau_Emax.html">pylayers.antprop.channel.TBchannel.tau_Emax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.tau_moy.html">pylayers.antprop.channel.TBchannel.tau_moy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.tau_rms.html">pylayers.antprop.channel.TBchannel.tau_rms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.delays.html">pylayers.antprop.channel.TBchannel.delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.SalehValenzuela.html">pylayers.antprop.channel.TBchannel.SalehValenzuela</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channel.html#tuchannel-class">TUchannel class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.psd.html">pylayers.antprop.channel.TUchannel.psd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.awgn.html">pylayers.antprop.channel.TUchannel.awgn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Etau0.html">pylayers.antprop.channel.TUchannel.Etau0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Ewin.html">pylayers.antprop.channel.TUchannel.Ewin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Etot.html">pylayers.antprop.channel.TUchannel.Etot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Emax.html">pylayers.antprop.channel.TUchannel.Emax</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channel.html#tudchannel">TUDchannel</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.channel.html#tchannel">Tchannel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.html#members">Members</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.saveh5.html">pylayers.antprop.channel.Tchannel.saveh5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.loadh5.html">pylayers.antprop.channel.Tchannel.loadh5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.apply.html">pylayers.antprop.channel.Tchannel.apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavC.html">pylayers.antprop.channel.Tchannel.applywavC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.chantap.html">pylayers.antprop.channel.Tchannel.chantap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavB.html">pylayers.antprop.channel.Tchannel.applywavB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavA.html">pylayers.antprop.channel.Tchannel.applywavA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotd.html">pylayers.antprop.channel.Tchannel.plotd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotad.html">pylayers.antprop.channel.Tchannel.plotad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.doadod.html">pylayers.antprop.channel.Tchannel.doadod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.energy.html">pylayers.antprop.channel.Tchannel.energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.wavefig.html">pylayers.antprop.channel.Tchannel.wavefig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.rayfig.html">pylayers.antprop.channel.Tchannel.rayfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.rssi.html">pylayers.antprop.channel.Tchannel.rssi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.cut.html">pylayers.antprop.channel.Tchannel.cut</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.sort.html">pylayers.antprop.channel.Tchannel.sort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.showtap.html">pylayers.antprop.channel.Tchannel.showtap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.tap.html">pylayers.antprop.channel.Tchannel.tap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ifft.html">pylayers.antprop.channel.Tchannel.ifft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.totime.html">pylayers.antprop.channel.Tchannel.totime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.iftd.html">pylayers.antprop.channel.Tchannel.iftd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft1.html">pylayers.antprop.channel.Tchannel.ft1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ftau.html">pylayers.antprop.channel.Tchannel.ftau</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plot3d.html">pylayers.antprop.channel.Tchannel.plot3d</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft2.html">pylayers.antprop.channel.Tchannel.ft2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.frombuf.html">pylayers.antprop.channel.Tchannel.frombuf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.capacity.html">pylayers.antprop.channel.Tchannel.capacity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.calibrate.html">pylayers.antprop.channel.Tchannel.calibrate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.pdp.html">pylayers.antprop.channel.Tchannel.pdp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.coeffModel.html">pylayers.antprop.coeffModel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.coeffModel.html#function-coeff-model">Function Coeff model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.relative_error.html">pylayers.antprop.coeffModel.relative_error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.RepAzimuth1.html">pylayers.antprop.coeffModel.RepAzimuth1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.mode_energy.html">pylayers.antprop.coeffModel.mode_energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.mode_energy2.html">pylayers.antprop.coeffModel.mode_energy2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.level_energy.html">pylayers.antprop.coeffModel.level_energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.modeMax.html">pylayers.antprop.coeffModel.modeMax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.lmreshape.html">pylayers.antprop.coeffModel.lmreshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.sshModel.html">pylayers.antprop.coeffModel.sshModel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.interactions.html">pylayers.antprop.interactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.interactions.html#inters-class">Inters Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.__init__.html">pylayers.antprop.interactions.Inter.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.__repr__.html">pylayers.antprop.interactions.Inter.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.create_dusl.html">pylayers.antprop.interactions.Inter.create_dusl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.sinsout.html">pylayers.antprop.interactions.Inter.sinsout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.stack.html">pylayers.antprop.interactions.Inter.stack</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.interactions.html#interactions-class">Interactions Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.__init__.html">pylayers.antprop.interactions.Interactions.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.add.html">pylayers.antprop.interactions.Interactions.add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.addi.html">pylayers.antprop.interactions.Interactions.addi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.eval.html">pylayers.antprop.interactions.Interactions.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.interactions.html#intb-class">IntB Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.__init__.html">pylayers.antprop.interactions.IntB.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.__repr__.html">pylayers.antprop.interactions.IntB.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.eval.html">pylayers.antprop.interactions.IntB.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.interactions.html#intr-class">IntR Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.__init__.html">pylayers.antprop.interactions.IntR.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.__repr__.html">pylayers.antprop.interactions.IntR.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.eval.html">pylayers.antprop.interactions.IntR.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.interactions.html#intt-class">IntT Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.__init__.html">pylayers.antprop.interactions.IntT.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.__repr__.html">pylayers.antprop.interactions.IntT.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.eval.html">pylayers.antprop.interactions.IntT.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.interactions.html#intd-class">IntD Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.__init__.html">pylayers.antprop.interactions.IntD.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.__repr__.html">pylayers.antprop.interactions.IntD.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.eval.html">pylayers.antprop.interactions.IntD.eval</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.loss.html#loss-module">Loss module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.PL0.html">pylayers.antprop.loss.PL0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.PL.html">pylayers.antprop.loss.PL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.Losst.html">pylayers.antprop.loss.Losst</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.Loss0.html">pylayers.antprop.loss.Loss0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.Loss_diff.html">pylayers.antprop.loss.Loss_diff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.OneSlopeMdl.html">pylayers.antprop.loss.OneSlopeMdl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.cost231.html">pylayers.antprop.loss.cost231</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.cost259.html">pylayers.antprop.loss.cost259</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.cost2100.html">pylayers.antprop.loss.cost2100</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_points.html">pylayers.antprop.loss.Dgrid_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_zone.html">pylayers.antprop.loss.Dgrid_zone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.calnu.html">pylayers.antprop.loss.calnu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.visuPts.html">pylayers.antprop.loss.visuPts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.loss.cdf.html">pylayers.antprop.loss.cdf</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.raysc.html">pylayers.antprop.raysc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.raysc.html#ray3d-class">Ray3D class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.info.html">pylayers.antprop.raysc.Ray3D.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.locbas.html">pylayers.antprop.raysc.Ray3D.locbas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.delay.html">pylayers.antprop.raysc.Ray3D.delay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.show.html">pylayers.antprop.raysc.Ray3D.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.show3.html">pylayers.antprop.raysc.Ray3D.show3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.raysc.html#raytud-class">RayTud class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.__init__.html">pylayers.antprop.raysc.RayTud.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.info.html">pylayers.antprop.raysc.RayTud.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.delay.html">pylayers.antprop.raysc.RayTud.delay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.signature.html">pylayers.antprop.raysc.RayTud.signature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.eval.html">pylayers.antprop.raysc.RayTud.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.raysc.html#grraytud-class">GrRayTud class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.__init__.html">pylayers.antprop.raysc.GrRayTud.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.__repr__.html">pylayers.antprop.raysc.GrRayTud.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.dir.html">pylayers.antprop.raysc.GrRayTud.dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.delay.html">pylayers.antprop.raysc.GrRayTud.delay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.choose.html">pylayers.antprop.raysc.GrRayTud.choose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.save.html">pylayers.antprop.raysc.GrRayTud.save</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.load.html">pylayers.antprop.raysc.GrRayTud.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.ray.html">pylayers.antprop.raysc.GrRayTud.ray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.typ.html">pylayers.antprop.raysc.GrRayTud.typ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.eval.html">pylayers.antprop.raysc.GrRayTud.eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.info.html">pylayers.antprop.raysc.GrRayTud.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.imshowinter.html">pylayers.antprop.raysc.GrRayTud.imshowinter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.get_thetas.html">pylayers.antprop.raysc.GrRayTud.get_thetas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.get_mat.html">pylayers.antprop.raysc.GrRayTud.get_mat</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.raysc.html#grray3d-class">GrRay3D class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.__init__.html">pylayers.antprop.raysc.GrRay3D.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.dir.html">pylayers.antprop.raysc.GrRay3D.dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.info.html">pylayers.antprop.raysc.GrRay3D.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.choose.html">pylayers.antprop.raysc.GrRay3D.choose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.load.html">pylayers.antprop.raysc.GrRay3D.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.delay.html">pylayers.antprop.raysc.GrRay3D.delay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.save.html">pylayers.antprop.raysc.GrRay3D.save</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.reciprocal.html">pylayers.antprop.raysc.GrRay3D.reciprocal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.show.html">pylayers.antprop.raysc.GrRay3D.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.show3.html">pylayers.antprop.raysc.GrRay3D.show3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.rays.html">pylayers.antprop.rays</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.rays.html#class-rays">Class Rays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.__init__.html">pylayers.antprop.rays.Rays.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.__len__.html">pylayers.antprop.rays.Rays.__len__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.__repr__.html">pylayers.antprop.rays.Rays.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.sort.html">pylayers.antprop.rays.Rays.sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.extract.html">pylayers.antprop.rays.Rays.extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.mirror.html">pylayers.antprop.rays.Rays.mirror</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.to3D.html">pylayers.antprop.rays.Rays.to3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.locbas.html">pylayers.antprop.rays.Rays.locbas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.fillinter.html">pylayers.antprop.rays.Rays.fillinter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.length.html">pylayers.antprop.rays.Rays.length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.eval.html">pylayers.antprop.rays.Rays.eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.ray.html">pylayers.antprop.rays.Rays.ray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.typ.html">pylayers.antprop.rays.Rays.typ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.info.html">pylayers.antprop.rays.Rays.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.signature.html">pylayers.antprop.rays.Rays.signature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.show.html">pylayers.antprop.rays.Rays.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.show3d.html">pylayers.antprop.rays.Rays.show3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays._show3.html">pylayers.antprop.rays.Rays._show3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.reciprocal.html">pylayers.antprop.rays.Rays.reciprocal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.check_reciprocity.html">pylayers.antprop.rays.Rays.check_reciprocity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pylayers.antprop package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antenna.html">pylayers.antprop.antenna</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channelc.html">pylayers.antprop.channelc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.html">pylayers.antprop.channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.coeffModel.html">pylayers.antprop.coeffModel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.html">pylayers.antprop.interactions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.raysc.html">pylayers.antprop.raysc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.rays.html">pylayers.antprop.rays</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.signature.html">pylayers.antprop.signature</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.html">pylayers.antprop.slab</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.antssh.html#scalar-spherical-harmonics-functions">Scalar Spherical Harmonics Functions</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.antssh.SSHFunc.html">pylayers.antprop.antssh.SSHFunc</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.antssh.SSHFunc2.html">pylayers.antprop.antssh.SSHFunc2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.antssh.SphereToCart.html">pylayers.antprop.antssh.SphereToCart</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.antssh.CartToSphere.html">pylayers.antprop.antssh.CartToSphere</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.signature.html">pylayers.antprop.signature</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.slab.html">pylayers.antprop.slab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channelc.html">pylayers.antprop.channelc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channelc.html#vectchannel-class">VectChannel Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectChannel.__init__.html">pylayers.antprop.channelc.VectChannel.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectChannel.show3_old.html">pylayers.antprop.channelc.VectChannel.show3_old</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectChannel.show3.html">pylayers.antprop.channelc.VectChannel.show3</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channelc.html#scalchannel-class">ScalChannel Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.__init__.html">pylayers.antprop.channelc.ScalChannel.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.info.html">pylayers.antprop.channelc.ScalChannel.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.imshow.html">pylayers.antprop.channelc.ScalChannel.imshow</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.apply.html">pylayers.antprop.channelc.ScalChannel.apply</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.applywavC.html">pylayers.antprop.channelc.ScalChannel.applywavC</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.applywavB.html">pylayers.antprop.channelc.ScalChannel.applywavB</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.applywavA.html">pylayers.antprop.channelc.ScalChannel.applywavA</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.doddoa.html">pylayers.antprop.channelc.ScalChannel.doddoa</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.wavefig.html">pylayers.antprop.channelc.ScalChannel.wavefig</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.ScalChannel.rayfig.html">pylayers.antprop.channelc.ScalChannel.rayfig</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channelc.html#vectlos-class">VectLOS Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectLOS.__init__.html">pylayers.antprop.channelc.VectLOS.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channelc.VectLOS.cir.html">pylayers.antprop.channelc.VectLOS.cir</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.channel.html">pylayers.antprop.channel</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channel.html#tbchannel-class">TBchannel class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.tau_Emax.html">pylayers.antprop.channel.TBchannel.tau_Emax</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.tau_moy.html">pylayers.antprop.channel.TBchannel.tau_moy</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.tau_rms.html">pylayers.antprop.channel.TBchannel.tau_rms</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.delays.html">pylayers.antprop.channel.TBchannel.delays</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.SalehValenzuela.html">pylayers.antprop.channel.TBchannel.SalehValenzuela</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channel.html#tuchannel-class">TUchannel class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.psd.html">pylayers.antprop.channel.TUchannel.psd</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.awgn.html">pylayers.antprop.channel.TUchannel.awgn</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Etau0.html">pylayers.antprop.channel.TUchannel.Etau0</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Ewin.html">pylayers.antprop.channel.TUchannel.Ewin</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Etot.html">pylayers.antprop.channel.TUchannel.Etot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Emax.html">pylayers.antprop.channel.TUchannel.Emax</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channel.html#tudchannel">TUDchannel</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.channel.html#tchannel">Tchannel</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pylayers.antprop.channel.html#members">Members</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.saveh5.html">pylayers.antprop.channel.Tchannel.saveh5</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.loadh5.html">pylayers.antprop.channel.Tchannel.loadh5</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.apply.html">pylayers.antprop.channel.Tchannel.apply</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavC.html">pylayers.antprop.channel.Tchannel.applywavC</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.chantap.html">pylayers.antprop.channel.Tchannel.chantap</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavB.html">pylayers.antprop.channel.Tchannel.applywavB</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavA.html">pylayers.antprop.channel.Tchannel.applywavA</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotd.html">pylayers.antprop.channel.Tchannel.plotd</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotad.html">pylayers.antprop.channel.Tchannel.plotad</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.doadod.html">pylayers.antprop.channel.Tchannel.doadod</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.energy.html">pylayers.antprop.channel.Tchannel.energy</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.wavefig.html">pylayers.antprop.channel.Tchannel.wavefig</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.rayfig.html">pylayers.antprop.channel.Tchannel.rayfig</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.rssi.html">pylayers.antprop.channel.Tchannel.rssi</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.cut.html">pylayers.antprop.channel.Tchannel.cut</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.sort.html">pylayers.antprop.channel.Tchannel.sort</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.showtap.html">pylayers.antprop.channel.Tchannel.showtap</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.tap.html">pylayers.antprop.channel.Tchannel.tap</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ifft.html">pylayers.antprop.channel.Tchannel.ifft</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.totime.html">pylayers.antprop.channel.Tchannel.totime</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.iftd.html">pylayers.antprop.channel.Tchannel.iftd</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft1.html">pylayers.antprop.channel.Tchannel.ft1</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ftau.html">pylayers.antprop.channel.Tchannel.ftau</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plot3d.html">pylayers.antprop.channel.Tchannel.plot3d</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft2.html">pylayers.antprop.channel.Tchannel.ft2</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.frombuf.html">pylayers.antprop.channel.Tchannel.frombuf</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.capacity.html">pylayers.antprop.channel.Tchannel.capacity</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.calibrate.html">pylayers.antprop.channel.Tchannel.calibrate</a></li>
+<li class="toctree-l6"><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.pdp.html">pylayers.antprop.channel.Tchannel.pdp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.coeffModel.html">pylayers.antprop.coeffModel</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.coeffModel.html#function-coeff-model">Function Coeff model</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.relative_error.html">pylayers.antprop.coeffModel.relative_error</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.RepAzimuth1.html">pylayers.antprop.coeffModel.RepAzimuth1</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.mode_energy.html">pylayers.antprop.coeffModel.mode_energy</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.mode_energy2.html">pylayers.antprop.coeffModel.mode_energy2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.level_energy.html">pylayers.antprop.coeffModel.level_energy</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.modeMax.html">pylayers.antprop.coeffModel.modeMax</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.lmreshape.html">pylayers.antprop.coeffModel.lmreshape</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.coeffModel.sshModel.html">pylayers.antprop.coeffModel.sshModel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.interactions.html">pylayers.antprop.interactions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.interactions.html#inters-class">Inters Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.__init__.html">pylayers.antprop.interactions.Inter.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.__repr__.html">pylayers.antprop.interactions.Inter.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.create_dusl.html">pylayers.antprop.interactions.Inter.create_dusl</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.sinsout.html">pylayers.antprop.interactions.Inter.sinsout</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.stack.html">pylayers.antprop.interactions.Inter.stack</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.interactions.html#interactions-class">Interactions Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.__init__.html">pylayers.antprop.interactions.Interactions.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.add.html">pylayers.antprop.interactions.Interactions.add</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.addi.html">pylayers.antprop.interactions.Interactions.addi</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.eval.html">pylayers.antprop.interactions.Interactions.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.interactions.html#intb-class">IntB Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.__init__.html">pylayers.antprop.interactions.IntB.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.__repr__.html">pylayers.antprop.interactions.IntB.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.eval.html">pylayers.antprop.interactions.IntB.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.interactions.html#intr-class">IntR Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.__init__.html">pylayers.antprop.interactions.IntR.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.__repr__.html">pylayers.antprop.interactions.IntR.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.eval.html">pylayers.antprop.interactions.IntR.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.interactions.html#intt-class">IntT Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.__init__.html">pylayers.antprop.interactions.IntT.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.__repr__.html">pylayers.antprop.interactions.IntT.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.eval.html">pylayers.antprop.interactions.IntT.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.interactions.html#intd-class">IntD Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.__init__.html">pylayers.antprop.interactions.IntD.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.__repr__.html">pylayers.antprop.interactions.IntD.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.eval.html">pylayers.antprop.interactions.IntD.eval</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.loss.html">pylayers.antprop.loss</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.loss.html#loss-module">Loss module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.PL0.html">pylayers.antprop.loss.PL0</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.PL.html">pylayers.antprop.loss.PL</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.Losst.html">pylayers.antprop.loss.Losst</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.Loss0.html">pylayers.antprop.loss.Loss0</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.Loss_diff.html">pylayers.antprop.loss.Loss_diff</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.OneSlopeMdl.html">pylayers.antprop.loss.OneSlopeMdl</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.cost231.html">pylayers.antprop.loss.cost231</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.cost259.html">pylayers.antprop.loss.cost259</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.cost2100.html">pylayers.antprop.loss.cost2100</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_points.html">pylayers.antprop.loss.Dgrid_points</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_zone.html">pylayers.antprop.loss.Dgrid_zone</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.calnu.html">pylayers.antprop.loss.calnu</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.visuPts.html">pylayers.antprop.loss.visuPts</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.loss.cdf.html">pylayers.antprop.loss.cdf</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.raysc.html">pylayers.antprop.raysc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.raysc.html#ray3d-class">Ray3D class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.info.html">pylayers.antprop.raysc.Ray3D.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.locbas.html">pylayers.antprop.raysc.Ray3D.locbas</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.delay.html">pylayers.antprop.raysc.Ray3D.delay</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.show.html">pylayers.antprop.raysc.Ray3D.show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.Ray3D.show3.html">pylayers.antprop.raysc.Ray3D.show3</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.raysc.html#raytud-class">RayTud class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.__init__.html">pylayers.antprop.raysc.RayTud.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.info.html">pylayers.antprop.raysc.RayTud.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.delay.html">pylayers.antprop.raysc.RayTud.delay</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.signature.html">pylayers.antprop.raysc.RayTud.signature</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.RayTud.eval.html">pylayers.antprop.raysc.RayTud.eval</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.raysc.html#grraytud-class">GrRayTud class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.__init__.html">pylayers.antprop.raysc.GrRayTud.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.__repr__.html">pylayers.antprop.raysc.GrRayTud.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.dir.html">pylayers.antprop.raysc.GrRayTud.dir</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.delay.html">pylayers.antprop.raysc.GrRayTud.delay</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.choose.html">pylayers.antprop.raysc.GrRayTud.choose</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.save.html">pylayers.antprop.raysc.GrRayTud.save</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.load.html">pylayers.antprop.raysc.GrRayTud.load</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.ray.html">pylayers.antprop.raysc.GrRayTud.ray</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.typ.html">pylayers.antprop.raysc.GrRayTud.typ</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.eval.html">pylayers.antprop.raysc.GrRayTud.eval</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.info.html">pylayers.antprop.raysc.GrRayTud.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.imshowinter.html">pylayers.antprop.raysc.GrRayTud.imshowinter</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.get_thetas.html">pylayers.antprop.raysc.GrRayTud.get_thetas</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRayTud.get_mat.html">pylayers.antprop.raysc.GrRayTud.get_mat</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.raysc.html#grray3d-class">GrRay3D class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.__init__.html">pylayers.antprop.raysc.GrRay3D.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.dir.html">pylayers.antprop.raysc.GrRay3D.dir</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.info.html">pylayers.antprop.raysc.GrRay3D.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.choose.html">pylayers.antprop.raysc.GrRay3D.choose</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.load.html">pylayers.antprop.raysc.GrRay3D.load</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.delay.html">pylayers.antprop.raysc.GrRay3D.delay</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.save.html">pylayers.antprop.raysc.GrRay3D.save</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.reciprocal.html">pylayers.antprop.raysc.GrRay3D.reciprocal</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.show.html">pylayers.antprop.raysc.GrRay3D.show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.raysc.GrRay3D.show3.html">pylayers.antprop.raysc.GrRay3D.show3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.rays.html">pylayers.antprop.rays</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.rays.html#class-rays">Class Rays</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.__init__.html">pylayers.antprop.rays.Rays.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.__len__.html">pylayers.antprop.rays.Rays.__len__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.__repr__.html">pylayers.antprop.rays.Rays.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.sort.html">pylayers.antprop.rays.Rays.sort</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.extract.html">pylayers.antprop.rays.Rays.extract</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.mirror.html">pylayers.antprop.rays.Rays.mirror</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.to3D.html">pylayers.antprop.rays.Rays.to3D</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.locbas.html">pylayers.antprop.rays.Rays.locbas</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.fillinter.html">pylayers.antprop.rays.Rays.fillinter</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.length.html">pylayers.antprop.rays.Rays.length</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.eval.html">pylayers.antprop.rays.Rays.eval</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.ray.html">pylayers.antprop.rays.Rays.ray</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.typ.html">pylayers.antprop.rays.Rays.typ</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.info.html">pylayers.antprop.rays.Rays.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.signature.html">pylayers.antprop.rays.Rays.signature</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.show.html">pylayers.antprop.rays.Rays.show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.show3d.html">pylayers.antprop.rays.Rays.show3d</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays._show3.html">pylayers.antprop.rays.Rays._show3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.reciprocal.html">pylayers.antprop.rays.Rays.reciprocal</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.rays.Rays.check_reciprocity.html">pylayers.antprop.rays.Rays.check_reciprocity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.signature.html">pylayers.antprop.signature</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.signature.html#class-signatures">Class Signatures</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__init__.html">pylayers.antprop.signature.Signatures.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__repr__.html">pylayers.antprop.signature.Signatures.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__len__.html">pylayers.antprop.signature.Signatures.__len__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.num.html">pylayers.antprop.signature.Signatures.num</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.info.html">pylayers.antprop.signature.Signatures.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.saveh5.html">pylayers.antprop.signature.Signatures.saveh5</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.loadh5.html">pylayers.antprop.signature.Signatures.loadh5</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures._saveh5.html">pylayers.antprop.signature.Signatures._saveh5</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures._loadh5.html">pylayers.antprop.signature.Signatures._loadh5</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.load.html">pylayers.antprop.signature.Signatures.load</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.save.html">pylayers.antprop.signature.Signatures.save</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.sp.html">pylayers.antprop.signature.Signatures.sp</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone.html">pylayers.antprop.signature.Signatures.procone</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths.html">pylayers.antprop.signature.Signatures.propaths</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.short_propath.html">pylayers.antprop.signature.Signatures.short_propath</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2.html">pylayers.antprop.signature.Signatures.propaths2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths3.html">pylayers.antprop.signature.Signatures.propaths3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2015_2.html">pylayers.antprop.signature.Signatures.propaths2015_2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone2.html">pylayers.antprop.signature.Signatures.procone2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.calsig.html">pylayers.antprop.signature.Signatures.calsig</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.exist.html">pylayers.antprop.signature.Signatures.exist</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run.html">pylayers.antprop.signature.Signatures.run</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_old.html">pylayers.antprop.signature.Signatures.run_old</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_exp.html">pylayers.antprop.signature.Signatures.run_exp</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_exp2.html">pylayers.antprop.signature.Signatures.run_exp2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.unfold.html">pylayers.antprop.signature.Signatures.unfold</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.show.html">pylayers.antprop.signature.Signatures.show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.showi.html">pylayers.antprop.signature.Signatures.showi</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.rays.html">pylayers.antprop.signature.Signatures.rays</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.raysv.html">pylayers.antprop.signature.Signatures.raysv</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.image.html">pylayers.antprop.signature.Signatures.image</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.image2.html">pylayers.antprop.signature.Signatures.image2</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.signature.html#class-signature">Class Signature</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__init__.html">pylayers.antprop.signature.Signature.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__repr__.html">pylayers.antprop.signature.Signature.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.info.html">pylayers.antprop.signature.Signature.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev2.html">pylayers.antprop.signature.Signature.ev2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evf.html">pylayers.antprop.signature.Signature.evf</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev.html">pylayers.antprop.signature.Signature.ev</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.unfold.html">pylayers.antprop.signature.Signature.unfold</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evtx.html">pylayers.antprop.signature.Signature.evtx</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.image.html">pylayers.antprop.signature.Signature.image</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.signature.html#utility-functions">Utility functions</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.showsig.html">pylayers.antprop.signature.showsig</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.signature.gidl.html">pylayers.antprop.signature.gidl</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.slab.html">pylayers.antprop.slab</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#interface-class">Interface Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.__init__.html">pylayers.antprop.slab.Interface.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.RT.html">pylayers.antprop.slab.Interface.RT</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.pcolor.html">pylayers.antprop.slab.Interface.pcolor</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.tocolor.html">pylayers.antprop.slab.Interface.tocolor</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.loss0.html">pylayers.antprop.slab.Interface.loss0</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.losst.html">pylayers.antprop.slab.Interface.losst</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.plotwrt.html">pylayers.antprop.slab.Interface.plotwrt</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#matinterface-class">MatInterface Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatInterface.__init__.html">pylayers.antprop.slab.MatInterface.__init__</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#mat-class">Mat Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.__init__.html">pylayers.antprop.slab.Mat.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.eval.html">pylayers.antprop.slab.Mat.eval</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.info.html">pylayers.antprop.slab.Mat.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.R.html">pylayers.antprop.slab.Mat.R</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#matdb-class">MatDB Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.__init__.html">pylayers.antprop.slab.MatDB.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.info.html">pylayers.antprop.slab.MatDB.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.dass.html">pylayers.antprop.slab.MatDB.dass</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.maxindex.html">pylayers.antprop.slab.MatDB.maxindex</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.delete.html">pylayers.antprop.slab.MatDB.delete</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.edit.html">pylayers.antprop.slab.MatDB.edit</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.add.html">pylayers.antprop.slab.MatDB.add</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.addgui.html">pylayers.antprop.slab.MatDB.addgui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.choose.html">pylayers.antprop.slab.MatDB.choose</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.load.html">pylayers.antprop.slab.MatDB.load</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.save.html">pylayers.antprop.slab.MatDB.save</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#slab-class">Slab Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.__init__.html">pylayers.antprop.slab.Slab.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.__repr__.html">pylayers.antprop.slab.Slab.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.info.html">pylayers.antprop.slab.Slab.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.conv.html">pylayers.antprop.slab.Slab.conv</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.ev.html">pylayers.antprop.slab.Slab.ev</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.filter.html">pylayers.antprop.slab.Slab.filter</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.excess_grdelay.html">pylayers.antprop.slab.Slab.excess_grdelay</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.tocolor.html">pylayers.antprop.slab.Slab.tocolor</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.loss0.html">pylayers.antprop.slab.Slab.loss0</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.losst.html">pylayers.antprop.slab.Slab.losst</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.show.html">pylayers.antprop.slab.Slab.show</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#slabdb-class">SlabDB Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.__init__.html">pylayers.antprop.slab.SlabDB.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.showall.html">pylayers.antprop.slab.SlabDB.showall</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.dass.html">pylayers.antprop.slab.SlabDB.dass</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.maxindex.html">pylayers.antprop.slab.SlabDB.maxindex</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.delete.html">pylayers.antprop.slab.SlabDB.delete</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.edit.html">pylayers.antprop.slab.SlabDB.edit</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.show.html">pylayers.antprop.slab.SlabDB.show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.add.html">pylayers.antprop.slab.SlabDB.add</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.addgui.html">pylayers.antprop.slab.SlabDB.addgui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.load.html">pylayers.antprop.slab.SlabDB.load</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.save.html">pylayers.antprop.slab.SlabDB.save</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.slab.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.slab.calsig.html">pylayers.antprop.slab.calsig</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html#class-vectorcoeff">Class VectorCoeff</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.__init__.html">pylayers.antprop.spharm.VectorCoeff.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.inits1.html">pylayers.antprop.spharm.VectorCoeff.inits1</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html#class-sshcoeff">class SSHCoeff</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.__init__.html">pylayers.antprop.spharm.SSHCoeff.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.s2tos3.html">pylayers.antprop.spharm.SSHCoeff.s2tos3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.sets3.html">pylayers.antprop.spharm.SSHCoeff.sets3</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html#class-scoeff">class SCoeff</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__init__.html">pylayers.antprop.spharm.SCoeff.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__repr__.html">pylayers.antprop.spharm.SCoeff.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits2.html">pylayers.antprop.spharm.SCoeff.inits2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits3.html">pylayers.antprop.spharm.SCoeff.inits3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete.html">pylayers.antprop.spharm.SCoeff.delete</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put.html">pylayers.antprop.spharm.SCoeff.put</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete3.html">pylayers.antprop.spharm.SCoeff.delete3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put3.html">pylayers.antprop.spharm.SCoeff.put3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.s3tos2.html">pylayers.antprop.spharm.SCoeff.s3tos2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.plot.html">pylayers.antprop.spharm.SCoeff.plot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.show.html">pylayers.antprop.spharm.SCoeff.show</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html#class-vcoeff">class VCoeff</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__init__.html">pylayers.antprop.spharm.VCoeff.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__repr__.html">pylayers.antprop.spharm.VCoeff.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits1.html">pylayers.antprop.spharm.VCoeff.inits1</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits2.html">pylayers.antprop.spharm.VCoeff.inits2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits3.html">pylayers.antprop.spharm.VCoeff.inits3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s1tos2.html">pylayers.antprop.spharm.VCoeff.s1tos2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete.html">pylayers.antprop.spharm.VCoeff.delete</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put.html">pylayers.antprop.spharm.VCoeff.put</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete3.html">pylayers.antprop.spharm.VCoeff.delete3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put3.html">pylayers.antprop.spharm.VCoeff.put3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s3tos2.html">pylayers.antprop.spharm.VCoeff.s3tos2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.plot.html">pylayers.antprop.spharm.VCoeff.plot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.show.html">pylayers.antprop.spharm.VCoeff.show</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html#class-vshcoeff">class VSHCoeff</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__init__.html">pylayers.antprop.spharm.VSHCoeff.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__repr__.html">pylayers.antprop.spharm.VSHCoeff.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.plot.html">pylayers.antprop.spharm.VSHCoeff.plot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.show.html">pylayers.antprop.spharm.VSHCoeff.show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s1tos2.html">pylayers.antprop.spharm.VSHCoeff.s1tos2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3_new.html">pylayers.antprop.spharm.VSHCoeff.s2tos3_new</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3.html">pylayers.antprop.spharm.VSHCoeff.s2tos3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s3tos2.html">pylayers.antprop.spharm.VSHCoeff.s3tos2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.strip3.html">pylayers.antprop.spharm.VSHCoeff.strip3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.drag3.html">pylayers.antprop.spharm.VSHCoeff.drag3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.put3.html">pylayers.antprop.spharm.VSHCoeff.put3</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.indexssh.html">pylayers.antprop.spharm.indexssh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.indexvsh.html">pylayers.antprop.spharm.indexvsh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.index_vsh.html">pylayers.antprop.spharm.index_vsh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre3.html">pylayers.antprop.spharm.AFLegendre3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre2.html">pylayers.antprop.spharm.AFLegendre2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre.html">pylayers.antprop.spharm.AFLegendre</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VW2.html">pylayers.antprop.spharm.VW2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VW.html">pylayers.antprop.spharm.VW</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.VW0.html">pylayers.antprop.spharm.VW0</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.antprop.spharm.plotVW.html">pylayers.antprop.spharm.plotVW</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.signature.html">pylayers.antprop.signature</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.signature.html#class-signatures">Class Signatures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__init__.html">pylayers.antprop.signature.Signatures.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__repr__.html">pylayers.antprop.signature.Signatures.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__len__.html">pylayers.antprop.signature.Signatures.__len__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.num.html">pylayers.antprop.signature.Signatures.num</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.info.html">pylayers.antprop.signature.Signatures.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.saveh5.html">pylayers.antprop.signature.Signatures.saveh5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.loadh5.html">pylayers.antprop.signature.Signatures.loadh5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures._saveh5.html">pylayers.antprop.signature.Signatures._saveh5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures._loadh5.html">pylayers.antprop.signature.Signatures._loadh5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.load.html">pylayers.antprop.signature.Signatures.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.save.html">pylayers.antprop.signature.Signatures.save</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.sp.html">pylayers.antprop.signature.Signatures.sp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone.html">pylayers.antprop.signature.Signatures.procone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths.html">pylayers.antprop.signature.Signatures.propaths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.short_propath.html">pylayers.antprop.signature.Signatures.short_propath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2.html">pylayers.antprop.signature.Signatures.propaths2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths3.html">pylayers.antprop.signature.Signatures.propaths3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2015_2.html">pylayers.antprop.signature.Signatures.propaths2015_2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone2.html">pylayers.antprop.signature.Signatures.procone2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.calsig.html">pylayers.antprop.signature.Signatures.calsig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.exist.html">pylayers.antprop.signature.Signatures.exist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run.html">pylayers.antprop.signature.Signatures.run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_old.html">pylayers.antprop.signature.Signatures.run_old</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_exp.html">pylayers.antprop.signature.Signatures.run_exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run_exp2.html">pylayers.antprop.signature.Signatures.run_exp2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.unfold.html">pylayers.antprop.signature.Signatures.unfold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.show.html">pylayers.antprop.signature.Signatures.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.showi.html">pylayers.antprop.signature.Signatures.showi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.rays.html">pylayers.antprop.signature.Signatures.rays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.raysv.html">pylayers.antprop.signature.Signatures.raysv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.image.html">pylayers.antprop.signature.Signatures.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.image2.html">pylayers.antprop.signature.Signatures.image2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.signature.html#class-signature">Class Signature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__init__.html">pylayers.antprop.signature.Signature.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__repr__.html">pylayers.antprop.signature.Signature.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.info.html">pylayers.antprop.signature.Signature.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev2.html">pylayers.antprop.signature.Signature.ev2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evf.html">pylayers.antprop.signature.Signature.evf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev.html">pylayers.antprop.signature.Signature.ev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.unfold.html">pylayers.antprop.signature.Signature.unfold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evtx.html">pylayers.antprop.signature.Signature.evtx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.image.html">pylayers.antprop.signature.Signature.image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.signature.html#utility-functions">Utility functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.showsig.html">pylayers.antprop.signature.showsig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.signature.gidl.html">pylayers.antprop.signature.gidl</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.slab.html">pylayers.antprop.slab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#interface-class">Interface Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.__init__.html">pylayers.antprop.slab.Interface.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.RT.html">pylayers.antprop.slab.Interface.RT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.pcolor.html">pylayers.antprop.slab.Interface.pcolor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.tocolor.html">pylayers.antprop.slab.Interface.tocolor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.loss0.html">pylayers.antprop.slab.Interface.loss0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.losst.html">pylayers.antprop.slab.Interface.losst</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.plotwrt.html">pylayers.antprop.slab.Interface.plotwrt</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#matinterface-class">MatInterface Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatInterface.__init__.html">pylayers.antprop.slab.MatInterface.__init__</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#mat-class">Mat Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.__init__.html">pylayers.antprop.slab.Mat.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.eval.html">pylayers.antprop.slab.Mat.eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.info.html">pylayers.antprop.slab.Mat.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.R.html">pylayers.antprop.slab.Mat.R</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#matdb-class">MatDB Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.__init__.html">pylayers.antprop.slab.MatDB.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.info.html">pylayers.antprop.slab.MatDB.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.dass.html">pylayers.antprop.slab.MatDB.dass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.maxindex.html">pylayers.antprop.slab.MatDB.maxindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.delete.html">pylayers.antprop.slab.MatDB.delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.edit.html">pylayers.antprop.slab.MatDB.edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.add.html">pylayers.antprop.slab.MatDB.add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.addgui.html">pylayers.antprop.slab.MatDB.addgui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.choose.html">pylayers.antprop.slab.MatDB.choose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.load.html">pylayers.antprop.slab.MatDB.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.save.html">pylayers.antprop.slab.MatDB.save</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#slab-class">Slab Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.__init__.html">pylayers.antprop.slab.Slab.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.__repr__.html">pylayers.antprop.slab.Slab.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.info.html">pylayers.antprop.slab.Slab.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.conv.html">pylayers.antprop.slab.Slab.conv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.ev.html">pylayers.antprop.slab.Slab.ev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.filter.html">pylayers.antprop.slab.Slab.filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.excess_grdelay.html">pylayers.antprop.slab.Slab.excess_grdelay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.tocolor.html">pylayers.antprop.slab.Slab.tocolor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.loss0.html">pylayers.antprop.slab.Slab.loss0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.losst.html">pylayers.antprop.slab.Slab.losst</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.show.html">pylayers.antprop.slab.Slab.show</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#slabdb-class">SlabDB Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.__init__.html">pylayers.antprop.slab.SlabDB.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.showall.html">pylayers.antprop.slab.SlabDB.showall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.dass.html">pylayers.antprop.slab.SlabDB.dass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.maxindex.html">pylayers.antprop.slab.SlabDB.maxindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.delete.html">pylayers.antprop.slab.SlabDB.delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.edit.html">pylayers.antprop.slab.SlabDB.edit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.show.html">pylayers.antprop.slab.SlabDB.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.add.html">pylayers.antprop.slab.SlabDB.add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.addgui.html">pylayers.antprop.slab.SlabDB.addgui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.load.html">pylayers.antprop.slab.SlabDB.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.save.html">pylayers.antprop.slab.SlabDB.save</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.slab.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.slab.calsig.html">pylayers.antprop.slab.calsig</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.spharm.html#class-vectorcoeff">Class VectorCoeff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.__init__.html">pylayers.antprop.spharm.VectorCoeff.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.inits1.html">pylayers.antprop.spharm.VectorCoeff.inits1</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.spharm.html#class-sshcoeff">class SSHCoeff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.__init__.html">pylayers.antprop.spharm.SSHCoeff.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.s2tos3.html">pylayers.antprop.spharm.SSHCoeff.s2tos3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.sets3.html">pylayers.antprop.spharm.SSHCoeff.sets3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.spharm.html#class-scoeff">class SCoeff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__init__.html">pylayers.antprop.spharm.SCoeff.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__repr__.html">pylayers.antprop.spharm.SCoeff.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits2.html">pylayers.antprop.spharm.SCoeff.inits2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits3.html">pylayers.antprop.spharm.SCoeff.inits3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete.html">pylayers.antprop.spharm.SCoeff.delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put.html">pylayers.antprop.spharm.SCoeff.put</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete3.html">pylayers.antprop.spharm.SCoeff.delete3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put3.html">pylayers.antprop.spharm.SCoeff.put3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.s3tos2.html">pylayers.antprop.spharm.SCoeff.s3tos2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.plot.html">pylayers.antprop.spharm.SCoeff.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.show.html">pylayers.antprop.spharm.SCoeff.show</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.spharm.html#class-vcoeff">class VCoeff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__init__.html">pylayers.antprop.spharm.VCoeff.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__repr__.html">pylayers.antprop.spharm.VCoeff.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits1.html">pylayers.antprop.spharm.VCoeff.inits1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits2.html">pylayers.antprop.spharm.VCoeff.inits2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits3.html">pylayers.antprop.spharm.VCoeff.inits3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s1tos2.html">pylayers.antprop.spharm.VCoeff.s1tos2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete.html">pylayers.antprop.spharm.VCoeff.delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put.html">pylayers.antprop.spharm.VCoeff.put</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete3.html">pylayers.antprop.spharm.VCoeff.delete3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put3.html">pylayers.antprop.spharm.VCoeff.put3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s3tos2.html">pylayers.antprop.spharm.VCoeff.s3tos2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.plot.html">pylayers.antprop.spharm.VCoeff.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.show.html">pylayers.antprop.spharm.VCoeff.show</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.spharm.html#class-vshcoeff">class VSHCoeff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__init__.html">pylayers.antprop.spharm.VSHCoeff.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__repr__.html">pylayers.antprop.spharm.VSHCoeff.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.plot.html">pylayers.antprop.spharm.VSHCoeff.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.show.html">pylayers.antprop.spharm.VSHCoeff.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s1tos2.html">pylayers.antprop.spharm.VSHCoeff.s1tos2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3_new.html">pylayers.antprop.spharm.VSHCoeff.s2tos3_new</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3.html">pylayers.antprop.spharm.VSHCoeff.s2tos3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s3tos2.html">pylayers.antprop.spharm.VSHCoeff.s3tos2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.strip3.html">pylayers.antprop.spharm.VSHCoeff.strip3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.drag3.html">pylayers.antprop.spharm.VSHCoeff.drag3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.put3.html">pylayers.antprop.spharm.VSHCoeff.put3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.antprop.spharm.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.indexssh.html">pylayers.antprop.spharm.indexssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.indexvsh.html">pylayers.antprop.spharm.indexvsh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.index_vsh.html">pylayers.antprop.spharm.index_vsh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre3.html">pylayers.antprop.spharm.AFLegendre3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre2.html">pylayers.antprop.spharm.AFLegendre2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre.html">pylayers.antprop.spharm.AFLegendre</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VW2.html">pylayers.antprop.spharm.VW2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VW.html">pylayers.antprop.spharm.VW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.VW0.html">pylayers.antprop.spharm.VW0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.antprop.spharm.plotVW.html">pylayers.antprop.spharm.plotVW</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -169,15 +1047,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.antprop.txt"
+    <a href="../_sources/modules/pylayers.antprop.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

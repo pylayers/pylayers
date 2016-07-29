@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,47 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-bsignal-fusignal-energy">
 <h1>pylayers.signal.bsignal.FUsignal.energy<a class="headerlink" href="#pylayers-signal-bsignal-fusignal-energy" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.energy">
+<code class="descclassname">FUsignal.</code><code class="descname">energy</code><span class="sig-paren">(</span><em>axis=-1</em>, <em>Friis=False</em>, <em>mode='mean'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUsignal.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate energy along a given axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong> : (default 0)</p>
+<p><strong>Friis</strong> : boolean</p>
+<p><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>mean | center | integ | first | last</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If Friis is true energy is multiplied by</p>
+<p></p>
+<p>axis = 0 is ray axis</p>
+<p>if mode == &#8216;mean&#8217;</p>
+<p></p>
+<p>if mode == &#8216;integ&#8217;</p>
+<p></p>
+<p>if mode == &#8216;center&#8217;</p>
+<p></p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ip = TUsignal()
+&gt;&gt;&gt; ip.EnImpulse()
+&gt;&gt;&gt; En1 = ip.energy()
+&gt;&gt;&gt; assert((En1&gt;0.99) &amp; (En1&lt;1.01))
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +178,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.energy.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.energy.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,95 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-plotutil-mulcplot">
 <h1>pylayers.util.plotutil.mulcplot<a class="headerlink" href="#pylayers-util-plotutil-mulcplot" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.plotutil.mulcplot">
+<code class="descclassname">pylayers.util.plotutil.</code><code class="descname">mulcplot</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/plotutil.html#mulcplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.plotutil.mulcplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>handling multiple complex variable plots</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray  (,N)</p>
+<p><strong>y</strong> : ndarray  (M,N)</p>
+<p><strong>typ</strong> : list of string</p>
+<blockquote>
+<div><p>&#8216;m&#8217;   : modulus
+&#8216;v&#8217;   : value
+&#8216;l10&#8217; : dB (10 log10)
+&#8216;l20&#8217; : dB (20 log10)
+&#8216;d&#8217;   : phase degrees
+&#8216;r&#8217;   : phase radians
+&#8216;du&#8217;  : phase degrees unwrap
+&#8216;ru&#8217;  : phase radians unwrap
+&#8216;gdn&#8217; : group delay (ns)
+&#8216;gdm&#8217; : group distance (m)
+&#8216;re&#8217;  : real part
+&#8216;im&#8217;  : imaginary part</p>
+</div></blockquote>
+<p><strong>att</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>ncol</strong> : int</p>
+<blockquote>
+<div><p>number of columns</p>
+</div></blockquote>
+<p><strong>nlin</strong> : int</p>
+<blockquote>
+<div><p>number of lines</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>fig,lax</strong> : figure and list of axes</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Here fig and ax are numpy arrays of matplotlib fig and ax</p>
+<p>If len(y.shape) &gt; 2 the two first axes are used
+as nlin and ncol this takes the priority over
+the passed values nlin and ncol</p>
+<p>notice that the typ is a list of string and not a string</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import pylayers.util.plotutil as plu
+&gt;&gt;&gt; x = np.arange(0,10,.01)
+&gt;&gt;&gt; z1 = np.cos(2*x)*np.sin(10*x) + 1j * np.cos(3*x)*np.sin(11*x)
+&gt;&gt;&gt; z2 = np.cos(3*x)*np.sin(11*x) + 1j * np.cos(4*x)*np.sin(10*x)
+&gt;&gt;&gt; z3 = np.cos(4*x)*np.sin(12*x) + 1j * np.cos(5*x)*np.sin(12*x)
+&gt;&gt;&gt; z4 = np.cos(5*x)*np.sin(13*x) + 1j * np.cos(6*x)*np.sin(13*x)
+&gt;&gt;&gt; y = np.vstack((z1,z2,z3,z4))
+&gt;&gt;&gt; plu.mulcplot(x,y)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_00_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_00_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_00_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-plotutil-mulcplot-1_00_00.png" src="../../_images/pylayers-util-plotutil-mulcplot-1_00_00.png" />
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; plu.mulcplot(x,y,typ=[&#39;v&#39;],)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_01_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_01_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_01_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-plotutil-mulcplot-1_01_00.png" src="../../_images/pylayers-util-plotutil-mulcplot-1_01_00.png" />
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; plu.mulcplot(x,y,typ=[&#39;r&#39;],ncol=2,nlin=2,color=&#39;k&#39;,linewidth=2)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_02_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_02_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_02_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-plotutil-mulcplot-1_02_00.png" src="../../_images/pylayers-util-plotutil-mulcplot-1_02_00.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +226,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.plotutil.mulcplot.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.plotutil.mulcplot.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

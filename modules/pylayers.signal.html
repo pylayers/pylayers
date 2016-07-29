@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -113,7 +127,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-package">
 <h1>pylayers.signal package<a class="headerlink" href="#pylayers-signal-package" title="Permalink to this headline">¶</a></h1>
@@ -121,11 +135,187 @@
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.bsignal.html">pylayers.signal.bsignal</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.DF.html">pylayers.signal.DF</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.ED.html">pylayers.signal.ED</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.bsignal.html">pylayers.signal.bsignal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#bsignal-class">Bsignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.__init__.html">pylayers.signal.bsignal.Bsignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.__repr__.html">pylayers.signal.bsignal.Bsignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.mean.html">pylayers.signal.bsignal.Bsignal.mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.min.html">pylayers.signal.bsignal.Bsignal.min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.max.html">pylayers.signal.bsignal.Bsignal.max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.len.html">pylayers.signal.bsignal.Bsignal.len</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.append.html">pylayers.signal.bsignal.Bsignal.append</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.extract.html">pylayers.signal.bsignal.Bsignal.extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.save.html">pylayers.signal.bsignal.Bsignal.save</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.load.html">pylayers.signal.bsignal.Bsignal.load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.setx.html">pylayers.signal.bsignal.Bsignal.setx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.sety.html">pylayers.signal.bsignal.Bsignal.sety</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.stem.html">pylayers.signal.bsignal.Bsignal.stem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.step.html">pylayers.signal.bsignal.Bsignal.step</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.cformat.html">pylayers.signal.bsignal.Bsignal.cformat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.imshow.html">pylayers.signal.bsignal.Bsignal.imshow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.plot.html">pylayers.signal.bsignal.Bsignal.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.flatteny.html">pylayers.signal.bsignal.Bsignal.flatteny</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.gating.html">pylayers.signal.bsignal.Bsignal.gating</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#usignal-class">Usignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.__init__.html">pylayers.signal.bsignal.Usignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.__repr__.html">pylayers.signal.bsignal.Usignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.setx.html">pylayers.signal.bsignal.Usignal.setx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.dx.html">pylayers.signal.bsignal.Usignal.dx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.width.html">pylayers.signal.bsignal.Usignal.width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.expand.html">pylayers.signal.bsignal.Usignal.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.max.html">pylayers.signal.bsignal.Usignal.max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.min.html">pylayers.signal.bsignal.Usignal.min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.truncate.html">pylayers.signal.bsignal.Usignal.truncate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.abs.html">pylayers.signal.bsignal.Usignal.abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.eprfl.html">pylayers.signal.bsignal.Usignal.eprfl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.energy.html">pylayers.signal.bsignal.Usignal.energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.fftshift.html">pylayers.signal.bsignal.Usignal.fftshift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.zright.html">pylayers.signal.bsignal.Usignal.zright</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.zleft.html">pylayers.signal.bsignal.Usignal.zleft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.zlr.html">pylayers.signal.bsignal.Usignal.zlr</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#tbsignal-class">TBsignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.__init__.html">pylayers.signal.bsignal.TBsignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.__repr__.html">pylayers.signal.bsignal.TBsignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.plot.html">pylayers.signal.bsignal.TBsignal.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.translate.html">pylayers.signal.bsignal.TBsignal.translate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.b2tu.html">pylayers.signal.bsignal.TBsignal.b2tu</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#tusignal-class">TUsignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.__init__.html">pylayers.signal.bsignal.TUsignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.__repr__.html">pylayers.signal.bsignal.TUsignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.__add__.html">pylayers.signal.bsignal.TUsignal.__add__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.diff.html">pylayers.signal.bsignal.TUsignal.diff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.info.html">pylayers.signal.bsignal.TUsignal.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.align.html">pylayers.signal.bsignal.TUsignal.align</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.filter.html">pylayers.signal.bsignal.TUsignal.filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ftshift.html">pylayers.signal.bsignal.TUsignal.ftshift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.show.html">pylayers.signal.bsignal.TUsignal.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.esd.html">pylayers.signal.bsignal.TUsignal.esd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.shift.html">pylayers.signal.bsignal.TUsignal.shift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.html#fourier-functions">Fourier Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ft.html">pylayers.signal.bsignal.TUsignal.ft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.fft.html">pylayers.signal.bsignal.TUsignal.fft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.fftsh.html">pylayers.signal.bsignal.TUsignal.fftsh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ftshift.html">pylayers.signal.bsignal.TUsignal.ftshift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.Yadd_zeros2l.html">pylayers.signal.bsignal.TUsignal.Yadd_zeros2l</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.Yadd_zeros2r.html">pylayers.signal.bsignal.TUsignal.Yadd_zeros2r</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.esd.html">pylayers.signal.bsignal.TUsignal.esd</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.html#visualization-functions">Visualization functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.show.html">pylayers.signal.bsignal.TUsignal.show</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.shift.html">pylayers.signal.bsignal.TUsignal.shift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.filter.html">pylayers.signal.bsignal.TUsignal.filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.correlate.html">pylayers.signal.bsignal.TUsignal.correlate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.corrgauss.html">pylayers.signal.bsignal.TUsignal.corrgauss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.resample.html">pylayers.signal.bsignal.TUsignal.resample</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.convolve.html">pylayers.signal.bsignal.TUsignal.convolve</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.bsignal.html#input-output-functions">Input Output Functions</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#fbsignal-class">FBsignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FBsignal.__init__.html">pylayers.signal.bsignal.FBsignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FBsignal.__repr__.html">pylayers.signal.bsignal.FBsignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FBsignal.plotri.html">pylayers.signal.bsignal.FBsignal.plotri</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FBsignal.plot.html">pylayers.signal.bsignal.FBsignal.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FBsignal.plotdB.html">pylayers.signal.bsignal.FBsignal.plotdB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FBsignal.stem.html">pylayers.signal.bsignal.FBsignal.stem</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#fusignal-class">FUsignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.__init__.html">pylayers.signal.bsignal.FUsignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.__repr__.html">pylayers.signal.bsignal.FUsignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.__add__.html">pylayers.signal.bsignal.FUsignal.__add__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.__sub__.html">pylayers.signal.bsignal.FUsignal.__sub__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.__mul__.html">pylayers.signal.bsignal.FUsignal.__mul__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.__div__.html">pylayers.signal.bsignal.FUsignal.__div__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.window.html">pylayers.signal.bsignal.FUsignal.window</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.get.html">pylayers.signal.bsignal.FUsignal.get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.info.html">pylayers.signal.bsignal.FUsignal.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.energy.html">pylayers.signal.bsignal.FUsignal.energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.applyFriis.html">pylayers.signal.bsignal.FUsignal.applyFriis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.enthrsh.html">pylayers.signal.bsignal.FUsignal.enthrsh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.dBthrsh.html">pylayers.signal.bsignal.FUsignal.dBthrsh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.zp.html">pylayers.signal.bsignal.FUsignal.zp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.newdf.html">pylayers.signal.bsignal.FUsignal.newdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.dftresamp.html">pylayers.signal.bsignal.FUsignal.dftresamp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.resample.html">pylayers.signal.bsignal.FUsignal.resample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.symH.html">pylayers.signal.bsignal.FUsignal.symH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.symHz.html">pylayers.signal.bsignal.FUsignal.symHz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.ifft.html">pylayers.signal.bsignal.FUsignal.ifft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.ift.html">pylayers.signal.bsignal.FUsignal.ift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.iftshift.html">pylayers.signal.bsignal.FUsignal.iftshift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.show.html">pylayers.signal.bsignal.FUsignal.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.decimate.html">pylayers.signal.bsignal.FUsignal.decimate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#fhsignal-class">FHsignal Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FHsignal.__init__.html">pylayers.signal.bsignal.FHsignal.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FHsignal.__repr__.html">pylayers.signal.bsignal.FHsignal.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FHsignal.__mul__.html">pylayers.signal.bsignal.FHsignal.__mul__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FHsignal.ifft.html">pylayers.signal.bsignal.FHsignal.ifft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.FHsignal.unrex.html">pylayers.signal.bsignal.FHsignal.unrex</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.bsignal.html#noise-class">Noise Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.__init__.html">pylayers.signal.bsignal.Noise.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.amplify.html">pylayers.signal.bsignal.Noise.amplify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.gating.html">pylayers.signal.bsignal.Noise.gating</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.DF.html">pylayers.signal.DF</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.DF.html#df-class">DF Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.__init__.html">pylayers.signal.DF.DF.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.filter.html">pylayers.signal.DF.DF.filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.simplify.html">pylayers.signal.DF.DF.simplify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.flipc.html">pylayers.signal.DF.DF.flipc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.freqz.html">pylayers.signal.DF.DF.freqz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.factorize.html">pylayers.signal.DF.DF.factorize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.wnxcorr.html">pylayers.signal.DF.DF.wnxcorr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.match.html">pylayers.signal.DF.DF.match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.butter.html">pylayers.signal.DF.DF.butter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.ellip_bp.html">pylayers.signal.DF.DF.ellip_bp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.remez.html">pylayers.signal.DF.DF.remez</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.zplane.html">pylayers.signal.DF.DF.zplane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.DF.DF.ir.html">pylayers.signal.DF.DF.ir</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.ED.html">pylayers.signal.ED</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.ED.html#energy-detector">Energy Detector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.__init__.html">pylayers.signal.ED.ED.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.__repr__.html">pylayers.signal.ED.ED.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.apply.html">pylayers.signal.ED.ED.apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.moment.html">pylayers.signal.ED.ED.moment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.pdf.html">pylayers.signal.ED.ED.pdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.errprob.html">pylayers.signal.ED.ED.errprob</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.roc.html">pylayers.signal.ED.ED.roc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.ED.ED.plot.html">pylayers.signal.ED.ED.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.signal.ED.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.signal.waveform.html">pylayers.signal.waveform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.device.html">pylayers.signal.devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.signal.device.html">pylayers.signal.devices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.signal.device.html#device-class">Device Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.signal.device.Device.__init__.html">pylayers.signal.device.Device.__init__</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -142,15 +332,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.signal.txt"
+    <a href="../_sources/modules/pylayers.signal.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

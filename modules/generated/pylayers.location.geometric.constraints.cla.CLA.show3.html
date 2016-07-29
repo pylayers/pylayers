@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,36 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-constraints-cla-cla-show3">
 <h1>pylayers.location.geometric.constraints.cla.CLA.show3<a class="headerlink" href="#pylayers-location-geometric-constraints-cla-cla-show3" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.show3">
+<code class="descclassname">CLA.</code><code class="descname">show3</code><span class="sig-paren">(</span><em>l=-1</em>, <em>amb=False</em>, <em>sc='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/location/geometric/constraints/cla.html#CLA.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display constraints and theirs boxes through geomview.</p>
+<p>geomview parameters are the following</p>
+<p>self.parmsh[&#8216;display&#8217;]=False            # launch geomview interactively
+self.parmsh[&#8216;scene&#8217;]=True               # display whole scene
+self.parmsh[&#8216;boxes&#8217;]=True               # display constraint box
+self.parmsh[&#8216;constr_boxes&#8217;]=False       # display constraint box
+self.parmsh[&#8216;estimated&#8217;]=True           # display estimated point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : layer number to observe. If -1 estimation is made on the highest available layer. default = -1</p>
+<p><strong>amb</strong> : display ambiguous boxes. default = false</p>
+<p><strong>sc</strong> : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default &#8216;all&#8217;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing but calls a geomview instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +167,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.show3.txt"
+    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.show3.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

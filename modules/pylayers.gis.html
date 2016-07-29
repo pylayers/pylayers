@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -113,7 +127,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-gis-package">
 <h1>pylayers.gis package<a class="headerlink" href="#pylayers-gis-package" title="Permalink to this headline">¶</a></h1>
@@ -129,10 +143,111 @@
 </table>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.gis.cycles.html">pylayers.gis.cycles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.gis.cycles.html">pylayers.gis.cycles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.cycles.html#cycles-class">Cycles Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.html">pylayers.gis.cycles.Cycles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.inclusion.html">pylayers.gis.cycles.Cycles.inclusion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.decompose.html">pylayers.gis.cycles.Cycles.decompose</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.__init__.html">pylayers.gis.cycles.Cycles.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.__repr__.html">pylayers.gis.cycles.Cycles.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.inclusion.html">pylayers.gis.cycles.Cycles.inclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.decompose.html">pylayers.gis.cycles.Cycles.decompose</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.cycles.html#cycle-class">Cycle Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.__init__.html">pylayers.gis.cycles.Cycle.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.__add__.html">pylayers.gis.cycles.Cycle.__add__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.update.html">pylayers.gis.cycles.Cycle.update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.__repr__.html">pylayers.gis.cycles.Cycle.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.info.html">pylayers.gis.cycles.Cycle.info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.flip.html">pylayers.gis.cycles.Cycle.flip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.inclusion.html">pylayers.gis.cycles.Cycle.inclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.simplify.html">pylayers.gis.cycles.Cycle.simplify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.intersect.html">pylayers.gis.cycles.Cycle.intersect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.reverberation.html">pylayers.gis.cycles.Cycle.reverberation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.split.html">pylayers.gis.cycles.Cycle.split</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.corrcy.html">pylayers.gis.cycles.Cycle.corrcy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.show.html">pylayers.gis.cycles.Cycle.show</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.gis.furniture.html">pylayers.gis.furniture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.gis.osmparser.html">pylayers.gis.osmparser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pylayers.gis.readvrml.html">pylayers.gis.readvrml</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.gis.osmparser.html">pylayers.gis.osmparser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#way-class">Way Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Way.__init__.html">pylayers.gis.osmparser.Way.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Way.__repr__.html">pylayers.gis.osmparser.Way.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Way.show.html">pylayers.gis.osmparser.Way.show</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#coords-class">Coords Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.__repr__.html">pylayers.gis.osmparser.Coords.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.clean.html">pylayers.gis.osmparser.Coords.clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.coords.html">pylayers.gis.osmparser.Coords.coords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.cartesian.html">pylayers.gis.osmparser.Coords.cartesian</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#nodes-class">Nodes Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Nodes.nodes.html">pylayers.gis.osmparser.Nodes.nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Nodes.clean.html">pylayers.gis.osmparser.Nodes.clean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#ways-class">Ways Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.ways.html">pylayers.gis.osmparser.Ways.ways</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.clean.html">pylayers.gis.osmparser.Ways.clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.building.html">pylayers.gis.osmparser.Ways.building</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.eval.html">pylayers.gis.osmparser.Ways.eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.show.html">pylayers.gis.osmparser.Ways.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.tomaska.html">pylayers.gis.osmparser.Ways.tomaska</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.showold.html">pylayers.gis.osmparser.Ways.showold</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#relations-class">Relations Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Relations.relations.html">pylayers.gis.osmparser.Relations.relations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.Relations.clean.html">pylayers.gis.osmparser.Relations.clean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#floorplan-class">FloorPlan Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.__init__.html">pylayers.gis.osmparser.FloorPlan.__init__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.__repr__.html">pylayers.gis.osmparser.FloorPlan.__repr__</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.build.html">pylayers.gis.osmparser.FloorPlan.build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.show.html">pylayers.gis.osmparser.FloorPlan.show</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.osmparser.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.osmparse.html">pylayers.gis.osmparser.osmparse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.extract.html">pylayers.gis.osmparser.extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.getbdg.html">pylayers.gis.osmparser.getbdg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.osmparser.buildingsparse.html">pylayers.gis.osmparser.buildingsparse</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.gis.readvrml.html">pylayers.gis.readvrml</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.readvrml.html#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.savestr2.html">pylayers.gis.readvrml.savestr2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.stretch.html">pylayers.gis.readvrml.stretch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.segsplit.html">pylayers.gis.readvrml.segsplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.extract.html">pylayers.gis.readvrml.extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.inbracket.html">pylayers.gis.readvrml.inbracket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.incrochet.html">pylayers.gis.readvrml.incrochet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.geomLine.html">pylayers.gis.readvrml.geomLine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.geomFace.html">pylayers.gis.readvrml.geomFace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.ParseDirectionalLight.html">pylayers.gis.readvrml.ParseDirectionalLight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.ParseMaterial.html">pylayers.gis.readvrml.ParseMaterial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.show.html">pylayers.gis.readvrml.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.parsevrml.html">pylayers.gis.readvrml.parsevrml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.vrml2sha.html">pylayers.gis.readvrml.vrml2sha</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pylayers.gis.readvrml.vrml2geom.html">pylayers.gis.readvrml.vrml2geom</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pylayers.gis.readvrml.html#vlayout-class">VLayout Class</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.gis.selectl.html">pylayers.gis.selectl</a></li>
 </ul>
 </div>
@@ -150,15 +265,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.gis.txt"
+    <a href="../_sources/modules/pylayers.gis.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,45 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-constraints-cla-cla-merge2">
 <h1>pylayers.location.geometric.constraints.cla.CLA.merge2<a class="headerlink" href="#pylayers-location-geometric-constraints-cla-cla-merge2" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.merge2">
+<code class="descclassname">CLA.</code><code class="descname">merge2</code><span class="sig-paren">(</span><em>vcw_init=1.0</em>, <em>RSS=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/location/geometric/constraints/cla.html#CLA.merge2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.merge2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge all constraints from the CLA2_reduc2</p>
+<p>Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.</p>
+<ul class="simple">
+<li>if the result of this merging is empty (no common intersections between all the boxes), all the constraints&#8217;s vcw are increased (x2) and this processing is operated until an intersection exists (physically intersection MUST exist)</li>
+<li>if the result of this merging is not empty (intersection exists between all the boxes), all the constraints&#8217;s vcw are decreased and this processing is operated until no intersection exists. the previous value of vcw is thus used for all constraints.</li>
+</ul>
+<p>This method ensure to find the smallest instersection box satisfaying all the constraints</p>
+<p>Also here is initialized self.dlayer.
+use of dlayer dictionnary:</p>
+<p>self.dlayer[Layer][type of boxes]</p>
+<p>Layer = number of intersecting constraints
+type of boxes : 0 = enclose boxes (EB)</p>
+<blockquote>
+<div>1 = ambiguous boxes (AB)</div></blockquote>
+<p>After the merging, all constraints boxes are store as AB list. EB list is void.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>vcw_init</strong> : float</p>
+<blockquote>
+<div><p>intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +176,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.merge2.txt"
+    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.merge2.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

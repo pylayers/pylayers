@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,35 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-constraints-cla-cla-refine">
 <h1>pylayers.location.geometric.constraints.cla.CLA.refine<a class="headerlink" href="#pylayers-location-geometric-constraints-cla-cla-refine" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.refine">
+<code class="descclassname">CLA.</code><code class="descname">refine</code><span class="sig-paren">(</span><em>l</em>, <em>NBOXMAX=50</em>, <em>VOLMIN=0.001</em>, <em>RSS=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/location/geometric/constraints/cla.html#CLA.refine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.refine" title="Permalink to this definition">¶</a></dt>
+<dd><p>refine the l layer of the CLA</p>
+<p>Refine the l layer of the CLA  until the maximum number of boxes (NBOXMAX) or the minimal volume of boxes (VOLMIN) has been reached.</p>
+<p>Once the CLA has been merged, this method aims to enclose the solution thanks to an octree/quadtreee process</p>
+<p>self.dlayer[l][0] : LBox which contains boxes inside of the validity area (VA)
+self.dlayer[l][1] : LBox which contains ambiguous boxes (partially inside of the VA == at least 1 edge inside the VA)
+All boxes partially inside of the VA are divided into octants. Each octants are tested into the self.valid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : the layer number</p>
+<p><strong>NBOXMAX</strong> : the maximum number of obtained boxes</p>
+<p><strong>VOLMIN</strong> :  the minimum volume achievable by the obtained boxes</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing, but fills self.dlayer[l][0] and self.dlayer[l][1] respectively with enclosed boxes and ambiguous boxes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +166,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.refine.txt"
+    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.refine.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

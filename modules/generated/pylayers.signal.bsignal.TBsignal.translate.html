@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,46 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-bsignal-tbsignal-translate">
 <h1>pylayers.signal.bsignal.TBsignal.translate<a class="headerlink" href="#pylayers-signal-bsignal-tbsignal-translate" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.TBsignal.translate">
+<code class="descclassname">TBsignal.</code><code class="descname">translate</code><span class="sig-paren">(</span><em>tau</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TBsignal.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TBsignal.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>translate signal by tau</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau</strong> : float</p>
+<blockquote class="last">
+<div><p>delay for translation</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Once translated original signal and translated signal might not be on the same grid</p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+&gt;&gt;&gt; from matplotlib.pylab import *
+&gt;&gt;&gt; ip = TUsignal()
+&gt;&gt;&gt; ip.EnImpulse()
+&gt;&gt;&gt; ip.translate(-10)
+&gt;&gt;&gt; fig,ax=ip.plot(typ=[&#39;v&#39;])
+&gt;&gt;&gt; show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-translate-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-translate-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-translate-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-translate-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TBsignal-translate-1.png" src="../../_images/pylayers-signal-bsignal-TBsignal-translate-1.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +177,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.TBsignal.translate.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.TBsignal.translate.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

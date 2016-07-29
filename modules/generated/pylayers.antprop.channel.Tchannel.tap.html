@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,68 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-channel-tchannel-tap">
 <h1>pylayers.antprop.channel.Tchannel.tap<a class="headerlink" href="#pylayers-antprop-channel-tchannel-tap" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.tap">
+<code class="descclassname">Tchannel.</code><code class="descname">tap</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.tap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.tap" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate channel tap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency</p>
+</div></blockquote>
+<p><strong>WMHz</strong> : float</p>
+<blockquote>
+<div><p>bandwidth</p>
+</div></blockquote>
+<p><strong>Ntap</strong> : int</p>
+<blockquote>
+<div><p>number of taps (related to bandwith)
+as the bandwith increases the potential number of taps increases</p>
+</div></blockquote>
+<p><strong>Ns</strong> : int</p>
+<blockquote>
+<div><p>number of spatial realizations</p>
+</div></blockquote>
+<p><strong>Nm</strong> : int</p>
+<blockquote>
+<div><p>number of time samples
+the channel is sampled along a distance of half a wavelength</p>
+</div></blockquote>
+<p><strong>Va</strong> : velocity of link termination a</p>
+<p><strong>Vb</strong> : velocity of link termination b</p>
+<p><strong>theta_va</strong> : float</p>
+<blockquote>
+<div><p>theta velocity termination a (in radians)</p>
+</div></blockquote>
+<p><strong>phi_va  :</strong></p>
+<blockquote>
+<div><p>phi  velocity termination a (in radians)</p>
+</div></blockquote>
+<p><strong>theta_vb:</strong></p>
+<blockquote>
+<div><p>theta velocity termination b (in radians)</p>
+</div></blockquote>
+<p><strong>phi_vb  :</strong></p>
+<blockquote class="last">
+<div><p>phi velocity termination b (in radians)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +199,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.tap.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.tap.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

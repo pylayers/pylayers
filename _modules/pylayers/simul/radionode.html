@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -247,8 +248,8 @@
 <div class="viewcode-block" id="RadioNode.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__init__.html#pylayers.simul.radionode.RadioNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;undefined&#39;</span><span class="p">,</span>
                  <span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;radionode.ini&#39;</span><span class="p">,</span>
                  <span class="n">_filetraj</span><span class="o">=</span><span class="s1">&#39;pos.csv&#39;</span><span class="p">,</span>
-                 <span class="n">_fileant</span><span class="o">=</span><span class="s1">&#39;defant.vsh3&#39;</span><span class="p">,</span>
-                 <span class="n">_filestr</span><span class="o">=</span><span class="s1">&#39;defstr.str2&#39;</span><span class="p">):</span>
+                 <span class="n">_fileant</span><span class="o">=</span><span class="s1">&#39;defant.vsh3&#39;</span>
+                 <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        the _fileini file must be placed in the ini directory</span>
@@ -262,8 +263,6 @@
 <span class="sd">            2 : rx</span>
 <span class="sd">        _fileini : string</span>
 <span class="sd">            file of RadioNode coordinates</span>
-<span class="sd">        _filestr : string</span>
-<span class="sd">            file of layout structure</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -300,7 +299,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;.ini&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;.spa&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;.vect&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span> <span class="o">=</span> <span class="n">_filestr</span>
         <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="s1">&#39;ini&#39;</span><span class="p">)</span>
         <span class="c1"># if file _fileini exists it is loaded</span>
         <span class="k">try</span><span class="p">:</span>
@@ -364,11 +362,7 @@
         <span class="k">print</span> <span class="s2">&quot;fileini    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span>
         <span class="k">print</span> <span class="s2">&quot;filespa    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span>
         <span class="k">print</span> <span class="s2">&quot;filegeom   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span>
-        <span class="k">print</span> <span class="s2">&quot;fileant    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;filestr    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span></div>
+        <span class="k">print</span> <span class="s2">&quot;fileant    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span></div>
 
 <div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.clear.html#pylayers.simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; clear positions</span>
@@ -1018,30 +1012,30 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
-<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show3.html#pylayers.simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s1">&#39;DLR.off&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; display RadioNode position in geomview</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        _filestr : string</span>
-<span class="sd">            structure file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s2">&quot;strucRN.off&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRGEOM&#39;</span><span class="p">])</span>
-        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">filegeom</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRGEOM&#39;</span><span class="p">])</span>
-
-        <span class="c1"># get .off filename from .str or .str2 filename</span>
-        <span class="n">_fileoff</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">)</span>
-        <span class="n">_fileoff</span> <span class="o">=</span> <span class="n">_fileoff</span> <span class="o">+</span> <span class="s1">&#39;.off&#39;</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;LIST</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileoff</span><span class="p">,</span><span class="s1">&#39;geom&#39;</span><span class="p">)):</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="n">_fileoff</span> <span class="o">+</span> <span class="s2">&quot;}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span> <span class="o">+</span> <span class="s2">&quot;}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;{&lt;/usr/share/geomview/geom/xyz.vect}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">chaine</span> <span class="o">=</span> <span class="s2">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; 2&gt;/dev/null &amp;&quot;</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span></div>
+<span class="c1">#    def show3(self, _filestr=&#39;DLR.off&#39;):</span>
+<span class="c1">#        &quot;&quot;&quot; display RadioNode position in geomview</span>
+<span class="c1">#</span>
+<span class="c1">#        Parameters</span>
+<span class="c1">#        ----------</span>
+<span class="c1">#</span>
+<span class="c1">#        _filestr : string</span>
+<span class="c1">#            structure file</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#        filename = pyu.getlong(&quot;strucRN.off&quot;, pstruc[&#39;DIRGEOM&#39;])</span>
+<span class="c1">#        fo = open(filename, &quot;w&quot;)</span>
+<span class="c1">#        filegeom = pyu.getlong(self.filegeom, pstruc[&#39;DIRGEOM&#39;])</span>
+<span class="c1">#</span>
+<span class="c1">#        # get .off filename from .str or .str2 filename</span>
+<span class="c1">#        _fileoff, ext = os.path.splitext(self.filestr)</span>
+<span class="c1">#        _fileoff = _fileoff + &#39;.off&#39;</span>
+<span class="c1">#        fo.write(&quot;LIST\n&quot;)</span>
+<span class="c1">#        if os.path.isfile(pyu.getlong(_fileoff,&#39;geom&#39;)):</span>
+<span class="c1">#            fo.write(&quot;{&lt;&quot; + _fileoff + &quot;}\n&quot;)</span>
+<span class="c1">#        fo.write(&quot;{&lt;&quot; + self.filegeom + &quot;}\n&quot;)</span>
+<span class="c1">#        fo.write(&quot;{&lt;/usr/share/geomview/geom/xyz.vect}\n&quot;)</span>
+<span class="c1">#        fo.close()</span>
+<span class="c1">#        chaine = &quot;geomview -nopanel -b 1 1 1 &quot; + filename + &quot; 2&gt;/dev/null &amp;&quot;</span>
+<span class="c1">#        os.system(chaine)</span>
 
 <div class="viewcode-block" id="RadioNode.move"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.move.html#pylayers.simul.radionode.RadioNode.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; move RadioNode with a specified offset over each cartesian axis</span>
@@ -1122,9 +1116,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,53 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-bsignal-tusignal-correlate">
 <h1>pylayers.signal.bsignal.TUsignal.correlate<a class="headerlink" href="#pylayers-signal-bsignal-tusignal-correlate" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.TUsignal.correlate">
+<code class="descclassname">TUsignal.</code><code class="descname">correlate</code><span class="sig-paren">(</span><em>s</em>, <em>normalized=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TUsignal.correlate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.correlate" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>The time step dx should be the same</p>
+<p>The chosen time reference is the one of the self signal
+This means that this function can be used to detect events appearing
+in the self signal by correlating with signal ..math:<cite>s</cite>, maximum of
+the correlation function appears in the proper time of the self signal
+history.</p>
+<p><strong>Interpretation of the correlation levels</strong></p>
+<p>We assume that s1 is the self signal and s2 is the correlating signal</p>
+<p>s1 = a1 * sn(t-tau)   where sn is normalized in energy
+s2 = a2 * sn(t)             &#8221;   &#8221;   &#8221;   &#8221;  &#8220;</p>
+<p>the maximum of correlation appears at time tau and its value is</p>
+<blockquote>
+<div>max (s1.correlate(s2,True)) = a1*a2</div></blockquote>
+<dl class="docutils">
+<dt>In the case of the propagation simulation we have</dt>
+<dd>s1 : the time domain UWB received waveform
+s2 : the corresponding emitted waveform s2,</dd>
+</dl>
+<p>To determine the ratio a1/a2 or a2/a1 in order to evaluate the propagation Loss L = 20 log10(a2/a1)</p>
+<p>This calculus assumes implicitely that the shape of the transmitted signal
+has not been modified during the propagation, which is a strong hypothesis.
+This calculus is then a minorant of the received energy.</p>
+<p>L = max(s1.correlate(s2,True)/s1.Energy)   with a1**2 = sum(s1**s1)*dx</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : TUsignal</p>
+<p><strong>normalized</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default True</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +184,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.TUsignal.correlate.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.TUsignal.correlate.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

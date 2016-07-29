@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -27,9 +28,6 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.antprop.slab" href="pylayers.antprop.slab.html" />
-    <link rel="prev" title="pylayers.antprop.antvsh" href="pylayers.antprop.antvsh.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,57 +83,24 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.antvsh.html" title="pylayers.antprop.antvsh"
-	    accesskey="P">Previous
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.antvsh
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.slab.html" title="pylayers.antprop.slab"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antprop...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.slab
+	    Python Module Index
 	    </span>
 	    
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
-	Up
-	<br>
-	<span class="smallrellink">
-	PyLayers
-	</span>
-	<span class="hiddenrellink">
-	PyLayers
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -147,7 +112,15 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.spharm</a></li>
+<li><a class="reference internal" href="#">pylayers.antprop.spharm</a><ul>
+<li><a class="reference internal" href="#class-vectorcoeff">Class VectorCoeff</a></li>
+<li><a class="reference internal" href="#class-sshcoeff">class SSHCoeff</a></li>
+<li><a class="reference internal" href="#class-scoeff">class SCoeff</a></li>
+<li><a class="reference internal" href="#class-vcoeff">class VCoeff</a></li>
+<li><a class="reference internal" href="#class-vshcoeff">class VSHCoeff</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -159,10 +132,230 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="pylayers-antprop-spharm">
-<h1>pylayers.antprop.spharm<a class="headerlink" href="#pylayers-antprop-spharm" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.antprop.spharm">
+<span id="pylayers-antprop-spharm"></span><h1>pylayers.antprop.spharm<a class="headerlink" href="#module-pylayers.antprop.spharm" title="Permalink to this headline">¶</a></h1>
+<p>This module handles Scalar and Vector Spherical Harmonics in PyLayers</p>
+<div class="section" id="class-vectorcoeff">
+<h2>Class VectorCoeff<a class="headerlink" href="#class-vectorcoeff" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.__init__.html#pylayers.antprop.spharm.VectorCoeff.__init__" title="pylayers.antprop.spharm.VectorCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">VectorCoeff.__init__</span></code></a>(typ[,&nbsp;fmin,&nbsp;fmax,&nbsp;...])</td>
+<td>class constructor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.inits1.html#pylayers.antprop.spharm.VectorCoeff.inits1" title="pylayers.antprop.spharm.VectorCoeff.inits1"><code class="xref py py-obj docutils literal"><span class="pre">VectorCoeff.inits1</span></code></a>(data,&nbsp;ind)</td>
+<td>init shape 1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-sshcoeff">
+<h2>class SSHCoeff<a class="headerlink" href="#class-sshcoeff" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.__init__.html#pylayers.antprop.spharm.SSHCoeff.__init__" title="pylayers.antprop.spharm.SSHCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff.__init__</span></code></a>(Cx,&nbsp;Cy,&nbsp;Cz)</td>
+<td>class constructor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.s2tos3.html#pylayers.antprop.spharm.SSHCoeff.s2tos3" title="pylayers.antprop.spharm.SSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff.s2tos3</span></code></a>([threshold])</td>
+<td>convert scalar spherical coefficients from shape 2 to shape 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.sets3.html#pylayers.antprop.spharm.SSHCoeff.sets3" title="pylayers.antprop.spharm.SSHCoeff.sets3"><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff.sets3</span></code></a>(Cx,&nbsp;Cy,&nbsp;Cz)</td>
+<td>set shape 3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-scoeff">
+<h2>class SCoeff<a class="headerlink" href="#class-scoeff" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__init__.html#pylayers.antprop.spharm.SCoeff.__init__" title="pylayers.antprop.spharm.SCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.__init__</span></code></a>([typ,&nbsp;fmin,&nbsp;fmax,&nbsp;lmax,&nbsp;...])</td>
+<td>init VCoeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__repr__.html#pylayers.antprop.spharm.SCoeff.__repr__" title="pylayers.antprop.spharm.SCoeff.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits2.html#pylayers.antprop.spharm.SCoeff.inits2" title="pylayers.antprop.spharm.SCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.inits2</span></code></a>(data,&nbsp;ind)</td>
+<td>initialize shape 2 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits3.html#pylayers.antprop.spharm.SCoeff.inits3" title="pylayers.antprop.spharm.SCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
+<td>initialize shape 3 format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete.html#pylayers.antprop.spharm.SCoeff.delete" title="pylayers.antprop.spharm.SCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.delete</span></code></a>(ind,&nbsp;typ)</td>
+<td>delete coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put.html#pylayers.antprop.spharm.SCoeff.put" title="pylayers.antprop.spharm.SCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.put</span></code></a>(typ)</td>
+<td>recover last deleted coeff</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete3.html#pylayers.antprop.spharm.SCoeff.delete3" title="pylayers.antprop.spharm.SCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.delete3</span></code></a>(ind)</td>
+<td>delete coeff.s3</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put3.html#pylayers.antprop.spharm.SCoeff.put3" title="pylayers.antprop.spharm.SCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.put3</span></code></a>(i,&nbsp;i3)</td>
+<td>function put3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.s3tos2.html#pylayers.antprop.spharm.SCoeff.s3tos2" title="pylayers.antprop.spharm.SCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.s3tos2</span></code></a>()</td>
+<td>transform shape3 to shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.plot.html#pylayers.antprop.spharm.SCoeff.plot" title="pylayers.antprop.spharm.SCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;...])</td>
+<td>plot coeff</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.show.html#pylayers.antprop.spharm.SCoeff.show" title="pylayers.antprop.spharm.SCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;...])</td>
+<td>show coeff</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-vcoeff">
+<h2>class VCoeff<a class="headerlink" href="#class-vcoeff" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__init__.html#pylayers.antprop.spharm.VCoeff.__init__" title="pylayers.antprop.spharm.VCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.__init__</span></code></a>(typ[,&nbsp;fmin,&nbsp;fmax,&nbsp;data,&nbsp;...])</td>
+<td>init VCoeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__repr__.html#pylayers.antprop.spharm.VCoeff.__repr__" title="pylayers.antprop.spharm.VCoeff.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits1.html#pylayers.antprop.spharm.VCoeff.inits1" title="pylayers.antprop.spharm.VCoeff.inits1"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.inits1</span></code></a>(data)</td>
+<td>initialize shape 1 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits2.html#pylayers.antprop.spharm.VCoeff.inits2" title="pylayers.antprop.spharm.VCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.inits2</span></code></a>(data)</td>
+<td>initialize shape 2 format</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits3.html#pylayers.antprop.spharm.VCoeff.inits3" title="pylayers.antprop.spharm.VCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
+<td>initialize shape 3 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s1tos2.html#pylayers.antprop.spharm.VCoeff.s1tos2" title="pylayers.antprop.spharm.VCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.s1tos2</span></code></a>([L2])</td>
+<td>convert shape 1 &#8211;&gt; shape 2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete.html#pylayers.antprop.spharm.VCoeff.delete" title="pylayers.antprop.spharm.VCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.delete</span></code></a>(ind,&nbsp;typ)</td>
+<td>delete coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put.html#pylayers.antprop.spharm.VCoeff.put" title="pylayers.antprop.spharm.VCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.put</span></code></a>(typ)</td>
+<td>recover last deleted coeff</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete3.html#pylayers.antprop.spharm.VCoeff.delete3" title="pylayers.antprop.spharm.VCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.delete3</span></code></a>(ind)</td>
+<td>delete coeff.s3</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put3.html#pylayers.antprop.spharm.VCoeff.put3" title="pylayers.antprop.spharm.VCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.put3</span></code></a>(i,&nbsp;i3)</td>
+<td>function put 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s3tos2.html#pylayers.antprop.spharm.VCoeff.s3tos2" title="pylayers.antprop.spharm.VCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.s3tos2</span></code></a>()</td>
+<td>transform shape3 to shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.plot.html#pylayers.antprop.spharm.VCoeff.plot" title="pylayers.antprop.spharm.VCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.show.html#pylayers.antprop.spharm.VCoeff.show" title="pylayers.antprop.spharm.VCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;...])</td>
+<td>show coeff</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-vshcoeff">
+<h2>class VSHCoeff<a class="headerlink" href="#class-vshcoeff" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__init__.html#pylayers.antprop.spharm.VSHCoeff.__init__" title="pylayers.antprop.spharm.VSHCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.__init__</span></code></a>(Br,&nbsp;Bi,&nbsp;Cr,&nbsp;Ci)</td>
+<td>Init  VSHCoeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__repr__.html#pylayers.antprop.spharm.VSHCoeff.__repr__" title="pylayers.antprop.spharm.VSHCoeff.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.plot.html#pylayers.antprop.spharm.VSHCoeff.plot" title="pylayers.antprop.spharm.VSHCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.plot</span></code></a>([typ,&nbsp;titre,&nbsp;log,&nbsp;stem,&nbsp;subp])</td>
+<td>plot coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.show.html#pylayers.antprop.spharm.VSHCoeff.show" title="pylayers.antprop.spharm.VSHCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.show</span></code></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;...])</td>
+<td>show VSH coeff</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s1tos2.html#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="pylayers.antprop.spharm.VSHCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s1tos2</span></code></a>([L2])</td>
+<td>convert shape 1 to shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3_new.html#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="pylayers.antprop.spharm.VSHCoeff.s2tos3_new"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s2tos3_new</span></code></a>(k)</td>
+<td>convert vector spherical coefficient from shape 2 to shape 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3.html#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="pylayers.antprop.spharm.VSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s2tos3</span></code></a>([threshold])</td>
+<td>convert vector spherical coefficients from shape 2 to shape 3</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s3tos2.html#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="pylayers.antprop.spharm.VSHCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s3tos2</span></code></a>()</td>
+<td>shape 3 to shape 2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.strip3.html#pylayers.antprop.spharm.VSHCoeff.strip3" title="pylayers.antprop.spharm.VSHCoeff.strip3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.strip3</span></code></a>()</td>
+<td>Thresholded coefficient conversion</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.ens3</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.drag3.html#pylayers.antprop.spharm.VSHCoeff.drag3" title="pylayers.antprop.spharm.VSHCoeff.drag3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.drag3</span></code></a>(Emin)</td>
+<td>thresholded coefficient conversion</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.put3.html#pylayers.antprop.spharm.VSHCoeff.put3" title="pylayers.antprop.spharm.VSHCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.put3</span></code></a>(i,&nbsp;i3)</td>
+<td>put 3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.indexssh.html#pylayers.antprop.spharm.indexssh" title="pylayers.antprop.spharm.indexssh"><code class="xref py py-obj docutils literal"><span class="pre">indexssh</span></code></a>(L[,&nbsp;mirror])</td>
+<td>create [l,m] indexation from Lmax</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.indexvsh.html#pylayers.antprop.spharm.indexvsh" title="pylayers.antprop.spharm.indexvsh"><code class="xref py py-obj docutils literal"><span class="pre">indexvsh</span></code></a>(L)</td>
+<td>calculate index of vsh</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.index_vsh.html#pylayers.antprop.spharm.index_vsh" title="pylayers.antprop.spharm.index_vsh"><code class="xref py py-obj docutils literal"><span class="pre">index_vsh</span></code></a>(L,&nbsp;M)</td>
+<td>vector spherical harmonics indexing</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre3.html#pylayers.antprop.spharm.AFLegendre3" title="pylayers.antprop.spharm.AFLegendre3"><code class="xref py py-obj docutils literal"><span class="pre">AFLegendre3</span></code></a>(L,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1l and Pmp1l</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre2.html#pylayers.antprop.spharm.AFLegendre2" title="pylayers.antprop.spharm.AFLegendre2"><code class="xref py py-obj docutils literal"><span class="pre">AFLegendre2</span></code></a>(L,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1l and Pmp1l</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.AFLegendre.html#pylayers.antprop.spharm.AFLegendre" title="pylayers.antprop.spharm.AFLegendre"><code class="xref py py-obj docutils literal"><span class="pre">AFLegendre</span></code></a>(N,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1n and Pmp1n</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VW2.html#pylayers.antprop.spharm.VW2" title="pylayers.antprop.spharm.VW2"><code class="xref py py-obj docutils literal"><span class="pre">VW2</span></code></a>(l,&nbsp;m,&nbsp;x,&nbsp;phi,&nbsp;Pmm1l,&nbsp;Pmp1l)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VW.html#pylayers.antprop.spharm.VW" title="pylayers.antprop.spharm.VW"><code class="xref py py-obj docutils literal"><span class="pre">VW</span></code></a>(l,&nbsp;m,&nbsp;theta,&nbsp;phi)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VW0.html#pylayers.antprop.spharm.VW0" title="pylayers.antprop.spharm.VW0"><code class="xref py py-obj docutils literal"><span class="pre">VW0</span></code></a>(n,&nbsp;m,&nbsp;x,&nbsp;phi,&nbsp;Pmm1n,&nbsp;Pmp1n)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.plotVW.html#pylayers.antprop.spharm.plotVW" title="pylayers.antprop.spharm.plotVW"><code class="xref py py-obj docutils literal"><span class="pre">plotVW</span></code></a>(l,&nbsp;m,&nbsp;theta,&nbsp;phi[,&nbsp;sf])</td>
+<td>plot VSH transform vsh basis in 3D plot</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -176,23 +369,18 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.antprop.spharm.txt"
+    <a href="../_sources/modules/pylayers.antprop.spharm.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.antvsh.html">
+      <a href="../py-modindex.html">
         Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.slab.html">
-        Next
       </a>  
     </div>
     

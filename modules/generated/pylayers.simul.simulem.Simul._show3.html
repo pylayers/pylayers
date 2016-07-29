@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,37 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-simul-simulem-simul-show3">
 <h1>pylayers.simul.simulem.Simul._show3<a class="headerlink" href="#pylayers-simul-simulem-simul-show3" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.simulem.Simul._show3">
+<code class="descclassname">Simul.</code><code class="descname">_show3</code><span class="sig-paren">(</span><em>rays=[]</em>, <em>newfig=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/simulem.html#Simul._show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simulem.Simul._show3" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>display of the simulation configuration</dt>
+<dd>using Mayavi</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rays: Ray3d object :</strong></p>
+<blockquote>
+<div><p>display the rays of the simulation</p>
+</div></blockquote>
+<p><strong>newfig</strong> : boolean (default</p>
+<p class="last"><strong>kwargs of Rays.show3()</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../../index.html#module-pylayers.gis.layout" title="pylayers.gis.layout"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout</span></code></a>, <code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.antenna</span></code>, <a class="reference internal" href="../pylayers.antprop.rays.html#module-pylayers.antprop.rays" title="pylayers.antprop.rays"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.rays</span></code></a></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +168,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.simul.simulem.Simul._show3.txt"
+    <a href="../../_sources/modules/generated/pylayers.simul.simulem.Simul._show3.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

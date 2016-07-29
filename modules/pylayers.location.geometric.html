@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -114,7 +128,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-package">
 <h1>pylayers.location.geometric package<a class="headerlink" href="#pylayers-location-geometric-package" title="Permalink to this headline">¶</a></h1>
@@ -124,8 +138,43 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pylayers.location.geometric.constraints.html">pylayers.location.geometric.constraints package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pylayers.location.geometric.constraints.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.cla.html">pylayers.location.geometric.constraints.cla</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.constraint.html">pylayers.location.geometric.constraints.constraint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.cla.html">pylayers.location.geometric.constraints.cla</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.location.geometric.constraints.cla.html#constraint-layer-array-cla-class">Constraint Layer Array (CLA) Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html">pylayers.location.geometric.constraints.cla.CLA.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.__repr__.html">pylayers.location.geometric.constraints.cla.CLA.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.info.html">pylayers.location.geometric.constraints.cla.CLA.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.update.html">pylayers.location.geometric.constraints.cla.CLA.update</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.compute.html">pylayers.location.geometric.constraints.cla.CLA.compute</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.rescale.html">pylayers.location.geometric.constraints.cla.CLA.rescale</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.annulus_bound.html">pylayers.location.geometric.constraints.cla.CLA.annulus_bound</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.append.html">pylayers.location.geometric.constraints.cla.CLA.append</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.remove.html">pylayers.location.geometric.constraints.cla.CLA.remove</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.setvcw.html">pylayers.location.geometric.constraints.cla.CLA.setvcw</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.merge2.html">pylayers.location.geometric.constraints.cla.CLA.merge2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.valid_v.html">pylayers.location.geometric.constraints.cla.CLA.valid_v</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.refine.html">pylayers.location.geometric.constraints.cla.CLA.refine</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.show3.html">pylayers.location.geometric.constraints.cla.CLA.show3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.prob.html">pylayers.location.geometric.constraints.cla.CLA.prob</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect.html">pylayers.location.geometric.constraints.cla.CLA.gapdetect</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect2.html">pylayers.location.geometric.constraints.cla.CLA.gapdetect2</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.min_dist.html">pylayers.location.geometric.constraints.cla.CLA.min_dist</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.estpos.html">pylayers.location.geometric.constraints.cla.CLA.estpos</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.estpos2.html">pylayers.location.geometric.constraints.cla.CLA.estpos2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.constraint.html">pylayers.location.geometric.constraints.constraint</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pylayers.location.geometric.constraints.constraint.html#constraint-class">Constraint Class</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__init__.html">pylayers.location.geometric.constraints.constraint.Constraint.__init__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.__repr__.html">pylayers.location.geometric.constraints.constraint.Constraint.__repr__</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.updc.html">pylayers.location.geometric.constraints.constraint.Constraint.updc</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.info.html">pylayers.location.geometric.constraints.constraint.Constraint.info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="generated/pylayers.location.geometric.constraints.constraint.Constraint.show3.html">pylayers.location.geometric.constraints.constraint.Constraint.show3</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.exclude.html">pylayers.location.geometric.constraints.exclude</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.rss.html">pylayers.location.geometric.constraints.rss</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pylayers.location.geometric.constraints.tdoa.html">pylayers.location.geometric.constraints.tdoa</a></li>
@@ -151,8 +200,6 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
 </div>
 </div>
 </div>
@@ -168,15 +215,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.location.geometric.txt"
+    <a href="../_sources/modules/pylayers.location.geometric.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

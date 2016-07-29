@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,81 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-slab-slabdb-add">
 <h1>pylayers.antprop.slab.SlabDB.add<a class="headerlink" href="#pylayers-antprop-slab-slabdb-add" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.slab.SlabDB.add">
+<code class="descclassname">SlabDB.</code><code class="descname">add</code><span class="sig-paren">(</span><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a slab in dB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<p><strong>lmat</strong> : list of mat name</p>
+<p><strong>lthick</strong> : list ot float</p>
+<blockquote class="last">
+<div><p>list of layer thickness in meters</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Examples from the paper:</p>
+<p>&#8220;Reflection ant Transmission Properties of Building Materials in D-Band
+for Modeling Future mm-Wave Communication Systems &#8221;
+Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz
+EUCAP 2010</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; sl.mat.add(name=&#39;ConcreteJc&#39;,cval=3.5,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
+&gt;&gt;&gt; sl.mat.add(name=&#39;GlassJc&#39;,cval=2.55,alpha_cmm1=2.4,fGHz=120,typ=&#39;THz&#39;)
+&gt;&gt;&gt; sl.add(&#39;ConcreteJc&#39;,[&#39;ConcreteJc&#39;],[0.049])
+&gt;&gt;&gt; sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[
+    0.0029,0.0102,0.0029])
+&gt;&gt;&gt; theta = np.linspace(20,60,100)*np.pi/180
+&gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].ev(120,theta)
+&gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(120,theta)
+&gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])
+&gt;&gt;&gt; freq = np.linspace(110,135,50)
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(freq,theta)
+&gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].pcolor(dB=True)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1.py">Source code</a>)</p>
+<p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">&#8220;[Kiani2007] Glass Characterization for Designing
+Frequency Selective Surfaces to Improve Transmission through Energy saving
+glass windows  Kiani 2007&#8221;</a>
+The surface impedance is , the thicknesss is </p>
+<p><a class="reference external" href="http://www.pilkington.com/spectrum2/default.aspx?country_code=FR">Pilkington Spectrum OnLine applet</a></p>
+<p><a class="reference external" href="http://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=530536&amp;fileOId=624944">Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz</a></p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+&gt;&gt;&gt; sl.mat.add(name=&#39;CoatingPilkington&#39;,cval=1,sigma=2.5e6,typ=&#39;epsr&#39;)
+&gt;&gt;&gt; sl.mat.add(name=&#39;GlassPilkington&#39;,cval = 6.9,sigma = 5e-4,typ=&#39;epsr&#39;)
+&gt;&gt;&gt; sl.add(&#39;Optitherm382&#39;,[&#39;CoatingPilkington&#39;,
+    &#39;GlassPilkington&#39;],[100e-9,0.00382])
+&gt;&gt;&gt; fGHz  = np.linspace(0.9,2.2,50)
+&gt;&gt;&gt; theta = np.linspace(0,np.pi/2,100)
+&gt;&gt;&gt; sl[&#39;Optitherm382&#39;].ev(fGHz,theta)
+&gt;&gt;&gt; sl[&#39;Optitherm382&#39;].pcolor(dB=True)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.py">Source code</a>)</p>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +212,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.slab.SlabDB.add.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.slab.SlabDB.add.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

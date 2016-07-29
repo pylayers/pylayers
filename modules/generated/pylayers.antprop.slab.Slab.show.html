@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,31 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-slab-slab-show">
 <h1>pylayers.antprop.slab.Slab.show<a class="headerlink" href="#pylayers-antprop-slab-slab-show" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.slab.Slab.show">
+<code class="descclassname">Slab.</code><code class="descname">show</code><span class="sig-paren">(</span><em>fGHz=2.4</em>, <em>theta=array([ 0.</em>, <em>0.01</em>, <em>0.02</em>, <em>0.03</em>, <em>0.04</em>, <em>0.05</em>, <em>0.06</em>, <em>0.07</em>, <em>0.08</em>, <em>0.09</em>, <em>0.1</em>, <em>0.11</em>, <em>0.12</em>, <em>0.13</em>, <em>0.14</em>, <em>0.15</em>, <em>0.16</em>, <em>0.17</em>, <em>0.18</em>, <em>0.19</em>, <em>0.2</em>, <em>0.21</em>, <em>0.22</em>, <em>0.23</em>, <em>0.24</em>, <em>0.25</em>, <em>0.26</em>, <em>0.27</em>, <em>0.28</em>, <em>0.29</em>, <em>0.3</em>, <em>0.31</em>, <em>0.32</em>, <em>0.33</em>, <em>0.34</em>, <em>0.35</em>, <em>0.36</em>, <em>0.37</em>, <em>0.38</em>, <em>0.39</em>, <em>0.4</em>, <em>0.41</em>, <em>0.42</em>, <em>0.43</em>, <em>0.44</em>, <em>0.45</em>, <em>0.46</em>, <em>0.47</em>, <em>0.48</em>, <em>0.49</em>, <em>0.5</em>, <em>0.51</em>, <em>0.52</em>, <em>0.53</em>, <em>0.54</em>, <em>0.55</em>, <em>0.56</em>, <em>0.57</em>, <em>0.58</em>, <em>0.59</em>, <em>0.6</em>, <em>0.61</em>, <em>0.62</em>, <em>0.63</em>, <em>0.64</em>, <em>0.65</em>, <em>0.66</em>, <em>0.67</em>, <em>0.68</em>, <em>0.69</em>, <em>0.7</em>, <em>0.71</em>, <em>0.72</em>, <em>0.73</em>, <em>0.74</em>, <em>0.75</em>, <em>0.76</em>, <em>0.77</em>, <em>0.78</em>, <em>0.79</em>, <em>0.8</em>, <em>0.81</em>, <em>0.82</em>, <em>0.83</em>, <em>0.84</em>, <em>0.85</em>, <em>0.86</em>, <em>0.87</em>, <em>0.88</em>, <em>0.89</em>, <em>0.9</em>, <em>0.91</em>, <em>0.92</em>, <em>0.93</em>, <em>0.94</em>, <em>0.95</em>, <em>0.96</em>, <em>0.97</em>, <em>0.98</em>, <em>0.99</em>, <em>1.</em>, <em>1.01</em>, <em>1.02</em>, <em>1.03</em>, <em>1.04</em>, <em>1.05</em>, <em>1.06</em>, <em>1.07</em>, <em>1.08</em>, <em>1.09</em>, <em>1.1</em>, <em>1.11</em>, <em>1.12</em>, <em>1.13</em>, <em>1.14</em>, <em>1.15</em>, <em>1.16</em>, <em>1.17</em>, <em>1.18</em>, <em>1.19</em>, <em>1.2</em>, <em>1.21</em>, <em>1.22</em>, <em>1.23</em>, <em>1.24</em>, <em>1.25</em>, <em>1.26</em>, <em>1.27</em>, <em>1.28</em>, <em>1.29</em>, <em>1.3</em>, <em>1.31</em>, <em>1.32</em>, <em>1.33</em>, <em>1.34</em>, <em>1.35</em>, <em>1.36</em>, <em>1.37</em>, <em>1.38</em>, <em>1.39</em>, <em>1.4</em>, <em>1.41</em>, <em>1.42</em>, <em>1.43</em>, <em>1.44</em>, <em>1.45</em>, <em>1.46</em>, <em>1.47</em>, <em>1.48</em>, <em>1.49</em>, <em>1.5</em>, <em>1.51</em>, <em>1.52</em>, <em>1.53</em>, <em>1.54</em>, <em>1.55</em>, <em>1.56</em>, <em>1.57])</em>, <em>dtype=&lt;type 'numpy.float64'&gt;</em>, <em>dB=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#Slab.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show slab Reflection and Transmission coefficient</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : float</p>
+<p><strong>theta</strong> : np.array</p>
+<p><strong>dtype :</strong></p>
+<p><strong>display</strong> : string</p>
+<p><strong>{&#8216;modulus&#8217;}</strong></p>
+<p><strong>dB</strong> : boolean</p>
+<p class="last"><strong>False</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +162,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.slab.Slab.show.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.slab.Slab.show.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

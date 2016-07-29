@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,51 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-channel-tchannel-totime">
 <h1>pylayers.antprop.channel.Tchannel.totime<a class="headerlink" href="#pylayers-antprop-channel-tchannel-totime" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.totime">
+<code class="descclassname">Tchannel.</code><code class="descname">totime</code><span class="sig-paren">(</span><em>Nz=1</em>, <em>ffts=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.totime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.totime" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform to TUDchannel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>Number of zeros for zero padding</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>ffts</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">nt</span><dd><p class="first last">fftshift indicator (default 0 )</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.ift</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; #from pylayers.simul.link import *
+&gt;&gt;&gt; #L = DLink(verbose=False)
+&gt;&gt;&gt; #aktk = L.eval()
+&gt;&gt;&gt; #L.H.cut()
+&gt;&gt;&gt; #T1 = L.H.totime()
+&gt;&gt;&gt; #f,a = T1.plot(typ=&#39;v&#39;)
+&gt;&gt;&gt; #L.H.minphas()
+&gt;&gt;&gt; #T2 = L.H.totime()
+&gt;&gt;&gt; #f,a = T2.plot(typ=&#39;v&#39;)
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +182,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.totime.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.totime.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

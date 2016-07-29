@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,56 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-gis-osmparser-osmparse">
 <h1>pylayers.gis.osmparser.osmparse<a class="headerlink" href="#pylayers-gis-osmparser-osmparse" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.gis.osmparser.osmparse">
+<code class="descclassname">pylayers.gis.osmparser.</code><code class="descname">osmparse</code><span class="sig-paren">(</span><em>_filename</em>, <em>typ='floorplan'</em>, <em>verbose=False</em>, <em>c=True</em>, <em>n=True</em>, <em>w=True</em>, <em>r=True</em>, <em>cart=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/osmparser.html#osmparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.osmparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse osm files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>floorplan | building</p>
+</div></blockquote>
+<p><strong>verbose</strong> : boolean</p>
+<blockquote>
+<div><p>default : False</p>
+</div></blockquote>
+<p><strong>c</strong> : boolean</p>
+<blockquote>
+<div><p>read coords</p>
+</div></blockquote>
+<p><strong>n</strong> : boolean</p>
+<blockquote>
+<div><p>read nodes</p>
+</div></blockquote>
+<p><strong>w</strong> : boolean</p>
+<blockquote>
+<div><p>read  ways</p>
+</div></blockquote>
+<p><strong>r</strong> : booleanif c:</p>
+<blockquote>
+<div><p>coords = Coords()
+coords.clean()
+read relations</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coords</strong> : Coords</p>
+<p><strong>nodes</strong> : Nodes</p>
+<p><strong>ways</strong> : Ways</p>
+<p class="last"><strong>relations</strong> : Relations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +187,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.gis.osmparser.osmparse.txt"
+    <a href="../../_sources/modules/generated/pylayers.gis.osmparser.osmparse.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

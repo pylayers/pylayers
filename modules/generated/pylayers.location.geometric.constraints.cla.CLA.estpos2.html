@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,43 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-location-geometric-constraints-cla-cla-estpos2">
 <h1>pylayers.location.geometric.constraints.cla.CLA.estpos2<a class="headerlink" href="#pylayers-location-geometric-constraints-cla-cla-estpos2" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.estpos2">
+<code class="descclassname">CLA.</code><code class="descname">estpos2</code><span class="sig-paren">(</span><em>l=-1</em>, <em>amb=False</em>, <em>HT=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/location/geometric/constraints/cla.html#CLA.estpos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.estpos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position estimation</p>
+<p>estimate position from the enclosed or/and ambibuous boxes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : Layer of the estimation. If -1 estimation is made on the highest available layer</p>
+<p><strong>amb</strong> : Use ambiguous boxes (if available) to perform the position estimation. default = False</p>
+<p><strong>HT</strong> : boolean</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span><dd><p class="first last">in estpos2 method</p>
+</dd>
+</dl>
+<p>False : no HT methos is applied</p>
+<p>Hybrid positioning based on hypothesis thesting
+N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+A Hybrid Positioning Method Based on Hypothesis Testing
+,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing but fills self.pe with an array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +174,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.estpos2.txt"
+    <a href="../../_sources/modules/generated/pylayers.location.geometric.constraints.cla.CLA.estpos2.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

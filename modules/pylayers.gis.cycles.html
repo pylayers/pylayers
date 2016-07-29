@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -27,9 +28,6 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.gis.selectl" href="pylayers.gis.selectl.html" />
-    <link rel="prev" title="pylayers.antprop.loss" href="pylayers.antprop.loss.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -45,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -85,57 +83,24 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.loss.html" title="pylayers.antprop.loss"
-	    accesskey="P">Previous
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.loss
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.gis.selectl.html" title="pylayers.gis.selectl"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.gis.sel...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.gis.selectl
+	    Python Module Index
 	    </span>
 	    
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
-	Up
-	<br>
-	<span class="smallrellink">
-	PyLayers
-	</span>
-	<span class="hiddenrellink">
-	PyLayers
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -147,7 +112,11 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.gis.cycles</a></li>
+<li><a class="reference internal" href="#">pylayers.gis.cycles</a><ul>
+<li><a class="reference internal" href="#cycles-class">Cycles Class</a></li>
+<li><a class="reference internal" href="#cycle-class">Cycle Class</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -159,10 +128,89 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="pylayers-gis-cycles">
-<h1>pylayers.gis.cycles<a class="headerlink" href="#pylayers-gis-cycles" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.gis.cycles">
+<span id="pylayers-gis-cycles"></span><h1>pylayers.gis.cycles<a class="headerlink" href="#module-pylayers.gis.cycles" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cycles-class">
+<h2>Cycles Class<a class="headerlink" href="#cycles-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.html#pylayers.gis.cycles.Cycles" title="pylayers.gis.cycles.Cycles"><code class="xref py py-obj docutils literal"><span class="pre">Cycles</span></code></a>()</td>
+<td>Graph of Cycles</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.__init__.html#pylayers.gis.cycles.Cycles.__init__" title="pylayers.gis.cycles.Cycles.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Cycles.__init__</span></code></a>()</td>
+<td>graph of cycle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.__repr__.html#pylayers.gis.cycles.Cycles.__repr__" title="pylayers.gis.cycles.Cycles.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Cycles.__repr__</span></code></a>()</td>
+<td>object representation</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Cycles.info</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.inclusion.html#pylayers.gis.cycles.Cycles.inclusion" title="pylayers.gis.cycles.Cycles.inclusion"><code class="xref py py-obj docutils literal"><span class="pre">Cycles.inclusion</span></code></a>([full])</td>
+<td>Inform the inclusion relations between cycles</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycles.decompose.html#pylayers.gis.cycles.Cycles.decompose" title="pylayers.gis.cycles.Cycles.decompose"><code class="xref py py-obj docutils literal"><span class="pre">Cycles.decompose</span></code></a>()</td>
+<td>recursive function to transform the cycle basis</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cycle-class">
+<h2>Cycle Class<a class="headerlink" href="#cycle-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.__init__.html#pylayers.gis.cycles.Cycle.__init__" title="pylayers.gis.cycles.Cycle.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.__init__</span></code></a>(G[,&nbsp;lnode])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.__add__.html#pylayers.gis.cycles.Cycle.__add__" title="pylayers.gis.cycles.Cycle.__add__"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.__add__</span></code></a>(cy)</td>
+<td>addition of 2 disjoint cycles is not a cycle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.update.html#pylayers.gis.cycles.Cycle.update" title="pylayers.gis.cycles.Cycle.update"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.update</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.__repr__.html#pylayers.gis.cycles.Cycle.__repr__" title="pylayers.gis.cycles.Cycle.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.__repr__</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.info.html#pylayers.gis.cycles.Cycle.info" title="pylayers.gis.cycles.Cycle.info"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.info</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.flip.html#pylayers.gis.cycles.Cycle.flip" title="pylayers.gis.cycles.Cycle.flip"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.flip</span></code></a>()</td>
+<td>flip the Cycle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.inclusion.html#pylayers.gis.cycles.Cycle.inclusion" title="pylayers.gis.cycles.Cycle.inclusion"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.inclusion</span></code></a>(Cy)</td>
+<td>Return True if self includes Cy</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.simplify.html#pylayers.gis.cycles.Cycle.simplify" title="pylayers.gis.cycles.Cycle.simplify"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.simplify</span></code></a>(L)</td>
+<td>simplify cycles</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.intersect.html#pylayers.gis.cycles.Cycle.intersect" title="pylayers.gis.cycles.Cycle.intersect"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.intersect</span></code></a>(Cy)</td>
+<td>Find intersection with an other cycle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.reverberation.html#pylayers.gis.cycles.Cycle.reverberation" title="pylayers.gis.cycles.Cycle.reverberation"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.reverberation</span></code></a>(fGHz,&nbsp;L)</td>
+<td>calculate reverberation time of the cycle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.split.html#pylayers.gis.cycles.Cycle.split" title="pylayers.gis.cycles.Cycle.split"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.split</span></code></a>(cyin)</td>
+<td>split cycle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.corrcy.html#pylayers.gis.cycles.Cycle.corrcy" title="pylayers.gis.cycles.Cycle.corrcy"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.corrcy</span></code></a>(Cy[,&nbsp;flip])</td>
+<td>cyclic matching correlation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.cycles.Cycle.show.html#pylayers.gis.cycles.Cycle.show" title="pylayers.gis.cycles.Cycle.show"><code class="xref py py-obj docutils literal"><span class="pre">Cycle.show</span></code></a>(**kwargs)</td>
+<td>show cycle</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -176,23 +224,18 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/modules/pylayers.gis.cycles.txt"
+    <a href="../_sources/modules/pylayers.gis.cycles.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.loss.html">
+      <a href="../py-modindex.html">
         Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.gis.selectl.html">
-        Next
       </a>  
     </div>
     

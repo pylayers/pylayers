@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,51 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-bsignal-fusignal-ift">
 <h1>pylayers.signal.bsignal.FUsignal.ift<a class="headerlink" href="#pylayers-signal-bsignal-fusignal-ift" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.ift">
+<code class="descclassname">FUsignal.</code><code class="descname">ift</code><span class="sig-paren">(</span><em>Nz=1</em>, <em>ffts=0</em>, <em>beta=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUsignal.ift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.ift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse Fourier Transform - returns the associated TUsignal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : Number of zeros (-1) No forcing</p>
+<p><strong>ffts</strong> : 0 (no fftshift 1:fftshift)</p>
+<p><strong>beta</strong> : kaiser window shape</p>
+<blockquote>
+<div><p>0   : rectangular 
+5   : similar to a Hamming
+6   : similar to a Hanning
+8.6 : similar to a blackman</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">uh :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.ifft.html#pylayers.signal.bsignal.FHsignal.ifft" title="pylayers.signal.bsignal.FHsignal.ifft"><code class="xref py py-obj docutils literal"><span class="pre">FHsignal.ifft</span></code></a>, <a class="reference internal" href="pylayers.signal.bsignal.FUsignal.symH.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symH</span></code></a>, <a class="reference internal" href="pylayers.signal.bsignal.FUsignal.symHz.html#pylayers.signal.bsignal.FUsignal.symHz" title="pylayers.signal.bsignal.FUsignal.symHz"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symHz</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>1 - Force Hermitian symmetry &#8211;&gt; FHsignal with or without zero padding
+2 - Inverse Fourier transform with or without fftshift</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.bsignal import *
+&gt;&gt;&gt; e = TUsignal()
+&gt;&gt;&gt; e.EnImpulse()
+&gt;&gt;&gt; E  = e.fft()
+&gt;&gt;&gt; EU = E.unrex()
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +182,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.ift.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.ift.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

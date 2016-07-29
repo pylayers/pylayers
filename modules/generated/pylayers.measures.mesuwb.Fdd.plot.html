@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,56 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-measures-mesuwb-fdd-plot">
 <h1>pylayers.measures.mesuwb.Fdd.plot<a class="headerlink" href="#pylayers-measures-mesuwb-fdd-plot" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.mesuwb.Fdd.plot">
+<code class="descclassname">Fdd.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>typ='moddB'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/measures/mesuwb.html#Fdd.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.Fdd.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot Fdd</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;moddB&#8217; : modulus in dB ,
+&#8216;mod&#8217;, : modulus in linear scale,
+&#8216;ang&#8217;   : unwraped phase in radians</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.project import *
+&gt;&gt;&gt; from pylayers.measures.mesuwb import *
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; M  = UWBMeasure(1)
+&gt;&gt;&gt; F  = M.fdd
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; F.plot(&#39;moddB&#39;)
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; F.plot(&#39;mod&#39;)
+&gt;&gt;&gt; F.plot(&#39;ang&#39;)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1.py">Source code</a>)</p>
+<div class="figure" id="id1">
+<img alt="../../_images/pylayers-measures-mesuwb-Fdd-plot-1_00.png" src="../../_images/pylayers-measures-mesuwb-Fdd-plot-1_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_00.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id2">
+<img alt="../../_images/pylayers-measures-mesuwb-Fdd-plot-1_01.png" src="../../_images/pylayers-measures-mesuwb-Fdd-plot-1_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_01.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id3">
+<img alt="../../_images/pylayers-measures-mesuwb-Fdd-plot-1_02.png" src="../../_images/pylayers-measures-mesuwb-Fdd-plot-1_02.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_02.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_02.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-measures-mesuwb-Fdd-plot-1_02.pdf">pdf</a>)</span></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +187,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.measures.mesuwb.Fdd.plot.txt"
+    <a href="../../_sources/modules/generated/pylayers.measures.mesuwb.Fdd.plot.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,52 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-pyutil-sqrte">
 <h1>pylayers.util.pyutil.sqrte<a class="headerlink" href="#pylayers-util-pyutil-sqrte" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.pyutil.sqrte">
+<code class="descclassname">pylayers.util.pyutil.</code><code class="descname">sqrte</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/pyutil.html#sqrte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pyutil.sqrte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evanescent SQRT for waves problems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>z</strong> : np.array</p>
+<blockquote>
+<div><p>array of complex numbers</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>y</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>for z = a-j*b, y is defined as follows:</dt>
+<dd><blockquote class="first">
+<div>[ sqrt(a-j*b),  if b~=0</div></blockquote>
+<dl class="last docutils">
+<dt>y = [ sqrt(a),      if b==0 and a&gt;=0</dt>
+<dd>[ -j*sqrt(<a href="#id1"><span class="problematic" id="id2">|a|</span></a>), if b==0 and a&lt;0   (i.e., the negative of what the ordinary SQRT gives)</dd>
+</dl>
+</dd>
+<dt>this definition is necessary to produce exponentially-decaying evanescent waves </dt>
+<dd>(under the convention exp(j*omega*t) for harmonic time dependence)</dd>
+</dl>
+<p>it is equivalent to the operation y = conj(sqrt(conj(a-j*b))), 
+but it fixes a bug in the ordinary SQRT in MATLAB arising whenever the real part is negative 
+and the imaginary part is an array with some zero elements. For example, compare the outputs:
+conj(sqrt(conj(-1 - array([0,1])*1j))) =      0 + 1.0000i,  
+sqrte(-1 - [0; 1]*j) =      0 - 1.0000i 0.4551 - 1.0987i                            0.4551 - 1.0987i
+but</p>
+<blockquote>
+<div>conj(sqrt(conj(-1 + 0*1j))) = 0 - 1.000i,               sqrte(-1 + 0*j) = 0 - 1.000i</div></blockquote>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +183,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.pyutil.sqrte.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.pyutil.sqrte.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

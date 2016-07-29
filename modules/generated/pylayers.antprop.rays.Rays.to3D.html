@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,43 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-rays-rays-to3d">
 <h1>pylayers.antprop.rays.Rays.to3D<a class="headerlink" href="#pylayers-antprop-rays-rays-to3d" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.to3D">
+<code class="descclassname">Rays.</code><code class="descname">to3D</code><span class="sig-paren">(</span><em>L</em>, <em>H=3</em>, <em>N=1</em>, <em>rmoutceilR=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/rays.html#Rays.to3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.to3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform 2D ray to 3D ray</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout object</p>
+<p><strong>H</strong> : float</p>
+<blockquote>
+<div><p>ceil height (default 3m)
+if H=0 only floor reflection is calculated (outdoor case)
+if H=-1 floor and ceil reflection are inhibited (2D test case)</p>
+</div></blockquote>
+<p><strong>N</strong> : int</p>
+<blockquote>
+<div><p>number of mirror reflexions</p>
+</div></blockquote>
+<p><strong>rmoutceilR ; bool</strong></p>
+<blockquote>
+<div><p>Remove Ceil reflexions in cycles (Gt nodes) 
+with indoor=False attribute</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>r3d</strong> : Rays</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +174,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.rays.Rays.to3D.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.rays.Rays.to3D.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +87,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +124,44 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-util-geomutil-plot-line">
 <h1>pylayers.util.geomutil.plot_line<a class="headerlink" href="#pylayers-util-geomutil-plot-line" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.geomutil.plot_line">
+<code class="descclassname">pylayers.util.geomutil.</code><code class="descname">plot_line</code><span class="sig-paren">(</span><em>ax</em>, <em>ob</em>, <em>color='#999999'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#plot_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.plot_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ax</strong> : matplotlib axes</p>
+<p><strong>ob</strong> : shapely object</p>
+<p><strong>color</strong> : string</p>
+<blockquote class="last">
+<div><p>default &#8216;#999999&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>color = v_color(ob)</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="http://pypi.python.org/pypi/Shapely">Shapely</a></p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.geomutil import *
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; seg = shg.LineString([(0,0),(1,1)])
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; ax  = fig.gca()
+&gt;&gt;&gt; plot_line(ax,seg)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +175,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 29, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.util.geomutil.plot_line.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.geomutil.plot_line.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
