@@ -95,7 +95,6 @@ import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
 import pylayers.antprop.antenna as ant
-from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 

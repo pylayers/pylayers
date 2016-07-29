@@ -17,6 +17,8 @@ The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v
 
 :math:`\mathbf{u} \times \mathbf{v} = \alpha \mathbf{z} \;\; \textrm{with} \;\;\alpha > 0`
 
+.. autosummary::
+    :toctree:
 
 """
 import numpy as np
@@ -656,6 +658,6 @@ class Cone(PyLayers):
 
         return(fig, ax)
         
-        if __name__ == '__main__':
-            plt.ion()
-            doctest.    
+if __name__ == '__main__':
+    plt.ion()
+    doctest.testmod()

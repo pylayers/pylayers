@@ -1,5 +1,4 @@
 # -*- coding:Utf-8 -*-
-
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -22,8 +21,17 @@ class CDF(object):
     def __init__(self, ld, filename):
         """
         cdf = CDF(ld)
+        
+        Parameters
+        ----------
+        
+        ld : list 
+            list of dictionnary
+        filename : string
 
-        ld is a list of dictionnary
+
+        Notes
+        -----
 
         d0 = ld[0]
 
@@ -37,11 +45,12 @@ class CDF(object):
         d0['linewidth']   : linewidth
 
         """
+        
         self.ld = ld
         self.parmsh = {}
         self.parmsh['file'] = True
         self.filename = filename
-        """
+        
         plt.rcParams['xtick.labelsize'] ='x-large'
         plt.rcParams['ytick.labelsize'] ='x-large'
         plt.rcParams['axes.labelsize']  ='large'
@@ -51,7 +60,7 @@ class CDF(object):
         plt.rcParams['font.size']       =20
         plt.rcParams['grid.linewidth']  =3.5
         plt.rcParams['xtick.major.pad'] =20
-        """
+       
         self.cdf = []
         for d in self.ld:
             bound = d['bound']

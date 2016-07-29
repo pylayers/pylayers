@@ -744,16 +744,22 @@ class Polygon(PyLayers,shg.Polygon):
         Returns
         -------
 
-        V    : Volume
-        A    : Area
-        eta  : absorption coefficient
-        tau_sab  :
-        tau_eyr  :
+        V    : float 
+            Volume
+        A    : float 
+            Area
+        eta  : float 
+            absorption coefficient
+        tau_sab  : float 
+            Sabine delay
+        tau_eyr  : float
+            Eyring delay
 
         
-        $$\tau_g = \frac{4V}{c\eta A}$$
+        :math:`\tau_g = \frac{4V}{c\eta A}`
+
         Sabine's Model
-        where $\eta$ is the absorbtion coefficient
+        where :math:`\eta` is the absorbtion coefficient
 
         """
         # get the sequence of segments 

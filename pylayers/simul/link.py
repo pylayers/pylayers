@@ -220,25 +220,23 @@ class SLink(Link):
 class DLink(Link):
     """ Deterministic Link Class
 
-
-    """
-
-    def __init__(self, **kwargs):
-        """ deterministic link evaluation
-
-        Parameters
-        ----------
+    Attributes
+    ----------
 
         L : Layout
             Layout to be used
-        a : np.ndarray (3,)
-            position of a device dev_a
-        b : np.ndarray (3,)
-            position of a device dev_b
         Aa : Antenna
             Antenna of device dev_a
         Ab : Antenna
             Antenna of device dev_b
+        a : np.ndarray (3,)
+            position of a device dev_a
+        b : np.ndarray (3,)
+            position of a device dev_b
+        ca : int 
+            cycle a number
+        cb : int 
+            cycle b number
         Ta : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
         Tb : np.ndarray (3,3)
@@ -250,6 +248,12 @@ class DLink(Link):
         save_idx : int
             number to identify the h5 file generated
 
+    """
+
+    def __init__(self, **kwargs):
+        """ deterministic link evaluation
+
+        
         Advanced (change only if you really know what you do !)
 
         save_opt : list (['sig','ray','Ct','H'])

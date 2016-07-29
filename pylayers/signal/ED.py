@@ -141,6 +141,7 @@ class ED(PyLayers):
 
     def update(self):
         """ updating 
+        
         """
         #
         # calculates ED moments, order and scale

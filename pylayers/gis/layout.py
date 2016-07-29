@@ -269,7 +269,7 @@ from pylayers.util import cone
 import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
-from pylayers.gis import cycles as cycl # new version of cycles
+#from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
 from pylayers.gui.editor_select import SelectL2
 
@@ -9484,15 +9484,14 @@ class Layout(PyLayers):
         try:
             print "Gt Nodes : ", self.Gt.number_of_nodes()
             print "Gt Edges : ", self.Gt.number_of_edges()
-            print "vnodes = Gt.node[Nc]['cycles'].cycle "
-            print "poly = Gt.node[Nc]['cycle'].polyg "
+            print "vnodes = Gt.node[Nc]['polyg'].vnodes"
+            print "poly = Gt.node[Nc]['polyg']"
         except:
             print "no Gt graph"
 
         try:
             print "Gr Nodes    :", self.Gr.number_of_nodes()
             print "Gr Edges    :", self.Gr.number_of_edges()
-            print "Nc  = Gr.node[nroom]['cycles']  "
         except:
             print "no Gr graph"
 

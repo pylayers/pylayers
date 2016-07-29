@@ -2,6 +2,17 @@
 import numpy as np
 import pdb
 
+"""
+
+.. currentmodule:: pylayers.gis.gisutil
+
+.. autosummary::
+    :toctree: generated
+
+
+
+"""
+
 def ent(lL,lL0):
     """ encode lon Lat in natural integer
 

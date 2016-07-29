@@ -13,18 +13,23 @@ An antenna can be loaded from various file formats among
 + .mat
 + .trx
 
+Antenna derives from Pattern 
+
 Examples
 --------
 
+.. plot::
+    :include-source:
+
     >>> import matplotlib.pyplot as plt
     >>> from pylayers.antprop.antenna import *
-    >>> A = Antenna('defant.trx')
+    >>> A = Antenna()
     >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
 
 Pattern Class
-=============
+-------------
 
-.. autosummary
+.. autosummary::
     :toctree: generated/
 
     Pattern.eval
@@ -32,7 +37,7 @@ Pattern Class
     Pattern.radF
 
 Pattern Functions
------------------
+=================
 
     Pattern.__pOmni
     Pattern.__pGauss
@@ -40,21 +45,21 @@ Pattern Functions
     Pattern.__p3gpp
 
 Pattern from SH coeff
----------------------
+=====================
 
     Pattern.__pvsh3
     Pattern.__psh3
 
 
 Antenna Class
-=============
+-------------
 
 .. autosummary::
     :toctree: generated/
 
 
 Utility Functions
------------------
+=================
 
 .. autosummary::
     :toctree: generated/
@@ -76,7 +81,7 @@ Utility Functions
     Antenna.elec_delay
 
 Synthesis Functions
--------------------
+===================
 
 .. autosummary::
     :toctree: generated/
@@ -89,7 +94,7 @@ Synthesis Functions
     Antenna.Fsynth3
 
 Visualization functions
------------------------
+=======================
 
 .. autosummary::
     :toctree: generated/
@@ -104,7 +109,7 @@ Visualization functions
     Antenna.movie_vsh
 
 Loading and Saving
-------------------
+==================
 
 .. autosummary::
     :toctree: generated/
@@ -121,7 +126,7 @@ Loading and Saving
     Antenna.loadsh2
     Antenna.loadvsh2
 
-Miscellianous  functions
+Miscellaneous  functions
 ========================
 
 
@@ -202,17 +207,28 @@ class Pattern(PyLayers):
         Parameters
         ----------
 
-        th:[]
-        ph:[]
-        fGHz:[]
-        nth:90
-        nph:181
-        first: boolean True if first call (to define self.param)
-        grid:  True for pattern mode, False for Ray Tracing mode
-        th0 : theta initial value
-        th1 : theta finale value
-        ph0 : phi initial value
-        ph1 : phi final value
+        th: list 
+            []
+        ph: list 
+            []
+        fGHz:list 
+            []
+        nth: int 
+            90
+        nph: int 
+            181
+        first: boolean 
+            True if first call (to define self.param)
+        grid:  boolean 
+            True for pattern mode, False for Ray Tracing mode
+        th0 : float 
+            theta initial value
+        th1 : float 
+            theta finale value
+        ph0 : float 
+            phi initial value
+        ph1 : float 
+            phi final value
 
 
         Examples
@@ -282,12 +298,21 @@ class Pattern(PyLayers):
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
 
-        TODO : gain w.r.t frequency
+        Parameters
+        ----------
 
-        self.grid is used for switching between
+        param : dict 
+            dictionnary of parameters
+            + pol : string 
+                't'| 'p'
+            + GmaxdB : float
+                0
 
-          True   angular grid : nth x nph x nf
-          False  direction    : ndir x nf
+
+        self.grid is used for switching between : 
+
+          if True   angular grid : nth x nph x nf
+          if False  direction    : ndir x nf
 
         """
         defaults = { 'param' : { 'pol' : 't', 'GmaxdB': 0 } }
@@ -2409,7 +2434,7 @@ class Antenna(Pattern):
             >>> from pylayers.antprop.antenna import *
             >>> import numpy as np
             >>> import matplotlib.pylab as plt
-            >>> A = Antenna('defant.trx')
+            >>> A = Antenna('defant.sh3')
             >>> #A.show3()
 
         """
@@ -3594,6 +3619,11 @@ class Antenna(Pattern):
 
     def savevsh2(self, filename = ''):
         """ save coeff in  a .vsh2 antenna file
+
+        Parameters
+        ----------
+
+        filename : string 
 
         """
 
