@@ -142,93 +142,12 @@
             
   <h1>Source code for pylayers.gis.osmparser</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module OSMParser</span>
+
+<span class="sd">This module provides classes to handle open stree map objects</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">Way Class</span>
-<span class="sd">==========</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     Way.__init__</span>
-<span class="sd">     Way.__repr__</span>
-<span class="sd">     Way.show</span>
-
-<span class="sd">Coords Class</span>
-<span class="sd">============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    Coords.__repr__</span>
-<span class="sd">    Coords.clean</span>
-<span class="sd">    Coords.coords</span>
-<span class="sd">    Coords.cartesian</span>
-
-<span class="sd">Nodes Class</span>
-<span class="sd">============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    Nodes.nodes</span>
-<span class="sd">    Nodes.clean</span>
-
-<span class="sd">Ways Class</span>
-<span class="sd">============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    Ways.ways</span>
-<span class="sd">    Ways.clean</span>
-<span class="sd">    Ways.building</span>
-<span class="sd">    Ways.eval</span>
-<span class="sd">    Ways.show</span>
-<span class="sd">    Ways.tomaska</span>
-<span class="sd">    Ways.showold</span>
-
-<span class="sd">Relations Class</span>
-<span class="sd">===============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     Relations.relations</span>
-<span class="sd">     Relations.clean</span>
-
-<span class="sd">FloorPlan Class</span>
-<span class="sd">===============</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     FloorPlan.__init__</span>
-<span class="sd">     FloorPlan.__repr__</span>
-<span class="sd">     FloorPlan.build</span>
-<span class="sd">     FloorPlan.show</span>
-
-<span class="sd">Utility Functions</span>
-<span class="sd">=================</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     osmparse</span>
-<span class="sd">     extract</span>
-<span class="sd">     getbdg</span>
-<span class="sd">     buildingsparse</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1"># Module OSMParser</span>
-<span class="c1">#</span>
-<span class="c1"># This module provides classes to handle open stree map objects</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-
-
 <span class="kn">from</span> <span class="nn">osmapi</span> <span class="kn">import</span> <span class="n">OsmApi</span>
 <span class="kn">import</span> <span class="nn">geocoder</span> <span class="kn">as</span> <span class="nn">geo</span>
 <span class="kn">import</span> <span class="nn">urllib</span>
@@ -251,7 +170,7 @@
 
 <span class="c1"># classes that handle the OSM data file format.</span>
 <span class="k">class</span> <span class="nc">Way</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;  </span>
 
 <span class="sd">    A Way is a polyline or a Polygon (if closed)</span>
 
@@ -363,6 +282,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span><span class="o">-=</span><span class="mi">1</span>
 
 <div class="viewcode-block" id="Coords.clean"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Coords.clean.html#pylayers.gis.osmparser.Coords.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reset coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latlon</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="p">{}</span>
@@ -518,6 +440,8 @@
 <span class="sd">    way : dict</span>
 <span class="sd">    cpt : int</span>
 <span class="sd">        way counter </span>
+
+
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 
@@ -538,12 +462,21 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="Ways.clean"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.clean.html#pylayers.gis.osmparser.Ways.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; clean ways </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">way</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.building.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    <span class="k">def</span> <span class="nf">building</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span> <span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">8.5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; building callback function</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        ways : Ways</span>
+<span class="sd">        height : float </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">refs</span> <span class="ow">in</span> <span class="n">ways</span><span class="p">:</span>
             <span class="k">if</span> <span class="s1">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
@@ -734,6 +667,12 @@
 <span class="k">class</span> <span class="nc">FloorPlan</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; FloorPlan class derived from nx.DigGraph</span>
 
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    build : recursive construction of floor plan </span>
+<span class="sd">    show : show the floor plan </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="FloorPlan.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.FloorPlan.__init__.html#pylayers.gis.osmparser.FloorPlan.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rootid</span><span class="p">,</span><span class="n">coords</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">ways</span><span class="p">,</span><span class="n">relations</span><span class="p">):</span>
@@ -811,9 +750,10 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        nid :</span>
-<span class="sd">        fig :</span>
-<span class="sd">        ax  :</span>
+
+<span class="sd">        nid : int </span>
+<span class="sd">        fig : plt.figure </span>
+<span class="sd">        ax  : plt.ax</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
@@ -1144,7 +1084,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 29, 2016.
+      Last updated on Jul 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

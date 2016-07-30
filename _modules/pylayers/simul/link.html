@@ -141,8 +141,7 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.simul.link</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">#</span>
 <span class="sd">r&quot;&quot;&quot;</span>
 
@@ -364,25 +363,23 @@
 <span class="k">class</span> <span class="nc">DLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Deterministic Link Class</span>
 
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="DLink.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__init__.html#pylayers.simul.link.DLink.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; deterministic link evaluation</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 
 <span class="sd">        L : Layout</span>
 <span class="sd">            Layout to be used</span>
-<span class="sd">        a : np.ndarray (3,)</span>
-<span class="sd">            position of a device dev_a</span>
-<span class="sd">        b : np.ndarray (3,)</span>
-<span class="sd">            position of a device dev_b</span>
 <span class="sd">        Aa : Antenna</span>
 <span class="sd">            Antenna of device dev_a</span>
 <span class="sd">        Ab : Antenna</span>
 <span class="sd">            Antenna of device dev_b</span>
+<span class="sd">        a : np.ndarray (3,)</span>
+<span class="sd">            position of a device dev_a</span>
+<span class="sd">        b : np.ndarray (3,)</span>
+<span class="sd">            position of a device dev_b</span>
+<span class="sd">        ca : int </span>
+<span class="sd">            cycle a number</span>
+<span class="sd">        cb : int </span>
+<span class="sd">            cycle b number</span>
 <span class="sd">        Ta : np.ndarray (3,3)</span>
 <span class="sd">            Rotation matrice of Antenna of device dev_a relative to global Layout scene</span>
 <span class="sd">        Tb : np.ndarray (3,3)</span>
@@ -394,6 +391,12 @@
 <span class="sd">        save_idx : int</span>
 <span class="sd">            number to identify the h5 file generated</span>
 
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DLink.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__init__.html#pylayers.simul.link.DLink.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; deterministic link evaluation</span>
+
+<span class="sd">        </span>
 <span class="sd">        Advanced (change only if you really know what you do !)</span>
 
 <span class="sd">        save_opt : list ([&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;])</span>
@@ -1965,7 +1968,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 29, 2016.
+      Last updated on Jul 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

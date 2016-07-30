@@ -149,33 +149,19 @@
 
 <span class="sd">The following conventions are adopted</span>
 
-<span class="sd">+ A Cone has an **apex** which is a point in the plane.</span>
-<span class="sd">+ A cone has two vectors which define the cone aperture. Those two vectors can</span>
-<span class="sd">always been distinguished as a starting vector (u) and a ending vector (v).</span>
+<span class="sd">+ A cone has an **apex** which is a point in the plane.</span>
+<span class="sd">+ A cone has two vectors which define the cone aperture. The order of those two vectors </span>
+<span class="sd">matters (u) is the starting vector (u) and (v) the ending vector.</span>
 
 <span class="sd">The cone region is defined by the convex angular sector going from starting</span>
-<span class="sd">vector  :math:`\mathbf{u}` to ending vector :math:`\mathbf{v}`</span>
-<span class="sd">rotating in the plane in folllowing the trigonometric convention.</span>
+<span class="sd">vector  :math:`\mathbf{u}` to the ending vector :math:`\mathbf{v}`</span>
+<span class="sd">rotating in the plane in following the trigonometric rotation convention.</span>
 <span class="sd">The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v}` is positive.</span>
 
 <span class="sd">:math:`\mathbf{u} \times \mathbf{v} = \alpha \mathbf{z} \;\; \textrm{with} \;\;\alpha &gt; 0`</span>
 
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree:</span>
-
-<span class="sd">    Cone.__init__</span>
-<span class="sd">    Cone.upd_angle</span>
-<span class="sd">    Cone.belong_seg</span>
-<span class="sd">    Cone.aboveseg</span>
-<span class="sd">    Cone.outside_point</span>
-<span class="sd">    Cone.belong_point2</span>
-<span class="sd">    Cone.belong_point</span>
-<span class="sd">    Cone.above</span>
-<span class="sd">    Cone.fromptseg</span>
-<span class="sd">    Cone.from2segs</span>
-<span class="sd">    Cone.from2csegs</span>
-<span class="sd">    Cone.show</span>
-
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -379,14 +365,14 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span><span class="n">proba</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Cone.aboveseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.aboveseg.html#pylayers.util.cone.Cone.aboveseg">[docs]</a>    <span class="k">def</span> <span class="nf">aboveseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">above_seg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vc</span>  <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
         <span class="n">vcn</span> <span class="o">=</span> <span class="n">vc</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">vc</span><span class="p">,</span><span class="n">vc</span><span class="p">))</span>
         <span class="n">w</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vcn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">vcn</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  
-        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">w</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Cone.outside_point"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.outside_point.html#pylayers.util.cone.Cone.outside_point">[docs]</a>    <span class="k">def</span> <span class="nf">outside_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check if p is outside cone</span>
@@ -437,6 +423,12 @@
 
 <div class="viewcode-block" id="Cone.belong_point2"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.belong_point2.html#pylayers.util.cone.Cone.belong_point2">[docs]</a>    <span class="k">def</span> <span class="nf">belong_point2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">         p  : np.array (Ndim x Npoints)</span>
+<span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
@@ -808,6 +800,10 @@
         <span class="c1"># ax.set_ylim(-2,2)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
+        
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -820,7 +816,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 29, 2016.
+      Last updated on Jul 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>1   Overview &mdash; Python 1 documentation</title>
+    <title>1. 1   Overview &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -18,7 +18,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -27,6 +28,8 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
+    <link rel="next" title="PyLayers" href="../modules/pylayers.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../index.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +45,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +89,53 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../index.html" title="&lt;no title&gt;"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    <no title>
+	    </span>
+	    <span class="hiddenrellink">
+	    <no title>
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../modules/pylayers.html" title="PyLayers"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    PyLayers
+	    </span>
+	    <span class="hiddenrellink">
+	    PyLayers
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -98,25 +148,25 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">1&nbsp;&nbsp;&nbsp;Overview</a></li>
-<li><a class="reference internal" href="#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><ul>
-<li><a class="reference internal" href="#environment-description">2.1&nbsp;&nbsp;&nbsp;Environment Description</a><ul>
-<li><a class="reference internal" href="#indoor-and-outdoor-layout">2.1.1&nbsp;&nbsp;&nbsp;Indoor and Outdoor Layout</a></li>
-<li><a class="reference internal" href="#gis-and-dem">2.1.2&nbsp;&nbsp;&nbsp;GIS and DEM</a></li>
-<li><a class="reference internal" href="#handling-material-properties-of-layout">2.1.3&nbsp;&nbsp;&nbsp;Handling Material Properties of Layout</a></li>
+<li><a class="reference internal" href="#">1. 1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li><a class="reference internal" href="#radio-propagation-simulation">2. 2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><ul>
+<li><a class="reference internal" href="#environment-description">2.1. 2.1&nbsp;&nbsp;&nbsp;Environment Description</a><ul>
+<li><a class="reference internal" href="#indoor-and-outdoor-layout">2.1.1. 2.1.1&nbsp;&nbsp;&nbsp;Indoor and Outdoor Layout</a></li>
+<li><a class="reference internal" href="#gis-and-dem">2.1.2. 2.1.2&nbsp;&nbsp;&nbsp;GIS and DEM</a></li>
+<li><a class="reference internal" href="#handling-material-properties-of-layout">2.1.3. 2.1.3&nbsp;&nbsp;&nbsp;Handling Material Properties of Layout</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#description-of-antennas">2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
-<li><a class="reference internal" href="#multiwall-motley-keenan-simulation">2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a></li>
-<li><a class="reference internal" href="#ray-tracing-tool">2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a></li>
+<li><a class="reference internal" href="#description-of-antennas">2.2. 2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a></li>
+<li><a class="reference internal" href="#multiwall-motley-keenan-simulation">2.3. 2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a></li>
+<li><a class="reference internal" href="#ray-tracing-tool">2.4. 2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
-<li><a class="reference internal" href="#wireless-body-area-network-related-classes">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
-<li><a class="reference internal" href="#some-simulation-examples">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
-<li><a class="reference internal" href="#algorithms-for-localization">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
-<li><a class="reference internal" href="#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
-<li><a class="reference internal" href="#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
+<li><a class="reference internal" href="#handling-agent-mobility">3. 3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
+<li><a class="reference internal" href="#wireless-body-area-network-related-classes">4. 4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a></li>
+<li><a class="reference internal" href="#some-simulation-examples">5. 5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a></li>
+<li><a class="reference internal" href="#algorithms-for-localization">6. 6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a></li>
+<li><a class="reference internal" href="#measurements-tools">7. 7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
+<li><a class="reference internal" href="#pylayers-tools">8. 8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
 </ul>
 
     
@@ -128,7 +178,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <style>
     @font-face {
@@ -214,11 +264,9 @@
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
 </div>
 <div class="section" id="overview">
-<h1><a class="toc-backref" href="#id1">1&nbsp;&nbsp;&nbsp;Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id1">1. 1&nbsp;&nbsp;&nbsp;Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
 <p>Pylayers is a site-specific radio channel simulator.
 It is organized in different python modules.</p>
 <p>The source code is distributed in the following directories</p>
@@ -283,227 +331,69 @@ scene. This means :</p>
 <p>Indoor environment situations and outdoor situations.</p>
 </div>
 <div class="section" id="radio-propagation-simulation">
-<h1><a class="toc-backref" href="#id2">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><a class="headerlink" href="#radio-propagation-simulation" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id2">2. 2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a><a class="headerlink" href="#radio-propagation-simulation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="environment-description">
-<h2><a class="toc-backref" href="#id3">2.1&nbsp;&nbsp;&nbsp;Environment Description</a><a class="headerlink" href="#environment-description" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">2.1. 2.1&nbsp;&nbsp;&nbsp;Environment Description</a><a class="headerlink" href="#environment-description" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="indoor-and-outdoor-layout">
-<h3><a class="toc-backref" href="#id4">2.1.1&nbsp;&nbsp;&nbsp;Indoor and Outdoor Layout</a><a class="headerlink" href="#indoor-and-outdoor-layout" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id4">2.1.1. 2.1.1&nbsp;&nbsp;&nbsp;Indoor and Outdoor Layout</a><a class="headerlink" href="#indoor-and-outdoor-layout" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="1-GIS/Layout.html">Description of the propagation environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/Layout.html#getting-the-list-of-all-available-layouts-the-ls-method">Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/Layout.html#the-useful-numpy-arrays-of-the-layout">The useful numpy arrays of the Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/Layout.html#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="1-GIS/LayoutEditor.html">The Layout class</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#structure-of-a-layout">Structure of a Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#subsegments">Subsegments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#the-different-layout-format">The different layout format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#reading-an-exiting-layout">Reading an exiting Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#the-display-options-dictionnary">The display options dictionnary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#interactive-editor">Interactive Editor</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="1-GIS/Multisubsegments.html">Effect of Modifying the Nature of Sub-Segments</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="gis-and-dem">
-<h3><a class="toc-backref" href="#id5">2.1.2&nbsp;&nbsp;&nbsp;GIS and DEM</a><a class="headerlink" href="#gis-and-dem" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5">2.1.2. 2.1.2&nbsp;&nbsp;&nbsp;GIS and DEM</a><a class="headerlink" href="#gis-and-dem" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
 </div>
 </div>
 <div class="section" id="handling-material-properties-of-layout">
-<h3><a class="toc-backref" href="#id6">2.1.3&nbsp;&nbsp;&nbsp;Handling Material Properties of Layout</a><a class="headerlink" href="#handling-material-properties-of-layout" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6">2.1.3. 2.1.3&nbsp;&nbsp;&nbsp;Handling Material Properties of Layout</a><a class="headerlink" href="#handling-material-properties-of-layout" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/SlabsMaterials.html">Slabs and Materials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#defining-a-new-slab-and-a-new-material">Defining a new Slab and a new Material</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#information-necessary-to-define-a-slab">Information necessary to define a Slab</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#evaluation-of-a-slab">Evaluation of a Slab</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#transmission-and-reflexion-coefficients">Transmission and Reflexion coefficients</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#evaluation-without-phase-compensation">Evaluation without phase compensation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#references">References</a></li>
-</ul>
-</li>
-</ul>
 </div>
 </div>
 </div>
 <div class="section" id="description-of-antennas">
-<h2><a class="toc-backref" href="#id7">2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a><a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">2.2. 2.2&nbsp;&nbsp;&nbsp;Description of Antennas</a><a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/Antenna.html">Description of antennas</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/Antenna.html#synthesis-of-the-radiation-pattern">Synthesis of the radiation pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/Antenna.html#defining-antenna-gain-from-analytic-formulas">Defining Antenna gain from analytic formulas</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/AntennaSSH.html">Scalar Spherical Harmonics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/AntennaVSH.html">Vector Spherical Harmonics Representation of Antennas</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/AntennaVSH.html#display-of-the-radiation-pattern-for-all-frequencies">Display of the radiation pattern for all frequencies</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/AntennaVSH.html#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="multiwall-motley-keenan-simulation">
-<h2><a class="toc-backref" href="#id8">2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a><a class="headerlink" href="#multiwall-motley-keenan-simulation" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id8">2.3. 2.3&nbsp;&nbsp;&nbsp;Multiwall Motley-Keenan Simulation</a><a class="headerlink" href="#multiwall-motley-keenan-simulation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/Coverage.html">Indoor Coverage with the PyLayers Multi Wall model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/MultiWall.html">Multi-wall model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/MultiWall.html#defining-a-radio-link">Defining a radio link</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/MultiWall.html#ploting-the-scene">Ploting the scene</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/MultiWall.html#coverage-class">Coverage class</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="ray-tracing-tool">
-<h2><a class="toc-backref" href="#id9">2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a><a class="headerlink" href="#ray-tracing-tool" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">2.4. 2.4&nbsp;&nbsp;&nbsp;Ray Tracing Tool</a><a class="headerlink" href="#ray-tracing-tool" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/Signatures.html">Ray Signatures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2-AP/Channel.html">The transmission channel</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/Channel.html#the-friis-factor">The Friis factor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-AP/Channel.html#the-tap-method">The tap method</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/LinkSimulation.html">How to do Ray Tracing simulation using DLink</a></li>
-</ul>
 </div>
 </div>
 </div>
 <div class="section" id="handling-agent-mobility">
-<h1><a class="toc-backref" href="#id10">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a><a class="headerlink" href="#handling-agent-mobility" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id10">3. 3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a><a class="headerlink" href="#handling-agent-mobility" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/SimulNetConfig.html">Network Simulation Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/SimulNetConfig.html#simulnet-ini">Simulnet.ini</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/SimulNetConfig.html#mechanics">Mechanics</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="4-MOB/Mobility.html">Trajectory and Network simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-MOB/Body.html">Handling Body Description and Mobility</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#bodycylinder-data-structure"><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#description-of-a-body-file">Description of a body file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#example-of-a-body-file">Example of a Body file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#loading-a-motion-capture-file">Loading a Motion Capture File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#defining-a-trajectory">Defining a trajectory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#centering-the-motion">Centering the motion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#defining-a-large-scale-trajectory">Defining a large scale trajectory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#trajectory">Trajectory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#posvel"><tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#definition-of-several-coordinates-systems">Definition of Several Coordinates systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#placing-a-dcs-device-coordinate-system-on-the-cylinder">Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
-</ul>
-</li>
-</ul>
 </div>
 </div>
 <div class="section" id="wireless-body-area-network-related-classes">
-<h1><a class="toc-backref" href="#id11">4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a><a class="headerlink" href="#wireless-body-area-network-related-classes" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id11">4. 4&nbsp;&nbsp;&nbsp;Wireless Body Area Network Related Classes</a><a class="headerlink" href="#wireless-body-area-network-related-classes" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html">Table Of Content</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Corser.html#cormoran-measurement-campaign">CORMORAN Measurement Campaign</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#motivation-for-creating-a-specific-tool">Motivation for creating a specific tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#prerequisite-installations">Prerequisite Installations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Corser.html#the-corser-class">The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#using-pylayers-ray-tracing-with-corser-data">Using Pylayers Ray-tracing with CorSer data</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="some-simulation-examples">
-<h1><a class="toc-backref" href="#id12">5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a><a class="headerlink" href="#some-simulation-examples" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id12">5. 5&nbsp;&nbsp;&nbsp;Some Simulation Examples</a><a class="headerlink" href="#some-simulation-examples" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/DLR-WHERE2.html">Example of a trajectory synthesis in the DLR WHERE2 environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/DLR-WHERE2.html#loading-the-layout">Loading the Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/DLR-WHERE2.html#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/WHERE1-M1.html">Example of an UWB channel Ray Tracing simulation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/WHERE1-M1.html#adding-coordinates-of-transmiting-and-receiving-points">Adding Coordinates of Transmiting and Receiving points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/WHERE1-M1.html#signatures-rays-and-propagation-and-transmission-channel">Signatures, rays and propagation and transmission channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/WHERE1-M1.html#calulating-the-propagation-channel">Calulating the Propagation Channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/WHERE1-M1.html#applying-a-waveform-to-the-transmission-channel">Applying a waveform to the transmission channel</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Where1M1.html">WHERE1-M1 UWB measurement campaign</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Where1M1.html#simulation-creation">Simulation Creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Where1M1.html#adding-coordinates-of-transmiting-and-receiving-points">Adding coordinates of transmiting and receiving points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Where1M1.html#signatures-rays-and-radio-channel">Signatures, Rays and Radio Channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Where1M1.html#apply-waveform">Apply waveform</a></li>
-</ul>
-</li>
-</ul>
 </div>
 </div>
 <div class="section" id="algorithms-for-localization">
-<h1><a class="toc-backref" href="#id13">6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a><a class="headerlink" href="#algorithms-for-localization" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id13">6. 6&nbsp;&nbsp;&nbsp;Algorithms for Localization</a><a class="headerlink" href="#algorithms-for-localization" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="7-APP/LOC-algebraic.html">Algebraic Localization Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7-APP/LOC-rgpa.html">&nbsp;Robust Geometric Positioning Algorithm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7-APP/LOC-rgpa.html#rgpa-robust-geometric-positioning-algorithm">RGPA (Robust Geometric Positioning Algorithm)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="7-APP/LOC-rgpa.html#exploiting-time-of-arrival-toa-only">Exploiting Time of Arrival (ToA) only</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-APP/LOC-rgpa.html#rss">RSS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-APP/LOC-rgpa.html#tdoa">TDOA</a></li>
-</ul>
-</li>
-</ul>
 </div>
 </div>
 <div class="section" id="measurements-tools">
-<h1><a class="toc-backref" href="#id14">7&nbsp;&nbsp;&nbsp;Measurements Tools</a><a class="headerlink" href="#measurements-tools" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id14">7. 7&nbsp;&nbsp;&nbsp;Measurements Tools</a><a class="headerlink" href="#measurements-tools" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="A-MES/scanner.html">Control of the 4 axes Scanner</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="pylayers-tools">
-<h1><a class="toc-backref" href="#id15">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a><a class="headerlink" href="#pylayers-tools" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id15">8. 8&nbsp;&nbsp;&nbsp;PyLayers Tools</a><a class="headerlink" href="#pylayers-tools" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="3-PHY/Bsignal.html">Handling time and frequency domain signals : <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3-PHY/Bsignal.html#fhsignal-in-cir-mode">FHsignal in CIR mode</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="3-PHY/Noise.html">Modelisation of the Thermal Noise</a></li>
-<li class="toctree-l1"><a class="reference internal" href="8-MISC/Cone.html">The class Cone</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#is-a-point-belonging-to-a-cone-belong-point">Is a point belonging to a cone ? : belong_point()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#creating-a-cone-from-2-segments-from2segs">Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#conditional-graph">Conditional Graph</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#debug">Debug</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#geomutil-mirror">geomutil.mirror</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#geometric-probability">Geometric probability</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="8-MISC/Geomutil.html">Class Polygon</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#ploting-polygons">ploting polygons</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#buildgv"><tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="8-MISC/Geomutil.html#geomview-classes">Geomview classes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#geomvect-class">GeomVect class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#utility-functions">Utility functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#useful-functions">Useful functions</a></li>
-</ul>
-</li>
-</ul>
 </div>
 <\div></div>
 
@@ -518,15 +408,30 @@ scene. This means :</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Jul 30, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../_sources/./TOC.txt"
+    <a href="../_sources/./TOC.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../index.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="../modules/pylayers.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
