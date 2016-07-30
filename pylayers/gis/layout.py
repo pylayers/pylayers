@@ -65,8 +65,6 @@ import pdb
 import ast
 import pylayers.util.graphutil as gph
  
-
-
 class Layout(PyLayers):
     """ Handling Layout
 
@@ -4685,11 +4683,7 @@ class Layout(PyLayers):
         """
         # create layout directory
         
-        path = os.path.join(basename,'struc','gpickle',self.filename)
-
-
-       
-
+        path = os.path.join(basename,'struc','gpickle',self._filename)
 
         if not os.path.isdir(path):
            os.mkdir(path)
@@ -4697,7 +4691,7 @@ class Layout(PyLayers):
             try:
                 # if g in ['v','i']:
                 #     gname1 ='G'+g
-                #     write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle'))
+                #     write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle'))
                 # else:
                 gname='G'+g
                 write_gpickle(getattr(self,gname),os.path.join(path,'G'+g+'.gpickle'))
@@ -4709,9 +4703,9 @@ class Layout(PyLayers):
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
         
-        # root,ext = os.path.splitext(self.filename)
+        # root,ext = os.path.splitext(self._filename)
         # if ext == '.ini':
-        #     self.saveini(self.filename)
+        #     self.saveini(self._filename)
 
     def dumpr(self,graphs='stvirw'):
         """ read of given graphs
@@ -9842,13 +9836,7 @@ class Layout(PyLayers):
         boxes[:,2]=b+2*npt_s
         boxes[:,3]=b+3*npt_s
 
-
-
-
-
-
-
-#         _filename,ext = os.path.splitext(self.filename)
+#         _filename,ext = os.path.splitext(self._filename)
 #         _filegeom = _filename+'.off'
 #         self.filegeom=_filegeom
 #         filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
