@@ -1,221 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-.. currentmodule:: pylayers.gis.layout
-
-This class handle the description of an Indoor layout
-
-Class Layout
-============
-
-.. autosummary::
-    :toctree: generated
-
-Utility functions
------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.__init__
-    Layout.__repr__
-    Layout.__add__
-    Layout.__mul__
-    Layout.info
-    Layout.ls
-    Layout.delete
-    Layout.check
-    Layout.clip
-    Layout.help
-    Layout.g2npy
-    Layout.check2
-    Layout.cleanup
-    Layout.boundary
-    Layout.distwall
-    Layout.randTxRx
-    Layout.get_paths
-    Layout.get_zone
-    Layout.info_segment
-    Layout.find_edgelist
-
-Loading and Saving
-------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.dumpw
-    Layout.dumpr
-    Layout.load
-    Layout.save
-    Layout.loadfur
-    Layout.save
-    Layout.saveold
-
-Layout editing
---------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.editor
-    Layout.editorGtk
-    Layout.editorTk
-    Layout.add_pnod
-    Layout.add_fnod
-    Layout.add_nfpe
-    Layout.add_pons
-    Layout.add_segment
-    Layout.add_furniture
-    Layout.add_furniture_file
-    Layout.del_points
-    Layout.del_segment
-    Layout.thwall
-    Layout.edit_point
-    Layout.edit_segment
-    Layout.add_window
-    Layout.add_door
-
-Layout transformation
----------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.translate
-    Layout.rotate
-    Layout.del_cycle
-    Layout.chgmss
-    Layout.diag
-    Layout.nd2seg
-    Layout.ed2nd
-    Layout.seguv
-    Layout.segpt2
-    Layout.seg2pts
-    Layout.segpt
-    Layout.extrseg
-    Layout.seginframe2
-    Layout.seginframe
-    Layout.layerongrid
-    Layout.cycleinline
-    Layout.seginline
-
-Layout visibility
------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.visilist
-    Layout.closest_edge
-    Layout.visi_papb
-    Layout.angleonlink
-    Layout.angleonlinkold
-    Layout.layeronlink
-
-Layout interactions
--------------------
-
-    Layout.intercy
-
-SubSegment Functions
---------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.subseg
-    Layout.have_subseg
-    Layout.del_subseg
-    Layout.add_subseg
-
-Vizualisation
---------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.displaygui
-    Layout.show_nodes
-    Layout.show_seg1
-    Layout.plot_segments
-    Layout.show_segment
-    Layout.show_layer
-    Layout.facet3D
-    Layout.facets3D
-    Layout.geomfile
-    Layout._show3
-    Layout.show3
-
-Showing Graphs
----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout._showGi
-    Layout._showGt
-    Layout.showGs
-    Layout.show
-    Layout.showG
-    Layout._showGv
-
-Building Graphs
----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.build
-    Layout.buildGt
-    Layout.buildGw
-    Layout.buildGv
-    Layout.buildGi
-    Layout.outputGi
-    Layout.waypointGw
-    Layout.builGr2
-    Layout.buildGr
-    Layout.buildGr3
-
-
-Cycles and Rooms  Related Functions
------------------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.pt2cy
-    Layout.cy2pt
-    Layout.pt2ro
-    Layout.seg2ro
-
-    Layout.room2segments
-    Layout.room2nodes
-
-    Layout.waypoint
-
-Testing Functions
-------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.isseg
-    Layout.numseg
-    Layout.ispoint
-    Layout.onseg
-
-
-Signatures
-----------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.signature
-    Layout.showSig
-    Layout.get_Sg_pos
-
-"""
 #
 #
 try:
@@ -269,7 +52,7 @@ from pylayers.util import cone
 import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
-from pylayers.gis import cycles as cycl # new version of cycles
+#from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
 from pylayers.gui.editor_select import SelectL2
 
@@ -282,15 +65,13 @@ import pdb
 import ast
 import pylayers.util.graphutil as gph
  
-
-
 class Layout(PyLayers):
     """ Handling Layout
 
     Attributes
     ----------
 
-    Gs     : Garph of points and segment (structure)
+    Gs     : Graph of points and segment (structure)
     Gt     : Graph of convex cycles      (topology)
     Gv     : Graph of visibility         (visibility)
     Gi     : Graph of interactions       (interactions)
@@ -300,12 +81,12 @@ class Layout(PyLayers):
     pt     : points sequence
     tahe   : tail head
 
+    
     Notes
     -----
 
     This class uses `networkx` to store Layout information
 
-    .. autosummary::
 
     """
     
@@ -1195,7 +976,7 @@ class Layout(PyLayers):
             else:
                 lat,lon = eval(kwargs['latlon'])
                 self._filename='lat_'+str(lat).replace('.','_')+'_lon_'+str(lon).replace('.','_')+'.ini'
-        else: # by reading an osm file
+        else: #by reading an osm file
             fileosm = pyu.getlong(kwargs['_fileosm'],os.path.join('struc','osm'))
             coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ=kwargs['typ'])
             self.coordinates = 'latlon'
@@ -1280,7 +1061,7 @@ class Layout(PyLayers):
                 #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
                     if 'name' in ways.way[nseg].tags:
                         slab = ways.way[nseg].tags['name']
-                    else: # the default slab name is WALL 
+                    else: #the default slab name is WALL 
                         slab = "WALL"
                     if 'z' in ways.way[nseg].tags:
                         z = ways.way[nseg].tags['z']
@@ -2934,12 +2715,12 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        e1 : int 
+            e1 : int 
 
         Returns
         -------
 
-        boolean 
+            have_subseg_bool : boolean 
 
 
         """
@@ -4902,11 +4683,7 @@ class Layout(PyLayers):
         """
         # create layout directory
         
-        path = os.path.join(basename,'struc','gpickle',self.filename)
-
-
-       
-
+        path = os.path.join(basename,'struc','gpickle',self._filename)
 
         if not os.path.isdir(path):
            os.mkdir(path)
@@ -4914,7 +4691,7 @@ class Layout(PyLayers):
             try:
                 # if g in ['v','i']:
                 #     gname1 ='G'+g
-                #     write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle'))
+                #     write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle'))
                 # else:
                 gname='G'+g
                 write_gpickle(getattr(self,gname),os.path.join(path,'G'+g+'.gpickle'))
@@ -4926,9 +4703,9 @@ class Layout(PyLayers):
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
         
-        # root,ext = os.path.splitext(self.filename)
+        # root,ext = os.path.splitext(self._filename)
         # if ext == '.ini':
-        #     self.saveini(self.filename)
+        #     self.saveini(self._filename)
 
     def dumpr(self,graphs='stvirw'):
         """ read of given graphs
@@ -5062,14 +4839,14 @@ class Layout(PyLayers):
         unit : str
             'deg' : degree values
             'rad' : radian values
-        inside : bollean
+        inside : boolean
             True :  compute the inside angles of the cycle.
-                    (a.k.a. in regard of the interior of the polygon) 
+                    (a.k.a. the interior of the polygon) 
             False : compute the outside angles of the cycle.
-                    (a.k.a.  in regard of the exterior of the polygon)
+                    (a.k.a. the exterior of the polygon)
 
-        Return
-        ------
+        Returns
+        -------
 
         (u,a)
         u : int (Np)
@@ -5305,11 +5082,11 @@ class Layout(PyLayers):
         """
 
         lMP=[]
-        # MERGE POLYGONS
-        # move from delaunay triangles to convex polygons
+        #MERGE POLYGONS
+        #move from delaunay triangles to convex polygons
         while lP !=[]:
             p = lP.pop(0)
-            # restrict research to polygon that are touching themself
+            #restrict research to polygon that are touching themself
             restp = [(ix,x) for ix,x in enumerate(lP) if  isinstance(p.intersection(x),sh.LineString)]
             # self.pltpoly(p,ax=plt.gca())
 
@@ -5377,7 +5154,7 @@ class Layout(PyLayers):
         segbounds = []
         ptbounds = []
         if holes == []:
-            # remove air segments around layout
+            #remove air segments around layout
             pass
             # [segbounds.extend(nx.neighbors(L.Gs,x)) for x in L.lboundary]
             # ptbounds = L.lboundary
@@ -5396,7 +5173,7 @@ class Layout(PyLayers):
         vertices = ivertices[:,1:]
         sorter = np.argsort(map_vertices)
         
-        # mapping between Gs graph segments and triangle segments
+        #mapping between Gs graph segments and triangle segments
         segments = sorter[np.searchsorted(map_vertices, seg, sorter=sorter)]
 
         if holes == []:
@@ -5430,9 +5207,9 @@ class Layout(PyLayers):
         """
 
 
-        ### 1. Do a Delaunay triangulation
+        ###1. Do a Delaunay triangulation
         ###     build a list of triangle polygons : lTP
-        ###     vnodes refers to the nodes of Gs
+        ###    vnodes refers to the nodes of Gs
         ###     if vnodes == 0 it means this is a created
         ###     segment which is tagged as _AIR
         ###
@@ -5480,7 +5257,7 @@ class Layout(PyLayers):
 
 
         # Ex represent list of points in Gs corresponging to segments
-        # [pt_head pt_tail]
+        #[pt_head pt_tail]
 
         E0 = map_vertices[tri[:,1:]]
         E1 = map_vertices[tri[:,:2]]
@@ -5506,19 +5283,19 @@ class Layout(PyLayers):
         ###
         ### nodes of degree 2  :
         ###     - they correspond to Gs segments that link to triangle centroid
-        ###     - their neighbors are the triangles centroids
+        ###    - their neighbors are the triangles centroids
 
-        # find nodes of degree 2 (corresponding to segments linked to a triangle centroid)
+        #find nodes of degree 2 (corresponding to segments linked to a triangle centroid)
         rn = []
         rn.extend([un for un in n0 if nx.degree(G,un)==2 ])
         rn.extend([un for un in n1 if nx.degree(G,un)==2 ])
         rn.extend([un for un in n2 if nx.degree(G,un)==2 ])
         rn = np.unique(rn)
         
-        # determine the neighbors of those segments (the 2 connected triangles centroids)
+        #determine the neighbors of those segments (the 2 connected triangles centroids)
         neigh = [ nx.neighbors(G,un) for un in rn ]
         
-        # store into networkx compliant format
+        #store into networkx compliant format
 
         uE = [(neigh[un][0],neigh[un][1],{'segment':rn[un]}) for un in xrange(len(rn))]
         iuE = {rn[un]:[-neigh[un][0],-neigh[un][1]] for un in xrange(len(rn))}
@@ -5528,7 +5305,7 @@ class Layout(PyLayers):
 
         #pdb.set_trace()
 
-        # create graph Gt
+        #create graph Gt
         self.Gt = nx.Graph()
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt,lambda x:-x)
@@ -5598,11 +5375,11 @@ class Layout(PyLayers):
                 dne.update(self.Gt[n1])
                 # list of items of the merged dictionnary
                 ine = dne.items()
-                # update n0 with the new merged polygon 
+                #update n0 with the new merged polygon 
                 self.Gt.add_node(n0,polyg=P)
                 # connect new cycle n0 to neighbors 
                 self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-                # remove old cycle n1 
+                #remove old cycle n1 
                 self.Gt.remove_node(n1)
                 # update pos of the cycle with merged polygon centroid
                 self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
@@ -5742,7 +5519,7 @@ class Layout(PyLayers):
 
         """
 
-        # remove possible previous Gt information (2nd build)
+        #remove possible previous Gt information (2nd build)
         if len(self.Gt.nodes()) != 0:
             self.Gt = nx.Graph()
             self.Gt.pos = {}
@@ -5753,7 +5530,7 @@ class Layout(PyLayers):
         # update shapely segments
         self.updateshseg()
 
-        ## Perform Delaunay Triangulation 
+        ##Perform Delaunay Triangulation 
 
         # # # boundary polygon
         # BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
@@ -5765,7 +5542,7 @@ class Layout(PyLayers):
         lP = [geu.Polygon(x) for x in lP]
 
 
-        # take a vnode of polygon to set it as hole
+        #take a vnode of polygon to set it as hole
         # the centroid point is a bad choice because, it is not necessarily inside
         # solution is : - take a point of polygon
         #               - turn around of this point and when found a point inside keep it
@@ -5797,12 +5574,12 @@ class Layout(PyLayers):
         holes=np.array(holesc+holesnc).squeeze()
         # holes=np.array([p.centroid.xy for p in lP ])[:,:,0]
 
-        # delaunay triangluation of exterior polygons
+        #delaunay triangluation of exterior polygons
         Tout  = self._triangle(holes=holes)
         #Tout  = self._triangle_old(BP,lP,mesh_holes=False)
 
         ptri = Tout['vertices'][Tout['triangles']]
-        # create Triangle Polygons from delaunay triangulation
+        #create Triangle Polygons from delaunay triangulation
         TP=[geu.Polygon(x) for x in ptri]
         # list of Merged Polygons outdoor
         lMPout = self._merge_polygons(TP)
@@ -5819,34 +5596,34 @@ class Layout(PyLayers):
                 vnodes=[]
                 [vnodes.extend(p.vnodes) for p in lncP]
                 vnodes=np.unique(vnodes)
-                # delaunay triangluat ion of interior of polygons
+                #delaunay triangluat ion of interior of polygons
                 Tin  = self._triangle(holes=holesc,vnodes=vnodes)
                 # Tin  = self._triangle_old(lP,mesh_holes=True)
                 ptri = Tin['vertices'][Tin['triangles']]
-                # create polygons from delaunay triangulation
+                #create polygons from delaunay triangulation
                 TP = [geu.Polygon(x) for x in ptri]
                 # list of Merged Polygons indoor
                 lMPin = self._merge_polygons(TP)
                 # remove old non convex polygon and replace by the convexify-ed ones
                 [lP.remove(p) for p in lncP]
-            # conserve convex polygons
+            #conserve convex polygons
             lMPin.extend(lP)
         else:
             # if indoor not meshed, the polygon inside 
-            # are directly the list of polygon inside boundaries (a.k.a. holes)
+            #are directly the list of polygon inside boundaries (a.k.a. holes)
             lMPin = lP
 
 
         lMP = lMPout + lMPin
-        # index of polygon representing indoor/outdoor situation
+        #index of polygon representing indoor/outdoor situation
         uindoor = np.zeros(len(lMP),dtype='bool')
         uindoor[len(lMPout):]=True
 
 
-        # ADD AIRWALLS
-        # find coordinates of vertices
+        #ADD AIRWALLS
+        #find coordinates of vertices
         [p.setvnodes(self) for p in lMP]
-        # find where vnodes == 0 <=> a new segment has been added 
+        #find where vnodes == 0 <=> a new segment has been added 
         #=> need to create airwall
         luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lMP]
         # for each polygon
@@ -5855,7 +5632,7 @@ class Layout(PyLayers):
         for p,uaw in luaw :
             # determine number of vnodes
             lvn = len(p.vnodes)
-            # for each vnodes == 0, add an _AIR
+            #for each vnodes == 0, add an _AIR
             for aw in uaw:
                 self.add_segment(  p.vnodes[np.mod(aw-1,lvn)],
                                    p.vnodes[np.mod(aw+1,lvn)]
@@ -9233,11 +9010,11 @@ class Layout(PyLayers):
         #         dne.update(self.Gt[n1])
         #         # list of items of the merged dictionnary
         #         ine = dne.items()
-        #         # update n0 with the new merged polygon 
+        #         #update n0 with the new merged polygon 
         #         self.Gt.add_node(n0,polyg=P)
         #         # connect new cycle n0 to neighbors 
         #         self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-        #         # remove old cycle n1 
+        #         #remove old cycle n1 
         #         self.Gt.remove_node(n1)
         #         # update pos of the cycle with merged polygon centroid
         #         self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
@@ -9278,9 +9055,21 @@ class Layout(PyLayers):
 
 
     def waypoint(self, nroom1, nroom2):
-        """
-        get the waypoint between room1 and room2
-        waypoint = waypoint(nroom1,nroom2)
+        """ get the waypoint between room1 and room2
+        
+        Parameters
+        -----------
+
+        nroom1 : int 
+            room number 1
+        nromm2 : int 
+            room number 2
+
+        Returns
+        -------
+
+        waypoint : 
+       
         """
         rooms = nx.dijkstra_path(self.Gr, nroom1, nroom2)
         nroom = len(rooms)
@@ -9484,15 +9273,14 @@ class Layout(PyLayers):
         try:
             print "Gt Nodes : ", self.Gt.number_of_nodes()
             print "Gt Edges : ", self.Gt.number_of_edges()
-            print "vnodes = Gt.node[Nc]['cycles'].cycle "
-            print "poly = Gt.node[Nc]['cycle'].polyg "
+            print "vnodes = Gt.node[Nc]['polyg'].vnodes"
+            print "poly = Gt.node[Nc]['polyg']"
         except:
             print "no Gt graph"
 
         try:
             print "Gr Nodes    :", self.Gr.number_of_nodes()
             print "Gr Edges    :", self.Gr.number_of_edges()
-            print "Nc  = Gr.node[nroom]['cycles']  "
         except:
             print "no Gr graph"
 
@@ -10048,13 +9836,7 @@ class Layout(PyLayers):
         boxes[:,2]=b+2*npt_s
         boxes[:,3]=b+3*npt_s
 
-
-
-
-
-
-
-#         _filename,ext = os.path.splitext(self.filename)
+#         _filename,ext = os.path.splitext(self._filename)
 #         _filegeom = _filename+'.off'
 #         self.filegeom=_filegeom
 #         filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
@@ -10630,7 +10412,7 @@ class Layout(PyLayers):
     def off_overlay(self,dx=0,dy=0):
         """ offset overlay image
 
-        Paramaters
+        Parameters
         ----------
 
         dx : float
@@ -10643,7 +10425,7 @@ class Layout(PyLayers):
     def scl_overlay(self,ax=1.0,ay=1.0):
         """ scale overlay image
 
-        Paramaters
+        Parameters
         ----------
 
         ax : float
@@ -10672,9 +10454,8 @@ class Layout(PyLayers):
         paths = gph.find_all_paths(self.Gs, nd_in, nd_fin)
         return paths
 
-
 if __name__ == "__main__":
-    #plt.ion()
-    #doctest.testmod()
-    L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
-    L.build()
+    plt.ion()
+    doctest.testmod()
+    #L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
+    #L.build()
