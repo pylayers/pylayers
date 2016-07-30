@@ -1,91 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+Module OSMParser
+
+This module provides classes to handle open stree map objects
 
 """
-
-Way Class
-==========
-
-.. autosummary::
-    :toctree: generated/
-
-     Way.__init__
-     Way.__repr__
-     Way.show
-
-Coords Class
-============
-
-.. autosummary::
-    :toctree: generated/
-
-    Coords.__repr__
-    Coords.clean
-    Coords.coords
-    Coords.cartesian
-
-Nodes Class
-============
-
-.. autosummary::
-    :toctree: generated/
-
-    Nodes.nodes
-    Nodes.clean
-
-Ways Class
-============
-
-.. autosummary::
-    :toctree: generated/
-
-    Ways.ways
-    Ways.clean
-    Ways.building
-    Ways.eval
-    Ways.show
-    Ways.tomaska
-    Ways.showold
-
-Relations Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-     Relations.relations
-     Relations.clean
-
-FloorPlan Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-     FloorPlan.__init__
-     FloorPlan.__repr__
-     FloorPlan.build
-     FloorPlan.show
-
-Utility Functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-     osmparse
-     extract
-     getbdg
-     buildingsparse
-
-"""
-#
-# Module OSMParser
-#
-# This module provides classes to handle open stree map objects
-#
-#
-
-
 from osmapi import OsmApi
 import geocoder as geo
 import urllib
@@ -108,7 +27,7 @@ import pdb
 
 # classes that handle the OSM data file format.
 class Way(object):
-    """
+    """  
 
     A Way is a polyline or a Polygon (if closed)
 
@@ -220,6 +139,9 @@ class Coords(object):
             self.cpt-=1
 
     def clean(self):
+        """ reset coordinates
+
+        """
         self.cpt = 0
         self.latlon={}
         self.xy = {}
@@ -375,6 +297,8 @@ class Ways(object):
     way : dict
     cpt : int
         way counter 
+
+
     Methods
     -------
 
@@ -395,12 +319,21 @@ class Ways(object):
             self.cpt += 1
 
     def clean(self):
+        """ clean ways 
+        """
         self.w = {}
         self.way = {}
         self.cpt = 0
 
     def building(self, ways , height=8.5):
         """ building callback function
+
+        Parameters
+        ----------
+
+        ways : Ways
+        height : float 
+
         """
         for osmid, tags, refs in ways:
             if 'building' in tags:
@@ -591,6 +524,12 @@ class Relations(object):
 class FloorPlan(nx.DiGraph):
     """ FloorPlan class derived from nx.DigGraph
 
+    Methods
+    -------
+
+    build : recursive construction of floor plan 
+    show : show the floor plan 
+
     """
 
     def __init__(self,rootid,coords,nodes,ways,relations):
@@ -668,9 +607,10 @@ class FloorPlan(nx.DiGraph):
 
         Parameters
         ----------
-        nid :
-        fig :
-        ax  :
+
+        nid : int 
+        fig : plt.figure 
+        ax  : plt.ax
 
         """
         if fig==[]:

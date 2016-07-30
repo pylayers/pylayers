@@ -1,221 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-.. currentmodule:: pylayers.gis.layout
-
-This class handle the description of an Indoor layout
-
-Class Layout
-============
-
-.. autosummary::
-    :toctree: generated
-
-Utility functions
------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.__init__
-    Layout.__repr__
-    Layout.__add__
-    Layout.__mul__
-    Layout.info
-    Layout.ls
-    Layout.delete
-    Layout.check
-    Layout.clip
-    Layout.help
-    Layout.g2npy
-    Layout.check2
-    Layout.cleanup
-    Layout.boundary
-    Layout.distwall
-    Layout.randTxRx
-    Layout.get_paths
-    Layout.get_zone
-    Layout.info_segment
-    Layout.find_edgelist
-
-Loading and Saving
-------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.dumpw
-    Layout.dumpr
-    Layout.load
-    Layout.save
-    Layout.loadfur
-    Layout.save
-    Layout.saveold
-
-Layout editing
---------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.editor
-    Layout.editorGtk
-    Layout.editorTk
-    Layout.add_pnod
-    Layout.add_fnod
-    Layout.add_nfpe
-    Layout.add_pons
-    Layout.add_segment
-    Layout.add_furniture
-    Layout.add_furniture_file
-    Layout.del_points
-    Layout.del_segment
-    Layout.thwall
-    Layout.edit_point
-    Layout.edit_segment
-    Layout.add_window
-    Layout.add_door
-
-Layout transformation
----------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.translate
-    Layout.rotate
-    Layout.del_cycle
-    Layout.chgmss
-    Layout.diag
-    Layout.nd2seg
-    Layout.ed2nd
-    Layout.seguv
-    Layout.segpt2
-    Layout.seg2pts
-    Layout.segpt
-    Layout.extrseg
-    Layout.seginframe2
-    Layout.seginframe
-    Layout.layerongrid
-    Layout.cycleinline
-    Layout.seginline
-
-Layout visibility
------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.visilist
-    Layout.closest_edge
-    Layout.visi_papb
-    Layout.angleonlink
-    Layout.angleonlinkold
-    Layout.layeronlink
-
-Layout interactions
--------------------
-
-    Layout.intercy
-
-SubSegment Functions
---------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.subseg
-    Layout.have_subseg
-    Layout.del_subseg
-    Layout.add_subseg
-
-Vizualisation
---------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.displaygui
-    Layout.show_nodes
-    Layout.show_seg1
-    Layout.plot_segments
-    Layout.show_segment
-    Layout.show_layer
-    Layout.facet3D
-    Layout.facets3D
-    Layout.geomfile
-    Layout._show3
-    Layout.show3
-
-Showing Graphs
----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout._showGi
-    Layout._showGt
-    Layout.showGs
-    Layout.show
-    Layout.showG
-    Layout._showGv
-
-Building Graphs
----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.build
-    Layout.buildGt
-    Layout.buildGw
-    Layout.buildGv
-    Layout.buildGi
-    Layout.outputGi
-    Layout.waypointGw
-    Layout.builGr2
-    Layout.buildGr
-    Layout.buildGr3
-
-
-Cycles and Rooms  Related Functions
------------------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.pt2cy
-    Layout.cy2pt
-    Layout.pt2ro
-    Layout.seg2ro
-
-    Layout.room2segments
-    Layout.room2nodes
-
-    Layout.waypoint
-
-Testing Functions
-------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.isseg
-    Layout.numseg
-    Layout.ispoint
-    Layout.onseg
-
-
-Signatures
-----------
-
-.. autosummary::
-    :toctree: generated/
-
-    Layout.signature
-    Layout.showSig
-    Layout.get_Sg_pos
-
-"""
 #
 #
 try:
@@ -290,7 +73,7 @@ class Layout(PyLayers):
     Attributes
     ----------
 
-    Gs     : Garph of points and segment (structure)
+    Gs     : Graph of points and segment (structure)
     Gt     : Graph of convex cycles      (topology)
     Gv     : Graph of visibility         (visibility)
     Gi     : Graph of interactions       (interactions)
@@ -300,12 +83,12 @@ class Layout(PyLayers):
     pt     : points sequence
     tahe   : tail head
 
+    
     Notes
     -----
 
     This class uses `networkx` to store Layout information
 
-    .. autosummary::
 
     """
     
@@ -2934,12 +2717,12 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        e1 : int 
+            e1 : int 
 
         Returns
         -------
 
-        boolean 
+            have_subseg_bool : boolean 
 
 
         """
@@ -5062,14 +4845,14 @@ class Layout(PyLayers):
         unit : str
             'deg' : degree values
             'rad' : radian values
-        inside : bollean
+        inside : boolean
             True :  compute the inside angles of the cycle.
-                    (a.k.a. in regard of the interior of the polygon) 
+                    (a.k.a. the interior of the polygon) 
             False : compute the outside angles of the cycle.
-                    (a.k.a.  in regard of the exterior of the polygon)
+                    (a.k.a. the exterior of the polygon)
 
-        Return
-        ------
+        Returns
+        -------
 
         (u,a)
         u : int (Np)
@@ -9278,9 +9061,21 @@ class Layout(PyLayers):
 
 
     def waypoint(self, nroom1, nroom2):
-        """
-        get the waypoint between room1 and room2
-        waypoint = waypoint(nroom1,nroom2)
+        """ get the waypoint between room1 and room2
+        
+        Parameters
+        -----------
+
+        nroom1 : int 
+            room number 1
+        nromm2 : int 
+            room number 2
+
+        Returns
+        -------
+
+        waypoint : 
+       
         """
         rooms = nx.dijkstra_path(self.Gr, nroom1, nroom2)
         nroom = len(rooms)

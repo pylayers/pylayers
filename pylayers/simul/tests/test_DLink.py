@@ -6,7 +6,6 @@ import pdb
 fGHz=np.arange(2.41,10.,0.05)
 # set the layout
 L=Layout('defstr.ini')
-L.buildGt()
 # set the link
 DL=DLink(L=L,fGHz=fGHz)
 #DL.Aa=Antenna(typ='Omni')

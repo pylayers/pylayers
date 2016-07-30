@@ -1,20 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-module ezone
-============
-
-.. currentmodule:: pylayers.gis.ezone
-
-This class handles the description of an earth zone
-
-An earth zone gathers raster and vector data
-raster data comes either from srtm or aster data
-vector data comes from openstreetmap
-
-.. autosummary::
-    :toctree: generated
-
+This module handles the description of an earth zone
 
 
 """
@@ -54,7 +41,17 @@ def maxloc(f,threshold=-np.sqrt(2)):
     Returns
     -------
 
-    g :
+    g : np.array
+        values of local maximum 
+    ind : np.array
+        index of local maximum 
+
+    Examples
+    --------
+        >>> import numpy as np 
+        >>> t = np.arange(0,6*np.pi)
+        >>> f = np.sin(2*t)*cos(3*t)*sin(5*t)
+        >>> g,ind = maxloc(f,threshold=0.3)
 
     """
     f_decr = np.roll(f,1,axis=1)
@@ -231,6 +228,9 @@ def zone(pt,rm=1000):
 
 class DEM(PyLayers):
     """ Class Digital Elevation Model
+
+    
+
     """
     def __init__(self,prefix):
 
@@ -361,10 +361,15 @@ class DEM(PyLayers):
         return fig,ax,divider
 
 class Ezone(PyLayers):
-    """
+    """ Earth zone 
+
         An Ezone is a class related to a region of Earth delimited by
         (lonmin,lonmax,latmin,latmax)
-
+        
+        An Ezone gathers raster and vector data
+            + raster data comes either from srtm or aster data
+            + vector data comes from openstreetmap
+        
         An Ezone is stored in hdf5 format
 
         Attributes
