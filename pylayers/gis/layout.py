@@ -198,7 +198,7 @@ class Layout(PyLayers):
         #self.display['layerset'] = self.sl.keys()
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
-
+        self.ax = self.display['box']
         self.zmin = 0
 
         newfile  = False
@@ -9690,7 +9690,7 @@ class Layout(PyLayers):
         return pg
 
     def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False,**kwargs):
-        """ create a .off geomview file
+        """ mayavi 3D vizualisation
 
         Parameters
         ----------

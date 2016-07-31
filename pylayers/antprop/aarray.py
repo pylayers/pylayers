@@ -3,7 +3,6 @@ import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
 import doctest
-import ipdb
 
 r"""
 
