@@ -420,7 +420,7 @@ class Layout(PyLayers):
         ----------
 
         typ : string optional
-            {'str'|'ini'|'osm'|'str2'|'wrl'}
+            {'ini'|'osm'|'wrl'}
 
         Returns
         -------
@@ -445,10 +445,6 @@ class Layout(PyLayers):
 
         """
 
-        if typ=='str':
-            pathname = os.path.join(pstruc['DIRSTRUC'],'*.'+ typ)
-        if typ=='str2':
-            pathname = os.path.join(pstruc['DIRSTRUC'],'*.' + typ)
         if typ=='ini':
             pathname = os.path.join(pstruc['DIRINI'],'*.' + typ)
         if typ=='osm':
@@ -5760,7 +5756,7 @@ class Layout(PyLayers):
 
 
     def _visual_check(self):
-        fig,axs=plt.subplots(3,2)
+        fig,axs=plt.subplots(2,2)
 
         try:
             ax = axs[0,0]
@@ -5773,18 +5769,18 @@ class Layout(PyLayers):
         except:
             print 'error with polyg in Gt or indoor parameter'
 
-        try:
+        # try:
 
+        #     ax = axs[0,1]
+        #     f,ax=self.showG('s',aw=1,ax=ax,fig=fig)
+        #     isopen = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes() if p !=0 and self.Gt.node[p]['isopen'] ]
+        #     self.pltpoly(isopen,ax=ax,fig=fig)
+        #     ax.set_title('isopen red')
+        # except:
+        #     print 'error with isopen parameter in Gt'
+
+        try:
             ax = axs[0,1]
-            f,ax=self.showG('s',aw=1,ax=ax,fig=fig)
-            isopen = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes() if p !=0 and self.Gt.node[p]['isopen'] ]
-            self.pltpoly(isopen,ax=ax,fig=fig)
-            ax.set_title('isopen red')
-        except:
-            print 'error with isopen parameter in Gt'
-
-        try:
-            ax = axs[1,0]
             f,ax=self.showG('s',aw=1,ax=ax,fig=fig)
             diffpos = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
             ax.scatter(diffpos[:,0],diffpos[:,1])
@@ -5793,20 +5789,20 @@ class Layout(PyLayers):
             print 'no diffraction found. Yet computed ?'
 
         try:
-            ax = axs[1,1]
+            ax = axs[1,0]
             f,ax=self.showG('st',labels='t',aw=1,ax=ax,fig=fig)
             ax.set_title('Gt')
         except:
             print 'no Gt found. Yet computed ?'
 
         try:
-            ax = axs[2,0]
+            ax = axs[1,1]
             f,ax=self.showG('sv',aw=1,ax=ax,fig=fig)
             ax.set_title('Gv')
         except:
             print 'no Gv found. Yet computed ?'
 
-        axs[2,1].remove()
+        # axs[2,1].remove()
 
     def _delaunay(self,poly,polyholes=[]):
         """ make a Delaunay partitioning of a polygon

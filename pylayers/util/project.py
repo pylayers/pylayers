@@ -158,11 +158,9 @@ except:
 #
 pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
-pstruc['DIRSTRUC'] =os.path.join('struc','str')
 pstruc['DIRWRL'] =os.path.join('struc','wrl')
 pstruc['DIRINI'] =os.path.join('struc','ini')
 pstruc['DIROSM'] =os.path.join('struc','osm')
-pstruc['DIRSTRUC2'] = os.path.join('struc','str')
 pstruc['DIRFUR'] = os.path.join('struc','furnitures')
 pstruc['DIRIMAGE'] = os.path.join('struc','images')
 pstruc['DIRPICKLE'] = os.path.join('struc','gpickle')
@@ -259,8 +257,6 @@ for nm,nv in pstruc.items():
 
     if nm == 'DIRANT':
         antdir = dirname
-    if nm == 'DIRSTRUC':
-        strdir = dirname
     if nm == 'DIRFUR':
         furdir = dirname
     if nm == 'DIRGEOM':
@@ -290,7 +286,7 @@ for nm,nv in pstruc.items():
 if basename != os.path.join(pylayersdir,'data'):
     if not 'win' in sys.platform:
         dirlist=['ini','struc','struc/furnitures'
-        ,'struc/osm','struc/str','struc/wrl'
+        ,'struc/osm','struc/wrl'
         ,'struc/images','struc/ini'
         ,'ant','output/Tx001','output'
         ,'geom','output/sig','output/r2d'
@@ -298,7 +294,7 @@ if basename != os.path.join(pylayersdir,'data'):
     else :
         dirlist=['ini','struc',os.path.join('struc','furnitures')
         ,os.path.join('struc','osm')
-        ,os.path.join('struc','str'),os.path.join('struc','wrl')
+        ,os.path.join('struc','wrl')
         ,os.path.join('struc','images')
         ,os.path.join('struc','ini')
         ,'ant',os.path.join('output','Tx001'),'output'
