@@ -25,5 +25,7 @@ cd ../_static
 git add *
 cd ../_templates
 git add *
+cd ../auto_examples
+git add *
 git commit -a -m "Updating Website"
 git push origin gh-pages
