@@ -5801,7 +5801,7 @@ class Layout(PyLayers):
             ax.set_title('Gv')
         except:
             print 'no Gv found. Yet computed ?'
-
+        plt.tight_layout()
         # axs[2,1].remove()
 
     def _delaunay(self,poly,polyholes=[]):
