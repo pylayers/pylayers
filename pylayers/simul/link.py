@@ -373,8 +373,8 @@ class DLink(Link):
                    'graph':'tcvirw'
                 }
 
-        self._ca = -1
-        self._cb = -1
+        # self._ca = -1
+        # self._cb = -1
         specset  = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         # set default attribute
@@ -445,8 +445,11 @@ class DLink(Link):
         #  they are chosen as center of gravity of cycle 0
         #
         ###########
+        nodes = self.L.Gt.nodes()
+        nodes = [n for n in nodes if n!=0]
         if len(self.a)==0:
-            self.ca = 1
+
+            self.ca = nodes[0]
             # self.a = self.L.cy2pt(self.ca)
         else:
             if len(kwargs['a']) ==2:
@@ -458,9 +461,9 @@ class DLink(Link):
 
         if len(self.b)==0:
             if len(self.L.Gt.node)>2:
-                self.cb = 2
+                self.cb = nodes[1]
             else:
-                self.cb = 1
+                self.cb = nodes[0]
             # self.b = self.L.cy2pt(self.cb)
         else:
             if len(kwargs['b']) ==2:
