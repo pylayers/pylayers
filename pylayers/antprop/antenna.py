@@ -342,8 +342,8 @@ class Pattern(PyLayers):
         polar indicates the orientation of the Electric field either 'x' or 'y'
 
         """
-        defaults = {'param': {'HPBW_x_deg':10,
-                              'HPBW_y_deg':40,
+        defaults = {'param': {'HPBW_x_deg':40,
+                              'HPBW_y_deg':10,
                               'Gfactor':27000,
                               'fcGHz': 27.5,
                               'polar':'x'
@@ -352,13 +352,13 @@ class Pattern(PyLayers):
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
 
-        param = kwargs['param']
+        self.param = kwargs['param']
 
         deg_to_rad = np.pi/180.
-        ld_c = 0.3/param['fcGHz']
+        ld_c = 0.3/self.param['fcGHz']
         ld = 0.3/self.fGHz
-        Dx = 0.886*ld_c/(param['HPBW_x_deg']*deg_to_rad)
-        Dy = 0.886*ld_c/(param['HPBW_y_deg']*deg_to_rad)
+        Dx = 0.886*ld_c/(self.param['HPBW_x_deg']*deg_to_rad)
+        Dy = 0.886*ld_c/(self.param['HPBW_y_deg']*deg_to_rad)
         Dx_n = Dx/ld
         Dy_n = Dy/ld
         if self.grid: 
@@ -371,24 +371,26 @@ class Pattern(PyLayers):
             phi = self.phi[:,None]
         vx = Dx_n[...,:]*np.sin(theta)*np.cos(phi)
         vy = Dy_n[...,:]*np.sin(theta)*np.sin(phi)
-        F_nor = np.abs(1+np.cos(theta)/2*np.sinc(vx)*np.sinc(vy))
+        F_nor = ((1+np.cos(theta))/2.)*np.abs(np.sinc(vx)*np.sinc(vy))
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
-        Gmax = param['Gfactor']/(HPBW_x*HPBW_y)
+        Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
         F  = np.sqrt(Gmax[...,:])*F_nor
 
-        if kwargs['param']['polar']=='x':
-            t1 = (np.cos(theta)*np.cos(phi))**2
-            t2 = np.sin(phi)**2
-        if kwargs['param']['polar']=='y':
-            t1 = (np.cos(theta)*np.sin(phi))**2
-            t2 = np.cos(phi)**2
-
-        a1 = np.sqrt(t1/(t1+t2))
-        a2 = np.sqrt(t2/(t2+t1))
-
-        self.Ft = a1*F
-        self.Fp = a2*F
+        # Handling repatition on both vector components
+        # enforce E.y = 0 
+        if self.param['polar']=='x':
+            self.Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
+            self.Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*self.Ft
+            nan_bool = np.isnan(self.Fp)
+            self.Fp[nan_bool] = F[nan_bool] 
+        # enforce E.x = 0 
+        if self.param['polar']=='y':
+            self.Ft = F/np.sqrt(1+(np.cos(theta)*np.cos(phi)/np.sin(phi))**2)
+            self.Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*self.Ft
+            nan_bool = np.isnan(self.Fp)
+            self.Fp[nan_bool] = F[nan_bool] 
+        # enforce E.x = 0 
         self.evaluated = True
         self.gain()
 
@@ -1440,7 +1442,13 @@ class Antenna(Pattern):
                 self.eval()
 
     def __repr__(self):
-        st = Pattern.__repr__(self)
+        st = ''
+        st = st + 'Antenna type : ' + self.typ +'\n'
+        st = st+'------------------------\n'
+        if 'param' in self.__dict__:
+            for k in self.param:
+                st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
+        st = st+'------------------------\n'
         rtd = 180./np.pi
         if self.fromfile:
             if isinstance(self._filename,str):
