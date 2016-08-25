@@ -334,9 +334,66 @@ class Pattern(PyLayers):
         self.radF()
 
 
+    def __paperture(self,**kwargs):
+        """ Aperture Pattern 
+
+        Aperture in the (x,y) plane. Main lobe in theta=0 direction
+
+        polar indicates the orientation of the Electric field either 'x' or 'y'
+
+        """
+        defaults = {'param': {'HPBW_x_deg':10,
+                              'HPBW_y_deg':40,
+                              'Gfactor':27000,
+                              'fcGHz': 27.5,
+                              'polar':'x'
+                             }}
+        
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        param = kwargs['param']
+
+        deg_to_rad = np.pi/180.
+        ld_c = 0.3/param['fcGHz']
+        ld = 0.3/self.fGHz
+        Dx = 0.886*ld_c/(param['HPBW_x_deg']*deg_to_rad)
+        Dy = 0.886*ld_c/(param['HPBW_y_deg']*deg_to_rad)
+        Dx_n = Dx/ld
+        Dy_n = Dy/ld
+        if self.grid: 
+            # Nth x Nph x Nf
+            theta = self.theta[:,None,None]
+            phi = self.phi[None,:,None]
+        else:
+            # Ndir x Nf 
+            theta = self.theta[:,None]
+            phi = self.phi[:,None]
+        vx = Dx_n[...,:]*np.sin(theta)*np.cos(phi)
+        vy = Dy_n[...,:]*np.sin(theta)*np.sin(phi)
+        F_nor = np.abs(1+np.cos(theta)/2*np.sinc(vx)*np.sinc(vy))
+        HPBW_x = (0.886*ld/Dx)/deg_to_rad
+        HPBW_y = (0.886*ld/Dy)/deg_to_rad
+        Gmax = param['Gfactor']/(HPBW_x*HPBW_y)
+        F  = np.sqrt(Gmax[...,:])*F_nor
+
+        if kwargs['param']['polar']=='x':
+            t1 = (np.cos(theta)*np.cos(phi))**2
+            t2 = np.sin(phi)**2
+        if kwargs['param']['polar']=='y':
+            t1 = (np.cos(theta)*np.sin(phi))**2
+            t2 = np.cos(phi)**2
+
+        a1 = np.sqrt(t1/(t1+t2))
+        a2 = np.sqrt(t2/(t2+t1))
+
+        self.Ft = a1*F
+        self.Fp = a2*F
+        self.evaluated = True
+        self.gain()
+
 
     def __pazel(self,**kwargs):
-
         """ Gauss pattern
 
         Parameters
