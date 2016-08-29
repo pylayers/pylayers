@@ -912,7 +912,8 @@ class Layout(PyLayers):
 
 
         # if problem here check file format 'z' should be a string
-        self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
+        self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values() if v[1]!= 40000000])
+        # self.maxheight=3.
         # calculate extremum of segments
         self.extrseg()
 
@@ -5305,7 +5306,7 @@ class Layout(PyLayers):
         self.Gt = nx.Graph()
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt,lambda x:-x)
-        
+
         # add polyg  to nodes
         # add indoor to nodes
         # add isopen to nodes
@@ -5379,12 +5380,21 @@ class Layout(PyLayers):
                 self.Gt.remove_node(n1)
                 # update pos of the cycle with merged polygon centroid
                 self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
+                self.Gt.pos.pop(n1)
                 # delete _air segment a
                 # do not apply g2npy  
                 self.del_segment(a,verbose=False,g2npy=False)
                 mapoldcy[n1]=n0
-
-        #
+        ######
+        # fix renumbering Gt nodes 
+        pos=self.Gt.pos
+        nl = {c:uc+1 for uc,c in enumerate(self.Gt.nodes())}
+        self.Gt = nx.relabel_nodes(self.Gt,nl)
+        self.Gt.pos={}
+        self.Gt.pos={nl[n]:pos[n] for n in nl}
+        # import ipdb
+        # ipdb.set_trace()
+        ###############
         # Find open convex cycles
         #
         #    A convex cycle is open if is has at least one segment which is _AIR or AIR
