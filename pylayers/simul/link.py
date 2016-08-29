@@ -446,7 +446,7 @@ class DLink(Link):
         #
         ###########
         nodes = self.L.Gt.nodes()
-        nodes = [n for n in nodes if n!=0]
+        nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']]
         if len(self.a)==0:
 
             self.ca = nodes[0]
@@ -1442,6 +1442,7 @@ class DLink(Link):
                 ceilheight = kwargs['ra_ceil_H']
 
             R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
+
             R.locbas(self.L)
             # ...and save
             R.fillinter(self.L)

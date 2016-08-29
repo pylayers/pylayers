@@ -1163,12 +1163,14 @@ class Rays(PyLayers,dict):
                         P = shg.MultiPoint(ptc[:2,:].T)
                         # 2 determine the cycle where ceil reflexions append
                         # uinter(nb pt x nb cycles)
-                        uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in L.Gt.nodes() if x>0] for p in P])
-
+                        mapnode=L.Gt.nodes()
+                        uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in mapnode if x>0] for p in P])
+                        # import ipdb
+                        # ipdb.set_trace()
+                        [plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
-                        uout = np.where([not L.Gt.node[u+1]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
-                        
+                        uout = np.where([not L.Gt.node[mapnode[u+1]]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
                         # 3 remove ceil reflexion of outdoor cycles
                         if len(uout)>0:
                         

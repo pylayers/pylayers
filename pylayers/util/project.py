@@ -162,6 +162,7 @@ pstruc['DIRWRL'] =os.path.join('struc','wrl')
 pstruc['DIRINI'] =os.path.join('struc','ini')
 pstruc['DIROSM'] =os.path.join('struc','osm')
 pstruc['DIRFUR'] = os.path.join('struc','furnitures')
+pstruc['DIRSTR'] = os.path.join('struc','str')
 pstruc['DIRIMAGE'] = os.path.join('struc','images')
 pstruc['DIRPICKLE'] = os.path.join('struc','gpickle')
 pstruc['DIRSLAB'] = 'ini'
@@ -287,7 +288,7 @@ if basename != os.path.join(pylayersdir,'data'):
     if not 'win' in sys.platform:
         dirlist=['ini','struc','struc/furnitures'
         ,'struc/osm','struc/wrl'
-        ,'struc/images','struc/ini'
+        ,'struc/images','struc/ini','struc/str'
         ,'ant','output/Tx001','output'
         ,'geom','output/sig','output/r2d'
         ,'output/r3d','body','body/c3d','body/wear']
@@ -297,6 +298,7 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('struc','wrl')
         ,os.path.join('struc','images')
         ,os.path.join('struc','ini')
+        ,os.path.join('struc','str')
         ,'ant',os.path.join('output','Tx001'),'output'
         ,'geom',os.path.join('output','sig')
         ,os.path.join('output','r2d')
@@ -310,6 +312,7 @@ if basename != os.path.join(pylayersdir,'data'):
                 if os.path.isfile(os.path.join(basename,dl,fi)): # file already exists
                     pass
                 else:
+                    print dl,fi
                     shutil.copy(
                         os.path.join(pylayersdir,'data',dl,fi),
                         os.path.join(basename,dl,fi))
