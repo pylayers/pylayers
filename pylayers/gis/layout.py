@@ -39,12 +39,13 @@ import urllib2 as urllib
 import hashlib
 from cStringIO import StringIO
 
-from pylayers.antprop import slab as sb
+import pylayers.antprop.slab as sb
 from pylayers.util import geomutil as geu
 from pylayers.util import plotutil as plu
 from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 from pylayers.util import cone
+
 
 #from  more_itertools import unique_everseen
 
@@ -2551,7 +2552,17 @@ class Layout(PyLayers):
         # Check slabname in ss_name 
         #
         #  update self.sl with new slab values
-        pdb.set_trace()
+
+        SDB = sb.SlabDB()
+        for sname in ss_name:
+            if sname not in self.sl.keys():
+                if sname not in SDB.keys():
+                    print('')
+                else:
+                    slab = SDB[sname]
+                    self.sl[slab['name']]=slab
+
+        
         if ss_z!=[]:
             assert len(ss_name)==len(ss_z),'Error incompatible size in chgmss'
         if ss_offset!=[]:
