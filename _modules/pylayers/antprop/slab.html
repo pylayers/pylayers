@@ -266,6 +266,7 @@
 <span class="sd">    calsig</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span> 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">import</span> <span class="nn">cPickle</span>
@@ -284,6 +285,7 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+
 
 <span class="k">class</span> <span class="nc">Interface</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Interface between 2 medium</span>
@@ -948,9 +950,9 @@
         <span class="sd">&quot;&quot;&quot; display material properties</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">print</span> <span class="s2">&quot;---------------------------------&quot;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+            <span class="k">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></div>
         <span class="c1">#print &quot; &quot;</span>
         <span class="c1">#print &quot;name : &quot;,self.name</span>
         <span class="c1">#print &quot;index :&quot;,self.index</span>
@@ -1392,7 +1394,7 @@
             <span class="n">nbmat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">na</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">na</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+                    <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">__repr__</span><span class="p">())</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">na</span><span class="o">+</span> <span class="s1">&#39; not in material Database&#39;</span><span class="p">)</span>
             <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;lmatname&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="c1">#dict.__setitem__(self,&quot;nbmat&quot;,nbmat)</span>
@@ -1433,6 +1435,7 @@
                 <span class="k">if</span> <span class="n">nf</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;f(GHz) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nf</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
+
                     <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;f(GHz) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
 
                 <span class="k">if</span> <span class="n">nt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1466,33 +1469,33 @@
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s2">&quot;------------&quot;</span>
-        <span class="k">print</span> <span class="s2">&quot;name : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="k">print</span> <span class="s2">&quot;nbmat : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">])</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;------------&quot;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;name : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;nbmat : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]))</span>
         <span class="n">chaine</span> <span class="o">=</span> <span class="s2">&quot;[ &quot;</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]:</span>
                 <span class="n">epsrc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="k">print</span> <span class="s2">&quot;epsrc : &quot;</span><span class="p">,</span> <span class="n">epsrc</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;epsrc : &quot;</span><span class="p">,</span> <span class="n">epsrc</span><span class="p">)</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
-            <span class="k">print</span> <span class="s2">&quot;index : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
-            <span class="k">print</span> <span class="s2">&quot;color : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
-            <span class="k">print</span> <span class="s2">&quot;linewidth :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;index : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">])</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;color : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">])</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;linewidth :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]:</span>
-                <span class="k">print</span> <span class="s2">&quot;---------------------&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;---------------------&quot;</span><span class="p">)</span>
                 <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
                 <span class="n">nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">nf</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;f (GHz) : &quot;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nf</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;f (GHz) : &quot;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nf</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;f (GHz) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;f (GHz) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
                 <span class="k">if</span> <span class="n">nt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;theta : &quot;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nt</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;theta : &quot;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nt</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s2">&quot;th (rad) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;th (rad) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Slab.conv"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv">[docs]</a>    <span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build lmat </span>
@@ -1895,6 +1898,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
+
 <span class="k">class</span> <span class="nc">SlabDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Slab data base</span>
 
@@ -2034,8 +2038,9 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
+
 <div class="viewcode-block" id="SlabDB.add"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.add.html#pylayers.antprop.slab.SlabDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lmatname</span><span class="p">,</span> <span class="n">lthick</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add a slab in dB</span>
+        <span class="sd">&quot;&quot;&quot; add a slab from its properties</span>
 
 
 <span class="sd">        Parameters</span>
@@ -2069,14 +2074,13 @@
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;ConcreteJc&#39;,cval=3.5,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;GlassJc&#39;,cval=2.55,alpha_cmm1=2.4,fGHz=120,typ=&#39;THz&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.add(&#39;ConcreteJc&#39;,[&#39;ConcreteJc&#39;],[0.049])</span>
-<span class="sd">            &gt;&gt;&gt; sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[</span>
-<span class="sd">                0.0029,0.0102,0.0029])</span>
+<span class="sd">            &gt;&gt;&gt; sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[0.0029,0.0102,0.0029])</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.linspace(20,60,100)*np.pi/180</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].ev(120,theta)</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; f,a=sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(120,theta)</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; f,a = sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; freq = np.linspace(110,135,50)</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(freq,theta)</span>
@@ -2106,8 +2110,7 @@
 <span class="sd">            &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;CoatingPilkington&#39;,cval=1,sigma=2.5e6,typ=&#39;epsr&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;GlassPilkington&#39;,cval = 6.9,sigma = 5e-4,typ=&#39;epsr&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; sl.add(&#39;Optitherm382&#39;,[&#39;CoatingPilkington&#39;,</span>
-<span class="sd">                &#39;GlassPilkington&#39;],[100e-9,0.00382])</span>
+<span class="sd">            &gt;&gt;&gt; sl.add(&#39;Optitherm382&#39;,[&#39;CoatingPilkington&#39;,&#39;GlassPilkington&#39;],[100e-9,0.00382])</span>
 <span class="sd">            &gt;&gt;&gt; fGHz  = np.linspace(0.9,2.2,50)</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.linspace(0,np.pi/2,100)</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;Optitherm382&#39;].ev(fGHz,theta)</span>
@@ -2379,7 +2382,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Aug 21, 2016.
+      Last updated on Aug 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

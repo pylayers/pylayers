@@ -7,10 +7,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Vector Spherical Harmonics Representation of Antennas &mdash; Python 1 documentation</title>
+    <title>2.2.2. Vector Spherical Harmonics Representation of Antennas &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1. 1   Overview" href="../TOC.html" />
+    <link rel="next" title="PyLayers" href="../../modules/pylayers.html" />
+    <link rel="prev" title="2.2.1. Description of antennas" href="Antenna.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="Antenna.html" title="2.2.1. Description of antennas"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    2.2.1. Descri...
+	    </span>
+	    <span class="hiddenrellink">
+	    2.2.1. Description of antennas
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../modules/pylayers.html" title="PyLayers"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    PyLayers
+	    </span>
+	    <span class="hiddenrellink">
+	    PyLayers
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1. 1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1. 1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1. 1   Overview
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -98,11 +166,11 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">Vector Spherical Harmonics Representation of Antennas</a><ul>
-<li><a class="reference internal" href="#display-of-the-radiation-pattern-for-all-frequencies">Display of the radiation pattern for all frequencies</a></li>
+<li><a class="reference internal" href="#">2.2.2. Vector Spherical Harmonics Representation of Antennas</a><ul>
+<li><a class="reference internal" href="#display-of-the-radiation-pattern-for-all-frequencies">2.2.2.1. Display of the radiation pattern for all frequencies</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">2.2.3. Evaluation of Vector Spherical Harmonics Coefficients</a></li>
 </ul>
 
     
@@ -114,33 +182,19 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="vector-spherical-harmonics-representation-of-antennas">
-<h1>Vector Spherical Harmonics Representation of Antennas<a class="headerlink" href="#vector-spherical-harmonics-representation-of-antennas" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-1-ebe886ecb0a6&gt;&quot;, line 4
-    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
-           ^
-SyntaxError: invalid syntax
+<h1>2.2.2. Vector Spherical Harmonics Representation of Antennas<a class="headerlink" href="#vector-spherical-harmonics-representation-of-antennas" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
+
+from pylayers.antprop.antvsh import *
+
+%matplotlib inline
 </pre></div>
 </div>
 <p>Loading an Antenna from a Matlab file</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S2R2.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-2-806a96154428&gt; in &lt;module&gt;()
-----&gt; 1 A = Antenna(&#39;S2R2.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
-
-
-NameError: name &#39;Antenna&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S2R2.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
 </pre></div>
 </div>
 <p>The shape of the  functions indicates :</p>
@@ -149,333 +203,220 @@ NameError: name &#39;Antenna&#39; is not defined
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
 <li></li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">)</span>
-<span class="go">(91, 180, 104)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>np.shape(A.Fp)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-3-a3080c48ba8c&gt; in &lt;module&gt;()
-----&gt; 1 np.shape(A.Fp)
-      2 (91, 180, 104)
-
-
-NameError: name &#39;np&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>(91, 180, 104)
 </pre></div>
 </div>
 <p>The frequency array is expressed in  and delays are expressed
 in </p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">fGHz</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = A.fGHz
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-4-7837d8426b1a&gt; in &lt;module&gt;()
-----&gt; 1 fGHz = A.fGHz
-
-
-NameError: name &#39;A&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz.shape
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span><span class="o">.</span><span class="n">shape</span>
-<span class="go">(104,)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-5-eff372d2becb&gt; in &lt;module&gt;()
-----&gt; 1 fGHz.shape
-      2 (104,)
-
-
-NameError: name &#39;fGHz&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>(104,)
 </pre></div>
 </div>
 <p>Then an electrical delay of  is applied on the
 </p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[:,:,:]</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>I = A.Ft[:,:,:]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-6-c10f1b8c978a&gt; in &lt;module&gt;()
-----&gt; 1 I = A.Ft[:,:,:]
-
-
-NameError: name &#39;A&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>I.shape
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">shape</span>
-<span class="go">(91, 180, 104)</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(91, 180, 104)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,8))
 
-&lt;ipython-input-7-417a8641729a&gt; in &lt;module&gt;()
-----&gt; 1 I.shape
-      2 (91, 180, 104)
+plt.imshow(np.unwrap(np.angle(I[:,45,:])))
 
+plt.title(r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;)
 
-NameError: name &#39;I&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:])))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;f index&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">,:])))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;f index&#39;</span><span class="p">)</span>
+plt.ylabel(&#39;f index&#39;)
 
-<span class="go">/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison</span>
-<span class="go">  if self._edgecolors == str(&#39;face&#39;):</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-714df3a8331e&gt;&quot;, line 10
-    home(/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590:, FutureWarning:, elementwise, comparison, failed;, returning, scalar, instead,, but, in, the, future, will, perform, elementwise, comparison)
-         ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tau</span><span class="o">=</span><span class="mf">4.185</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+plt.colorbar()
 
-&lt;ipython-input-9-24216f96e669&gt; in &lt;module&gt;()
-      1 tau=4.185
-----&gt; 2 I = A.Ft[:,:,:]*np.exp(-2*1j*np.pi*fGHz[None,None,:]*tau)
+plt.figure()
 
+plt.plot(fGHz,np.unwrap(np.angle(I[45,85,:])))
 
-NameError: name &#39;A&#39; is not defined
+plt.xlabel(&#39;f index&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:])))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;f index&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">,:])))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7f2a328d7190&gt;]</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f595f38dad0&gt;
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-10-07b6b2e40f77&gt;&quot;, line 7
-    [&lt;matplotlib.lines.Line2D at 0x7f2a328d7190&gt;]
-     ^
-SyntaxError: invalid syntax
+<img alt="../../_images/AntennaVSH_12_1.png" src="../../_images/AntennaVSH_12_1.png" />
+<img alt="../../_images/AntennaVSH_12_2.png" src="../../_images/AntennaVSH_12_2.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>tau=4.185
+
+I = A.Ft[:,:,:]*np.exp(-2*1j*np.pi*fGHz[None,None,:]*tau)
 </pre></div>
 </div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.imshow(np.unwrap(np.angle(I[:,45,:])))
+
+plt.title(r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;)
+
+plt.ylabel(&#39;f index&#39;)
+
+plt.colorbar()
+
+plt.figure()
+
+plt.plot(fGHz,np.unwrap(np.angle(I[45,85,:])))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f595efcf710&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/AntennaVSH_14_1.png" src="../../_images/AntennaVSH_14_1.png" />
+<img alt="../../_images/AntennaVSH_14_2.png" src="../../_images/AntennaVSH_14_2.png" />
 <div class="section" id="display-of-the-radiation-pattern-for-all-frequencies">
-<h2>Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">104</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">plt</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[</span><span class="mi">45</span><span class="p">,:,</span><span class="n">nf</span><span class="p">]))</span>
+<h2>2.2.2.1. Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+
+for nf in range(104):
+    plt.polar(A.phi,abs(A.Ft[45,:,nf]))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-11-f991f6d8f1a6&gt; in &lt;module&gt;()
-----&gt; 1 plt.figure(figsize=(10,10))
-      2 for nf in range(104):
-      3     plt.polar(A.phi,abs(A.Ft[45,:,nf]))
-
-
-NameError: name &#39;plt&#39; is not defined
+<img alt="../../_images/AntennaVSH_16_0.png" src="../../_images/AntennaVSH_16_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.info()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">S2R2.mat</span>
-<span class="go">type :  mat</span>
-<span class="go">S2R2</span>
-<span class="go">Th1</span>
-<span class="go">04/13/12</span>
-<span class="go">09:59</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>S2R2.mat
+type :  mat
+S2R2
+Th1
+04/13/12
+09:59
 
 
-<span class="go">2</span>
-<span class="go">2</span>
-<span class="go">Nb theta (lat) : 91</span>
-<span class="go">Nb phi (lon) : 180</span>
-<span class="go">No vsh coefficient calculated yet</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-12-837bfeceeb4d&gt;&quot;, line 3
-    type :  mat
-         ^
-SyntaxError: invalid syntax
+2
+2
+Nb theta (lat) : 91
+Nb phi (lon) : 180
+No vsh coefficient calculated yet
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
-<h1>Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h1>
+<h1>2.2.3. Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h1>
 <p>At that stage we compute the Vector Spherical Harmonics coefficients</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">=</span><span class="n">vsh</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A=vsh(A)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-13-aab26d118494&gt; in &lt;module&gt;()
-----&gt; 1 A=vsh(A)
-
-
-NameError: name &#39;vsh&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.info()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">S2R2.mat</span>
-<span class="go">type :  mat</span>
-<span class="go">S2R2</span>
-<span class="go">Th1</span>
-<span class="go">04/13/12</span>
-<span class="go">09:59</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>S2R2.mat
+type :  mat
+S2R2
+Th1
+04/13/12
+09:59
 
 
-<span class="go">2</span>
-<span class="go">2</span>
-<span class="go">Nb theta (lat) : 91</span>
-<span class="go">Nb phi (lon) : 180</span>
-<span class="go">No vsh coefficient calculated yet</span>
+2
+2
+Nb theta (lat) : 91
+Nb phi (lon) : 180
+No vsh coefficient calculated yet
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-14-837bfeceeb4d&gt;&quot;, line 3
-    type :  mat
-         ^
-SyntaxError: invalid syntax
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C.s1tos2(30)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+<div class="highlight-none"><div class="highlight"><pre><span></span>Br
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 
-&lt;ipython-input-15-98aa5dfbfef3&gt; in &lt;module&gt;()
-----&gt; 1 A.C.s1tos2(30)
+Bi
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 
+Cr
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 
-NameError: name &#39;A&#39; is not defined
+Ci
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span>
-<span class="go">Br</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
 
-<span class="go">Bi</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
-
-<span class="go">Cr</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
-
-<span class="go">Ci</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
+A.C.show(&#39;s2&#39;,k=300)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-16-aa32a992ae2e&gt;&quot;, line 3
-    -------------
-                 ^
-SyntaxError: invalid syntax
+<img alt="../../_images/AntennaVSH_23_0.png" src="../../_images/AntennaVSH_23_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C.s2tos3()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.C
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+<div class="highlight-none"><div class="highlight"><pre><span></span>Br
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 
-&lt;ipython-input-17-a2dac715dfe4&gt; in &lt;module&gt;()
-----&gt; 1 fig = plt.figure(figsize=(8,8))
-      2 A.C.show(&#39;s2&#39;,k=300)
+Bi
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 
+Cr
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 
-NameError: name &#39;plt&#39; is not defined
+Ci
+-------------
+L1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 145
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(8,8))
+
+A.C.show(&#39;s3&#39;)
+
+plt.tight_layout()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-18-34ddad199ddd&gt; in &lt;module&gt;()
-----&gt; 1 A.C.s2tos3()
-
-
-NameError: name &#39;A&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span>
-<span class="go">Br</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
-<span class="go">Ncoeff s3 : 145</span>
-
-<span class="go">Bi</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
-<span class="go">Ncoeff s3 : 145</span>
-
-<span class="go">Cr</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
-<span class="go">Ncoeff s3 : 145</span>
-
-<span class="go">Ci</span>
-<span class="go">-------------</span>
-<span class="go">L1  : 90</span>
-<span class="go">M1  : 89</span>
-<span class="go">Ncoeff s1 8010</span>
-<span class="go">NCoeff s2  : 495</span>
-<span class="go">Ncoeff s3 : 145</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-19-e5635a621117&gt;&quot;, line 3
-    -------------
-                 ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-20-627adf1c1577&gt; in &lt;module&gt;()
-----&gt; 1 fig = plt.figure(figsize=(8,8))
-      2 A.C.show(&#39;s3&#39;)
-      3 plt.tight_layout()
-
-
-NameError: name &#39;plt&#39; is not defined
-</pre></div>
-</div>
+<img alt="../../_images/AntennaVSH_26_0.png" src="../../_images/AntennaVSH_26_0.png" />
 </div>
 
 
@@ -489,15 +430,30 @@ NameError: name &#39;plt&#39; is not defined
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Aug 30, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/2-AP/AntennaVSH.txt"
+    <a href="../../_sources/notebook/2-AP/AntennaVSH.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="Antenna.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="../../modules/pylayers.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

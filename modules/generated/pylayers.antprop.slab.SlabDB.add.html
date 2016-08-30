@@ -185,7 +185,7 @@
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.add">
 <code class="descclassname">SlabDB.</code><code class="descname">add</code><span class="sig-paren">(</span><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>add a slab in dB</p>
+<dd><p>add a slab from its properties</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -215,14 +215,13 @@ EUCAP 2010</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; sl.mat.add(name=&#39;ConcreteJc&#39;,cval=3.5,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)
 &gt;&gt;&gt; sl.mat.add(name=&#39;GlassJc&#39;,cval=2.55,alpha_cmm1=2.4,fGHz=120,typ=&#39;THz&#39;)
 &gt;&gt;&gt; sl.add(&#39;ConcreteJc&#39;,[&#39;ConcreteJc&#39;],[0.049])
-&gt;&gt;&gt; sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[
-    0.0029,0.0102,0.0029])
+&gt;&gt;&gt; sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[0.0029,0.0102,0.0029])
 &gt;&gt;&gt; theta = np.linspace(20,60,100)*np.pi/180
 &gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].ev(120,theta)
-&gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])
+&gt;&gt;&gt; f,a=sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])
 &gt;&gt;&gt; fig = plt.figure()
 &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(120,theta)
-&gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])
+&gt;&gt;&gt; f,a = sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])
 &gt;&gt;&gt; freq = np.linspace(110,135,50)
 &gt;&gt;&gt; fig = plt.figure()
 &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(freq,theta)
@@ -230,6 +229,22 @@ EUCAP 2010</p>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1.py">Source code</a>)</p>
+<div class="figure" id="id1">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_00.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_00.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id2">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_01.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_01.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id3">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_02.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_02.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_02.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_02.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_02.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id4">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_03.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_03.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_03.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_03.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_03.pdf">pdf</a>)</span></p>
+</div>
 <p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">&#8220;[Kiani2007] Glass Characterization for Designing
 Frequency Selective Surfaces to Improve Transmission through Energy saving
 glass windows  Kiani 2007&#8221;</a>
@@ -242,15 +257,17 @@ The surface impedance is , the thicknesss is </p>
 &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
 &gt;&gt;&gt; sl.mat.add(name=&#39;CoatingPilkington&#39;,cval=1,sigma=2.5e6,typ=&#39;epsr&#39;)
 &gt;&gt;&gt; sl.mat.add(name=&#39;GlassPilkington&#39;,cval = 6.9,sigma = 5e-4,typ=&#39;epsr&#39;)
-&gt;&gt;&gt; sl.add(&#39;Optitherm382&#39;,[&#39;CoatingPilkington&#39;,
-    &#39;GlassPilkington&#39;],[100e-9,0.00382])
+&gt;&gt;&gt; sl.add(&#39;Optitherm382&#39;,[&#39;CoatingPilkington&#39;,&#39;GlassPilkington&#39;],[100e-9,0.00382])
 &gt;&gt;&gt; fGHz  = np.linspace(0.9,2.2,50)
 &gt;&gt;&gt; theta = np.linspace(0,np.pi/2,100)
 &gt;&gt;&gt; sl[&#39;Optitherm382&#39;].ev(fGHz,theta)
 &gt;&gt;&gt; sl[&#39;Optitherm382&#39;].pcolor(dB=True)
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-2.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-2.png" />
+</div>
 </dd></dl>
 
 </div>
@@ -266,7 +283,7 @@ The surface impedance is , the thicknesss is </p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 31, 2016.
+      Last updated on Aug 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.slab.SlabDB.add.rst.txt"
