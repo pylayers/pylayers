@@ -122,6 +122,7 @@ Utility Functions
     calsig
 
 """
+from __future__ import division, print_function, absolute_import 
 import os
 import string
 import cPickle
@@ -140,6 +141,7 @@ from scipy.interpolate import interp1d
 import copy
 import pdb
 import copy
+
 
 class Interface(PyLayers):
     """ Interface between 2 medium
@@ -804,9 +806,9 @@ class Mat(PyLayers,dict):
         """ display material properties
         """
 
-        print "---------------------------------"
+        print("---------------------------------")
         for k in self:
-            print k, self[k]
+            print(k, self[k])
         #print " "
         #print "name : ",self.name
         #print "index :",self.index
@@ -1248,7 +1250,7 @@ class Slab(Interface,dict):
             nbmat = len(value)
             for na in value:
                 if na not in self.mat:
-                    print self.mat.__repr__()
+                    print(self.mat.__repr__())
                     raise ValueError(na+ ' not in material Database')
             dict.__setitem__(self,"lmatname", value)
             #dict.__setitem__(self,"nbmat",nbmat)
@@ -1289,6 +1291,7 @@ class Slab(Interface,dict):
                 if nf > 1:
                     st = st + "f(GHz) : " + str((self.fGHz[0], self.fGHz[-1], nf))+'\n'
                 else:
+
                     st = st + "f(GHz) : " + str(self.fGHz[0])+'\n'
 
                 if nt > 1:
@@ -1322,33 +1325,33 @@ class Slab(Interface,dict):
             >>> plt.show()
 
         """
-        print "------------"
-        print "name : ", self['name']
-        print "nbmat : ", len(self['lmatname'])
+        print("------------")
+        print("name : ", self['name'])
+        print("nbmat : ", len(self['lmatname']))
         chaine = "[ "
         for name in self['lmatname']:
             self.mat[name].info()
             if self['evaluated']:
                 epsrc = self.mat[name].eval(self.fGHz[0])
-                print "epsrc : ", epsrc
+                print("epsrc : ", epsrc)
             chaine = chaine + name + ' '
             chaine = chaine + ']'
-            print "index : ", self['index']
-            print "color : ", self['color']
-            print "linewidth :", self['linewidth']
+            print("index : ", self['index'])
+            print("color : ", self['color'])
+            print("linewidth :", self['linewidth'])
             if self['evaluated']:
-                print "---------------------"
+                print("---------------------")
                 nf = len(self.fGHz)
                 nt = len(self.theta)
                 if nf > 1:
-                    print "f (GHz) : ", (self.fGHz[0], self.fGHz[-1], nf)
+                    print("f (GHz) : ", (self.fGHz[0], self.fGHz[-1], nf))
                 else:
-                    print "f (GHz) : ", self.fGHz[0]
+                    print("f (GHz) : ", self.fGHz[0])
 
                 if nt > 1:
-                    print "theta : ", (self.theta[0], self.theta[-1], nt)
+                    print("theta : ", (self.theta[0], self.theta[-1], nt))
                 else:
-                    print "th (rad) : ", self.theta[0]
+                    print("th (rad) : ", self.theta[0])
 
     def conv(self):
         """ build lmat 
@@ -1751,6 +1754,7 @@ class Slab(Interface,dict):
 
         return fig,ax
 
+
 class SlabDB(dict):
     """ Slab data base
 
@@ -1890,8 +1894,9 @@ class SlabDB(dict):
 
         return fig,ax
 
+
     def add(self, name, lmatname, lthick, color='black'):
-        """ add a slab in dB
+        """ add a slab from its properties
 
 
         Parameters
@@ -1925,14 +1930,13 @@ class SlabDB(dict):
             >>> sl.mat.add(name='ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
             >>> sl.mat.add(name='GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
             >>> sl.add('ConcreteJc',['ConcreteJc'],[0.049])
-            >>> sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
-                0.0029,0.0102,0.0029])
+            >>> sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[0.0029,0.0102,0.0029])
             >>> theta = np.linspace(20,60,100)*np.pi/180
             >>> sl['ConcreteJc'].ev(120,theta)
-            >>> sl['ConcreteJc'].plotwrt(var='a',typ=['l20'])
+            >>> f,a=sl['ConcreteJc'].plotwrt(var='a',typ=['l20'])
             >>> fig = plt.figure()
             >>> sl['DoubleGlass'].ev(120,theta)
-            >>> sl['DoubleGlass'].plotwrt(var='a',typ=['l20'])
+            >>> f,a = sl['DoubleGlass'].plotwrt(var='a',typ=['l20'])
             >>> freq = np.linspace(110,135,50)
             >>> fig = plt.figure()
             >>> sl['DoubleGlass'].ev(freq,theta)
@@ -1962,8 +1966,7 @@ class SlabDB(dict):
             >>> sl = SlabDB('matDB.ini','slabDB.ini')
             >>> sl.mat.add(name='CoatingPilkington',cval=1,sigma=2.5e6,typ='epsr')
             >>> sl.mat.add(name='GlassPilkington',cval = 6.9,sigma = 5e-4,typ='epsr')
-            >>> sl.add('Optitherm382',['CoatingPilkington',
-                'GlassPilkington'],[100e-9,0.00382])
+            >>> sl.add('Optitherm382',['CoatingPilkington','GlassPilkington'],[100e-9,0.00382])
             >>> fGHz  = np.linspace(0.9,2.2,50)
             >>> theta = np.linspace(0,np.pi/2,100)
             >>> sl['Optitherm382'].ev(fGHz,theta)
