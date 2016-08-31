@@ -266,6 +266,7 @@ class Layout(PyLayers):
                         rebuild = True 
                     else:
                         self.dumpr('stvirw')
+                        rebuild = False
                 else: 
                     rebuild = True
 
@@ -4670,6 +4671,7 @@ class Layout(PyLayers):
         if 't' in self.lbltg:
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
+        write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
 
         
         # root,ext = os.path.splitext(self._filename)
@@ -4752,6 +4754,7 @@ class Layout(PyLayers):
         if 't' in graphs :
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
+        setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
 
 
 

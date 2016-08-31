@@ -375,6 +375,7 @@ class DLink(Link):
 
         # self._ca = -1
         # self._cb = -1
+
         specset  = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         # set default attribute
@@ -429,7 +430,7 @@ class DLink(Link):
                      'Ct':{'exist':False,'grpname':''},
                      'H':{'exist':False,'grpname':''}
                     }
-
+       
         try:
             self.L.dumpr()
         except:
@@ -1368,7 +1369,7 @@ class DLink(Link):
         ############
         # Signatures
         ############
-        pdb.set_trace()
+        
         if self.verbose :
             print "Start Signatures"
         tic = time.time()
@@ -1418,6 +1419,7 @@ class DLink(Link):
         ############
         # Rays
         ############
+
         if self.verbose :
             print "Start Rays"
         tic = time.time()
