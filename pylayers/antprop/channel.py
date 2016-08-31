@@ -124,7 +124,7 @@ class TBchannel(bs.TBsignal):
         return(tau_Emax)
 
     def tau_moy(self, alpha=0.1, tau0=0):
-        """ calculate mean excess delay starting from delay tau_0
+        """ calculate mean excess delay starting from delay tau0
 
         Parameters
         ----------
@@ -142,15 +142,16 @@ class TBchannel(bs.TBsignal):
         cdf = cdf/cdf[:,-1][:,None]
 
         #pdb.set_trace()
-        pdf = np.diff(cdf.y)
+        pdf = np.diff(cdf)
 
 
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
+        u = np.nonzero(cdf > alpha)[0]
+        v = np.nonzero(cdf < 1 - alpha)[0]
 
         t = t[u[0]:v[-1]]
         pdf = pdf[u[0]:v[-1]]
 
+        
         a = np.sum(t * pdf)
         b = np.sum(pdf)
         taum = a / b
@@ -1015,7 +1016,7 @@ class TUchannel(TBchannel,bs.TUsignal):
            self.y = np.vstack((self.y,ynew))
         else:
            self.y = ynew[np.newaxis,:]
-
+        self.y = np.delete(self.y,0,0)
 
     def readcir(self,filename,outdir=[]):
         """ read channel impulse response

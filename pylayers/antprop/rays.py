@@ -363,12 +363,11 @@ class Rays(PyLayers,dict):
             raise NameError('Rays: issue when reading h5py file')
 
         # fill if save was filled
-
         # temporary solution in order to avoid
         # creating save for Interactions classes
 
         if self.filled:
-            L=Layout(self.Lfilename)
+            L=Layout(self.Lfilename,build=True)
             self.fillinter(L)
 
         if self.evaluated:

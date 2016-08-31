@@ -888,7 +888,7 @@ class Layout(PyLayers):
             index = nsmax+1
             for ks in useg:
                 k = self.tgs[ks]                        # index numpy
-                self.offset[k]=self.Gs.node[ks]['offset']
+                self.offset[k] = self.Gs.node[ks]['offset']
                 self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
                 nameslab  = self.Gs.node[ks]['name']   # update sla array
                 assert nameslab!='', "segment "+str(ks)+ " is not defined"
@@ -2328,50 +2328,6 @@ class Layout(PyLayers):
             self.Gs.pos[k]=(ptr[0],ptr[1])
 
         self.g2npy()
-
-    def del_cycle(self, lnc):
-        """ delete a cycle
-
-        Parameters
-        ----------
-
-        lnc :  list of cycle number
-
-        """
-
-        if (type(lnc) == np.ndarray):
-            lnc = list(lnc)
-
-        if (type(lnc) == int):
-            lnc = [lnc]
-
-        # for all cycles
-        for nc in lnc:
-            # get nodes of the cycles
-            vnodes = np.array(self.Gt.node[nc]['cycle'].cycle)
-            # get neighbors cycles
-            neigh = self.Gt.neighbors(nc)
-            # array of nodes of neighbors
-            tvn = np.array([])
-            # for all neihbor cycles
-            for ncy in neigh:
-                #vn = np.array(self.Gt.node[ncy]['vnodes'])
-                # get nodes of neighbor cycle
-                vn = np.array(self.Gt.node[ncy]['cycle'].cycle)
-                # append nodes in tvn
-                try:
-                    tvn = np.hstack((tvn, vn))
-                except:
-                    tvn = vn
-            # remove multiple values
-            utvn = np.unique(tvn)
-            # destroy nodes which are not involved with neighbors
-            udel = vnodes[~np.in1d(vnodes, utvn)]
-
-            # delete cycle
-            self.Gt.remove_node(nc)
-            # delete nodes in udel
-            self.del_segment(udel)
 
     def check2(self):
         """ Layout checking
@@ -4715,6 +4671,7 @@ class Layout(PyLayers):
         if 't' in self.lbltg:
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
+        write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
 
         
         # root,ext = os.path.splitext(self._filename)
@@ -4774,6 +4731,7 @@ class Layout(PyLayers):
 
         for k in self.Gt.node:
             if k != 0:
+                #vnodes = self.Gt.node[k]['cycle'].cycle
                 vnodes = self.Gt.node[k]['polyg'].vnodes
                 if vnodes[0]<0:
                     self.Gt.node[k]['polyg'].vnodes = vnodes
@@ -4796,6 +4754,7 @@ class Layout(PyLayers):
         if 't' in graphs :
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
+        setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
 
 
 
