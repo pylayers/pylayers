@@ -265,6 +265,7 @@ class Layout(PyLayers):
                         rebuild = True 
                     else:
                         self.dumpr('stvirw')
+                        rebuild = False
                 else: 
                     rebuild = True
 
@@ -4757,7 +4758,7 @@ class Layout(PyLayers):
 
         for k in self.Gt.node:
             if k != 0:
-                vnodes = self.Gt.node[k]['cycle'].cycle
+                vnodes = self.Gt.node[k]['polyg'].vnodes
                 if vnodes[0]<0:
                     self.Gt.node[k]['polyg'].vnodes = vnodes
                 else:

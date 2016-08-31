@@ -1167,7 +1167,7 @@ class Rays(PyLayers,dict):
                         uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in mapnode if x>0] for p in P])
                         # import ipdb
                         # ipdb.set_trace()
-                        [plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
+                        # [plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
                         uout = np.where([not L.Gt.node[mapnode[u+1]]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
@@ -2079,7 +2079,6 @@ class Rays(PyLayers,dict):
 
                 # assign floor and ceil slab
                 ############################
-
 
                 slT=L.sla[nstrf[uT]]
                 slR=L.sla[nstrf[uR]]
