@@ -2080,7 +2080,7 @@ class Rays(PyLayers,dict):
                 # assign floor and ceil slab
                 ############################
 
-
+                pdb.set_trace()
                 slT=L.sla[nstrf[uT]]
                 slR=L.sla[nstrf[uR]]
 

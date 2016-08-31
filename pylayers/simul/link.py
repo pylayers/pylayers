@@ -1368,6 +1368,7 @@ class DLink(Link):
         ############
         # Signatures
         ############
+        pdb.set_trace()
         if self.verbose :
             print "Start Signatures"
         tic = time.time()
@@ -1444,6 +1445,7 @@ class DLink(Link):
 
             R.locbas(self.L)
             # ...and save
+
             R.fillinter(self.L)
 
             C = Ctilde()
