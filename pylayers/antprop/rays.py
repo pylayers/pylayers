@@ -1168,6 +1168,7 @@ class Rays(PyLayers,dict):
                         # import ipdb
                         # ipdb.set_trace()
                         # [plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
+                        #[ plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
                         uout = np.where([not L.Gt.node[mapnode[u+1]]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0

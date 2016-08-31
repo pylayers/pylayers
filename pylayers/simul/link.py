@@ -448,7 +448,6 @@ class DLink(Link):
         nodes = self.L.Gt.nodes()
         nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']]
         if len(self.a)==0:
-
             self.ca = nodes[0]
             # self.a = self.L.cy2pt(self.ca)
         else:
@@ -456,22 +455,22 @@ class DLink(Link):
                 a=np.r_[kwargs['a'],1.0]
             else:
                 a=kwargs['a']
+            self.ca = self.L.pt2cy(a)
             self.a = a
-            # self.ca = self.L.pt2cy(self.a)
 
         if len(self.b)==0:
             if len(self.L.Gt.node)>2:
                 self.cb = nodes[1]
             else:
                 self.cb = nodes[0]
-            # self.b = self.L.cy2pt(self.cb)
+            self.b = self.L.cy2pt(self.cb)
         else:
             if len(kwargs['b']) ==2:
                 b=np.r_[kwargs['b'],1.0]
             else:
                 b=kwargs['b']
+            self.cb = self.L.pt2cy(b)
             self.b = b
-            # self.cb = self.L.pt2cy(self.b)
 
 
        
