@@ -519,6 +519,7 @@
 
         <span class="c1"># self._ca = -1</span>
         <span class="c1"># self._cb = -1</span>
+
         <span class="n">specset</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;Aa&#39;</span><span class="p">,</span><span class="s1">&#39;Ab&#39;</span><span class="p">,</span><span class="s1">&#39;Ta&#39;</span><span class="p">,</span><span class="s1">&#39;Tb&#39;</span><span class="p">,</span><span class="s1">&#39;L&#39;</span><span class="p">,</span><span class="s1">&#39;fGHz&#39;</span><span class="p">,</span><span class="s1">&#39;wav&#39;</span><span class="p">]</span>
 
         <span class="c1"># set default attribute</span>
@@ -573,7 +574,7 @@
                      <span class="s1">&#39;Ct&#39;</span><span class="p">:{</span><span class="s1">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s1">&#39;grpname&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">},</span>
                      <span class="s1">&#39;H&#39;</span><span class="p">:{</span><span class="s1">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s1">&#39;grpname&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
                     <span class="p">}</span>
-
+       
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
@@ -1512,6 +1513,7 @@
         <span class="c1">############</span>
         <span class="c1"># Signatures</span>
         <span class="c1">############</span>
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
             <span class="k">print</span> <span class="s2">&quot;Start Signatures&quot;</span>
         <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -1561,6 +1563,7 @@
         <span class="c1">############</span>
         <span class="c1"># Rays</span>
         <span class="c1">############</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
             <span class="k">print</span> <span class="s2">&quot;Start Rays&quot;</span>
         <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -1588,6 +1591,7 @@
 
             <span class="n">R</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
             <span class="c1"># ...and save</span>
+
             <span class="n">R</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 
             <span class="n">C</span> <span class="o">=</span> <span class="n">Ctilde</span><span class="p">()</span>
@@ -1972,7 +1976,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Aug 30, 2016.
+      Last updated on Aug 31, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

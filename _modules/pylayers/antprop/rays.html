@@ -507,12 +507,11 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Rays: issue when reading h5py file&#39;</span><span class="p">)</span>
 
         <span class="c1"># fill if save was filled</span>
-
         <span class="c1"># temporary solution in order to avoid</span>
         <span class="c1"># creating save for Interactions classes</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">:</span>
-            <span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span><span class="p">)</span>
+            <span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">build</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
@@ -2224,7 +2223,7 @@
                 <span class="c1"># assign floor and ceil slab</span>
                 <span class="c1">############################</span>
 
-
+                
                 <span class="n">slT</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uT</span><span class="p">]]</span>
                 <span class="n">slR</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uR</span><span class="p">]]</span>
 
@@ -3139,7 +3138,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Aug 30, 2016.
+      Last updated on Aug 31, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
