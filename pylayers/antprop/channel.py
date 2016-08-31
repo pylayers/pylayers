@@ -2246,6 +2246,7 @@ class Tchannel(bs.FUsignal):
         Etot = self.energy(mode=mode) + 1e-15
 
 
+
         if normalize:
             Emax = max(Etot)
             Etot = Etot / Emax
