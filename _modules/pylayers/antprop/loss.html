@@ -989,10 +989,17 @@
     <span class="c1"># determine incidence angles on segment crossing p1-p2 segment</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
 
-    <span class="c1"># as many slabs as segments</span>
-    <span class="n">slabs</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]]</span>
+    <span class="c1"># as many slabs as segments and subsegments</span>
+    <span class="n">us</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> 
+    <span class="n">slabs</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
+    <span class="n">check</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slabs</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
+    <span class="c1">#</span>
+    <span class="c1"># As segment numbering is not necessarily contiguous </span>
+    <span class="c1"># there exist void string &#39;&#39; in slabs</span>
     <span class="n">cslab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">slabs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;&#39;</span> <span class="ow">in</span> <span class="n">cslab</span><span class="p">:</span>
+        <span class="n">cslab</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
     <span class="n">LossWallo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="n">Nlink</span><span class="p">))</span>
     <span class="n">LossWallp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="n">Nlink</span><span class="p">))</span>
@@ -1735,7 +1742,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 01, 2016.
+      Last updated on Sep 02, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

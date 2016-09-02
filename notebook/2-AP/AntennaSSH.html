@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="2.2.2. Vector Spherical Harmonics Representation of Antennas" href="AntennaVSH.html" />
+    <link rel="prev" title="2.2.1. Description of antennas" href="Antenna.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="Antenna.html" title="2.2.1. Description of antennas"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    2.2.1. Descri...
+	    </span>
+	    <span class="hiddenrellink">
+	    2.2.1. Description of antennas
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="AntennaVSH.html" title="2.2.2. Vector Spherical Harmonics Representation of Antennas"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    2.2.2. Vector...
+	    </span>
+	    <span class="hiddenrellink">
+	    2.2.2. Vector Spherical Harmonics Representation of Antennas
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1   Overview
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,310 +178,188 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="scalar-spherical-harmonics">
 <h1>Scalar Spherical Harmonics<a class="headerlink" href="#scalar-spherical-harmonics" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
+from pylayers.antprop.antssh import *
+%matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-1-4506c685f97e&gt;&quot;, line 4
-    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
-           ^
-SyntaxError: invalid syntax
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-2-e9264d69a718&gt; in &lt;module&gt;()
-----&gt; 1 A = Antenna(&#39;S1R1.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
-
-
-NameError: name &#39;Antenna&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>Antenna type : mat
+------------------------
+------------------------
+file name : S1R1.mat
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+-----------------------
+      evaluated
+-----------------------
+Ntheta : 91
+Nphi : 180
+   f = 5.60 GHz
+   theta = 70.00 (degrees)
+   phi = 272.00  (degrees)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>
-<span class="go">Antenna type : mat</span>
-<span class="go">------------------------</span>
-<span class="go">file name : S1R1.mat</span>
-<span class="go">fmin : 0.80GHz</span>
-<span class="go">fmax : 5.95GHz</span>
-<span class="go">step : 50.00MHz</span>
-<span class="go">Nf : 104</span>
-<span class="go">-----------------------</span>
-<span class="go">      evaluated</span>
-<span class="go">-----------------------</span>
-<span class="go">Ntheta : 91</span>
-<span class="go">Nphi : 180</span>
-<span class="go">   f = 5.60 GHz</span>
-<span class="go">   theta = 70.00 (degrees)</span>
-<span class="go">   phi = 272.00  (degrees)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.nf
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-e0e13be6d99a&gt;&quot;, line 2
-    Antenna type : mat
-               ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>104
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">nf</span>
-<span class="go">104</span>
+<p>To calculate scalar spherical harmonics use method <code class="docutils literal"><span class="pre">ssh(A,L)</span></code></p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>L = 5
+A = ssh(A,L=5)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-4-75576ca402f7&gt; in &lt;module&gt;()
-----&gt; 1 A.nf
-      2 104
-
-
-NameError: name &#39;A&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
 </pre></div>
 </div>
-<p>To calculate scalar spherical harmonics use method <tt class="docutils literal"><span class="pre">ssh(A,L)</span></tt></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">ssh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Antenna type : mat
+------------------------
+------------------------
+file name : S1R1.mat
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+-----------------------
+      evaluated
+-----------------------
+Ntheta : 91
+Nphi : 180
+   f = 5.60 GHz
+   theta = 70.00 (degrees)
+   phi = 272.00  (degrees)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-5-711dcc2ce081&gt; in &lt;module&gt;()
-      1 L = 5
-----&gt; 2 A = ssh(A,L=5)
-
-
-NameError: name &#39;ssh&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>
-<span class="go">Antenna type : mat</span>
-<span class="go">------------------------</span>
-<span class="go">file name : S1R1.mat</span>
-<span class="go">fmin : 0.80GHz</span>
-<span class="go">fmax : 5.95GHz</span>
-<span class="go">step : 50.00MHz</span>
-<span class="go">Nf : 104</span>
-<span class="go">-----------------------</span>
-<span class="go">      evaluated</span>
-<span class="go">-----------------------</span>
-<span class="go">Ntheta : 91</span>
-<span class="go">Nphi : 180</span>
-<span class="go">   f = 5.60 GHz</span>
-<span class="go">   theta = 70.00 (degrees)</span>
-<span class="go">   phi = 272.00  (degrees)</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3235ed210&gt;]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-6-e0e13be6d99a&gt;&quot;, line 2
-    Antenna type : mat
-               ^
-SyntaxError: invalid syntax
+<img alt="../../_images/AntennaSSH_8_1.png" src="../../_images/AntennaSSH_8_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.savesh2()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe754161bd0&gt;]</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/ant/S1R1.sh2  already exist
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-7-a2c9a12f1b70&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fe754161bd0&gt;]
-     ^
-SyntaxError: invalid syntax
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.loadsh2()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">savesh2</span><span class="p">()</span>
-<span class="go">create  /home/uguen/Bureau/P1/ant/S1R1.sh2  file</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-47020edc7b1d&gt;&quot;, line 2
-    create  /home/uguen/Bureau/P1/ant/S1R1.sh2  file
-                                                   ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3234ec1d0&gt;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">loadsh2</span><span class="p">()</span>
+<img alt="../../_images/AntennaSSH_11_1.png" src="../../_images/AntennaSSH_11_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.s2tos3()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-9-73bf83d236c0&gt; in &lt;module&gt;()
-----&gt; 1 A.loadsh2()
-
-
-NameError: name &#39;A&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s3[0]))
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe7540d0b90&gt;]</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa32342ae10&gt;]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-10-0f345f1c16aa&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fe7540d0b90&gt;]
-     ^
-SyntaxError: invalid syntax
+<img alt="../../_images/AntennaSSH_13_1.png" src="../../_images/AntennaSSH_13_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.Cx.ind2.shape
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(36, 2)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-11-889ab716c956&gt; in &lt;module&gt;()
-----&gt; 1 A.S.s2tos3()
-
-
-NameError: name &#39;A&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.savesh3()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe753d11510&gt;]</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1/ant/S1R1.sh3  already exist
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-12-30b0f3bba346&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fe753d11510&gt;]
-     ^
-SyntaxError: invalid syntax
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[0]))
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">ind2</span><span class="o">.</span><span class="n">shape</span>
-<span class="go">(36, 2)</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa323372190&gt;]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-13-df61edd3218d&gt; in &lt;module&gt;()
-----&gt; 1 A.S.Cx.ind2.shape
-      2 (36, 2)
-
-
-NameError: name &#39;A&#39; is not defined
+<img alt="../../_images/AntennaSSH_16_1.png" src="../../_images/AntennaSSH_16_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.loadsh3()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">savesh3</span><span class="p">()</span>
-<span class="go">/home/uguen/Bureau/P1/ant/S1R1.sh3  already exist</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s3[100]))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-14-90b51d2b8bf5&gt;&quot;, line 2
-    home(/uguen/Bureau/P1/ant/S1R1.sh3, already, exist)
-         ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3232ac150&gt;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe753c51250&gt;]</span>
+<img alt="../../_images/AntennaSSH_18_1.png" src="../../_images/AntennaSSH_18_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(abs(A.S.Cx.s2[100]))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-15-b65a1e28acc5&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fe753c51250&gt;]
-     ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa3231f4410&gt;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">loadsh3</span><span class="p">()</span>
+<img alt="../../_images/AntennaSSH_19_1.png" src="../../_images/AntennaSSH_19_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.__dict__.keys()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-16-ac50ca9ac26e&gt; in &lt;module&gt;()
-----&gt; 1 A.loadsh3()
-
-
-NameError: name &#39;A&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;tau&#39;,
+ &#39;_is_selected&#39;,
+ &#39;PhotoFile&#39;,
+ &#39;nf&#39;,
+ &#39;full_evaluated&#39;,
+ &#39;Fp&#39;,
+ &#39;Run&#39;,
+ &#39;source&#39;,
+ &#39;_filename&#39;,
+ &#39;param&#39;,
+ &#39;Serie&#39;,
+ &#39;Date&#39;,
+ &#39;theta&#39;,
+ &#39;fromfile&#39;,
+ &#39;fGHz&#39;,
+ &#39;phi&#39;,
+ &#39;nph&#39;,
+ &#39;Notes&#39;,
+ &#39;nth&#39;,
+ &#39;S&#39;,
+ &#39;AntennaName&#39;,
+ &#39;grid&#39;,
+ &#39;Ft&#39;,
+ &#39;typ&#39;,
+ &#39;DataFile&#39;,
+ &#39;evaluated&#39;,
+ &#39;ext&#39;,
+ &#39;StartTime&#39;,
+ &#39;sqG&#39;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe753b8f150&gt;]</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.Cx.__dict__.keys()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-17-062afa886a4a&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fe753b8f150&gt;]
-     ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&#39;k2&#39;, &#39;ind3&#39;, &#39;ind2&#39;, &#39;fmax&#39;, &#39;s2&#39;, &#39;Nf&#39;, &#39;s3&#39;, &#39;lmax&#39;, &#39;fmin&#39;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe753acac90&gt;]</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A.S.Cx
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-18-0f567cbda363&gt;&quot;, line 2
-    [&lt;matplotlib.lines.Line2D at 0x7fe753acac90&gt;]
-     ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="go">[&#39;tau&#39;,</span>
-<span class="go"> &#39;PhotoFile&#39;,</span>
-<span class="go"> &#39;nf&#39;,</span>
-<span class="go"> &#39;Fp&#39;,</span>
-<span class="go"> &#39;Run&#39;,</span>
-<span class="go"> &#39;source&#39;,</span>
-<span class="go"> &#39;_filename&#39;,</span>
-<span class="go"> &#39;param&#39;,</span>
-<span class="go"> &#39;Serie&#39;,</span>
-<span class="go"> &#39;Date&#39;,</span>
-<span class="go"> &#39;theta&#39;,</span>
-<span class="go"> &#39;fromfile&#39;,</span>
-<span class="go"> &#39;fGHz&#39;,</span>
-<span class="go"> &#39;phi&#39;,</span>
-<span class="go"> &#39;nph&#39;,</span>
-<span class="go"> &#39;Notes&#39;,</span>
-<span class="go"> &#39;nth&#39;,</span>
-<span class="go"> &#39;S&#39;,</span>
-<span class="go"> &#39;AntennaName&#39;,</span>
-<span class="go"> &#39;grid&#39;,</span>
-<span class="go"> &#39;Ft&#39;,</span>
-<span class="go"> &#39;typ&#39;,</span>
-<span class="go"> &#39;DataFile&#39;,</span>
-<span class="go"> &#39;evaluated&#39;,</span>
-<span class="go"> &#39;ext&#39;,</span>
-<span class="go"> &#39;StartTime&#39;,</span>
-<span class="go"> &#39;sqG&#39;]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-19-58c1538184d2&gt; in &lt;module&gt;()
-----&gt; 1 A.__dict__.keys()
-      2 [&#39;tau&#39;,
-      3  &#39;PhotoFile&#39;,
-      4  &#39;nf&#39;,
-      5  &#39;Fp&#39;,
-
-
-NameError: name &#39;A&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="go">[&#39;k2&#39;, &#39;ind3&#39;, &#39;ind2&#39;, &#39;fmax&#39;, &#39;s2&#39;, &#39;Nf&#39;, &#39;s3&#39;, &#39;lmax&#39;, &#39;fmin&#39;]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-20-094ff156e1a3&gt; in &lt;module&gt;()
-----&gt; 1 A.S.Cx.__dict__.keys()
-      2 [&#39;k2&#39;, &#39;ind3&#39;, &#39;ind2&#39;, &#39;fmax&#39;, &#39;s2&#39;, &#39;Nf&#39;, &#39;s3&#39;, &#39;lmax&#39;, &#39;fmin&#39;]
-
-
-NameError: name &#39;A&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span>
-<span class="go">Nf   : 104</span>
-<span class="go">fmin (GHz) : 0.8</span>
-<span class="go">fmax (GHz) : 5.95</span>
-<span class="go">NCoeff s2  : 36</span>
-<span class="go">Ncoeff s3 : 143</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-21-e4f2123c2b01&gt;&quot;, line 2
-    Nf   : 104
-         ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+NCoeff s2  : 36
+Ncoeff s3 : 143
 </pre></div>
 </div>
 </div>
@@ -429,15 +375,30 @@ SyntaxError: invalid syntax
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 02, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/2-AP/AntennaSSH.txt"
+    <a href="../../_sources/notebook/2-AP/AntennaSSH.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="Antenna.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="AntennaVSH.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

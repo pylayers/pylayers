@@ -1,0 +1,392 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example of Utilisation of Coverage &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="Multi-wall model" href="MultiWall.html" />
+    <link rel="prev" title="2.2.2. Vector Spherical Harmonics Representation of Antennas" href="AntennaVSH.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body role="document">
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	  <div class="rel">
+	   
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="AntennaVSH.html" title="2.2.2. Vector Spherical Harmonics Representation of Antennas"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    2.2.2. Vector...
+	    </span>
+	    <span class="hiddenrellink">
+	    2.2.2. Vector Spherical Harmonics Representation of Antennas
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="MultiWall.html" title="Multi-wall model"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    Multi-wall model
+	    </span>
+	    <span class="hiddenrellink">
+	    Multi-wall model
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1   Overview
+	</span>
+	
+	</a>
+	</div>
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Example of Utilisation of Coverage</a></li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="example-of-utilisation-of-coverage">
+<h1>Example of Utilisation of Coverage<a class="headerlink" href="#example-of-utilisation-of-coverage" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>%matplotlib inline
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+</pre></div>
+</div>
+<p>Load a coverage simulation file</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C = Coverage(&#39;coverage2.ini&#39;)
+</pre></div>
+</div>
+<p>Information about the coverage object</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Layout file : homeK_vf.ini
+
+-----list of Access Points ------
+name : room1
+p : (2.1, 6.0, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+name : room2
+p : (12, 9.0, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+-----Rx------
+temperature (K) : 300
+noisefactor (dB) : 13
+
+--- Grid ----
+mode : full
+nx : 50
+ny : 50
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(10,10))
+f,a=C.L.showGs(fig=fig)
+</pre></div>
+</div>
+<img alt="../../_images/Coverage2_7_0.png" src="../../_images/Coverage2_7_0.png" />
+<p>List of used slabs</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.L.sl
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>List of Slabs
+-----------------------------
+
+_AIR : AIR | [0.05]
+       white 1
+DOOR : WOOD | [0.05]
+       red 1
+FLOOR : REINFORCED_CONCRETE | [0.05]
+       grey40 1
+WALL : BRICK | [0.05]
+       grey20 3
+PARTITION : PLASTER | [0.05]
+       grey80 4
+METAL : METAL | [0.05]
+       black 1
+AIR : AIR | [0.05]
+       white 1
+WINDOW : WOOD | [0.05]
+       blue 1
+WOOD : WOOD | [0.05]
+       maroon 1
+CEIL : REINFORCED_CONCRETE | [0.05]
+       grey20 1
+ABSORBENT : AIR | [0.05]
+       grey20 3
+</pre></div>
+</div>
+<p>List of materials</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.L.sl.mat
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>List of Materials
+-------------------
+PLASTER (3)    |epsr|=8.00 sigma (S/m)=0.04
+METAL (7)    |epsr|=1.00 sigma (S/m)=10000000.00
+AIR (1)    |epsr|=1.00 sigma (S/m)=0.00
+WOOD (7)    |epsr|=2.83 sigma (S/m)=3.00
+BRICK (2)    |epsr|=4.10 sigma (S/m)=0.30
+REINFORCED_CONCRETE (6)    |epsr|=8.70 sigma (S/m)=3.00
+</pre></div>
+</div>
+<p>List associated to the slab nature of each segment.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.L.sla
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([&#39;&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;PARTITION&#39;, &#39;WALL&#39;, &#39;WALL&#39;,
+       &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;PARTITION&#39;, &#39;WALL&#39;,
+       &#39;WALL&#39;, &#39;PARTITION&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;PARTITION&#39;,
+       &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;PARTITION&#39;, &#39;WALL&#39;,
+       &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;ABSORBENT&#39;, &#39;AIR&#39;, &#39;WALL&#39;, &#39;WALL&#39;,
+       &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;WOOD&#39;, &#39;PARTITION&#39;, &#39;WINDOW&#39;,
+       &#39;DOOR&#39;, &#39;DOOR&#39;, &#39;WALL&#39;, &#39;WALL&#39;, &#39;_AIR&#39;, &#39;_AIR&#39;, &#39;_AIR&#39;, &#39;_AIR&#39;,
+       &#39;_AIR&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;&#39;, &#39;&#39;,
+       &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;,
+       &#39;&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;,
+       &#39;&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;,
+       &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;_AIR&#39;, &#39;DOOR&#39;, &#39;DOOR&#39;, &#39;DOOR&#39;, &#39;DOOR&#39;, &#39;DOOR&#39;,
+       &#39;METAL&#39;, &#39;AIR&#39;, &#39;AIR&#39;, &#39;AIR&#39;],
+      dtype=&#39;|S20&#39;)
+</pre></div>
+</div>
+<p>Actually, calculate the coverage by invoquing the <code class="docutils literal"><span class="pre">cover</span></code>method</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.cover()
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(14,8))
+a1 = fig.add_subplot(121)
+a2 = fig.add_subplot(122)
+f,a = C.show(typ=&#39;pr&#39;,best=False,polar=&#39;o&#39;,vmin=-90,fig=fig,ax=a1)
+f,a = C.show(typ=&#39;pr&#39;,best=False,polar=&#39;p&#39;,vmin=-90,fig=fig,ax=a2)
+</pre></div>
+</div>
+<img alt="../../_images/Coverage2_16_0.png" src="../../_images/Coverage2_16_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(14,8))
+a1 = fig.add_subplot(121)
+a2 = fig.add_subplot(122)
+f,a = C.show(typ=&#39;loss&#39;,best=False,polar=&#39;o&#39;,vmin=-90,fig=fig,ax=a1)
+f,a = C.show(typ=&#39;loss&#39;,best=False,polar=&#39;p&#39;,vmin=-90,fig=fig,ax=a2)
+</pre></div>
+</div>
+<img alt="../../_images/Coverage2_17_0.png" src="../../_images/Coverage2_17_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(14,8))
+a1 = fig.add_subplot(121)
+a2 = fig.add_subplot(122)
+f,a = C.show(typ=&#39;snr&#39;,best=False,polar=&#39;o&#39;,vmin=-90,fig=fig,ax=a1)
+f,a = C.show(typ=&#39;snr&#39;,best=False,polar=&#39;p&#39;,vmin=-90,fig=fig,ax=a2)
+</pre></div>
+</div>
+<img alt="../../_images/Coverage2_18_0.png" src="../../_images/Coverage2_18_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(14,8))
+a1 = fig.add_subplot(121)
+a2 = fig.add_subplot(122)
+f,a = C.show(typ=&#39;sinr&#39;,best=False,polar=&#39;o&#39;,vmin=-90,fig=fig,ax=a1)
+f,a = C.show(typ=&#39;sinr&#39;,best=False,polar=&#39;p&#39;,vmin=-90,fig=fig,ax=a2)
+</pre></div>
+</div>
+<img alt="../../_images/Coverage2_19_0.png" src="../../_images/Coverage2_19_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(14,8))
+a1 = fig.add_subplot(121)
+a2 = fig.add_subplot(122)
+f,a = C.show(typ=&#39;capacity&#39;,best=False,polar=&#39;o&#39;,vmin=0,fig=fig,ax=a1)
+f,a = C.show(typ=&#39;capacity&#39;,best=False,polar=&#39;p&#39;,vmin=0,fig=fig,ax=a2)
+</pre></div>
+</div>
+<img alt="../../_images/Coverage2_20_0.png" src="../../_images/Coverage2_20_0.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 02, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/Coverage2.rst.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel">
+    
+    <div class="buttonPrevious">
+      <a href="AntennaVSH.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="MultiWall.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>
