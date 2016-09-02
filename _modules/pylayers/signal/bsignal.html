@@ -1970,8 +1970,6 @@
         <span class="n">S</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">f</span>
         <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">te</span>
-        <span class="c1"># compensation du retard 11.12.2009</span>
-        <span class="c1">#S.y=S.y*exp(-1j*2*np.pi*f*self.x[0])</span>
         <span class="k">return</span><span class="p">(</span><span class="n">S</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TUsignal.fftsh"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.fftsh.html#pylayers.signal.bsignal.TUsignal.fftsh">[docs]</a>    <span class="k">def</span> <span class="nf">fftsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2206,6 +2204,27 @@
         <span class="n">A</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fftsh</span><span class="p">()</span>
         <span class="n">AU</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">unrex</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">AU</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tpns</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate power spectral density</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        R    : Resistance (default 50 Ohms)</span>
+<span class="sd">        Tpns : real</span>
+<span class="sd">            PRP (default 100 ns)</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">esd</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;unilateral&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">periodic</span><span class="p">:</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">Tpns</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="TUsignal.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.show.html#pylayers.signal.bsignal.TUsignal.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">PRPns</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>

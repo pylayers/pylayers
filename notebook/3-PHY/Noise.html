@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="PyLayers" href="../../modules/pylayers.html" />
+    <link rel="prev" title="Handling time and frequency domain signals : Bsignal Class" href="Bsignal.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="Bsignal.html" title="Handling time and frequency domain signals : Bsignal Class"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    Handling time...
+	    </span>
+	    <span class="hiddenrellink">
+	    Handling time and frequency domain signals : Bsignal Class
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../modules/pylayers.html" title="PyLayers"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    PyLayers
+	    </span>
+	    <span class="hiddenrellink">
+	    PyLayers
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1   Overview
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,17 +178,17 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="modelisation-of-the-thermal-noise">
 <h1>Modelisation of the Thermal Noise<a class="headerlink" href="#modelisation-of-the-thermal-noise" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.signal.bsignal import *
+%matplotlib inline
 </pre></div>
 </div>
 <p>The bsignal module has a dedicated class for handling noise signal. To
 create a white noise just type :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Noise</span><span class="p">()</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>w = Noise()
 </pre></div>
 </div>
 <p>The representation of the noise object provides information about
@@ -128,117 +196,65 @@ default values. In digital representation of noise the sampling
 frequency is important. The noise signal is generated from a time
  to a time . The default power spectral
 density is  and can be modified with the argument
-<tt class="docutils literal"><span class="pre">PSDdBmpHz</span></tt>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span>
-<span class="go">Sampling frequency : 50 GHz</span>
-<span class="go">ti  : 0ns</span>
-<span class="go">tf  : 100ns</span>
-<span class="go">ts  : 0.02ns</span>
-<span class="go">N   : 5000</span>
-<span class="go">-------------</span>
-<span class="go">DSP : -174 dBm/Hz</span>
-<span class="go">    : 3.98107170553e-21 Joules</span>
-<span class="go">-------------</span>
-<span class="go">Noise Figure : 0 dB</span>
-<span class="go">Vrms : 9.97631157484e-05 Volts</span>
-<span class="go">Variance : 9.81692234355e-09 V^2</span>
-<span class="go">Power (dBm) /50 Ohms : -157.010299957 dBm</span>
-<span class="go">Power realized /50 Ohms : -157.069946488 dBm</span>
+<code class="docutils literal"><span class="pre">PSDdBmpHz</span></code>.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>w
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-95c19c884cbc&gt;&quot;, line 2
-    Sampling frequency : 50 GHz
-                     ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>Sampling frequency : 50 GHz
+ti  : 0ns
+tf  : 100ns
+ts  : 0.02ns
+N   : 5000
+-------------
+DSP : -174 dBm/Hz
+    : 3.98107170553e-21 Joules
+-------------
+Noise Figure : 0 dB
+Vrms : 9.97631157484e-05 Volts
+Variance : 9.47566704228e-09 V^2
+Power (dBm) /50 Ohms : -157.010299957 dBm
+Power realized /50 Ohms : -157.223602123 dBm
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=w.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/Noise_6_0.png" src="../../_images/Noise_6_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">psd</span><span class="p">()</span>
-<span class="go">FUsignal :  (2500,)  (2500,)</span>
-<span class="go">Frequency (GHz) : 2500</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>w.psd()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-5-ad9f7f7e43b5&gt;&quot;, line 2
-    FUsignal :  (2500,)  (2500,)
-             ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>FUsignal :  (2500,)  (1, 2500)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w2</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">fgating</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">BGHz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>w2 = w.fgating(fcGHz=4,WGHz=3)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>TypeErrorTraceback (most recent call last)
-
-&lt;ipython-input-6-0901d96562a6&gt; in &lt;module&gt;()
-----&gt; 1 w2 = w.fgating(fcGHz=4,BGHz=3)
-
-
-TypeError: fgating() got an unexpected keyword argument &#39;BGHz&#39;
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>W2=w2.psd()
+W2.plotdB(mask=True)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">W2</span><span class="o">=</span><span class="n">w2</span><span class="o">.</span><span class="n">psd</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">W2</span><span class="o">.</span><span class="n">plotdB</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<img alt="../../_images/Noise_9_0.png" src="../../_images/Noise_9_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>w.plot(typ=&#39;v&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-7-00fd8114e3d7&gt; in &lt;module&gt;()
-----&gt; 1 W2=w2.psd()
-      2 W2.plotdB(mask=True)
-
-
-NameError: name &#39;w2&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fef5f122190&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7fef5f1509d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x7ff520fd5c90&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x7ff520fcd750&gt;]], dtype=object))</span>
+<img alt="../../_images/Noise_10_1.png" src="../../_images/Noise_10_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ip=TUsignal()
+ip.EnImpulse(fcGHz=4.4928,WGHz=0.4992,feGHz=100)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-cc6c01699cec&gt;&quot;, line 2
-    (&lt;matplotlib.figure.Figure at 0x7ff520fd5c90&gt;,
-     ^
-SyntaxError: invalid syntax
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#fig = plt.figure(figsize=(10,10))
+#for k,snr in enumerate(range(30,-30,-10)):
+#    a = fig.add_subplot(3,2,k+1)
+#    ipn,n=ip.awgn(snr=snr,typ=&#39;snr&#39;)
+#    ipn.plot(typ=&#39;v&#39;,fig=fig,ax=a)
+#    a.set_title(&#39;SNR :&#39;+str(snr)+&#39; dB&#39;)
+#plt.tight_layout()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">=</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mf">4.4928</span><span class="p">,</span><span class="n">band</span><span class="o">=</span><span class="mf">0.4992</span><span class="p">,</span><span class="n">fe</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-9-307076f57f86&gt; in &lt;module&gt;()
-----&gt; 1 ip=EnImpulse(fc=4.4928,band=0.4992,fe=100)
-
-
-NameError: name &#39;EnImpulse&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">snr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">)):</span>
-<span class="gp">... </span>    <span class="n">a</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">ipn</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="n">ip</span><span class="o">.</span><span class="n">awgn</span><span class="p">(</span><span class="n">snr</span><span class="o">=</span><span class="n">snr</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;snr&#39;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">ipn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;SNR :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; dB&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-10-897bc488bfef&gt; in &lt;module&gt;()
-      2 for k,snr in enumerate(range(30,-30,-10)):
-      3     a = fig.add_subplot(3,2,k+1)
-----&gt; 4     ipn,n=ip.awgn(snr=snr,typ=&#39;snr&#39;)
-      5     ipn.plot(typ=&#39;v&#39;,fig=fig,ax=a)
-      6     a.set_title(&#39;SNR :&#39;+str(snr)+&#39; dB&#39;)
-
-
-NameError: name &#39;ip&#39; is not defined
-</pre></div>
-</div>
-<img alt="../../_images/Noise_12_1.png" src="../../_images/Noise_12_1.png" />
 </div>
 
 
@@ -252,15 +268,30 @@ NameError: name &#39;ip&#39; is not defined
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 02, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/3-PHY/Noise.txt"
+    <a href="../../_sources/notebook/3-PHY/Noise.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="Bsignal.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="../../modules/pylayers.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

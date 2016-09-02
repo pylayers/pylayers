@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="Example of Utilisation of Coverage" href="Coverage2.html" />
+    <link rel="prev" title="2.2.2. Vector Spherical Harmonics Representation of Antennas" href="AntennaVSH.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="AntennaVSH.html" title="2.2.2. Vector Spherical Harmonics Representation of Antennas"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    2.2.2. Vector...
+	    </span>
+	    <span class="hiddenrellink">
+	    2.2.2. Vector Spherical Harmonics Representation of Antennas
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="Coverage2.html" title="Example of Utilisation of Coverage"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    Example of Ut...
+	    </span>
+	    <span class="hiddenrellink">
+	    Example of Utilisation of Coverage
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1   Overview
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,7 +178,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="indoor-coverage-with-the-pylayers-multi-wall-model">
 <h1>Indoor Coverage with the PyLayers Multi Wall model<a class="headerlink" href="#indoor-coverage-with-the-pylayers-multi-wall-model" title="Permalink to this headline">¶</a></h1>
@@ -126,21 +194,23 @@ simpler and faster site-specific approach as the Multiwall model.</p>
 <p><strong>``PyLayers``</strong> provides a multiwall module which heavily relies on the
 core class <strong>``Slab``</strong>. Notice that, the same core <strong>``Slab``</strong> module
 is used for Ray tracing and MultiWall model approaches.</p>
-<p>Let&#8217;s see, how it works. First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module. And
-the <tt class="docutils literal"><span class="pre">time</span></tt> module for performance evaluation.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">time</span>
+<p>Let&#8217;s see, how it works. First let&#8217;s import the <code class="docutils literal"><span class="pre">coverage</span></code> module. And
+the <code class="docutils literal"><span class="pre">time</span></code> module for performance evaluation.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+from matplotlib.pyplot import *
+%matplotlib inline
+import time
 </pre></div>
 </div>
-<p>Instantiate a coverage object. By defaut the <tt class="docutils literal"><span class="pre">TA-Office.ini</span></tt> layout is
+<p>Instantiate a coverage object. By defaut the <code class="docutils literal"><span class="pre">TA-Office.ini</span></code> layout is
 loaded.</p>
 <p>The coverage information is placed in the <strong>coverage.ini</strong> file in the
 project directory.</p>
 <p>Below is an example such a configuration file.</p>
-<div class="code python highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; !cat $BASENAME/ini/coverage.ini
-[grid]
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>!cat $BASENAME/ini/coverage.ini
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[grid]
 nx = 40
 ny = 20
 boundary = [20,0,30,20]
@@ -167,477 +237,182 @@ noisefactordb = 0
 show = True
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-2-0545b412e6f3&gt;&quot;, line 10
-    filename = TA-Office.ini ; 0 40 0 15
-                                  ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
 <p>The ini file contains 5 sections.</p>
 <ul class="simple">
 <li>[grid] section This section precises the size of the grid. By default
 the grid is placed over the whole region of the Layout. A selected
-region can also be defined whith the <tt class="docutils literal"><span class="pre">boundary</span></tt> list</li>
+region can also be defined whith the <code class="docutils literal"><span class="pre">boundary</span></code> list</li>
 <li>[layout] section The name of the layout file (filename = )</li>
 <li>[ap] section A dictionnary of access points precising the standard,
 the used channel, the emitted power and the position of the access
 point.</li>
 <li>[show] section</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Create a Coverage object from coverag.ini file</span>
-<span class="gp">... </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">(</span><span class="s">&#39;coverage.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span># Create a Coverage object from coverag.ini file
+C = Coverage(&#39;coverage.ini&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+<div class="highlight-none"><div class="highlight"><pre><span></span>building Layout ...
+check len(ncycles) == 2 passed
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
-
-&lt;ipython-input-3-33376351d131&gt; in &lt;module&gt;()
-      1 # Create a Coverage object from coverag.ini file
-----&gt; 2 C = Coverage(&#39;coverage.ini&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/coverage.pyc in __init__(self, _fileini)
-    110         if filename.endswith(&#39;ini&#39;):
-    111             self.typ = &#39;indoor&#39;
---&gt; 112             self.L = Layout(filename)
-    113
-    114             # get the receiving grid
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check, build, verbose)
-    422
-    423
---&gt; 424         self.load(_filename,build=build)
-    425
-    426
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in load(self, _filename, build)
-   1624                     # if ans.lower()==&#39;y&#39;:
-   1625
--&gt; 1626                     self.build()
-   1627                     self.lbltg.append(&#39;s&#39;)
-   1628                     self.dumpw()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
-   4786             if verbose:
-   4787                 print &quot;Gv&quot;
--&gt; 4788             self.buildGv()
-   4789             self.lbltg.extend(&#39;v&#39;)
-   4790
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
-   7065                 for idiff in ndiffvalid:
-   7066
--&gt; 7067                     import ipdb
-   7068                     # ipdb.set_trace()
-   7069                     # if (icycle==2) &amp; (idiff==-2399):
-
-
-/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
-      5 # https://opensource.org/licenses/BSD-3-Clause
-      6
-----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
-      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
-      9
-
-
-/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
-     56     # the instance method will create a new one without loading the config.
-     57     # i.e: if we are in an embed instance we do not want to load the config.
----&gt; 58     ipapp = TerminalIPythonApp.instance()
-     59     shell = get_ipython()
-     60     def_colors = shell.colors
-
-
-/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
-    414             raise MultipleInstanceError(
-    415                 &#39;Multiple incompatible subclass instances of &#39;
---&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
-    417             )
-    418
-
-
-MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
-</pre></div>
-</div>
-<p><tt class="docutils literal"><span class="pre">C</span></tt> has a dictionnary <tt class="docutils literal"><span class="pre">dap</span></tt> (dictionnary of access points) which
+<p><code class="docutils literal"><span class="pre">C</span></code> has a dictionnary <code class="docutils literal"><span class="pre">dap</span></code> (dictionnary of access points) which
 gathers information about each access points of the scene.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="go">name : room2</span>
-<span class="go">p : (10, 2, 1.2)</span>
-<span class="go">PtdBm : 0</span>
-<span class="go">channels  : [11]   2.462 : [2.451,2.473]</span>
-<span class="go">sensdBm : -94</span>
-<span class="go">nant : 1</span>
-<span class="go">On : True</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.dap[1]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-4-9dba40a6bb5a&gt;&quot;, line 2
-    name : room2
-         ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>name : room2
+p : (10, 2, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
 </pre></div>
 </div>
-<p>The coverage object has a <tt class="docutils literal"><span class="pre">__repr__</span></tt> method which summarizes different
+<p>The coverage object has a <code class="docutils literal"><span class="pre">__repr__</span></code> method which summarizes different
 parameters of the current coverage object</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span>
-<span class="go">Layout file : TA-Office.ini</span>
-
-<span class="go">-----list of Access Points ------</span>
-<span class="go">name : room1</span>
-<span class="go">p : (1, 12, 1.2)</span>
-<span class="go">PtdBm : 0</span>
-<span class="go">channels  : [11]   2.462 : [2.451,2.473]</span>
-<span class="go">sensdBm : -94</span>
-<span class="go">nant : 1</span>
-<span class="go">On : True</span>
-
-<span class="go">name : room2</span>
-<span class="go">p : (10, 2, 1.2)</span>
-<span class="go">PtdBm : 0</span>
-<span class="go">channels  : [11]   2.462 : [2.451,2.473]</span>
-<span class="go">sensdBm : -94</span>
-<span class="go">nant : 1</span>
-<span class="go">On : True</span>
-
-<span class="go">name : room3</span>
-<span class="go">p : (20, 1, 1.2)</span>
-<span class="go">PtdBm : 0</span>
-<span class="go">channels  : [11]   2.462 : [2.451,2.473]</span>
-<span class="go">sensdBm : -94</span>
-<span class="go">nant : 1</span>
-<span class="go">On : True</span>
-
-<span class="go">name : room4</span>
-<span class="go">p : (36.5, 1.5, 1.2)</span>
-<span class="go">PtdBm : 0</span>
-<span class="go">channels  : [11]   2.462 : [2.451,2.473]</span>
-<span class="go">sensdBm : -94</span>
-<span class="go">nant : 1</span>
-<span class="go">On : True</span>
-
-<span class="go">name : room5</span>
-<span class="go">p : (25, 12, 1.2)</span>
-<span class="go">PtdBm : 0</span>
-<span class="go">channels  : [11]   2.462 : [2.451,2.473]</span>
-<span class="go">sensdBm : -94</span>
-<span class="go">nant : 1</span>
-<span class="go">On : True</span>
-
-<span class="go">-----Rx------</span>
-<span class="go">temperature (K) : 300</span>
-<span class="go">noisefactor (dB) : 0</span>
-
-<span class="go">--- Grid ----</span>
-<span class="go">mode : full</span>
-<span class="go">nx : 40</span>
-<span class="go">ny : 20</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-5-cb35b139978f&gt;&quot;, line 2
-    Layout file : TA-Office.ini
-              ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>Layout file : TA-Office.ini
+
+-----list of Access Points ------
+name : room1
+p : (1, 12, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+name : room2
+p : (10, 2, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+name : room3
+p : (20, 1, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+name : room4
+p : (36.5, 1.5, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+name : room5
+p : (25, 12, 1.2)
+PtdBm : 0
+channels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+On : True
+
+-----Rx------
+temperature (K) : 300
+noisefactor (dB) : 0
+
+--- Grid ----
+mode : full
+nx : 40
+ny : 20
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-6-0e75a4f1a346&gt; in &lt;module&gt;()
-----&gt; 1 C.cover()
-
-
-NameError: name &#39;C&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.cover()
 </pre></div>
 </div>
 <p>Let display the current Layout with hidding nodes.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+C.L.display[&#39;nodes&#39;]=False
+C.L.display[&#39;ednodes&#39;]=False
+f,a = C.show(fig=fig)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-7-d7bbaf68c62a&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 C.L.display[&#39;nodes&#39;]=False
-      3 C.L.display[&#39;ednodes&#39;]=False
-      4 f,a = C.show(fig=fig)
-
-
-NameError: name &#39;C&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f0768650&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Coverage_12_0.png" src="../../_images/Coverage_12_0.png" />
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f,a=C.show(fig=fig,typ=&#39;pr&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-8-e2637ddfd59f&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f,a=C.show(fig=fig,typ=&#39;pr&#39;)
-
-
-NameError: name &#39;C&#39; is not defined
+<img alt="../../_images/Coverage_14_0.png" src="../../_images/Coverage_14_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f,a=C.show(fig=fig,typ=&#39;pr&#39;,f=4)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f2beac10&gt;
+<img alt="../../_images/Coverage_15_0.png" src="../../_images/Coverage_15_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f,a=C.show(fig=fig,typ=&#39;pr&#39;,f=10)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<img alt="../../_images/Coverage_16_0.png" src="../../_images/Coverage_16_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f,a=C.show(fig=fig,typ=&#39;best&#39;,f=1)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-9-387b085bdc21&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f,a=C.show(fig=fig,typ=&#39;pr&#39;,f=4)
-
-
-NameError: name &#39;C&#39; is not defined
+<img alt="../../_images/Coverage_17_0.png" src="../../_images/Coverage_17_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f,a=C.show(fig=fig,typ=&#39;best&#39;,f=10)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f2b6b590&gt;
+<img alt="../../_images/Coverage_18_0.png" src="../../_images/Coverage_18_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f=C.show(fig=fig,f=5,typ=&#39;sinr&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-10-acaa5ae5e147&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f,a=C.show(fig=fig,typ=&#39;pr&#39;,f=10)
-
-
-NameError: name &#39;C&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f0753790&gt;
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-11-6eca5a6da0b8&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f,a=C.show(fig=fig,typ=&#39;best&#39;,f=1)
-
-
-NameError: name &#39;C&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f07539d0&gt;
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-12-7fabaad1dbb9&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f,a=C.show(fig=fig,typ=&#39;best&#39;,f=10)
-
-
-NameError: name &#39;C&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f04fb390&gt;
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-13-e9aa4be471c9&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f=C.show(fig=fig,f=5,typ=&#39;sinr&#39;)
-
-
-NameError: name &#39;C&#39; is not defined
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f04fbe10&gt;
-</pre></div>
-</div>
+<img alt="../../_images/Coverage_19_0.png" src="../../_images/Coverage_19_0.png" />
 <p>As you have noticed the calculation has been done for all the center
 frequencies of the selected standard. This is done in prevision of
 further channel optimizations.</p>
-<p>Let&#8217;s consider an other standard</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C2</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">(</span><span class="s">&#39;coverage2.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C2</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<p>Let&#8217;s consider an other layout</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C2 = Coverage(&#39;coverage2.ini&#39;)
+C2.cover()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>building Layout ...
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+f=C2.show(ftyp=&#39;pr&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>MultipleInstanceErrorTraceback (most recent call last)
-
-&lt;ipython-input-14-a22e5c85a032&gt; in &lt;module&gt;()
-----&gt; 1 C2 = Coverage(&#39;coverage2.ini&#39;)
-      2 C2.cover()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/coverage.pyc in __init__(self, _fileini)
-    110         if filename.endswith(&#39;ini&#39;):
-    111             self.typ = &#39;indoor&#39;
---&gt; 112             self.L = Layout(filename)
-    113
-    114             # get the receiving grid
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check, build, verbose)
-    422
-    423
---&gt; 424         self.load(_filename,build=build)
-    425
-    426
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in load(self, _filename, build)
-   1624                     # if ans.lower()==&#39;y&#39;:
-   1625
--&gt; 1626                     self.build()
-   1627                     self.lbltg.append(&#39;s&#39;)
-   1628                     self.dumpw()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in build(self, graph, verbose)
-   4786             if verbose:
-   4787                 print &quot;Gv&quot;
--&gt; 4788             self.buildGv()
-   4789             self.lbltg.extend(&#39;v&#39;)
-   4790
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in buildGv(self, show)
-   7065                 for idiff in ndiffvalid:
-   7066
--&gt; 7067                     import ipdb
-   7068                     # ipdb.set_trace()
-   7069                     # if (icycle==2) &amp; (idiff==-2399):
-
-
-/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__init__.py in &lt;module&gt;()
-      5 # https://opensource.org/licenses/BSD-3-Clause
-      6
-----&gt; 7 from ipdb.__main__ import set_trace, post_mortem, pm, run             # noqa
-      8 from ipdb.__main__ import runcall, runeval, launch_ipdb_on_exception  # noqa
-      9
-
-
-/home/uguen/anaconda2/lib/python2.7/site-packages/ipdb/__main__.py in &lt;module&gt;()
-     56     # the instance method will create a new one without loading the config.
-     57     # i.e: if we are in an embed instance we do not want to load the config.
----&gt; 58     ipapp = TerminalIPythonApp.instance()
-     59     shell = get_ipython()
-     60     def_colors = shell.colors
-
-
-/home/uguen/anaconda2/lib/python2.7/site-packages/traitlets/config/configurable.pyc in instance(cls, *args, **kwargs)
-    414             raise MultipleInstanceError(
-    415                 &#39;Multiple incompatible subclass instances of &#39;
---&gt; 416                 &#39;%s are being created.&#39; % cls.__name__
-    417             )
-    418
-
-
-MultipleInstanceError: Multiple incompatible subclass instances of TerminalIPythonApp are being created.
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fe90e684a10&gt;
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">C2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ftyp</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
+<img alt="../../_images/Coverage_22_1.png" src="../../_images/Coverage_22_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C.snro.shape
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-15-82e55d16c1d6&gt; in &lt;module&gt;()
-      1 fig=figure(figsize=(10,5))
-----&gt; 2 f=C2.show(ftyp=&#39;pr&#39;)
-
-
-NameError: name &#39;C2&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>(13, 800, 5)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fc2f0506bd0&gt;
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=figure(figsize=(10,5))
+C.show(fig=fig,f=5,typ=&#39;capacity&#39;,dB=False)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">snro</span><span class="o">.</span><span class="n">shape</span>
-<span class="go">(13, 800, 5)</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe910a9d910&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fe910a9ddd0&gt;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-16-03db730d9be3&gt; in &lt;module&gt;()
-----&gt; 1 C.snro.shape
-      2 (13, 800, 5)
-
-
-NameError: name &#39;C&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x7f3ea6200ed0&gt;,</span>
-<span class="go"> &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f3e9e473310&gt;)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-17-04064cb4f222&gt;&quot;, line 3
-    (&lt;matplotlib.figure.Figure at 0x7f3ea6200ed0&gt;,
-     ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
+<img alt="../../_images/Coverage_24_1.png" src="../../_images/Coverage_24_1.png" />
 <p>All simulated quantities are stored in linear scale.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C2</span><span class="o">.</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">0.078045027166146197</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C2.Lwo[0,0,0]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-18-11161e2f0b4f&gt; in &lt;module&gt;()
-----&gt; 1 C2.Lwo[0,0,0]
-      2 0.078045027166146197
-
-
-NameError: name &#39;C2&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.00087507748196715026
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">C2</span><span class="o">.</span><span class="n">freespace</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">8.520773206944774e-07</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C2.freespace[0,0,0]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-19-78eefcf9aad5&gt; in &lt;module&gt;()
-----&gt; 1 C2.freespace[0,0,0]
-      2 8.520773206944774e-07
-
-
-NameError: name &#39;C2&#39; is not defined
+<div class="highlight-none"><div class="highlight"><pre><span></span>1.7443256561424206e-06
 </pre></div>
 </div>
 </div>
@@ -653,15 +428,30 @@ NameError: name &#39;C2&#39; is not defined
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 02, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/2-AP/Coverage.txt"
+    <a href="../../_sources/notebook/2-AP/Coverage.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="AntennaVSH.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="Coverage2.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
