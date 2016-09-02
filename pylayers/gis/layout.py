@@ -542,6 +542,10 @@ class Layout(PyLayers):
 
         """
         consistent = True
+
+        if len(self.sla)!=len(self.offset):
+            consistent =False
+        
         nodes = self.Gs.nodes()
         if len(nodes)>0:
             #
@@ -1505,13 +1509,13 @@ class Layout(PyLayers):
         if self.display.has_key('fileoverlay'):
             self.display['overlay_file'] = self.display.pop('fileoverlay')
             self.display['overlay_axis'] = self.display['box'] 
-            self.saveini(_fileini)
+            self.save()
 
         if self.display.has_key('inverse'):
             self.display['overlay_flip'] = ""
             self.display.pop('inverse')
 
-            self.saveini(_fileini)
+            self.save()
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
         # 
@@ -3222,9 +3226,9 @@ class Layout(PyLayers):
         Returns
         -------
 
-        seglist : list
-                  list of segment number on the link
-        angle   : angle (in radians) between segment and LOS axis
+        data['i'] 
+        data['s'] : list of segment number 
+        data['a'] : angle (in radians) between segment and LOS axis
 
         Examples
         --------
@@ -3266,7 +3270,6 @@ class Layout(PyLayers):
         un = u / nu[np.newaxis,:]
 
         seglist = self.seginframe2(p1, p2)
-
         upos = np.nonzero(seglist>=0)[0]
         uneg = np.nonzero(seglist<0)[0]
 
@@ -3637,7 +3640,9 @@ class Layout(PyLayers):
             ----------
 
             p1 array (2 x N)
+                array of N 2D points
             p2 array (2 x N)
+                array of N 2D points 
 
             Returns
             -------
@@ -3689,7 +3694,6 @@ class Layout(PyLayers):
         min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
         max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
         min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
-
         seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
                                          (self.min_sx < x[1]) &
                                          (self.max_sy > x[2]) &
@@ -4591,6 +4595,8 @@ class Layout(PyLayers):
         if not self.hasboundary:
             self.boundary()
 
+        # to save graoh Gs
+        self.lbltg.extend('s')
 
         print "building Layout ..." 
         if 't' in graph:
@@ -5483,7 +5489,7 @@ class Layout(PyLayers):
             to_visit.extend(nv_neighbors_aw)
             visited.append(cur_cy)
             
-
+        self.g2npy()
         
         
 
