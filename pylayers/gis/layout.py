@@ -266,6 +266,7 @@ class Layout(PyLayers):
                         rebuild = True 
                     else:
                         self.dumpr('stvirw')
+                        rebuild = False
                 else: 
                     rebuild = True
 
@@ -541,6 +542,10 @@ class Layout(PyLayers):
 
         """
         consistent = True
+
+        if len(self.sla)!=len(self.offset):
+            consistent =False
+        
         nodes = self.Gs.nodes()
         if len(nodes)>0:
             #
@@ -887,7 +892,7 @@ class Layout(PyLayers):
             index = nsmax+1
             for ks in useg:
                 k = self.tgs[ks]                        # index numpy
-                self.offset[k]=self.Gs.node[ks]['offset']
+                self.offset[k] = self.Gs.node[ks]['offset']
                 self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
                 nameslab  = self.Gs.node[ks]['name']   # update sla array
                 assert nameslab!='', "segment "+str(ks)+ " is not defined"
@@ -1504,13 +1509,13 @@ class Layout(PyLayers):
         if self.display.has_key('fileoverlay'):
             self.display['overlay_file'] = self.display.pop('fileoverlay')
             self.display['overlay_axis'] = self.display['box'] 
-            self.saveini(_fileini)
+            self.save()
 
         if self.display.has_key('inverse'):
             self.display['overlay_flip'] = ""
             self.display.pop('inverse')
 
-            self.saveini(_fileini)
+            self.save()
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
         # 
@@ -2327,50 +2332,6 @@ class Layout(PyLayers):
             self.Gs.pos[k]=(ptr[0],ptr[1])
 
         self.g2npy()
-
-    def del_cycle(self, lnc):
-        """ delete a cycle
-
-        Parameters
-        ----------
-
-        lnc :  list of cycle number
-
-        """
-
-        if (type(lnc) == np.ndarray):
-            lnc = list(lnc)
-
-        if (type(lnc) == int):
-            lnc = [lnc]
-
-        # for all cycles
-        for nc in lnc:
-            # get nodes of the cycles
-            vnodes = np.array(self.Gt.node[nc]['cycle'].cycle)
-            # get neighbors cycles
-            neigh = self.Gt.neighbors(nc)
-            # array of nodes of neighbors
-            tvn = np.array([])
-            # for all neihbor cycles
-            for ncy in neigh:
-                #vn = np.array(self.Gt.node[ncy]['vnodes'])
-                # get nodes of neighbor cycle
-                vn = np.array(self.Gt.node[ncy]['cycle'].cycle)
-                # append nodes in tvn
-                try:
-                    tvn = np.hstack((tvn, vn))
-                except:
-                    tvn = vn
-            # remove multiple values
-            utvn = np.unique(tvn)
-            # destroy nodes which are not involved with neighbors
-            udel = vnodes[~np.in1d(vnodes, utvn)]
-
-            # delete cycle
-            self.Gt.remove_node(nc)
-            # delete nodes in udel
-            self.del_segment(udel)
 
     def check2(self):
         """ Layout checking
@@ -3265,9 +3226,9 @@ class Layout(PyLayers):
         Returns
         -------
 
-        seglist : list
-                  list of segment number on the link
-        angle   : angle (in radians) between segment and LOS axis
+        data['i'] 
+        data['s'] : list of segment number 
+        data['a'] : angle (in radians) between segment and LOS axis
 
         Examples
         --------
@@ -3309,7 +3270,6 @@ class Layout(PyLayers):
         un = u / nu[np.newaxis,:]
 
         seglist = self.seginframe2(p1, p2)
-
         upos = np.nonzero(seglist>=0)[0]
         uneg = np.nonzero(seglist<0)[0]
 
@@ -3680,7 +3640,9 @@ class Layout(PyLayers):
             ----------
 
             p1 array (2 x N)
+                array of N 2D points
             p2 array (2 x N)
+                array of N 2D points 
 
             Returns
             -------
@@ -3732,7 +3694,6 @@ class Layout(PyLayers):
         min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
         max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
         min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
-
         seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
                                          (self.min_sx < x[1]) &
                                          (self.max_sy > x[2]) &
@@ -4634,6 +4595,8 @@ class Layout(PyLayers):
         if not self.hasboundary:
             self.boundary()
 
+        # to save graoh Gs
+        self.lbltg.extend('s')
 
         print "building Layout ..." 
         if 't' in graph:
@@ -4714,6 +4677,7 @@ class Layout(PyLayers):
         if 't' in self.lbltg:
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
+        write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
 
         
         # root,ext = os.path.splitext(self._filename)
@@ -4773,7 +4737,8 @@ class Layout(PyLayers):
 
         for k in self.Gt.node:
             if k != 0:
-                vnodes = self.Gt.node[k]['cycle'].cycle
+                #vnodes = self.Gt.node[k]['cycle'].cycle
+                vnodes = self.Gt.node[k]['polyg'].vnodes
                 if vnodes[0]<0:
                     self.Gt.node[k]['polyg'].vnodes = vnodes
                 else:
@@ -4795,6 +4760,7 @@ class Layout(PyLayers):
         if 't' in graphs :
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
+        setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
 
 
 
@@ -5523,7 +5489,7 @@ class Layout(PyLayers):
             to_visit.extend(nv_neighbors_aw)
             visited.append(cur_cy)
             
-
+        self.g2npy()
         
         
 

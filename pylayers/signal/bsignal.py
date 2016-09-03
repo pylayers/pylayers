@@ -1826,8 +1826,6 @@ class TUsignal(TBsignal, Usignal):
         S.x = f
         S.y = y
         S.y = S.y * te
-        # compensation du retard 11.12.2009
-        #S.y=S.y*exp(-1j*2*np.pi*f*self.x[0])
         return(S)
 
     def fftsh(self):
@@ -2062,6 +2060,27 @@ class TUsignal(TBsignal, Usignal):
         A  = self.fftsh()
         AU = A.unrex()
         return(AU)
+
+
+    def psd(self, Tpns=100, R=50,periodic=True):
+        """ calculate power spectral density
+
+        Parameters
+        ----------
+
+        R    : Resistance (default 50 Ohms)
+        Tpns : real
+            PRP (default 100 ns)
+
+        .. note::
+
+            If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)
+
+        """
+        P = self.esd(mode='unilateral')
+        if periodic:
+            P.y = P.y / (R * Tpns)
+        return(P)
 
 
     def show(self,fig=[],ax=[],display=True,PRPns=100):
