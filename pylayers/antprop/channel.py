@@ -145,11 +145,17 @@ class TBchannel(bs.TBsignal):
         pdf = np.diff(cdf)
 
 
-        u = np.nonzero(cdf > alpha)[0]
-        v = np.nonzero(cdf < 1 - alpha)[0]
+        u = np.where(cdf > alpha)
+        v = np.where(cdf < 1 - alpha)
 
-        t = t[u[0]:v[-1]]
-        pdf = pdf[u[0]:v[-1]]
+        
+        if len(pdf.shape)==1:
+            t = t[u[0]:v[-1]]
+            pdf = pdf[u[0]:v[-1]]
+        else:
+            t = t[u[1][0]:v[1][-1]]
+            pdf = pdf[0,u[1][0]:v[1][-1]]
+        
 
         
         a = np.sum(t * pdf)
@@ -226,13 +232,24 @@ class TBchannel(bs.TBsignal):
 
         taum = self.tau_moy(tau0)
 
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
+        u = np.where(cdf > alpha)
+        v = np.where(cdf < 1 - alpha)
+        
 
-        t = t[u[0]:v[-1]]
-        pdp = pdp[u[0]:v[-1]]
-        b = sum(pdp)
-        m = sum(pdp * (t - taum) * (t - taum))
+
+
+
+        pdf = np.diff(cdf)
+
+        if len(cdf.shape)==1:
+            t = t[u[0]:v[-1]]
+            pdf = pdf[u[0]:v[-1]]
+        else:
+            t = t[u[1][0]:v[1][-1]]
+            pdf = pdf[0,u[1][0]:v[1][-1]]
+
+        b = sum(pdf)
+        m = sum(pdf * (t - taum) * (t - taum))
         taurms = np.sqrt(m / b)
 
         return(taurms)
@@ -2526,13 +2543,13 @@ class Tchannel(bs.FUsignal):
         self.sort(typ='energy')
         E = self.eprfl()
         cumE = np.cumsum(E)/sum(E)
-        v = np.where(cumE<threshold)[0]
+        v = np.where(cumE[0,:]<threshold)[0]
         self.taud = self.taud[v]
         self.taue = self.taue[v]
         #self.tau = self.tau[v]
-        self.doa = self.doa[v]
-        self.dod = self.dod[v]
-        self.y = self.y[v,:]
+        self.doa = self.doa[v,:]
+        self.dod = self.dod[v,:]
+        self.y = self.y[v,...]
 
     def sort(self,typ='tau'):
         """ sort FUD signal
@@ -2542,8 +2559,8 @@ class Tchannel(bs.FUsignal):
 
         typ  : string
             which parameter to sort '
-                tau : (default)
-                energy
+                'tau' : (default)
+                'energy'
 
         """
 

@@ -104,7 +104,7 @@ class Coverage(PyLayers):
         self.apopt     = dict(self.config.items('ap'))
         self.rxopt     = dict(self.config.items('rx'))
         self.showopt   = dict(self.config.items('show'))
-
+        
         # get the Layout
         filename = self.layoutopt['filename']
         if filename.endswith('ini'):
@@ -115,6 +115,7 @@ class Coverage(PyLayers):
             self.nx = eval(self.gridopt['nx'])
             self.ny = eval(self.gridopt['ny'])
             self.mode = self.gridopt['mode']
+            assert self.mode in ['file','full','zone'], "Error reading grid mode "
             self.boundary = eval(self.gridopt['boundary'])
             self.filespa = self.gridopt['file']
             #
@@ -143,6 +144,7 @@ class Coverage(PyLayers):
             self.E.loadh5()
             self.E.rebase()
 
+        # The frequency is fixed from the AP nature
         self.fGHz = np.array([])
         #self.fGHz = eval(self.txopt['fghz'])
         #self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
@@ -161,7 +163,7 @@ class Coverage(PyLayers):
     def __repr__(self):
         st=''
         if self.typ=='indoor':
-            st = st+ 'Layout file : '+self.L.filename + '\n\n'
+            st = st+ 'Layout file : '+self.L._filename + '\n\n'
             st = st + '-----list of Access Points ------'+'\n'
             for k in self.dap:
                 st = st + self.dap[k].__repr__()+'\n'
@@ -191,6 +193,7 @@ class Coverage(PyLayers):
             if full is False the boundary argument is used
 
         """
+
         if mode=="file":
             self.RN = RadioNode(name='',
                                typ='rx',
@@ -334,6 +337,7 @@ class Coverage(PyLayers):
             if self.dap[iap]['on']:
                 lactiveAP.append(iap)
                 fGHz = self.dap[iap].s.fcghz
+                # The frequency band is set here
                 self.fGHz=np.unique(np.hstack((self.fGHz,fGHz)))
                 apchan = self.dap[iap]['chan']
                 try:
@@ -383,7 +387,6 @@ class Coverage(PyLayers):
         self.na = na
         ng = self.ng
         nf = self.nf
-
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)
@@ -409,7 +412,7 @@ class Coverage(PyLayers):
             self.evbestsv()
 
     def evsnr(self):
-        """ calculates snr
+        """ calculates signal to noise ratio
         """
 
         NmW = 10**(self.pndbm/10.)[np.newaxis,:]
@@ -836,6 +839,8 @@ class Coverage(PyLayers):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
         polar = kwargs['polar']
+        assert polar in ['p','o'],"polar wrongly defined in show coverage"
+
         if 'fig' in kwargs:
             if 'ax' in kwargs:
                 fig,ax=self.L.showG('s',fig=kwargs['fig'],ax=kwargs['ax'])
@@ -856,6 +861,7 @@ class Coverage(PyLayers):
         f = kwargs['f']
         a = kwargs['a']
         typ = kwargs['typ']
+        assert typ in ['best','egd','sinr','snr','capacity','pr','loss'],"typ unknown in show coverage"
         best = kwargs['best']
 
         dB = kwargs['db']

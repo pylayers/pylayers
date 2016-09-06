@@ -845,10 +845,17 @@ def Losst(L,fGHz,p1,p2,dB=True):
     # determine incidence angles on segment crossing p1-p2 segment
     data = L.angleonlink(p1,p2)
 
-    # as many slabs as segments
-    slabs = L.sla[data['s']]
+    # as many slabs as segments and subsegments
+    us    = data['s'] 
+    slabs = L.sla[us]
+    check = np.where(slabs=='')
 
+    #
+    # As segment numbering is not necessarily contiguous 
+    # there exist void string '' in slabs
     cslab = np.unique(slabs)
+    if '' in cslab:
+        cslab.remove('')
 
     LossWallo = np.zeros((len(fGHz),Nlink))
     LossWallp = np.zeros((len(fGHz),Nlink))
