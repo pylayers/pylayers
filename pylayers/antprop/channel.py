@@ -91,6 +91,7 @@ import pylab as plt
 import struct as stru
 import scipy.stats as st
 import numpy.fft as fft
+from scipy.io import loadmat
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
@@ -102,6 +103,119 @@ try:
     import h5py
 except:
     print 'h5py is not installed: Ctilde(object cannot be saved)'
+
+class AFPchannel(bs.FUsignal):
+    """ Angular Frequency Profile channel
+    """
+    def __init__(self,x=np.array([]),y=np.array([])):
+        bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
+    
+    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
+        """ Load measurement file 
+
+        Measurement files and the associated back to back calibration files 
+        are placed in the mes directory of the project.
+
+        """
+        self.BW = BW
+        self.fcGHz = fcGHz
+        self.fmin = fcGHz-BW/2.
+        self.fmax = fcGHz+BW/2.
+        # load Back 2 Back calibration file
+        filecal = pyu.getlong(_filecal,'meas')
+        filename = pyu.getlong(_filename,'meas')
+        U = loadmat(filecal)
+        cal_trf = U['cal_trf'][:,0]
+        # load Back 2 Back calibration file
+        D = np.loadtxt(filename,skiprows=2)
+        #
+        # Transfer function reconstruction 
+        #
+        amp = D[:,2::2]
+        ang = D[:,3::2]
+        self.Na  = amp.shape[0]
+        self.Nf  = amp.shape[1]
+        #
+        # select apodisation window 
+        #
+        if win=='hamming':
+            window = np.hamming(self.Nf)
+        elif win=='blackman':
+            window = np.blackman(self.Nf)
+        else:
+            window = np.ones(self.Nf)
+        #
+        # complex transfer function 
+        #
+        self.x = np.linspace(self.fmin,self.fmax,self.Nf)
+        self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
+        self.a = rot = (360-D[:,0])*np.pi/180.
+
+    def toadp(self):
+
+        x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
+        y = np.fft.ifft(self.y,axis=1)
+        adp = ADPchannel(x=x,y=y,a=self.a)
+        return adp 
+
+class ADPchannel(bs.TUsignal):
+    """ Angular Delay Profile channel
+    """
+    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([])):
+        bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
+        self.a = a
+
+    def polarplot(self,**kwargs):
+        defaults = { 'fig':[],
+                     'ax':[],
+                     'figsize':(10,10), 
+                     'typ':'l20',
+                     'Ndec':10,
+                     'vmin':-110,
+                     'vmax':-70,
+                     'imax':1000,
+                     'cmap': plt.cm.jet,
+                     'title':'PADP'
+                   }
+        
+        cvel = 0.3
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else:
+            fig = kwargs.pop('fig')
+        if kwargs['ax'] == []:
+            ax = fig.add_subplot(111,polar=True)
+        else:
+            ax = kwargs.pop('ax')
+        
+        imax = kwargs.pop('imax')
+        Ndec = kwargs.pop('Ndec')
+        vmin = kwargs.pop('vmin')
+        vmax = kwargs.pop('vmax')
+        cmap = kwargs.pop('cmap')
+        title = kwargs.pop('title')
+
+        rho,theta = np.meshgrid(self.x*cvel,self.a)
+        # convert y data in desired format
+        dt,ylabels = self.cformat(**kwargs)
+        val = dt[:,0::Ndec][:,0:imax/Ndec]
+        th  = theta[:,0::Ndec][:,0:imax/Ndec]
+        rh  = rho[:,0::Ndec][:,0:imax/Ndec]
+        #vmin = np.min(val)
+        vmax = np.max(val)
+        #Dynamic = max_val-vmin 
+        pc  = ax.pcolormesh(th,rh,val,cmap=cmap,vmin=vmin,vmax=vmax)
+        fig.colorbar(pc,orientation='vertical')
+        ax.set_title(title)
+        ax.axis('equal')
+
+
+    def toafp(self):
+        return afp
 
 class TBchannel(bs.TBsignal):
     """ radio channel in non uniform delay domain
