@@ -107,8 +107,11 @@ except:
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
     """
-    def __init__(self,x=np.array([]),y=np.array([])):
+    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([])):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
+        self.tx = tx 
+        self.rx = rx
+        self._filename = ''
     
     def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
         """ Load measurement file 
@@ -117,6 +120,7 @@ class AFPchannel(bs.FUsignal):
         are placed in the mes directory of the project.
 
         """
+        self._filename = _filename
         self.BW = BW
         self.fcGHz = fcGHz
         self.fmin = fcGHz-BW/2.
@@ -155,15 +159,53 @@ class AFPchannel(bs.FUsignal):
 
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
-        adp = ADPchannel(x=x,y=y,a=self.a)
+        adp = ADPchannel(x=x,y=y,a=self.a,tx=self.tx,rx=self.rx,_filename=self._filename)
         return adp 
 
 class ADPchannel(bs.TUsignal):
     """ Angular Delay Profile channel
     """
-    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([])):
+    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename=''):
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
         self.a = a
+        self._filename = _filename
+    
+
+    def pdp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[]):
+        """ Calculate Power Delay Profile
+
+        Parameters
+        ----------
+
+        fcGHz : float
+
+        """
+
+
+        Na = self.y.shape[0]
+        pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
+        u  = np.where(pdp==max(pdp))[0]
+        FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(fcGHz))
+        Gmax = 10*np.log10(pdp[u])-FS[u] 
+        Gmax_r = np.round(Gmax[0]*100)/100.
+        print Gmax
+        if fig==[]:
+            fig = plt.figure(figsize=figsize)
+        else:
+            fig = fig
+        if ax == []:
+            ax  = fig.add_subplot(111)
+        else:
+            ax = ax
+        ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+        ax.semilogx(self.x,10*np.log10(pdp)-Gmax,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax_r))
+        ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+        ax.set_xlim(10,1000)
+        ax.set_xlabel('Delay (ns) log scale',fontsize=fontsize) 
+        ax.set_ylabel('level (dB)',fontsize=fontsize) 
+        ax.set_title(self._filename)
+        plt.legend(loc='best') 
+        return fig,ax
 
     def polarplot(self,**kwargs):
         defaults = { 'fig':[],

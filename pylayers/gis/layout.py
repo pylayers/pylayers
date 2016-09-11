@@ -1164,7 +1164,7 @@ class Layout(PyLayers):
         # export Layout in osm format
         # The osm filename basenam is the same as the _filename ini file 
 
-        _filename,ext = splitext(self._filename)
+        _filename,ext = os.path.splitext(self._filename)
         filename = pyu.getlong(_filename+'.osm','struc/osm')
 
         #
@@ -4678,6 +4678,8 @@ class Layout(PyLayers):
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
         write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
+        if hasattr(self,'m'):
+            write_gpickle(getattr(self,'m'),os.path.join(path,'m.gpickle'))
 
         
         # root,ext = os.path.splitext(self._filename)
@@ -4761,7 +4763,9 @@ class Layout(PyLayers):
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
         setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
-
+        filem = os.path.join(path,'m.gpickle')
+        if os.path.isfile(fieme):
+            setattr(self,'m', read_gpickle(filem))
 
 
 
