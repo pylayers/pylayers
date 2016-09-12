@@ -28,6 +28,7 @@ import networkx as nx
 from networkx.readwrite import write_gpickle,read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
+import shapefile as shp
 import shapely.ops as sho
 import triangle
 from shapely.ops import cascaded_union
@@ -922,6 +923,59 @@ class Layout(PyLayers):
         # self.maxheight=3.
         # calculate extremum of segments
         self.extrseg()
+    
+    def importshp(self, **kwargs ):
+        """ import layout from shp file
+
+        Parameters
+        ----------
+
+        _fileshp : 
+
+        """
+
+
+        fileshp = pyu.getlong(kwargs['_fileshp'],os.path.join('struc','shp'))
+        polys = shp.Reader(fileshp)
+        verts = []
+        for poly in polys.iterShapes():
+            verts.append(poly.points)
+        npt = -1
+        ns = 0
+        xmin = 1e16
+        ymin = 1e16
+        xmax = -1e16
+        ymax = -1e16
+        self.name['WALL']=[]
+        for p in verts:
+            for k,point in enumerate(p):
+                self.Gs.add_node(npt)
+                x = point[0]
+                y = point[1]
+                xmin = min(x,xmin)
+                xmax = max(x,xmax)
+                ymin = min(y,ymin)
+                ymax = max(y,ymax)
+                self.Gs.pos[npt] = (x,y)
+                if k>0:
+                    ns = ns + 1 
+                    self.Gs.add_node(ns,name='WALL',z=[0,10],offset=0,transition=False,connect=[npt,npt+1])
+                    self.Gs.add_edge(npt, ns)
+                    self.Gs.add_edge(npt+1, ns)
+                    self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[npt])+np.array(self.Gs.pos[npt+1]))/2.)
+                npt = npt - 1
+        x_0  = (xmin+xmax)/2.
+        y_0  = (ymin+ymax)/2.
+        rx   = (20919.17611465165, 73282.03310954012)
+        pos  = np.array(self.Gs.pos.values())-np.array([x_0,y_0])[None,:]
+        Dx = 20917.765231945126+1059.47
+        Dy = 73236.89042681921+1562.98
+        self.m = Basemap(llcrnrlon=60, llcrnrlat=24,
+                         urcrnrlon=61, urcrnrlat=25,
+                         resolution='i', projection='cass', lon_0=60.5, lat_0=61.5)
+        for k,keys in enumerate(self.Gs.pos.keys()):
+            self.Gs.pos[keys] = self.m(pos[k,0]+Dx,pos[k,1]+Dy,inverse=True)
+
 
     def importosm(self, **kwargs):
         """ import layout from osm file or osmapi 
