@@ -690,6 +690,10 @@ class Bsignal(PyLayers):
             'auto' (default) ,'equal','scalar'
         function : string
             {'imshow'|'pcolormesh'}
+        typ : string 
+            'l20','l10'
+        vmin : min value
+        vmax : max value 
 
         Examples
         --------
@@ -706,7 +710,8 @@ class Bsignal(PyLayers):
                     'fontsize':20,
                     'typ':'l20',
                     'function':'imshow',
-                    'sax':[0,1]}
+                    'sax':[0,1],
+                    'bindex':[]}
 
         for k in defaults.keys():
             if not kwargs.has_key(k):
@@ -721,11 +726,21 @@ class Bsignal(PyLayers):
             ax = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
+        if kwargs['bindex']==[]:
+            ixmin=0
+            ixmax=len(self.x)-1
+            iamin=0 
+            iamax=np.shape(np.squeeze(self.y))[0]-1
+        else:
+            ixmin = kwargs['bindex'][0]
+            ixmax = kwargs['bindex'][1]
+            iamin = kwargs['bindex'][2]
+            iamax = kwargs['bindex'][3]
 
         # axis selection
         sax = kwargs['sax']
-
         if self.y.ndim>1:
+            # convert y data in desired format
             dt,ylabels = self.cformat(**kwargs)
 
             if 'vmin' not in kwargs:
@@ -738,13 +753,23 @@ class Bsignal(PyLayers):
             else:
                 vmax = kwargs['vmax']
 
+            xmin = self.x[ixmin]
+            xmax = self.x[ixmax]
+            if hasattr(self,'a'): 
+                ymin = self.a[iamin]
+                ymax = self.a[iamax]
+            else:
+                ymin = np.max(iamin,0)
+                ymax = np.min(iamax,np.squeeze(dt)[0])
+
+
             if kwargs['function']=='imshow':
-                im = ax.imshow(np.squeeze(dt),
+                im = ax.imshow(np.squeeze(dt)[iamin:iamax,ixmin:ixmax],
                            origin = 'lower',
                            vmin = vmin,
                            vmax = vmax,
                            aspect = kwargs['aspect'],
-                           extent = (self.x[0],self.x[-1],0,self.y.shape[0]),
+                           extent = (xmin,xmax,ymin,ymax),
                            interpolation=kwargs['interpolation'],
                            cmap = kwargs['cmap'],
                            )
@@ -1695,6 +1720,8 @@ class TUsignal(TBsignal, Usignal):
     """ Uniform signal in time domain
 
     This class inheritates from TBsignal and Usignal
+
+    The signal can either be complex or real 
 
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):

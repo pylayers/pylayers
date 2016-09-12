@@ -11,7 +11,7 @@ DL=DLink(L=L,fGHz=fGHz)
 #DL.Aa=Antenna(typ='Omni')
 #DL.Ab=Antenna(typ='Omn')
 
-DL.b=DL.b+1
+DL.b=np.array([755,1110,1.5])
 DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
 dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
 #
@@ -24,6 +24,5 @@ if DL.R.los:
     assert np.allclose(-lak0,Friss,0.1), 'issue in Friss'
 
 # Point outside
-DL.b=np.array([755,1110,1.2])
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True,ra_ceil_H=0)
 ak,tauk = DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)

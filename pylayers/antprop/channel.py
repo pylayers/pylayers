@@ -91,6 +91,7 @@ import pylab as plt
 import struct as stru
 import scipy.stats as st
 import numpy.fft as fft
+from scipy.io import loadmat
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
@@ -102,6 +103,213 @@ try:
     import h5py
 except:
     print 'h5py is not installed: Ctilde(object cannot be saved)'
+
+class AFPchannel(bs.FUsignal):
+    """ Angular Frequency Profile channel
+    """
+    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([])):
+        bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
+        self.tx = tx 
+        self.rx = rx
+        self._filename = ''
+        if len(tx)>0:
+            txrx = tx-rx
+            self.dist = np.sqrt(np.sum(txrx*txrx))
+            txrx_n = txrx/self.dist
+            self.theta  = np.arcos(txrx_n[2])
+            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])
+            self.tau  = self.dist/0.3
+            
+
+
+    
+    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
+        """ Load measurement file 
+
+        Measurement files and the associated back to back calibration files 
+        are placed in the mes directory of the project.
+
+        """
+        self._filename = _filename
+        self.BW = BW
+        self.fcGHz = fcGHz
+        self.fmin = fcGHz-BW/2.
+        self.fmax = fcGHz+BW/2.
+        # load Back 2 Back calibration file
+        filecal = pyu.getlong(_filecal,'meas')
+        filename = pyu.getlong(_filename,'meas')
+        U = loadmat(filecal)
+        cal_trf = U['cal_trf'][:,0]
+        # load Back 2 Back calibration file
+        D = np.loadtxt(filename,skiprows=2)
+        #
+        # Transfer function reconstruction 
+        #
+        amp = D[:,2::2]
+        ang = D[:,3::2]
+        self.Na  = amp.shape[0]
+        self.Nf  = amp.shape[1]
+        #
+        # select apodisation window 
+        #
+        if win=='hamming':
+            window = np.hamming(self.Nf)
+        elif win=='blackman':
+            window = np.blackman(self.Nf)
+        else:
+            window = np.ones(self.Nf)
+        #
+        # complex transfer function 
+        #
+        self.x = np.linspace(self.fmin,self.fmax,self.Nf)
+        self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
+        self.a = rot = (360-D[:,0])*np.pi/180.
+
+    def toadp(self):
+
+        x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
+        y = np.fft.ifft(self.y,axis=1)
+        adp = ADPchannel(x=x,y=y,a=self.a,tx=self.tx,rx=self.rx,_filename=self._filename)
+        return adp 
+
+class ADPchannel(bs.TUsignal):
+    """ Angular Delay Profile channel
+    """
+    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename=''):
+        bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
+        self.a = a
+        if len(tx)>0:
+            txrx = tx-rx
+            self.dist = np.sqrt(np.sum(txrx*txrx))
+            self.tau  = self.dist/0.3
+        self._filename = _filename
+    
+
+
+    def adp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
+        """ Calculate Angular Delay Profile
+
+        Parameters
+        ----------
+
+        fcGHz : float
+
+        """
+
+
+        Na = self.y.shape[0]
+        adp = np.real(np.sum(self.y*np.conj(self.y),axis=1))
+        u  = np.where(adp==max(adp))[0]
+        if fig==[]:
+            fig = plt.figure(figsize=figsize)
+        else:
+            fig = fig
+        if ax == []:
+            ax  = fig.add_subplot(111)
+        else:
+            ax = ax
+        ax.plot(self.a*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
+        #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+        ax.set_ylim(-80,-60)
+        if xlabel:
+            ax.set_xlabel('Angle (degrees)',fontsize=fontsize) 
+        if ylabel:
+            ax.set_ylabel('level (dB)',fontsize=fontsize) 
+        ax.set_title(self._filename)
+        if legend:
+            plt.legend(loc='best') 
+        return fig,ax
+
+    def pdp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
+        """ Calculate Power Delay Profile
+
+        Parameters
+        ----------
+
+        fcGHz : float
+
+        """
+
+
+        Na = self.y.shape[0]
+        pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
+        u  = np.where(pdp==max(pdp))[0]
+        FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(fcGHz))
+        Gmax = 10*np.log10(pdp[u])-FS[u] 
+        Gmax_r = np.round(Gmax[0]*100)/100.
+        if fig==[]:
+            fig = plt.figure(figsize=figsize)
+        else:
+            fig = fig
+        if ax == []:
+            ax  = fig.add_subplot(111)
+        else:
+            ax = ax
+        ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+        ax.semilogx(self.x,10*np.log10(pdp)-Gmax,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax_r))
+        ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+        ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+        ax.set_xlim(10,1000)
+        if xlabel:
+            ax.set_xlabel('Delay (ns) log scale',fontsize=fontsize) 
+        if ylabel:
+            ax.set_ylabel('level (dB)',fontsize=fontsize) 
+        ax.set_title(self._filename+' '+str(Gmax))
+        if legend:
+            plt.legend(loc='best') 
+        return fig,ax
+
+    def polarplot(self,**kwargs):
+        defaults = { 'fig':[],
+                     'ax':[],
+                     'figsize':(10,10), 
+                     'typ':'l20',
+                     'Ndec':10,
+                     'vmin':-110,
+                     'vmax':-70,
+                     'imax':1000,
+                     'cmap': plt.cm.jet,
+                     'title':'PADP'
+                   }
+        
+        cvel = 0.3
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else:
+            fig = kwargs.pop('fig')
+        if kwargs['ax'] == []:
+            ax = fig.add_subplot(111,polar=True)
+        else:
+            ax = kwargs.pop('ax')
+        
+        imax = kwargs.pop('imax')
+        Ndec = kwargs.pop('Ndec')
+        vmin = kwargs.pop('vmin')
+        vmax = kwargs.pop('vmax')
+        cmap = kwargs.pop('cmap')
+        title = kwargs.pop('title')
+
+        rho,theta = np.meshgrid(self.x*cvel,self.a)
+        # convert y data in desired format
+        dt,ylabels = self.cformat(**kwargs)
+        val = dt[:,0::Ndec][:,0:imax/Ndec]
+        th  = theta[:,0::Ndec][:,0:imax/Ndec]
+        rh  = rho[:,0::Ndec][:,0:imax/Ndec]
+        #vmin = np.min(val)
+        vmax = np.max(val)
+        #Dynamic = max_val-vmin 
+        pc  = ax.pcolormesh(th,rh,val,cmap=cmap,vmin=vmin,vmax=vmax)
+        fig.colorbar(pc,orientation='vertical')
+        ax.set_title(title)
+        ax.axis('equal')
+
+
+    def toafp(self):
+        return afp
 
 class TBchannel(bs.TBsignal):
     """ radio channel in non uniform delay domain

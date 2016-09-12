@@ -654,7 +654,8 @@ class Polygon(PyLayers,shg.Polygon):
         x,y = self.exterior.xy
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
-        npts = [L.ispoint(np.array(xx),tol=0.01) for xx in zip(x[0:-1],y[0:-1])]
+        npts = [ L.ispoint(np.array(xx),tol=0.01) for xx in zip(x[0:-1],y[0:-1]) ]
+        assert ( 0 not in npts), pdb.set_trace()
         seg = zip(npts,np.roll(npts,-1))
         try:
             nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
