@@ -116,7 +116,7 @@ class AFPchannel(bs.FUsignal):
             txrx = tx-rx
             self.dist = np.sqrt(np.sum(txrx*txrx))
             txrx_n = txrx/self.dist
-            self.theta  = np.arcos(txrx_n[2])
+            self.theta = np.arccos(txrx_n[2])
             self.phi  = np.arctan2(txrx_n[1],txrx_n[0])
             self.tau  = self.dist/0.3
             
@@ -181,10 +181,12 @@ class ADPchannel(bs.TUsignal):
         if len(tx)>0:
             txrx = tx-rx
             self.dist = np.sqrt(np.sum(txrx*txrx))
+            txrx_n = txrx/self.dist
+            self.theta = np.arccos(txrx_n[2])
+            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])
             self.tau  = self.dist/0.3
-        self._filename = _filename
-    
 
+        self._filename = _filename
 
     def adp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
         """ Calculate Angular Delay Profile
@@ -220,7 +222,7 @@ class ADPchannel(bs.TUsignal):
             plt.legend(loc='best') 
         return fig,ax
 
-    def pdp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
+    def pdp(self,**kwargs):
         """ Calculate Power Delay Profile
 
         Parameters
@@ -230,6 +232,25 @@ class ADPchannel(bs.TUsignal):
 
         """
 
+        defaults = { 'fcGHz':28,
+                     'figsize':(10,10),
+                     'fontsize':18,
+                     'fig' : [],
+                     'ax': [],
+                     'xlabel': True,
+                     'ylabel': True,
+                     'legend': True,
+                     'losdelay': True,
+                     'freespace': True,
+                     'desembeded': True,
+                     'raw': True,
+                     'Gtmax':19.77,
+                     'Grmax':2,
+                     'Tilt':10,
+                     'HPBW':10,
+                     'dphi':5
+                    }
+
 
         Na = self.y.shape[0]
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
@@ -237,25 +258,35 @@ class ADPchannel(bs.TUsignal):
         FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(fcGHz))
         Gmax = 10*np.log10(pdp[u])-FS[u] 
         Gmax_r = np.round(Gmax[0]*100)/100.
-        if fig==[]:
+
+        if kwargs['fig']==[]:
             fig = plt.figure(figsize=figsize)
         else:
-            fig = fig
+            fig = kwargs['fig'] 
         if ax == []:
             ax  = fig.add_subplot(111)
         else:
-            ax = ax
-        ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
-        ax.semilogx(self.x,10*np.log10(pdp)-Gmax,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax_r))
-        ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
-        ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+            ax = kwargs['ax']
+
+        if kwargs['raw']:
+            ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+
+        if kwargs['desembeded']:
+            ax.semilogx(self.x,10*np.log10(pdp)-Gmax,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax_r))
+
+        if kwargs['freespace']:
+            ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+
+        if kwargs['losdelay']:
+            ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+
         ax.set_xlim(10,1000)
-        if xlabel:
+        if kwargs['xlabel']:
             ax.set_xlabel('Delay (ns) log scale',fontsize=fontsize) 
-        if ylabel:
+        if kwargs['ylabel']:
             ax.set_ylabel('level (dB)',fontsize=fontsize) 
-        ax.set_title(self._filename+' '+str(Gmax))
-        if legend:
+        ax.set_title(self._filename+' '+str(Gain))
+        if kwargs['legend']:
             plt.legend(loc='best') 
         return fig,ax
 

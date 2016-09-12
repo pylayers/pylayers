@@ -925,7 +925,7 @@ class Layout(PyLayers):
         self.extrseg()
     
     def importshp(self, **kwargs ):
-        """ import layout from shp file
+        """ import layout from shape file
 
         Parameters
         ----------
@@ -933,6 +933,9 @@ class Layout(PyLayers):
         _fileshp : 
 
         """
+        defaults = { 'pc': [],
+                     'dist_m':250
+                   }
 
 
         fileshp = pyu.getlong(kwargs['_fileshp'],os.path.join('struc','shp'))
@@ -948,22 +951,38 @@ class Layout(PyLayers):
         ymax = -1e16
         self.name['WALL']=[]
         for p in verts:
+            npoint = len(p)
             for k,point in enumerate(p):
-                self.Gs.add_node(npt)
-                x = point[0]
-                y = point[1]
-                xmin = min(x,xmin)
-                xmax = max(x,xmax)
-                ymin = min(y,ymin)
-                ymax = max(y,ymax)
-                self.Gs.pos[npt] = (x,y)
-                if k>0:
+                ## add a new node unless last point already existing
+                added = False
+                if k!=(npoint-1):
+                    if k==0:
+                        np0=npt
+                    self.Gs.add_node(npt)
+                    added = True
+                    x = point[0]
+                    y = point[1]
+                    xmin = min(x,xmin)
+                    xmax = max(x,xmax)
+                    ymin = min(y,ymin)
+                    ymax = max(y,ymax)
+                    self.Gs.pos[npt] = (x,y)
+                #add a new segment from the second point
+                if (k>0) & (k!=npoint-2):
                     ns = ns + 1 
                     self.Gs.add_node(ns,name='WALL',z=[0,10],offset=0,transition=False,connect=[npt,npt+1])
                     self.Gs.add_edge(npt, ns)
-                    self.Gs.add_edge(npt+1, ns)
+                    self.Gs.add_edge(ns,npt+1)
                     self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[npt])+np.array(self.Gs.pos[npt+1]))/2.)
-                npt = npt - 1
+                # add a new segment closing the polygon 
+                if k == npoint-2:
+                    ns = ns + 1 
+                    self.Gs.add_node(ns,name='WALL',z=[0,10],offset=0,transition=False,connect=[npt,npt+1])
+                    self.Gs.add_edge(npt, ns)
+                    self.Gs.add_edge(ns,np0)
+                    self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[npt])+np.array(self.Gs.pos[np0]))/2.)
+                if added:
+                    npt = npt - 1
         x_0  = (xmin+xmax)/2.
         y_0  = (ymin+ymax)/2.
         rx   = (20919.17611465165, 73282.03310954012)
