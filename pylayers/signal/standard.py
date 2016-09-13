@@ -276,7 +276,10 @@ class Wstandard(dict):
                     smhz =chan[k]['smhz']
                     bmhz = chan[k]['bmhz']
                     gmhz = chan[k]['gmhz']
-                    self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz)
+                    if self.name=='generic':
+                        self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz,chan=False)
+                    else:
+                        self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz)
 
     def ls(self):
         """ list all available standards
@@ -369,7 +372,7 @@ class Wstandard(dict):
                 return power
         raise NameError('Requested information not in standard')
 
-    def bandplan(self,fstart,fstop,smhz=5,bmhz=20,gmhz=2):
+    def bandplan(self,fstart,fstop,smhz=5,bmhz=20,gmhz=2,chan=True):
         """ construct the different channels of the standard
 
         Parameters
@@ -386,14 +389,15 @@ class Wstandard(dict):
             self.chan={}
         Nchannel = np.round((fstop-fstart)/(smhz/1000.)).astype(int)+1
         fcghz = np.linspace(fstart,fstop,Nchannel,endpoint=True)
-        for k,fc in enumerate(fcghz):
-            if (fc>=4) & (fc<5):
-                channum = int(np.round((fc-4)*200))
-            if (fc>=5) & (fc<6):
-                channum = int(np.round((fc-5)*200))
-            if fc<4:
-                channum = k+1
-            self.chan[channum] = Channel(fc,bmhz,gmhz)
+        if chan:
+            for k,fc in enumerate(fcghz):
+                if (fc>=4) & (fc<5):
+                    channum = int(np.round((fc-4)*200))
+                if (fc>=5) & (fc<6):
+                    channum = int(np.round((fc-5)*200))
+                if fc<4:
+                    channum = k+1
+                self.chan[channum] = Channel(fc,bmhz,gmhz)
         try:
             self.fcghz=np.hstack((self.fcghz,fcghz))
         except:

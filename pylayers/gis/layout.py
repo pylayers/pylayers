@@ -28,6 +28,7 @@ import networkx as nx
 from networkx.readwrite import write_gpickle,read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
+import shapefile as shp
 import shapely.ops as sho
 import triangle
 from shapely.ops import cascaded_union
@@ -922,6 +923,89 @@ class Layout(PyLayers):
         # self.maxheight=3.
         # calculate extremum of segments
         self.extrseg()
+    
+    def importshp(self, **kwargs ):
+        """ import layout from shape file
+
+        Parameters
+        ----------
+
+        _fileshp : 
+
+        """
+        defaults = { 'pref': [np.array([25481100,6676890]),np.array([60.2043716,24.6591147])],
+                     'dist_m': 250,
+                     'latlon': True,
+                     'bd': [24,60,25,61],
+                   }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        fileshp = pyu.getlong(kwargs['_fileshp'],os.path.join('struc','shp'))
+        polys = shp.Reader(fileshp)
+        verts = []
+        for poly in polys.iterShapes():
+            verts.append(poly.points)
+        npt = -1
+        ns = 0
+        xmin = 1e16
+        ymin = 1e16
+        xmax = -1e16
+        ymax = -1e16
+        self.name['WALL']=[]
+        for p in verts:
+            v = np.array(p)-kwargs['pref'][0][None,:]
+            nv = np.sqrt(np.sum(v*v,axis=1))
+            # if at least one point is in the radius the poygon is kept
+            if (nv<kwargs['dist_m']).any():
+                #pdb.set_trace()
+                npoint = len(p)
+                for k,point in enumerate(p):
+                    ## add a new node unless it is the last already existing point
+                    if k!=(npoint-1):
+                        if k==0:
+                            np0=npt
+                        self.Gs.add_node(npt)
+                        x = point[0]
+                        y = point[1]
+                        xmin = min(x,xmin)
+                        xmax = max(x,xmax)
+                        ymin = min(y,ymin)
+                        ymax = max(y,ymax)
+                        self.Gs.pos[npt] = (x,y)
+                        npt = npt - 1
+                    #add a new segment from the second point
+                    if (k>0) & (k<npoint-1):
+                        ns = ns + 1 
+                        self.Gs.add_node(ns,name='WALL',z=[0,10],offset=0,transition=False,connect=[npt+1,npt+2])
+                        self.Gs.add_edge(npt+1, ns)
+                        self.Gs.add_edge(ns,npt+2)
+                        self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[npt+1])+np.array(self.Gs.pos[npt+2]))/2.)
+                    # add a new segment closing the polygon 
+                    if k == npoint-1:
+                        ns = ns + 1 
+                        self.Gs.add_node(ns,name='WALL',z=[0,10],offset=0,transition=False,connect=[np0,npt+1])
+                        self.Gs.add_edge(np0, ns)
+                        self.Gs.add_edge(ns,npt+1)
+                        self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[npt+1])+np.array(self.Gs.pos[np0]))/2.)
+
+        self.m = Basemap(llcrnrlon=kwargs['bd'][0], llcrnrlat=kwargs['bd'][1],
+                         urcrnrlon=kwargs['bd'][2], urcrnrlat=kwargs['bd'][3],
+                         resolution='i', projection='cass', lon_0=24.5, lat_0=60.5)
+
+        if kwargs['latlon']:
+            lat_ref=kwargs['pref'][1][0]
+            lon_ref=kwargs['pref'][1][1]
+            x_ref,y_ref = self.m(lon_ref,lat_ref)
+            Dx = kwargs['pref'][0][0]-x_ref
+            Dy = kwargs['pref'][0][1]-y_ref
+            pos  = np.array(self.Gs.pos.values())
+            for k,keys in enumerate(self.Gs.pos.keys()):
+                self.Gs.pos[keys] = self.m(pos[k,0]-Dx,pos[k,1]-Dy,inverse=True)
+
+            self.coordinates = 'latlon'
 
     def importosm(self, **kwargs):
         """ import layout from osm file or osmapi 
@@ -1111,7 +1195,7 @@ class Layout(PyLayers):
         if kwargs['cart']:
             self.coordinates ='cart'
         else:
-            self.coordinates ='lonlat'
+            self.coordinates ='latlon'
 
         #del coords
         #del nodes
@@ -1164,7 +1248,7 @@ class Layout(PyLayers):
         # export Layout in osm format
         # The osm filename basenam is the same as the _filename ini file 
 
-        _filename,ext = splitext(self._filename)
+        _filename,ext = os.path.splitext(self._filename)
         filename = pyu.getlong(_filename+'.osm','struc/osm')
 
         #
@@ -1187,8 +1271,11 @@ class Layout(PyLayers):
         for n in self.Gs.pos:
             if n <0:
                 if n not in self.lboundary:
-                    x,y = self.Gs.pos[n]
-                    lon,lat = self.m(x,y,inverse=True)
+                    if self.coordinates=='latlon':
+                        lon,lat = self.Gs.pos[n]
+                    if self.coordinates=='cart':
+                        x,y = self.Gs.pos[n]
+                        lon,lat = self.m(x,y,inverse=True)
                     fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
 
         for n in self.Gs.pos:
@@ -1213,6 +1300,7 @@ class Layout(PyLayers):
 
 
         fd.write("</osm>\n")
+        fd.close()
 
     def save(self):
         """ save structure in an ini file
@@ -4678,6 +4766,8 @@ class Layout(PyLayers):
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
         write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
+        if hasattr(self,'m'):
+            write_gpickle(getattr(self,'m'),os.path.join(path,'m.gpickle'))
 
         
         # root,ext = os.path.splitext(self._filename)
@@ -4761,7 +4851,9 @@ class Layout(PyLayers):
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
         setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
-
+        filem = os.path.join(path,'m.gpickle')
+        if os.path.isfile(fieme):
+            setattr(self,'m', read_gpickle(filem))
 
 
 

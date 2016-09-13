@@ -4359,6 +4359,33 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     for t in cbar.ax.get_yticklabels():
         t.set_fontsize(fontsize)
 
+def BeamGauss(theta,phi,Gmax=19.77,HPBW_az=10,HPBW_el=40,Tilt=10):
+    """ Beam with a Gaussian shape
+
+    Parameters
+    ----------
+                
+    theta : float 
+          angle in degree
+    phi   : float 
+          angle in degree
+    Gmax  : float 
+    HPBW_az : float  
+        Half Power Beamwidth azimuth degree
+    HPBW_el : float
+        Half Power Beamwidth elevation degree
+    Tilt : float 
+        angle in degree 
+
+    """
+    c = np.pi/180.
+    az = c*(theta-(Tilt+90))*2*np.sqrt(np.log(2))
+    el = c*phi*2*np.sqrt(np.log(2))
+    taz = -(az/(HPBW_az*c))**2
+    tel = -(el/(HPBW_el*c))**2
+    gain = 10**(Gmax/10.)*np.exp(taz)*np.exp(tel)
+    return(gain)
+
 def show3D(F, theta, phi, k, col=True):
     """ show 3D matplotlib diagram
 
