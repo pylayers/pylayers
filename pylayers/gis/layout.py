@@ -1203,7 +1203,6 @@ class Layout(PyLayers):
         # 
         # get slab and materials 
         #
-        pdb.set_trace()
         mat = sb.MatDB()
         mat.load(self.filematini)
         self.sl = sb.SlabDB()
