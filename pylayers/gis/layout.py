@@ -4850,7 +4850,7 @@ class Layout(PyLayers):
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
         setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
         filem = os.path.join(path,'m.gpickle')
-        if os.path.isfile(fieme):
+        if os.path.isfile(filem):
             setattr(self,'m', read_gpickle(filem))
 
 
