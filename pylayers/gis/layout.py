@@ -231,11 +231,11 @@ class Layout(PyLayers):
                 else: # which do not exist
                     newfile = True
                     print "new file - creating a void Layout",self._filename
-            elif loadosm:
+            elif loadosm:# load .osm file
                 self.importosm(_fileosm=string,cart=True)
-            elif '(' in string:
+            elif '(' in string: # load from osmapi latlon in string
                 self.importosm(latlon=string,dist_m=dist_m,cart=True)
-            else: 
+            else: # load from address geocoding  
                 self.importosm(address=string,dist_m=dist_m,cart=True)
 
 
@@ -284,6 +284,7 @@ class Layout(PyLayers):
         st = '\n'
         st = st + "----------------\n"
         st = st + self._filename + "\n"
+        st = st + self.coordinates + "\n"
         if self.display['overlay_file']!='':
             filename = pyu.getlong(self.display['overlay_file'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
@@ -1180,22 +1181,19 @@ class Layout(PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
-        #if kwargs['cart']:
-        #    lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
-        #    lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
-        #    bd = [lon.min(),lat.min(),lon.max(),lat.max()]
-        #    lon_0 = (bd[0]+bd[2])/2.
-        #    lat_0 = (bd[1]+bd[3])/2.
-        #self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
-        #                urcrnrlon=bd[2], urcrnrlat=bd[3],
-        #        resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
-        #    x,y = self.m(lon,lat)
-        #    self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
+        lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
+        lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+        bd = [lon.min(),lat.min(),lon.max(),lat.max()]
+        lon_0 = (bd[0]+bd[2])/2.
+        lat_0 = (bd[1]+bd[3])/2.
+        self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
+                        urcrnrlon=bd[2], urcrnrlat=bd[3],
+                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
         self.m  = m 
         if kwargs['cart']:
+            x,y = self.m(lon,lat)
+            self.Gs.pos = {k: (x[i],y[i]) for i,k in enumerate(self.Gs.pos)}
             self.coordinates ='cart'
-        else:
-            self.coordinates ='latlon'
 
         #del coords
         #del nodes
