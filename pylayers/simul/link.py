@@ -1581,10 +1581,9 @@ class DLink(Link):
         >>> L.show(rays=True,dB=True)
 
         """
-
-        defaults ={'s':80,
-                   'ca':'b',
-                   'cb':'r',
+        defaults ={'s':80,   # size points
+                   'ca':'b', # color a 
+                   'cb':'r', # color b 
                    'alpha':1,
                    'i':-1,
                    'figsize':(20,10),

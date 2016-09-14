@@ -4814,6 +4814,7 @@ class Layout(PyLayers):
         for k in self.Gt.node:
             if k != 0:
                 #vnodes = self.Gt.node[k]['cycle'].cycle
+                self.Gt.node[k]['polyg'].setvnodes(self)
                 vnodes = self.Gt.node[k]['polyg'].vnodes
                 if vnodes[0]<0:
                     self.Gt.node[k]['polyg'].vnodes = vnodes
