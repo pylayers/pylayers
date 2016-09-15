@@ -878,7 +878,8 @@ class Simul(PyLayers):
         self.config.set("files", "struc", self.filestr)
         self.save()
 
-    def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
+    #def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
+    def show(self,**kwargs):
         """ show simulation
 
             Parameters
@@ -906,6 +907,24 @@ class Simul(PyLayers):
 
 
         """
+
+        defaults = { 'itx':[-1],
+                     'irx':[-1],
+                     'furniture': True,
+                     's':8,
+                     'c':'b',
+                     'num':False,
+                     'fig':[],
+                     'ax':[],
+                     'aw':False
+                     }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+            st = k+"=kwargs['"+k+"']"
+            exec(st)
+
         if type(itx) == int:
             itx = [itx]
         if type(irx) == int:
@@ -918,7 +937,7 @@ class Simul(PyLayers):
             ax = fig.gca()
 
         #self.L.display['scaled']=False
-        fig,ax=self.L.showG('s',fig=fig,ax=ax, aw=True)
+        fig,ax=self.L.showG('s',fig=fig,ax=ax, aw=aw)
         #
         if furniture:
             if 'lfur' in self.L.__dict__:

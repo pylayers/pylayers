@@ -98,7 +98,7 @@ class Layout(PyLayers):
                       _filefur='',
                       force=False,
                       check=True,
-                      build=False,
+                      build=True,
                       verbose=False,
                       cartesian=True,
                       dist_m = 400):
@@ -128,6 +128,8 @@ class Layout(PyLayers):
         #self.sl.mat = mat
         #self.sl.load(_fileslabini)
 
+        self.isbuilt = False
+        self.loadosm = False
         self.labels = {}
 
         self.Np = 0
@@ -233,10 +235,13 @@ class Layout(PyLayers):
                     print "new file - creating a void Layout",self._filename
             elif loadosm:# load .osm file
                 self.importosm(_fileosm=string,cart=True)
+                self.loadosm = True
             elif '(' in string: # load from osmapi latlon in string
                 self.importosm(latlon=string,dist_m=dist_m,cart=True)
+                self.loadosm = True
             else: # load from address geocoding  
                 self.importosm(address=string,dist_m=dist_m,cart=True)
+                self.loadosm = True
 
 
             self.boundary()
@@ -251,7 +256,7 @@ class Layout(PyLayers):
             if check:
                 self.check()
             
-       
+            
             # check if the graph gpickle files have been built
             if build:
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
@@ -263,11 +268,16 @@ class Layout(PyLayers):
                     # Otherwise all the stored graphs are loaded 
                     #  
                     self.dumpr('t')
+                    # If node 0 exists : the layout has been built
+                    
+                    # If .ini file has changed rebuild 
                     if self._hash != self.Gt.node[0]['hash']:
                         rebuild = True 
-                    else:
+                    else: # reload
                         self.dumpr('stvirw')
+                        self.isbuilt=True
                         rebuild = False
+                    
                 else: 
                     rebuild = True
 
@@ -283,11 +293,17 @@ class Layout(PyLayers):
     def __repr__(self):
         st = '\n'
         st = st + "----------------\n"
-        st = st + self._filename + "\n"
-        st = st + self.coordinates + "\n"
+        st = st + self._filename + ' : '+self._hash +"\n"
+       
+        
+        if self.isbuilt:
+            st = st + 'Built with : '+ self.Gt.node[0]['hash']+"\n"
+        else:
+            st = st + 'Not built \n'
         if self.display['overlay_file']!='':
             filename = pyu.getlong(self.display['overlay_file'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
+        st = st + "Coordinates : " + self.coordinates + "\n"
         st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
         st = st + "Number of segments  : "+str(self.Ns)+"\n"
@@ -303,45 +319,45 @@ class Layout(PyLayers):
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
-        st = st + "\nUseful dictionnaries" + "\n----------------\n"
-        if hasattr(self,'dca'):
-            st = st + "dca {cycle : []} cycle with an airwall" +"\n"
-        if hasattr(self,'di'):
-            st = st + "di {interaction : [nstr,typi]}" +"\n"
-        if hasattr(self,'sl'):
-            st = st + "sl {slab name : slab dictionary}" +"\n"
-        if hasattr(self,'name'):
-            st = st + "name :  {slab :seglist} " +"\n"
-        st = st + "\nUseful arrays"+"\n----------------\n"
-        if hasattr(self,'pt'):
-            st = st + "pt : numpy array of points " +"\n"
-        if hasattr(self,'normal'):
-            st = st + "normal : numpy array of normal " +"\n"
-        if hasattr(self,'offset'):
-            st = st + "offset : numpy array of offset " +"\n"
-        if hasattr(self,'tsg'):
-            st = st + "tsg : get segment index in Gs from tahe" +"\n"
-        if hasattr(self,'isss'):
-            st = st + "isss :  sub-segment index above Nsmax"+"\n"
-        if hasattr(self,'tgs'):
-            st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
-        if hasattr(self,'upnt'):
-            st = st + "upnt : get point id index from self.pt"+"\n"
-        #if hasattr(self,'iupnt'):
-        #    st = st + "iupnt : get point index in self.pt from point id  "+"\n"
-        if hasattr(self,'lsss'):
-            st = st + "lsss : list of segments with sub-segment"+"\n"
-        if hasattr(self,'sridess'):
-            st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
-        if hasattr(self,'sla'):
-            st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
-        if hasattr(self,'degree'):
-            st = st + "degree : degree of nodes " +"\n"
-        st = st + "\nUseful tip" + "\n----------------\n"
-        st = st + "Point p in Gs => p_coord:\n"
-        #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
-        st = st + "Segment s in Gs => s_ab coordinates \n"
-        st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
+        # st = st + "\nUseful dictionnaries" + "\n----------------\n"
+        # if hasattr(self,'dca'):
+        #     st = st + "dca {cycle : []} cycle with an airwall" +"\n"
+        # if hasattr(self,'di'):
+        #     st = st + "di {interaction : [nstr,typi]}" +"\n"
+        # if hasattr(self,'sl'):
+        #     st = st + "sl {slab name : slab dictionary}" +"\n"
+        # if hasattr(self,'name'):
+        #     st = st + "name :  {slab :seglist} " +"\n"
+        # st = st + "\nUseful arrays"+"\n----------------\n"
+        # if hasattr(self,'pt'):
+        #     st = st + "pt : numpy array of points " +"\n"
+        # if hasattr(self,'normal'):
+        #     st = st + "normal : numpy array of normal " +"\n"
+        # if hasattr(self,'offset'):
+        #     st = st + "offset : numpy array of offset " +"\n"
+        # if hasattr(self,'tsg'):
+        #     st = st + "tsg : get segment index in Gs from tahe" +"\n"
+        # if hasattr(self,'isss'):
+        #     st = st + "isss :  sub-segment index above Nsmax"+"\n"
+        # if hasattr(self,'tgs'):
+        #     st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
+        # if hasattr(self,'upnt'):
+        #     st = st + "upnt : get point id index from self.pt"+"\n"
+        # #if hasattr(self,'iupnt'):
+        # #    st = st + "iupnt : get point index in self.pt from point id  "+"\n"
+        # if hasattr(self,'lsss'):
+        #     st = st + "lsss : list of segments with sub-segment"+"\n"
+        # if hasattr(self,'sridess'):
+        #     st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
+        # if hasattr(self,'sla'):
+        #     st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
+        # if hasattr(self,'degree'):
+        #     st = st + "degree : degree of nodes " +"\n"
+        # st = st + "\nUseful tip" + "\n----------------\n"
+        # st = st + "Point p in Gs => p_coord:\n"
+        # #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
+        # st = st + "Segment s in Gs => s_ab coordinates \n"
+        # st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
 
     def __add__(self, other):
@@ -1224,6 +1240,8 @@ class Layout(PyLayers):
    
         self.save()
 
+        # 
+
     def exportosm(self):
         """  export layout in osm file format
 
@@ -1424,12 +1442,10 @@ class Layout(PyLayers):
         fd = open(fileini,"w")
         config.write(fd)
         fd.close()
-
         # convert graph Gs to numpy arrays for speed up post processing
         # ideally an edited Layout should be locked while not saved.
-
-        self.g2npy()
-
+        #self.g2npy()
+        self._hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
 
     def load(self):
         """ load a structure file from an .ini file
@@ -1698,103 +1714,6 @@ class Layout(PyLayers):
         # create shapely polygons L._shseg 
         
 
-    
-            
-
-    def load_old(self,arg,build=True,cartesian=False,dist_m=400):
-        """ load a Layout in different formats
-
-        Parameters
-        ----------
-
-        _filename : string
-
-        Notes
-        -----
-
-        Available file formats are :
-        
-        +  .osm   : opens street map format  DIROSM
-        +  .ini   : ini file format (natural one) DIRINI
-
-
-        """
-
-        
-        filename,ext=os.path.splitext(arg)
-        newfile=False
-        if ext=='.osm':  # osm file with extension
-            filename = pyu.getlong(arg,pstruc['DIROSM'])
-            if os.path.exists(filename): # which exists
-                # force the cartesian conversion 
-                self.loadosm(_fileosm=arg,cart=cartesian)
-            else: # which do not exist
-                self.filename = arg
-                newfile=True
-                print "new file",self.filename
-        
-        elif ext=='.ini': # ini file with extension
-            filename = pyu.getlong(arg,pstruc['DIRINI'])
-            if os.path.exists(filename):# which exists
-                self.loadini(arg)
-            else: # which do not exist
-                self.filename = arg
-                newfile=True
-                print "new file",self.filename
-        else: # address or (lat,lon) 
-            if '(' in arg: # latlon
-                latlon = eval(arg)
-                self.loadosm(latlon=latlon,dist_m=dist_m,cart=cartesian)
-            else: # address 
-                self.loadosm(address=arg,dist_m=dist_m,cart=cartesian)
-                self.filename = arg.replace(' ','_')
-
-       
-        
-        #  construct geomfile (.off) for vizualisation with geomview
-        self.subseg()
-        if os.path.exists(filename):
-            try:
-                self.geomfile()
-            except:
-                print "problem to construct geomfile"
-        # if check:
-        #     self.check()
-        
-        if not newfile :
-            self.boundary(dx=10,dy=10)
-        
-        # create shapely polygons L._shseg 
-        self.updateshseg()
-
-        rebuild = False
-        #from guppy import hpy
-        #hp = hpy()
-        #h = hp.heap()
-        #print h
-        #pdb.set_trace()
-        if ext!='.osm':
-            if not newfile :
-
-                if os.path.exists(os.path.join(basename,'struc','gpickle',self.filename)):
-                    path = os.path.join(basename,'struc','gpickle',self.filename)
-                    self.dumpr('t')
-                    if self._hash != self.Gt.node[0]['hash']:
-                        rebuild = True 
-                    else:
-                        self.dumpr('stvirw')
-                else: 
-                    rebuild = True
-
-                
-                # build and dump
-                if build and rebuild:  
-                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                    # if ans.lower()=='y':
-
-                    self.build()
-                    self.lbltg.append('s')
-                    self.dumpw()
 
     def subseg(self):
         """ establishes the association : name <->  edgelist
@@ -3577,7 +3496,6 @@ class Layout(PyLayers):
 
 
 
-    def segpt2(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
 
         Parameters
@@ -4715,12 +4633,15 @@ class Layout(PyLayers):
         #     self.lbltg.extend('w')
 
 
-        # add hash to node 0 of Gt 
+        # add hash to node 0 of Gs 
         
         fileini = pyu.getlong(self._filename,pstruc['DIRINI'])
         _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
         self.Gt.add_node(0,hash=_hash)
-        
+
+        # There is a dumpw after each build
+        self.dumpw()
+        self.isbuilt=True
 
     def dumpw(self):
         """ write a dump of given Graph
@@ -4814,6 +4735,7 @@ class Layout(PyLayers):
         for k in self.Gt.node:
             if k != 0:
                 #vnodes = self.Gt.node[k]['cycle'].cycle
+                self.Gt.node[k]['polyg'].setvnodes(self)
                 vnodes = self.Gt.node[k]['polyg'].vnodes
                 if vnodes[0]<0:
                     self.Gt.node[k]['polyg'].vnodes = vnodes
@@ -8446,7 +8368,8 @@ class Layout(PyLayers):
                 if 'h' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_TOP_BOTTOM)
                     print "flip h"
-                kwargs['ax'].imshow(image, extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
+                plt.axis()
+                kwargs['ax'].imshow(np.array(image), extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
 
         if kwargs['show']:
