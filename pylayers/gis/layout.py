@@ -1209,7 +1209,8 @@ class Layout(PyLayers):
         self.sl.mat = mat
         self.sl.load(self.fileslabini)
         for k in self.sl.keys():
-            self.name[k] = []
+            if k not in self.name:
+                self.name[k] = []
         
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
@@ -1239,7 +1240,6 @@ class Layout(PyLayers):
 
         layout.loadosm
         layout.loadini
-        layout.saveini 
         layout.check
 
         """
@@ -4721,14 +4721,6 @@ class Layout(PyLayers):
         _hash = hashlib.md5(open(fileini,'rb').read()).hexdigest()
         self.Gt.add_node(0,hash=_hash)
         
-        # f=os.path.splitext(self.filename)
-        # if f[1] =='.ini':
-        #     self.saveini(self.filename)
-        # else :
-        #     self.saveini(f[0] +'.ini')
-
-    
-
 
     def dumpw(self):
         """ write a dump of given Graph
@@ -4768,10 +4760,6 @@ class Layout(PyLayers):
             write_gpickle(getattr(self,'m'),os.path.join(path,'m.gpickle'))
 
         
-        # root,ext = os.path.splitext(self._filename)
-        # if ext == '.ini':
-        #     self.saveini(self._filename)
-
     def dumpr(self,graphs='stvirw'):
         """ read of given graphs
 
@@ -4850,7 +4838,7 @@ class Layout(PyLayers):
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
         setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
         filem = os.path.join(path,'m.gpickle')
-        if os.path.isfile(fieme):
+        if os.path.isfile(filem):
             setattr(self,'m', read_gpickle(filem))
 
 
