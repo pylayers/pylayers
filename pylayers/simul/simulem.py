@@ -66,11 +66,6 @@ Simul class
     Simul.getlaunch
     Simul.gettra
     Simul.gettud
-    Simul.launching
-    Simul.tracing
-    Simul.tratotud
-    Simul.field
-    Simul.run2
     Simul.run
     Simul.gt
     Simul.delay
@@ -102,6 +97,7 @@ import pylayers.signal.waveform as wvf
 import pylayers.signal.bsignal as bs
 from pylayers.simul.radionode import RadioNode
 from pylayers.util import easygui
+from pylayers.simul.link import DLink
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 # Handle Layout
 from pylayers.gis.layout import Layout
@@ -228,24 +224,6 @@ class Simul(PyLayers):
 
     This class group together all the parametrization files of a simulation
 
-    Directory list file :
-
-        fileconf
-
-    Constitutive parameters file :
-
-        fileslab
-        filemat
-
-    Ray Tracing parameters files :
-
-        filepalch
-        filetra
-
-    Frequency list file :
-
-        filefreq
-
     """
     def __init__(self, _filesimul='default.ini'):
         self.filesimul = _filesimul
@@ -293,10 +271,7 @@ class Simul(PyLayers):
         self.cfield = []
         self.fGHz = np.linspace(2, 11, 181, endpoint=True)
         self.wav = wvf.Waveform()
-        try:
-            self.load(_filesimul)
-        except:
-            pass
+        self.load(_filesimul)
 
 
     def gui(self):
@@ -371,46 +346,6 @@ class Simul(PyLayers):
         # Update waveform 
         self.wav.read(self.config)
         self.save()
-
-    def clean(self, level=1):
-        """ clean
-
-       Notes
-       -----
-       obsolete
-
-        Parameters
-        ----------
-            level  = 1
-
-
-        """
-        if level > 0:
-            for itx in range(self.tx.N):
-                filename = pyu.getlong(self.filelch[itx], pstruc['DIRLCH'])
-                print filename
-        if level > 1:
-            for itx in range(self.tx.N):
-                for irx in range(self.rx.N):
-                    filename = pyu.getlong(self.filetra[itx][irx],
-                                           pstruc(['DIRTRA']))
-                    print filename
-        if level > 2:
-            for itx in range(self.tx.N):
-                for irx in range(self.rx.N):
-                    filename = pyu.getlong(self.filetud[itx][irx], pstruc['DIRTUD'])
-                    print filename
-                    filename = pyu.getlong(self.filetauk[itx][irx],pstruc['DIRTUD'])
-                    print filename
-        if level > 3:
-            for itx in range(self.tx.N):
-                for irx in range(self.rx.N):
-                    filename = pyu.getlong(self.filetang[itx][irx], pstruc['DIRTUD'])
-                    print filename
-                    filename = pyu.getlong(self.filerang[itx][irx], pstruc['DIRTUD'])
-                    print filename
-                    filename = pyu.getlong(self.filefield[itx][irx], pstruc['DIRTUD'])
-                    print filename
 
 
     def clean_project(self,verbose= True):
@@ -746,6 +681,11 @@ class Simul(PyLayers):
 
 
         try:
+            _fileini = self.config.get("files", "struc")
+        except:
+            raise NameError('Error in section struc from '+ _fileini)
+
+        try:
             _fileanttx = self.config.get("files", "txant")
         except:
             raise NameError('Error in section txant from '+ _filesimul)
@@ -759,21 +699,20 @@ class Simul(PyLayers):
             self.tx = RadioNode(name = '',
                                 typ = 'tx',
                                 _fileini = _filetx,
-                                _fileant = _fileanttx,
-                                _filestr = self.filestr)
+                                _fileant = _fileanttx
+                                )
 
             self.rx = RadioNode(name = '',
                                 typ = 'rx',
                                 _fileini = _filerx,
-                                _fileant = _fileantrx,
-                                _filestr = self.filestr)
+                                _fileant = _fileantrx)
         except:
             raise NameError('Error during Radionode load')
 #
 # Load Layout
 # 
         try:
-            self.L = Layout(self.filestr)
+            self.L = Layout(_fileini)
         except:
             raise NameError('Layout load error')
 
@@ -800,54 +739,54 @@ class Simul(PyLayers):
 #
 # Simulation Progress
 #
-        self.output = {}
-        if "output" in sections:
-            for itx in self.config.options("output"):
-                _filename  =  self.config.get("output", itx)
-                self.dout[int(itx)] = _filename
-                filename = pyu.getlong(_filename, "output")
-                output = ConfigParser.ConfigParser()
-                output.read(filename)
-                secout = output.sections()
-                self.dtra[int(itx)] = {}
-                self.dtud[int(itx)] = {}
-                self.dtang[int(itx)] = {}
-                self.drang[int(itx)] = {}
-                self.dtauk[int(itx)] = {}
-                self.dfield[int(itx)] = {}
-                self.dcir[int(itx)] = {}
-                if "launch" in secout:
-                    self.progress = 1
-                    keys_launch = output.options("launch")
-                    for kl in keys_launch:
-                        self.dlch[int(kl)] = output.get("launch", kl)
-                if "trace" in secout:
-                    self.progress = 2
-                    keys_tra = output.options("trace")
-                    for kt in keys_tra:
-                        self.dtra[int(itx)][int(kt)] = output.get("trace", kt)
-
-                if "tang" in secout:
-                    self.progress = 3
-                    keys_tang = output.options("tang")
-                    for kt in keys_tang:
-                        self.dtang[int(itx)][int(kt)] = output.get("tang", kt)
-                        self.drang[int(itx)][int(kt)] = output.get("rang", kt)
-                        self.dtud[int(itx)][int(kt)] = output.get("tud", kt)
-                if "field" in secout:
-                    self.progress = 4
-                    keys_field = output.options("field")
-                    for kt in keys_field:
-                        self.dfield[int(itx)][int(kt)] = output.get(
-                            "field", kt)
-                        self.dtauk[int(itx)][int(kt)] = output.get("tauk", kt)
-                if "cir" in secout:
-                    self.progress = 5
-                    keys_cir = output.options("cir")
-                    for kt in keys_cir:
-                        self.dcir[int(itx)][int(kt)] = output.get("cir", kt)
-
-                self.output[int(itx)] = output
+#        self.output = {}
+#        if "output" in sections:
+#            for itx in self.config.options("output"):
+#                _filename  =  self.config.get("output", itx)
+#                self.dout[int(itx)] = _filename
+#                filename = pyu.getlong(_filename, "output")
+#                output = ConfigParser.ConfigParser()
+#                output.read(filename)
+#                secout = output.sections()
+#                self.dtra[int(itx)] = {}
+#                self.dtud[int(itx)] = {}
+#                self.dtang[int(itx)] = {}
+#                self.drang[int(itx)] = {}
+#                self.dtauk[int(itx)] = {}
+#                self.dfield[int(itx)] = {}
+#                self.dcir[int(itx)] = {}
+#                if "launch" in secout:
+#                    self.progress = 1
+#                    keys_launch = output.options("launch")
+#                    for kl in keys_launch:
+#                        self.dlch[int(kl)] = output.get("launch", kl)
+#                if "trace" in secout:
+#                    self.progress = 2
+#                    keys_tra = output.options("trace")
+#                    for kt in keys_tra:
+#                        self.dtra[int(itx)][int(kt)] = output.get("trace", kt)
+#
+#                if "tang" in secout:
+#                    self.progress = 3
+#                    keys_tang = output.options("tang")
+#                    for kt in keys_tang:
+#                        self.dtang[int(itx)][int(kt)] = output.get("tang", kt)
+#                        self.drang[int(itx)][int(kt)] = output.get("rang", kt)
+#                        self.dtud[int(itx)][int(kt)] = output.get("tud", kt)
+#                if "field" in secout:
+#                    self.progress = 4
+#                    keys_field = output.options("field")
+#                    for kt in keys_field:
+#                        self.dfield[int(itx)][int(kt)] = output.get(
+#                            "field", kt)
+#                        self.dtauk[int(itx)][int(kt)] = output.get("tauk", kt)
+#                if "cir" in secout:
+#                    self.progress = 5
+#                    keys_cir = output.options("cir")
+#                    for kt in keys_cir:
+#                        self.dcir[int(itx)][int(kt)] = output.get("cir", kt)
+#
+#                self.output[int(itx)] = output
         #
         # Waveform section
         #
@@ -878,7 +817,8 @@ class Simul(PyLayers):
         self.config.set("files", "struc", self.filestr)
         self.save()
 
-    def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
+    #def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
+    def show(self,**kwargs):
         """ show simulation
 
             Parameters
@@ -906,6 +846,24 @@ class Simul(PyLayers):
 
 
         """
+
+        defaults = { 'itx':[-1],
+                     'irx':[-1],
+                     'furniture': True,
+                     's':8,
+                     'c':'b',
+                     'num':False,
+                     'fig':[],
+                     'ax':[],
+                     'aw':False
+                     }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+            st = k+"=kwargs['"+k+"']"
+            exec(st)
+
         if type(itx) == int:
             itx = [itx]
         if type(irx) == int:
@@ -918,7 +876,7 @@ class Simul(PyLayers):
             ax = fig.gca()
 
         #self.L.display['scaled']=False
-        fig,ax=self.L.showG('s',fig=fig,ax=ax, aw=True)
+        fig,ax=self.L.showG('s',fig=fig,ax=ax, aw=aw)
         #
         if furniture:
             if 'lfur' in self.L.__dict__:
@@ -993,6 +951,25 @@ class Simul(PyLayers):
         plt.semilogx(td, 10 * np.log10(tEo), 'xb')
         plt.show()
         return td, tEa, tEo
+
+    def eval(self,**kwrgs):
+        """
+        """
+        for kt in range(Nb_tx):
+            tx = np.array([self.tx.position[0,kt+1], self.tx.position[1,kt+1], self.tx.position[2,kt+1]])
+            link.a = tx
+            for kr in range(Nb_Run):
+                rx = np.array([S.rx.position[0,Run], S.rx.position[1,Run], S.rx.position[2,Run]])
+                link.b = rx
+                tic = time.clock()
+                ak,tk = link.eval(verbose=False,diffraction=True)
+                toc = time.clock()
+                ciro = link.H.applywav(wav.sfg)
+                cir = bs.TUsignal(ciro.x,np.squeeze(np.sum(ciro.y,axis=0)))
+                tac = time.clock()
+                tcir[Run] = cir
+                print toc-tic,tac-toc
+
 
     def evalcir(self,cutoff=4,algo='new'):
         """
@@ -1502,62 +1479,33 @@ class Simul(PyLayers):
         """
         
         # get file prefix
-
-        link = DLink(force=True,L=self.L,fGHz=self.fGHz, verbose=False)
+        dl = DLink(force=True,L=self.L,fGHz=self.fGHz, verbose=False)
         prefix = self.filesimul.replace('.ini', '') 
         lsig = []
+        self.chan = {}
         for k,il in enumerate(link):
             tx = self.tx.points[il[0]]
             rx = self.rx.points[il[1]]
-            ctx = S.L.pt2cy(tx)
-            crx = S.L.pt2cy(rx)
+            ctx = self.L.pt2cy(tx)
+            crx = self.L.pt2cy(rx)
             _filecir = prefix +'-cir-'+str(k)+'-'+str(link)+'-'+str((ctx,crx))
             D = {}
             D['Tx'] = tx
             D['Rx'] = rx
 
             
-            link.a = tx
-            link.b = rx
-            ak,tauk = link.eval(verbose=False,diffrction=True)
-            if (ctx,crx) not in lsig:
-                Si  = signature.Signatures(S.L,ctx,crx)
-                #
-                # Change the run number depending on
-                # the algorithm used for signature determination
-                #
-                Si.run4(cutoff=cutoff)
-                # keep track and save signature
-                _filesir = prefix + '-sig-'+str((ctx,crx))
-                fd = open(filesig,'w')
-                pickle.dump(Si,filesig)
-                fd.close()
-                lsig.appeng((ctx,crx))
-                Si.dump(S.L,(ctx,crx))
+            dl.a = tx
+            dl.b = rx
+            ak,tauk = dl.eval(verbose=False,diffraction=True)
+            self.chan[k] = dl
+            #cira = dl.H.applywavB(self.wav.sf)
+            #cira = dl.H.applywavB(self.wav.sfg)
 
+            #D['t'] = cira.x
+            #D['cir'] = cira.y
 
-
-            r2d = Si.rays(tx,rx)
-            r2d.show(S.L)
-    
-            r3d = r2d.to3D()
-            r3d.locbas(S.L)
-            r3d.fillinter(S.L)
-
-            Ct  = r3d.eval(S.freq)
-            sco = Ct.prop2tran(a='theta',b='phi')
-            sca = Ct.prop2tran(a=S.tx.A,b=S.rx.A)
-
-            ciro = sco.applywavB(self.wav.sfg)
-            cira = sca.applywavB(self.wav.sfg)
-
-            D['to'] = ciro.x
-            D['ciro'] = ciro.y
-            D['t'] = cira.x
-            D['cir'] = cira.y
-
-            filename = pyu.getlong(_filename, cirdir)
-            spio.savemat(filename, D)
+            #filename = pyu.getlong(_filecir, 'output')
+            #spio.savemat(filename, D)
             
     def delay(self, itx, irx):
         """ calculate LOS link delay

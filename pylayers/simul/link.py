@@ -112,6 +112,7 @@ import time
 import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
+import pylayers.util.geomutil as geu 
 
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
@@ -126,7 +127,7 @@ from pylayers.antprop.signature import Signatures
 # Handle Rays
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
-from pylayers.antprop.channel import Ctilde, Tchannel
+from pylayers.antprop.channel import Ctilde, Tchannel , AFPchannel
 from pylayers.antprop.statModel import getchannel
 import tqdm
 
@@ -363,7 +364,7 @@ class DLink(Link):
                    'Ab':[],
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':[],
+                   'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
@@ -397,12 +398,9 @@ class DLink(Link):
         delattr(self,'force_create')
 
        
-        # The link frequency range depends on the antenna frequency range
+        # The link frequency range depends on the antenna 
+        # self.fGHz = kwargs['fGHz']
 
-        if self.fGHz == []:
-            self.initfreq()
-        else :
-            pass
 
         
         if self.Aa==[]:
@@ -412,8 +410,11 @@ class DLink(Link):
         
 
 
-       
-        self._Lname = self._L._filename
+        if isinstance(self._L,str):
+            self._Lname = self._L
+            self._L = Layout(self._Lname)
+        else:
+            self._Lname = self._L._filename
     
 
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
@@ -552,7 +553,7 @@ class DLink(Link):
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L
-            self._Lname = L.filename
+            self._Lname = L._filename
 
         self.reset_config()
 
@@ -564,6 +565,8 @@ class DLink(Link):
         # change layout and build/load
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             mlab.clf()
+        import ipdb
+        ipdb.set_trace()
         self._L = Layout(Lname)
         self._Lname = Lname
         self.reset_config()
@@ -628,12 +631,16 @@ class DLink(Link):
 
         if hasattr(self.Aa,'_mayamesh'):
             self.Aa._mayamesh.remove()
-
         # save rot
         rot = self.Ta
         self._Aa = Ant
         self.Ta = rot
-        self.initfreq()
+        if Ant.fromfile:
+            self.fGHz = Ant.fGHz
+            print "Warning : frequency range modified by antenna Aa"
+        else:
+            self._Aa.fGHz = self.fGHz
+        # self.initfreq()
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a')
@@ -644,11 +651,17 @@ class DLink(Link):
         if hasattr(self.Ab,'_mayamesh'):
            self.Ab._mayamesh.remove()
 
+
+        
         #save rot
         rot = self.Tb
         self._Ab = Ant
         self.Tb = rot
-        self.initfreq()
+        if Ant.fromfile:
+           self.fGHz = Ant.fGHz
+           print "Warning : frequency range modified by antenna Ab"
+        else:
+           self._Ab.fGHz = self.fGHz
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b')
@@ -670,7 +683,14 @@ class DLink(Link):
     def fGHz(self,freq):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
-        self._fGHz = freq
+        if (self.Aa.fromfile) & (self.Aa.fGHz!=freq).all():
+            print " Antenna Aa frequency range is fixed, you cannot change frequency"
+        elif (self.Ab.fromfile) & (self.Ab.fGHz!=freq).all():
+            print " Antenna Ab frequency range is fixed,you cannot change frequency"
+        else:
+            self._fGHz = freq
+            self.Aa.fGHz=self.fGHz
+            self.Ab.fGHz=self.fGHz
         # if self.Aa.typ == 'Omni':
         #     self.Aa.fGHz = self.fGHz
         # if self.Ab.typ == 'Omni':
@@ -733,58 +753,58 @@ class DLink(Link):
         return s
 
 
-    def initfreq(self):
-        """ Automatic freq determination from
-            Antennas
-        """
-        #sf = self.fGHz[1]-self.fGHz[0]
-        sf = 1e15
-        if hasattr(self.Aa,'fGHz'):
-            fa = self.Aa.fGHz
-            if len(fa)==0:
-                fa = np.array([2.4])
-                self.Aa.fGHz = fa
-                # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
-                print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
-            try:
-                sa = fa[1]-fa[0]  # step frequecy 
-            except: #single frequency
-                sa = fa[0]
-            # step
-            if len(self.fGHz)>0:
-                minfa = max(min(fa),min(self.fGHz))
-                maxfa = min(max(fa),max(self.fGHz))
-            else:
-                minfa = min(fa)
-                maxfa = max(fa)
-            sf = min(sa,sf)
-            self.fGHz = np.arange(minfa,maxfa+sf,sf)
+    # def initfreq(self):
+    #     """ Automatic freq determination from
+    #         Antennas
+    #     """
+    #     #sf = self.fGHz[1]-self.fGHz[0]
+    #     sf = 1e15
+    #     if hasattr(self.Aa,'fGHz'):
+    #         fa = self.Aa.fGHz
+    #         if len(fa)==0:
+    #             fa = np.array([2.4])
+    #             self.Aa.fGHz = fa
+    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+    #             print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
+    #         try:
+    #             sa = fa[1]-fa[0]  # step frequecy 
+    #         except: #single frequency
+    #             sa = fa[0]
+    #         # step
+    #         if len(self.fGHz)>0:
+    #             minfa = max(min(fa),min(self.fGHz))
+    #             maxfa = min(max(fa),max(self.fGHz))
+    #         else:
+    #             minfa = min(fa)
+    #             maxfa = max(fa)
+    #         sf = min(sa,sf)
+    #         self.fGHz = np.arange(minfa,maxfa+sf,sf)
 
-        elif hasattr(self.Ab,'fGHz'):
-            fb = self.Ab.fGHz
-            if len(fb)==0:
-                # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
-                fb = np.array([2.4])
-                self.Ab.fGHz=fb
-                # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
-                print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
+    #     elif hasattr(self.Ab,'fGHz'):
+    #         fb = self.Ab.fGHz
+    #         if len(fb)==0:
+    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
+    #             fb = np.array([2.4])
+    #             self.Ab.fGHz=fb
+    #             # raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+    #             print "Incompatible frequency range in Antenna. WARNING  Dlink.fGHz changed to 2.4GHz"
         
-            try:
-                sb = fb[1]-fb[0] # step frequency 
-            except:
-                sb = fb[0]
+    #         try:
+    #             sb = fb[1]-fb[0] # step frequency 
+    #         except:
+    #             sb = fb[0]
 
-            if len(self.fGHz)>0:
-                minfb = max(min(self.fGHz),min(fb))
-                maxfb = min(max(self.fGHz),max(fb))
-            else:
-                minfb = min(fb)
-                maxfb = max(fb)
+    #         if len(self.fGHz)>0:
+    #             minfb = max(min(self.fGHz),min(fb))
+    #             maxfb = min(max(self.fGHz),max(fb))
+    #         else:
+    #             minfb = min(fb)
+    #             maxfb = max(fb)
 
-            sf = min(sf,sb)
-            self.fGHz = np.arange(minfb,maxfb+sf,sf)
-        else:
-            self.fGHz = np.array([2.3,2.4,2.5])
+    #         sf = min(sf,sb)
+    #         self.fGHz = np.arange(minfb,maxfb+sf,sf)
+    #     else:
+    #         self.fGHz = np.array([2.3,2.4,2.5])
 
 
     def reset_config(self):
@@ -806,7 +826,7 @@ class DLink(Link):
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         if not os.path.exists(filenameh5) :
-            print 'Links save file for ' + self.L.filename + ' does not exist.'
+            print 'Links save file for ' + self.L._filename + ' does not exist.'
             print 'It is beeing created. You\'ll see that message only once per Layout'
             self.save_init(filenameh5)
 
@@ -1220,10 +1240,12 @@ class DLink(Link):
             if (lufmi==0) and (lufma==0) and (lufst==0):
                 ua = np.array([])
             else :
-                # find comon lines of fmin and fmax
-                ufmima = np.where(np.in1d(ufmi,ufma))[0]
-                # find comon lines of fmin, fmax and fstep
-                ua = np.where(np.in1d(ufmima,ufst))[0]
+                # find comon lines of fmin and fmax and fstep
+                ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
+                # # find comon lines of fmin and fmax
+                # ufmima = np.where(np.in1d(ufmi,ufma))[0]
+                # # find comon lines of fmin, fmax and fstep
+                # ua = np.where(np.in1d(ufmima,ufst))[0]
 
         elif key == 'A_map':
             ua = np.where(fa==array)[0]
@@ -1277,7 +1299,7 @@ class DLink(Link):
         tk : ndarray
             tau_k
 
-        Notes
+        Notes    def eval(self,**kwargs):
         -----
 
         update self.ak and self.tk
@@ -1329,6 +1351,10 @@ class DLink(Link):
                    'verbose':[],
                    'progressbar':None,
                    }
+
+        # check antenna frequency range compatibility
+        if (self.Aa.fGHz!=self.Ab.fGHz).all():
+            raise AttributeError("Antenna frequency range are not compatible")
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -1499,7 +1525,7 @@ class DLink(Link):
             self.load(H,self.dexist['H']['grpname'])
         else :
             # Ctilde antenna
-            Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
+            Cl= C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
@@ -1518,7 +1544,27 @@ class DLink(Link):
             pbar.update(20)
         except: 
             pass
-        return self.H.ak, self.H.tk
+
+
+        return self.H.ak,self.H.tk
+
+    def padp(self,phi):
+        """
+        """
+        afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
+        for ph in phi:
+            self.Tb = geu.MEulerAngle(ph,beta=0,gamma=0)
+            self.eval()
+            S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            try:
+                afp.y = np.vstack((afp.y,np.squeeze(S)))
+            except:
+                afp.y = np.squeeze(S)
+
+        afp.x = self.H.x
+        return(afp)
+
+
 
     def select(self):
         fig,ax = self.show()
@@ -1581,10 +1627,9 @@ class DLink(Link):
         >>> L.show(rays=True,dB=True)
 
         """
-
-        defaults ={'s':80,
-                   'ca':'b',
-                   'cb':'r',
+        defaults ={'s':80,   # size points
+                   'ca':'b', # color a 
+                   'cb':'r', # color b 
                    'alpha':1,
                    'i':-1,
                    'figsize':(20,10),
