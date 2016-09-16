@@ -107,10 +107,11 @@ except:
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
     """
-    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([])):
+    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([]),a=np.array([])):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         self.tx = tx 
         self.rx = rx
+        self.a = a
         self._filename = ''
         if len(tx)>0:
             txrx = tx-rx
@@ -2127,6 +2128,10 @@ class Tchannel(bs.FUsignal):
 
             impulse response for each ray separately
 
+        See Also
+        --------
+
+        pylayers.antprop.channel.rir
 
         """
 

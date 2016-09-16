@@ -104,7 +104,6 @@ class RadioNode(PyLayers):
 
     def __init__(self, name = '',typ='undefined',
                  _fileini='radionode.ini',
-                 _filetraj='pos.csv',
                  _fileant='defant.vsh3'
                  ):
         """
