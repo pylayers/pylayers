@@ -1325,7 +1325,7 @@ class Antenna(Pattern):
     """
 
 
-    def __init__(self,typ='S1R1.sh3',**kwargs):
+    def __init__(self,typ='Omni',**kwargs):
         """ class constructor
 
         Parameters
@@ -1339,7 +1339,7 @@ class Antenna(Pattern):
                     antenna subdirectory of the current project
                     the file is seek in the $BASENAME/ant directory
         nf        : integer
-                     number of frequency (default 104)
+                     number of frequency 
         ntheta    : integer
                     number of theta (default 181)
         nphi      : integer
