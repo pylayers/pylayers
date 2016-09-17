@@ -1371,7 +1371,7 @@ class DLink(Link):
             self.verbose=kwargs['verbose']
 
 
-        #pdb.set_trace()
+        
         # must be placed after all the init !!!!
         if self.verbose :
             print "checkh5"
@@ -1410,13 +1410,13 @@ class DLink(Link):
                     print "default algorithm"
 
             if kwargs['alg']=='exp':
-                TMP=Si.run_exp(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
+                TMP = Si.run_exp(cutoff=kwargs['cutoff'],
+                         cutoffbound=kwargs['si_reverb'])
                 if self.verbose :
                     print "experimental (ex 2015)"
 
             if kwargs['alg']=='exp2':
-                TMP=Si.run_exp2(cutoff=kwargs['cutoff'],
+                TMP = Si.run_exp2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
                 if self.verbose :
                     print "algo exp2 ( ex 20152)"
@@ -1499,7 +1499,7 @@ class DLink(Link):
             # Ctilde...
             # Find an other criteria in order to decide whether the R has
             # already been evaluated
-            #pdb.set_trace()
+            
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
@@ -1594,6 +1594,8 @@ class DLink(Link):
         cb  : string
             color b
         alpha : int
+        axis : boolean 
+            display axis boolean (default True)
         figsize : tuple
             (20,10)
         fontsize : int
@@ -1626,6 +1628,7 @@ class DLink(Link):
                    'ca':'b', # color a 
                    'cb':'r', # color b 
                    'alpha':1,
+                   'axis':True,
                    'i':-1,
                    'figsize':(20,10),
                    'fontsize':20,
@@ -1648,8 +1651,7 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'])
-        plt.axis('off')
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'],axis=kwargs['axis'])
         #
         # Point A
         #
