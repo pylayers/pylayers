@@ -410,8 +410,11 @@ class DLink(Link):
         
 
 
-       
-        self._Lname = self._L._filename
+        if isinstance(self._L,str):
+            self._Lname = self._L
+            self._L = Layout(self._Lname)
+        else:
+            self._Lname = self._L._filename
     
 
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
@@ -562,6 +565,8 @@ class DLink(Link):
         # change layout and build/load
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             mlab.clf()
+        import ipdb
+        ipdb.set_trace()
         self._L = Layout(Lname)
         self._Lname = Lname
         self.reset_config()
