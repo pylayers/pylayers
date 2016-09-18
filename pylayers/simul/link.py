@@ -137,12 +137,12 @@ import pdb
 
 
 
-class Link(Tchannel):
+class Link(PyLayers):
     def __init__(self):
         """ Link evaluation metaclass
         """
-        Tchannel.__init__(self)
-    #    super(Link,self).__init__ ()
+        PyLayers.__init__(self)
+   
 
 
     def __add__(self,l):
@@ -1259,6 +1259,12 @@ class DLink(Link):
 
         return ua
 
+    def evalH(self,**kwargs):
+        # Antenna Rotation
+        self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        # Transmission channel calculation
+        H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
+        self.H = H
 
     def eval(self,**kwargs):
         """ evaluate the link
@@ -1291,14 +1297,7 @@ class DLink(Link):
             python : progress bar in ipython
 
 
-        Returns
-        -------
-
-        ak : ndarray
-            alpha_k
-        tk : ndarray
-            tau_k
-
+    
         Notes    def eval(self,**kwargs):
         -----
 
@@ -1525,7 +1524,7 @@ class DLink(Link):
             self.load(H,self.dexist['H']['grpname'])
         else :
             # Ctilde antenna
-            Cl= C.locbas(Tt=self.Ta, Tr=self.Tb)
+            C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
@@ -1546,15 +1545,14 @@ class DLink(Link):
             pass
 
 
-        return self.H.ak,self.H.tk
 
-    def padp(self,phi):
-        """
+    def afp(self,phi):
+        """ Evaluate angular frequency profile 
         """
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:
             self.Tb = geu.MEulerAngle(ph,beta=0,gamma=0)
-            self.eval()
+            self.evalH()
             S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             try:
                 afp.y = np.vstack((afp.y,np.squeeze(S)))
@@ -1759,7 +1757,7 @@ class DLink(Link):
 
             >>> from pylayers.simul.link import *
             >>> L=DLink(verbose=False)
-            >>> aktk = L.eval()
+            >>> L.eval()
 
         """
 
