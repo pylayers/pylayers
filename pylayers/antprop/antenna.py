@@ -509,8 +509,10 @@ class Pattern(PyLayers):
 
         if self.grid :
             # Nth x Nph x Nf
-            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
-            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            # self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            # self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
+            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
             self.evaluated = True
         else:
             #
@@ -2411,7 +2413,6 @@ class Antenna(Pattern):
                      'title':True
                      }
 
-
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -2447,7 +2448,6 @@ class Antenna(Pattern):
         else : u = r
 
         r = minr + (maxr-minr) * u
-
         x = r * np.sin(th) * np.cos(phi)
         y = r * np.sin(th) * np.sin(phi)
         z = r * np.cos(th)

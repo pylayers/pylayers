@@ -640,6 +640,7 @@ class DLink(Link):
             print "Warning : frequency range modified by antenna Aa"
         else:
             self._Aa.fGHz = self.fGHz
+
         # self.initfreq()
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
@@ -683,9 +684,24 @@ class DLink(Link):
     def fGHz(self,freq):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
-        if (self.Aa.fromfile) & (self.Aa.fGHz!=freq).all():
+
+        diff_freq_a = (self.Aa.fGHz!=freq)
+        diff_freq_b = (self.Ab.fGHz!=freq)
+
+        if isinstance(diff_freq_a,bool):
+            cond_a = diff_freq_a
+        else: 
+            cond_a = diff_freq_a.all()
+
+        if  isinstance(diff_freq_b,bool):
+            cond_b = diff_freq_b
+        else: 
+            cond_b = diff_freq_b.all()
+
+
+        if (self.Aa.fromfile) & cond_a:
             print " Antenna Aa frequency range is fixed, you cannot change frequency"
-        elif (self.Ab.fromfile) & (self.Ab.fGHz!=freq).all():
+        elif (self.Ab.fromfile) & cond_b:
             print " Antenna Ab frequency range is fixed,you cannot change frequency"
         else:
             self._fGHz = freq
@@ -1317,7 +1333,7 @@ class DLink(Link):
             :include-source:
 
             >>> from pylayers.simul.link import *
-            >>> L = DLink(verbose=False)
+            >>> L=DLink(verbose=False)
             >>> aktk = L.eval()
 
 
@@ -1376,7 +1392,7 @@ class DLink(Link):
             self.verbose=kwargs['verbose']
 
 
-        #pdb.set_trace()
+        
         # must be placed after all the init !!!!
         if self.verbose :
             print "checkh5"
@@ -1415,13 +1431,13 @@ class DLink(Link):
                     print "default algorithm"
 
             if kwargs['alg']=='exp':
-                TMP=Si.run_exp(cutoff=kwargs['cutoff'],
-                        cutoffbound=kwargs['si_reverb'])
+                TMP = Si.run_exp(cutoff=kwargs['cutoff'],
+                         cutoffbound=kwargs['si_reverb'])
                 if self.verbose :
                     print "experimental (ex 2015)"
 
             if kwargs['alg']=='exp2':
-                TMP=Si.run_exp2(cutoff=kwargs['cutoff'],
+                TMP = Si.run_exp2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
                 if self.verbose :
                     print "algo exp2 ( ex 20152)"
@@ -1504,7 +1520,7 @@ class DLink(Link):
             # Ctilde...
             # Find an other criteria in order to decide whether the R has
             # already been evaluated
-            #pdb.set_trace()
+            
             C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
@@ -1599,6 +1615,8 @@ class DLink(Link):
         cb  : string
             color b
         alpha : int
+        axis : boolean 
+            display axis boolean (default True)
         figsize : tuple
             (20,10)
         fontsize : int
@@ -1631,6 +1649,7 @@ class DLink(Link):
                    'ca':'b', # color a 
                    'cb':'r', # color b 
                    'alpha':1,
+                   'axis':True,
                    'i':-1,
                    'figsize':(20,10),
                    'fontsize':20,
@@ -1653,8 +1672,7 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'])
-        plt.axis('off')
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'],axis=kwargs['axis'])
         #
         # Point A
         #
@@ -1847,6 +1865,7 @@ class DLink(Link):
 
 
         if hasattr(antenna,'_mayamesh'):
+            # antenna.eval()
             x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
