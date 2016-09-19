@@ -640,6 +640,7 @@ class DLink(Link):
             print "Warning : frequency range modified by antenna Aa"
         else:
             self._Aa.fGHz = self.fGHz
+
         # self.initfreq()
 
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
@@ -683,9 +684,24 @@ class DLink(Link):
     def fGHz(self,freq):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
-        if (self.Aa.fromfile) & (self.Aa.fGHz!=freq).all():
+
+        diff_freq_a = (self.Aa.fGHz!=freq)
+        diff_freq_b = (self.Ab.fGHz!=freq)
+
+        if isinstance(diff_freq_a,bool):
+            cond_a = diff_freq_a
+        else: 
+            cond_a = diff_freq_a.all()
+
+        if  isinstance(diff_freq_b,bool):
+            cond_b = diff_freq_b
+        else: 
+            cond_b = diff_freq_b.all()
+
+
+        if (self.Aa.fromfile) & cond_a:
             print " Antenna Aa frequency range is fixed, you cannot change frequency"
-        elif (self.Ab.fromfile) & (self.Ab.fGHz!=freq).all():
+        elif (self.Ab.fromfile) & cond_b:
             print " Antenna Ab frequency range is fixed,you cannot change frequency"
         else:
             self._fGHz = freq
@@ -1849,6 +1865,7 @@ class DLink(Link):
 
 
         if hasattr(antenna,'_mayamesh'):
+            # antenna.eval()
             x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
