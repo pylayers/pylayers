@@ -2772,12 +2772,25 @@ class Rays(PyLayers,dict):
                 # current number of interactions
                 cnbi = i + 2
                 pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
+                l0 = np.array([np.arange(0,cnbi-1)+i*cnbi for i in range(nbr)]).ravel()
+                l1 = l0+1
+                connection = np.vstack((l0,l1)).T
 
+                # if 'ER' in :
+                #     kwargs['ER']
+                #     T = np.repeat(np.linspace(-2 * np.pi, 2 * np.pi, nbr),cnbi)
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
-                lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
-                mesh = tvtk.PolyData(points=pt.T, polys=lines)
-                mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
-                                                     color=(0, 0, 0), )
+                src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:])
+                src.mlab_source.dataset.lines=connection
+                src.update()
+                lines = mlab.pipeline.stripper(src)
+                mlab.pipeline.surface(lines,color=(0,0,0))
+
+
+                # lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
+                # mesh = tvtk.PolyData(points=pt.T, polys=lines)
+                # mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
+                #                                      color=(0, 0, 0), )
                 f.children[-1].name='Rays with ' + str(i) + 'interactions'
         else :
 
