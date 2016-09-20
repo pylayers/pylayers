@@ -273,8 +273,6 @@ def G(N,phi0,Ro,Rn):
     c1 = (abs(PHI0-BN*np.pi) < 1.0e-6) * (abs(Rn+1.0)>1.0e-6)
     c2 = (abs(PHI0-BN*np.pi) < 1.0e-6) * (abs(Rn+1.0)<1.0e-6)
     c3 = abs(PHI0) < 1.0e-6
-    import ipdb
-    ipdb.set_trace()
     Gn[c1] = 1.0/(1.0+Rn[c1])
     Gn[c2] = -1.
     Gn[c3] = 0.5
