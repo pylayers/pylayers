@@ -1845,9 +1845,10 @@ class DLink(Link):
             #     import ipdb
             #     ipdb.set_trace()
             try:
-                # if self.H.ndim>2:
-                #     ER = np.squeeze(self.H.energy())
-                #     kwargs['ER']=ER
+
+                if self.H.y.ndim>2:
+                    ER = np.squeeze(self.H.energy())
+                    kwargs['ER']=ER
                 self.R._show3(**kwargs)
             except:
                 print 'Rays not computed yet'
