@@ -2764,7 +2764,7 @@ class Rays(PyLayers,dict):
 
         if 'ER' in kwargs:
             ER = kwargs['ER']
-            color_range = np.linspace( 2 * np.pi,0, len(ER))
+            color_range = np.linspace( 0,2 * np.pi, len(ER))
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
 
@@ -2778,7 +2778,8 @@ class Rays(PyLayers,dict):
                 # current number of interactions
                 cnbi = i + 2
 
-
+                # import ipdb
+                # ipdb.set_trace()
                 pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
                 l0 = np.array([np.arange(0,cnbi-1)+k*cnbi for k in range(nbr)]).ravel()
                 l1 = l0+1
@@ -2793,42 +2794,14 @@ class Rays(PyLayers,dict):
                     # T = np.repeat(np.linspace(-2 * np.pi, 2 * np.pi, nbr),cnbi)
                     rc[::cnbi]=0
 
-                    src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:],rc,colormap='jet')
+                    src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:],rc,colormap='hot')
 
                 else: 
                     src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:])
                 src.mlab_source.dataset.lines=connection
                 src.update()
                 lines = mlab.pipeline.stripper(src)
-                mlab.pipeline.surface(lines,opacity=0.5,colormap='jet')
-
-                # def colorize_edges(points, edge_indices, edge_colors):
-                #     assert points.ndim == 2
-                #     assert points.shape[1] == 3
-                #     assert edge_indices.ndim == 2
-                #     n_edges = edge_indices.shape[0]
-                #     assert edge_indices.shape[1] == 2
-                #     edge_indices = edge_indices.astype(int)
-                #     assert edge_colors.ndim == 1
-                #     assert edge_colors.shape[0] == n_edges
-                #     x, y, z = points[:, 0], points[:, 1], points[:, 2]
-                #     i, j = edge_indices[:, 0], edge_indices[:, 1]
-                #     x = np.hstack([x[i], x[j]])
-                #     y = np.hstack([y[i], y[j]])
-                #     z = np.hstack([z[i], z[j]])
-                #     c = np.hstack([edge_colors, edge_colors])
-                #     src = mlab.pipeline.scalar_scatter(x, y, z, c)
-                #     connections = np.vstack([i, j+n_edges]).T
-                #     src.mlab_source.dataset.lines = connections
-                #     surf = mlab.pipeline.surface(src, line_width=1.0)       
-
-                # import ipdb
-                # ipdb.set_trace()
-                # colorize_edges(pt,connection,rc)
-                # lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
-                # mesh = tvtk.PolyData(points=pt.T, polys=lines)
-                # mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
-                #                                      color=(0, 0, 0), )
+                mlab.pipeline.surface(lines,opacity=0.5,colormap='hot')
                 f.children[-1].name='Rays with ' + str(i) + 'interactions'
         else :
 

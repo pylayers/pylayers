@@ -1829,7 +1829,31 @@ class DLink(Link):
                 title=False,colorbar=False,newfig=False,name = '',interact=False)
 
         if lay:
-            self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
+            # check if indoor/outdoor, outdoor or indoor situations
+            a_in = self.L.Gt.node[self.ca]['indoor']
+            b_in = self.L.Gt.node[self.cb]['indoor']
+
+            if (a_in) & (b_in):
+                # indoor
+                show_ceil=False
+                opacity = 0.7
+                ceil_opacity = 0.
+            elif ((not a_in) & (not b_in)):
+                # outdoor
+                show_ceil=True
+                opacity = 1.
+                ceil_opacity = 1.
+            else:
+                # indoor/outdoor
+                show_ceil=True
+                opacity = 0.7
+                ceil_opacity = 0.7
+
+            self.L._show3(newfig=False,
+                          opacity=opacity,
+                          ceil_opacity=ceil_opacity,
+                          show_ceil=show_ceil,
+                          centered=centered,**kwargs)
 
         # mlab.text3d(self.a[0],self.a[1],self.a[2],'a',
         #             scale=1,
