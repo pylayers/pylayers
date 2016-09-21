@@ -1476,6 +1476,7 @@ class DLink(Link):
             R.fillinter(self.L)
 
             C = Ctilde()
+            pdb.set_trace()
             C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
@@ -1551,7 +1552,7 @@ class DLink(Link):
         """
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:
-            self.Tb = geu.MEulerAngle(ph,beta=0,gamma=0)
+            self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
             self.evalH()
             S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             try:
