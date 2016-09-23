@@ -1829,7 +1829,31 @@ class DLink(Link):
                 title=False,colorbar=False,newfig=False,name = '',interact=False)
 
         if lay:
-            self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
+            # check if indoor/outdoor, outdoor or indoor situations
+            a_in = self.L.Gt.node[self.ca]['indoor']
+            b_in = self.L.Gt.node[self.cb]['indoor']
+
+            if (a_in) & (b_in):
+                # indoor
+                show_ceil=False
+                opacity = 0.7
+                ceil_opacity = 0.
+            elif ((not a_in) & (not b_in)):
+                # outdoor
+                show_ceil=True
+                opacity = 1.
+                ceil_opacity = 1.
+            else:
+                # indoor/outdoor
+                show_ceil=True
+                opacity = 0.7
+                ceil_opacity = 0.7
+
+            self.L._show3(newfig=False,
+                          opacity=opacity,
+                          ceil_opacity=ceil_opacity,
+                          show_ceil=show_ceil,
+                          centered=centered,**kwargs)
 
         # mlab.text3d(self.a[0],self.a[1],self.a[2],'a',
         #             scale=1,
@@ -1845,10 +1869,17 @@ class DLink(Link):
             #     import ipdb
             #     ipdb.set_trace()
             try:
+
+                if self.H.y.ndim>2:
+                    ER = np.squeeze(self.H.energy())
+                    kwargs['ER']=ER
                 self.R._show3(**kwargs)
             except:
                 print 'Rays not computed yet'
 
+        fp = (self.a+self.b)/2.
+        dab = np.sqrt(np.sum((self.a-self.b)**2))
+        mlab.view(focalpoint=fp,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
 
 
