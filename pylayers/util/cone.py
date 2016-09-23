@@ -66,10 +66,27 @@ class Cone(PyLayers):
         # update cone angle and probability
         self.upd_angle()
         
+    def  __repr__(self):  
+        st = 'Cone object \n'
+        st = st+'----------------\n'
+        st = st + "Apex : " + str(self.apex)+'\n'
+        st = st + "u :" + str(self.u)+'\n'
+        st = st + "v :" + str(self.v)+'\n'
+        st = st + "cross : " + str(self.cross)+'\n'
+        st = st + "dot : " + str(self.dot)+'\n'
+        st = st + "angle : " + str(self.angle*180/np.pi)+'\n'
+        st = st + "pcone : " + str(self.pcone)+'\n'
+        if hasattr(self,'seg0'):
+            st = st + "from segments ( (xta,xhe) , (yta,yhe) )\n"
+            st = st + "   seg0 : " + str(tuple(self.seg0))+'\n'
+            st = st + "   seg1 : " + str(tuple(self.seg1))+'\n'
+        return(st)
+        
 
     def upd_angle(self):
         """update cone angle attribute 
            and associated probability of the Cone object
+
         """
         
         self.angle = np.arccos(self.dot)
@@ -105,6 +122,11 @@ class Cone(PyLayers):
 
         A segment belongs to the cone if not all termination points 
         lie in the same side outside the cone.
+
+        See Also
+        --------
+
+        outside_point
 
         """
 
@@ -232,7 +254,7 @@ class Cone(PyLayers):
         self.pb = (self.seg1[:,0]+w).reshape(2,1)
 
     def outside_point(self,p):
-        """ check if p is outside cone
+        """ check if p is outside the cone
 
         Parameters
         ----------
@@ -545,10 +567,15 @@ class Cone(PyLayers):
 
         self.dot = np.dot(self.u,self.v)
         self.cross = np.cross(self.u,self.v)
-
+        if self.cross<0:
+            self.u , self.v = self.v , self.u
+            self.dot = np.dot(self.u,self.v)
+            self.cross = np.cross(self.u,self.v)
+            
         if self.cross < 1e-15:
             self.degenerated=True
 
+        
         self.upd_angle()
 
 
@@ -646,6 +673,14 @@ class Cone(PyLayers):
                 [self.apex[1],self.apex[1]+kwargs['length']*self.u[1]],lw=1,color='b')
         ax.plot([self.apex[0],self.apex[0]+kwargs['length']*self.v[0]],
                 [self.apex[1],self.apex[1]+kwargs['length']*self.v[1]],lw=1,color='r')
+        theta1 = np.arctan2(self.u[1],self.u[0])*180/np.pi
+        print theta1
+        theta2 = np.arctan2(self.v[1],self.v[0])*180/np.pi
+        print theta2
+        angle = self.angle*180/np.pi
+        print angle
+        arc = patches.Arc((self.apex[0],self.apex[1]),kwargs['length'],kwargs['length'],theta1=theta1,theta2=theta2,linewidth=2)
+        ax.add_patch(arc)
         if 'seg0' in self.__dict__:
             ax.plot([a0[0],b0[0]],[a0[1],b0[1]],lw=2,color='b')
         if 'seg1' in self.__dict__:

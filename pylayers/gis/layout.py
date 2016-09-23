@@ -356,8 +356,8 @@ class Layout(PyLayers):
         # st = st + "\nUseful tip" + "\n----------------\n"
         # st = st + "Point p in Gs => p_coord:\n"
         # #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
-        # st = st + "Segment s in Gs => s_ab coordinates \n"
-        # st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
+        st = st + "Segment s in Gs => s_ab coordinates \n"
+        st = st + "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
 
     def __add__(self, other):
