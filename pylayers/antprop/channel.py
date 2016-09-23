@@ -261,8 +261,13 @@ class ADPchannel(bs.TUsignal):
         u  = np.where(pdp==max(pdp))[0]
         FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(kwargs['fcGHz']))
         Gmax = 10*np.log10(pdp[u])-FS[u] 
-        Gmax_r = np.round(Gmax[0]*100)/100.
-
+        Gmax_r = 24.77
+        Gmax   = 24.77
+        #Gmax_r = np.round(Gmax[0]*100)/100.
+        pdpd = 10*np.log10(pdp)-Gmax
+        u = np.where(pdpd>-118)
+        pdpd_thr = pdpd[u] 
+        PL = -10*np.log10(np.sum(10**(pdpd_thr/10.)))
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
         else:
@@ -289,10 +294,10 @@ class ADPchannel(bs.TUsignal):
             ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
         if kwargs['ylabel']:
             ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
-        ax.set_title(self._filename+' '+str(Gmax_r))
+        ax.set_title(self._filename+' '+str(PL))
         if kwargs['legend']:
             plt.legend(loc='best') 
-        return fig,ax
+        return fig,ax,PL
 
     def polarplot(self,**kwargs):
         defaults = { 'fig':[],

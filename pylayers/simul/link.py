@@ -1492,7 +1492,6 @@ class DLink(Link):
             R.fillinter(self.L)
 
             C = Ctilde()
-            pdb.set_trace()
             C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
