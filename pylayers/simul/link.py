@@ -1565,7 +1565,7 @@ class DLink(Link):
         return self.H.ak,self.H.tk
 
     def padp(self,phi):
-        """
+        """ calculates the channel impulse response (cir) which is a function of angles.
         """
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:
