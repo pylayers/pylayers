@@ -4511,6 +4511,8 @@ def mirror(p,pa,pb):
         pa = pa.reshape(2,1)
     if np.shape(pb)==(2,):
         pb = pb.reshape(2,1)
+    if np.shape(p)==(2,):
+        p = p.reshape(2,1)
 
     pab = pb - pa
     alpha = np.sum(pab * pab, axis=0)
