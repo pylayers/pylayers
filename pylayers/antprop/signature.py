@@ -2918,7 +2918,8 @@ class Signatures(PyLayers,dict):
 
                                     # check if child (current segment) is an airwall
                                     # warning not efficient if many airwalls
-                                    if child[0] in self.L.name['AIR']:
+                                    lair = self.L.name['AIR']+self.L.name['_AIR']
+                                    if child[0] in lair:
                                         lawp.append(1)
                                     else:
                                         lawp.append(0)
@@ -3014,6 +3015,7 @@ class Signatures(PyLayers,dict):
            lit  = litT + litR + litD
         else:
            lit  = litT + litR
+        pdb.set_trace()
         #print "source,lis :",self.source,lis
         #print "target,lit :",self.target,lit
         # for u in lit: 
@@ -3089,8 +3091,9 @@ class Signatures(PyLayers,dict):
                 if (not cond1):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
+                        lair = self.L.name['AIR']+self.L.name['_AIR']
                         #print visited,len(stack)
-                        if interaction[0] in self.L.name['AIR']:
+                        if interaction[0] in lair:
                             lawp.append(1)
                         else:
                             lawp.append(0)
