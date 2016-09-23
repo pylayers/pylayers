@@ -2998,6 +2998,7 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
+        
         self.cutoff   = cutoff
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
@@ -3015,7 +3016,7 @@ class Signatures(PyLayers,dict):
            lit  = litT + litR + litD
         else:
            lit  = litT + litR
-        pdb.set_trace()
+        #pdb.set_trace()
         #print "source,lis :",self.source,lis
         #print "target,lit :",self.target,lit
         # for u in lit: 

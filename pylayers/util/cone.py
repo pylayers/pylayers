@@ -186,9 +186,10 @@ class Cone(PyLayers):
             v2  = phe[:,btalhein]-self.apex.reshape(2,1)
             vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
             vvn2 = np.dot(self.v,vn2)
+            # paranoid verification of scalar product \in [-1,1]
             vvn2 = np.minimum(vvn2,np.ones(len(vvn2)))
             vvn2 = np.maximum(vvn2,-np.ones(len(vvn2)))
-            pr2 = np.arccos(vvn2)/np.arccos(self.dot)
+            pr2 = np.arccos(vvn2)/self.angle
             proba[btalhein] = pr2
         typ[btalhein] = 2
 
@@ -200,7 +201,7 @@ class Cone(PyLayers):
             vvn3 = np.dot(self.v,vn3)
             vvn3 = np.minimum(vvn3,np.ones(len(vvn3)))
             vvn3 = np.maximum(vvn3,-np.ones(len(vvn3)))
-            pr3 = np.arccos(vvn3)/np.arccos(self.dot)
+            pr3 = np.arccos(vvn3)/self.angle
             proba[bheltain] = pr3
         typ[bheltain] = 3
 
@@ -209,10 +210,10 @@ class Cone(PyLayers):
         if (prob and not(bhertain==False).all()):
             v4  = pta[:,bhertain]-self.apex.reshape(2,1)
             vn4 = v4/np.sqrt(np.sum(v4*v4,axis=0))
-            vvn4 = np.dot(self.v,vn4)
+            vvn4 = np.dot(self.u,vn4)
             vvn4 = np.minimum(vvn4,np.ones(len(vvn4)))
             vvn4 = np.maximum(vvn4,-np.ones(len(vvn4)))
-            pr4 = np.arccos(vvn4)/np.arccos(self.dot)
+            pr4 = np.arccos(vvn4)/self.angle
             proba[bhertain] = pr4
         typ[bhertain] = 4
 
@@ -221,10 +222,10 @@ class Cone(PyLayers):
         if (prob and not(btarhein==False).all()):
             v5  = phe[:,btarhein]-self.apex.reshape(2,1)
             vn5 = v5/np.sqrt(np.sum(v5*v5,axis=0))
-            vvn5 = np.dot(self.v,vn5)
+            vvn5 = np.dot(self.u,vn5)
             vvn5 = np.minimum(vvn5,np.ones(len(vvn5)))
             vvn5 = np.maximum(vvn5,-np.ones(len(vvn5)))
-            pr5 = np.arccos(vvn5)/np.arccos(self.dot)
+            pr5 = np.arccos(vvn5)/self.angle
             proba[btarhein] = pr5
         typ[btarhein] = 5
 
@@ -235,10 +236,11 @@ class Cone(PyLayers):
             vb  = phe[:,btainhein]-self.apex.reshape(2,1)
             vna = va/np.sqrt(np.sum(va*va,axis=0))
             vnb = vb/np.sqrt(np.sum(vb*vb,axis=0))
+            # dot product vna,vnb
             vnab = np.sum(vna*vnb,axis=0)
             vnab = np.minimum(vnab,np.ones(len(vnab)))
             vnab = np.maximum(vnab,-np.ones(len(vnab)))
-            pr6 = np.arccos(vnab)/np.arccos(self.dot)
+            pr6 = np.arccos(vnab)/self.angle
             proba[btainhein] = pr6
         typ[btainhein] = 6
 
@@ -571,7 +573,7 @@ class Cone(PyLayers):
             self.u , self.v = self.v , self.u
             self.dot = np.dot(self.u,self.v)
             self.cross = np.cross(self.u,self.v)
-            
+
         if self.cross < 1e-15:
             self.degenerated=True
 
