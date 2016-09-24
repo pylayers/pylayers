@@ -1757,22 +1757,43 @@ class Signatures(PyLayers,dict):
         Parameters
         ----------
 
-        seq : list or np.array()
+        seq : list of tuple 
+               [(2,2),(5,3),(7,2)]
+        
+        1 : Diffraction 
+        2 : Reflexion
+        3 : Diffraction 
 
         Returns
         -------
 
-        boolean
+        Examples
+        --------
+
+        >>> DL=DLink()
+        >>> DL.eval()
+        >>> seq = [(2,3)] # transmission through segment 2 
+        >>> DL.Si.exist(seq)
 
         """
-        if type(seq)==list:
-            seq = np.array(seq)
-
+        # Number of interactions 
         N = len(seq)
+        # signatures with N interaction
         sig = self[N]
-        lf = filter(lambda x : (x==seq).all(),sig)
-        if len(lf)>0:
-            return True,lf
+        # Number signature with N interaction
+        Nsig = sig.shape[0]/2
+        nstr = sig[::2,:]
+        typ  = sig[1::2,:]
+        # List of signat
+        lsig = []
+        for k in range(Nsig):
+            lint = []
+            for l in range(N):
+                lint.append((nstr[k,l],typ[k,l]))
+            lsig.append(lint)
+
+        if seq in lsig:
+            return True
         else:
             return False
 
@@ -3001,7 +3022,7 @@ class Signatures(PyLayers,dict):
         
         self.cutoff   = cutoff
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
-
+        lair = self.L.name['AIR']+self.L.name['_AIR']
         # list of interactions visible from source
         lisR,lisT,lisD = self.L.intercy(self.source,typ='source')
         if diffraction:
@@ -3043,6 +3064,10 @@ class Signatures(PyLayers,dict):
         # signature counter
         cptsig = 0
         for us,s in enumerate(lis):
+            
+            #print s
+            # if s==(4,2):
+            #     pdb.set_trace()
             # if (us%20)==0:
             #     print us,'/',len(lis)
             # us counter
@@ -3078,10 +3103,15 @@ class Signatures(PyLayers,dict):
             lawp = []
             # while the stack of iterators is not void
             while stack: #
+                
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
+                #if visited==[(4,2),(5,2)]:
+                #     print visited
+                #   print interaction
+                #     pdb.set_trace()
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
                 cond2 = (interaction in visited) and bt
@@ -3092,7 +3122,7 @@ class Signatures(PyLayers,dict):
                 if (not cond1):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
-                        lair = self.L.name['AIR']+self.L.name['_AIR']
+                        
                         #print visited,len(stack)
                         if interaction[0] in lair:
                             lawp.append(1)
@@ -3181,22 +3211,22 @@ class Signatures(PyLayers,dict):
                             kl,p_int_left  = geu.intersect_line_seg(linel,seg)
                             kr,p_int_right = geu.intersect_line_seg(liner,seg)
                             valid_bool = True
-                            if ((abs(kl)>=1) & (abs(kr)>=1)): # 0 intersection points 
+                            if ((abs(kl)>1) & (abs(kr)>1)): # 0 intersection points 
                                 if (kl*kr)<0:
                                     tha = th
                                     tahe.append(tha)
                                 else: # outside cone
                                     valid_bool = False
-                            if ((abs(kl)<1) & (abs(kr)<1)): # 2 intersection points 
+                            if ((abs(kl)<=1) & (abs(kr)<=1)): # 2 intersection points 
                                 tha = np.vstack((p_int_left,p_int_right))
                                 tahe.append(tha)
-                            if ((abs(kl)<1) & (abs(kr)>=1)):
+                            if ((abs(kl)<=1) & (abs(kr)>1)):
                                 if kr<kl:
                                     tha = np.vstack((th[0],p_int_left))
                                 else:
                                     tha = np.vstack((p_int_left,th[1]))
                                 tahe.append(tha)
-                            if ((abs(kr)<1) & (abs(kl)>=1)):
+                            if ((abs(kr)<=1) & (abs(kl)>1)):
                                 if kl<kr:
                                     tha = np.vstack((th[0],p_int_right))
                                 else:
@@ -4857,24 +4887,22 @@ class Signature(object):
             >>> import numpy as np
             >>> from pylayers.gis.layout import *
             >>> from pylayers.antprop.signature import *
-            >>> L = Layout()
-            >>> L.dumpr()
-            >>> seq = np.array([[1,5,1],[1,1,1]])
+            >>> L = Layout('defstr.ini')
             >>> s = Signature(seq)
-            >>> tx = np.array([4,-1])
-            >>> rx = np.array([1,1])
+            >>> tx = np.array([760,1113])
+            >>> rx = np.array([762,1114])
             >>> s.ev(L)
             >>> M = s.image(tx)
-            >>> isvalid,Y = s.backtrace(tx,rx,M)
-            >>> fig = plt.figure()
-            >>> ax = fig.add_subplot(111)
+            >>> isvalid,Y = s.backtrace_old(tx,rx,M)
+
+            >>> fig,ax = L.showG('s',labels=1,aw=1,axes=1)
             >>> l1 = ax.plot(tx[0],tx[1],'or')
             >>> l2 = ax.plot(rx[0],rx[1],'og')
             >>> l3 = ax.plot(M[0,:],M[1,:],'ob')
             >>> l4 = ax.plot(Y[0,:],Y[1,:],'xk')
             >>> ray = np.hstack((np.hstack((tx.reshape(2,1),Y)),rx.reshape(2,1)))
             >>> l5 = ax.plot(ray[0,:],ray[1,:],color='#999999',alpha=0.6,linewidth=0.6)
-            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+            >>> 
             >>> plt.show()
 
         Notes
