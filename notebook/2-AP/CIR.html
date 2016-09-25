@@ -1,0 +1,562 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>&lt;no title&gt; &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="Handling time and frequency domain signals : Bsignal Class" href="../3-PHY/Bsignal.html" />
+    <link rel="prev" title="The transmission channel" href="Channel.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body role="document">
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	  <div class="rel">
+	   
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="Channel.html" title="The transmission channel"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    The transmiss...
+	    </span>
+	    <span class="hiddenrellink">
+	    The transmission channel
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../3-PHY/Bsignal.html" title="Handling time and frequency domain signals : Bsignal Class"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    Handling time...
+	    </span>
+	    <span class="hiddenrellink">
+	    Handling time and frequency domain signals : Bsignal Class
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1   Overview
+	</span>
+	
+	</a>
+	</div>
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul class="simple">
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="code python highlight-none"><div class="highlight"><pre><span></span># %load test_DLR.py
+import mayavi.mlab as mlab
+from pylayers.simul.simulem import * #Obsolete
+from pylayers.simul.link import *
+from pylayers.antprop.rays import *
+from pylayers.antprop.channel import *
+from pylayers.antprop.signature import *
+import pylayers.util.pyutil as pyu
+from pylayers.gis.layout import *
+from pylayers.util.project import *
+import pylayers.signal.bsignal as bs
+from datetime import datetime
+import time
+import pdb
+import pickle
+import numpy as np
+import pylayers.signal.waveform as wvf
+import matplotlib.cm as cm
+#import matplotlib.pyplot as plt
+%matplotlib inline
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span># Set the frequency range
+fGHz = np.arange(2,6,0.01)
+# Define the Layout
+L = Layout(&#39;DLR2.ini&#39;)
+# Create a link for the Layout
+S = DLink(L=L,fGHz=fGHz)
+S.eval(force=1,verbose=False,diffraction=1,cutoff=5)
+#S._show3()
+f,a=S.H.plot(idx=[0,1,2,3,4,20])
+</pre></div>
+</div>
+<img alt="../../_images/CIR_1_0.png" src="../../_images/CIR_1_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.wav
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;Np&#39;: 3000,
+ &#39;bandGHz&#39;: 0.499,
+ &#39;fcGHz&#39;: 4.493,
+ &#39;feGHz&#39;: 100,
+ &#39;te&#39;: 0.01,
+ &#39;threshdB&#39;: 3,
+ &#39;twns&#39;: 30,
+ &#39;typ&#39;: &#39;generic&#39;}
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.a
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 11.7605    ,  -4.55808685,   1.2       ])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.b
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 3.99350671,  0.03857113,  1.2       ])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(20,5))
+S.H.show(fig=fig)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f42b77f0650&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f42b77f0610&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f4261659e50&gt;])
+</pre></div>
+</div>
+<img alt="../../_images/CIR_5_1.png" src="../../_images/CIR_5_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>print u
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[ 0  1  2  3  5  6  7  8 16 17 35  4 56  9 57 10 70 69 18 19 58 11 71 20 72
+ 21 73 74 37 36 12 22 13 23 24 25 38 39 26 14 40 27 41 42 43 28 59 60 44 45
+ 15 29 30 46 47 31 48 49 61 62 32 50 51 64 63 33 52 53 65 66 34 54 55 67 68]
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig=plt.figure(figsize=(20,5))
+S.H.show(fig=fig)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f42615bb350&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f42615bb650&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f4261621790&gt;])
+</pre></div>
+</div>
+<img alt="../../_images/CIR_8_1.png" src="../../_images/CIR_8_1.png" />
+<p>Let sort the  channel by energy</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#u = S.H.sort(typ=&#39;energy&#39;)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#fig=plt.figure(figsize=(20,5))
+#S.H.show(fig=fig,cmap=cm.jet)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>wav = wvf.Waveform(fcGHz=4,bandGHz=4)
+wav.show()
+</pre></div>
+</div>
+<img alt="../../_images/CIR_12_0.png" src="../../_images/CIR_12_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>h  = S.H.totime()
+# applyu waveform
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>h.y.shape
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(75, 1, 1, 1203)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>print h.x.shape
+print h.y.shape
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(1203,)
+(75, 1, 1, 1203)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>h.y
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([[[[ -2.30524517e-07,   2.19248320e-06,   3.24492493e-06, ...,
+            2.45316508e-07,  -2.20743466e-06,  -3.23064732e-06]]],
+
+
+       [[[ -3.65232886e-07,   1.50970188e-06,   3.11438227e-06, ...,
+            3.76280412e-07,  -1.52078698e-06,  -3.10386983e-06]]],
+
+
+       [[[ -4.44296614e-07,   1.04450251e-06,   2.99968350e-06, ...,
+            4.52474385e-07,  -1.05263732e-06,  -2.99204874e-06]]],
+
+
+       ...,
+       [[[ -6.02463207e-09,  -1.09695487e-08,  -6.53203433e-09, ...,
+            6.00607685e-09,   1.09906407e-08,   6.51382509e-09]]],
+
+
+       [[[ -1.07975734e-09,  -2.44591937e-09,  -3.26228650e-09, ...,
+            1.07003177e-09,   2.45626244e-09,   3.25281693e-09]]],
+
+
+       [[[ -1.07975734e-09,  -2.44591937e-09,  -3.26228650e-09, ...,
+            1.07003177e-09,   2.45626244e-09,   3.25281693e-09]]]])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.H.taud
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([  30.08422425,   31.12973737,   32.3892042 ,   33.69484275,
+         34.63152361,   35.76789661,   36.12562178,   36.12562178,
+         39.18344584,   39.18344584,   47.381087  ,   47.74410919,
+         48.05171594,   48.40970938,   48.8770642 ,   49.22905608,
+         51.42924659,   51.42924659,   51.76388666,   51.76388666,
+         52.72002827,   53.09743108,   53.32355372,   53.69671486,
+         54.06848788,   54.43654275,   56.38618076,   56.38618076,
+         56.73920326,   56.73920326,   58.95148217,   59.49182507,
+         59.89456675,   60.16042927,   60.42647703,   61.08485186,
+         62.25172488,   62.25172488,   62.27534138,   62.59097949,
+         62.78708581,   63.10016414,   63.14553925,   63.14553925,
+         63.42095982,   63.73092431,   65.40808929,   65.40808929,
+         65.70868066,   65.70868066,   68.78797801,   69.25161311,
+         69.82682807,   71.63648455,   71.63648455,   72.61297437,
+         73.05233773,   73.59785355,   75.31695724,   75.31695724,
+         76.36989611,   76.78776616,   77.30692745,   78.94530405,
+         78.94530405,   91.94107416,   92.28846687,   92.72087747,
+         94.09123826,   94.09123826,   98.75167269,   99.07518791,
+         99.47810241,  100.75660206,  100.75660206])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.H.y.shape
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(75, 1, 1, 400)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ehf = np.sum(np.abs(S.H.y),axis=-1)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>Ehf.shape
+plt.plot(h.taud,abs(Ehf[:,0,0]))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f425e4c5850&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/CIR_21_1.png" src="../../_images/CIR_21_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>Eh = np.sum(np.abs(h.y),axis=-1)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>Eh.shape
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(75, 1, 1)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud,abs(Eh[:,0,0]))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f425e5bd7d0&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/CIR_24_1.png" src="../../_images/CIR_24_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>hw = S.H.applywav(wav.sfg)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>Nray = h.y.shape[0]
+ir = 0
+it = 0
+plt.figure()
+tEk1 = []
+tEk2 = []
+for k in range(Nray):
+    Ek = np.sum(h.y[k,ir,it,:]*h.y[k,ir,it,:])
+    tEk1.append(Ek)
+alpha=np.sqrt(tEk1)/max(np.sqrt(tEk1))
+plt.figure(figsize=(20,5))
+for k in range(Nray):
+    plt.plot(h.x,h.y[k,ir,it,:]+0.001*k,&#39;k&#39;,alpha=alpha[k])
+plt.figure(figsize=(20,5))
+for k in range(Nray):
+    Ek = np.sum(hw.y[k,:]*hw.y[k,:])
+    tEk2.append(Ek)
+    plt.plot(hw.x,hw.y[k,:],&#39;k&#39;,alpha=max(alpha[k],0.3))
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f425e57b850&gt;
+</pre></div>
+</div>
+<img alt="../../_images/CIR_26_1.png" src="../../_images/CIR_26_1.png" />
+<img alt="../../_images/CIR_26_2.png" src="../../_images/CIR_26_2.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot()
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425e5ea090&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f4261315210&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="../../_images/CIR_27_1.png" src="../../_images/CIR_27_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot(typ=&#39;v&#39;)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425dfda6d0&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f425e5d2dd0&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="../../_images/CIR_28_1.png" src="../../_images/CIR_28_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>len(alpha)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>75
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f425de44490&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/CIR_30_1.png" src="../../_images/CIR_30_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[10:20])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f4261542410&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425de6ef90&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_31_1.png" src="../../_images/CIR_31_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.keys()
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[2, 3, 4, 5, 6, 7, 8, 9]
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>problem
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Rays3D
+----------
+2 / 1 : [0]
+3 / 4 : [1 2 3 4]
+4 / 11 : [ 5  6  7  8  9 10 11 12 13 14 15]
+5 / 19 : [16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34]
+6 / 21 : [35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55]
+7 / 13 : [56 57 58 59 60 61 62 63 64 65 66 67 68]
+8 / 4 : [69 70 71 72]
+9 / 2 : [73 74]
+-----
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[0:10])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425ddd3350&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425ddca650&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_34_1.png" src="../../_images/CIR_34_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425e123ad0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425dccec10&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_35_1.png" src="../../_images/CIR_35_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425ddd3390&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425dbd60d0&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_36_1.png" src="../../_images/CIR_36_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425de7ad10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425dae9190&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_37_1.png" src="../../_images/CIR_37_1.png" />
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/CIR.rst.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel">
+    
+    <div class="buttonPrevious">
+      <a href="Channel.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="../3-PHY/Bsignal.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

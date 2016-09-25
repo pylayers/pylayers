@@ -1310,6 +1310,7 @@
                         <span class="n">uinter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mapnode</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">])</span>
                         <span class="c1"># import ipdb</span>
                         <span class="c1"># ipdb.set_trace()</span>
+                        <span class="c1"># [plt.scatter(p.xy[0],p.xy[1],c=&#39;r&#39;) for up,p in enumerate(P) if uinter[0,up]]</span>
                         <span class="c1">#[ plt.scatter(p.xy[0],p.xy[1],c=&#39;r&#39;) for up,p in enumerate(P) if uinter[0,up]]</span>
                         <span class="c1"># find points are indoor/outdoor cycles</span>
                         <span class="n">upt</span><span class="p">,</span><span class="n">ucy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">uinter</span><span class="p">)</span>
@@ -2223,7 +2224,6 @@
                 <span class="c1"># assign floor and ceil slab</span>
                 <span class="c1">############################</span>
 
-                
                 <span class="n">slT</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uT</span><span class="p">]]</span>
                 <span class="n">slR</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uR</span><span class="p">]]</span>
 
@@ -2906,22 +2906,73 @@
 
             <span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="s1">&#39;ER&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">ER</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ER&#39;</span><span class="p">]</span>
+            <span class="n">color_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ER</span><span class="p">))</span>
+            <span class="n">uER</span> <span class="o">=</span> <span class="n">ER</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">colors</span><span class="o">=</span> <span class="n">color_range</span><span class="p">[</span><span class="n">uER</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">rlist</span> <span class="o">==</span><span class="p">[]:</span>
             <span class="n">nbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nbi</span><span class="p">:</span>
                 <span class="n">r</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">])[</span><span class="mi">2</span><span class="p">])</span>
-                
+                <span class="n">ridx</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;rayidx&#39;</span><span class="p">]</span>
                 <span class="c1"># number of rays</span>
                 <span class="n">nbr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> 
                 <span class="c1"># current number of interactions</span>
                 <span class="n">cnbi</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span>
-                <span class="n">pt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">][:,:,</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
 
-                <span class="c1"># lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)</span>
-                <span class="n">lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nbr</span><span class="p">,</span><span class="n">cnbi</span><span class="p">)</span>
-                <span class="n">mesh</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">pt</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">lines</span><span class="p">)</span>
-                <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">mesh</span><span class="p">),</span>
-                                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
+
+                <span class="n">pt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">][:,:,</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+                <span class="n">l0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cnbi</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">cnbi</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbr</span><span class="p">)])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+                <span class="n">l1</span> <span class="o">=</span> <span class="n">l0</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">connection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">l0</span><span class="p">,</span><span class="n">l1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+
+                
+
+                <span class="k">if</span> <span class="s1">&#39;ER&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="n">rc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">ridx</span><span class="p">],</span><span class="n">cnbi</span><span class="p">)</span>
+                    <span class="c1"># import ipdb</span>
+                    <span class="c1"># ipdb.set_trace()</span>
+                    <span class="c1"># T = np.repeat(np.linspace(-2 * np.pi, 2 * np.pi, nbr),cnbi)</span>
+                    <span class="n">rc</span><span class="p">[::</span><span class="n">cnbi</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+
+                    <span class="n">src</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">scalar_scatter</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">,:],</span><span class="n">rc</span><span class="p">,</span><span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span> 
+                    <span class="n">src</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">scalar_scatter</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">,:])</span>
+                <span class="n">src</span><span class="o">.</span><span class="n">mlab_source</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">lines</span><span class="o">=</span><span class="n">connection</span>
+                <span class="n">src</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">stripper</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+                <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+
+                <span class="c1"># def colorize_edges(points, edge_indices, edge_colors):</span>
+                <span class="c1">#     assert points.ndim == 2</span>
+                <span class="c1">#     assert points.shape[1] == 3</span>
+                <span class="c1">#     assert edge_indices.ndim == 2</span>
+                <span class="c1">#     n_edges = edge_indices.shape[0]</span>
+                <span class="c1">#     assert edge_indices.shape[1] == 2</span>
+                <span class="c1">#     edge_indices = edge_indices.astype(int)</span>
+                <span class="c1">#     assert edge_colors.ndim == 1</span>
+                <span class="c1">#     assert edge_colors.shape[0] == n_edges</span>
+                <span class="c1">#     x, y, z = points[:, 0], points[:, 1], points[:, 2]</span>
+                <span class="c1">#     i, j = edge_indices[:, 0], edge_indices[:, 1]</span>
+                <span class="c1">#     x = np.hstack([x[i], x[j]])</span>
+                <span class="c1">#     y = np.hstack([y[i], y[j]])</span>
+                <span class="c1">#     z = np.hstack([z[i], z[j]])</span>
+                <span class="c1">#     c = np.hstack([edge_colors, edge_colors])</span>
+                <span class="c1">#     src = mlab.pipeline.scalar_scatter(x, y, z, c)</span>
+                <span class="c1">#     connections = np.vstack([i, j+n_edges]).T</span>
+                <span class="c1">#     src.mlab_source.dataset.lines = connections</span>
+                <span class="c1">#     surf = mlab.pipeline.surface(src, line_width=1.0)       </span>
+
+                <span class="c1"># import ipdb</span>
+                <span class="c1"># ipdb.set_trace()</span>
+                <span class="c1"># colorize_edges(pt,connection,rc)</span>
+                <span class="c1"># lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)</span>
+                <span class="c1"># mesh = tvtk.PolyData(points=pt.T, polys=lines)</span>
+                <span class="c1"># mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),</span>
+                <span class="c1">#                                      color=(0, 0, 0), )</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Rays with &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;interactions&#39;</span>
         <span class="k">else</span> <span class="p">:</span>
 
@@ -3138,7 +3189,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 02, 2016.
+      Last updated on Sep 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

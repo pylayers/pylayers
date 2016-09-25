@@ -1901,22 +1901,43 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        seq : list or np.array()</span>
+<span class="sd">        seq : list of tuple </span>
+<span class="sd">               [(2,2),(5,3),(7,2)]</span>
+<span class="sd">        </span>
+<span class="sd">        1 : Diffraction </span>
+<span class="sd">        2 : Reflexion</span>
+<span class="sd">        3 : Diffraction </span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        boolean</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; DL=DLink()</span>
+<span class="sd">        &gt;&gt;&gt; DL.eval()</span>
+<span class="sd">        &gt;&gt;&gt; seq = [(2,3)] # transmission through segment 2 </span>
+<span class="sd">        &gt;&gt;&gt; DL.Si.exist(seq)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">==</span><span class="nb">list</span><span class="p">:</span>
-            <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
-
+        <span class="c1"># Number of interactions </span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+        <span class="c1"># signatures with N interaction</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">N</span><span class="p">]</span>
-        <span class="n">lf</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="n">seq</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span><span class="n">sig</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lf</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">True</span><span class="p">,</span><span class="n">lf</span>
+        <span class="c1"># Number signature with N interaction</span>
+        <span class="n">Nsig</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">nstr</span> <span class="o">=</span> <span class="n">sig</span><span class="p">[::</span><span class="mi">2</span><span class="p">,:]</span>
+        <span class="n">typ</span>  <span class="o">=</span> <span class="n">sig</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">,:]</span>
+        <span class="c1"># List of signat</span>
+        <span class="n">lsig</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nsig</span><span class="p">):</span>
+            <span class="n">lint</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">lint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">nstr</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">l</span><span class="p">],</span><span class="n">typ</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">l</span><span class="p">]))</span>
+            <span class="n">lsig</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lint</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span></div>
 
@@ -3062,7 +3083,8 @@
 
                                     <span class="c1"># check if child (current segment) is an airwall</span>
                                     <span class="c1"># warning not efficient if many airwalls</span>
-                                    <span class="k">if</span> <span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]:</span>
+                                    <span class="n">lair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;_AIR&#39;</span><span class="p">]</span>
+                                    <span class="k">if</span> <span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lair</span><span class="p">:</span>
                                         <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                                     <span class="k">else</span><span class="p">:</span>
                                         <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -3141,9 +3163,10 @@
 <span class="sd">        pylayers.antprop.signature.Signatures.procone2</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>   <span class="o">=</span> <span class="n">cutoff</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span>
-
+        <span class="n">lair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;_AIR&#39;</span><span class="p">]</span>
         <span class="c1"># list of interactions visible from source</span>
         <span class="n">lisR</span><span class="p">,</span><span class="n">lisT</span><span class="p">,</span><span class="n">lisD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
@@ -3158,6 +3181,7 @@
            <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span> <span class="o">+</span> <span class="n">litD</span>
         <span class="k">else</span><span class="p">:</span>
            <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span>
+        <span class="c1">#pdb.set_trace()</span>
         <span class="c1">#print &quot;source,lis :&quot;,self.source,lis</span>
         <span class="c1">#print &quot;target,lit :&quot;,self.target,lit</span>
         <span class="c1"># for u in lit: </span>
@@ -3184,6 +3208,10 @@
         <span class="c1"># signature counter</span>
         <span class="n">cptsig</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
+            
+            <span class="c1">#print s</span>
+            <span class="c1"># if s==(4,2):</span>
+            <span class="c1">#     pdb.set_trace()</span>
             <span class="c1"># if (us%20)==0:</span>
             <span class="c1">#     print us,&#39;/&#39;,len(lis)</span>
             <span class="c1"># us counter</span>
@@ -3219,10 +3247,15 @@
             <span class="n">lawp</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="c1"># while the stack of iterators is not void</span>
             <span class="k">while</span> <span class="n">stack</span><span class="p">:</span> <span class="c1">#</span>
+                
                 <span class="c1"># iter_on_interactions is the last iterator in the stack</span>
                 <span class="n">iter_on_interactions</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="c1"># next interaction child</span>
                 <span class="n">interaction</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iter_on_interactions</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="c1">#if visited==[(4,2),(5,2)]:</span>
+                <span class="c1">#     print visited</span>
+                <span class="c1">#   print interaction</span>
+                <span class="c1">#     pdb.set_trace()</span>
                 <span class="n">cond1</span> <span class="o">=</span> <span class="n">interaction</span> <span class="ow">is</span> <span class="bp">None</span>
                 <span class="c1"># test whether the interaction has already been visited (reverberation)</span>
                 <span class="n">cond2</span> <span class="o">=</span> <span class="p">(</span><span class="n">interaction</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bt</span>
@@ -3233,8 +3266,9 @@
                 <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond1</span><span class="p">):</span>
                     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond3</span><span class="p">):</span>
                         <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interaction</span><span class="p">)</span>
+                        
                         <span class="c1">#print visited,len(stack)</span>
-                        <span class="k">if</span> <span class="n">interaction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">interaction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lair</span><span class="p">:</span>
                             <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -3321,22 +3355,22 @@
                             <span class="n">kl</span><span class="p">,</span><span class="n">p_int_left</span>  <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">linel</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
                             <span class="n">kr</span><span class="p">,</span><span class="n">p_int_right</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">liner</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
                             <span class="n">valid_bool</span> <span class="o">=</span> <span class="bp">True</span>
-                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 0 intersection points </span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 0 intersection points </span>
                                 <span class="k">if</span> <span class="p">(</span><span class="n">kl</span><span class="o">*</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
                                     <span class="n">tha</span> <span class="o">=</span> <span class="n">th</span>
                                     <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
                                 <span class="k">else</span><span class="p">:</span> <span class="c1"># outside cone</span>
                                     <span class="n">valid_bool</span> <span class="o">=</span> <span class="bp">False</span>
-                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 2 intersection points </span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 2 intersection points </span>
                                 <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_left</span><span class="p">,</span><span class="n">p_int_right</span><span class="p">))</span>
                                 <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)):</span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)):</span>
                                 <span class="k">if</span> <span class="n">kr</span><span class="o">&lt;</span><span class="n">kl</span><span class="p">:</span>
                                     <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p_int_left</span><span class="p">))</span>
                                 <span class="k">else</span><span class="p">:</span>
                                     <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_left</span><span class="p">,</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                                 <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)):</span>
+                            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">kr</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)):</span>
                                 <span class="k">if</span> <span class="n">kl</span><span class="o">&lt;</span><span class="n">kr</span><span class="p">:</span>
                                     <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p_int_right</span><span class="p">))</span>
                                 <span class="k">else</span><span class="p">:</span>
@@ -4997,24 +5031,22 @@
 <span class="sd">            &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">            &gt;&gt;&gt; from pylayers.antprop.signature import *</span>
-<span class="sd">            &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">            &gt;&gt;&gt; L.dumpr()</span>
-<span class="sd">            &gt;&gt;&gt; seq = np.array([[1,5,1],[1,1,1]])</span>
+<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;defstr.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; s = Signature(seq)</span>
-<span class="sd">            &gt;&gt;&gt; tx = np.array([4,-1])</span>
-<span class="sd">            &gt;&gt;&gt; rx = np.array([1,1])</span>
+<span class="sd">            &gt;&gt;&gt; tx = np.array([760,1113])</span>
+<span class="sd">            &gt;&gt;&gt; rx = np.array([762,1114])</span>
 <span class="sd">            &gt;&gt;&gt; s.ev(L)</span>
 <span class="sd">            &gt;&gt;&gt; M = s.image(tx)</span>
-<span class="sd">            &gt;&gt;&gt; isvalid,Y = s.backtrace(tx,rx,M)</span>
-<span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(111)</span>
+<span class="sd">            &gt;&gt;&gt; isvalid,Y = s.backtrace_old(tx,rx,M)</span>
+
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,labels=1,aw=1,axes=1)</span>
 <span class="sd">            &gt;&gt;&gt; l1 = ax.plot(tx[0],tx[1],&#39;or&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; l2 = ax.plot(rx[0],rx[1],&#39;og&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; l3 = ax.plot(M[0,:],M[1,:],&#39;ob&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; l4 = ax.plot(Y[0,:],Y[1,:],&#39;xk&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; ray = np.hstack((np.hstack((tx.reshape(2,1),Y)),rx.reshape(2,1)))</span>
 <span class="sd">            &gt;&gt;&gt; l5 = ax.plot(ray[0,:],ray[1,:],color=&#39;#999999&#39;,alpha=0.6,linewidth=0.6)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; </span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        Notes</span>
@@ -5115,7 +5147,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 02, 2016.
+      Last updated on Sep 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

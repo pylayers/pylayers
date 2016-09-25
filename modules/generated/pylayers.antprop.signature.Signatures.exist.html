@@ -172,12 +172,24 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seq</strong> : list or np.array()</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seq</strong> : list of tuple</p>
+<blockquote>
+<div><p>[(2,2),(5,3),(7,2)]</p>
+</div></blockquote>
+<p><strong>1</strong> : Diffraction</p>
+<p><strong>2</strong> : Reflexion</p>
+<p class="last"><strong>3</strong> : Diffraction</p>
+</td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; DL=DLink()
+&gt;&gt;&gt; DL.eval()
+&gt;&gt;&gt; seq = [(2,3)] # transmission through segment 2 
+&gt;&gt;&gt; DL.Si.exist(seq)
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -193,7 +205,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 31, 2016.
+      Last updated on Sep 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.signature.Signatures.exist.rst.txt"

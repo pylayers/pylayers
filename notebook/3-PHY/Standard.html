@@ -7,10 +7,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; Python 1 documentation</title>
+    <title>Radio standards &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +44,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +88,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -97,7 +112,8 @@
     <p>If you use the software, please consider
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
-	<ul class="simple">
+	<ul>
+<li><a class="reference internal" href="#">Radio standards</a></li>
 </ul>
 
     
@@ -109,30 +125,32 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.signal.standard</span> <span class="kn">as</span> <span class="nn">std</span>
+  <div class="section" id="radio-standards">
+<h1>Radio standards<a class="headerlink" href="#radio-standards" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>import pylayers.signal.standard as std
 </pre></div>
 </div>
-<p>Parameters of different standards are stored in <tt class="docutils literal"><span class="pre">wstd.json</span></tt> file. The
-class which handles wireless standards is <tt class="docutils literal"><span class="pre">standard</span></tt></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws1</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s">&#39;ieee80211b&#39;</span><span class="p">)</span>
+<p>Parameters of different standards are stored in <code class="docutils literal"><span class="pre">wstd.json</span></code> file. The
+class which handles wireless standards is <code class="docutils literal"><span class="pre">standard</span></code></p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws1 = std.Wstandard(&#39;ieee80211b&#39;)
 </pre></div>
 </div>
 <p>To list the available standard :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws1</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws1.ls()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ieee80211g</span> <span class="p">,</span>  <span class="n">ieee80211b</span> <span class="p">,</span>  <span class="n">ieee80211a</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class3</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class2</span> <span class="p">,</span>  <span class="n">bluetooth</span><span class="o">-</span><span class="n">class1</span> <span class="p">,</span>  <span class="n">ieee80211ah</span> <span class="p">,</span>  <span class="n">ieee802154</span> <span class="p">,</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>ieee80211g ,  ieee80211b ,  ieee80211a ,  generic ,  bluetooth-class3 ,  bluetooth-class2 ,  bluetooth-class1 ,  ieee80211ah ,  ieee802154 ,  ieee802154b ,
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wifi</span><span class="o">=</span> <span class="n">ws1</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;ieee80211b&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>wifi= ws1.load(&#39;ieee80211b&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws1</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws1
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>ieee80211b
+<div class="highlight-none"><div class="highlight"><pre><span></span>ieee80211b
 -------------------------
 1 :  2.412 : [2.401,2.423]
 2 :  2.417 : [2.406,2.428]
@@ -149,59 +167,42 @@ class which handles wireless standards is <tt class="docutils literal"><span cla
 13 :  2.472 : [2.461,2.483]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">AP1</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">AP</span><span class="p">()</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>AP1 = std.AP()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws2</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s">&#39;ieee80211g&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws2 = std.Wstandard(&#39;ieee80211g&#39;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>TypeErrorTraceback (most recent call last)
-
-&lt;ipython-input-7-c21d9b04bd47&gt; in &lt;module&gt;()
-----&gt; 1 ws2 = std.Wstandard(&#39;ieee80211g&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/standard.pyc in __init__(self, stdname, _filejson)
-    227         self.name = stdname
-    228         if stdname != &#39;&#39;:
---&gt; 229             self.load(stdname)
-    230
-    231     def __repr__(self):
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/standard.pyc in load(self, stdname, _fileini)
-    272                 for k in chan:
-    273                     bandname = k
---&gt; 274                     fstart=chan[k][&#39;fstart&#39;]
-    275                     fstop =chan[k][&#39;fstop&#39;]
-    276                     smhz =chan[k][&#39;smhz&#39;]
-
-
-TypeError: &#39;int&#39; object has no attribute &#39;__getitem__&#39;
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws2
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws2</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>ieee80211g
+-------------------------
+1 :  2.412 : [2.401,2.423]
+2 :  2.417 : [2.406,2.428]
+3 :  2.422 : [2.411,2.433]
+4 :  2.427 : [2.416,2.438]
+5 :  2.432 : [2.421,2.443]
+6 :  2.437 : [2.426,2.448]
+7 :  2.442 : [2.431,2.453]
+8 :  2.447 : [2.436,2.458]
+9 :  2.452 : [2.441,2.463]
+10 :  2.457 : [2.446,2.468]
+11 :  2.462 : [2.451,2.473]
+12 :  2.467 : [2.456,2.478]
+13 :  2.472 : [2.461,2.483]
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-8-8be99413ae52&gt; in &lt;module&gt;()
-----&gt; 1 ws2
-
-
-NameError: name &#39;ws2&#39; is not defined
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws3 = std.Wstandard(&#39;ieee80211a&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws3</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s">&#39;ieee80211a&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws3 = std.Wstandard(&#39;bluetooth-class3&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws3</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s">&#39;bluetooth-class3&#39;</span><span class="p">)</span>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>ws3
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ws3</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>bluetooth-class3
+<div class="highlight-none"><div class="highlight"><pre><span></span>bluetooth-class3
 -------------------------
 1 :  2.402 : [2.4015,2.4025]
 2 :  2.403 : [2.4025,2.4035]
@@ -288,6 +289,7 @@ NameError: name &#39;ws2&#39; is not defined
 83 :  2.484 : [2.4835,2.4845]
 </pre></div>
 </div>
+</div>
 
 
           </div>
@@ -300,15 +302,20 @@ NameError: name &#39;ws2&#39; is not defined
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 25, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/3-PHY/Standard.txt"
+    <a href="../../_sources/notebook/3-PHY/Standard.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

@@ -794,19 +794,36 @@
 
 <span class="sd">        pylayers.layout.Layout.ispoint</span>
 
+<span class="sd">        vnodes is a list of point and segments of the polygon, is there are isosegments the sequence of iso segments </span>
+<span class="sd">        is repeated between the termination points. L.numseg has been adapted in oreder to return either the first segment (default)</span>
+<span class="sd">        or the list of all segments</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span>
         <span class="c1"># npts = map(lambda x :</span>
         <span class="c1">#            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))</span>
-        <span class="n">npts</span> <span class="o">=</span> <span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">ispoint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span> <span class="k">for</span> <span class="n">xx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="p">[</span> <span class="n">L</span><span class="o">.</span><span class="n">ispoint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span> <span class="k">for</span> <span class="n">xx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">]</span>
+        <span class="k">assert</span> <span class="p">(</span> <span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">npts</span><span class="p">),</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+        <span class="c1"># seg list of tuple [(n1,n2),(n2,n3),....(,)]</span>
         <span class="n">seg</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">nseg</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">numseg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">seg</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">ipdb</span>
-            <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
-        <span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">nseg</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">=</span> <span class="n">vnodes</span>
+        <span class="n">vnodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pseg</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">:</span>
+            <span class="n">vnodes</span> <span class="o">=</span> <span class="n">vnodes</span> <span class="o">+</span> <span class="p">[</span><span class="n">pseg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">nseg</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">numseg</span><span class="p">(</span><span class="n">pseg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nseg</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">:</span>
+                <span class="n">nseg</span><span class="o">=</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nseg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nseg</span><span class="p">)</span>
+            <span class="n">vnodes</span> <span class="o">=</span> <span class="n">vnodes</span> <span class="o">+</span> <span class="n">nseg</span>
+            
+        <span class="c1"># pdb.set_trace()</span>
+        <span class="c1"># try:</span>
+        <span class="c1">#     nseg = map(lambda x : L.numseg(x[0],x[1],first=False),seg)</span>
+        <span class="c1"># except:</span>
+        <span class="c1">#     import ipdb</span>
+        <span class="c1">#     ipdb.set_trace()</span>
+        <span class="c1"># vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vnodes</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Polygon.ndarray"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.ndarray.html#pylayers.util.geomutil.Polygon.ndarray">[docs]</a>    <span class="k">def</span> <span class="nf">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get a ndarray from a Polygon</span>
@@ -4638,6 +4655,8 @@
         <span class="n">pa</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
         <span class="n">pb</span> <span class="o">=</span> <span class="n">pb</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">pab</span> <span class="o">=</span> <span class="n">pb</span> <span class="o">-</span> <span class="n">pa</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pab</span> <span class="o">*</span> <span class="n">pab</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -5132,7 +5151,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 02, 2016.
+      Last updated on Sep 25, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
