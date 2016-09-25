@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; Python 1 documentation</title>
+    <title>Sorting and Cutting &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -165,7 +165,8 @@
     <p>If you use the software, please consider
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
-	<ul class="simple">
+	<ul>
+<li><a class="reference internal" href="#">Sorting and Cutting</a></li>
 </ul>
 
     
@@ -179,7 +180,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="code python highlight-none"><div class="highlight"><pre><span></span># %load test_DLR.py
+  <div class="section" id="sorting-and-cutting">
+<h1>Sorting and Cutting<a class="headerlink" href="#sorting-and-cutting" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span># %load test_DLR.py
 import mayavi.mlab as mlab
 from pylayers.simul.simulem import * #Obsolete
 from pylayers.simul.link import *
@@ -212,7 +215,7 @@ S.eval(force=1,verbose=False,diffraction=1,cutoff=5)
 f,a=S.H.plot(idx=[0,1,2,3,4,20])
 </pre></div>
 </div>
-<img alt="../../_images/CIR_1_0.png" src="../../_images/CIR_1_0.png" />
+<img alt="../../_images/CIR_2_0.png" src="../../_images/CIR_2_0.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>S.wav
 </pre></div>
 </div>
@@ -242,12 +245,12 @@ f,a=S.H.plot(idx=[0,1,2,3,4,20])
 S.H.show(fig=fig)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f42b77f0650&gt;,
- [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f42b77f0610&gt;,
-  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f4261659e50&gt;])
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f53d9f6a550&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f53d9f6a7d0&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537bdf2e50&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/CIR_5_1.png" src="../../_images/CIR_5_1.png" />
+<img alt="../../_images/CIR_6_1.png" src="../../_images/CIR_6_1.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
 </pre></div>
 </div>
@@ -263,12 +266,12 @@ S.H.show(fig=fig)
 S.H.show(fig=fig)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f42615bb350&gt;,
- [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f42615bb650&gt;,
-  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f4261621790&gt;])
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f537e3a13d0&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537e3a1cd0&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537bd9d890&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/CIR_8_1.png" src="../../_images/CIR_8_1.png" />
+<img alt="../../_images/CIR_9_1.png" src="../../_images/CIR_9_1.png" />
 <p>Let sort the  channel by energy</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>#u = S.H.sort(typ=&#39;energy&#39;)
 </pre></div>
@@ -281,7 +284,7 @@ S.H.show(fig=fig)
 wav.show()
 </pre></div>
 </div>
-<img alt="../../_images/CIR_12_0.png" src="../../_images/CIR_12_0.png" />
+<img alt="../../_images/CIR_13_0.png" src="../../_images/CIR_13_0.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>h  = S.H.totime()
 # applyu waveform
 </pre></div>
@@ -368,10 +371,10 @@ print h.y.shape
 plt.plot(h.taud,abs(Ehf[:,0,0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f425e4c5850&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f5378c42810&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/CIR_21_1.png" src="../../_images/CIR_21_1.png" />
+<img alt="../../_images/CIR_22_1.png" src="../../_images/CIR_22_1.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>Eh = np.sum(np.abs(h.y),axis=-1)
 </pre></div>
 </div>
@@ -384,10 +387,10 @@ plt.plot(h.taud,abs(Ehf[:,0,0]))
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud,abs(Eh[:,0,0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f425e5bd7d0&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f537bb8c450&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/CIR_24_1.png" src="../../_images/CIR_24_1.png" />
+<img alt="../../_images/CIR_25_1.png" src="../../_images/CIR_25_1.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>hw = S.H.applywav(wav.sfg)
 </pre></div>
 </div>
@@ -411,27 +414,27 @@ for k in range(Nray):
     plt.plot(hw.x,hw.y[k,:],&#39;k&#39;,alpha=max(alpha[k],0.3))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f425e57b850&gt;
-</pre></div>
-</div>
-<img alt="../../_images/CIR_26_1.png" src="../../_images/CIR_26_1.png" />
-<img alt="../../_images/CIR_26_2.png" src="../../_images/CIR_26_2.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot()
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425e5ea090&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f4261315210&gt;]], dtype=object))
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f5378cf5850&gt;
 </pre></div>
 </div>
 <img alt="../../_images/CIR_27_1.png" src="../../_images/CIR_27_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot(typ=&#39;v&#39;)
+<img alt="../../_images/CIR_27_2.png" src="../../_images/CIR_27_2.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425dfda6d0&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f425e5d2dd0&gt;]], dtype=object))
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378ca7f10&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f5378d93e10&gt;]], dtype=object))
 </pre></div>
 </div>
 <img alt="../../_images/CIR_28_1.png" src="../../_images/CIR_28_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.ir.plot(typ=&#39;v&#39;)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378761d50&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x7f5378808850&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="../../_images/CIR_29_1.png" src="../../_images/CIR_29_1.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>len(alpha)
 </pre></div>
 </div>
@@ -441,18 +444,18 @@ for k in range(Nray):
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f425de44490&gt;]
-</pre></div>
-</div>
-<img alt="../../_images/CIR_30_1.png" src="../../_images/CIR_30_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[10:20])
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f4261542410&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425de6ef90&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f53785c2490&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/CIR_31_1.png" src="../../_images/CIR_31_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[10:20])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378761590&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f53785ecbd0&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_32_1.png" src="../../_images/CIR_32_1.png" />
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.keys()
 </pre></div>
 </div>
@@ -481,35 +484,36 @@ for k in range(Nray):
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[0:10])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425ddd3350&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425ddca650&gt;)
-</pre></div>
-</div>
-<img alt="../../_images/CIR_34_1.png" src="../../_images/CIR_34_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425e123ad0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425dccec10&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f53784a03d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f53784a0090&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_35_1.png" src="../../_images/CIR_35_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425ddd3390&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425dbd60d0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f53785e40d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5378447c90&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_36_1.png" src="../../_images/CIR_36_1.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f425de7ad10&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f425dae9190&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5378454690&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5378352bd0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_37_1.png" src="../../_images/CIR_37_1.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f537839dbd0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f537859c250&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_38_1.png" src="../../_images/CIR_38_1.png" />
+</div>
 
 
           </div>
