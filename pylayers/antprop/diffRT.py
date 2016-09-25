@@ -342,9 +342,8 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
         #pxF = 10**xF
         #uF = (np.abs(KLA[:,:]-pxF[:,None,None])).argmin(axis=0)
         val = np.maximum(np.log10(np.abs(KLA))-xF[0,None,None],0)
-        uF2 = len(F)*(val)/(xF[-1,None,None]-xF[0,None,None])
+        uF2 = (len(F)-1)*(val)/(xF[-1,None,None]-xF[0,None,None])
         uF2_int = np.floor(uF2).astype('int')
-        #pdb.set_trace()
         Fkla = F[uF2_int]
         #if np.max(Fkla) > 1:
         #    Warning('diffRT : Fkla tab probably wrong')

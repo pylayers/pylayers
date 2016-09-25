@@ -105,7 +105,7 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #--------------------------------------------------
 # grazing angle Go et Gn
 #--------------------------------------------------
-    pdb.set_trace()
+    
     Gsofto,Gsoftn = G(N,phi0,Rsofto,Rsoftn)
 
     Ghardo,Ghardn = G(N,phi0,Rhardo,Rhardn)
