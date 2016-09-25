@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<VTKFile type="RectilinearGrid" version="0.1" byte_order="LittleEndian" compressor="vtkZLibDataCompressor">
+  <RectilinearGrid WholeExtent="0 20 0 0 0 20">
+  <Piece Extent="0 20 0 0 0 20">
+    <PointData>
+      <DataArray type="Float32" Name="E-Field" NumberOfComponents="3" format="binary" RangeMin="0" RangeMax="0">
+        AQAAAACAAACsFAAAHAAAAA==eJztwTEBAAAAwqD1T20MH6AAAAAAAP4GFKwAAQ==
+      </DataArray>
+    </PointData>
+    <CellData>
+    </CellData>
+    <Coordinates>
+      <DataArray type="Float64" Name="Array 0xa36060" format="binary" RangeMin="-10" RangeMax="10">
+        AQAAAACAAACoAAAAPwAAAA==eJxVyqENACAQBMGTSAQC8YJ86IPvHEqiBAJZw5o5cdKtr4ccGxpWLJgxoXBPfe3BCP6YsWBFw4aOPQ4e6Q1r
+      </DataArray>
+      <DataArray type="Float64" Name="Array 0xa36240" format="binary" RangeMin="0" RangeMax="0">
+        AQAAAACAAAAIAAAACwAAAA==eJxjYIAAAAAIAAE=
+      </DataArray>
+      <DataArray type="Float64" Name="Array 0xa6d150" format="binary" RangeMin="-10" RangeMax="10">
+        AQAAAACAAACoAAAAPwAAAA==eJxVyqENACAQBMGTSAQC8YJ86IPvHEqiBAJZw5o5cdKtr4ccGxpWLJgxoXBPfe3BCP6YsWBFw4aOPQ4e6Q1r
+      </DataArray>
+    </Coordinates>
+  </Piece>
+  </RectilinearGrid>
+</VTKFile>
