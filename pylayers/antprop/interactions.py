@@ -885,7 +885,7 @@ class IntD(Inter):
 
         """
 
-
+    
         self.fGHz=fGHz
         self.nf=len(fGHz)
         self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
@@ -925,7 +925,6 @@ class IntD(Inter):
                 #     D[:,:,1,1]=Dh
                 #     mapp.extend(self.dusl[m])
             self.A[:, np.array((mapp)), :, :] = D[:,mapp,:,:]
-
             return(self.A)
         else :
             self.A = self.data[:, None, None, None]

@@ -2210,7 +2210,10 @@ class Rays(PyLayers,dict):
         #print 'Rays evaluation'
         self.fGHz=fGHz
         # evaluation of interaction
+        pdb.set_trace()
         self.I.eval(fGHz)
+        if np.isnan(self.I.I).any():
+            pdb.set_trace()
         # evaluation of base B  (2x2)
         # B and B0 do no depend on frequency
         # just an axis extension (np.newaxis)
