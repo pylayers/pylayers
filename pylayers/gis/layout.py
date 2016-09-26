@@ -1567,19 +1567,20 @@ class Layout(PyLayers):
         Nss = 0
         self.name['AIR']=[]
         pdb.set_trace()
-        for ns in di['segments']:
-            self.Gs.add_node(eval(ns)) # add segment node
-            d = eval(di['segments'][ns])
+        Ns = len(di['segments'].keys())
+        for ns,key in enumerate(di['segments']):
+            self.Gs.add_node(ns) # add segment node
+            d = eval(di['segments'][key])
             d['ncycles'] = []
-            d['iso']=[]
+            d['iso'] = []
             if d.has_key('ss_name'):
                 Nss = Nss + len(d['ss_name'])
                 ss_offset=[]
                 for n in d['ss_name']:
                     if n in self.name:
-                        self.name[n].append(eval(ns))
+                        self.name[n].append(ns)
                     else:
-                        self.name[n]=[eval(ns)]
+                        self.name[n]=[ns]
                     ss_offset.append(0)
                 if not d.has_key('ss_offset'):
                     d['ss_offset']=ss_offset
@@ -1595,7 +1596,7 @@ class Layout(PyLayers):
             # Two segments with the same end points are iso segments
             #
             for k in same_seg:
-                self.Gs.node[k]['iso'].append(eval(ns))
+                self.Gs.node[k]['iso'].append(ns)
             d['iso']=same_seg
 
         
@@ -1609,16 +1610,16 @@ class Layout(PyLayers):
             # 
             # add edge dictionnary to Gs node ns
             #
-            self.Gs.node[eval(ns)] = d
-            self.Gs.add_edge(nta,eval(ns))
-            self.Gs.add_edge(eval(ns),nhe)
+            self.Gs.node[ns] = d
+            self.Gs.add_edge(nta,ns)
+            self.Gs.add_edge(ns,nhe)
             if name not in self.display['layers']:
                 self.display['layers'].append(name)
-            self.labels[eval(ns)] = ns
+            self.labels[ns] = ns
             if name in self.name:
-                self.name[name].append(eval(ns))
+                self.name[name].append(ns)
             else:
-                self.name[name] = [eval(ns)]
+                self.name[name] = [ns]
 
         # Nss DEPRECATED    
         self.Nss = Nss
