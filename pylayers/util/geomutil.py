@@ -666,6 +666,8 @@ class Polygon(PyLayers,shg.Polygon):
         for pseg in seg:
             vnodes = vnodes + [pseg[0]]
             nseg = L.numseg(pseg[0],pseg[1],first=False)
+            # if nseg==0:
+            #     pdb.set_trace()
             if type(nseg)==int:
                 nseg=[nseg]
             else:

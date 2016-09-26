@@ -285,6 +285,7 @@ class Layout(PyLayers):
                 if rebuild:  
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y':
+                
                     self.build()
                     self.lbltg.append('s')
                     self.dumpw()
@@ -1343,6 +1344,11 @@ class Layout(PyLayers):
             config.set("info","format","cart")
         config.set("info","version",current_version)
         config.set("info","type",self.type)
+        
+        if self.type=='floorplan':
+            config.add_section("floorplan")
+            config.set("floorplan","zceil",self.zceil)
+
         #config.set("info",'Npoints',self.Np)
         #config.set("info",'Nsegments',self.Ns)
         #config.set("info",'Nsubsegments',self.Nss)
@@ -1429,6 +1435,7 @@ class Layout(PyLayers):
         if "CEIL" not in lslab:
             ceil = {'color': 'grey20', 'index': 6, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs","CEIL",ceil)
+
         if "FLOOR" not in lslab:
             floor = {'color': 'grey40', 'index': 7, 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs","FLOOR",floor)
@@ -1501,13 +1508,14 @@ class Layout(PyLayers):
             self.sl.load(self.fileslabini)
             for k in self.sl.keys():
                 self.name[k] = []
+
         if di['info'].has_key('type'):
             self.type = di['info']['type']
             if self.type=='floorplan':
                 self.zceil=eval(di['floorplan']['zceil'])
         else:
             self.type = 'floorplan'
-            self.zceil = 3
+            self.zceil = 2.9
         # manage ini file with latlon coordinates
         #
         # if the format is latlon, coordinates are converted into 
@@ -1564,11 +1572,13 @@ class Layout(PyLayers):
         # SEGMENTS 
         #
         # update segments section
-        Nss = 0
+        
         self.name['AIR']=[]
-        pdb.set_trace()
-        Ns = len(di['segments'].keys())
-        for ns,key in enumerate(di['segments']):
+        self.name['_AIR']=[]
+        #pdb.set_trace()
+        cpt = 1
+        for k,key in enumerate(di['segments']):
+            ns = k+1
             self.Gs.add_node(ns) # add segment node
             d = eval(di['segments'][key])
             d['ncycles'] = []
@@ -1588,7 +1598,9 @@ class Layout(PyLayers):
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]
+
             # is there an other segments with the same neighbors ? 
+
             nbnta = self.Gs.neighbors(nta)
             nbnhe = self.Gs.neighbors(nhe)
             same_seg = list(set(nbnta).intersection(nbnhe))
@@ -1597,6 +1609,7 @@ class Layout(PyLayers):
             #
             for k in same_seg:
                 self.Gs.node[k]['iso'].append(ns)
+            
             d['iso']=same_seg
 
         
@@ -1606,13 +1619,32 @@ class Layout(PyLayers):
 
             x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
             # round to mm
-            self.Gs.pos[eval(ns)] = (round(1000*x)/1000.,round(1000*y)/1000.)
+            self.Gs.pos[ns] = (round(1000*x)/1000.,round(1000*y)/1000.)
             # 
             # add edge dictionnary to Gs node ns
             #
             self.Gs.node[ns] = d
             self.Gs.add_edge(nta,ns)
             self.Gs.add_edge(ns,nhe)
+
+            #
+            # Complement segment which do not get to zceil with an iso segment 
+            # with _AIR property
+            # 
+            if d['z'][1]<self.zceil:
+                self.Ns = self.Ns+1
+                self.Gs.add_node(self.Ns) # add segment node
+                self.Gs.node[self.Ns] = copy.deepcopy(d)
+                self.Gs.add_edge(nta,self.Ns)
+                self.Gs.add_edge(self.Ns,nhe)
+                self.Gs.node[self.Ns]['z']=(d['z'][1],self.zceil)
+                self.Gs.node[self.Ns]['name']='_AIR'
+                self.Gs.node[self.Ns]['iso'].append(ns)
+                self.Gs.node[ns]['iso'].append(self.Ns)
+                self.Gs.pos[self.Ns]=self.Gs.pos[ns]
+                self.name['_AIR'].append(self.Ns)
+                
+
             if name not in self.display['layers']:
                 self.display['layers'].append(name)
             self.labels[ns] = ns
@@ -1622,7 +1654,7 @@ class Layout(PyLayers):
                 self.name[name] = [ns]
 
         # Nss DEPRECATED    
-        self.Nss = Nss
+        #self.Nss = Nss
 
         # compliant with config file without  material/slab information
 
@@ -5439,6 +5471,7 @@ class Layout(PyLayers):
         #    self.Gt.node[ccy]['isopen']=isopen
         #    self.Gt.node[ccy]['isopen']=isopen
         # update ncycles in Gs
+        pdb.set_trace()
         self._updGsncy()
 
         #
@@ -6446,7 +6479,6 @@ class Layout(PyLayers):
         #   not enough information available.
         #   The diffraction points are not known yet
         
-        
 
         self._interlist()
 
@@ -6474,6 +6506,7 @@ class Layout(PyLayers):
             #vnodes = np.array(self.Gt.node[k]['vnodes'])
 
             vnodes = self.Gt.node[ncy]['polyg'].vnodes
+        
             #
             # add iso segments to vnodes
             #
@@ -6492,6 +6525,8 @@ class Layout(PyLayers):
             self.Gt.node[ncy]['polyg'].vnodes = vnodes
             #vnodes = self.Gt.node[k]['polyg'].vnodes
             for n in vnodes:
+                if n==0:
+                    pdb.set_trace()
                 if ncy not in self.Gs.node[n]['ncycles']:
                     self.Gs.node[n]['ncycles'].append(ncy)
                     if n>0:
