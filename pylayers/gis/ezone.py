@@ -167,12 +167,14 @@ def expand(A):
     A : np.array (MxN)
 
     """
+
     M,N = A.shape
     t = np.kron(A.flatten(),np.ones(N))
     u = np.triu(np.ones((N,N))).flatten()
     v = np.kron(np.ones(M),u)
     w  = t *  v
     return(w.reshape(M,N,N).swapaxes(1,2)[:,1:,:])
+    
     #return(w.reshape(M,N,N).swapaxes(1,2))
 
 def conv(extent,m,mode='tocart'):

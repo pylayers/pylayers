@@ -3287,6 +3287,9 @@ class FUsignal(FBsignal,Usignal):
 
     def show(self,**kwargs):
         """ pcolor visualization of Modulus and Phase
+
+        vmin 
+        vmax
         """
 
         if 'fig' not in kwargs:

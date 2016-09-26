@@ -3224,7 +3224,7 @@ def intersect_line_seg(line,seg):
     seg :  (pta,phe)
     
     Returns
-    -------
+    -------D
     
     k : intersection parameter (0<k<1 if intersection)
     M : intersection point 

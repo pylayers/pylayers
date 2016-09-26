@@ -166,7 +166,7 @@ class Layout(PyLayers):
         self.hasboundary=False
         self.coordinates='cart'
         self.version='1.1'
-        
+        self.type='floorplan'
         #
         # setting display option
         #
@@ -1327,7 +1327,7 @@ class Layout(PyLayers):
 
         """
         print self._filename
-        current_version = 1.1
+        current_version = 1.2
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
         config.add_section("info")
@@ -1342,6 +1342,7 @@ class Layout(PyLayers):
         else:
             config.set("info","format","cart")
         config.set("info","version",current_version)
+        config.set("info","type",self.type)
         #config.set("info",'Npoints',self.Np)
         #config.set("info",'Nsegments',self.Ns)
         #config.set("info",'Nsubsegments',self.Nss)
@@ -1500,7 +1501,13 @@ class Layout(PyLayers):
             self.sl.load(self.fileslabini)
             for k in self.sl.keys():
                 self.name[k] = []
-
+        if di['info'].has_key('type'):
+            self.type = di['info']['type']
+            if self.type=='floorplan':
+                self.zceil=eval(di['floorplan']['zceil'])
+        else:
+            self.type = 'floorplan'
+            self.zceil = 3
         # manage ini file with latlon coordinates
         #
         # if the format is latlon, coordinates are converted into 
@@ -1532,6 +1539,9 @@ class Layout(PyLayers):
 
         self.ax = self.display['box']
 
+        #
+        # POINTS 
+        #
         # update points section
         for nn in di['points']:
             nodeindex = eval(nn)
@@ -1550,10 +1560,13 @@ class Layout(PyLayers):
             self.Gs.pos[nodeindex] = (round(1000*x)/1000.,round(1000*y)/1000.)
             self.labels[nodeindex] = nn
 
+        #
+        # SEGMENTS 
+        #
         # update segments section
         Nss = 0
         self.name['AIR']=[]
-    
+        pdb.set_trace()
         for ns in di['segments']:
             self.Gs.add_node(eval(ns)) # add segment node
             d = eval(di['segments'][ns])
@@ -1578,6 +1591,9 @@ class Layout(PyLayers):
             nbnta = self.Gs.neighbors(nta)
             nbnhe = self.Gs.neighbors(nhe)
             same_seg = list(set(nbnta).intersection(nbnhe))
+            #
+            # Two segments with the same end points are iso segments
+            #
             for k in same_seg:
                 self.Gs.node[k]['iso'].append(eval(ns))
             d['iso']=same_seg
@@ -1590,6 +1606,9 @@ class Layout(PyLayers):
             x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
             # round to mm
             self.Gs.pos[eval(ns)] = (round(1000*x)/1000.,round(1000*y)/1000.)
+            # 
+            # add edge dictionnary to Gs node ns
+            #
             self.Gs.node[eval(ns)] = d
             self.Gs.add_edge(nta,eval(ns))
             self.Gs.add_edge(eval(ns),nhe)
@@ -1600,6 +1619,8 @@ class Layout(PyLayers):
                 self.name[name].append(eval(ns))
             else:
                 self.name[name] = [eval(ns)]
+
+        # Nss DEPRECATED    
         self.Nss = Nss
 
         # compliant with config file without  material/slab information
@@ -1630,8 +1651,8 @@ class Layout(PyLayers):
         if self.display.has_key('inverse'):
             self.display['overlay_flip'] = ""
             self.display.pop('inverse')
-
             self.save()
+
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
         # 
@@ -5770,6 +5791,8 @@ class Layout(PyLayers):
 
 
     def _visual_check(self):
+        """ visual checking of graphs
+        """
         fig,axs=plt.subplots(2,2)
 
         try:

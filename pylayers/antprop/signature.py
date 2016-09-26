@@ -3068,6 +3068,7 @@ class Signatures(PyLayers,dict):
             #print s
             # if s==(4,2):
             #     pdb.set_trace()
+
             # if (us%20)==0:
             #     print us,'/',len(lis)
             # us counter
