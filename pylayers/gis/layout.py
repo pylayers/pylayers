@@ -764,6 +764,8 @@ class Layout(PyLayers):
         # degree of segment nodes
         degseg = map(lambda x : nx.degree(self.Gs,x),useg)
 
+
+       
         assert(np.all(array(degseg)==2)) # all segments must have degree 2
 
         #
@@ -1513,9 +1515,11 @@ class Layout(PyLayers):
             self.type = di['info']['type']
             if self.type=='floorplan':
                 self.zceil=eval(di['floorplan']['zceil'])
+                self.zfloor=eval(di['floorplan']['zfloor'])
         else:
             self.type = 'floorplan'
-            self.zceil = 2.9
+            self.zfloor = 0
+            self.zceil = 3
         # manage ini file with latlon coordinates
         #
         # if the format is latlon, coordinates are converted into 
@@ -1575,87 +1579,70 @@ class Layout(PyLayers):
         
         self.name['AIR']=[]
         self.name['_AIR']=[]
-        #pdb.set_trace()
-        Nss = 0
-        for k,key in enumerate(di['segments']):
-            ns = k+1
-            self.Gs.add_node(ns) # add segment node
-            d = eval(di['segments'][key])
-            d['ncycles'] = []
-            d['iso'] = []
-            if d.has_key('ss_name'):
-                Nss = Nss + len(d['ss_name'])
-                ss_offset=[]
-                for n in d['ss_name']:
-                    if n in self.name:
-                        self.name[n].append(ns)
-                    else:
-                        self.name[n]=[ns]
-                    ss_offset.append(0)
-                if not d.has_key('ss_offset'):
-                    d['ss_offset']=ss_offset
+        
 
-            name = d['name']
+        for k,key in enumerate(di['segments']):
+
+            d = eval(di['segments'][key])
             nta = d['connect'][0]
             nhe = d['connect'][1]
-
-            # is there an other segments with the same neighbors ? 
-
-            nbnta = self.Gs.neighbors(nta)
-            nbnhe = self.Gs.neighbors(nhe)
-            same_seg = list(set(nbnta).intersection(nbnhe))
-            #
-            # Two segments with the same end points are iso segments
-            #
-            for k in same_seg:
-                self.Gs.node[k]['iso'].append(ns)
             
-            d['iso']=same_seg
-
-        
             if not d.has_key('offset'):
-                d['offset'] = 0
-
-
-            x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-            # round to mm
-            self.Gs.pos[ns] = (round(1000*x)/1000.,round(1000*y)/1000.)
-            # 
-            # add edge dictionnary to Gs node ns
-            #
-            self.Gs.node[ns] = d
-            self.Gs.add_edge(nta,ns)
-            self.Gs.add_edge(ns,nhe)
-
-            #
-            # Complement segment which do not get to zceil with an iso segment 
-            # with _AIR property
-            # 
-            if d['z'][1]<self.zceil:
-                self.Ns = self.Ns+1
-                self.Gs.add_node(self.Ns) # add segment node
-                self.Gs.node[self.Ns] = copy.deepcopy(d)
-                self.Gs.add_edge(nta,self.Ns)
-                self.Gs.add_edge(self.Ns,nhe)
-                self.Gs.node[self.Ns]['z']=(d['z'][1],self.zceil)
-                self.Gs.node[self.Ns]['name']='_AIR'
-                self.Gs.node[self.Ns]['iso'].append(ns)
-                self.Gs.node[ns]['iso'].append(self.Ns)
-                self.Gs.pos[self.Ns]=self.Gs.pos[ns]
-                self.name['_AIR'].append(self.Ns)
-                
-
-            if name not in self.display['layers']:
-                self.display['layers'].append(name)
-            self.labels[ns] = ns
-            if name in self.name:
-                self.name[name].append(ns)
+                offset = 0
             else:
-                self.name[name] = [ns]
+                offset = d['offset']
+            #
+            # iso segments 
+            #
+            if d.has_key('ss_name'):
+        
+                for k in range(len(d['ss_name'])):
+                    if not d.has_key('ss_offset'):
+                        offset=0
+                    else: 
+                        offset = d['ss_offset'][k]
+                    
+                    ssname = d['ss_name'][k]
+                    
+                    # add a new segment 
+                    
+                    num = self.add_segment(nta,nhe,
+                        name=ssname,
+                        offset= offset,
+                        z=d['ss_z'][k])
 
-        # Nss DEPRECATED    
-        self.Nss = Nss
 
+                    # x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+                    # # round to mm
+                    # self.Gs.pos[num] = (round(1000*x)/1000.,round(1000*y)/1000.)
+            #
+            # single segment
+            #
+            else:
+                name = d['name']
+                z   = d['z']
+                num = self.add_segment(nta,nhe,
+                        name = name,
+                        offset = offset,
+                        z = z)
+
+                #
+                # Complement single segment which do not reach zceil or zfloor with 
+                # an iso segment with _AIR property
+                # 
+                if z[1]<self.zceil:
+                    num = self.add_segment(nta,nhe,
+                        name = 'AIR',
+                        offset = offset,
+                        z = (d['z'][1],self.zceil))
+                    
+                if z[0]>self.zfloor:
+                    num = self.add_segment(nta,nhe,
+                        name = 'AIR',
+                        offset = offset,
+                        z = (d['z'][1],self.zceil))
+    
+        
         # compliant with config file without  material/slab information
 
         if config.has_section('files'):
@@ -1962,44 +1949,32 @@ class Layout(PyLayers):
         transition : boolean
         ncycles : list of involved cycles
         connect : list of point number
+        iso : list of isosegment 
+    
+        If a segment is _AIR it cannnot be duplicated 
 
         """
-
-
-
+        
         # if 2 points are selected
         if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
-            if not np.any([i in nx.neighbors(self.Gs,n1) for i in nx.neighbors(self.Gs,n2)]):
-
-                nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
-                up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
-                lp = len(up)                        ## lp : number of segments  (can be zero)
-                if lp>0:
-                    e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
-                else:
-                    e1 = np.array([1])
-                e2 = nn[up]                         ## e2 : current list of segment number
-                c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
-                tn = e1[c]                          ## tn[c] free segment number
-                #print tn
-                try:
-                    num = tn[0]
-                except:
-                    num = max(self.Gs.node.keys()) + 1
-                    if num == 0:
-                        num = 1
+            nseg =[ s for s in self.Gs.node if s >0]
+            if len(nseg)>0:
+                num = max(nseg) + 1
             else:
-                if verbose:
-                    print "segment already exists"
-                return
+                num = 1
         else:
             if verbose :
                 print "add_segment : error not a node", n1, n2
             return
+
+
         transition = False
-        if ((name == 'AIR') or (name == '_AIR')):
+        if (name == '_AIR'):
         #if name == 'AIR':
             transition=True
+        
+        
+        
 
         p1 = np.array(self.Gs.pos[n1])
         p2 = np.array(self.Gs.pos[n2])
@@ -2007,22 +1982,56 @@ class Layout(PyLayers):
         t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
 
         #
-        # n = t x z
+        # n = t x z  (2D) 
         #
 
         norm = np.array([t[1], -t[0], 0])
+
+        #
+        # Two segments with the same end points are iso segments
+        #
+        # is there an other segments with the same neighbors ? 
+
+        nbnta = self.Gs.neighbors(n1)
+        nbnhe = self.Gs.neighbors(n2)
+        same_seg = list(set(nbnta).intersection(nbnhe))
+
+        #
+        # Impossible to have duplicated _AIR
+        #
+        if (name == '_AIR'):
+            if len(same_seg)>0:
+                return None
+
         self.Gs.add_node(num, name=name, 
                               z=z,
                               norm=norm,
                               transition=transition,
                               offset=offset,
                               connect=[n1,n2],
-                              iso=[]
+                              iso = [],
+                              ncycles=[]
                               )
+        
 
+        for k in same_seg:
+            self.Gs.node[k]['iso'].append(num)   
+            self.Gs.node[num]['iso'].append(k)
+
+        #
+        # Segment position in the middle
+        #
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
+
+        #
+        # Connectivity 
+        #
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
+
+        #
+        # Update current total number of segments 
+        #
         self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
         try:
@@ -5390,6 +5399,7 @@ class Layout(PyLayers):
         mapoldcy={c:c for c in self.Gt.nodes() }
 
         self.showG('st',aw=1)
+       
         for a in _airseg:
             n0,n1=iuE[a]
             found=False
