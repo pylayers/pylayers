@@ -18,7 +18,7 @@ DL=DLink(L=Layout('Luebbers.ini'))
 DL.a = np.array(([25,21.67,2.]))
 # DL.a = np.array(([37.5,52.2,2.]))
 DL.b = np.array(([12.5,30.,2.]))
-DL.fGHz=np.linspace(0.9,1.3,5)
+DL.fGHz=np.linspace(0.9,10,500)
 
 DL.Aa=Antenna(typ='Omni')
 DL.Ab=Antenna(typ='Omni')
