@@ -1576,7 +1576,7 @@ class Layout(PyLayers):
         self.name['AIR']=[]
         self.name['_AIR']=[]
         #pdb.set_trace()
-        cpt = 1
+        Nss = 0
         for k,key in enumerate(di['segments']):
             ns = k+1
             self.Gs.add_node(ns) # add segment node
@@ -1654,7 +1654,7 @@ class Layout(PyLayers):
                 self.name[name] = [ns]
 
         # Nss DEPRECATED    
-        #self.Nss = Nss
+        self.Nss = Nss
 
         # compliant with config file without  material/slab information
 
@@ -5279,17 +5279,17 @@ class Layout(PyLayers):
         ####       ( polygon , array of _AIR segments)
         luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lTP]
 
-       
         #
-        # For a triangle polygon the number of vnodes = 6
+        # For a triangle polygon the number of vnodes
         # creates new _AIR segments
         #
         _airseg = []
         for p,uaw in luaw :
             # for each vnodes == 0, add an _AIR
             for aw in uaw:
-                _airseg.append(self.add_segment( p.vnodes[np.mod(aw-1,6)],
-                                                 p.vnodes[np.mod(aw+1,6)]
+                modpt = len(p.vnodes)
+                _airseg.append(self.add_segment( p.vnodes[np.mod(aw-1,modpt)],
+                                                 p.vnodes[np.mod(aw+1,modpt)]
                                                 ,name='_AIR',
                                                 z = [0,40000000],
                                                 verbose=False))
@@ -5388,6 +5388,8 @@ class Layout(PyLayers):
         #    Loop over AIR segments
         #
         mapoldcy={c:c for c in self.Gt.nodes() }
+
+        self.showG('st',aw=1)
         for a in _airseg:
             n0,n1=iuE[a]
             found=False
@@ -5440,6 +5442,8 @@ class Layout(PyLayers):
                 # do not apply g2npy  
                 self.del_segment(a,verbose=False,g2npy=False)
                 mapoldcy[n1]=n0
+                # fig,a=self.showG('st',aw=1)
+                # plt.show()
         ######
         # fix renumbering Gt nodes 
 
@@ -5471,7 +5475,7 @@ class Layout(PyLayers):
         #    self.Gt.node[ccy]['isopen']=isopen
         #    self.Gt.node[ccy]['isopen']=isopen
         # update ncycles in Gs
-        pdb.set_trace()
+    
         self._updGsncy()
 
         #
