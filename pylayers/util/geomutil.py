@@ -3242,6 +3242,7 @@ def intersect_line_seg(line,seg):
     if (abs(den) > 0):
         k = num/den
     else:
+        #k = np.inf*np.sign(den)
         k = 2
     M = pta+k*vseg
     return(k,M)

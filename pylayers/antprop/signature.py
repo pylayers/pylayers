@@ -3175,64 +3175,85 @@ class Signatures(PyLayers,dict):
                         #vlp vrpdb.set_trace()
                         if len(tahe)<2:
                             tahe.append(th)
-                            valid_bool = True
+                            seg_ratio = 1.0
                         else:
                             pta0 = tahe[0][0]   # tail first segment
                             phe0 = tahe[0][1]   # head first segment
                             pta_ = tahe[-1][0]  # tail last segment
                             phe_ = tahe[-1][1]  # head last segment 
+
+                            #
+                            # Calculates the left and righ vector of the cone 
+                            #
+                            #  vl left vector 
+                            #  vr right vector 
                             if not (geu.ccw(pta0,phe0,phe_) ^
                                     geu.ccw(phe0,phe_,pta_) ):
-                                # vr = (pta0,pta_)
-                                # vl = (phe0,phe_)
                                 vr = (pta0,phe_)
                                 vl = (phe0,pta_)
                             else:  # twisted case
-                                # vr = (pta0,phe_)
-                                # vl = (phe0,pta_)
                                 vr = (pta0,pta_)
                                 vl = (phe0,phe_)
 
-                            # lta = geu.isleft(th[0][:,None],vl[0][:,None],vl[1][:,None])
-                            # rta = geu.isleft(th[0][:,None],vr[0][:,None],vr[1][:,None])
-                            # lhe = geu.isleft(th[1][:,None],vl[0][:,None],vl[1][:,None])
-                            # rhe = geu.isleft(th[1][:,None],vr[0][:,None],vr[1][:,None])
+                            # vr_n = vr/np.sqrt(np.sum(vr*vr,axis=0))
+                            # vl_n = vl/np.sqrt(np.sum(vl*vl,axis=0))
+                            # alpha_cone = np.arcos(np.dot(vr_n,vl_n))
 
-                            # out = (lta & lhe ) | (~rta & ~rhe)
-                            # inside = ~out
-                            #if inside:   # new segment is inside the beam
+                            # prepare lines and seg argument for intersection checking
                             linel = (vl[0],vl[1]-vl[0])
                             liner = (vr[0],vr[1]-vr[0])
+                            # from origin mirrored segment to be tested 
                             seg   = (th[0],th[1])
-                            #pdb.set_trace()
+                            
                             kl,p_int_left  = geu.intersect_line_seg(linel,seg)
                             kr,p_int_right = geu.intersect_line_seg(liner,seg)
-
+                            vchord = p_int_left-p_int_right 
+                            chord =  np.sqrt(np.sum(vchord*vchord,axis=0))
                             # signature is valid until proved false
-                            valid_bool = True
-                            pdb.set_trace()
+                            # valid_bool = True
+                            seg_ratio = 1.0
+                            
                             if ((abs(kl)>1) & (abs(kr)>1)): # 0 intersection points 
+                                # if kl and kr have different sign 
+                                # the segment is fully in the cone
+                                # 
                                 if (kl*kr)<0:
+                                    vseg = th[1]-th[0]
+                                    lseg = np.sqrt(np.sum(vseg*vseg,axis=0))
+                                    seg_ratio = lseg/chord
                                     tha = th
                                     tahe.append(tha)
                                 else: # outside cone
-                                    valid_bool = False
-                            if ((abs(kl)<=1) & (abs(kr)<=1)): # 2 intersection points 
+                                    seg_ratio = 0
+                            elif ((abs(kl)<=1) & (abs(kr)<=1)): # 2 intersection points 
                                 tha = np.vstack((p_int_left,p_int_right))
                                 tahe.append(tha)
-                            if ((abs(kl)<=1) & (abs(kr)>1)):
-                                if kr<kl:
+                                seg_ratio = 1
+
+                            elif ((abs(kl)<=1) & (abs(kr)>1)):  # left line intersects while right line don't
+                                if kr<kl: 
                                     tha = np.vstack((th[0],p_int_left))
                                 else:
                                     tha = np.vstack((p_int_left,th[1]))
                                 tahe.append(tha)
-                            if ((abs(kr)<=1) & (abs(kl)>1)):
+                                vseg = tha[1]-tha[0]
+                                lseg = np.sqrt(np.sum(vseg*vseg,axis=0))
+                                seg_ratio = lseg/chord
+
+                            elif ((abs(kr)<=1) & (abs(kl)>1)):  # righ line intersects while line line don't
                                 if kl<kr:
                                     tha = np.vstack((th[0],p_int_right))
                                 else:
                                     tha = np.vstack((p_int_right,th[1]))
                                 tahe.append(tha)
-                        if valid_bool:
+                                vseg = tha[1]-tha[0]
+                                lseg = np.sqrt(np.sum(vseg*vseg,axis=0))
+                                seg_ratio = lseg/chord
+                            else:
+                                pdb.set_trace()
+                        #print visited,seg_ratio
+                        #print visited,tahe
+                        if seg_ratio>threshold:
                             # 
                             # Check if the targer has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -3251,21 +3272,15 @@ class Signatures(PyLayers,dict):
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
-                            nexti  = [it for k,it in enumerate(outint) if (proint[k]>threshold)]
+                            nexti  = [it for k,it in enumerate(outint)]
                             stack.append(iter(nexti))
                         else:
-                            #ltahe = tahe+[th]
-                            #showsig2(visited,self.L,ltahe)
-                            #pdb.set_trace()  
-                            # go back
-                            #pdb.set_trace()
-                            #print visited
+                            
                             if len(visited)>1:
                                 if len(visited[-2])==2:
                                     R.pop()
                             last = visited.pop()
-                            #tahe.pop()
-                            #R.pop()
+                            
                             lawp.pop()
 
                 else:
@@ -3274,7 +3289,10 @@ class Signatures(PyLayers,dict):
                         if len(visited[-2])==2:
                             R.pop()
                     last = visited.pop()
-                    tahe.pop()
+                    try:
+                        tahe.pop()
+                    except:
+                        pdb.set_trace()
                     #R.pop()
                     try:
                         lawp.pop()
