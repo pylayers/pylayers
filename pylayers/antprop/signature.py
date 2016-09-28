@@ -3073,16 +3073,16 @@ class Signatures(PyLayers,dict):
             #     print us,'/',len(lis)
             # us counter
             # s : interaction 
-            # s[0] : point or segment
+            # s[0] : point (<0) or segment (>0)
             # pts : list of neighbour nodes
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
             else:
                 tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
-            #R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-            #for mirroring 
-            #R=[[S0,v0],[S1,v1],...]
+            # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
+            # for mirroring 
+            # R=[[S0,v0],[S1,v1],...]
             R = [(np.eye(2),np.array([0,0]))]
 
             visited = [s]
@@ -3138,7 +3138,7 @@ class Signatures(PyLayers,dict):
                         # and a translation vector for doing the mirroring 
                         # operation
 
-                        #diffraction (retrieve a point)
+                        # diffraction (retrieve a point)
                         if len(visited[-2]) == 1:
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
@@ -3165,11 +3165,7 @@ class Signatures(PyLayers,dict):
                         # apply current chain of symmetries
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
-                        #pdb.set_trace()
-                        #for r in R[::-1]: 
-                        #for r in R:
-                        #    th = np.einsum('ki,ij->kj',th,r[0])+r[1]
-                        #pdb.set_trace()
+                        
                         ik = 1
                         r = R[-ik]
                         while np.any(r[0]!=np.eye(2)):     
@@ -3211,7 +3207,10 @@ class Signatures(PyLayers,dict):
                             #pdb.set_trace()
                             kl,p_int_left  = geu.intersect_line_seg(linel,seg)
                             kr,p_int_right = geu.intersect_line_seg(liner,seg)
+
+                            # signature is valid until proved false
                             valid_bool = True
+                            pdb.set_trace()
                             if ((abs(kl)>1) & (abs(kr)>1)): # 0 intersection points 
                                 if (kl*kr)<0:
                                     tha = th
@@ -3234,8 +3233,8 @@ class Signatures(PyLayers,dict):
                                     tha = np.vstack((p_int_right,th[1]))
                                 tahe.append(tha)
                         if valid_bool:
-                            #showsig2(visited,self.L,tahe)
-                            #pdb.set_trace()  
+                            # 
+                            # Check if the targer has been reached
                             # sequence is valid and last interaction is in the list of targets   
                             if (interaction in lit) or (interaction[-1]==self.target):
                                 anstr = np.array(map(lambda x: x[0],visited))

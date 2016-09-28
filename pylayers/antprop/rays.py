@@ -778,7 +778,7 @@ class Rays(PyLayers,dict):
         # vertical plane
         #
 
-        d = self.mirror(H=H, N=N, a=tx[2], b=rx[2])
+        d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])
         
 
         #
