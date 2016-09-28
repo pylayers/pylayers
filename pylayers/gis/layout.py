@@ -22,6 +22,7 @@ import struct as stru
 from   scipy import io
 import doctest
 import random
+import triangle
 import matplotlib.pyplot as plt
 import matplotlib.colors as clr
 import networkx as nx
@@ -9678,7 +9679,7 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False,**kwargs):
+    def _show3(self,centered=False,newfig=False,opacity=1.,ceil_opacity=1.,show_ceil=False,cyid=False,**kwargs):
         """ mayavi 3D vizualisation
 
         Parameters
@@ -9692,6 +9693,8 @@ class Layout(PyLayers):
             if True the layout is centered around its center of gravity
         cyid : boolean
             display cycle number
+        show_ceil: boolean
+            display ceil or not
 
         Notes
         -----
@@ -9842,7 +9845,7 @@ class Layout(PyLayers):
         cold = pyu.coldict()
         color=np.zeros((4*(cen+en),3))
         for i in range(en + cen):
-            q = 4 * i
+            # q = 4 * i
             if i < en:
                 ne = dikn[i]
                 name = self.Gs.node[ne]['name']
@@ -9908,7 +9911,6 @@ class Layout(PyLayers):
 
 
 
-
         mesh = tvtk.PolyData(points=points, polys=boxes)
         mesh.point_data.scalars = sc
         mesh.point_data.scalars.name = 'scalars'
@@ -9929,7 +9931,60 @@ class Layout(PyLayers):
                                     color=(0, 0, 0), )
         f.children[-1].name='Layout ' + self._filename
 
-        
+        if show_ceil==True:
+            if len(self.Gt.nodes())!=0:
+                uin=[kn for kn in self.Gt.nodes() if self.Gt.node[kn]['indoor']==True]
+                
+                ptc=np.ndarray(shape=(3,0))
+                boxc=np.ndarray(shape=(0,3))
+                cpt = 0
+                for u in uin:
+                    p = self.Gt.node[u]['polyg']
+                    no = self.Gt.node[u]['polyg'].vnodes[self.Gt.node[u]['polyg'].vnodes>0]
+                    for n in no:
+                        if self.Gs.node[n]['z'][1] != 40000000:
+                            h=self.Gs.node[n]['z'][1]
+                            break
+                    vert = {"vertices":np.array(p.exterior.xy).T}
+                    dt = triangle.triangulate(vert)
+                    nbpt=len(dt['vertices'])
+                    pt = np.vstack((dt['vertices'].T,[h]*nbpt))
+                    box = dt['triangles']
+                    ptc = np.hstack((ptc,pt))
+                    boxc = np.vstack((boxc,box+cpt))
+                    cpt=cpt+nbpt
+
+
+                # manage Ceil color
+                colname = sl['CEIL']['color']
+                colhex = cold[colname]
+                colf = np.repeat((pyu.rgb(colhex))[np.newaxis,:],4,axis=0)
+                color = np.vstack((color,colf))
+
+                # trick for correcting  color assignement
+
+                sc=tvtk.UnsignedCharArray()
+                sc.from_array(color)
+
+                meshc = tvtk.PolyData(points=ptc.T, polys=boxc)
+                meshc.point_data.scalars = sc
+                meshc.point_data.scalars.name = 'scalars'
+                mlab.pipeline.surface(meshc, opacity=ceil_opacity,reset_zoom=False)
+
+                    # ptc = 
+
+
+
+                    # ptcxy = np.array([self.Gt.node[u]['polyg'].exterior.xy[0],self.Gt.node[u]['polyg'].exterior.xy[1]])
+                    # ptcz = [self.Gs.node[self.Gt.node[u]['polyg'].vnodes[1]]['z'][1]]*len(self.Gt.node[u]['polyg'].exterior.xy[0])
+                    # ptc = np.vstack((ptcxy,ptcz)) 
+                    # nbpt = ptc.shape[1]
+                    # pdb
+                    # ceil = tvtk.PolyData(points=ptc.T, polys=np.arange(nbpt).reshape(1,nbpt))
+                    # surf2 = mlab.pipeline.surface(ceil, opacity=opacity)
+                    # import ipdb
+                    # ipdb.set_trace()
+
         if cyid:
             if len(self.Gt.nodes())>0:
                 pk=self.Gt.pos.keys()

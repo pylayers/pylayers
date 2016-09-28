@@ -509,8 +509,10 @@ class Pattern(PyLayers):
 
         if self.grid :
             # Nth x Nph x Nf
-            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
-            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            # self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            # self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
+            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
             self.evaluated = True
         else:
             #
@@ -2344,7 +2346,7 @@ class Antenna(Pattern):
         self._mayamesh = mlab.mesh(x, y, z,
                                    scalars= scalar,
                                    resolution = 1,
-                                   opacity = opacity)
+                                   opacity = opacity,reset_zoom=False)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename
@@ -2405,12 +2407,13 @@ class Antenna(Pattern):
                      'T' : np.eye(3),
                      'minr' : 0.1,
                      'maxr' : 1 ,
+                     'scale':1.,
                      'tag' : 'Pat',
                      'txru' : 0,
                      'ilog' : False,
-                     'title':True
-                     }
+                     'title':True,
 
+                     }
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -2422,6 +2425,7 @@ class Antenna(Pattern):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         txru = kwargs['txru']
+        scale= kwargs['scale']
 
         po = kwargs['po']
         # T is an unitary matrix
@@ -2447,10 +2451,9 @@ class Antenna(Pattern):
         else : u = r
 
         r = minr + (maxr-minr) * u
-
-        x = r * np.sin(th) * np.cos(phi)
-        y = r * np.sin(th) * np.sin(phi)
-        z = r * np.cos(th)
+        x = scale*r * np.sin(th) * np.cos(phi)
+        y = scale*r * np.sin(th) * np.sin(phi)
+        z = scale*r * np.cos(th)
         if z.shape[1] != y.shape[1]:
             z = z*np.ones(y.shape[1])
         p = np.concatenate((x[...,None],
