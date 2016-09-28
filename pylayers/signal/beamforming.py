@@ -13,7 +13,8 @@ def weight(N,**kwags):
             kwargs[k]=defaluts[k]
 
     if typ=='uniform':
-        w
+        pass
+
 def rejection(w,theta,fGHz=10,d=[],thresh=0.1):
     """
     Calculate rejection for a given arbitrary array
