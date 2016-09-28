@@ -650,20 +650,38 @@ class Polygon(PyLayers,shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
+        vnodes is a list of point and segments of the polygon, is there are isosegments the sequence of iso segments 
+        is repeated between the termination points. L.numseg has been adapted in oreder to return either the first segment (default)
+        or the list of all segments
+
         """
         x,y = self.exterior.xy
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
         npts = [ L.ispoint(np.array(xx),tol=0.01) for xx in zip(x[0:-1],y[0:-1]) ]
         assert ( 0 not in npts), pdb.set_trace()
+        # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts,np.roll(npts,-1))
-        try:
-            nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
-        except:
-            import ipdb
-            ipdb.set_trace()
-        vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
-        self.vnodes = vnodes
+        vnodes = []
+        for pseg in seg:
+            vnodes = vnodes + [pseg[0]]
+            nseg = L.numseg(pseg[0],pseg[1],first=False)
+            # if nseg==0:
+            #     pdb.set_trace()
+            if type(nseg)==int:
+                nseg=[nseg]
+            else:
+                nseg = list(nseg)
+            vnodes = vnodes + nseg
+            
+        # pdb.set_trace()
+        # try:
+        #     nseg = map(lambda x : L.numseg(x[0],x[1],first=False),seg)
+        # except:
+        #     import ipdb
+        #     ipdb.set_trace()
+        # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
+        self.vnodes = np.array(vnodes)
 
     def ndarray(self):
         """ get a ndarray from a Polygon
@@ -3208,7 +3226,7 @@ def intersect_line_seg(line,seg):
     seg :  (pta,phe)
     
     Returns
-    -------
+    -------D
     
     k : intersection parameter (0<k<1 if intersection)
     M : intersection point 

@@ -1,0 +1,5 @@
+#!/bin/bash
+notedown $1 --to notebook ${1%%.md}.ipynb
+ipython nbconvert ${1%%.md}.ipynb --to latex --execute
+pdflatex ${1%%.md}.tex
+

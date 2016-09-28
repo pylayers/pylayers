@@ -252,19 +252,27 @@ class ADPchannel(bs.TUsignal):
                      'dphi':5
                     }
 
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
 
         Na = self.y.shape[0]
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
         u  = np.where(pdp==max(pdp))[0]
-        FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(fcGHz))
+        FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(kwargs['fcGHz']))
         Gmax = 10*np.log10(pdp[u])-FS[u] 
-        Gmax_r = np.round(Gmax[0]*100)/100.
-
+        Gmax_r = 24.77
+        Gmax   = 24.77
+        #Gmax_r = np.round(Gmax[0]*100)/100.
+        pdpd = 10*np.log10(pdp)-Gmax
+        u = np.where(pdpd>-118)
+        pdpd_thr = pdpd[u] 
+        PL = -10*np.log10(np.sum(10**(pdpd_thr/10.)))
         if kwargs['fig']==[]:
-            fig = plt.figure(figsize=figsize)
+            fig = plt.figure(figsize=kwargs['figsize'])
         else:
             fig = kwargs['fig'] 
-        if ax == []:
+        if kwargs['ax'] == []:
             ax  = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
@@ -283,13 +291,13 @@ class ADPchannel(bs.TUsignal):
 
         ax.set_xlim(10,1000)
         if kwargs['xlabel']:
-            ax.set_xlabel('Delay (ns) log scale',fontsize=fontsize) 
+            ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
         if kwargs['ylabel']:
-            ax.set_ylabel('level (dB)',fontsize=fontsize) 
-        ax.set_title(self._filename+' '+str(Gain))
+            ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
+        ax.set_title(self._filename+' '+str(PL))
         if kwargs['legend']:
             plt.legend(loc='best') 
-        return fig,ax
+        return fig,ax,PL
 
     def polarplot(self,**kwargs):
         defaults = { 'fig':[],
@@ -4307,7 +4315,7 @@ class Ctilde(PyLayers):
         self.Cpt = bs.FUsignal(fGHz, Cptl)
         self.Cpp = bs.FUsignal(fGHz, Cppl)
 
-        return self
+        #return self
 
     def Cg2Cl(self, Tt=[], Tr=[]):
         """ global reference frame to local reference frame
@@ -4554,7 +4562,7 @@ class Ctilde(PyLayers):
 
         return ECtt, ECpp, ECtp, ECpt
 
-    def cut(self,threshold=0.99):
+    def cut(self,threshold_dB=50):
         """ cut rays from a energy threshold
 
         Parameters
@@ -4566,17 +4574,21 @@ class Ctilde(PyLayers):
         """
         Ett, Epp, Etp, Ept = self.energy()
         Etot = Ett+Epp+Etp+Ept
-        u = np.argsort(Etot)
-        cumE = np.cumsum(Etot)/sum(Etot)
-        v = np.where(cumE<threshold)[0]
-
-        self.tauk = self.tauk[v]
-        self.tang = self.tang[v,:]
-        self.rang = self.rang[v,:]
-        self.Ctt.y = self.Ctt.y[v,:]
-        self.Cpp.y = self.Cpp.y[v,:]
-        self.Ctp.y = self.Ctp.y[v,:]
-        self.Cpt.y = self.Cpt.y[v,:]
+        u = np.argsort(Etot)[::-1]
+        #cumE = np.cumsum(Etot[u])/sum(Etot)
+        profdB = 10*np.log10(Etot[u]/np.max(Etot))
+        #v1 = np.where(cumE<threshold)[0]
+        v = np.where(profdB>-threshold_dB)[0]
+        w = u[v]
+        self.selected = w
+        self.Eselected = Etot[w]
+        self.tauk = self.tauk[w]
+        self.tang = self.tang[w,:]
+        self.rang = self.rang[w,:]
+        self.Ctt.y = self.Ctt.y[w,:]
+        self.Cpp.y = self.Cpp.y[w,:]
+        self.Ctp.y = self.Ctp.y[w,:]
+        self.Cpt.y = self.Cpt.y[w,:]
 
     def sort(self,typ='tauk'):
         """ sort Ctilde with respect to typ (default tauk)
@@ -4730,10 +4742,10 @@ class Ctilde(PyLayers):
         if Friis:
             H.applyFriis()
 
-        # average w.r.t frequency
-        Nf   = H.y.shape[-1]
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))
-        H.tk = H.taud
+        # # average w.r.t frequency
+        # Nf   = H.y.shape[-1]
+        # H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))
+        # H.tk = H.taud
 
         return(H)
 

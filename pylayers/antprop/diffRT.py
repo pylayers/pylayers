@@ -225,6 +225,12 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
 #        DTsoft = Rsoftoz*Rsoftnz*D1+Rsoftn*D3+(Rsofto*Rsoftn*D2+Rsofto*D4)
 #
 #        DThard = Rhardoz*Rhardnz*D1+Rhardn*D3+(Rhardo*Rhardn*D2+Rhardo*D4)
+    if np.isnan(Dsoft).any():
+        u = np.isnan(Dsoft)
+        pdb.set_trace()
+    if np.isnan(Dhard).any():
+        v = np.where(Dhard==np.nan)
+        pdb.set_trace()
     if debug:
         return Dsoft,Dhard,D1,D2,D3,D4
     else :
@@ -342,9 +348,8 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
         #pxF = 10**xF
         #uF = (np.abs(KLA[:,:]-pxF[:,None,None])).argmin(axis=0)
         val = np.maximum(np.log10(np.abs(KLA))-xF[0,None,None],0)
-        uF2 = len(F)*(val)/(xF[-1,None,None]-xF[0,None,None])
+        uF2 = (len(F)-1)*(val)/(xF[-1,None,None]-xF[0,None,None])
         uF2_int = np.floor(uF2).astype('int')
-        #pdb.set_trace()
         Fkla = F[uF2_int]
         #if np.max(Fkla) > 1:
         #    Warning('diffRT : Fkla tab probably wrong')
@@ -353,7 +358,9 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
 
     c5 = np.where(np.abs(tan)<1e-9)
     BL = np.ones(Di.shape)*L
-    Di[c5] = 0.5*np.sqrt(BL[c5])
+    Di[:,c5] = 0.5*np.sqrt(BL[c5])
+    # if np.isinf(Di).any():
+    #     pdb.set_trace()
 
     return(Di)
 
@@ -559,8 +566,8 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     if (er >= 0.0 ):
         if ( (( ur-1.0)<1e-16) & ((er-1.0)<1e-16) ):
-            Rs = np.zeros(len(th))
-            Rh = np.zeros(len(th))
+            Rs = np.zeros(len(th),dtype=complex)
+            Rh = np.zeros(len(th),dtype=complex)
 
         u1 = np.where(th >= 1.5*np.pi)
         u2 = np.where(th >= np.pi )
@@ -596,8 +603,8 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
         Rh  = (yy*st-bb)/(yy*st+bb)
 
     else: # metalic case
-        Rs = -np.ones(th.shape)
-        Rh =  np.ones(th.shape)
+        Rs = -np.ones(th.shape,dtype=complex)
+        Rh =  np.ones(th.shape,dtype=complex)
 
     roughness = 1.0
 

@@ -14,6 +14,10 @@ def weight(N,**kwags):
 
     if typ=='uniform':
         pass
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3d
 def rejection(w,theta,fGHz=10,d=[],thresh=0.1):
     """
     Calculate rejection for a given arbitrary array

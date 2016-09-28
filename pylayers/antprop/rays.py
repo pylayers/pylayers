@@ -639,7 +639,7 @@ class Rays(PyLayers,dict):
 
         return(fig,ax)
 
-    def mirror(self, H=3, N=1, a = [], b= []):
+    def mirror(self, H=3, N=1, za = [], zb= []):
         """ mirror a ray termination
 
         Parameters
@@ -652,10 +652,10 @@ class Rays(PyLayers,dict):
         N : int
             handle the number of mirror reflexions
 
-        a : float
+        za : float
             height of the point where the parametrization starts ( e.g. pTx[2])
 
-        b : float
+        zb : float
             height of the point where the parametrization ends ( e.g. pRx[2])
 
 
@@ -694,12 +694,12 @@ class Rays(PyLayers,dict):
         #
         # heights of transmitter and receiver
         #
-        if a == []:
-            a=self.pTx[2]
-        if b == []:
-            b=self.pRx[2]
-        ht = a
-        hr = b
+        if za == []:
+            za=self.pTx[2]
+        if zb == []:
+            zb=self.pRx[2]
+        ht = za
+        hr = zb
         assert (hr<H or H==0 or H == -1),"mirror : receiver higher than ceil height"
         assert (ht<H or H==0 or H == -1),"mirror : transmitter higher than ceil height"
 
@@ -779,6 +779,13 @@ class Rays(PyLayers,dict):
         #
 
         d = self.mirror(H=H, N=N, a=tx[2], b=rx[2])
+        
+
+        #
+        # Elimination of invalid diffraction point 
+        # If the diffaction point is a separation between 2 air wall 
+        # it should be removed.
+
 
         #
         # Phase 2 : calculate 2D parameterization in the horizontal plane
@@ -874,8 +881,8 @@ class Rays(PyLayers,dict):
                     # a1es : extended sorted horizontal + vertical parameterization
                     a1es = np.sort(a1e, axis=0)
 
-                    # #### Check if it exist same parameter value  in horizontal plane
-                    # #### and vertical plane. Move parameter is so.
+                    # #### Check if it exists the same parameter value in the horizontal plane
+                    # #### and the vertical plane. Move parameter if so.
                     da1es = np.diff(a1es,axis=0)
                     pda1es = np.where(da1es<1e-10)
                     a1es[pda1es]=a1es[pda1es]-1e-3
@@ -914,8 +921,6 @@ class Rays(PyLayers,dict):
                     elif l > 0 and Nint%2 ==0: # l>0 Nint even
                         u = np.mod(range(Nint), 2)
                     
-
-
                     #
                     u = u + 4
                     #
@@ -2210,7 +2215,10 @@ class Rays(PyLayers,dict):
         #print 'Rays evaluation'
         self.fGHz=fGHz
         # evaluation of interaction
+        
         self.I.eval(fGHz)
+        # if np.isnan(self.I.I).any():
+        #     pdb.set_trace()
         # evaluation of base B  (2x2)
         # B and B0 do no depend on frequency
         # just an axis extension (np.newaxis)

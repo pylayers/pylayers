@@ -1,5 +1,5 @@
 #!/bin/bash 
 export TMPVAR=$BASENAME
 export BASENAME=$PYLAYERS/data
-make test-code
+nosetests -x --debug-log test.log --with-id -s pylayers
 export BASENAME=$TMPVAR

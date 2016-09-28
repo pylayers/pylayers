@@ -5,15 +5,17 @@ import pdb
 # set the frequency range
 fGHz=np.arange(2.41,10.,0.05)
 # set the layout
-L=Layout('defstr.ini')
+L=Layout('defstr_new.ini')
 # set the link
 DL=DLink(L=L,fGHz=fGHz)
 #DL.Aa=Antenna(typ='Omni')
 #DL.Ab=Antenna(typ='Omn')
 
+#DL.b=np.array([766,1115,1.8])
+DL.eval(force=['sig','ray','Ct','H'],cutoff=8,ra_vectorized=True,diffraction=True)
 #DL.b=np.array([755,1110,1.5])
-DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
-dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
+#DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
+#dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
 #
 if DL.R.los:
     ak0 = DL.H.ak[0]
@@ -25,4 +27,4 @@ if DL.R.los:
 
 # Point outside
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True,ra_ceil_H=0)
-ak,tauk = DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
+#DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
