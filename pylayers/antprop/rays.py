@@ -557,7 +557,7 @@ class Rays(PyLayers,dict):
                     'alpharay':1,
                     'widthray':0.5,
                     'colray':'black',
-                    'ms':5,
+                    'ms':8,
                     'layout':True,
                     'points':True
                    }
