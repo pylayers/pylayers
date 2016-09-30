@@ -1,0 +1,912 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 @IETR) &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body role="document">
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../TOC.html">User Guide</a></li>
+            <li><a href="../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 &#64;IETR)</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#description-of-test-case-1-virtual-reality-office">Description of Test Case 1: Virtual reality office</a></li>
+<li><a class="reference internal" href="#deployment-considerations">Deployment considerations</a></li>
+<li><a class="reference internal" href="#parameters-of-ap-files">Parameters of AP files</a><ul>
+<li><a class="reference internal" href="#in-the-generation-of-the-ap-files-the-following-parameters-are-used">In the generation of the AP files the following parameters are used:</a></li>
+<li><a class="reference internal" href="#frequency-60000-000000">FREQUENCY 60000.000000</a></li>
+<li><a class="reference internal" href="#max-number-ref-2-000000">MAX_NUMBER_REF 2.000000</a></li>
+<li><a class="reference internal" href="#pts-density-0-000000">PTS_DENSITY 0.000000</a></li>
+<li><a class="reference internal" href="#pts-average-attenuation-18-000000">PTS_AVERAGE_ATTENUATION 18.000000</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#displaying-only-the-files-of-tc-1">Displaying only the files of TC 1</a></li>
+<li><a class="reference internal" href="#scenario-of-tc-1">Scenario of TC 1</a></li>
+<li><a class="reference internal" href="#propagation-model-environment-and-link-topology">Propagation model (Environment and Link Topology)</a></li>
+<li><a class="reference internal" href="#material-validation">Material Validation</a></li>
+<li><a class="reference internal" href="#path-gain-simulation">Path Gain Simulation</a></li>
+<li><a class="reference internal" href="#saving-the-grid-file">Saving the Grid File</a></li>
+<li><a class="reference internal" href="#simulation">Simulation</a></li>
+<li><a class="reference internal" href="#description-of-pylayers">Description of PyLayers</a></li>
+<li><a class="reference internal" href="#reading-tc1-metis-layout">Reading TC1_METIS layout</a></li>
+<li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the Layout</a></li>
+<li><a class="reference internal" href="#displaying-subsegments-of-the-layout">Displaying Subsegments of the Layout</a></li>
+<li><a class="reference internal" href="#building-associated-graphs">Building associated graphs</a><ul>
+<li><a class="reference internal" href="#graph-of-structure">Graph of structure</a></li>
+<li><a class="reference internal" href="#topological-graph">Topological graph</a></li>
+<li><a class="reference internal" href="#visibility-graph">Visibility Graph</a></li>
+<li><a class="reference internal" href="#graph-of-interactions">Graph of interactions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-ap-and-ues">Defining AP and UEs</a></li>
+<li><a class="reference internal" href="#plotting-the-los">Plotting the LOS</a></li>
+<li><a class="reference internal" href="#multi-wall-model-motley-kennan-model">Multi-wall Model: Motley Kennan Model</a></li>
+<li><a class="reference internal" href="#antenna-description">Antenna Description</a><ul>
+<li><a class="reference internal" href="#polar-representation">Polar Representation</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="exploiting-pylayers-for-tc1-metis-scenario-alhassane-diallo-master-student-2016-ietr">
+<h1>Exploiting PyLayers for TC1 METIS Scenario (Alhassane Diallo Master student 2016 &#64;IETR)<a class="headerlink" href="#exploiting-pylayers-for-tc1-metis-scenario-alhassane-diallo-master-student-2016-ietr" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import os
+import os.path as op
+
+basename = os.environ[&#39;BASENAME&#39;]
+
+%matplotlib inline
+</pre></div>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The European project called &#8220;METIS&#8221; has defined twelve test cases (TCs)
+to cover the practical applications of 5G system and simulation needs
+for the coming 5G system. For this reason, they have made available &#8220;Ray
+tracing data&#8221; from their
+<a class="reference external" href="https://www.metis2020.com/documents/simulations/">website</a> . The
+provided data is used here to perform simulation with PyLayers which is
+an open source software developped by the Propagation Team in IETR. The
+following code displays all available data.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>for root, dirs, files in os.walk(&#39;../Metis&#39;):
+    #print root
+    if len(dirs)==0:
+        for f in files:
+            pass
+            filename = root+&#39;/&#39;+f
+            print filename.replace(basename,&#39;&#39;)
+    #for d in dirs:
+    #for f in files:
+    #    print dirs+f
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="description-of-test-case-1-virtual-reality-office">
+<h1>Description of Test Case 1: Virtual reality office<a class="headerlink" href="#description-of-test-case-1-virtual-reality-office" title="Permalink to this headline">¶</a></h1>
+<p>Test case 1 the virtual reality office, is an indoor test case where
+very high data rates are investigated targeting also implementations at
+a reasonable cost. A realistic office environmental model for this test
+case is attained by explicitly considering walls, screens, desks, chairs
+and people. To maintain reasonable cost, one single backhaul fiber
+connection is assumed for one AP. Applying multiple access points
+requires to use in-band wireless backhaul.</p>
+<p>The environmental model geometry, is given by the dimensions of the
+rooms, cubicle offices and tables. The indoor office model is
+illustrated in the following two and three-dimensional figures.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from IPython.display import Image
+</pre></div>
+</div>
+<div class="figure" id="id1">
+<img alt="alt text" src="notebook/2-AP/../Data_TC1/METIS_TC1_Layout.png" />
+<p class="caption"><span class="caption-text">alt text</span></p>
+</div>
+<div class="figure" id="id2">
+<img alt="alt text" src="notebook/2-AP/../Data_TC1/METIS_TC1_3D.png" />
+<p class="caption"><span class="caption-text">alt text</span></p>
+</div>
+<p>The above figures available from METIS&#8217; deliverable [D6.1] show the
+initial room size of 20 m x 10 m, however it was later scaled to 25 m x
+12.5 m. The room size of 25 m x 12.5 m was used to obtained the ray
+tracing data available from METIS&#8217; website.</p>
+<p>The respective heights and materials of these objects are given in the
+following table.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from tabulate import tabulate
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>table = [[&quot;Object&quot;,&quot;Height[m]&quot;,&quot;Material&quot;],[&quot;Room&quot;,2.9,&quot;Concrete&quot;],[&quot;Cubicle&quot;,1.5,&quot;Wood&quot;],[&quot;Table&quot;,1.5,&quot;Wood&quot;]]
+print tabulate(table)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>-------  ---------  --------
+Object   Height[m]  Material
+Room     2.9        Concrete
+Cubicle  1.5        Wood
+Table    1.5        Wood
+-------  ---------  --------
+</pre></div>
+</div>
+</div>
+<div class="section" id="deployment-considerations">
+<h1>Deployment considerations<a class="headerlink" href="#deployment-considerations" title="Permalink to this headline">¶</a></h1>
+<p>In test case 1, five APs and 1176 UEs with respectively 2.85 and 75cm of
+height are used. The deployment baseline is one main base station
+ceiling-mounted with fiber backhaul with UEs, as desktop computers,
+tablets and smartphones, in either a sitting or standing position. A
+coverage base station working at frequencies below 6 GHz will be located
+in the center of the office whereas other access points could be
+deployed to give further capacity to the system. Using available ray
+tracing data from Metis&#8217; website we represent the actual scenario in the
+next figure. The coordinates of the APs are as follows: AP1 (2.5, 2.5,
+2.85), AP2 (2.5, 10, 2.85), AP3 (22.5, 10, 2.85), AP4 (22.5, 2.5, 2.85),
+AP5 (12.5, 6.25, 2.85). This scenario is assumed to be isolated from
+outside interferences.</p>
+</div>
+<div class="section" id="parameters-of-ap-files">
+<h1>Parameters of AP files<a class="headerlink" href="#parameters-of-ap-files" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="in-the-generation-of-the-ap-files-the-following-parameters-are-used">
+<h2>In the generation of the AP files the following parameters are used:<a class="headerlink" href="#in-the-generation-of-the-ap-files-the-following-parameters-are-used" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="frequency-60000-000000">
+<h2>FREQUENCY 60000.000000<a class="headerlink" href="#frequency-60000-000000" title="Permalink to this headline">¶</a></h2>
+<p>The carrier frequency in MHz, i.e. 60000 is 60 GHz.</p>
+</div>
+<div class="section" id="max-number-ref-2-000000">
+<h2>MAX_NUMBER_REF 2.000000<a class="headerlink" href="#max-number-ref-2-000000" title="Permalink to this headline">¶</a></h2>
+<p>The number of reflections allowed for the propagation paths.</p>
+</div>
+<div class="section" id="pts-density-0-000000">
+<h2>PTS_DENSITY 0.000000<a class="headerlink" href="#pts-density-0-000000" title="Permalink to this headline">¶</a></h2>
+<p>This is the number of point sources per square meter [m^2], the point
+sources are 80% on walls and 20% in space (uniformly in the 3D space of
+the whole room). A point source is a point that reflects in any
+direction, hence any AP and UE pair that has line-of-sight path to a
+point source has a propagation path using this point source.</p>
+</div>
+<div class="section" id="pts-average-attenuation-18-000000">
+<h2>PTS_AVERAGE_ATTENUATION 18.000000<a class="headerlink" href="#pts-average-attenuation-18-000000" title="Permalink to this headline">¶</a></h2>
+<p>PTS_SIGMA 5.000000</p>
+<p>These two determine the attenuation [in dB] of the propagation path
+using a point source, the attenuation is a normal distributed random
+variable with the above parameters, i.e. mean PTS_AVERAGE_ATTENUATION
+and standard deviation PTS_SIGMA.</p>
+<p>FORMAT [xAp yAp zAp xUe yUe zUe PATHGAIN]</p>
+<p>This is the format of the table, i.e. the three first values [xAp yAp
+zAp] are the AP position and the next three [xUe yUe zUe] is the UE
+position the last is the pathgain in dB.</p>
+</div>
+</div>
+<div class="section" id="displaying-only-the-files-of-tc-1">
+<h1>Displaying only the files of TC 1<a class="headerlink" href="#displaying-only-the-files-of-tc-1" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>lfile = !ls
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#for fi in lfile:
+    #print fi
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fap1 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap1_raytrace.txt&#39;
+fap2 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap2_raytrace.txt&#39;
+fap3 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap3_raytrace.txt&#39;
+fap4 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap4_raytrace.txt&#39;
+fap5 = basename+&#39;/meas/Metis/TC1_5APs_1176UEs_75cm_height_50cm_sampling_2metis/tc1_ap5_raytrace.txt&#39;
+
+lfile = [fap1,fap2,fap3,fap4,fap5]
+</pre></div>
+</div>
+</div>
+<div class="section" id="scenario-of-tc-1">
+<h1>Scenario of TC 1<a class="headerlink" href="#scenario-of-tc-1" title="Permalink to this headline">¶</a></h1>
+<p>The next figure shows the position of the five APs in the grid. Each AP
+is represented by a red triangle and the blue color is the grid (all
+UEs).</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>def SCENARIO(df,fGHz=60,title=&#39;title&#39;):
+    df[&#39;d&#39;]=np.sqrt((df[&#39;xue&#39;]-df[&#39;xap&#39;])**2+(df[&#39;yue&#39;]-df[&#39;yap&#39;])**2+(df[&#39;zue&#39;]-df[&#39;zap&#39;])**2)
+    plt.plot(df[&#39;xue&#39;].values,df[&#39;yue&#39;].values,&#39;.b&#39;, label=&#39;UEs&#39;)
+    plt.plot(df[&#39;xap&#39;].values,df[&#39;yap&#39;].values,&#39;^r&#39;,ms=15,label=&#39;BS&#39;)
+    plt.xlabel(&#39;X (meters)&#39;)
+    plt.ylabel(&#39;Y (meters)&#39;)
+    plt.title(title)
+    #plt.legend()
+    legend = plt.legend(loc=&#39;lower center&#39;,shadow=True, fontsize=&#39;18&#39;)
+    #legend.get_frame().set_facecolor(&#39;#00FFCC&#39;)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
+    with open(filename) as fd:
+        lis = fd.readlines()
+    data = lis[8:-1]
+    for d in data:
+        d = d.replace(&#39;\r\n&#39;,&#39;&#39;)
+        lvs = d.split(&#39; &#39;)
+        r = np.array([eval(x) for x in lvs])
+        try:
+            tab = np.vstack((tab,r))
+        except:
+            tab = r
+    df = pd.DataFrame(data=tab,columns=[&#39;xap&#39;,&#39;yap&#39;,&#39;zap&#39;,&#39;xue&#39;,&#39;yue&#39;,&#39;zue&#39;,&#39;pg&#39;])
+    return(df)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,6))
+for k,f in enumerate(lfile):
+    df = readdata(f)
+    plt.subplot(2,3,k+1)
+    SCENARIO(df,title=op.basename(f))
+    plt.tight_layout()
+    #plt.savefig(&#39;TC1_deploiement_scenario&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_16_0.png" src="../../_images/MetisRayTracing60GHzforTC1_16_0.png" />
+</div>
+<div class="section" id="propagation-model-environment-and-link-topology">
+<h1>Propagation model (Environment and Link Topology)<a class="headerlink" href="#propagation-model-environment-and-link-topology" title="Permalink to this headline">¶</a></h1>
+<p>Main propagation link type is the Base Station to Mobile Station (BS-UE)
+link and the propagation link topology is I2I (indoor to indoor).
+Furthermore, D2D links can be considered for the big volume data sharing
+between users in the same office room. Line-of-Sight (LOS) links can be
+assumed to dominate, but also reflected waves need to be taken into
+account due to shadowing effects. For this scenario blocking by humans
+may have a severe impact, particularly in the high frequency range. To
+obtain propagation models at higher frequency regions such as millimeter
+Waves (mmW), for instance from 30 to 300GHz, ray tracing could be used.
+In order to perform the ray tracing, a maximum number of reflections, as
+well as distance dependencies of free-space loss and material constants
+for penetration and reflection losses need to be specified. Therefore,
+the propagation characteristics of the used materials are given by METIS
+in [D6.1] as following:</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>table = [[&quot;Material&quot;,&quot;realPermittivity&quot;,&quot;imagPermittivity&quot;,&quot;Penetration Loss&quot;],[&quot;Concrete&quot;,6.14,0.3,71.5],[&quot;Wood&quot;,1.64,0.11,8.6],]
+print tabulate(table)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>--------  ----------------  ----------------  ----------------
+Material  realPermittivity  imagPermittivity  Penetration Loss
+Concrete  6.14              0.3               71.5
+Wood      1.64              0.11              8.6
+--------  ----------------  ----------------  ----------------
+</pre></div>
+</div>
+<p>Given  and  which denote the real and the imaginary part of the
+permitivity, the complex relative permitivity of the material is
+computed by: =-i.</p>
+</div>
+<div class="section" id="material-validation">
+<h1>Material Validation<a class="headerlink" href="#material-validation" title="Permalink to this headline">¶</a></h1>
+<p>These complex values are then used to compute the complex amplitude of
+the signal after the reflection. This is known as the validation of the
+materials as shown in the following figures. The next library is first
+imported from PyLayers.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.slab import *
+</pre></div>
+</div>
+<p>Firsly, we check the available material from SlabDB() which is (slab
+data based) of PyLayers.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S=SlabDB()
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#S
+</pre></div>
+</div>
+<p>The materials &#8220;CONCRETE_TC1_METIS&#8221; and &#8220;WOOD_TC1_METIS&#8221; are not
+included in the data base, therefore the two materials are added in the
+next cell.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.mat.add(name=&#39;CONCRETE_TC1_METIS&#39;,cval=6.14-1j*0.3,typ=&#39;reim&#39;,fGHz=60)
+S.mat.add(name=&#39;WOOD_TC1_METIS&#39;,cval=1.64-0.11*1j,typ=&#39;reim&#39;,fGHz=60)
+</pre></div>
+</div>
+<p>Then, the electromagnetics parameters of the added materials are
+displayed as following:</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.mat[&#39;CONCRETE_TC1_METIS&#39;]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;epr&#39;: array(6.14),
+ &#39;epr2&#39;: array(-0.3),
+ &#39;epsr&#39;: (6.14-0.3j),
+ &#39;fGHz&#39;: 60,
+ &#39;index&#39;: 17,
+ &#39;mur&#39;: 1,
+ &#39;n&#39;: (2.478641222659018-0.060517027889612891j),
+ &#39;name&#39;: &#39;CONCRETE_TC1_METIS&#39;,
+ &#39;roughness&#39;: 0,
+ &#39;sigma&#39;: 1.0}
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.mat[&#39;WOOD_TC1_METIS&#39;]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;epr&#39;: array(1.64),
+ &#39;epr2&#39;: array(-0.11),
+ &#39;epsr&#39;: (1.64-0.11j),
+ &#39;fGHz&#39;: 60,
+ &#39;index&#39;: 18,
+ &#39;mur&#39;: 1,
+ &#39;n&#39;: (1.2813439984332509-0.042923680188341806j),
+ &#39;name&#39;: &#39;WOOD_TC1_METIS&#39;,
+ &#39;roughness&#39;: 0,
+ &#39;sigma&#39;: 0.36666666666666664}
+</pre></div>
+</div>
+<p>The next cell adds the thickness of the materials.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>S.add(&#39;CONCRETE_TC1_METIS&#39;,lmatname=[&#39;CONCRETE_TC1_METIS&#39;],lthick=[0.108])
+S.add(&#39;WOOD_TC1_METIS&#39;,lmatname=[&#39;WOOD_TC1_METIS&#39;],lthick=[0.019])
+</pre></div>
+</div>
+<p>Finally, the data base is displayed to check the existence of the added
+materials.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#S
+</pre></div>
+</div>
+<p>After adding the materials with their characteristics, they are then
+evaluated within the used frequency band and angle range.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz= np.arange(59,61,0.1)
+theta = np.arange(0,np.pi/2,0.01)
+S[&#39;CONCRETE_TC1_METIS&#39;].ev(fGHz,theta)
+S[&#39;WOOD_TC1_METIS&#39;].ev(fGHz,theta)
+</pre></div>
+</div>
+<p>The material validation consists of plotting Reflection and Transmission
+Coefficients and compare with the Penetration loss given in the above
+table.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=S[&#39;CONCRETE_TC1_METIS&#39;].plotwrt(var=&#39;f&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_36_0.png" src="../../_images/MetisRayTracing60GHzforTC1_36_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=S[&#39;WOOD_TC1_METIS&#39;].plotwrt(var=&#39;f&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_37_0.png" src="../../_images/MetisRayTracing60GHzforTC1_37_0.png" />
+<p>The above figures show the amplitude of the reflection (R) and
+transmission (T) coefficients as a function of the frequency.</p>
+<p>It can be seen that for the &#8220;concrete material&#8221; both transmission
+coefficients (perpendicular and parallel) have an amplitude which is
+roughly equivalent to the penetration loss given in the above table
+(71.5 dB). And the same observation is obtained with the wood where the
+given penetration loss is 8.6 dB.</p>
+<p>Regarding the reflection coefficients for the &#8220;wood material&#8221;, it is
+observed that both amplitudes have a slight decrease from -17.13 dB to
+-18,85 dB within the specified frequency band. Finally, the reflection
+coefficients for the concrete material have a constant amplitude of -9
+dB from 59 to 61GHz.</p>
+<p>In the next graph, we plot the frequency of both coefficients as a
+function of the angle.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(10,10))
+S[&#39;CONCRETE_TC1_METIS&#39;].pcolor()
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_39_0.png" src="../../_images/MetisRayTracing60GHzforTC1_39_0.png" />
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fig = plt.figure(figsize=(10,10))
+S[&#39;WOOD_TC1_METIS&#39;].pcolor()
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_40_0.png" src="../../_images/MetisRayTracing60GHzforTC1_40_0.png" />
+<p>The above graphs describe the behavior of the waves when they arrive on
+a given surface. Some waves are reflected and others are refracted. It
+can be seen that  and  are complementary
+to  and  respectively.</p>
+<p>Now we represent the amplitudes of both coefficients in the different
+interfaces (air/concrete and air/wood) as shown in the next figures.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+mat   = sl.mat
+lmat  = [mat[&#39;AIR&#39;],mat[&#39;CONCRETE_TC1_METIS&#39;]]
+II    = MatInterface(lmat,0,fGHz,theta)
+II.RT()
+fig,ax = II.plotwrt(var=&#39;f&#39;,kv=10,typ=[&#39;m&#39;])
+plt.tight_layout()
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_42_0.png" src="../../_images/MetisRayTracing60GHzforTC1_42_0.png" />
+<p>The graph revealed that both reflections coefficients of the
+air/concrete interface have a constant amplitude of 0.4 dB over the
+frequency band. However, the transmission coefficients have a difference
+of amplitude which equal to 0.8 dB.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
+mat   = sl.mat
+lmat  = [mat[&#39;AIR&#39;],mat[&#39;WOOD_TC1_METIS&#39;]]
+II    = MatInterface(lmat,0,fGHz,theta)
+II.RT()
+fig,ax = II.plotwrt(var=&#39;a&#39;,kv=10,typ=[&#39;m&#39;])
+plt.tight_layout()
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_44_0.png" src="../../_images/MetisRayTracing60GHzforTC1_44_0.png" />
+<div class="line-block">
+<div class="line">As regards to the air/wood interface, it is clear that the amplitude</div>
+</div>
+<p>of both reflections and transmission coefficients
+| increased roughly from 0.12 dB to 1 dB and from 1 dB to 2 dB
+respectively.</p>
+</div>
+<div class="section" id="path-gain-simulation">
+<h1>Path Gain Simulation<a class="headerlink" href="#path-gain-simulation" title="Permalink to this headline">¶</a></h1>
+<p>The path gain of each AP and free-space path loss are shown in the next
+figure.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>def PathLoss(df,fGHz=60,title=&#39;title&#39;):
+    &quot;&quot;&quot; Display Path Loss
+
+    Parameters
+    ----------
+
+    fGHz : float
+        frequency in GHz
+
+    &quot;&quot;&quot;
+    df[&#39;d&#39;]=np.sqrt((df[&#39;xue&#39;]-df[&#39;xap&#39;])**2+(df[&#39;yue&#39;]-df[&#39;yap&#39;])**2+(df[&#39;zue&#39;]-df[&#39;zap&#39;])**2)
+    L = 32.4+ 20*np.log10(fGHz)+20*np.log10(df[&#39;d&#39;].values)
+    ax = plt.gca()
+    ax.semilogx(df[&#39;d&#39;],df[&#39;pg&#39;],&#39;.b&#39;,label=&#39;Metis Simulation&#39;)
+    ax.semilogx(df[&#39;d&#39;],-L,&#39;r&#39;,linewidth=3,label=&#39;Free Space Path Loss&#39;)
+    plt.xlabel(&#39;Distance (meters)&#39;,fontsize=14)
+    plt.ylabel(&#39;Path Gain (dB)&#39;)
+    plt.title(title,fontsize=18)
+    plt.legend()
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>def readdata(filename):
+    with open(filename) as fd:
+        lis = fd.readlines()
+    data = lis[8:-1]
+    for d in data:
+        d = d.replace(&#39;\r\n&#39;,&#39;&#39;)
+        lvs = d.split(&#39; &#39;)
+        r = np.array([eval(x) for x in lvs])
+        try:
+            tab = np.vstack((tab,r))
+        except:
+            tab = r
+    df = pd.DataFrame(data=tab,columns=[&#39;xap&#39;,&#39;yap&#39;,&#39;zap&#39;,&#39;xue&#39;,&#39;yue&#39;,&#39;zue&#39;,&#39;pg&#39;])
+
+    return(df)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(12,12))
+for k,f in enumerate(lfile):
+    df = readdata(f)
+    plt.subplot(2,3,k+1)
+    PathLoss(df,title=op.basename(f))
+plt.tight_layout()
+#plt.savefig(&#39;path_gain_tc1&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_48_0.png" src="../../_images/MetisRayTracing60GHzforTC1_48_0.png" />
+<p>The above graph shows the path gain which is a cloud of points
+represented in blue and the free-space path loss in red line. The cloud
+of points is obtained by using the ray tracing data of each AP. The
+graph means that all points which are around the free space path loss
+are in LOS with the corresponding AP whereas far away points are in NLOS
+with the AP.</p>
+</div>
+<div class="section" id="saving-the-grid-file">
+<h1>Saving the Grid File<a class="headerlink" href="#saving-the-grid-file" title="Permalink to this headline">¶</a></h1>
+<p>This next cell is for saving the grid in a file in a proper format for
+being used by Pylayers coverage module.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fd = open(&quot;tc1_metis_grid.ini&quot;,&quot;w&quot;)
+fd.write(&quot;[coordinates]\n&quot;)
+for k in np.arange(len(df[&#39;xue&#39;])):
+    fd.write(str(k+1)+&quot; = &quot;+str(df[&#39;xue&#39;][k])+&quot; &quot;+str(df[&#39;yue&#39;][k])+&quot; &quot;+str(df[&#39;zue&#39;][k])+&#39;\n&#39;)
+fd.close()
+</pre></div>
+</div>
+</div>
+<div class="section" id="simulation">
+<h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="description-of-pylayers">
+<h1>Description of PyLayers<a class="headerlink" href="#description-of-pylayers" title="Permalink to this headline">¶</a></h1>
+<p>The simulation of this project is based on PyLayers which is an open
+source propagation and localization simulator designed to simulate
+dynamic scenarios including (Nicolas A. et al., 2013): a) the realistic
+movement of pedestrians inside a building, b) the transmission channel
+synthesis for multiple radio access technologies, c) the position
+estimation relying on location-dependent parameters originated from the
+simulated physical layer. It is developed in order to tackle indoor
+localization problems. It addresses multiple simulation issues such as
+(radio and localization) and each part of the simulation is independent
+to another. The estimation of the channel is made by using a fast
+graph-based ray tracing method. From the simulated data, location
+dependent parameters such as the received power or time of arrival can
+be deduced. The realistic movement of pedestrians into a building layout
+is modeled with a virtual forces approach. The simulated data can be
+directly used with one of the built in localization algorithms or be
+exported to various standards extensions.</p>
+<p>In order to simulate with PyLayers, the following libraries are first
+imported.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.coverage import *
+from pylayers.gis.layout import *
+from pylayers.util.project import *
+from pylayers.simul.link import *
+import pylayers.signal.waveform as wvf
+import pdb
+%matplotlib inline
+</pre></div>
+</div>
+</div>
+<div class="section" id="reading-tc1-metis-layout">
+<h1>Reading TC1_METIS layout<a class="headerlink" href="#reading-tc1-metis-layout" title="Permalink to this headline">¶</a></h1>
+<p>The TC1 Metis layout has been edited with JOSM editor (Java
+OpenStreetMap Editor) and the edited layout is shown with the air wall
+as following:</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;TC1_METIS.ini&#39;)
+f,a=L.showG(&#39;s&#39;,aw=1)
+a.axis(&#39;on&#39;)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(-10.0, 35.0, -5.0, 20.0)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_54_1.png" src="../../_images/MetisRayTracing60GHzforTC1_54_1.png" />
+<p>This next cell is for displaying the layout in 3D.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#ll L.show3()
+</pre></div>
+</div>
+</div>
+<div class="section" id="vizualisation-of-the-layout">
+<h1>Vizualisation of the Layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h1>
+<p>After reading the Layout in the above figure, it can be visualized as
+follows:</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>#L.dumpr()
+f=plt.figure(figsize=(30,30))
+ax=f.gca()
+f,ax=L.showG(f=f,ax=ax,graph=&#39;s&#39;,labels=True,font_size=18,node_size=220,node_color=&#39;c&#39;)
+a=plt.axis(&#39;off&#39;)
+#plt.savefig(&#39;vizualised TC1&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_58_0.png" src="../../_images/MetisRayTracing60GHzforTC1_58_0.png" />
+<img alt="../../_images/MetisRayTracing60GHzforTC1_58_1.png" src="../../_images/MetisRayTracing60GHzforTC1_58_1.png" />
+<p>The visualized layout shows the numbering of segments and nodes. The
+nodes which have positive index are called segments (or wall) and those
+with negative index are the highest points (vertexes).</p>
+</div>
+<div class="section" id="displaying-subsegments-of-the-layout">
+<h1>Displaying Subsegments of the Layout<a class="headerlink" href="#displaying-subsegments-of-the-layout" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;s&#39;,subseg=True,figsize=(10,10))
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_60_0.png" src="../../_images/MetisRayTracing60GHzforTC1_60_0.png" />
+</div>
+<div class="section" id="building-associated-graphs">
+<h1>Building associated graphs<a class="headerlink" href="#building-associated-graphs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="graph-of-structure">
+<h2>Graph of structure<a class="headerlink" href="#graph-of-structure" title="Permalink to this headline">¶</a></h2>
+<p>This graph is used to describe the outline of the layout and the used
+materials. The graph of structure is shown here with the air wall (aw).
+The node is defined as a discrete position in the graph whereas the edge
+is the link (connection) between two vertexes that can be either direct
+or not.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
+a=f.gca()
+f,a = L.showG(&#39;s&#39;,aw=1,fig=f,ax=a)
+a.axis(&#39;off&#39;)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(-10.0, 35.0, -5.0, 20.0)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_62_1.png" src="../../_images/MetisRayTracing60GHzforTC1_62_1.png" />
+</div>
+<div class="section" id="topological-graph">
+<h2>Topological graph<a class="headerlink" href="#topological-graph" title="Permalink to this headline">¶</a></h2>
+<p>This graph contains the information about the different connections of
+rooms in terms of electromagnetic propagation inside the layout. In this
+graph the vertexes are represented by distinct points and the edges by
+connected pieces of arcs (also called edges) that join the corresponding
+pair of points.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
+a=f.gca()
+f,a=L.showG(&#39;st&#39;,fig=f,ax=a,labels=&#39;t&#39;,fontsize=18,aw=1)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_64_0.png" src="../../_images/MetisRayTracing60GHzforTC1_64_0.png" />
+</div>
+<div class="section" id="visibility-graph">
+<h2>Visibility Graph<a class="headerlink" href="#visibility-graph" title="Permalink to this headline">¶</a></h2>
+<p>This graph describes all the possible electromagnetic paths through the
+layout. It is the graph of inter-visible locations for the set of points
+(nodes) and obstacles in the layout. Each node in the graph represents a
+point location, and each edge represents a visible connection between
+them. That means, if the line segment connecting two locations does not
+pass through any obstacle, an edge (connection) is drawn between them in
+the graph.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;v&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_66_0.png" src="../../_images/MetisRayTracing60GHzforTC1_66_0.png" />
+</div>
+<div class="section" id="graph-of-interactions">
+<h2>Graph of interactions<a class="headerlink" href="#graph-of-interactions" title="Permalink to this headline">¶</a></h2>
+<p>This graph describes all the possible electromagnetic interactions
+between the nodes. There are three interactions type: reflection,
+diffraction and transmission. This graph is directly used to determine
+rays signatures.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(10,10))
+a = f.gca()
+f,a=L.showG(&#39;i&#39;,fig=f,ax=a)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_68_0.png" src="../../_images/MetisRayTracing60GHzforTC1_68_0.png" />
+</div>
+</div>
+<div class="section" id="defining-ap-and-ues">
+<h1>Defining AP and UEs<a class="headerlink" href="#defining-ap-and-ues" title="Permalink to this headline">¶</a></h1>
+<p>The following graph shows the position of AP5 and all users equipment.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A=np.array([df[&#39;xap&#39;].values,df[&#39;yap&#39;].values,df[&#39;zap&#39;].values,])
+B=np.array([df[&#39;xue&#39;].values,df[&#39;yue&#39;].values,df[&#39;zue&#39;].values,])
+</pre></div>
+</div>
+<p>Defining a frequency range</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz=np.linspace(59,61,0.1)
+</pre></div>
+</div>
+</div>
+<div class="section" id="plotting-the-los">
+<h1>Plotting the LOS<a class="headerlink" href="#plotting-the-los" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([[ 12.5 ,  12.5 ,  12.5 , ...,  12.5 ,  12.5 ,  12.5 ],
+       [  6.25,   6.25,   6.25, ...,   6.25,   6.25,   6.25],
+       [  2.85,   2.85,   2.85, ...,   2.85,   2.85,   2.85]])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>B
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([[  0.5 ,   0.5 ,   0.5 , ...,  24.5 ,  24.5 ,  24.5 ],
+       [  0.5 ,   1.  ,   1.5 , ...,  11.  ,  11.5 ,  12.  ],
+       [  0.75,   0.75,   0.75, ...,   0.75,   0.75,   0.75]])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span># figure instanciation
+f = plt.figure(figsize=(10,5))
+ax = f.add_subplot(111)
+r = np.array((A,B))
+# plotting the Layout
+f,ax = L.showG(fig=f,ax=ax,graph=&#39;s&#39;,nodes=False)
+# plotting the Tx and Rx
+ax.plot(A[0],A[1],&#39;ob&#39;)
+ax.plot(B[0],B[1],&#39;or&#39;)
+# plotting the LOS
+ax.plot(r[:,0],r[:,1])
+a = plt.axis(&#39;on&#39;)
+plt.savefig(&#39;LOS for AP middle&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_76_0.png" src="../../_images/MetisRayTracing60GHzforTC1_76_0.png" />
+</div>
+<div class="section" id="multi-wall-model-motley-kennan-model">
+<h1>Multi-wall Model: Motley Kennan Model<a class="headerlink" href="#multi-wall-model-motley-kennan-model" title="Permalink to this headline">¶</a></h1>
+<p>In the following figure we plot the radio link between C=AP5 and D.</p>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>C=np.array([12.5,6.25,2.85])
+D=np.array([0.5,8.5,0.75])
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span># figure instanciation
+f = plt.figure(figsize=(10,5))
+ax = f.add_subplot(111)
+r = np.array((C,D))
+# plotting the Layout
+f,ax = L.showG(fig=f,ax=ax,graph=&#39;s&#39;,nodes=False)
+# plotting the Tx and Rx
+ax.plot(C[0],C[1],&#39;ob&#39;)
+ax.plot(D[0],D[1],&#39;or&#39;)
+# plotting the LOS
+ax.plot(r[:,0],r[:,1])
+a = plt.axis(&#39;on&#39;)
+plt.savefig(&#39;LOS AP midle one UE&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_79_0.png" src="../../_images/MetisRayTracing60GHzforTC1_79_0.png" />
+<p>Motley Kennan model: In this model, the propagation loss is computed
+based on the path loss in free space added by the loss (attenuation) due
+to obstacles (walls, floors, or obstructions) along the direct path.
+This means that this model count the number of walls, floors, and other
+obstacles between the transmitter and the receiver to produce the
+propagation loss along the direct path. It does not provide any
+information about multi-paths but it can be still used to optimize the
+indoor radio network. A ray tracing approach is much more accurate for
+better optimization; however it is also time consuming. Thus, it is
+relevant to proceed with a simple and fast approach as the Motley Kennan
+model.</p>
+<p>Mathematically the Motley Kennan model can be written the following
+expression: PL = 20<em>log 10 (4  d/) +p</em>(WAF) + k*(FAF) where p is
+the number of walls, WAF is wall attenuation factor, k is the number of
+floors and FAF means the floor attenuation factor.</p>
+<p>This specific model accommodates wide range of frequencies with the
+appropriate choice of attenuation factors. The measured attenuation
+values of different materials at different frequencies can be found in
+the literature review.</p>
+</div>
+<div class="section" id="antenna-description">
+<h1>Antenna Description<a class="headerlink" href="#antenna-description" title="Permalink to this headline">¶</a></h1>
+<p>The antenna type that will be used to simulate the coverage Motley
+Kennan in the following section is an Omni-directional antenna which
+radiates radio wave power uniformly in all directions in a given plane.
+This type of antenna is best suitable for applications that require
+round coverage because the radiated signal has same strength in all
+directions. The following figure shows the polar representation of the
+antenna radiation pattern at 3GHz and 5.95GHz with a maximum gain of
+5dB.</p>
+<div class="section" id="polar-representation">
+<h2>Polar Representation<a class="headerlink" href="#polar-representation" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S1R1.vsh3&#39;)
+</pre></div>
+</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,20))
+a1 = f.add_subplot(121,projection=&#39;polar&#39;)
+f1,a1 = A.plotG(fGHz=[3,32],plan=&#39;theta&#39;,angdeg=0,GmaxdB=5,fig=f,ax=a1,show=False)
+a2 = f1.add_subplot(122,projection=&#39;polar&#39;)
+f2,a2 = A.plotG(fGHz=[3,32],plan=&#39;phi&#39;,angdeg=90,GmaxdB=5,fig=f,ax=a2)
+f2.tight_layout()
+</pre></div>
+</div>
+<img alt="../../_images/MetisRayTracing60GHzforTC1_82_0.png" src="../../_images/MetisRayTracing60GHzforTC1_82_0.png" />
+<p>The above figure describes the antenna radiation pattern with vertical
+plane in the (left) and horizontal plane in the (right). It can be
+observed that the antenna radiates in all directions by concentrating
+the same energy equally (horizontal plane). At the same time, the
+vertical plane reveals that there is a back radiation because the
+reflector of the antenna reflects all the energy in the second half of
+the polar plane.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 30, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/MetisRayTracing60GHzforTC1.rst.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel rellarge">
+    
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

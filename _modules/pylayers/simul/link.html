@@ -538,6 +538,7 @@
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
     
+
         <span class="n">force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_create</span>
         <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;force_create&#39;</span><span class="p">)</span>
 
@@ -1971,7 +1972,31 @@
                 <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">interact</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">lay</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="c1"># check if indoor/outdoor, outdoor or indoor situations</span>
+            <span class="n">a_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">][</span><span class="s1">&#39;indoor&#39;</span><span class="p">]</span>
+            <span class="n">b_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">][</span><span class="s1">&#39;indoor&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">a_in</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b_in</span><span class="p">):</span>
+                <span class="c1"># indoor</span>
+                <span class="n">show_ceil</span><span class="o">=</span><span class="bp">False</span>
+                <span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.7</span>
+                <span class="n">ceil_opacity</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="k">elif</span> <span class="p">((</span><span class="ow">not</span> <span class="n">a_in</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">b_in</span><span class="p">)):</span>
+                <span class="c1"># outdoor</span>
+                <span class="n">show_ceil</span><span class="o">=</span><span class="bp">True</span>
+                <span class="n">opacity</span> <span class="o">=</span> <span class="mf">1.</span>
+                <span class="n">ceil_opacity</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># indoor/outdoor</span>
+                <span class="n">show_ceil</span><span class="o">=</span><span class="bp">True</span>
+                <span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.7</span>
+                <span class="n">ceil_opacity</span> <span class="o">=</span> <span class="mf">0.7</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                          <span class="n">opacity</span><span class="o">=</span><span class="n">opacity</span><span class="p">,</span>
+                          <span class="n">ceil_opacity</span><span class="o">=</span><span class="n">ceil_opacity</span><span class="p">,</span>
+                          <span class="n">show_ceil</span><span class="o">=</span><span class="n">show_ceil</span><span class="p">,</span>
+                          <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># mlab.text3d(self.a[0],self.a[1],self.a[2],&#39;a&#39;,</span>
         <span class="c1">#             scale=1,</span>
@@ -2045,7 +2070,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 25, 2016.
+      Last updated on Sep 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

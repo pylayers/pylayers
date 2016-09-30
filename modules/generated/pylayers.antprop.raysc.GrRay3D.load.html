@@ -29,9 +29,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.raysc" href="../pylayers.antprop.raysc.html" />
-    <link rel="next" title="pylayers.antprop.raysc.GrRay3D.delay" href="pylayers.antprop.raysc.GrRay3D.delay.html" />
-    <link rel="prev" title="pylayers.antprop.raysc.GrRay3D.choose" href="pylayers.antprop.raysc.GrRay3D.choose.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -87,44 +84,10 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.raysc.GrRay3D.choose.html" title="pylayers.antprop.raysc.GrRay3D.choose"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.raysc.GrRay3D.choose
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.raysc.GrRay3D.delay.html" title="pylayers.antprop.raysc.GrRay3D.delay"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.raysc.GrRay3D.delay
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -139,22 +102,6 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.raysc.html" title="pylayers.antprop.raysc" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antp...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.raysc
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -182,50 +129,6 @@
             
   <div class="section" id="pylayers-antprop-raysc-grray3d-load">
 <h1>pylayers.antprop.raysc.GrRay3D.load<a class="headerlink" href="#pylayers-antprop-raysc-grray3d-load" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.raysc.GrRay3D.load">
-<code class="descclassname">GrRay3D.</code><code class="descname">load</code><span class="sig-paren">(</span><em>_filename</em>, <em>L</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.raysc.GrRay3D.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a .tra de PulsRay</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : PulsRay .tra data format  filename</p>
-<p class="last"><strong>L</strong> : Layout object</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.raysc import *
-&gt;&gt;&gt; from pylayers.util.project import *
-&gt;&gt;&gt; from pylayers.gis.layout import *
-&gt;&gt;&gt; import matplotlib.pyplot as plt
-&gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; import scipy as sp
-&gt;&gt;&gt; g = GrRay3D()
-&gt;&gt;&gt; lfile = g.dir()
-&gt;&gt;&gt; n = len(lfile)
-&gt;&gt;&gt; file0  = lfile[0]
-&gt;&gt;&gt; s1 = file0.split(&#39;_&#39;)
-&gt;&gt;&gt; _filestr = s1[0]+&#39;.str&#39;
-&gt;&gt;&gt; L = Layout()
-&gt;&gt;&gt; L.load(_filestr)
-&gt;&gt;&gt; f,a = L.showGs()
-&gt;&gt;&gt; g.load(file0,L)
-&gt;&gt;&gt; f1 = g.show(f,a,np.arange(10))
-&gt;&gt;&gt; plt.show()
-&gt;&gt;&gt; f,a = L.showGs()
-&gt;&gt;&gt; f2 = g.show(f,a,np.arange(100))
-&gt;&gt;&gt; plt.show()
-&gt;&gt;&gt; f,a = L.showGs()
-&gt;&gt;&gt; f3 = g.show(f,a,np.arange(300))
-&gt;&gt;&gt; plt.show()
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-raysc-GrRay3D-load-1.py">Source code</a>)</p>
-</dd></dl>
-
 </div>
 
 
@@ -239,25 +142,15 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 31, 2016.
+      Last updated on Sep 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.raysc.GrRay3D.load.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.raysc.GrRay3D.choose.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.raysc.GrRay3D.delay.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous

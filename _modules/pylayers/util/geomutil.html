@@ -810,6 +810,8 @@
         <span class="k">for</span> <span class="n">pseg</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">:</span>
             <span class="n">vnodes</span> <span class="o">=</span> <span class="n">vnodes</span> <span class="o">+</span> <span class="p">[</span><span class="n">pseg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="n">nseg</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">numseg</span><span class="p">(</span><span class="n">pseg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="c1"># if nseg==0:</span>
+            <span class="c1">#     pdb.set_trace()</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nseg</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">:</span>
                 <span class="n">nseg</span><span class="o">=</span><span class="p">[</span><span class="n">nseg</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -3368,7 +3370,7 @@
 <span class="sd">    seg :  (pta,phe)</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    -------D</span>
 <span class="sd">    </span>
 <span class="sd">    k : intersection parameter (0&lt;k&lt;1 if intersection)</span>
 <span class="sd">    M : intersection point </span>
@@ -3384,6 +3386,7 @@
     <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">den</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">k</span> <span class="o">=</span> <span class="n">num</span><span class="o">/</span><span class="n">den</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1">#k = np.inf*np.sign(den)</span>
         <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">vseg</span>
     <span class="k">return</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
@@ -5151,7 +5154,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 25, 2016.
+      Last updated on Sep 30, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
