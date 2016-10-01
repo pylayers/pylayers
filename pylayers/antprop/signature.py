@@ -3174,8 +3174,8 @@ class Signatures(PyLayers,dict):
                             r  = R[-ik]
                         #vlp vrpdb.set_trace()
                         if len(tahe)<2:
-                            tahe.append(th)
-                            seg_ratio = 1.0
+                            tha = th
+                            ratio = 1.0
                         else:
                             pta0 = tahe[0][0]   # tail first segment
                             phe0 = tahe[0][1]   # head first segment
@@ -3196,14 +3196,16 @@ class Signatures(PyLayers,dict):
                                 vl = (phe0,phe_)
 
                             # cone dot product 
-                            
+                            # print vr
+                            # print vl
                             vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
                             vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
                             
                         
                             vrdotvl = np.dot(vr_n,vl_n)
                             # cone angle 
-                            alpha_cone = np.arccos(vrdotvl)
+                            angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+                            #angle_cone = np.arccos(vrdotvl)
                             # prepare lines and seg argument for intersection checking
                             linel = (vl[0],vl[1]-vl[0])
                             liner = (vr[0],vr[1]-vr[0])
@@ -3219,75 +3221,84 @@ class Signatures(PyLayers,dict):
                             kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
                             apex = phe0 + kb*vl_n
 
-                            #
-                            # visual check for debug
-                            #
-                            print nstr
-                            print visited
-                            fig ,ax = self.L.showG('s',aw=1,labels=1)
-                            ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                            ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-
-                            ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
-                            ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                            ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                            #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                            ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
-                            plt.title(str(visited))
-                            ax.plot(apex[0],apex[1],'or')
-                            plt.axis('auto')
-                            plt.show()
-                            pdb.set_trace()
-
+                            
+                            
                             kl,p_int_left  = geu.intersect_line_seg(linel,seg)
                             kr,p_int_right = geu.intersect_line_seg(liner,seg)
-                            vchord = p_int_left-p_int_right 
-                            chord =  np.sqrt(np.sum(vchord*vchord,axis=0))
-                            # signature is valid until proved false
+                            
+                            # signature is valid until proved non valid
                             # valid_bool = True
+
                             seg_ratio = 1.0
                             
-                            if ((abs(kl)>1) & (abs(kr)>1)): # 0 intersection points 
-                                # if kl and kr have different sign 
-                                # the segment is fully in the cone
-                                # 
-                                if (kl*kr)<0:
-                                    vseg = th[1]-th[0]
-                                    lseg = np.sqrt(np.sum(vseg*vseg,axis=0))
-                                    seg_ratio = lseg/chord
-                                    tha = th
-                                    tahe.append(tha)
-                                else: # outside cone
-                                    seg_ratio = 0
-                            elif ((abs(kl)<=1) & (abs(kr)<=1)): # 2 intersection points 
-                                tha = np.vstack((p_int_left,p_int_right))
-                                tahe.append(tha)
-                                seg_ratio = 1
+                            bkl = (kl<=1) & (kl>=0) 
+                            bkr = (kr<=1) & (kr>=0)
 
-                            elif ((abs(kl)<=1) & (abs(kr)>1)):  # left line intersects while right line don't
+                            if (not bkl) & (not bkr) & (kl*kr>0): # outside cone
+                                ratio = 0
+
+                            elif (not bkl) & (not bkr) & (kl*kr<=0): # fully in cone
+                                tha = th
+                                wseg0 = th[0]-apex
+                                wseg1 = th[1]-apex
+                                wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                                wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                                useg  = np.arccos(np.minimum(np.dot(wseg0_n,wseg1_n),1.0))
+                                ratio = useg/angle_cone
+
+                            elif (bkl & bkr): # 2 intersection points 
+                                tha = np.vstack((p_int_left,p_int_right))
+                                ratio = 1.0
+
+                            elif (bkl & (not bkr)): # left line intersects while right line don't
                                 if kr<kl: 
+                                    wseg = th[0]-apex
                                     tha = np.vstack((th[0],p_int_left))
                                 else:
+                                    wseg = th[1]-apex
                                     tha = np.vstack((p_int_left,th[1]))
-                                tahe.append(tha)
-                                vseg = tha[1]-tha[0]
-                                lseg = np.sqrt(np.sum(vseg*vseg,axis=0))
-                                seg_ratio = lseg/chord
+                                
+                                wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
+                                useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
+                                ratio = useg/angle_cone
 
-                            elif ((abs(kr)<=1) & (abs(kl)>1)):  # righ line intersects while line line don't
+                            elif (bkr & (not bkl)): # right line intersects while left line don't
                                 if kl<kr:
+                                    wseg = th[0]-apex
                                     tha = np.vstack((th[0],p_int_right))
                                 else:
+                                    wseg = th[1]-apex
                                     tha = np.vstack((p_int_right,th[1]))
-                                tahe.append(tha)
-                                vseg = tha[1]-tha[0]
-                                lseg = np.sqrt(np.sum(vseg*vseg,axis=0))
-                                seg_ratio = lseg/chord
+                                    
+                                wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
+                                useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
+                                ratio = useg/angle_cone
                             else:
-                                pdb.set_trace()
-                        #print visited,seg_ratio
-                        #print visited,tahe
-                        if seg_ratio>threshold:
+                                ratio = 0
+                                #pdb.set_trace()
+
+                            #
+                            # visual debug
+                            #
+                            # print nstr
+                            # print visited
+                            # fig ,ax = self.L.showG('s',aw=1,labels=1)
+                            # ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                            # ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                            # ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                            # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                            # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                            # #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                            # ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                            # plt.title(str(visited)+'  '+str(seg_ratio))
+                            # ax.plot(apex[0],apex[1],'or')
+                            # plt.axis('auto')
+                            # plt.show()
+                            # pdb.set_trace()
+
+                        if ratio > threshold:
+                            tahe.append(tha)
                             # 
                             # Check if the targer has been reached
                             # sequence is valid and last interaction is in the list of targets   

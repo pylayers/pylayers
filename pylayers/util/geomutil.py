@@ -3226,7 +3226,7 @@ def intersect_line_seg(line,seg):
     seg :  (pta,phe)
     
     Returns
-    -------D
+    -------
     
     k : intersection parameter (0<k<1 if intersection)
     M : intersection point 
@@ -3242,11 +3242,12 @@ def intersect_line_seg(line,seg):
     
     if (abs(den) > 0):
         k = num/den
+        M = pta+k*vseg
     else:
         si = np.sign(np.dot(v,vseg))
         k = np.inf*si
-       
-    M = pta+k*vseg
+        M = pta + 2*vseg
+    
     return(k,M)
 
 
