@@ -563,8 +563,6 @@ class Layout(PyLayers):
         """
         consistent = True
 
-        if len(self.sla)!=len(self.offset):
-            consistent =False
         
         nodes = self.Gs.nodes()
         if len(nodes)>0:
@@ -899,15 +897,13 @@ class Layout(PyLayers):
             # sla is an array of string, index 0 is not used because there is
             # no such segment number.
             #
-            self.lsss = []
-            self.isss = []
+            # self.lsss = []
+            # self.isss = []
 
             #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
-            self.stridess = np.empty(nsmax+1,dtype=int)
+            # self.stridess = np.empty(nsmax+1,dtype=int)
             # +1 is for discarding index 0 (unused here)
-            # self.sla  = np.empty((nsmax+1+self.Nss), dtype='S20')
-            self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
-            self.offset = np.empty(nsmax+1+self.Nss,dtype=int)
+            # self.offset = np.empty(nsmax+1+self.Nss,dtype=int)
 
 
             # Storing segment normals
@@ -915,32 +911,32 @@ class Layout(PyLayers):
             #
             # index is for indexing subsegment after the nsmax value
             #
-            index = nsmax+1
-            for ks in useg:
-                k = self.tgs[ks]                        # index numpy
-                self.offset[k] = self.Gs.node[ks]['offset']
-                self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
-                nameslab  = self.Gs.node[ks]['name']   # update sla array
-                assert nameslab!='', "segment "+str(ks)+ " is not defined"
-                self.sla[ks] = nameslab
-                # stridess is different from 0 only for subsegments
-                self.stridess[ks] = 0                   # initialize stridess[ks]
-                #if index==155:
-                #    pdb.set_trace()
-                if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment
-                    nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
-                    self.stridess[ks]=index-1           # update stridess[ks] dict
-                    for uk,slabname in enumerate(self.Gs.node[ks]['ss_name']):
-                        self.lsss.append(ks)
-                        self.sla[index] = slabname
-                        self.isss.append(index)
-                        self.offset[index] = self.Gs.node[ks]['ss_offset'][uk]
-                        index = index+1
+            # index = nsmax+1
+            # for ks in useg:
+            #     k = self.tgs[ks]                        # index numpy
+            #     self.offset[k] = self.Gs.node[ks]['offset']
+            #     self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
+            #     nameslab  = self.Gs.node[ks]['name']   # update sla array
+            #     assert nameslab!='', "segment "+str(ks)+ " is not defined"
+            #     self.sla[ks] = nameslab
+            #     # stridess is different from 0 only for subsegments
+            #     self.stridess[ks] = 0                   # initialize stridess[ks]
+            #     #if index==155:
+            #     #    pdb.set_trace()
+            #     if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment
+            #         nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
+            #         self.stridess[ks]=index-1           # update stridess[ks] dict
+            #         for uk,slabname in enumerate(self.Gs.node[ks]['ss_name']):
+            #             self.lsss.append(ks)
+            #             self.sla[index] = slabname
+            #             self.isss.append(index)
+            #             self.offset[index] = self.Gs.node[ks]['ss_offset'][uk]
+            #             index = index+1
 
         # append sub segment normal to normal
 
-        normal_ss = self.normal[:,self.tgs[self.lsss]]
-        self.normal = np.hstack((self.normal,normal_ss))
+        # normal_ss = self.normal[:,self.tgs[self.lsss]]
+        # self.normal = np.hstack((self.normal,normal_ss))
 
 
         # if problem here check file format 'z' should be a string
@@ -3414,6 +3410,7 @@ class Layout(PyLayers):
         # self.lsss
         # self.stridess
         #
+
         sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
 
         data['i'] = idxlnk
@@ -5586,258 +5583,6 @@ class Layout(PyLayers):
         
 
 
-    def buildGtold(self,check=False,mesh_indoor=True):
-        """  build Gt the graph of convex cycles 
-
-        Parameters
-        ----------
-
-        check : booolean
-            if check 
-        mesh_indoor : bool
-            if True make a delaunay partiioning inside building
-
-        """
-
-        #remove possible previous Gt information (2nd build)
-        if len(self.Gt.nodes()) != 0:
-            self.Gt = nx.Graph()
-            self.Gt.pos = {}
-            [self.del_segment(x,verbose=False,g2npy=False) for x in np.where(self.sla =='_AIR')[0] 
-             if x not in self.segboundary ]
-            self.g2npy()
-
-        # update shapely segments
-        self.updateshseg()
-
-        ##Perform Delaunay Triangulation 
-
-        # # # boundary polygon
-        # BP = sho.polygonize([self._shseg[x] for x in self.segboundary])
-        # BP=[p for p in BP][0]
-
-
-        # list of polygon inside boundaries
-        lP = sho.polygonize([self._shseg[p] for p in self._shseg if p not in self.segboundary])
-        lP = [geu.Polygon(x) for x in lP]
-
-
-        #take a vnode of polygon to set it as hole
-        # the centroid point is a bad choice because, it is not necessarily inside
-        # solution is : - take a point of polygon
-        #               - turn around of this point and when found a point inside keep it
-        ang = np.arange(0,2*np.pi,0.1)
-        cpx = np.exp(1j*ang)
-        circenter = np.array([np.real(cpx),np.imag(cpx)])
-
-        # holes corrsp. to convex polygons
-        holesc=[]
-        # holes corrsp. to non convex polygons
-        holesnc=[]
-        lncP = []
-        lcP=[]
-        for p in lP:
-            if p.isconvex():
-                lcP.append(p)
-                holesc.append(p.centroid.xy)
-            else:
-                lncP.append(p)
-                if p.contains(p.centroid):
-                    holesnc.append(p.centroid.xy)
-                else:
-                    pt0 = np.array(p.exterior.xy)[:,0]
-                    MPoint = sh.MultiPoint((circenter+pt0[:,None]).T)
-                    for pt in MPoint:
-                        if p.contains(pt):
-                            holesnc.append(pt.xy)
-                            break
-        holes=np.array(holesc+holesnc).squeeze()
-        # holes=np.array([p.centroid.xy for p in lP ])[:,:,0]
-
-        #delaunay triangluation of exterior polygons
-        Tout  = self._triangle(holes=holes)
-        #Tout  = self._triangle_old(BP,lP,mesh_holes=False)
-
-        ptri = Tout['vertices'][Tout['triangles']]
-        #create Triangle Polygons from delaunay triangulation
-        TP=[geu.Polygon(x) for x in ptri]
-        # list of Merged Polygons outdoor
-        lMPout = self._merge_polygons(TP)
-
-
-        if mesh_indoor:
-
-
-            lMPin=[]
-            if len(lncP) >0:
-                # holes=np.array([p.centroid.xy for p in lcP ])[:,:,0]
-
-                [p.setvnodes(self) for p in lncP]
-                vnodes=[]
-                [vnodes.extend(p.vnodes) for p in lncP]
-                vnodes=np.unique(vnodes)
-                #delaunay triangluat ion of interior of polygons
-                Tin  = self._triangle(holes=holesc,vnodes=vnodes)
-                # Tin  = self._triangle_old(lP,mesh_holes=True)
-                ptri = Tin['vertices'][Tin['triangles']]
-                #create polygons from delaunay triangulation
-                TP = [geu.Polygon(x) for x in ptri]
-                # list of Merged Polygons indoor
-                lMPin = self._merge_polygons(TP)
-                # remove old non convex polygon and replace by the convexify-ed ones
-                [lP.remove(p) for p in lncP]
-            #conserve convex polygons
-            lMPin.extend(lP)
-        else:
-            # if indoor not meshed, the polygon inside 
-            #are directly the list of polygon inside boundaries (a.k.a. holes)
-            lMPin = lP
-
-
-        lMP = lMPout + lMPin
-        #index of polygon representing indoor/outdoor situation
-        uindoor = np.zeros(len(lMP),dtype='bool')
-        uindoor[len(lMPout):]=True
-
-
-        #ADD AIRWALLS
-        #find coordinates of vertices
-        [p.setvnodes(self) for p in lMP]
-        #find where vnodes == 0 <=> a new segment has been added 
-        #=> need to create airwall
-        luaw = [(p,np.where(p.vnodes == 0)[0]) for p in lMP]
-        # for each polygon
-        import ipdb
-        ipdb.set_trace()
-        for p,uaw in luaw :
-            # determine number of vnodes
-            lvn = len(p.vnodes)
-            #for each vnodes == 0, add an _AIR
-            for aw in uaw:
-                self.add_segment(  p.vnodes[np.mod(aw-1,lvn)],
-                                   p.vnodes[np.mod(aw+1,lvn)]
-                                   ,name='_AIR',verbose=False)
-            # update polygon segments with new added airwalls
-            p.setvnodes(self)
-
-        self.g2npy()
-        self.updateshseg()
-
-        # remove cycle 0 (exterior) if it exists
-        try:
-            self.Gt.remove_node(0)
-        except:
-            pass
-
-
-        #III . create Gt nodes
-        for ui,p in enumerate(lMP):
-            cyid = ui+1
-            
-            # III 1.a get vnode associated to the polygon
-            #get vnodes not in the correct order
-            # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
-            # vnodes = Gsnodes[uvn]
-
-            # III 1.b transform vnodes to an ordered cycle with Cycle class 
-            # NOTE ! Using class cycle is MANDATORY
-            # because, some extra vnodes can be picked up during the contain 
-            # process before
-
-
-            S = nx.subgraph(self.Gs,p.vnodes)
-            S.pos={}
-            S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
-
-            cycle = cycl.Cycle(S)
-
-            # III 1.c create a new polygon with correct vnodes and correct points
-            # P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
-            # import ipdb
-            # ipdb.set_trace()
-            # IV 1.d add node to Gt + position
-            #
-            
-
-            seg = p.vnodes[p.vnodes>0]
-            lair = [x in (self.name['AIR']+self.name['_AIR']) for x in seg]
-            
-            if sum(lair)>0:
-                isopen = True
-            else:
-                isopen = False
-
-            # III 1.e add nodes
-            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=uindoor[ui])
-            self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
-
-        #IV  create Gt edges
-  
-        for n1 in self.Gt.nodes():
-            for n2 in self.Gt.nodes():
-                if n1!= n2:
-                    if self.Gt.node[n1]['polyg'].touches(self.Gt.node[n2]['polyg']):
-                        # find common segments
-                        seg = np.array([n for n in self.Gt.node[n1]['polyg'].vnodes if (n in self.Gt.node[n2]['polyg'].vnodes) and (n>0)])
-                        #if cycle are connected by at least a segmnent but not a point
-                        if len(seg)>0:
-                            self.Gt.add_edge(n1,n2,segment=seg)
-
-
-        #  V update Gs
-        #   V Update graph Gs nodes with their cycles information
-        #
-        #   initialize a void list 'ncycles' for each node of Gs
-        #
-        
-        self._updGsncy()
-
-        #add cycle 0 to boundaries segments
-        for s in self.segboundary:
-            self.Gs.node[s]['ncycles'].append(0)
-
-        #
-        # boundary adjascent cycles
-        #
-        adjcyair = np.array(map(lambda x : filter(lambda y: y!=0,
-                                      self.Gs.node[x]['ncycles'])[0],self.segboundary))
-        # connect cycles separated by air wall to cycle 0  
-        for cy,seg in zip(adjcyair,self.segboundary):
-            self.Gt.node[cy]['indoor'] = False
-            self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(0,cy,segment=np.array([seg]))
-
-
-        self._find_diffractions()
-
-
-        #
-        #   VIII -  Construct the list of interactions associated to each cycle
-        #
-        # Interaction labeling convention
-        #
-        #   tuple (npoint,)  : Diffraction on point npoint
-        #   tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
-        #   tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
-        #
-        #   At that stage the diffraction points are not included
-        #   not enough information available.
-        #   The diffraction points are not known yet
-        self._interlist(indoor=mesh_indoor)
-
-
-
-        if check : 
-            print "check len(ncycles) == 2",
-            nodes = [i for i in self.Gs.nodes() if i>0]
-            cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
-            ucncyl = np.where(cncy<2)[0]
-            ucncym = np.where(cncy>2)[0]
-            assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
-            assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
-            print "passed"
-
-
 
     def _visual_check(self):
         """ visual checking of graphs
@@ -7256,9 +7001,8 @@ class Layout(PyLayers):
                 delta = nl / 10.
 
                 # On AIR or ABSORBENT there is no reflection
-                # except if n is a subsegment
 
-                if ((name!='_AIR') & (name!='AIR') & (name!='ABSORBENT')) or (n in self.lsss):
+                if ((name!='_AIR') & (name!='AIR') & (name!='ABSORBENT')):
                     self.Gi.add_node((n,cy0))
                     self.Gi.add_node((n,cy1))
                     self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
@@ -7267,7 +7011,7 @@ class Layout(PyLayers):
                 # Through METAL or ABSORBENT there is no transmission
                 # except if n has a subsegment
 
-                if (name!='METAL') & (name!='ABSORBENT') or (n in self.lsss):
+                if (name!='METAL') & (name!='ABSORBENT'):
                     self.Gi.add_node((n,cy0,cy1))
                     self.Gi.add_node((n,cy1,cy0))
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
