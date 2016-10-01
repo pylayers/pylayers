@@ -3195,16 +3195,50 @@ class Signatures(PyLayers,dict):
                                 vr = (pta0,pta_)
                                 vl = (phe0,phe_)
 
-                            # vr_n = vr/np.sqrt(np.sum(vr*vr,axis=0))
-                            # vl_n = vl/np.sqrt(np.sum(vl*vl,axis=0))
-                            # alpha_cone = np.arcos(np.dot(vr_n,vl_n))
-
+                            # cone dot product 
+                            
+                            vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
+                            vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                            
+                        
+                            vrdotvl = np.dot(vr_n,vl_n)
+                            # cone angle 
+                            alpha_cone = np.arccos(vrdotvl)
                             # prepare lines and seg argument for intersection checking
                             linel = (vl[0],vl[1]-vl[0])
                             liner = (vr[0],vr[1]-vr[0])
                             # from origin mirrored segment to be tested 
                             seg   = (th[0],th[1])
-                            
+
+                            # apex calculation 
+                            a0u = np.dot(pta0,vr_n)
+                            a0v = np.dot(pta0,vl_n)
+                            b0u = np.dot(phe0,vr_n)
+                            b0v = np.dot(phe0,vl_n)
+
+                            kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
+                            apex = phe0 + kb*vl_n
+
+                            #
+                            # visual check for debug
+                            #
+                            print nstr
+                            print visited
+                            fig ,ax = self.L.showG('s',aw=1,labels=1)
+                            ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                            ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                            ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                            ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                            ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                            #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                            ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                            plt.title(str(visited))
+                            ax.plot(apex[0],apex[1],'or')
+                            plt.axis('auto')
+                            plt.show()
+                            pdb.set_trace()
+
                             kl,p_int_left  = geu.intersect_line_seg(linel,seg)
                             kr,p_int_right = geu.intersect_line_seg(liner,seg)
                             vchord = p_int_left-p_int_right 

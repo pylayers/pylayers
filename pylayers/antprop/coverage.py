@@ -122,6 +122,7 @@ class Coverage(PyLayers):
             # create grid
             #
             self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
+            
             self.dap = {}
             for k in self.apopt:
                 kwargs  = eval(self.apopt[k])
@@ -368,7 +369,7 @@ class Coverage(PyLayers):
         # 1 x na
         for k in p:
             pg = self.grid[k[0],:]
-            pa = self.dap[k[1]]['p'][0:2]
+            pa = np.array(self.dap[k[1]]['p'][0:2])
             try:
                 self.pa = np.vstack((self.pa,pa))
             except:

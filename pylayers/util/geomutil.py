@@ -3239,11 +3239,13 @@ def intersect_line_seg(line,seg):
     yth = pta[1]-phe[1]
     num = -(v[1]*(pta[0]-pt[0])+v[0]*(pt[1]-pta[1]))
     den = (v[1]*xht+v[0]*yth)
+    
     if (abs(den) > 0):
         k = num/den
     else:
-        #k = np.inf*np.sign(den)
-        k = 2
+        si = np.sign(np.dot(v,vseg))
+        k = np.inf*si
+       
     M = pta+k*vseg
     return(k,M)
 
