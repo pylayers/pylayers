@@ -897,7 +897,9 @@ class Layout(PyLayers):
             # sla is an array of string, index 0 is not used because there is
             # no such segment number.
             #
-            # self.lsss = []
+
+            self.lsss = [ x for x in useg if len(self.Gs.node[x]['iso'])>0 ] 
+            
             # self.isss = []
 
             #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
@@ -3283,9 +3285,10 @@ class Layout(PyLayers):
         #
         # update subsegment in seglist
         #
-        # self.sla
         # self.lsss
         # self.stridess
+        #
+        # TODO : To be modified stidesss deprecated
         #
         sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
 
@@ -3406,10 +3409,10 @@ class Layout(PyLayers):
         #
         # update subsegment in seglist
         #
-        # self.sla
         # self.lsss
         # self.stridess
         #
+        #  TODO : To be modified deprecated 
 
         sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
 
