@@ -1071,23 +1071,27 @@ class Rays(PyLayers,dict):
                     # scalability : avoid a loop over all the subsegments in lsss
                     #
                     lss = [ x for x in lsss if x in nstr.ravel()]
-
+                    
                     for s in lss: 
                         u  = np.where(nstr==s)
-                        zs = ptees[2,u[0],u[1]][0]
-                        zinterval = L.Gs.node[s]['z']
-                        if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                            # print s , zs , zinterval
-                            pass
-                        else: # signature is not valid
-                            # nstr : structure number
-                            nstr  = np.delete(nstr,u[1],axis=1)
-                            # typi : type of interaction 
-                            typi  = np.delete(typi,u[1],axis=1)
-                            # 3d sequence of points
-                            ptees = np.delete(ptees,u[1],axis=2)
-                            # extended (floor/ceil) signature
-                            siges = np.delete(siges,u[1],axis=2)
+                        if len(u)>0:
+                            try:
+                                zs = ptees[2,u[0],u[1]][0]
+                            except:
+                                pass
+                            zinterval = L.Gs.node[s]['z']
+                            if (zs<=zinterval[1]) & (zs>=zinterval[0]):
+                                # print s , zs , zinterval
+                                pass
+                            else: # signature is not valid
+                                # nstr : structure number
+                                nstr  = np.delete(nstr,u[1],axis=1)
+                                # typi : type of interaction 
+                                typi  = np.delete(typi,u[1],axis=1)
+                                # 3d sequence of points
+                                ptees = np.delete(ptees,u[1],axis=2)
+                                # extended (floor/ceil) signature
+                                siges = np.delete(siges,u[1],axis=2)
                             
 
                 

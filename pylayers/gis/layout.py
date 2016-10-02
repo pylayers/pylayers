@@ -899,7 +899,7 @@ class Layout(PyLayers):
             #
 
             self.lsss = [ x for x in useg if len(self.Gs.node[x]['iso'])>0 ] 
-            
+            self.lnss = [ x for x in upnt if len(set(nx.neighbors(self.Gs,x)).intersection(set(self.lsss)))>0]
             # self.isss = []
 
             #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
@@ -1917,7 +1917,7 @@ class Layout(PyLayers):
         # add new edge num np[1]
         self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
 
-    def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0,verbose=True):
+    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,40000000),offset=0,verbose=True):
         """  add segment between node n1 and node n2
 
         Parameters
@@ -1928,7 +1928,7 @@ class Layout(PyLayers):
         name : string
             layer name 'PARTITION'
         z : list of float
-            default = [0,3.0]
+            default = (0,40000000)
         offset : float
             [-1,1] default (0)
 
@@ -4558,14 +4558,14 @@ class Layout(PyLayers):
             dlabels = self.display['ndlabel']
             fig,ax=self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s',fig=fig,ax=ax)
 
-        if self.display['subsegnb']:
-            if hasattr(self,'lsss'):
-                seg = self.lsss
-                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
-                nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+        # if self.display['subsegnb']:
+        #     if hasattr(self,'lsss'):
+        #         seg = self.lsss
+        #         psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+        #         nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
 
-                [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
-                    fontdict={'size':8},ha='center') for x in range(len(seg))]
+        #         [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
+        #             fontdict={'size':8},ha='center') for x in range(len(seg))]
 
         if self.display['transition']:
             try:
@@ -4755,7 +4755,7 @@ class Layout(PyLayers):
         if 't' in self.lbltg:
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
-        write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
+        #write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
         if hasattr(self,'m'):
             write_gpickle(getattr(self,'m'),os.path.join(path,'m.gpickle'))
 
@@ -4837,7 +4837,7 @@ class Layout(PyLayers):
         if 't' in graphs :
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
-        setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
+        #setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
         filem = os.path.join(path,'m.gpickle')
         if os.path.isfile(filem):
             setattr(self,'m', read_gpickle(filem))
@@ -5271,10 +5271,12 @@ class Layout(PyLayers):
         ###     if vnodes == 0 it means this is a created
         ###     segment which is tagged as _AIR
         ###
+
         T,map_vertices = self._triangle()
         # point index are integer
         map_vertices = map_vertices.astype(int)
         ptri = T['vertices'][T['triangles']]
+        
         # List of Triangle Polygons
 
         lTP = [ geu.Polygon(x) for x in ptri ]
@@ -5301,7 +5303,7 @@ class Layout(PyLayers):
                 _airseg.append(self.add_segment( p.vnodes[np.mod(aw-1,modpt)],
                                                  p.vnodes[np.mod(aw+1,modpt)]
                                                 ,name='_AIR',
-                                                z = [0,40000000],
+                                                z = (0,40000000),
                                                 verbose=False))
             # update polygon segments with new added airwalls
             p.setvnodes(self)
@@ -5357,9 +5359,9 @@ class Layout(PyLayers):
         #determine the neighbors of those segments (the 2 connected triangles centroids)
         neigh = [ nx.neighbors(G,un) for un in rn ]
         
-        #store into networkx compliant format
-
-        uE = [(neigh[un][0],neigh[un][1],{'segment':rn[un]}) for un in xrange(len(rn))]
+        # store into networkx compliant format
+        
+        uE = [(neigh[un][0],neigh[un][1],{'segment':[rn[un]]+self.Gs.node[rn[un]]['iso']}) for un in xrange(len(rn))]
         iuE = {rn[un]:[-neigh[un][0],-neigh[un][1]] for un in xrange(len(rn))}
 
         # delete temporary graph
@@ -5371,7 +5373,7 @@ class Layout(PyLayers):
         self.Gt = nx.Graph()
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt,lambda x:-x)
-
+        
         # add polyg  to nodes
         # add indoor to nodes
         # add isopen to nodes
@@ -5399,9 +5401,12 @@ class Layout(PyLayers):
         #
         mapoldcy={c:c for c in self.Gt.nodes() }
 
-        self.showG('st',aw=1)
+        #self.showG('st',aw=1)
        
         for a in _airseg:
+            #
+            # n0,n1 : cycle number 
+            #
             n0,n1=iuE[a]
             found=False
             while not found:
@@ -5442,9 +5447,21 @@ class Layout(PyLayers):
                 ine = dne.items()
                 #update n0 with the new merged polygon 
                 self.Gt.add_node(n0,polyg=P)
-                # connect new cycle n0 to neighbors 
+                #connect new cycle n0 to neighbors 
+                # for x in ine:
+                #     if x[0]!=n0:
+                #         ncy  = x[0]
+                #         dseg = x[1]
+                #         # a link between cycles already exists
+                #         if self.Gt.has_edge(n0,ncy):
+                #             dseg_prev = self.Gt.edge[n0][ncy]
+                #             dseg['segment']=list(set(dseg['segment']+dseg_prev['segment']))
+                #         print n0,ncy,dseg['segment']
+                #         self.Gt.add_edge(n0,ncy,segment=dseg['segment'])
+
+                
                 self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-                #remove old cycle n1 
+                #remove old cycle n1 n
                 self.Gt.remove_node(n1)
                 # update pos of the cycle with merged polygon centroid
                 self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
@@ -5452,7 +5469,7 @@ class Layout(PyLayers):
                 # delete _air segment a
                 # do not apply g2npy  
                 self.del_segment(a,verbose=False,g2npy=False)
-                mapoldcy[n1]=n0
+                mapoldcy[n1] = n0
                 # fig,a=self.showG('st',aw=1)
                 # plt.show()
         ######
@@ -5463,40 +5480,18 @@ class Layout(PyLayers):
         self.Gt = nx.relabel_nodes(self.Gt,nl)
         self.Gt.pos={}
         self.Gt.pos={nl[n]:pos[n] for n in nl}
-        # import ipdb
-        # ipdb.set_trace()
-        ###############
-        # Find open convex cycles
-        #
-        #    A convex cycle is open if is has at least one segment which is _AIR or AIR
-        #for ccy in self.Gt.node:
-            # get the polygon 
-        #    poly = self.Gt.node[ccy]['polyg']
-            # get segment of the polygon
-        #    seg = poly.vnodes[poly.vnodes>0]
-            # get list of AIR or _AIR segment of the polygon
-        #    lair = [x in (self.name['AIR']+self.name['_AIR']) for x in seg]
-            
-        #    if sum(lair)>0:
-        #        isopen = True
-        #    else:
-        #        isopen = False
-            # update ispopen status 
-            # update indoor status 
-        #    self.Gt.node[ccy]['isopen']=isopen
-        #    self.Gt.node[ccy]['isopen']=isopen
-        # update ncycles in Gs
-    
+        
+        
         self._updGsncy()
-
         #
         # add cycle 0 to boundaries segments
         # cycle 0 is necessarily outdoor
         #
-
         self.Gt.add_node(0,indoor=False)
         for s in self.segboundary:
             self.Gs.node[s]['ncycles'].append(0)
+
+        
         #
         # boundary adjascent cycles
         #
@@ -5580,12 +5575,10 @@ class Layout(PyLayers):
             # extend to_visit to not visited neighbors
             to_visit.extend(nv_neighbors_aw)
             visited.append(cur_cy)
-            
+        
         self.g2npy()
         
         
-
-
 
     def _visual_check(self):
         """ visual checking of graphs
@@ -6249,6 +6242,7 @@ class Layout(PyLayers):
         """ update Gs ncycles using Gt information
 
         Update graph Gs segment with their 2 cycles information
+
         initialize a void list 'ncycles' for each segment of Gs
 
         See Also
@@ -6262,31 +6256,13 @@ class Layout(PyLayers):
         for k in self.Gs.node:
             self.Gs.node[k]['ncycles']=[]
        
-        # remove node 0
+        # filter out node 0
         Gtnodes = filter(lambda x: x != 0, self.Gt.nodes())
         
+        # loop over all cycles
         for ncy in Gtnodes:
-            #vnodes = np.array(self.Gt.node[k]['vnodes'])
-
+            # get vnodes : points and segments number
             vnodes = self.Gt.node[ncy]['polyg'].vnodes
-        
-            #
-            # add iso segments to vnodes
-            #
-            new  = []
-            for k in vnodes:
-                if k>0: 
-                    iso = self.Gs.node[k]['iso']
-                    if len(iso)>0:
-                        new = new + [k] + iso
-                    else:
-                        new = new +[k]
-                else:
-                    new = new + [k]
-
-            vnodes = np.array(new) 
-            self.Gt.node[ncy]['polyg'].vnodes = vnodes
-            #vnodes = self.Gt.node[k]['polyg'].vnodes
             for n in vnodes:
                 if n==0:
                     pdb.set_trace()
@@ -6296,7 +6272,13 @@ class Layout(PyLayers):
                         if len(self.Gs.node[n]['ncycles'])>2:
                             print n,self.Gs.node[n]['ncycles']
                             logging.warning('A segment cannot relate more than 2 cycles')
-             
+        
+        for nseg in self.Gs.node:
+            if nseg>0:
+                ncycles = self.Gs.node[nseg]['ncycles']
+                if len(ncycles)>1:
+                    if nseg not in self.Gt.edge[ncycles[0]][ncycles[1]]['segment']:
+                        self.Gt.edge[ncycles[0]][ncycles[1]]['segment'].append(nseg)
               
 
     def _addoutcy(self,check=False):
@@ -7996,7 +7978,9 @@ class Layout(PyLayers):
                 plt.axis()
                 kwargs['ax'].imshow(np.array(image), extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
-
+        if True:
+            pt = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
+            kwargs['ax'].scatter(pt[:,0],pt[:,1],c='r',s=50)
         if kwargs['show']:
             plt.show()
 
@@ -8416,11 +8400,11 @@ class Layout(PyLayers):
         #
         #ldiff = list(np.hstack((self.degree[1],self.degree[2])).astype('int'))
         lpnt = [x for x in self.Gs.node if (x <0 and x not in self.degree[0]) ]
-        
+       
         self.ddiff = {}
         #pdb.set_trace()
         for k in lpnt:
-
+            
             # list of cycles associated with point k
             lcyk = self.Gs.node[k]['ncycles']
             if len(lcyk)>2:
@@ -8435,8 +8419,10 @@ class Layout(PyLayers):
                 neigh = self.Gs[k].keys()
                 sega  = [ n for n in neigh if 
                     (self.Gs.node[n]['name']=='AIR' or 
-                     self.Gs.node[n]['name']=='_AIR')]
+                     self.Gs.node[n]['name']=='_AIR') ]
 
+                sega_iso = [ n for n in sega if len(self.Gs.node[n]['iso'])>0 ]
+                sega_eff = list(set(sega).difference(set(sega_iso)))
                 nsector = len(neigh)-len(sega)
 
 
@@ -8445,16 +8431,26 @@ class Layout(PyLayers):
                 # team building algo
                 # 
                 ct = 0
+                # if k ==-44:
+                #     pdb.set_trace()
                 for ccy in lccyk:
 
                     #segsep = self.Gt[ccy[0]][ccy[1]]['segment'][0]
                     segsep = self.Gt[ccy[0]][ccy[1]]['segment']
-                    typslab = self.Gs.node[segsep]['name']
-                    if (typslab=='AIR' or typslab=='_AIR'): # same sector
+                    # filter only segments connected to point k (neigh)
+                    lvseg = [x for x in segsep if x in neigh]
+                    if len(lvseg)==1 and (lvseg[0] in sega_eff): # same sector
                         dsector[ct].append(ccy[1])
-                    else: # change sector
+                    else:  # change sector
                         ct=(ct+1)%nsector
                         dsector[ct].append(ccy[1])
+
+                    # typslab = self.Gs.node[segsep]['name']
+                    # if (typslab=='AIR' or typslab=='_AIR'): # same sector
+                        # dsector[ct].append(ccy[1])
+                    # else: # change sector
+                        # ct=(ct+1)%nsector
+                        # dsector[ct].append(ccy[1])
                         # lcy2.append(ccy[1])
                         # lcy1,lcy2 = lcy2,lcy1
 

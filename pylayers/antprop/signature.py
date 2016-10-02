@@ -103,6 +103,7 @@ from pylayers.util.project import *
 import heapq
 import shapely.geometry as sh
 import shapely.ops as sho
+from tqdm import tqdm
 #from numba import autojit
 
 
@@ -3063,7 +3064,7 @@ class Signatures(PyLayers,dict):
 
         # signature counter
         cptsig = 0
-        for us,s in enumerate(lis):
+        for us,s in tqdm(enumerate(lis)):
             
             #print s
             # if s==(4,2):
