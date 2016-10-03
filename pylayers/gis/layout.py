@@ -899,7 +899,7 @@ class Layout(PyLayers):
             #
 
             self.lsss = [ x for x in useg if len(self.Gs.node[x]['iso'])>0 ] 
-            self.lnss = [ x for x in upnt if len(set(nx.neighbors(self.Gs,x)).intersection(set(self.lsss)))>0]
+            
             # self.isss = []
 
             #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
@@ -4754,6 +4754,7 @@ class Layout(PyLayers):
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in self.lbltg:
             write_gpickle(getattr(self,'ddiff'),os.path.join(path,'ddiff.gpickle'))
+            write_gpickle(getattr(self,'lnss'),os.path.join(path,'lnss.gpickle'))
         write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
         #write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
         if hasattr(self,'m'):
@@ -4836,6 +4837,7 @@ class Layout(PyLayers):
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in graphs :
             setattr(self,'ddiff', read_gpickle(os.path.join(path,'ddiff.gpickle')))
+            setattr(self,'lnss', read_gpickle(os.path.join(path,'lnss.gpickle')))
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
         #setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
         filem = os.path.join(path,'m.gpickle')
@@ -5522,7 +5524,9 @@ class Layout(PyLayers):
         self.g2npy()
         # find diffraction points : updating self.ddiff
         self._find_diffractions()
-
+        # list of diffraction point involving airwall 
+        # needs checking height in rays.to3D for constructing the 3D ray
+        self.lnss = [ x for x in self.ddiff if len(set(nx.neighbors(self.Gs,x)).intersection(set(self.lsss)))>0]
         #
         #   VIII -  Construct the list of interactions associated to each cycle
         #
@@ -6273,6 +6277,7 @@ class Layout(PyLayers):
                             print n,self.Gs.node[n]['ncycles']
                             logging.warning('A segment cannot relate more than 2 cycles')
         
+
         for nseg in self.Gs.node:
             if nseg>0:
                 ncycles = self.Gs.node[nseg]['ncycles']
@@ -6837,6 +6842,7 @@ class Layout(PyLayers):
         self.dGv = {}  # dict of Gv graph
 
         for icycle in self.Gt.node:
+            
             if icycle!=0:
                 if indoor or not self.Gt.node[icycle]['indoor']:
                     polyg = self.Gt.node[icycle]['polyg']
@@ -6879,7 +6885,7 @@ class Layout(PyLayers):
                         d0 = np.linalg.det(A0)
                         d1 = np.linalg.det(A1)
 
-                        if not ((abs(d0)<1e-3) & (abs(d1)<1e-3)):
+                        if not ((abs(d0)<1e-1) & (abs(d1)<1e-1)):
                             if ((0 not in self.Gs.node[nk[0]]['ncycles']) and 
                                (0 not in self.Gs.node[nk[1]]['ncycles'])) : 
                                 Gv.add_edge(nk[0],nk[1])
@@ -7980,7 +7986,9 @@ class Layout(PyLayers):
 
         if True:
             pt = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
-            kwargs['ax'].scatter(pt[:,0],pt[:,1],c='r',s=50)
+            pta = np.array([self.Gs.pos[x] for x in self.lnss])
+            kwargs['ax'].scatter(pt[:,0],pt[:,1],c='r',s=75)
+            kwargs['ax'].scatter(pta[:,0],pta[:,1],c='b',s=20)
         if kwargs['show']:
             plt.show()
 
