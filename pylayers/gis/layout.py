@@ -3171,14 +3171,14 @@ class Layout(PyLayers):
 
     
 
-    def angleonlink3(self, p1=np.array([0,0,1]), p2=np.array([10, 3,1])):
+    def angleonlink3(self, p1=np.array([0,0,1]), p2=np.array([10,3,1])):
         """ angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2
 
         Parameters
         ----------
 
-        p1 : np.array (2 x Np) or (2,)
-        p2 : np.array (2 x Np) or (2,)
+        p1 : np.array (3 x Np) or (3,)
+        p2 : np.array (3 x Np) or (3,)
 
         Returns
         -------
@@ -3205,12 +3205,15 @@ class Layout(PyLayers):
 
         sh1 = np.shape(p1)
         sh2 = np.shape(p2)
+        
 
         assert sh1[0]==3
         assert sh2[0]==3
 
+        
         if (len(sh1)<2) & (len(sh2)>1):
             p1 = np.outer(p1,np.ones(sh2[1]))
+
 
         if (len(sh2)<2) & (len(sh1)>1):
             p2 = np.outer(p2,np.ones(sh1[1]))
@@ -3225,8 +3228,12 @@ class Layout(PyLayers):
         nu = np.sqrt(np.sum(u*u,axis=0))
         # 3 x N
         un = u / nu[np.newaxis,:]
-
-        seglist = self.seginframe2(p1[0:2], p2[0:2])
+        #
+        # warning : seglist contains the segment number in tahe not in Gs
+        #
+        #
+        seglist = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
+        
 
         upos = np.nonzero(seglist>=0)[0]
         uneg = np.nonzero(seglist<0)[0]
@@ -3238,7 +3245,8 @@ class Layout(PyLayers):
         else:
             llink = np.array([len(seglist)])
         # [(link id,number of seg),...]
-        #nl = zip(np.arange(nlink),llink)
+        #nl = zip(np.arange(nlink),llink)n
+
 
         npta = self.tahe[0, seglist[upos]]
         nphe = self.tahe[1, seglist[upos]]
@@ -3252,18 +3260,32 @@ class Layout(PyLayers):
 
         for i,nl in enumerate(llink):
             try:
-                P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
-                P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
+                # P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
+                # P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
                 ilink = np.hstack((ilink,array([-1]),i*np.ones(nl,dtype='int')))
             except:
-                P1 = np.outer(p1[:,i],np.ones(nl))
-                P2 = np.outer(p2[:,i],np.ones(nl))
+                # P1 = np.outer(p1[:,i],np.ones(nl))
+                # P2 = np.outer(p2[:,i],np.ones(nl))
                 ilink = i*np.ones(nl,dtype='int')
 
         # check for intersection P1P2 PtaPhe
-        bo = geu.intersect(P1, P2, Pta, Phe)
-
-        upos_intersect = upos[bo]
+        # bo = geu.intersect(P1[0:-1], P2[0:-1], Pta, Phe)
+        Nscreen = len(npta)
+        # get segment height bounds
+        zmin  = np.array([ self.Gs.node[x]['z'][0] for x in self.tsg[seglist[upos]] ])
+        zmax  = np.array([ self.Gs.node[x]['z'][1] for x in self.tsg[seglist[upos]] ])
+        # centroid of the screen
+        Pg = np.vstack(((Phe+Pta)/2.,(zmax+zmin)/2.))
+        Ptahe = Phe-Pta
+        L1 = np.sqrt(np.sum(Ptahe*Ptahe,axis=0)) 
+        U1 = np.vstack((Ptahe/L1,np.zeros(Nscreen))) # 3 x Nscreen U1 is in plane xy 
+        L2 = zmax-zmin 
+        U2 = np.array([0,0,1])[:,None]  # 3 x 1  U2 is along z
+        
+        bo = geu.intersect3(p1,p2,Pg,U1,U2,L1,L2)
+        
+        #pdb.set_trace()
+        upos_intersect = upos[bo[0,:]]
 
         seglist2 = seglist[upos_intersect]
         idxlnk = ilink[upos_intersect]
@@ -3280,21 +3302,17 @@ class Layout(PyLayers):
 
         # seglist = seglist+1
         seglist = np.array(map(lambda x : self.tsg[x],seglist2))
+
         data = np.zeros(len(seglist),dtype=[('i','i8'),('s','i8'),('a',np.float32)])
 
         #
         # update subsegment in seglist
         #
-        # self.lsss
-        # self.stridess
         #
-        # TODO : To be modified stidesss deprecated
-        #
-        sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
 
         data['i'] = idxlnk
-        data['s'] = sseglist
-        data['a'] = angle
+        data['s'] = seglist[0]
+        data['a'] = angle[0]
         return(data)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
@@ -3385,19 +3403,19 @@ class Layout(PyLayers):
                 P2 = np.outer(p2[:,i],np.ones(nl))
                 ilink = i*np.ones(nl,dtype='int')
 
+        
         bo = geu.intersect(P1, P2, Pta, Phe)
-
+        
         upos_intersect = upos[bo]
 
         seglist2 = seglist[upos_intersect]
         idxlnk = ilink[upos_intersect]
-
         #
         # Calculate angle of incidence refered from segment normal
         #
 
         norm  = self.normal[0:2,seglist2]
-        # vector along the link
+        # vector along the linkco
         uu = un[:,idxlnk]
         unn = abs(np.sum(uu * norm, axis=0))
         angle = np.arccos(unn)
@@ -3410,14 +3428,10 @@ class Layout(PyLayers):
         # update subsegment in seglist
         #
         # self.lsss
-        # self.stridess
-        #
-        #  TODO : To be modified deprecated 
-
-        sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
+    
 
         data['i'] = idxlnk
-        data['s'] = sseglist
+        data['s'] = seglist
         data['a'] = angle
         return(data)
 
@@ -3777,6 +3791,7 @@ class Layout(PyLayers):
         min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
         max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
         min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+
         seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
                                          (self.min_sx < x[1]) &
                                          (self.max_sy > x[2]) &
@@ -7589,7 +7604,8 @@ class Layout(PyLayers):
                     'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False,
-                    'overlay':False
+                    'overlay':False,
+                    'diffraction':False
                     }
 
 
@@ -7652,7 +7668,8 @@ class Layout(PyLayers):
                     'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False,
-                    'overlay':False
+                    'overlay':False,
+                    'diffraction':False
                     }
 
         for key, value in defaults.items():
@@ -7873,7 +7890,7 @@ class Layout(PyLayers):
             # range len edges
 
             rle = range(len(edges))
-
+    
             DD = filter(lambda x:  ((len(edges[x][0])==1) &
                                     (len(edges[x][1])==1)),rle)
 
@@ -7984,11 +8001,12 @@ class Layout(PyLayers):
                 plt.axis()
                 kwargs['ax'].imshow(np.array(image), extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
-        if True:
+        if kwargs['diffraction']:
             pt = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
             pta = np.array([self.Gs.pos[x] for x in self.lnss])
             kwargs['ax'].scatter(pt[:,0],pt[:,1],c='r',s=75)
-            kwargs['ax'].scatter(pta[:,0],pta[:,1],c='b',s=20)
+            if len(self.lnss)>0:
+                kwargs['ax'].scatter(pta[:,0],pta[:,1],c='b',s=20)
         if kwargs['show']:
             plt.show()
 

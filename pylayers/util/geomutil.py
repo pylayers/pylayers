@@ -3250,9 +3250,82 @@ def intersect_line_seg(line,seg):
     
     return(k,M)
 
+def intersect3(a,b,pg,u1,u2,l1,l2):
+    """ Intersection of a line and a rectangle screen
+
+    Parameters
+    ----------
+
+    a  : np.array (3,Nseg) of floats  
+        transmiter coordinates 
+    b  : np.array (3,Nseg) of floats  
+        receiver coordinates 
+    pg  : np.array (3,Nscreen) of floats 
+        center of gravity of the screen 
+    u1  : np.array (3,Nscreen) of floats 
+        unitary vector along first imension
+    u2  : np.array (3,Nscreen) of floats 
+        unitary vector along second dimension
+    l1   : np.array (,Nscreen)
+        length along first dimension in meters
+    l2   : np.array (,Nscreen)
+        length along second dimension in meters 
+
+    Returns
+    -------
+
+    bool : True   => intersection (occultation)
+           False 
+    
+    """
+
+    Nseg = a.shape[1]
+    Nscreen = u1.shape[1]
+
+    ba = b - a # (3,Nseg) LOS distance
+
+    # A : (Nseg,Nscreen,3,3)
+    # c : (Nseg,Nscreen,3)
+    # ba.T (Nseg,3)
+    # u1.T (Nscreen, 3)
+    # u2.T (Nscreen, 3)
+
+    # U  : Nseg,1,3,1
+    U  = ba.T[:,None,:,None]
+    assert(U.shape==(Nseg,1,3,1))
+    # U1 : 1,Nscreen,3,1 
+    U1 = u1.T[None,:,:,None]+np.zeros((1,Nscreen,3,1))
+    assert(U1.shape==(1,Nscreen,3,1))
+    # U1 : 1,Nscreen,3,1 
+    U2 = u2.T[None,:,:,None]+np.zeros((1,Nscreen,3,1))
+    assert(U2.shape==(1,Nscreen,3,1))
+    # U1e : Nseg,Nscreen,3,1
+    U1e = U1 + np.zeros(U.shape)
+    # U2e : Nseg,Nscreen,3,1
+    U2e = U2 + np.zeros(U.shape)
+    # Ue  : Nseg,Nscreen,3,1
+    Ue  = U + np.zeros(U2e.shape)
+
+    A = np.concatenate((Ue,-U1e,-U2e),axis=3)
+    
+    c = pg.T[None,:,:]-a.T[:,None,:]
+    # 
+    # Warning scipy.linalg do not handle MDA 
+    #
+    # x : Nseg x Nscreen
+    x = np.linalg.solve(A,c)
+    # condition of occultation 
+
+    condseg = ((x[:,:,0]>1) + (x[:,:,0]<0)) 
+    cond1 = ((x[:,:,1]>l1[None,:]/2.) + (x[:,:,1]<-l1[None,:]/2.)) 
+    cond2 = ((x[:,:,2]>l2[None,:]/2.) + (x[:,:,2]<-l2[None,:]/2.)) 
+    
+    visi = ~(((condseg + cond1 + cond2)%2).astype(bool))
+    return(visi)
+
 
 def intersect(a, b, c, d):
-    """ check if segment AB intersects segment CD
+    """ check if segment AB intersects segment CD in 2D 
 
     Parameters
     ----------

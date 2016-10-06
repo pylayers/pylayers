@@ -367,6 +367,7 @@ class Coverage(PyLayers):
         # pg : grid point
         #
         # 1 x na
+        
         for k in p:
             pg = self.grid[k[0],:]
             pa = np.array(self.dap[k[1]]['p'][0:2])
@@ -380,7 +381,12 @@ class Coverage(PyLayers):
                 self.pg = pg
 
         self.pa = self.pa.T
+        shpa = self.pa.shape
+        shpg = self.pg.shape
+        self.pa = np.vstack((self.pa,np.ones(shpa[1])))
         self.pg = self.pg.T
+        self.pg = np.vstack((self.pg,np.ones(shpg[0])))
+        
         self.nf = len(self.fGHz)
 
         # retrieving dimensions along the 3 axis
@@ -388,6 +394,8 @@ class Coverage(PyLayers):
         self.na = na
         ng = self.ng
         nf = self.nf
+        #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+        pdb.set_trace()
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)
