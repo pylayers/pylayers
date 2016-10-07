@@ -1568,7 +1568,8 @@ class DLink(Link):
         """
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:
-            self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
+            self.Tb = geu.MEulerAngle(ph,gamma=0,beta=np.pi/2)
+            pdb.set_trace()
             self.evalH()
             S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             try:
