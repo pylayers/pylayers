@@ -4919,7 +4919,7 @@ class Signature(object):
 
         return M
 
-    def backtrace_old(self, tx, rx, M):
+    def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx
 
         Parameters
@@ -4957,7 +4957,7 @@ class Signature(object):
             >>> rx = np.array([762,1114])
             >>> s.ev(L)
             >>> M = s.image(tx)
-            >>> isvalid,Y = s.backtrace_old(tx,rx,M)
+            >>> isvalid,Y = s.backtrace(tx,rx,M)
 
             >>> fig,ax = L.showG('s',labels=1,aw=1,axes=1)
             >>> l1 = ax.plot(tx[0],tx[1],'or')
@@ -5046,6 +5046,61 @@ class Signature(object):
             return isvalid,(k,alpha,beta)
 
 
+  def sig2ray(self, L, pTx, pRx, mode='incremental'):
+        """ convert a signature to a 2D ray
+
+        Parameters
+        ----------
+
+        L : Layout
+        pTx : ndarray
+            2D transmitter position
+        pRx : ndarray
+            2D receiver position
+        mod : if mod=='incremental' a set of alternative signatures is return
+
+        Returns
+        -------
+
+        Y : ndarray (2x(N+2))
+
+        See Also 
+        --------
+
+        Signature.image
+        Signature.backtrace
+            
+        """
+
+        # ev transforms a sequence of segment into numpy arrays (points)
+        # necessary for image calculation
+        self.ev(L)
+        # calculates images from pTx
+        M = self.image(pTx)
+
+        #print self
+        #if np.array_equal(self.seq,np.array([5,7,4])):
+        #    pdb.set_trace()
+        isvalid,Y = self.backtrace(pTx, pRx, M)
+        #print isvalid,Y
+        # 
+        # If incremental mode this function returns an alternative signature
+        # in case the signature do not yield a valid ray.
+        #
+        isray = True
+        if mode=='incremental':
+            if isvalid:
+                return isray,Y
+            else:
+                isray=False
+                # something to do here
+                return isray,None
+        else:
+            if isvalid:
+                return isray,Y
+            else:
+                isray=False
+                return isray,None
 
 
 

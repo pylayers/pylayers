@@ -258,6 +258,7 @@ class ADPchannel(bs.TUsignal):
 
         Na = self.y.shape[0]
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
+        spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
         u  = np.where(pdp==max(pdp))[0]
         FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(kwargs['fcGHz']))
         Gmax = 10*np.log10(pdp[u])-FS[u] 
@@ -297,7 +298,7 @@ class ADPchannel(bs.TUsignal):
         ax.set_title(self._filename+' '+str(PL))
         if kwargs['legend']:
             plt.legend(loc='best') 
-        return fig,ax,PL
+        return fig,ax,PL,spdp
 
     def polarplot(self,**kwargs):
         defaults = { 'fig':[],
@@ -360,7 +361,7 @@ class TBchannel(bs.TBsignal):
 
 
     def tau_Emax(self):
-        """ calculate the delay of max energy pildeeak
+        """ calculate the delay of max energy peak
 
         .. math::
             \max_{\tau} y^{2}(\tau)
@@ -371,7 +372,7 @@ class TBchannel(bs.TBsignal):
         tau_Emax = self.x[u]
         return(tau_Emax)
 
-    def tau_moy(self, alpha=0.1, tau0=0):
+    def tau_moy(self, alpha=0.1, threshold_dB = 20, tau0=0):
         """ calculate mean excess delay starting from delay tau0
 
         Parameters
@@ -386,28 +387,38 @@ class TBchannel(bs.TBsignal):
 
         #cdf, vary = self.ecdf()
 
-        cdf = np.cumsum(self.y,axis=-1)
-        cdf = cdf/cdf[:,-1][:,None]
+        u = np.max(self.y*self.y)
+        v = 10**(np.log10(u)-threshold_dB/10.)
+
+        uf = np.where(self.y*self.y>v)
+
+        cdf = np.cumsum(self.y[uf]*self.y[uf],axis=-1)
+       
+        if len(cdf.shape)==1:
+            cdf = cdf/cdf[-1]
+        else:
+            cdf = cdf/cdf[:,-1][:,None]
 
         #pdb.set_trace()
         pdf = np.diff(cdf)
 
 
-        u = np.where(cdf > alpha)
-        v = np.where(cdf < 1 - alpha)
+        # u = np.where(cdf > alpha)[0]
+        # v = np.where(cdf < 1 - alpha)[0]
 
-        
-        if len(pdf.shape)==1:
-            t = t[u[0]:v[-1]]
-            pdf = pdf[u[0]:v[-1]]
-        else:
-            t = t[u[1][0]:v[1][-1]]
-            pdf = pdf[0,u[1][0]:v[1][-1]]
+
+        # pdb.set_trace()
+        # if len(pdf.shape)==1:
+        #     t = t[u[0]:v[-1]]
+        #     pdf = pdf[u[0]:v[-1]]
+        # else:
+        #     t = t[u[1][0]:v[1][-1]]
+        #     pdf = pdf[0,u[1][0]:v[1][-1]]
         
 
-        
-        a = np.sum(t * pdf)
-        b = np.sum(pdf)
+        pdb.set_trace()
+        a = np.sum(t[uf] * pdf[uf])
+        b = np.sum(pdf[uf])
         taum = a / b
 
         return(taum)
@@ -435,16 +446,19 @@ class TBchannel(bs.TBsignal):
         """
 
         self.flatteny(reversible=True)
+
         y2 = self.yf*self.yf
         y4 = y2*y2
         taum = sum(self.x*y2,axis=0)/sum(y2,axis=0)
+
         delayspread = np.sqrt(sum((self.x-taum)*(self.x-taum)*y2)/sum(y2,axis=0))
-        of = 1 -sum(y4,axis=0)/sum(y2,axis=0)**2
+        of = 1 - sum(y4,axis=0)/sum(y2,axis=0)**2
+
         return taum,delayspread,of
 
 
 
-    def tau_rms(self, alpha=0.1, tau0=0):
+    def tau_rms(self, alpha=0.1,threshold_dB=20, tau0=0):
         r""" calculate root mean square delay spread starting from delay tau_0
 
         Parameters
@@ -475,29 +489,36 @@ class TBchannel(bs.TBsignal):
         #cdf, vary = self.ecdf()
         #pdp = np.diff(cdf.y)
 
-        cdf = np.cumsum(self.y,axis=1)
-        cdf = cdf/cdf[:,-1][:,None]
+        u = np.max(self.y*self.y)
+        v = 10**(np.log10(u)-threshold_dB/10.)
 
-        taum = self.tau_moy(tau0)
+        uf = np.where(self.y*self.y>v)
 
-        u = np.where(cdf > alpha)
-        v = np.where(cdf < 1 - alpha)
+        cdf = np.cumsum(self.y[uf]*self.y[uf],axis=-1)
+       
+        
+        if len(cdf.shape)==1:
+            cdf = cdf/cdf[-1]
+        else:
+            cdf = cdf/cdf[:,-1][:,None]
+      
+        taum = self.tau_moy(tau0,threshold_dB=threshold_dB)
+
+        # u = np.where(cdf > alpha)
+        # v = np.where(cdf < 1 - alpha)
         
 
+        # pdf = np.diff(cdf)
 
+        # if len(cdf.shape)==1:
+        #     t = t[u[0]:v[-1]]
+        #     pdf = pdf[u[0]:v[-1]]
+        # else:
+        #     t = t[u[1][0]:v[1][-1]]
+        #     pdf = pdf[0,u[1][0]:v[1][-1]]
 
-
-        pdf = np.diff(cdf)
-
-        if len(cdf.shape)==1:
-            t = t[u[0]:v[-1]]
-            pdf = pdf[u[0]:v[-1]]
-        else:
-            t = t[u[1][0]:v[1][-1]]
-            pdf = pdf[0,u[1][0]:v[1][-1]]
-
-        b = sum(pdf)
-        m = sum(pdf * (t - taum) * (t - taum))
+        b = sum(pdf[uf])
+        m = sum(pdf[uf] * (t[uf] - taum) * (t[uf] - taum))
         taurms = np.sqrt(m / b)
 
         return(taurms)

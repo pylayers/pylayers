@@ -102,7 +102,8 @@ class Layout(PyLayers):
                       build=True,
                       verbose=False,
                       cartesian=True,
-                      dist_m = 400):
+                      dist_m = 400,
+                      type='floorplan'):
 
         """ object constructor
 
@@ -167,7 +168,7 @@ class Layout(PyLayers):
         self.hasboundary=False
         self.coordinates='cart'
         self.version='1.1'
-        self.type='floorplan'
+        self.type=type
         #
         # setting display option
         #
@@ -1349,7 +1350,10 @@ class Layout(PyLayers):
         if self.type=='floorplan':
             config.add_section("floorplan")
             config.set("floorplan","zceil",self.zceil)
-
+            config.set("floorplan","zfloor",self.zceil)
+        
+        if self.type=='outdoor':
+            config.add_section("outdoor")
         #config.set("info",'Npoints',self.Np)
         #config.set("info",'Nsegments',self.Ns)
         #config.set("info",'Nsubsegments',self.Nss)

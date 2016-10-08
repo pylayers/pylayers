@@ -16,7 +16,7 @@ DL.wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 # DL.eval(diffraction=True,force=True,ra_vectorized=True,alg=20152,si_reverb=2)
 ra_vectorized = False
 
-DL.eval(diffraction=True,force=True,ra_vectorized=ra_vectorized,alg=5,cutoff=2,applywav=True)
+DL.eval(diffraction=True,force=True,applywav=True)
 DL2=DLink(L='defstr.ini')
 
 DL2.a=np.array([759,1114,1.0])
