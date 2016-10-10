@@ -107,18 +107,19 @@ except:
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
     """
-    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([]),a=np.array([])):
+    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([]),a=np.array([]),offset=21.128*np.pi/180):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         self.tx = tx 
         self.rx = rx
         self.a = a
+        self.offset=offset
         self._filename = ''
         if len(tx)>0:
             txrx = tx-rx
             self.dist = np.sqrt(np.sum(txrx*txrx))
             txrx_n = txrx/self.dist
             self.theta = np.arccos(txrx_n[2])
-            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])
+            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])-self.offset
             self.tau  = self.dist/0.3
             
 
@@ -170,24 +171,46 @@ class AFPchannel(bs.FUsignal):
 
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
-        adp = ADPchannel(x=x,y=y,a=self.a,tx=self.tx,rx=self.rx,_filename=self._filename)
+        adp = ADPchannel(x=x,y=y,a=self.a,tx=self.tx,rx=self.rx,_filename=self._filename,offset=self.offset)
         return adp 
 
 class ADPchannel(bs.TUsignal):
     """ Angular Delay Profile channel
     """
-    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename=''):
+    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename='',offset=0):
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
         self.a = a
+        self.offset = offset
         if len(tx)>0:
             txrx = tx-rx
             self.dist = np.sqrt(np.sum(txrx*txrx))
             txrx_n = txrx/self.dist
             self.theta = np.arccos(txrx_n[2])
-            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])
+            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])-self.offset
             self.tau  = self.dist/0.3
 
         self._filename = _filename
+
+    def clean(self,threshold_dB=20):
+        """  clean ADP 
+
+        Parameters 
+        -----------
+
+        threshold_dB : float 
+
+        Notes
+        -----
+
+        All values below Max -threshold are set to zero
+
+        """
+        Na = self.y.shape[0]
+        P = np.real(self.y*np.conj(self.y))
+        MaxdB = 10*np.log10(np.max(P))
+        u = np.where(10*np.log10(P) < MaxdB-threshold_dB)
+        
+        self.y[u] = 0+0j
 
     def adp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
         """ Calculate Angular Delay Profile
@@ -222,6 +245,13 @@ class ADPchannel(bs.TUsignal):
         if legend:
             plt.legend(loc='best') 
         return fig,ax
+
+    def app(self,**kwargs):
+        """ Calculate Angular Power Profile
+        """
+        Na = self.y.shape[0]
+        app = np.real(np.sum(self.y*np.conj(self.y),axis=1))
+
 
     def pdp(self,**kwargs):
         """ Calculate Power Delay Profile
@@ -301,6 +331,26 @@ class ADPchannel(bs.TUsignal):
         return fig,ax,PL,spdp
 
     def polarplot(self,**kwargs):
+        """  
+
+        Parameters
+        -----------
+
+        fig
+        ax 
+        figsize
+        typ : string 
+        Ndec : int 
+            decimation factor
+        imax : int 
+            max value 
+        vmin : float 
+        vmax : float 
+        cmap : colormap
+        title : PADP
+
+
+        """
         defaults = { 'fig':[],
                      'ax':[],
                      'figsize':(10,10), 
@@ -344,6 +394,7 @@ class ADPchannel(bs.TUsignal):
         vmax = np.max(val)
         #Dynamic = max_val-vmin 
         pc  = ax.pcolormesh(th,rh,val,cmap=cmap,vmin=vmin,vmax=vmax)
+        ptx = ax.plot(self.phi,self.tau*cvel,'or')
         fig.colorbar(pc,orientation='vertical')
         ax.set_title(title)
         ax.axis('equal')
@@ -392,34 +443,10 @@ class TBchannel(bs.TBsignal):
 
         uf = np.where(self.y*self.y>v)
 
-        cdf = np.cumsum(self.y[uf]*self.y[uf],axis=-1)
-       
-        if len(cdf.shape)==1:
-            cdf = cdf/cdf[-1]
-        else:
-            cdf = cdf/cdf[:,-1][:,None]
-
-        #pdb.set_trace()
-        pdf = np.diff(cdf)
-
-
-        # u = np.where(cdf > alpha)[0]
-        # v = np.where(cdf < 1 - alpha)[0]
-
-
-        # pdb.set_trace()
-        # if len(pdf.shape)==1:
-        #     t = t[u[0]:v[-1]]
-        #     pdf = pdf[u[0]:v[-1]]
-        # else:
-        #     t = t[u[1][0]:v[1][-1]]
-        #     pdf = pdf[0,u[1][0]:v[1][-1]]
-        
-
-        pdb.set_trace()
-        a = np.sum(t[uf] * pdf[uf])
-        b = np.sum(pdf[uf])
-        taum = a / b
+        num = np.sum(self.y[uf]*self.y[uf]*self.x[uf[-1]])
+        den = np.sum(self.y[uf]*self.y[uf])
+        taum = num/den
+    
 
         return(taum)
 
@@ -457,6 +484,31 @@ class TBchannel(bs.TBsignal):
         return taum,delayspread,of
 
 
+    def Kfactor(self,threshold_dB=20,dB=True):
+        """ determine Ricean K factor 
+
+        Parameters
+        -----------
+
+        Threshold_dB : float 
+            Only the energy above threshold is taken into account
+        dB : boolean 
+            if True value in dB is returned
+
+        """
+        t = self.x
+        y = self.y
+        
+        u  = np.max(self.y*self.y)
+        v  = 10**(np.log10(u)-threshold_dB/10.)
+        vmax = np.where(self.y*self.y==u)
+        Pmax = self.y[vmax]*self.y[vmax]
+        uf   = np.where(self.y*self.y>v)
+        Ptot = np.sum(self.y[uf]*self.y[uf])
+        K = Pmax/(Ptot-Pmax)
+        if dB:
+            K=10*np.log10(K)
+        return(K[0])
 
     def tau_rms(self, alpha=0.1,threshold_dB=20, tau0=0):
         r""" calculate root mean square delay spread starting from delay tau_0
@@ -494,32 +546,12 @@ class TBchannel(bs.TBsignal):
 
         uf = np.where(self.y*self.y>v)
 
-        cdf = np.cumsum(self.y[uf]*self.y[uf],axis=-1)
-       
-        
-        if len(cdf.shape)==1:
-            cdf = cdf/cdf[-1]
-        else:
-            cdf = cdf/cdf[:,-1][:,None]
-      
         taum = self.tau_moy(tau0,threshold_dB=threshold_dB)
-
-        # u = np.where(cdf > alpha)
-        # v = np.where(cdf < 1 - alpha)
         
-
-        # pdf = np.diff(cdf)
-
-        # if len(cdf.shape)==1:
-        #     t = t[u[0]:v[-1]]
-        #     pdf = pdf[u[0]:v[-1]]
-        # else:
-        #     t = t[u[1][0]:v[1][-1]]
-        #     pdf = pdf[0,u[1][0]:v[1][-1]]
-
-        b = sum(pdf[uf])
-        m = sum(pdf[uf] * (t[uf] - taum) * (t[uf] - taum))
-        taurms = np.sqrt(m / b)
+        num = np.sum(self.y[uf]*self.y[uf]*(self.x[uf[-1]]-taum)**2)
+        den = np.sum(self.y[uf]*self.y[uf])
+        
+        taurms = np.sqrt(num/den)
 
         return(taurms)
 

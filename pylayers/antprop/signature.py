@@ -5046,7 +5046,7 @@ class Signature(object):
             return isvalid,(k,alpha,beta)
 
 
-  def sig2ray(self, L, pTx, pRx, mode='incremental'):
+    def sig2ray(self, L, pTx, pRx, mode='incremental'):
         """ convert a signature to a 2D ray
 
         Parameters
