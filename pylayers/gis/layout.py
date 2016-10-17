@@ -1589,7 +1589,10 @@ class Layout(PyLayers):
                 self.name[name] = [eval(ns)]
         self.Nss = Nss
 
+        self.boundary()
+
         # compliant with config file without  material/slab information
+
 
         if config.has_section('files'):
             #self.filematini=config.get('files','materials')

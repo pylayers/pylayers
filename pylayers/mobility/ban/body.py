@@ -68,12 +68,12 @@ from pylayers.util.project import *
 
 
 
-# try:
-#     from mayavi import mlab
-#     from tvtk.tools import visual
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
 
-# except:
-#     print 'mayavi not installed'
+except:
+    print 'mayavi not installed'
 
 
 class Body(PyLayers):

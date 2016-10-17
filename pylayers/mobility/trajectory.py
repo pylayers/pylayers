@@ -401,12 +401,12 @@ class Trajectory(PyLayers,pd.DataFrame):
     def __init__(self, df={}, ID='0', name='', typ=''):
         """ initialization
         """
+        
         super(Trajectory, self).__init__(df)
         self.ID = ID
         self.name = name
         self.typ = typ
         self.has_values = self.update()
-
     def __repr__(self):
         try:
             # total distance
@@ -417,6 +417,8 @@ class Trajectory(PyLayers,pd.DataFrame):
             typ = self.typ
             if not isinstance(self.ID,str):
                 ID = str(self.ID)
+            else:
+                ID = self.ID
             if typ == 'ag':
                 string ='Trajectory of agent ' + self.name + ' with ID ' + ID
             else :
@@ -537,10 +539,10 @@ class Trajectory(PyLayers,pd.DataFrame):
             raise AttributeError('Trajectory.generate requieres at least 3 time stamps')
         pt = kwargs['pt']
         npt = len(t)
-        now = datetime.now()
+        # now = datetime.now()
         td = pd.to_datetime(t,unit=kwargs['unit'])
-        delta = now - td[0]
-        td = td+delta
+        # delta = now - td[0]
+        # td = td+delta
         # velocity vector
         v = (pt[1:, :]-pt[0:-1, :])/(t[1]-t[0])
         # acceleration vector
