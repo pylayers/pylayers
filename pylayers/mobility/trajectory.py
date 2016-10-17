@@ -563,9 +563,10 @@ class Trajectory(PyLayers,pd.DataFrame):
             'ax': a[:, 0],
             'ay': a[:, 1],
             'az': a[:, 2],
-            's': s[:-1]}
+            's': s[:-1],
+            't':t[:-2]}
         super(Trajectory, self).__init__(df, columns=['x', 'y', 'z', 'vx', 'vy',
-                                         'vz', 'ax', 'ay', 'az', 's'],
+                                         'vz', 'ax', 'ay', 'az', 's','t'],
                                         index=td[:-2])
         self.ID = kwargs['ID']
         self.name = kwargs['name']
