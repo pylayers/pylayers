@@ -3,35 +3,29 @@
 #
 try:
     from tvtk.api import tvtk
-    from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
     print 'Layout:Mayavi is not installed'
 import pdb
+import sys
 import os
-import time
 import copy
 import glob
-import pickle
-import cPickle
 import ConfigParser
 import numpy as np
 import numpy.random as rd
 import scipy as sp
-import struct as stru
-from scipy import io
 import doctest
-import random
 import triangle
 import matplotlib.pyplot as plt
 import matplotlib.colors as clr
 import networkx as nx
+from itertools import combinations
+import ast
 from networkx.readwrite import write_gpickle, read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
-import shapely.ops as sho
-import triangle
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
@@ -48,28 +42,16 @@ from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 from pylayers.util import cone
 
-
-#from  more_itertools import unique_everseen
-
 # Handle furnitures
+
 import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
-#from pylayers.gis import cycles as Cycls
-# from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
-from pylayers.gui.editor_select import SelectL2
-
-from pylayers.util.easygui import *
-from pylayers.util.project import *
-#from   PyUtil  import *
-#from   interval import interval
-from itertools import combinations
-import pdb
-import ast
 import pylayers.util.graphutil as gph
+import pylayers.util.easygui as eag
+import pylayers.util.project as pro
 
-
-class Layout(PyLayers):
+class Layout(pro.PyLayers):
     """ Handling Layout
 
     Attributes
@@ -123,11 +105,11 @@ class Layout(PyLayers):
 
         """
 
-        #mat = sb.MatDB()
+        # mat = sb.MatDB()
         # mat.load(_filematini)
 
-        #self.sl = sb.SlabDB()
-        #self.sl.mat = mat
+        # self.sl = sb.SlabDB()
+        # self.sl.mat = mat
         # self.sl.load(_fileslabini)
 
         self.isbuilt = False
@@ -197,7 +179,7 @@ class Layout(PyLayers):
         # self.display['overlay_file']="/home/buguen/Pyproject/data/image/"
         self.display['overlay_file'] = ""
         self.display['overlay_axis'] = ""
-        #self.display['layerset'] = self.sl.keys()
+        # self.display['layerset'] = self.sl.keys()
         self.display['box'] = (-50, 50, -50, 50)
         self.name = {}
         self.ax = self.display['box']
@@ -225,7 +207,7 @@ class Layout(PyLayers):
 
         if not newfile:
             if loadini:
-                filename = pyu.getlong(self._filename, pstruc['DIRINI'])
+                filename = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
                 if os.path.exists(filename):  # which exists
                     self.load()
                 else:  # which do not exist
@@ -254,12 +236,14 @@ class Layout(PyLayers):
 
             # check if the graph gpickle files have been built
             if build:
-                if os.path.exists(os.path.join(basename, 'struc', 'gpickle', self._filename)):
-                    path = os.path.join(basename, 'struc',
-                                        'gpickle', self._filename)
+                path = os.path.join(pro.basename,
+                                    'struc',
+                                    'gpickle',
+                                    self._filename)
+                if os.path.exists(path):
                     # load graph Gt
                     # and compare the self._hash from ini file
-                    #        with the hash store in node 0 of Gt at time of the last build
+                    # with the hash store in node 0 of Gt at time of the last build
                     # If they are different a rebuild is needeed
                     # Otherwise all the stored graphs are loaded
                     #
@@ -423,7 +407,7 @@ class Layout(PyLayers):
         for k in nseg:
             Ls.Gs.node[k]['z'] = tuple(
                 (np.array(Ls.Gs.node[k]['z']) - self.zmin) * alpha[2] + self.zmin)
-            if Ls.Gs.node[k].has_key('ss_z'):
+            if 'ss_z' in Ls.Gs.node[k]:
                 Ls.Gs.node[k]['ss_z'] = list(
                     (np.array(Ls.Gs.node[k]['ss_z']) - self.zmin) * alpha[2] + self.zmin)
 
@@ -467,13 +451,13 @@ class Layout(PyLayers):
         """
 
         if typ == 'ini':
-            pathname = os.path.join(pstruc['DIRINI'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIRINI'], '*.' + typ)
         if typ == 'osm':
-            pathname = os.path.join(pstruc['DIROSM'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIROSM'], '*.' + typ)
         if typ == 'wrl':
-            pathname = os.path.join(pstruc['DIRWRL'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIRWRL'], '*.' + typ)
 
-        lfile_l = glob.glob(os.path.join(basename, pathname))
+        lfile_l = glob.glob(os.path.join(pro.basename, pathname))
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
@@ -657,7 +641,7 @@ class Layout(PyLayers):
 
                             logging.critical(
                                 "segment %d contains point %d", s, n)
-                            consistent = Falseq
+                            consistent = False
                 if level > 0:
                     cycle = self.Gs.node[s]['ncycles']
                     if len(cycle) == 0:
@@ -751,9 +735,9 @@ class Layout(PyLayers):
         # association
         # pdb.set_trace()
 
-        #utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
-        #mutmp = max(utmp[:,0])
-        #self.iupnt = -np.ones((mutmp+1),dtype='int')
+        # utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
+        # mutmp = max(utmp[:,0])
+        # self.iupnt = -np.ones((mutmp+1),dtype='int')
         # self.iupnt[utmp[:,0]]=utmp[:,1]
 
         # degree of segment nodes
@@ -886,7 +870,9 @@ class Layout(PyLayers):
             #
             # lsss : list of subsegment
             #
-            nsmax = max(self.Gs.node.keys())
+
+            # nsmax = max(self.Gs.node.keys())
+
             # Warning
             # -------
             # nsmax can be different from the total number of segments
@@ -901,7 +887,7 @@ class Layout(PyLayers):
 
             # self.isss = []
 
-            #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
+            # self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
             # self.stridess = np.empty(nsmax+1,dtype=int)
             # +1 is for discarding index 0 (unused here)
             # self.offset = np.empty(nsmax+1+self.Nss,dtype=int)
@@ -951,7 +937,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        _fileshp : 
+        _fileshp :
 
         """
         defaults = {'pref': [np.array([25481100, 6676890]), np.array([60.2043716, 24.6591147])],
@@ -1035,19 +1021,19 @@ class Layout(PyLayers):
             self.coordinates = 'latlon'
 
     def importosm(self, **kwargs):
-        """ import layout from osm file or osmapi 
+        """ import layout from osm file or osmapi
 
         Parameters
         ----------
 
         _fileosm : string
-        address : string 
+        address : string
             address to be geocoded
-        latlon : tuple 
-            (latitude,longitude) degrees 
+        latlon : tuple
+            (latitude,longitude) degrees
         dist_m : float
-            distance in meter from the geocoded address (def 200 m ) 
-        cart : boolean 
+            distance in meter from the geocoded address (def 200 m )
+        cart : boolean
             conversion in cartesian coordinates
 
         Notes
@@ -1078,6 +1064,7 @@ class Layout(PyLayers):
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
         cart = kwargs['cart']
+        pdb.set_trace()
 
         if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
             coords, nodes, ways, dpoly, m = osm.getosm(typ=typ,
@@ -1198,7 +1185,7 @@ class Layout(PyLayers):
                     # ss_name = self.Gs.node[]
                     #ns = self.chgmss(inter_u1_u2[0],name=d['name'],z=[eval(u) for u in d['z']],offset=0)
 
-                if d.has_key('ss_name'):
+                if 'ss_name' in d:
                     nss += len(d['ss_name'])
                     if type(d['ss_z'][0][0]) == 'str':
                         ss_z = [[eval(u) for u in v] for v in d['ss_z']]
@@ -1223,10 +1210,10 @@ class Layout(PyLayers):
             self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
             self.coordinates = 'cart'
 
-        #del coords
-        #del nodes
-        #del ways
-        #del relations
+        # del coords
+        # del nodes
+        # del ways
+        # del relations
 
         #
         # get slab and materials
@@ -1282,12 +1269,12 @@ class Layout(PyLayers):
         #
         #
         #
-        #lonmin = -2
-        #lonmax = -1
-        #latmin = 47
-        #latmax = 48
-        #lon_0 = -1.5
-        #lat_0 = 47.5
+        # lonmin = -2
+        # lonmax = -1
+        # latmin = 47
+        # latmax = 48
+        # lon_0 = -1.5
+        # lat_0 = 47.5
         # m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
         #    resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
 
@@ -1323,7 +1310,7 @@ class Layout(PyLayers):
                     fd.write("<tag k='z' v=\"" + str(d['z']) + "\" />\n")
                     fd.write("<tag k='transition' v='" +
                              str(d['transition']) + "' />\n")
-                    if d.has_key('ss_name'):
+                    if 'ss_name' in d:
                         ch = str(d['ss_name'])
                         fd.write("<tag k='ss_name' v=\"" + ch + "\" />\n")
                         fd.write("<tag k='ss_z' v=\"" +
@@ -1383,17 +1370,17 @@ class Layout(PyLayers):
                 if self.Gs.node[n]['name'] != '_AIR':
                     d = self.Gs.node[n]
                     # old format conversion
-                    if d.has_key('ncycles'):
+                    if 'ncycles' in d:
                         del d['ncycles']
-                    if d.has_key('ss_ce1'):
+                    if 'ss_ce1' in d:
                         del d['ss_ce1']
-                    if d.has_key('ss_ce2'):
+                    if 'ss_ce2' in d:
                         del d['ss_ce2']
-                    if d.has_key('zmin'):
+                    if 'zmin' in d:
                         d['z'] = [d['zmin'], d['zmax']]
                         del(d['zmin'])
                         del(d['zmax'])
-                    if d.has_key('ss_zmin'):
+                    if 'ss_zmin' in d:
                         d['ss_z'] = [[d['ss_zmin'], d['ss_zmax']]]
                         d['ss_name'] = [d['ss_name']]
                         del(d['ss_zmin'])
@@ -1469,7 +1456,7 @@ class Layout(PyLayers):
         # config.set("files",'materials',self.filematini)
         # config.set("files",'slab',self.fileslabini)
         config.set("files", 'furniture', self.filefur)
-        fileini = pyu.getlong(self._filename, pstruc['DIRINI'])
+        fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
         fd = open(fileini, "w")
         config.write(fd)
         fd.close()
@@ -1494,7 +1481,7 @@ class Layout(PyLayers):
         di = {}
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
-        fileini = pyu.getlong(self._filename, pstruc['DIRINI'])
+        fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
         config.read(fileini)
         sections = config.sections()
         for section in sections:
@@ -1515,7 +1502,7 @@ class Layout(PyLayers):
         #
         # Check file version
         #
-        if di['info'].has_key('version'):
+        if 'version' in di['info']:
             self.version = di['info']['version']
             self.name = {}
         else:
@@ -1731,7 +1718,7 @@ class Layout(PyLayers):
 
 
         """
-        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
+        filefur = pyu.getlong(_filefur, pro.pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -1758,7 +1745,7 @@ class Layout(PyLayers):
         """
 
         newfile = False
-        filename = pyu.getlong(_filename, pstruc['DIRINI'])
+        filename = pyu.getlong(_filename, pro.pstruc['DIRINI'])
         if os.path.exists(filename):  # which exists
             self.loadini(arg)
         else:  # which do not exist
@@ -2087,10 +2074,10 @@ class Layout(PyLayers):
 
         # 2. Make the correct association
         # pts is (nb_diffraction_points x 4 x 2)
-        #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
+        # - The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
         # tail and head of segemnt 1 and 2 respectively
         # a segment
-        #- The dimension 2 is x,y
+        # - The dimension 2 is x,y
         #
         # The following aims to determine which tails and heads of
         # segments associated to a give diffraction point
@@ -2237,7 +2224,7 @@ class Layout(PyLayers):
 
         """
 
-        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
+        filefur = pyu.getlong(_filefur, pro.pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -2250,11 +2237,11 @@ class Layout(PyLayers):
             length = config.getfloat(fur, "length")
             angle = config.getfloat(fur, "angle")
             thickness = config.getfloat(fur, "thickness")
-            #~ if matname=='WOOD':
-            #~ zmin = height
-            #~ height=thickness
-            #~ else:
-            #~ zmin=0.0
+            # ~ if matname=='WOOD':
+            # ~ zmin = height
+            # ~ height=thickness
+            # ~ else:
+            # ~ zmin=0.0
             # .. todo: be more generic relate to floor level
             zmin = 0.0
             if typ == '':
@@ -2475,7 +2462,7 @@ class Layout(PyLayers):
 
         """
 
-        displaygui = multenterbox('', 'Display Parameters',
+        displaygui = eag.multenterbox('', 'Display Parameters',
                                   ('filename',
                                    'nodes',
                                    'ednodes',
@@ -2562,7 +2549,7 @@ class Layout(PyLayers):
         title = "Point (" + str(np) + ")"
         message = "Enter coordinates "
         pt = self.Gs.pos[np]
-        data = multenterbox(message, title, (('x', 'y')),
+        data = eag.multenterbox(message, title, (('x', 'y')),
                             ((str(pt[0]), str(pt[1]))))
         self.Gs.pos[np] = tuple(eval(data[0]), eval(data[1]))
 
@@ -2671,13 +2658,13 @@ class Layout(PyLayers):
             outdata = {}
             data0 = choicebox('chose slab', title, self.sl.keys())
             try:
-                data1 = multenterbox(
+                data1 = eag.multenterbox(
                     'attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
                 d1 = data1[0].split(' ')
                 d1t = tuple((eval(d1[0]), eval(d1[1])))
                 data1[0] = d1t
                 data = [data0] + data1
-                #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
+                #data = eag.multenterbox(message, title, tuple(de1k), tuple(de1v))
                 i = 0
                 self.name[de1['name']].remove(e1)
                 for k in de1k:
@@ -2828,7 +2815,7 @@ class Layout(PyLayers):
         self.info_segment(s1)
         message = str(self.sl.keys())
         title = 'Add a subsegment'
-        data = multenterbox(message, title, ('name', 'zmin', 'zmax', 'offset'),
+        data = eag.multenterbox(message, title, ('name', 'zmin', 'zmax', 'offset'),
                             (name, zmin, zmax, offset))
         try:
             self.Gs.node[s1]['ss_name'] = [data[0]]
@@ -4534,7 +4521,7 @@ class Layout(PyLayers):
             else:
                 if self.display['overlay_file'] != '':
                     image = Image.open(os.path.join(
-                        basename, pstruc['DIRIMAGE'], self.display['overlay_file']))
+                        pro.basename, pro.pstruc['DIRIMAGE'], self.display['overlay_file']))
                     imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
@@ -4719,7 +4706,7 @@ class Layout(PyLayers):
 
         # add hash to node 0 of Gs
 
-        fileini = pyu.getlong(self._filename, pstruc['DIRINI'])
+        fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
         _hash = hashlib.md5(open(fileini, 'rb').read()).hexdigest()
         self.Gt.add_node(0, hash=_hash)
 
@@ -4742,7 +4729,7 @@ class Layout(PyLayers):
         """
         # create layout directory
 
-        path = os.path.join(basename, 'struc', 'gpickle', self._filename)
+        path = os.path.join(pro.basename, 'struc', 'gpickle', self._filename)
 
         if not os.path.isdir(path):
             os.mkdir(path)
@@ -4789,12 +4776,12 @@ class Layout(PyLayers):
 
         """
 
-        path = os.path.join(basename, 'struc', 'gpickle', self._filename)
+        path = os.path.join(pro.basename, 'struc', 'gpickle', self._filename)
         for g in graphs:
             try:
                 # if g in ['v','i']:
                 #     gname1 ='G'+g
-                #     setattr(self, gname1, read_gpickle(os.path.join(basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle')))
+                #     setattr(self, gname1, read_gpickle(os.path.join(pro.basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle')))
                 # else:
                 gname = 'G' + g
                 setattr(self, gname, read_gpickle(
@@ -7952,7 +7939,7 @@ class Layout(PyLayers):
             imok = False
             if self.display['overlay_file'] != '':
                 image = Image.open(os.path.join(
-                    basename, pstruc['DIRIMAGE'], self.display['overlay_file']))
+                    pro.basename, pro.pstruc['DIRIMAGE'], self.display['overlay_file']))
                 imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
@@ -8873,7 +8860,7 @@ class Layout(PyLayers):
         """
 
         filename = name + '.list'
-        filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
+        filestruc = pyu.getlong(filename, pro.pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("LIST{\n")
         for e in edlist:
@@ -9072,7 +9059,7 @@ class Layout(PyLayers):
             nsseg = 0
 
         filename = 'fa' + str(s) + '.off'
-        filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
+        filestruc = pyu.getlong(filename, pro.pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("OFF\n")
         fos.write("%d %d \n\n" % (1 + (nsseg + 1) * 4, nsseg + 1))
@@ -9234,7 +9221,7 @@ class Layout(PyLayers):
         _filename, ext = os.path.splitext(self._filename)
         _filegeom = _filename + '.off'
         self.filegeom = _filegeom
-        filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
+        filegeom = pyu.getlong(_filegeom, pro.pstruc['DIRGEOM'])
         fos = open(filegeom, "w")
         fos.write("OFF\n")
         fos.write("%d %d \n\n" % (npt + 1, en + cen))
@@ -9430,7 +9417,7 @@ class Layout(PyLayers):
 #         _filename,ext = os.path.splitext(self._filename)
 #         _filegeom = _filename+'.off'
 #         self.filegeom=_filegeom
-#         filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
+#         filegeom = pyu.getlong(_filegeom, pro.pstruc['DIRGEOM'])
 #         fos = open(filegeom, "w")
 #         fos.write("OFF\n")
 #         fos.write("%d %d \n\n" % (npt + 1, en + cen))
@@ -9610,7 +9597,7 @@ class Layout(PyLayers):
 
         pg = self.geomfile(centered=centered)
 
-        filename = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
+        filename = pyu.getlong(self.filegeom, pro.pstruc['DIRGEOM'])
         if (bdis):
             #chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
             chaine = "geomview  -b 1 1 1 " + filename + " 2>/dev/null &"
@@ -9885,57 +9872,57 @@ class Layout(PyLayers):
 #            lines.extend(ax.plot(x,y,'k',lw=0.1,alpha=0.2))
 #        return (fig,ax,lines)
 
-    def distwall(self, p, nroom):
-        """ calculate distance to wall
-
-        Parameters
-        ----------
-
-        p : ndarray
-            point coordinate
-
-        nroom : int
-            room number of p
-
-        Returns
-        -------
-
-        dist
-                list of distances to walls of room nroom
-
-        Notes
-        -----
-
-        Return  dist a list of all the distances to the walls of a room
-
-
-        """
-        pp = sh.Point(p[0], p[1])
-
-        dist = []
-        p0_xy = []
-        p1_xy = []
-
-        vnode = self.Gr.node[nroom]['cycle'].cycle
-
-        # for j in range(len(Gr[nroom]['vnodes'])):
-        for j in range(len(vnodes)):
-            nn = self.b_Gr[5]['vnodes'][j]
-            nta = G1.tahe[0, nn - 1]
-            nhe = G1.tahe[1, nn - 1]
-            p0 = np.array([G1.pt[0, nta], G1.pt[1, nta]])
-            p1 = np.array([G1.pt[0, nhe], G1.pt[1, nhe]])
-            p0_xy.insert(j, p0)
-            p1_xy.insert(j, p1)
-
-        pstartwll = np.array(p0_xy)
-        pfinwll = np.array(p1_xy)
-
-        for i in range(len(self.b_Gr[nroom]['vnodes'])):
-            line_wall = sh.LineString([(pstartwll[i, 0],
-                                        pstartwll[i, 1]), (pfinwll[i, 0], pfinwll[i, 1])])
-            dist.insert(i, line_wall.distance(pp))
-        return(dist)
+#    def distwall(self, p, nroom):
+#        """ calculate distance to wall
+#
+#        Parameters
+#        ----------
+#
+#        p : ndarray
+#            point coordinate
+#
+#        nroom : int
+#            room number of p
+#
+#        Returns
+#        -------
+#
+#        dist
+#                list of distances to walls of room nroom
+#
+#        Notes
+#        -----
+#
+#        Return  dist a list of all the distances to the walls of a room
+#
+#
+#        """
+#        pp = sh.Point(p[0], p[1])
+#
+#        dist = []
+#        p0_xy = []
+#        p1_xy = []
+#
+#        vnode = self.Gr.node[nroom]['cycle'].cycle
+#
+#        # for j in range(len(Gr[nroom]['vnodes'])):
+#        for j in range(len(vnodes)):
+#            nn = self.b_Gr[5]['vnodes'][j]
+#            nta = G1.tahe[0, nn - 1]
+#            nhe = G1.tahe[1, nn - 1]
+#            p0 = np.array([G1.pt[0, nta], G1.pt[1, nta]])
+#            p1 = np.array([G1.pt[0, nhe], G1.pt[1, nhe]])
+#            p0_xy.insert(j, p0)
+#            p1_xy.insert(j, p1)
+#
+#        pstartwll = np.array(p0_xy)
+#        pfinwll = np.array(p1_xy)
+#
+#        for i in range(len(self.b_Gr[nroom]['vnodes'])):
+#            line_wall = sh.LineString([(pstartwll[i, 0],
+#                                        pstartwll[i, 1]), (pfinwll[i, 0], pfinwll[i, 1])])
+#            dist.insert(i, line_wall.distance(pp))
+#        return(dist)
 
     def randTxRx(self):
         """returns random coordinates for Tx and Rx.
@@ -10086,5 +10073,5 @@ class Layout(PyLayers):
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
-    #L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
+    # L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
     # L.build()

@@ -12,7 +12,7 @@ DL=DLink(L=L,fGHz=fGHz)
 #DL.Ab=Antenna(typ='Omn')
 
 #DL.b=np.array([766,1115,1.8])
-DL.eval(force=True,cutoff=5,threshold=0.5)
+DL.eval(force=True,cutoff=5,threshold=0.1)
 #DL.b=np.array([755,1110,1.5])
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
 #dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
