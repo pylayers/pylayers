@@ -497,11 +497,7 @@
 <span class="sd">    # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh</span>
 <span class="sd">    # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx &lt;==&gt; Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and</span>
 
-<span class="sd">    TODO</span>
-<span class="sd">    ----</span>
-
-<span class="sd">    To be vectorized </span>
-
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Nseg</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -987,11 +983,13 @@
         <span class="n">Nlink</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># determine incidence angles on segment crossing p1-p2 segment</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
+    <span class="c1">#data = L.angleonlink(p1,p2)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink3</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
 
     <span class="c1"># as many slabs as segments and subsegments</span>
     <span class="n">us</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> 
-    <span class="n">slabs</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
+    <span class="n">slabs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">us</span> <span class="p">]</span> 
+    <span class="c1">#slabs = L.sla[us]</span>
     <span class="n">check</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slabs</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
     <span class="c1">#</span>
@@ -1742,7 +1740,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 01, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -29,9 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="1. 1   Overview" href="../TOC.html" />
-    <link rel="next" title="2.2.2. Vector Spherical Harmonics Representation of Antennas" href="AntennaVSH.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="../1-GIS/Coverage.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="Scalar Spherical Harmonics" href="AntennaSSH.html" />
+    <link rel="prev" title="Slabs and Materials" href="SlabsMaterials.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,14 +92,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="../1-GIS/Coverage.html" title="&lt;no title&gt;"
+	<a href="SlabsMaterials.html" title="Slabs and Materials"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    <no title>
+	    Slabs and Mat...
 	    </span>
 	    <span class="hiddenrellink">
-	    <no title>
+	    Slabs and Materials
 	    </span>
 	    
 	    </a>
@@ -109,14 +109,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="AntennaVSH.html" title="2.2.2. Vector Spherical Harmonics Representation of Antennas"
+	<a href="AntennaSSH.html" title="Scalar Spherical Harmonics"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    2.2.2. Vector...
+	    Scalar Spheri...
 	    </span>
 	    <span class="hiddenrellink">
-	    2.2.2. Vector Spherical Harmonics Representation of Antennas
+	    Scalar Spherical Harmonics
 	    </span>
 	    
 	    </a>
@@ -143,14 +143,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="../TOC.html" title="1. 1   Overview" >
+	<a href="../TOC.html" title="1   Overview" >
 	Up
 	<br>
 	<span class="smallrellink">
-	1. 1   Overview
+	1   Overview
 	</span>
 	<span class="hiddenrellink">
-	1. 1   Overview
+	1   Overview
 	</span>
 	
 	</a>
@@ -185,7 +185,7 @@
           <div class="body" role="main">
             
   <div class="section" id="description-of-antennas">
-<h1>2.2.1. Description of antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
+<h1>Description of antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
 <p>PyLayers has a very rich set of tools for handling antenna radiation
 pattern. Antennas can be described in different manners and read from
 different specific file formats.</p>
@@ -313,7 +313,7 @@ Ncoeff s3 : 72
 </pre></div>
 </div>
 <div class="section" id="synthesis-of-the-radiation-pattern">
-<h2>2.2.1.1. Synthesis of the radiation pattern<a class="headerlink" href="#synthesis-of-the-radiation-pattern" title="Permalink to this headline">¶</a></h2>
+<h2>Synthesis of the radiation pattern<a class="headerlink" href="#synthesis-of-the-radiation-pattern" title="Permalink to this headline">¶</a></h2>
 <p>The radiation pattern is synthetized with the following call</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>A.eval(grid=True)
 </pre></div>
@@ -372,7 +372,7 @@ plt.tight_layout()
 <img alt="../../_images/Antenna_22_0.png" src="../../_images/Antenna_22_0.png" />
 </div>
 <div class="section" id="defining-antenna-gain-from-analytic-formulas">
-<h2>2.2.1.2. Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
+<h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
 <p>An antenna can also be defined from closed-form expressions. Available
 antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>Ag = Antenna(typ=&#39;Gauss&#39;)
@@ -422,7 +422,7 @@ antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Aug 30, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Antenna.rst.txt"
@@ -432,12 +432,12 @@ antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="../1-GIS/Coverage.html">
+      <a href="SlabsMaterials.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="AntennaVSH.html">
+      <a href="AntennaSSH.html">
         Next
       </a>  
     </div>

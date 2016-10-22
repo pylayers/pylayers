@@ -29,9 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="1. 1   Overview" href="../TOC.html" />
-    <link rel="next" title="PyLayers" href="../../modules/pylayers.html" />
-    <link rel="prev" title="2.2.1. Description of antennas" href="Antenna.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="Indoor Coverage with the PyLayers Multi Wall model" href="Coverage.html" />
+    <link rel="prev" title="Scalar Spherical Harmonics" href="AntennaSSH.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,14 +92,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="Antenna.html" title="2.2.1. Description of antennas"
+	<a href="AntennaSSH.html" title="Scalar Spherical Harmonics"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    2.2.1. Descri...
+	    Scalar Spheri...
 	    </span>
 	    <span class="hiddenrellink">
-	    2.2.1. Description of antennas
+	    Scalar Spherical Harmonics
 	    </span>
 	    
 	    </a>
@@ -109,14 +109,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="../../modules/pylayers.html" title="PyLayers"
+	<a href="Coverage.html" title="Indoor Coverage with the PyLayers Multi Wall model"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    PyLayers
+	    Indoor Covera...
 	    </span>
 	    <span class="hiddenrellink">
-	    PyLayers
+	    Indoor Coverage with the PyLayers Multi Wall model
 	    </span>
 	    
 	    </a>
@@ -143,14 +143,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="../TOC.html" title="1. 1   Overview" >
+	<a href="../TOC.html" title="1   Overview" >
 	Up
 	<br>
 	<span class="smallrellink">
-	1. 1   Overview
+	1   Overview
 	</span>
 	<span class="hiddenrellink">
-	1. 1   Overview
+	1   Overview
 	</span>
 	
 	</a>
@@ -185,7 +185,7 @@
           <div class="body" role="main">
             
   <div class="section" id="vector-spherical-harmonics-representation-of-antennas">
-<h1>2.2.2. Vector Spherical Harmonics Representation of Antennas<a class="headerlink" href="#vector-spherical-harmonics-representation-of-antennas" title="Permalink to this headline">¶</a></h1>
+<h1>Vector Spherical Harmonics Representation of Antennas<a class="headerlink" href="#vector-spherical-harmonics-representation-of-antennas" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
 
 from pylayers.antprop.antvsh import *
@@ -277,7 +277,7 @@ plt.plot(fGHz,np.unwrap(np.angle(I[45,85,:])))
 <img alt="../../_images/AntennaVSH_14_1.png" src="../../_images/AntennaVSH_14_1.png" />
 <img alt="../../_images/AntennaVSH_14_2.png" src="../../_images/AntennaVSH_14_2.png" />
 <div class="section" id="display-of-the-radiation-pattern-for-all-frequencies">
-<h2>2.2.2.1. Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
+<h2>Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
 
 for nf in range(104):
@@ -306,7 +306,7 @@ No vsh coefficient calculated yet
 </div>
 </div>
 <div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
-<h1>2.2.3. Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h1>
+<h1>Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h1>
 <p>At that stage we compute the Vector Spherical Harmonics coefficients</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>A=vsh(A)
 </pre></div>
@@ -430,7 +430,7 @@ plt.tight_layout()
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Aug 30, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/AntennaVSH.rst.txt"
@@ -440,12 +440,12 @@ plt.tight_layout()
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="Antenna.html">
+      <a href="AntennaSSH.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="../../modules/pylayers.html">
+      <a href="Coverage.html">
         Next
       </a>  
     </div>

@@ -30,7 +30,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="&lt;no title&gt;" href="index.html" />
-    <link rel="prev" title="Building graphs of a Layout" href="plot_exLayout2.html" />
+    <link rel="prev" title="Indoor Radio Coverage with Motley Keenan" href="plot_coverage.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -91,14 +91,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="plot_exLayout2.html" title="Building graphs of a Layout"
+	<a href="plot_coverage.html" title="Indoor Radio Coverage with Motley Keenan"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    Building grap...
+	    Indoor Radio ...
 	    </span>
 	    <span class="hiddenrellink">
-	    Building graphs of a Layout
+	    Indoor Radio Coverage with Motley Keenan
 	    </span>
 	    
 	    </a>
@@ -165,7 +165,6 @@ position and evaluates the link</p>
 <img alt="../_images/sphx_glr_plot_exDLink_001.png" class="align-center" src="../_images/sphx_glr_plot_exDLink_001.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
 
 <span class="c1"># set the frequency range from 2.4GHz to 10GHz</span>
 <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">10.</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
@@ -185,14 +184,14 @@ position and evaluates the link</p>
 <span class="c1"># Diffraction : enabled</span>
 <span class="c1"># Vectorization : enabled</span>
 <span class="c1">#</span>
-<span class="n">ak</span><span class="p">,</span><span class="n">tauk</span> <span class="o">=</span> <span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">],</span><span class="n">ra_vectorized</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">],</span><span class="n">ra_vectorized</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ray transfer funtion w.r.t frequency Modulus and Phase&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 4.320 seconds)</p>
+(0 minutes 4.405 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_exDLink.py" download=""><code class="xref download docutils literal"><span class="pre">plot_exDLink.py</span></code></a></div>
 <div class="sphx-glr-download container">
@@ -211,7 +210,7 @@ position and evaluates the link</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 01, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/auto_examples/plot_exDLink.rst.txt"
@@ -221,7 +220,7 @@ position and evaluates the link</p>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="plot_exLayout2.html">
+      <a href="plot_coverage.html">
         Previous
       </a>  
     </div>

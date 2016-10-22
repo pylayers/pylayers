@@ -3370,7 +3370,7 @@
 <span class="sd">    seg :  (pta,phe)</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    -------D</span>
+<span class="sd">    -------</span>
 <span class="sd">    </span>
 <span class="sd">    k : intersection parameter (0&lt;k&lt;1 if intersection)</span>
 <span class="sd">    M : intersection point </span>
@@ -3383,17 +3383,93 @@
     <span class="n">yth</span> <span class="o">=</span> <span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">num</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">den</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">xht</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">yth</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">den</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">k</span> <span class="o">=</span> <span class="n">num</span><span class="o">/</span><span class="n">den</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">vseg</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1">#k = np.inf*np.sign(den)</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">vseg</span>
+        <span class="n">si</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">vseg</span><span class="p">))</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="o">*</span><span class="n">si</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">vseg</span>
+    
     <span class="k">return</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">intersect3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">,</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Intersection of a line and a rectangle screen</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    a  : np.array (3,Nseg) of floats  </span>
+<span class="sd">        transmiter coordinates </span>
+<span class="sd">    b  : np.array (3,Nseg) of floats  </span>
+<span class="sd">        receiver coordinates </span>
+<span class="sd">    pg  : np.array (3,Nscreen) of floats </span>
+<span class="sd">        center of gravity of the screen </span>
+<span class="sd">    u1  : np.array (3,Nscreen) of floats </span>
+<span class="sd">        unitary vector along first imension</span>
+<span class="sd">    u2  : np.array (3,Nscreen) of floats </span>
+<span class="sd">        unitary vector along second dimension</span>
+<span class="sd">    l1   : np.array (,Nscreen)</span>
+<span class="sd">        length along first dimension in meters</span>
+<span class="sd">    l2   : np.array (,Nscreen)</span>
+<span class="sd">        length along second dimension in meters </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    bool : True   =&gt; intersection (occultation)</span>
+<span class="sd">           False </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Nseg</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Nscreen</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">ba</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="c1"># (3,Nseg) LOS distance</span>
+
+    <span class="c1"># A : (Nseg,Nscreen,3,3)</span>
+    <span class="c1"># c : (Nseg,Nscreen,3)</span>
+    <span class="c1"># ba.T (Nseg,3)</span>
+    <span class="c1"># u1.T (Nscreen, 3)</span>
+    <span class="c1"># u2.T (Nscreen, 3)</span>
+
+    <span class="c1"># U  : Nseg,1,3,1</span>
+    <span class="n">U</span>  <span class="o">=</span> <span class="n">ba</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">Nseg</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># U1 : 1,Nscreen,3,1 </span>
+    <span class="n">U1</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">U1</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># U1 : 1,Nscreen,3,1 </span>
+    <span class="n">U2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">U2</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># U1e : Nseg,Nscreen,3,1</span>
+    <span class="n">U1e</span> <span class="o">=</span> <span class="n">U1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># U2e : Nseg,Nscreen,3,1</span>
+    <span class="n">U2e</span> <span class="o">=</span> <span class="n">U2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># Ue  : Nseg,Nscreen,3,1</span>
+    <span class="n">Ue</span>  <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U2e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Ue</span><span class="p">,</span><span class="o">-</span><span class="n">U1e</span><span class="p">,</span><span class="o">-</span><span class="n">U2e</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    
+    <span class="n">c</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]</span>
+    <span class="c1"># </span>
+    <span class="c1"># Warning scipy.linalg do not handle MDA </span>
+    <span class="c1">#</span>
+    <span class="c1"># x : Nseg x Nscreen</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+    <span class="c1"># condition of occultation </span>
+
+    <span class="n">condseg</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span> 
+    <span class="n">cond1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">l1</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;-</span><span class="n">l1</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span> 
+    <span class="n">cond2</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">l2</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;-</span><span class="n">l2</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span> 
+    
+    <span class="n">visi</span> <span class="o">=</span> <span class="o">~</span><span class="p">(((</span><span class="n">condseg</span> <span class="o">+</span> <span class="n">cond1</span> <span class="o">+</span> <span class="n">cond2</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">visi</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="intersect"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.intersect.html#pylayers.util.geomutil.intersect">[docs]</a><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; check if segment AB intersects segment CD</span>
+    <span class="sd">&quot;&quot;&quot; check if segment AB intersects segment CD in 2D </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -5154,7 +5230,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 01, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

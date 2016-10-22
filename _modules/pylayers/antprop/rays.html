@@ -1027,6 +1027,7 @@
 
                     <span class="c1"># #### Check if it exists the same parameter value in the horizontal plane</span>
                     <span class="c1"># #### and the vertical plane. Move parameter if so.</span>
+
                     <span class="n">da1es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">a1es</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     <span class="n">pda1es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">da1es</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">)</span>
                     <span class="n">a1es</span><span class="p">[</span><span class="n">pda1es</span><span class="p">]</span><span class="o">=</span><span class="n">a1es</span><span class="p">[</span><span class="n">pda1es</span><span class="p">]</span><span class="o">-</span><span class="mf">1e-3</span>
@@ -1052,10 +1053,10 @@
                     <span class="c1">#     u = 1 - np.mod(range(Nint), 2)</span>
 
 
-                    <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Nint</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1">#l&lt;0 Nint odd</span>
+                    <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Nint</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># l&lt;0 Nint odd</span>
                         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">Nint</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
 
-                    <span class="k">elif</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Nint</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1">#l&gt;0 Nint odd</span>
+                    <span class="k">elif</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Nint</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># l&gt;0 Nint odd</span>
                         <span class="n">u</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">Nint</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
 
 
@@ -1197,111 +1198,75 @@
                 <span class="c1">#---------------------------------</span>
                 <span class="c1">#</span>
                 <span class="c1">#   ptes (3 x i+2 x r )</span>
-                <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">Nss</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="c1"># lsss[k] = n means subsegment k belongs to segment n</span>
-                    <span class="c1"># a same segment n can have several subsegments</span>
-                    <span class="c1"># (multi-subsegment case) that is the reason of unique</span>
-                    <span class="n">lsss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">lsss</span><span class="p">))</span>
-
-                    <span class="c1"># index of signature which corresponds to subsegment</span>
-                    <span class="n">u</span>   <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">siges</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span><span class="o">==</span><span class="n">x</span><span class="p">)),</span><span class="n">lsss</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-                    <span class="c1"># dimension extension of index u for :</span>
-                    <span class="c1">#    z coordinate extraction (append line 2 on dimension 0)</span>
-                    <span class="c1">#    0 signature extraction  (append line 0 on  dimension 0)</span>
-
-                    <span class="c1"># v : index 2 is for getting z coordinate</span>
-                    <span class="c1"># w : index 0 is for getting segment number (first line of</span>
-                    <span class="c1"># siges)</span>
-                    <span class="n">v</span>   <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)]</span><span class="o">+</span><span class="n">u</span>
-                    <span class="n">w</span>   <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)]</span><span class="o">+</span><span class="n">u</span>
-
-                    <span class="c1"># zss : height of interactions on subsegments</span>
-                    <span class="n">zss</span> <span class="o">=</span> <span class="n">ptees</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
-                    <span class="c1">#if k==1:</span>
-                    <span class="c1">#    print &quot;l&quot;,l</span>
-                    <span class="c1">#    print &quot;ptees : &quot;,ptees</span>
-                    <span class="c1">#    print &quot;u &quot;,u</span>
-                    <span class="c1">#    print &quot;v &quot;,v</span>
-                    <span class="c1">#    print &quot;w &quot;,w</span>
-                    <span class="c1"># structure index of corresponding subsegments</span>
-
-                    <span class="c1"># nstrs = [ 1 , 1 , 1 , 1, 1 , 1]</span>
-                    <span class="n">nstrs</span> <span class="o">=</span> <span class="n">siges</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
-
-                    <span class="c1">#if k==1:</span>
-                    <span class="c1">#    print &quot;nstrs: &quot;,nstrs</span>
-                    <span class="c1">#    print &quot;zss:&quot;,zss</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">lsss</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                     <span class="c1">#</span>
-                    <span class="c1"># Determine which subsegment has been intersected</span>
-                    <span class="c1"># k = 0 : no subsegment intersected</span>
-                    <span class="n">zinterval</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;ss_z&#39;</span><span class="p">],</span><span class="n">nstrs</span><span class="p">)</span>
+                    <span class="c1"># lsss : list of sub segments ( iso segments siges)</span>
+                    <span class="c1"># lnss : list of diffaction point involving air walls</span>
 
+                    <span class="n">lsss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">lsss</span><span class="p">)</span>
+                    <span class="n">lnss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">lnss</span><span class="p">)</span>
 
-                    <span class="c1"># Example</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># zinterval = [[(0.0, 2.4), (2.7, 2.8), (2.8, 3)],</span>
-                    <span class="c1">#              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],</span>
-                    <span class="c1">#              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],</span>
-                    <span class="c1">#              [(0 .0, 2.4), (2.7, 2.8), (2.8, 3)],</span>
-                    <span class="c1">#              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],</span>
-                    <span class="c1">#              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)]]</span>
-                    <span class="c1"># zss = array([ 2.62590637,  2.62589727,  1.34152518,</span>
-                    <span class="c1"># 2.0221785 ,  0.23706671, 0.2378053])</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]</span>
-                    <span class="c1">#</span>
-                    <span class="n">tab</span> <span class="o">=</span> <span class="nb">map</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">z</span><span class="p">:</span> <span class="p">((</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
-                                                           <span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">zip</span><span class="p">(</span><span class="n">zinterval</span><span class="p">,</span><span class="n">zss</span><span class="p">))</span>
-                    <span class="c1">#print tab</span>
-                    <span class="k">def</span> <span class="nf">findindex</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                            <span class="n">k</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
-                            <span class="k">return</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># indexss = [0, 0 , 1 , 1 ,1 ,1]</span>
-                    <span class="c1"># L.stridess[nstrs] = [ 9 , 9 , 9, 9 , 9 , 9 ]</span>
-                    <span class="c1"># indexnex = [ 9 , 9 , 10 , 10 , 10 , 10 ]</span>
-                    <span class="c1">#</span>
-                    <span class="n">indexss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">findindex</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="n">zinterval</span><span class="p">,</span><span class="n">tab</span><span class="p">)))</span>
-                    <span class="n">uw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">indexss</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">indexnew</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">stridess</span><span class="p">[</span><span class="n">nstrs</span><span class="p">]</span><span class="o">+</span><span class="n">indexss</span>
-                    <span class="n">indexnew</span><span class="p">[</span><span class="n">uw</span><span class="p">]</span> <span class="o">=</span> <span class="n">nstrs</span><span class="p">[</span><span class="n">uw</span><span class="p">]</span>
-                    <span class="c1">#ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))</span>
-                    <span class="c1">#iindexnex = L.isss[ind]</span>
-                    <span class="c1">#indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))</span>
-                    <span class="c1">#indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))</span>
-                    <span class="c1"># update signature</span>
-                    <span class="n">siges</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">indexnew</span>
-                    <span class="c1">#if k==3:</span>
-                    <span class="c1">#    print siges</span>
+                    <span class="c1"># number of structure element </span>
+                    <span class="n">nstr</span> <span class="o">=</span> <span class="n">siges</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span>
+                    <span class="c1"># type of interaction</span>
+                    <span class="n">typi</span> <span class="o">=</span> <span class="n">siges</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,:]</span>
 
-                    <span class="c1">#if k==1:</span>
-                    <span class="c1">#    print &quot;indexss:&quot;,indexss</span>
-                    <span class="c1">#    print &quot;indexnew:&quot;,indexnew</span>
-                    <span class="c1">#    print &quot;siges&quot;,siges</span>
-                    <span class="c1">#print siges</span>
+                    <span class="c1"># lss : list of subsegments in the current signature </span>
+                    <span class="c1">#</span>
+                    <span class="c1"># scalability : avoid a loop over all the subsegments in lsss</span>
+                    <span class="c1">#</span>
+                    <span class="n">lss</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lsss</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nstr</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
+                    
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lss</span><span class="p">:</span> 
+                        <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nstr</span><span class="o">==</span><span class="n">s</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">zs</span> <span class="o">=</span> <span class="n">ptees</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                <span class="k">pass</span>
+                            <span class="n">zinterval</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">zs</span><span class="o">&lt;=</span><span class="n">zinterval</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">zs</span><span class="o">&gt;=</span><span class="n">zinterval</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                                <span class="c1"># print s , zs , zinterval</span>
+                                <span class="k">pass</span>
+                            <span class="k">else</span><span class="p">:</span> <span class="c1"># signature is not valid</span>
+                                <span class="c1"># nstr : structure number</span>
+                                <span class="n">nstr</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">nstr</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="c1"># typi : type of interaction </span>
+                                <span class="n">typi</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">typi</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="c1"># 3d sequence of points</span>
+                                <span class="n">ptees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ptees</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                <span class="c1"># extended (floor/ceil) signature</span>
+                                <span class="n">siges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">siges</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                            
+                    <span class="c1"># lns : list of diffraction pointx in the current signature </span>
+                    <span class="c1">#</span>
+                    <span class="c1"># scalability : avoid a loop over all the points in lnss</span>
+                    <span class="c1">#</span>
+                    <span class="n">lns</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lnss</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nstr</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
                     <span class="c1">#pdb.set_trace()</span>
-                    <span class="c1">#pdb.set_trace()</span>
-                    <span class="c1"># expand dimension add z dimension (2)</span>
-                    <span class="c1"># tuple concatenation doesn&#39;t work with array this is strange!!</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># &gt;&gt; a = (1,2,3)</span>
-                    <span class="c1"># &gt;&gt; b = (3,5,6)</span>
-                    <span class="c1"># &gt;&gt; a+b</span>
-                    <span class="c1"># (1,2,3,3,5,6)</span>
-                    <span class="c1"># but</span>
-                    <span class="c1"># &gt;&gt; u = (array([1,2]),array([1,2]))</span>
-                    <span class="c1"># &gt;&gt; v = (array([2,2]))</span>
-                    <span class="c1"># &gt;&gt; u + v</span>
-                    <span class="c1"># array([[3,4],[3,4]])  inconsistent !</span>
-                    <span class="c1">#</span>
-                    <span class="c1">#   z --&gt; kl subseg level </span>
-                    <span class="c1">#   siges[0,:] --&gt; Ms + nstr *Mss + (kl)</span>
-                    <span class="c1">#</span>
-
+                    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">lns</span><span class="p">:</span> 
+                        <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nstr</span><span class="o">==</span><span class="n">p</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">zp</span> <span class="o">=</span> <span class="n">ptees</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                <span class="k">pass</span>
+                            <span class="c1">#zinterval = L.Gs.node[s][&#39;z&#39;]</span>
+                            <span class="c1"># if (zs&lt;=zinterval[1]) &amp; (zs&gt;=zinterval[0]):</span>
+                            <span class="k">if</span> <span class="n">zp</span> <span class="o">&lt;</span> <span class="mf">1.5</span><span class="p">:</span>
+                                <span class="c1"># print s , zs , zinterval</span>
+                                <span class="k">pass</span>
+                            <span class="k">else</span><span class="p">:</span> <span class="c1"># signature is not valid</span>
+                                <span class="c1"># nstr : structure number</span>
+                                <span class="n">nstr</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">nstr</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="c1"># typi : type of interaction </span>
+                                <span class="n">typi</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">typi</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="c1"># 3d sequence of points</span>
+                                <span class="n">ptees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ptees</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                <span class="c1"># extended (floor/ceil) signature</span>
+                                <span class="n">siges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">siges</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                
+                    
                 <span class="k">if</span> <span class="n">rmoutceilR</span><span class="p">:</span>
                     <span class="c1"># 1 determine Ceil reflexion index</span>
                     <span class="c1"># uc (inter x ray)</span>
@@ -1315,7 +1280,7 @@
                         <span class="n">uinter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mapnode</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">])</span>
                         <span class="c1"># import ipdb</span>
                         <span class="c1"># ipdb.set_trace()</span>
-                        <span class="c1"># [plt.scatter(p.xy[0],p.xy[1],c=&#39;r&#39;) for up,p in enumerate(P) if uinter[0,up]]</span>
+                        <span class="c1">#[plt.scatter(p.xy[0],p.xy[1],c=&#39;r&#39;) for up,p in enumerate(P) if uinter[0,up]]</span>
                         <span class="c1">#[ plt.scatter(p.xy[0],p.xy[1],c=&#39;r&#39;) for up,p in enumerate(P) if uinter[0,up]]</span>
                         <span class="c1"># find points are indoor/outdoor cycles</span>
                         <span class="n">upt</span><span class="p">,</span><span class="n">ucy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">uinter</span><span class="p">)</span>
@@ -1329,16 +1294,13 @@
 
                 
                 <span class="k">if</span> <span class="n">r3d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">):</span>
-                    <span class="c1"># r3d[k+Nint][&#39;alpha&#39;] = np.hstack((r3d[k+Nint][&#39;alpha&#39;],a1es))</span>
-                    <span class="c1"># r3d[k+Nint][&#39;ks&#39;] = np.hstack((r3d[k+Nint][&#39;ks&#39;],ks))</span>
+            
                     <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">],</span> <span class="n">ptees</span><span class="p">))</span>
                     <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">],</span> <span class="n">siges</span><span class="p">))</span>
                     <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;sig2d&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sigsave</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">ptees</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
                         <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                        <span class="c1"># r3d[k+Nint][&#39;alpha&#39;] = a1es</span>
-                        <span class="c1"># r3d[k+Nint][&#39;ks&#39;] = ks</span>
                         <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;pt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ptees</span>
                         <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;sig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">siges</span>
                         <span class="n">r3d</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">Nint</span><span class="p">][</span><span class="s1">&#39;sig2d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigsave</span><span class="p">]</span>
@@ -1741,7 +1703,7 @@
                 <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;BiN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="o">-</span><span class="n">si</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:],</span><span class="n">eth</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:],</span>
                                                    <span class="n">eph</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-                <span class="c1">#Creatinon of B from Bi and Bo</span>
+                <span class="c1"># Creation of B from Bi and Bo</span>
                 <span class="c1"># is done after the potential diffraction </span>
                 <span class="c1"># computation</span>
 
@@ -1804,36 +1766,28 @@
                     <span class="c1"># get points positions</span>
                     <span class="c1">#pdb.set_trace()</span>
                     <span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span><span class="n">aseg</span><span class="p">))</span>
-                    <span class="c1"># get associated slab ind.seex face_0,face_n</span>
-                    <span class="c1"># self[k][&#39;diffslabs&#39;]=[[L.sl[L.sla[y]][&#39;index&#39;] for y in x] for x in aseg]</span>
-                    <span class="c1"># self[k][&#39;diffslabs&#39;]=[L.sla[x[0]]+&#39;-&#39;+L.sla[x[1]] for x in aseg]</span>
-                    <span class="c1">#diffslab = [ idslab0-idslabn ]</span>
+                    
+                    <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;diffslabs&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]][</span><span class="s1">&#39;index&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;_&#39;</span>
+                                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]][</span><span class="s1">&#39;index&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">aseg</span><span class="p">]</span>
 
-                    <span class="c1">#</span>
-                    <span class="c1"># slab name are converted in lower case since v1.0 file format of layout</span>
-                    <span class="c1">#</span>
-                    <span class="c1">#self[k][&#39;diffslabs&#39;]=[str(L.sl[L.sla[x[0]].lower()][&#39;index&#39;])+&#39;_&#39;</span>
-                    <span class="c1">#                    + str(L.sl[L.sla[x[1]].lower()][&#39;index&#39;]) for x in aseg]</span>
-                    <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;diffslabs&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]][</span><span class="s1">&#39;index&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;_&#39;</span>
-                                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]][</span><span class="s1">&#39;index&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">aseg</span><span class="p">]</span>
                     <span class="n">uwl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;diffslabs&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
                     <span class="n">luw</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">uwl</span><span class="p">)</span>
 
 
-                    <span class="n">pt1</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="c1">#tail seg1</span>
-                    <span class="n">ph1</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="c1">#head seg1</span>
-                    <span class="n">pt2</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="c1">#tail seg2</span>
-                    <span class="n">ph2</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="c1">#head seg2</span>
+                    <span class="n">pt1</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#tail seg1</span>
+                    <span class="n">ph1</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#head seg1</span>
+                    <span class="n">pt2</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#tail seg2</span>
+                    <span class="n">ph2</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#head seg2</span>
 
 
                     <span class="c1">#pts is (nb_diffraction_points x 4 x 2)</span>
                     <span class="c1">#- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2</span>
-                    <span class="c1"># tail and head of segemnt 1 and 2 respectively</span>
-                    <span class="c1">#a segment </span>
+                    <span class="c1"># tail and head of segment 1 and 2 respectively</span>
+                    <span class="c1"># a segment </span>
                     <span class="c1">#- The dimension 2 is x,y</span>
                     <span class="c1">#</span>
                     <span class="c1"># The following aims to determine which tails and heads of </span>
-                    <span class="c1"># segments associated to a give diffraction point </span>
+                    <span class="c1"># segments associated to a given diffraction point </span>
                     <span class="c1"># are connected</span>
                     <span class="c1">#</span>
                     <span class="c1"># </span>
@@ -2073,11 +2027,12 @@
         <span class="c1"># slv = nx.get_node_attributes(L.Gs, &quot;name&quot;).values()</span>
         <span class="c1"># slk = nx.get_node_attributes(L.Gs, &quot;name&quot;).keys()</span>
         <span class="c1"># find all material used in simulation</span>
-        <span class="n">uslv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="c1">#uslv = np.unique(L.sla[1:])</span>
+        <span class="n">uslv</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="c1">#</span>
         <span class="c1"># add CEIL and FLOOR</span>
         <span class="c1">#</span>
-        <span class="n">uslv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uslv</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="s1">&#39;CEIL&#39;</span><span class="p">,</span> <span class="s1">&#39;FLOOR&#39;</span><span class="p">))))</span>
+        <span class="c1">#uslv = np.hstack((uslv, np.array((&#39;CEIL&#39;, &#39;FLOOR&#39;))))</span>
 
         <span class="c1"># create reverse dictionnary with all material as a key</span>
         <span class="c1"># and associated point/segment as a value</span>
@@ -2102,8 +2057,8 @@
 
         <span class="n">R</span><span class="o">.</span><span class="n">dusl</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">uslv</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">))</span>
         <span class="n">T</span><span class="o">.</span><span class="n">dusl</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">uslv</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">))</span>
-        <span class="c1">#to be specified and limited to used wedges</span>
         
+        <span class="c1">#to be specified and limited to used wedges</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_luw&#39;</span><span class="p">):</span>
             <span class="n">D</span><span class="o">.</span><span class="n">dusl</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_luw</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">))</span>
 
@@ -2229,13 +2184,13 @@
                 <span class="c1"># assign floor and ceil slab</span>
                 <span class="c1">############################</span>
 
-                <span class="n">slT</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uT</span><span class="p">]]</span>
-                <span class="n">slR</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">nstrf</span><span class="p">[</span><span class="n">uR</span><span class="p">]]</span>
+                <span class="n">slT</span><span class="o">=</span><span class="p">[</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nstrf</span><span class="p">[</span><span class="n">uT</span><span class="p">]</span> <span class="p">]</span>
+                <span class="n">slR</span><span class="o">=</span><span class="p">[</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">nstrf</span><span class="p">[</span><span class="n">uR</span><span class="p">]</span> <span class="p">]</span>
 
                 <span class="c1"># WARNING</span>
-                <span class="c1"># in future version floor and ceil could be different for each cycle.</span>
+                <span class="c1"># in future versions floor and ceil could be different for each cycle.</span>
                 <span class="c1"># this information would be directly obtained from L.Gs</span>
-                <span class="c1"># then the two following lines would have to be  modified</span>
+                <span class="c1"># then the two following lines would have to be modified</span>
 
                 <span class="n">slRf</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;FLOOR&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">uRf</span><span class="p">))</span>
                 <span class="n">slRc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;CEIL&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">uRc</span><span class="p">))</span>
@@ -3170,7 +3125,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 01, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

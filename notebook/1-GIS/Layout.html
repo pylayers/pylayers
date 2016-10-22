@@ -29,9 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="1. 1   Overview" href="../TOC.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
     <link rel="next" title="2.1.1.2. Effect of Modifying the Nature of Sub-Segments" href="Multisubsegments.html" />
-    <link rel="prev" title="1. 1   Overview" href="../TOC.html" />
+    <link rel="prev" title="1   Overview" href="../TOC.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,14 +92,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="../TOC.html" title="1. 1   Overview"
+	<a href="../TOC.html" title="1   Overview"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    1. 1   Overview
+	    1   Overview
 	    </span>
 	    <span class="hiddenrellink">
-	    1. 1   Overview
+	    1   Overview
 	    </span>
 	    
 	    </a>
@@ -143,14 +143,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="../TOC.html" title="1. 1   Overview" >
+	<a href="../TOC.html" title="1   Overview" >
 	Up
 	<br>
 	<span class="smallrellink">
-	1. 1   Overview
+	1   Overview
 	</span>
 	<span class="hiddenrellink">
-	1. 1   Overview
+	1   Overview
 	</span>
 	
 	</a>
@@ -196,7 +196,7 @@
 </pre></div>
 </div>
 <div class="section" id="description-of-the-propagation-environment">
-<h1>2.1.1.1. Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
+<h1>Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal"><span class="pre">Layout</span></code> class contains the data structure for describing a
 propagation environment. It contains different graphs helping the
 implementation of the ray tracing. The class is implemented in the</p>
@@ -208,7 +208,7 @@ implementation of the ray tracing. The class is implemented in the</p>
 </pre></div>
 </div>
 <div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
-<h2>2.1.1.1.1. Getting the list of all available Layouts : the <code class="docutils literal"><span class="pre">ls()</span></code> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
+<h2>Getting the list of all available Layouts : the <code class="docutils literal"><span class="pre">ls()</span></code> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
 <p>Creating a default Layout is as simple as :</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L=Layout()
 &gt;&gt;&gt; L
@@ -603,7 +603,7 @@ project UWB impulse radio measuremnts have been performed.</p>
 <img alt="../../_images/Layout_28_0.png" src="../../_images/Layout_28_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
-<h2>2.1.1.1.2. The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
+<h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
 <p>The layout data structure is a mix between graph and numpy array. numpy
 arrays are used when high performance is required while graph structure
 is convenient when dealing with different specific tasks. The tricky
@@ -619,7 +619,7 @@ numpy array which are mostly used internally.</p>
 <li>degree : degree of nodes</li>
 </ul>
 <div class="section" id="pt-the-array-of-points">
-<h3>2.1.1.1.2.1. <code class="docutils literal"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
 <p>The point coordinates are stored in two different places</p>
 <ul class="simple">
 <li>L.Gs.pos : in a dictionary form (key is the point negative index)</li>
@@ -639,7 +639,7 @@ of the edition in the <code class="docutils literal"><span class="pre">Layout.g2
 in charge of the conversion.</p>
 </div>
 <div class="section" id="tahe-tail-head">
-<h3>2.1.1.1.2.2. tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
+<h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal"><span class="pre">tahe</span></code> is a  where  denotes the
 number of segment. The first line is the tail index of the segment
  and the second line is the head of the segment .
@@ -673,7 +673,7 @@ connected to the origin (corresponding to exterior cycle).</p>
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
-<h2>2.1.1.1.3. <code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length +1. The index 0 is not used
 because none segment has 0 as an index.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ns = 5
@@ -747,7 +747,7 @@ because none segment has 0 as an index.</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Aug 30, 2016.
+      Last updated on Oct 22, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Layout.rst.txt"
