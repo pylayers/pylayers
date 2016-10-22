@@ -395,7 +395,6 @@ class Coverage(PyLayers):
         ng = self.ng
         nf = self.nf
         #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        pdb.set_trace()
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)

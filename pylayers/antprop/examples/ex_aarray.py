@@ -24,5 +24,5 @@ k = np.arange(npts)
 A.w = wn # (npts,1)
 A.eval()
 A.plotG()
-A.show3()
+A._show3()
 # A.plot3d() doesn't work
