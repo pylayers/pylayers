@@ -86,7 +86,7 @@ class Layout(pro.PyLayers):
                  verbose=False,
                  cartesian=True,
                  dist_m=400,
-                 type='floorplan'):
+                 typ='floorplan'):
         """ object constructor
 
         Parameters
@@ -146,7 +146,7 @@ class Layout(pro.PyLayers):
         self.hasboundary = False
         self.coordinates = 'cart'
         self.version = '1.1'
-        self.type = type
+        self.typ = typ
         #
         # setting display option
         #
@@ -194,6 +194,7 @@ class Layout(pro.PyLayers):
         #
         arg, ext = os.path.splitext(string)
         # force .ini extension
+    
         if arg != '':
             if ext == '.ini':
                 self._filename = string
@@ -201,6 +202,8 @@ class Layout(pro.PyLayers):
             elif ext == '.osm':
                 self._filename = arg + '.ini'
                 loadosm = True
+            else:
+                self.typ = 'city'
         else:  # No argument
             self._filename = 'newfile.ini'
             newfile = True
@@ -217,10 +220,10 @@ class Layout(pro.PyLayers):
                 self.importosm(_fileosm=string, cart=True)
                 self.loadosm = True
             elif '(' in string:  # load from osmapi latlon in string
-                self.importosm(latlon=string, dist_m=dist_m, cart=True)
+                self.importosm(latlon=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
             else:  # load from address geocoding
-                self.importosm(address=string, dist_m=dist_m, cart=True)
+                self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
 
             self.boundary()
@@ -1064,8 +1067,7 @@ class Layout(pro.PyLayers):
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
         cart = kwargs['cart']
-        pdb.set_trace()
-
+        
         if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
             coords, nodes, ways, dpoly, m = osm.getosm(typ=typ,
                                                        address=address,
@@ -1086,7 +1088,7 @@ class Layout(pro.PyLayers):
                 fileosm, typ=kwargs['typ'])
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'ini')
-
+        
         # 2 valid typ : 'floorplan' and 'building'
 
         _np = 0  # _ to avoid name conflict with numpy alias
@@ -1196,19 +1198,21 @@ class Layout(pro.PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
-        lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
-        lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
-        bd = [lon.min(), lat.min(), lon.max(), lat.max()]
-        lon_0 = (bd[0] + bd[2]) / 2.
-        lat_0 = (bd[1] + bd[3]) / 2.
-        self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
-                         urcrnrlon=bd[2], urcrnrlat=bd[3],
-                         resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+        # lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
+        # lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+        # bd = [lon.min(), lat.min(), lon.max(), lat.max()]
+        # lon_0 = (bd[0] + bd[2]) / 2.
+        # lat_0 = (bd[1] + bd[3]) / 2.
+
+        # pdb.set_trace()
+        # self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
+        #                  urcrnrlon=bd[2], urcrnrlat=bd[3],
+        #                  resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
         self.m = m
-        if kwargs['cart']:
-            x, y = self.m(lon, lat)
-            self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
-            self.coordinates = 'cart'
+        # if kwargs['cart']:
+        #     x, y = self.m(lon, lat)
+        #     self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
+        #     self.coordinates = 'cart'
 
         # del coords
         # del nodes
@@ -1340,14 +1344,14 @@ class Layout(pro.PyLayers):
         else:
             config.set("info", "format", "cart")
         config.set("info", "version", current_version)
-        config.set("info", "type", self.type)
+        config.set("info", "type", self.typ)
 
-        if self.type == 'floorplan':
+        if self.typ == 'floorplan':
             config.add_section("floorplan")
             config.set("floorplan", "zceil", self.zceil)
             config.set("floorplan", "zfloor", self.zceil)
 
-        if self.type == 'outdoor':
+        if self.typ == 'outdoor':
             config.add_section("outdoor")
         # config.set("info",'Npoints',self.Np)
         # config.set("info",'Nsegments',self.Ns)
@@ -1515,13 +1519,16 @@ class Layout(pro.PyLayers):
             for k in self.sl.keys():
                 self.name[k] = []
 
-        if di['info'].has_key('type'):
-            self.type = di['info']['type']
-            if self.type == 'floorplan':
+        if di['info'].has_key('typ'):
+            self.typ = di['info']['typ']
+            if self.typ == 'floorplan':
                 self.zceil = eval(di['floorplan']['zceil'])
                 self.zfloor = eval(di['floorplan']['zfloor'])
+            if self.typ == 'outdoor':
+                self.zceil = 1000.
+                self.zfloor = 0.
         else:
-            self.type = 'floorplan'
+            self.typ = 'floorplan'
             self.zfloor = 0
             self.zceil = 3
         # manage ini file with latlon coordinates
@@ -1638,13 +1645,13 @@ class Layout(pro.PyLayers):
                     num = self.add_segment(nta, nhe,
                                            name='AIR',
                                            offset=offset,
-                                           z=(d['z'][1], self.zceil))
+                                           z=(z[1], self.zceil))
 
                 if z[0] > self.zfloor:
                     num = self.add_segment(nta, nhe,
                                            name='AIR',
                                            offset=offset,
-                                           z=(d['z'][1], self.zceil))
+                                           z=(self.zfloor,z[0]))
 
         # compliant with config file without  material/slab information
 
@@ -4401,6 +4408,8 @@ class Layout(pro.PyLayers):
         ax : matlplotlib axes
         roomlist : list
             list of room numbers
+        mode : string 
+            'indoor','open'
 
         """
         if not isinstance(ax, plt.Axes):
@@ -4411,33 +4420,34 @@ class Layout(pro.PyLayers):
 
         # pdb.set_trace()
         for k, nc in enumerate(G.node.keys()):
-            poly = G.node[nc]['polyg']
+            if nc!=0:
+                poly = G.node[nc]['polyg']
 
-            a = poly.signedarea()
+                a = poly.signedarea()
 
-            if mode == 'area':
-                if a < 0:
-                    poly.plot(color='red', alpha=0.5, fig=fig, ax=ax)
-                else:
-                    poly.plot(color='green', alpha=0.5, fig=fig, ax=ax)
+                if mode == 'area':
+                    if a < 0:
+                        poly.plot(color='red', alpha=0.5, fig=fig, ax=ax)
+                    else:
+                        poly.plot(color='green', alpha=0.5, fig=fig, ax=ax)
 
-            if mode == 'start':
-                if poly.vnodes[0] < 0:
-                    poly.plot(color='blue', alpha=0.5, fig=fig, ax=ax)
-                else:
-                    poly.plot(color='yellow', alpha=0.5, fig=fig, ax=ax)
+                if mode == 'start':
+                    if poly.vnodes[0] < 0:
+                        poly.plot(color='blue', alpha=0.5, fig=fig, ax=ax)
+                    else:
+                        poly.plot(color='yellow', alpha=0.5, fig=fig, ax=ax)
 
-            if mode == 'indoor':
-                if G.node[nc]['indoor']:
-                    poly.plot(color='green', alpha=0.5, fig=fig, ax=ax)
-                else:
-                    poly.plot(color='blue', alpha=0.5, fig=fig, ax=ax)
+                if mode == 'indoor':
+                    if G.node[nc]['indoor']:
+                        poly.plot(color='green', alpha=0.5, fig=fig, ax=ax)
+                    else:
+                        poly.plot(color='blue', alpha=0.5, fig=fig, ax=ax)
 
-            if mode == 'open':
-                if G.node[nc]['isopen']:
-                    poly.plot(color='green', alpha=0.5, fig=fig, ax=ax)
-                # else:
-                #     poly.plot(color='blue', alpha=0.5,fig=fig,ax=ax)
+                if mode == 'open':
+                    if G.node[nc]['isopen']:
+                        poly.plot(color='green', alpha=0.5, fig=fig, ax=ax)
+                    # else:
+                    #     poly.plot(color='blue', alpha=0.5,fig=fig,ax=ax)
 
         ax.axis('scaled')
 
@@ -5493,7 +5503,7 @@ class Layout(pro.PyLayers):
         for cy, seg in zip(adjcyair, self.segboundary):
             self.Gt.node[cy]['indoor'] = False
             self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(0, cy, segment=seg)
+            self.Gt.add_edge(0, cy, segment=[seg])
 
         if check:
             print "check len(ncycles) == 2",
@@ -5552,6 +5562,7 @@ class Layout(pro.PyLayers):
         #
         # indoor property is spread by contagion
         #
+        pdb.set_trace()
         visited = [0]
         to_visit = nx.neighbors(self.Gt, 0)
         law = self.name['_AIR'] + self.name['AIR']
@@ -5561,8 +5572,12 @@ class Layout(pro.PyLayers):
             # get neighbors of current_cycle
             neighbors = nx.neighbors(self.Gt, cur_cy)
             # get neighbors separated by an air_wall
-            neighbors_aw = [x for x in neighbors if self.Gt[
-                cur_cy][x]['segment'] in law]
+            neighbors_aw = [x for x in neighbors 
+                            if ( len(self.Gt[cur_cy][x]['segment'])==1 
+                                and 
+                                self.Gt[cur_cy][x]['segment'][0] in law
+                                )
+                            ]
             # get not visited neighbors_aw
             nv_neighbors_aw = [
                 x for x in neighbors_aw if x not in (visited + to_visit)]
@@ -6782,6 +6797,8 @@ class Layout(pro.PyLayers):
 
         show : boolean
             default False
+        indoor : boolean 
+            default True
 
         Examples
         --------
