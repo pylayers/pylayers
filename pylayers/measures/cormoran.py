@@ -164,13 +164,18 @@ import pylayers.antprop.antenna as antenna
 from matplotlib.widgets import Slider, CheckButtons, Button, Cursor
 from pylayers.signal.DF import *
 
-from moviepy.editor import *
+# from moviepy.editor import *
 from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import pickle
-
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 #Those lines handle incompatibility between mayavi and VTK
 #and redirect noisy warning message into a log file
 # import vtk
@@ -334,12 +339,12 @@ class CorSer(PyLayers):
             if isinstance(self.B,dict):
                 for b in self.B:
                     if hasattr(self,'L'):
-                        self.B[b].traj.Lfilename=copy.copy(self.L.filename)
+                        self.B[b].traj.Lfilename=copy.copy(self.L._filename)
                     else:
                         self.B[b].traj.Lfilename='notloaded'
 
             else :
-                self.B.traj.Lfilename=copy.copy(self.L.filename)
+                self.B.traj.Lfilename=copy.copy(self.L._filename)
 
         # reference time is tmocap
         self.tmocap = self.B[self.subject[0]].time

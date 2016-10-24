@@ -297,7 +297,7 @@ def haversine(lat1, lon1, lat2, lon2):
     deltaphi = (lat2-lat1) * np.pi/180.
     deltalamda = (lon2-lon1) * np.pi/180.
 
-    a = np.sin(deltaphi/2) * np.sin(deltaphi/2) + np.cos(phi1) * np.cos(phi2) * np.sin(deltalamda/2) * np.sin(deltalamda/2)
-    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1-a))
+    a = np.sin(deltaphi/2.) * np.sin(deltaphi/2.) + np.cos(phi1) * np.cos(phi2) * np.sin(deltalamda/2.) * np.sin(deltalamda/2.)
+    c = 2. * np.arctan2(np.sqrt(a), np.sqrt(1.-a))
 
     return R * c

@@ -1658,7 +1658,10 @@ class Layout(pro.PyLayers):
                                            offset=offset,
                                            z=(self.zfloor,z[0]))
 
+        self.boundary()
+
         # compliant with config file without  material/slab information
+
 
         if config.has_section('files'):
             # self.filematini=config.get('files','materials')

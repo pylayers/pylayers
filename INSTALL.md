@@ -97,6 +97,22 @@ $ <Path to Anaconda>/lib/python2.7/site-packages/   (UNIX)
 or 
 c:\<Path to Anaconda>\Lib\site-packages (Windows)
 
+## 3. Everything is correctly installed, but I can't see the Mayavi scene when I use DL._show3() in the example
+
+This is related to your Mayavi backend configuration, which doesn't use qt. The [Mayavi website ](http://docs.enthought.com/mayavi/mayavi/mlab.html) gives a solution in 2 step to the problem:
+
+1. Invoking ipython with the qt backend either in the bash, by launching ipython with 'ipython --gui=qt' or, in the interactive prompt by using the '%gui qt' command )
+2. Setting 2 environment variables 'QT_API=pyqt' and 'ETS_TOOLKIT=qt4 ipython'
+
+
+If you still fail to see any 3D scene in mayavi, you may try the wx backend by:
+
+1. Invoking ipython with ipython --gui=wx
+2. Setting the environment variable to ETS_TOOLKIT=wx
+
+
+
+
 
 
 
