@@ -3421,7 +3421,6 @@ def is_aligned3(a, b, c, tol=1e-2):
     # (b[1,:]-a[1,:])*(c[0,:]-a[0,:])))<1e-8
     val = abs(((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])))
     cond = val < tol
-    print val,tol,cond
     # print val
     return cond
 

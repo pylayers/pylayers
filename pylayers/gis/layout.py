@@ -203,7 +203,7 @@ class Layout(pro.PyLayers):
                 self._filename = arg + '.ini'
                 loadosm = True
             else:
-                self.typ = 'city'
+                self.typ = 'outdoor'
         else:  # No argument
             self._filename = 'newfile.ini'
             newfile = True
@@ -6826,19 +6826,18 @@ class Layout(pro.PyLayers):
         # loop over cycles
         #
         self.dGv = {}  # dict of Gv graph
-        pdb.set_trace()
+        
         for icycle in self.Gt.node:
             if icycle != 0:
                 if self.indoor or not self.Gt.node[icycle]['indoor']:
-                    if icycle==39:
-                        pdb.set_trace()
+                
                     polyg = self.Gt.node[icycle]['polyg']
-                    polyg.plot(fig=plt.gcf(),ax=plt.gca())
+                    # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
                     # take a single segment between 2 points 
                     vnodes = polyg.vnodes
                     unodes = np.where(vnodes<0)[0]
                     useg = np.mod(unodes+1,len(vnodes))
-                    print vnodes
+                    
                     npt  = filter(lambda x: x < 0, vnodes)
                     nseg = vnodes[useg]
                     nseg_full = filter(lambda x: x > 0, vnodes)
@@ -6890,7 +6889,7 @@ class Layout(pro.PyLayers):
                                 l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
                                 l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
                                 for vlink in product(l0,l1):
-                                    print icycle,vlink[0],vlink[1]
+                                    #print icycle,vlink[0],vlink[1]
                                     Gv.add_edge(vlink[0], vlink[1])
 
                     #
