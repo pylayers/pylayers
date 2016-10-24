@@ -545,12 +545,12 @@
 <div class="viewcode-block" id="Trajectory.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.__init__.html#pylayers.mobility.trajectory.Trajectory.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="p">{},</span> <span class="n">ID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialization</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="nb">super</span><span class="p">(</span><span class="n">Trajectory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
-
 <div class="viewcode-block" id="Trajectory.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.__repr__.html#pylayers.mobility.trajectory.Trajectory.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># total distance</span>
@@ -561,6 +561,8 @@
             <span class="n">typ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
                 <span class="n">ID</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span>
             <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;ag&#39;</span><span class="p">:</span>
                 <span class="n">string</span> <span class="o">=</span><span class="s1">&#39;Trajectory of agent &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; with ID &#39;</span> <span class="o">+</span> <span class="n">ID</span>
             <span class="k">else</span> <span class="p">:</span>
@@ -681,10 +683,10 @@
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Trajectory.generate requieres at least 3 time stamps&#39;</span><span class="p">)</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pt&#39;</span><span class="p">]</span>
         <span class="n">npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="c1"># now = datetime.now()</span>
         <span class="n">td</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;unit&#39;</span><span class="p">])</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">td</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">td</span> <span class="o">=</span> <span class="n">td</span><span class="o">+</span><span class="n">delta</span>
+        <span class="c1"># delta = now - td[0]</span>
+        <span class="c1"># td = td+delta</span>
         <span class="c1"># velocity vector</span>
         <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span><span class="o">/</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="c1"># acceleration vector</span>
@@ -705,9 +707,10 @@
             <span class="s1">&#39;ax&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
             <span class="s1">&#39;ay&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
             <span class="s1">&#39;az&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
-            <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]}</span>
+            <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="n">t</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]}</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Trajectory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;vx&#39;</span><span class="p">,</span> <span class="s1">&#39;vy&#39;</span><span class="p">,</span>
-                                         <span class="s1">&#39;vz&#39;</span><span class="p">,</span> <span class="s1">&#39;ax&#39;</span><span class="p">,</span> <span class="s1">&#39;ay&#39;</span><span class="p">,</span> <span class="s1">&#39;az&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">],</span>
+                                         <span class="s1">&#39;vz&#39;</span><span class="p">,</span> <span class="s1">&#39;ax&#39;</span><span class="p">,</span> <span class="s1">&#39;ay&#39;</span><span class="p">,</span> <span class="s1">&#39;az&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">],</span>
                                         <span class="n">index</span><span class="o">=</span><span class="n">td</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
