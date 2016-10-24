@@ -6838,7 +6838,7 @@ class Layout(pro.PyLayers):
                     vnodes = polyg.vnodes
                     unodes = np.where(vnodes<0)[0]
                     useg = np.mod(unodes+1,len(vnodes))
-
+                    print vnodes
                     npt  = filter(lambda x: x < 0, vnodes)
                     nseg = vnodes[useg]
                     nseg_full = filter(lambda x: x > 0, vnodes)
@@ -6872,18 +6872,20 @@ class Layout(pro.PyLayers):
                         pta1 = self.pt[:, tahe1[0]]
                         phe1 = self.pt[:, tahe1[1]]
 
-                        A0 = np.vstack((pta0, phe0, pta1))
-                        A0 = np.hstack((A0, np.ones((3, 1))))
+                        aligned = geu.is_aligned4(pta0,phe0,pta1,phe1)
+                        # A0 = np.vstack((pta0, phe0, pta1))
+                        # A0 = np.hstack((A0, np.ones((3, 1))))
 
-                        A1 = np.vstack((pta0, phe0, phe1))
-                        A1 = np.hstack((A1, np.ones((3, 1))))
+                        # A1 = np.vstack((pta0, phe0, phe1))
+                        # A1 = np.hstack((A1, np.ones((3, 1))))
 
-                        d0 = np.linalg.det(A0)
-                        d1 = np.linalg.det(A1)
+                        # d0 = np.linalg.det(A0)
+                        # d1 = np.linalg.det(A1)
 
-                        if not ((abs(d0) < 1e-1) & (abs(d1) < 1e-1)):
+                        #if not ((abs(d0) < 1e-1) & (abs(d1) < 1e-1)):
+                        if not aligned:
                             if ((0 not in self.Gs.node[nk[0]]['ncycles']) and
-                                    (0 not in self.Gs.node[nk[1]]['ncycles'])):
+                                (0 not in self.Gs.node[nk[1]]['ncycles'])):
                                 # get the iso segments of both nk[0] and nk[1]
                                 l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
                                 l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
