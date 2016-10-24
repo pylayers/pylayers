@@ -20,7 +20,7 @@ import triangle
 import matplotlib.pyplot as plt
 import matplotlib.colors as clr
 import networkx as nx
-from itertools import combinations
+from itertools import combinations, product
 import ast
 from networkx.readwrite import write_gpickle, read_gpickle
 from mpl_toolkits.basemap import Basemap
@@ -238,6 +238,11 @@ class Layout(pro.PyLayers):
                 self.check()
 
             # check if the graph gpickle files have been built
+            if self.typ=='floorplan':
+                self.indoor = True
+            if self.typ=='outdoor':
+                self.indoor = False
+
             if build:
                 path = os.path.join(pro.basename,
                                     'struc',
@@ -267,7 +272,7 @@ class Layout(pro.PyLayers):
                 # rebuild dump
                 if rebuild:
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                    # if ans.lower()=='y':
+                    # if ans.lower()=='y'
 
                     self.build()
                     self.lbltg.append('s')
@@ -4409,7 +4414,7 @@ class Layout(pro.PyLayers):
         roomlist : list
             list of room numbers
         mode : string 
-            'indoor','open'
+            'indoor','open','area','start'
 
         """
         if not isinstance(ax, plt.Axes):
@@ -4656,7 +4661,7 @@ class Layout(pro.PyLayers):
 
         return fig, ax
 
-    def build(self, graph='tvirw', verbose=False, indoor=True):
+    def build(self, graph='tvirw', verbose=False):
         """ build graphs
 
         Parameters
@@ -4668,7 +4673,8 @@ class Layout(pro.PyLayers):
             'i' : Gi
             'r' : Gr
             'w" : Gw
-
+        verbose : boolean
+        
         Notes
         -----
 
@@ -4688,13 +4694,13 @@ class Layout(pro.PyLayers):
         if 't' in graph:
             if verbose:
                 print "Gt"
-            self.buildGt(mesh_indoor=indoor)
+            self.buildGt()
             self.lbltg.extend('t')
 
         if 'v' in graph:
             if verbose:
                 print "Gv"
-            self.buildGv(indoor=indoor)
+            self.buildGv()
             self.lbltg.extend('v')
 
         if 'i' in graph:
@@ -5253,13 +5259,12 @@ class Layout(pro.PyLayers):
         # plt.show()
         return T, map_vertices
 
-    def buildGt(self, mesh_indoor=True, check=True):
+    def buildGt(self, check=True):
         """ build graph of convex cycle 
 
         Parameters
         ----------
 
-        mesh_indoor : boolean 
         check : boolean 
 
         todo :
@@ -5541,7 +5546,7 @@ class Layout(pro.PyLayers):
         #   At that stage the diffraction points are not included
         #   not enough information available.
         #   The diffraction points are not known yet
-        self._interlist(indoor=mesh_indoor)
+        self._interlist()
 
         #
         # dca : dictionnary of cycles which have an air wall
@@ -5562,7 +5567,7 @@ class Layout(pro.PyLayers):
         #
         # indoor property is spread by contagion
         #
-        pdb.set_trace()
+        
         visited = [0]
         to_visit = nx.neighbors(self.Gt, 0)
         law = self.name['_AIR'] + self.name['AIR']
@@ -6301,7 +6306,7 @@ class Layout(pro.PyLayers):
                 str(np.array(nodes)[ucncym])
             print "passed"
 
-    def _interlist(self, nodelist=[], indoor=True):
+    def _interlist(self, nodelist=[]):
         """ Construct the list of interactions associated to each cycle
 
 
@@ -6310,13 +6315,14 @@ class Layout(pro.PyLayers):
 
         nodelist: list
             list of Gt nodes (cycles) for which interactions have to be found
-        indoor: bool
-            if indoor=True , get list of interaction of Gt cycle with indoor =True
-            else list of indoor interaction is skipped
+    
+            
 
         Notes
         -----
 
+        if selfr.indoor==True , get list of interaction of Gt cycle with indoor =True
+            else list of indoor interaction is skipped
 
          Interaction labeling convention
 
@@ -6344,7 +6350,7 @@ class Layout(pro.PyLayers):
         # for all cycles k (node of Gt)
         for k in nodelist:
             if k != 0:
-                if indoor or not self.Gt.node[k]['indoor']:
+                if self.indoor or not self.Gt.node[k]['indoor']:
                     #vnodes = self.Gt.node[k]['vnodes']
                     vnodes = self.Gt.node[k]['polyg'].vnodes
                     ListInteractions = []
@@ -6789,7 +6795,7 @@ class Layout(pro.PyLayers):
 
         self.Gv = Gv
 
-    def buildGv(self, show=False, indoor=True):
+    def buildGv(self, show=False):
         """ build visibility graph
 
         Parameters
@@ -6797,8 +6803,7 @@ class Layout(pro.PyLayers):
 
         show : boolean
             default False
-        indoor : boolean 
-            default True
+        
 
         Examples
         --------
@@ -6821,19 +6826,30 @@ class Layout(pro.PyLayers):
         # loop over cycles
         #
         self.dGv = {}  # dict of Gv graph
-
+        pdb.set_trace()
         for icycle in self.Gt.node:
-
             if icycle != 0:
-                if indoor or not self.Gt.node[icycle]['indoor']:
+                if self.indoor or not self.Gt.node[icycle]['indoor']:
+                    if icycle==39:
+                        pdb.set_trace()
                     polyg = self.Gt.node[icycle]['polyg']
+                    polyg.plot(fig=plt.gcf(),ax=plt.gca())
+                    # take a single segment between 2 points 
                     vnodes = polyg.vnodes
+                    unodes = np.where(vnodes<0)[0]
+                    useg = np.mod(unodes+1,len(vnodes))
 
-                    npt = filter(lambda x: x < 0, vnodes)
-                    nseg = filter(lambda x: x > 0, vnodes)
+                    npt  = filter(lambda x: x < 0, vnodes)
+                    nseg = vnodes[useg]
+                    nseg_full = filter(lambda x: x > 0, vnodes)
+                    # keep only airwalls without iso single
+                    nseg_single = filter(lambda x: len(self.Gs.node[x]['iso'])==0, nseg)
 
-                    lair = self.name['AIR'] + self.name['_AIR']
-                    airwalls = filter(lambda x: x in lair, nseg)
+                    lair1 = self.name['AIR'] 
+                    lair2 = self.name['_AIR']
+                    lair  = lair1 + lair2
+
+                    airwalls = filter(lambda x: x in lair, nseg_single)
                     ndiff = [x for x in npt if x in self.ddiff.keys()]
                     #
                     # Create a graph
@@ -6868,7 +6884,12 @@ class Layout(pro.PyLayers):
                         if not ((abs(d0) < 1e-1) & (abs(d1) < 1e-1)):
                             if ((0 not in self.Gs.node[nk[0]]['ncycles']) and
                                     (0 not in self.Gs.node[nk[1]]['ncycles'])):
-                                Gv.add_edge(nk[0], nk[1])
+                                # get the iso segments of both nk[0] and nk[1]
+                                l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
+                                l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
+                                for vlink in product(l0,l1):
+                                    print icycle,vlink[0],vlink[1]
+                                    Gv.add_edge(vlink[0], vlink[1])
 
                     #
                     # Handle diffraction points
@@ -6892,8 +6913,9 @@ class Layout(pro.PyLayers):
 
                         # idiff segment neighbors
                         #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
-                        nsneigh = [x for x in nx.neighbors(
-                            self.Gs, idiff) if x in nseg]
+                        nsneigh = [x for x in 
+                                   nx.neighbors(self.Gs, idiff) 
+                                   if x in nseg_full]
                         # segvalid : not adjascent segment
                         seen_from_neighbors = []
 
@@ -6909,8 +6931,9 @@ class Layout(pro.PyLayers):
                         # and which are not neighbrs of the point idiff
                         #
                         for x in nsneigh:
-                            neighbx = [y for y in nx.neighbors(Gv, x) if 0 not in self.Gs.node[
-                                y]['ncycles'] and y not in nsneigh]
+                            neighbx = [ y for y in nx.neighbors(Gv, x) 
+                                        if 0 not in self.Gs.node[y]['ncycles'] 
+                                        and y not in nsneigh]
                             seen_from_neighbors += neighbx
 
                         for ns in seen_from_neighbors:
@@ -7121,7 +7144,7 @@ class Layout(pro.PyLayers):
                     self.Gt.node[c]['inter'] += [(k,)]
 
     def filterGi(self, situ='outdoor'):
-        """ Filter Gi to manage indoor/ outdoor situations
+        """ Filter Gi to manage indoor/outdoor situations
 
         Not called
 
