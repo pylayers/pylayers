@@ -103,6 +103,7 @@ from pylayers.util.project import *
 import heapq
 import shapely.geometry as sh
 import shapely.ops as sho
+from tqdm import tqdm
 #from numba import autojit
 
 
@@ -1757,22 +1758,43 @@ class Signatures(PyLayers,dict):
         Parameters
         ----------
 
-        seq : list or np.array()
+        seq : list of tuple 
+               [(2,2),(5,3),(7,2)]
+        
+        1 : Diffraction 
+        2 : Reflexion
+        3 : Diffraction 
 
         Returns
         -------
 
-        boolean
+        Examples
+        --------
+
+        >>> DL=DLink()
+        >>> DL.eval()
+        >>> seq = [(2,3)] # transmission through segment 2 
+        >>> DL.Si.exist(seq)
 
         """
-        if type(seq)==list:
-            seq = np.array(seq)
-
+        # Number of interactions 
         N = len(seq)
+        # signatures with N interaction
         sig = self[N]
-        lf = filter(lambda x : (x==seq).all(),sig)
-        if len(lf)>0:
-            return True,lf
+        # Number signature with N interaction
+        Nsig = sig.shape[0]/2
+        nstr = sig[::2,:]
+        typ  = sig[1::2,:]
+        # List of signat
+        lsig = []
+        for k in range(Nsig):
+            lint = []
+            for l in range(N):
+                lint.append((nstr[k,l],typ[k,l]))
+            lsig.append(lint)
+
+        if seq in lsig:
+            return True
         else:
             return False
 
@@ -3001,7 +3023,7 @@ class Signatures(PyLayers,dict):
         
         self.cutoff   = cutoff
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
-
+        lair = self.L.name['AIR']+self.L.name['_AIR']
         # list of interactions visible from source
         lisR,lisT,lisD = self.L.intercy(self.source,typ='source')
         if diffraction:
@@ -3042,21 +3064,26 @@ class Signatures(PyLayers,dict):
 
         # signature counter
         cptsig = 0
-        for us,s in enumerate(lis):
+        for us,s in tqdm(enumerate(lis)):
+            
+            #print s
+            # if s==(4,2):
+            #     pdb.set_trace()
+
             # if (us%20)==0:
             #     print us,'/',len(lis)
             # us counter
             # s : interaction 
-            # s[0] : point or segment
+            # s[0] : point (<0) or segment (>0)
             # pts : list of neighbour nodes
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
             else:
                 tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
-            #R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-            #for mirroring 
-            #R=[[S0,v0],[S1,v1],...]
+            # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
+            # for mirroring 
+            # R=[[S0,v0],[S1,v1],...]
             R = [(np.eye(2),np.array([0,0]))]
 
             visited = [s]
@@ -3078,10 +3105,15 @@ class Signatures(PyLayers,dict):
             lawp = []
             # while the stack of iterators is not void
             while stack: #
+                
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
+                #if visited==[(4,2),(5,2)]:
+                #     print visited
+                #   print interaction
+                #     pdb.set_trace()
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
                 cond2 = (interaction in visited) and bt
@@ -3092,7 +3124,7 @@ class Signatures(PyLayers,dict):
                 if (not cond1):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
-                        lair = self.L.name['AIR']+self.L.name['_AIR']
+                        
                         #print visited,len(stack)
                         if interaction[0] in lair:
                             lawp.append(1)
@@ -3107,7 +3139,7 @@ class Signatures(PyLayers,dict):
                         # and a translation vector for doing the mirroring 
                         # operation
 
-                        #diffraction (retrieve a point)
+                        # diffraction (retrieve a point)
                         if len(visited[-2]) == 1:
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
@@ -3134,11 +3166,7 @@ class Signatures(PyLayers,dict):
                         # apply current chain of symmetries
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
-                        #pdb.set_trace()
-                        #for r in R[::-1]: 
-                        #for r in R:
-                        #    th = np.einsum('ki,ij->kj',th,r[0])+r[1]
-                        #pdb.set_trace()
+                        
                         ik = 1
                         r = R[-ik]
                         while np.any(r[0]!=np.eye(2)):     
@@ -3147,64 +3175,133 @@ class Signatures(PyLayers,dict):
                             r  = R[-ik]
                         #vlp vrpdb.set_trace()
                         if len(tahe)<2:
-                            tahe.append(th)
-                            valid_bool = True
+                            tha = th
+                            ratio = 1.0
                         else:
                             pta0 = tahe[0][0]   # tail first segment
                             phe0 = tahe[0][1]   # head first segment
                             pta_ = tahe[-1][0]  # tail last segment
                             phe_ = tahe[-1][1]  # head last segment 
+
+                            #
+                            # Calculates the left and righ vector of the cone 
+                            #
+                            #  vl left vector 
+                            #  vr right vector 
                             if not (geu.ccw(pta0,phe0,phe_) ^
                                     geu.ccw(phe0,phe_,pta_) ):
-                                # vr = (pta0,pta_)
-                                # vl = (phe0,phe_)
                                 vr = (pta0,phe_)
                                 vl = (phe0,pta_)
                             else:  # twisted case
-                                # vr = (pta0,phe_)
-                                # vl = (phe0,pta_)
                                 vr = (pta0,pta_)
                                 vl = (phe0,phe_)
 
-                            # lta = geu.isleft(th[0][:,None],vl[0][:,None],vl[1][:,None])
-                            # rta = geu.isleft(th[0][:,None],vr[0][:,None],vr[1][:,None])
-                            # lhe = geu.isleft(th[1][:,None],vl[0][:,None],vl[1][:,None])
-                            # rhe = geu.isleft(th[1][:,None],vr[0][:,None],vr[1][:,None])
-
-                            # out = (lta & lhe ) | (~rta & ~rhe)
-                            # inside = ~out
-                            #if inside:   # new segment is inside the beam
+                            # cone dot product 
+                            # print vr
+                            # print vl
+                            vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
+                            vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                            
+                        
+                            vrdotvl = np.dot(vr_n,vl_n)
+                            # cone angle 
+                            angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+                            #angle_cone = np.arccos(vrdotvl)
+                            # prepare lines and seg argument for intersection checking
                             linel = (vl[0],vl[1]-vl[0])
                             liner = (vr[0],vr[1]-vr[0])
+                            # from origin mirrored segment to be tested 
                             seg   = (th[0],th[1])
-                            #pdb.set_trace()
+
+                            # apex calculation 
+                            a0u = np.dot(pta0,vr_n)
+                            a0v = np.dot(pta0,vl_n)
+                            b0u = np.dot(phe0,vr_n)
+                            b0v = np.dot(phe0,vl_n)
+
+                            kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
+                            apex = phe0 + kb*vl_n
+
+                            
+                            
                             kl,p_int_left  = geu.intersect_line_seg(linel,seg)
                             kr,p_int_right = geu.intersect_line_seg(liner,seg)
-                            valid_bool = True
-                            if ((abs(kl)>=1) & (abs(kr)>=1)): # 0 intersection points 
-                                if (kl*kr)<0:
-                                    tha = th
-                                    tahe.append(tha)
-                                else: # outside cone
-                                    valid_bool = False
-                            if ((abs(kl)<1) & (abs(kr)<1)): # 2 intersection points 
+                            
+                            # signature is valid until proved non valid
+                            # valid_bool = True
+
+                            seg_ratio = 1.0
+                            
+                            bkl = (kl<=1) & (kl>=0) 
+                            bkr = (kr<=1) & (kr>=0)
+
+                            if (not bkl) & (not bkr) & (kl*kr>0): # outside cone
+                                ratio = 0
+
+                            elif (not bkl) & (not bkr) & (kl*kr<=0): # fully in cone
+                                tha = th
+                                wseg0 = th[0]-apex
+                                wseg1 = th[1]-apex
+                                wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                                wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                                useg  = np.arccos(np.minimum(np.dot(wseg0_n,wseg1_n),1.0))
+                                ratio = useg/angle_cone
+
+                            elif (bkl & bkr): # 2 intersection points 
                                 tha = np.vstack((p_int_left,p_int_right))
-                                tahe.append(tha)
-                            if ((abs(kl)<1) & (abs(kr)>=1)):
-                                if kr<kl:
+                                ratio = 1.0
+
+                            elif (bkl & (not bkr)): # left line intersects while right line don't
+                                if kr<kl: 
+                                    wseg = th[0]-apex
                                     tha = np.vstack((th[0],p_int_left))
                                 else:
+                                    wseg = th[1]-apex
                                     tha = np.vstack((p_int_left,th[1]))
-                                tahe.append(tha)
-                            if ((abs(kr)<1) & (abs(kl)>=1)):
+                                
+                                wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
+                                useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
+                                ratio = useg/angle_cone
+
+                            elif (bkr & (not bkl)): # right line intersects while left line don't
                                 if kl<kr:
+                                    wseg = th[0]-apex
                                     tha = np.vstack((th[0],p_int_right))
                                 else:
+                                    wseg = th[1]-apex
                                     tha = np.vstack((p_int_right,th[1]))
-                                tahe.append(tha)
-                        if valid_bool:
-                            #showsig2(visited,self.L,tahe)
-                            #pdb.set_trace()  
+                                    
+                                wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
+                                useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
+                                ratio = useg/angle_cone
+                            else:
+                                ratio = 0
+                                #pdb.set_trace()
+
+                            #
+                            # visual debug
+                            #
+                            # print nstr
+                            # print visited
+                            # fig ,ax = self.L.showG('s',aw=1,labels=1)
+                            # ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                            # ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                            # ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                            # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                            # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                            # #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                            # ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                            # plt.title(str(visited)+'  '+str(seg_ratio))
+                            # ax.plot(apex[0],apex[1],'or')
+                            # plt.axis('auto')
+                            # plt.show()
+                            # pdb.set_trace()
+
+                        if ratio > threshold:
+                            tahe.append(tha)
+                            # 
+                            # Check if the targer has been reached
                             # sequence is valid and last interaction is in the list of targets   
                             if (interaction in lit) or (interaction[-1]==self.target):
                                 anstr = np.array(map(lambda x: x[0],visited))
@@ -3221,21 +3318,15 @@ class Signatures(PyLayers,dict):
                             outint = Gi[visited[-2]][interaction]['output'].keys()
                             proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
-                            nexti  = [it for k,it in enumerate(outint) if (proint[k]>threshold)]
+                            nexti  = [it for k,it in enumerate(outint)]
                             stack.append(iter(nexti))
                         else:
-                            #ltahe = tahe+[th]
-                            #showsig2(visited,self.L,ltahe)
-                            #pdb.set_trace()  
-                            # go back
-                            #pdb.set_trace()
-                            #print visited
+                            
                             if len(visited)>1:
                                 if len(visited[-2])==2:
                                     R.pop()
                             last = visited.pop()
-                            #tahe.pop()
-                            #R.pop()
+                            
                             lawp.pop()
 
                 else:
@@ -3244,7 +3335,10 @@ class Signatures(PyLayers,dict):
                         if len(visited[-2])==2:
                             R.pop()
                     last = visited.pop()
-                    tahe.pop()
+                    try:
+                        tahe.pop()
+                    except:
+                        pdb.set_trace()
                     #R.pop()
                     try:
                         lawp.pop()
@@ -4825,7 +4919,7 @@ class Signature(object):
 
         return M
 
-    def backtrace_old(self, tx, rx, M):
+    def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx
 
         Parameters
@@ -4857,24 +4951,22 @@ class Signature(object):
             >>> import numpy as np
             >>> from pylayers.gis.layout import *
             >>> from pylayers.antprop.signature import *
-            >>> L = Layout()
-            >>> L.dumpr()
-            >>> seq = np.array([[1,5,1],[1,1,1]])
+            >>> L = Layout('defstr.ini')
             >>> s = Signature(seq)
-            >>> tx = np.array([4,-1])
-            >>> rx = np.array([1,1])
+            >>> tx = np.array([760,1113])
+            >>> rx = np.array([762,1114])
             >>> s.ev(L)
             >>> M = s.image(tx)
             >>> isvalid,Y = s.backtrace(tx,rx,M)
-            >>> fig = plt.figure()
-            >>> ax = fig.add_subplot(111)
+
+            >>> fig,ax = L.showG('s',labels=1,aw=1,axes=1)
             >>> l1 = ax.plot(tx[0],tx[1],'or')
             >>> l2 = ax.plot(rx[0],rx[1],'og')
             >>> l3 = ax.plot(M[0,:],M[1,:],'ob')
             >>> l4 = ax.plot(Y[0,:],Y[1,:],'xk')
             >>> ray = np.hstack((np.hstack((tx.reshape(2,1),Y)),rx.reshape(2,1)))
             >>> l5 = ax.plot(ray[0,:],ray[1,:],color='#999999',alpha=0.6,linewidth=0.6)
-            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+            >>> 
             >>> plt.show()
 
         Notes
@@ -4954,6 +5046,61 @@ class Signature(object):
             return isvalid,(k,alpha,beta)
 
 
+    def sig2ray(self, L, pTx, pRx, mode='incremental'):
+        """ convert a signature to a 2D ray
+
+        Parameters
+        ----------
+
+        L : Layout
+        pTx : ndarray
+            2D transmitter position
+        pRx : ndarray
+            2D receiver position
+        mod : if mod=='incremental' a set of alternative signatures is return
+
+        Returns
+        -------
+
+        Y : ndarray (2x(N+2))
+
+        See Also 
+        --------
+
+        Signature.image
+        Signature.backtrace
+            
+        """
+
+        # ev transforms a sequence of segment into numpy arrays (points)
+        # necessary for image calculation
+        self.ev(L)
+        # calculates images from pTx
+        M = self.image(pTx)
+
+        #print self
+        #if np.array_equal(self.seq,np.array([5,7,4])):
+        #    pdb.set_trace()
+        isvalid,Y = self.backtrace(pTx, pRx, M)
+        #print isvalid,Y
+        # 
+        # If incremental mode this function returns an alternative signature
+        # in case the signature do not yield a valid ray.
+        #
+        isray = True
+        if mode=='incremental':
+            if isvalid:
+                return isray,Y
+            else:
+                isray=False
+                # something to do here
+                return isray,None
+        else:
+            if isvalid:
+                return isray,Y
+            else:
+                isray=False
+                return isray,None
 
 
 

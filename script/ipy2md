@@ -1,0 +1,4 @@
+#!/bin/bash
+#ipymd --from notebook --to markdown --overwrite $1
+jupyter nbconvert $1 --to markdown 
+

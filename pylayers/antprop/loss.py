@@ -353,11 +353,7 @@ def LossMetisShadowing2(fGHz,tx,rx,pg,uw,uh,w,h):
     # Besides, M is defined as M = pg + beta*uw + gamma*uh then  alpha*rx + (1-alpha)tx = pg + beta*uw + gamma*uh
     # [rx-tx , -uw, -uh]*[alpha,beta,gamma].T = pg - tx <==> Ax = b solved by la.solve ; x[0]=alpha, x[1]=beta and
 
-    TODO
-    ----
-
-    To be vectorized 
-
+    
     """
 
     Nseg = tx.shape[1]
@@ -773,7 +769,7 @@ def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
     # f x grid x ap
     #PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
-
+    
     PL = PL0(fGHz,d0)[:,np.newaxis] + 10*n*np.log10(D/d0)[np.newaxis,:]
 
     if not dB:
@@ -843,11 +839,13 @@ def Losst(L,fGHz,p1,p2,dB=True):
         Nlink = 1
 
     # determine incidence angles on segment crossing p1-p2 segment
-    data = L.angleonlink(p1,p2)
+    #data = L.angleonlink(p1,p2)
+    data = L.angleonlink3(p1,p2)
 
     # as many slabs as segments and subsegments
     us    = data['s'] 
-    slabs = L.sla[us]
+    slabs = [ L.Gs.node[x]['name'] for x in us ] 
+    #slabs = L.sla[us]
     check = np.where(slabs=='')
 
     #

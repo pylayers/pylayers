@@ -694,6 +694,9 @@ class Bsignal(PyLayers):
             'l20','l10'
         vmin : min value
         vmax : max value 
+        sax  : list 
+            selct axe
+        bindex 
 
         Examples
         --------
@@ -726,6 +729,10 @@ class Bsignal(PyLayers):
             ax = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
+
+        #
+        # bindex bound index [ixmin,ixmax,iamin,iamax]
+        # 
         if kwargs['bindex']==[]:
             ixmin=0
             ixmax=len(self.x)-1
@@ -737,8 +744,9 @@ class Bsignal(PyLayers):
             iamin = kwargs['bindex'][2]
             iamax = kwargs['bindex'][3]
 
-        # axis selection
+        # axis selection with sax
         sax = kwargs['sax']
+
         if self.y.ndim>1:
             # convert y data in desired format
             dt,ylabels = self.cformat(**kwargs)
@@ -759,8 +767,9 @@ class Bsignal(PyLayers):
                 ymin = self.a[iamin]
                 ymax = self.a[iamax]
             else:
-                ymin = np.max(iamin,0)
-                ymax = np.min(iamax,np.squeeze(dt)[0])
+                ymin = max(iamin,0)
+                imax = np.squeeze(dt).shape[0]
+                ymax = min(iamax,imax)
 
 
             if kwargs['function']=='imshow':
@@ -3278,6 +3287,9 @@ class FUsignal(FBsignal,Usignal):
 
     def show(self,**kwargs):
         """ pcolor visualization of Modulus and Phase
+
+        vmin 
+        vmax
         """
 
         if 'fig' not in kwargs:

@@ -33,5 +33,23 @@ class Tesonb(TestCase):
         assert_equal(cvex,[-5] )
         assert_equal(ccave,[-1, -2, -3, -4, -6] )
 
+    def test_is_aligned(self):
+        p1 = np.array([0,0])
+        p2 = np.array([1,0])
+        p3 = np.array([3,0])
+        p4 = np.array([4,0])
+        p5 = np.array([3,0.1])
+        p6 = np.array([4,0.1])
+        p7 = np.array([4,0.001])
+
+        b1 = is_aligned4(p1,p2,p3,p4,tol=1e-7)
+        b2 = is_aligned4(p1,p2,p5,p6,tol=1e-7)
+        b3 = is_aligned4(p1,p2,p3,p7,tol=1e-1)
+        b4 = is_aligned4(p1,p2,p3,p7,tol=1e-4)
+        assert b1
+        assert not b2
+        assert b3
+        assert not b4
+
 if __name__ == "__main__":
     run_module_suite()
