@@ -1561,6 +1561,7 @@ class DLink(Link):
         except: 
             pass
 
+
     #def padp(self,phi):
         #""" calculates the channel impulse response (cir) which is a function of angles.
     def afp(self,phi,beta=0,gamma=np.pi/2.):
