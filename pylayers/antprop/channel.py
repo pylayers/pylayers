@@ -287,12 +287,9 @@ class ADPchannel(bs.TUsignal):
                 kwargs[k]=defaults[k]
 
         Na = self.y.shape[0]
-<<<<<<< HEAD
-        pdp = np.real(np.sum(self.y*np.conj(shelf.y),axis=0))
-=======
+        #pdp = np.real(np.sum(self.y*np.conj(shelf.y),axis=0))
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
         spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
->>>>>>> 7eaaec0f719cdb09ea2d36eaa40ca1a4d31488be
         u  = np.where(pdp==max(pdp))[0]
         FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(kwargs['fcGHz']))
         Gmax = 10*np.log10(pdp[u])-FS[u] 
