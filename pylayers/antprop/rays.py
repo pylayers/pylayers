@@ -60,7 +60,9 @@ import pylayers.signal.bsignal as bs
 import shapely.geometry as shg
 import h5py
 
-class Rays(PyLayers,dict):
+
+class Rays(PyLayers, dict):
+
     """ A set of rays
 
     Attributes

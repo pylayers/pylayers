@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 #
 #
+from __future__ import print_function
 try:
     from tvtk.api import tvtk
     from mayavi import mlab
 except:
-    print 'Layout:Mayavi is not installed'
+    print ('Layout:Mayavi is not installed')
 import pdb
 import sys
 import os
@@ -215,7 +216,7 @@ class Layout(pro.PyLayers):
                     self.load()
                 else:  # which do not exist
                     newfile = True
-                    print "new file - creating a void Layout", self._filename
+                    print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
                 self.importosm(_fileosm=string, cart=True)
                 self.loadosm = True
@@ -232,7 +233,7 @@ class Layout(pro.PyLayers):
             try:
                 self.geomfile()
             except:
-                print "problem to construct geomfile"
+                print("problem to construct geomfile")
 
             if check:
                 self.check()
@@ -643,9 +644,9 @@ class Layout(pro.PyLayers):
                     if (n1 != n) & (n2 != n):
                         p = np.array(self.Gs.pos[n])
                         if geu.isBetween(p1, p2, p):
-                            print n1, p1
-                            print n2, p2
-                            print n, p
+                            print (n1, p1)
+                            print (n2, p2)
+                            print (n, p)
 
                             logging.critical(
                                 "segment %d contains point %d", s, n)
@@ -1333,7 +1334,7 @@ class Layout(pro.PyLayers):
         """ save structure in an ini file
 
         """
-        print self._filename
+        print (self._filename)
         current_version = 1.2
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
@@ -1500,7 +1501,7 @@ class Layout(pro.PyLayers):
                 try:
                     di[section][option] = config.get(section, option)
                 except:
-                    print section, option
+                    print (section, option)
 
         self.Np = len(di['points'])
         self.Ns = len(di['segments'])
@@ -1766,7 +1767,7 @@ class Layout(pro.PyLayers):
         else:  # which do not exist
             self._filename = _filename
             newfile = True
-            print "new file", self._filename
+            print ("new file", self._filename)
 
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
@@ -1774,7 +1775,7 @@ class Layout(pro.PyLayers):
             try:
                 self.geomfile()
             except:
-                print "problem to construct geomfile"
+                print ("problem to construct geomfile")
         # if check:
         #     self.check()
 
@@ -1978,7 +1979,7 @@ class Layout(pro.PyLayers):
                 num = 1
         else:
             if verbose:
-                print "add_segment : error not a node", n1, n2
+                print ("add_segment : error not a node", n1, n2)
             return
 
         transition = False
@@ -2288,16 +2289,16 @@ class Layout(pro.PyLayers):
         if (type(lp) != list):
             lp = [lp]
 
-        print "lp : ", lp
+        print ("lp : ", lp)
         # get segments involved in points list
         ls = self.nd2seg(lp)
 
-        print "ls : ", ls
+        print ("ls : ", ls)
         # 1) delete involved segments
         for k in ls:
             assert(k > 0)
             self.del_segment(k)
-            print 'del ', k
+            print ('del ', k)
         # 2) delete involved points
         for n1 in lp:
             assert(n1 < 0)
@@ -2438,15 +2439,15 @@ class Layout(pro.PyLayers):
             seg1 = tseg[k[0]]
             seg2 = tseg[k[1]]
             if seg1.crosses(seg2):
-                print "crosses :", k[0], k[1]
+                print ("crosses :", k[0], k[1])
             if seg1.contains(seg2):
-                print "contains :", k[0], k[1]
+                print ("contains :", k[0], k[1])
             if seg2.contains(seg1):
-                print "contains :", k[0], k[1]
+                print ("contains :", k[0], k[1])
             if seg1.overlaps(seg2):
-                print "overlaps :", k[0], k[1]
+                print ("overlaps :", k[0], k[1])
             if seg2.overlaps(seg1):
-                print "overlaps :", k[0], k[1]
+                print ("overlaps :", k[0], k[1])
 
         return(tseg)
 
@@ -2537,17 +2538,17 @@ class Layout(pro.PyLayers):
         nns1 = self.Gs.neighbors(n1)
         nns2 = self.Gs.neighbors(n2)
         ds1 = self.Gs.node[s1]
-        print n1, ' : ', nns1
-        print n2, ' : ', nns2
-        print '------------'
-        print 'Slab     : ', ds1['name']
-        print 'zmin (m) : ', ds1['z'][0]
-        print 'zmax (m) : ', ds1['z'][1]
+        print (n1, ' : ', nns1)
+        print (n2, ' : ', nns2)
+        print ('------------')
+        print ('Slab     : ', ds1['name'])
+        print ('zmin (m) : ', ds1['z'][0])
+        print ('zmax (m) : ', ds1['z'][1])
         try:
-            print '------------'
+            print ('------------')
             a = ds1['ss_name']
-            print 'subseg Slabs  : ', ds1['ss_name']
-            print 'subseg (zmin,zmax) (m) : ', ds1['ss_z']
+            print ('subseg Slabs  : ', ds1['ss_name'])
+            print ('subseg (zmin,zmax) (m) : ', ds1['ss_z'])
         except:
             pass
 
@@ -2809,7 +2810,7 @@ class Layout(pro.PyLayers):
             self.Gs.node[e1].pop('transition')
             self.Nss -= 1
         elif verbose:
-            print "no subseg to delete"
+            print ("no subseg to delete")
 
     def add_subseg(self, s1, name='DOOR', zmin=0, zmax=2.24, offset=0, transition=True):
         """ add a subsegment on a segment WITH EasyGUI
@@ -4350,15 +4351,15 @@ class Layout(pro.PyLayers):
         # interactions corresponding to edge en
         int0, int1 = self.Gi.edges()[kwargs['en']]
 
-        print "int0 : ", int0
-        print "int1 : ", int1
+        print ("int0 : ", int0)
+        print ("int1 : ", int1)
 
         # if interaction is tuple (R or T)
         if ((len(int0) > 1) & (len(int1) > 1)):
             nstr0 = int0[0]
             nstr1 = int1[0]
             output = self.Gi.edge[int0][int1]['output']
-            print " output ", output
+            print (" output ", output)
             ltup = filter(lambda x: type(x) == tuple, output.keys())
             lref = filter(lambda x: len(x) == 2, ltup)
             ltran = filter(lambda x: len(x) == 3, ltup)
@@ -4649,7 +4650,7 @@ class Layout(pro.PyLayers):
                     if fur1.Matname == 'METAL':
                         fig, ax = fur1.show(fig, ax)
             else:
-                print "Warning : no furniture file loaded"
+                print ("Warning : no furniture file loaded")
 
         for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']
@@ -4693,22 +4694,22 @@ class Layout(pro.PyLayers):
         # to save graoh Gs
         self.lbltg.extend('s')
 
-        print "building Layout ..."
+        print ("building Layout ...")
         if 't' in graph:
             if verbose:
-                print "Gt"
+                print ("Gt")
             self.buildGt()
             self.lbltg.extend('t')
 
         if 'v' in graph:
             if verbose:
-                print "Gv"
+                print ("Gv")
             self.buildGv()
             self.lbltg.extend('v')
 
         if 'i' in graph:
             if verbose:
-                print "Gi"
+                print ("Gi")
             self.buildGi()
             self.outputGi()
             self.lbltg.extend('i')
@@ -5514,7 +5515,7 @@ class Layout(pro.PyLayers):
             self.Gt.add_edge(0, cy, segment=[seg])
 
         if check:
-            print "check len(ncycles) == 2",
+            print ("check len(ncycles) == 2",)
             nodes = [i for i in self.Gs.nodes() if i > 0]
             cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy < 2)[0]
@@ -5523,7 +5524,7 @@ class Layout(pro.PyLayers):
                 str(np.array(nodes)[ucncyl])
             assert len(ucncym) == 0, "Some segments are connected to MORE than 2 cycles" + \
                 str(np.array(nodes)[ucncym])
-            print "passed"
+            print ("passed")
 
         # self.degree is updated in g2npy
         # self.degree has to be called before determination of diffraction points
@@ -5581,8 +5582,7 @@ class Layout(pro.PyLayers):
             neighbors = nx.neighbors(self.Gt, cur_cy)
             # get neighbors separated by an air_wall
             neighbors_aw = [x for x in neighbors 
-                            if ( len(self.Gt[cur_cy][x]['segment'])==1 
-                                and 
+                            if (len(self.Gt[cur_cy][x]['segment'])==1 and
                                 self.Gt[cur_cy][x]['segment'][0] in law
                                 )
                             ]
@@ -5615,7 +5615,7 @@ class Layout(pro.PyLayers):
             self.pltpoly(outdoor, color='g', ax=ax, fig=fig)
             ax.set_title('indoor red,outdoor green')
         except:
-            print 'error with polyg in Gt or indoor parameter'
+            print ('error with polyg in Gt or indoor parameter')
 
         # try:
 
@@ -5625,7 +5625,7 @@ class Layout(pro.PyLayers):
         #     self.pltpoly(isopen,ax=ax,fig=fig)
         #     ax.set_title('isopen red')
         # except:
-        #     print 'error with isopen parameter in Gt'
+        #     print ('error with isopen parameter in Gt')
 
         try:
             ax = axs[0, 1]
@@ -5634,21 +5634,21 @@ class Layout(pro.PyLayers):
             ax.scatter(diffpos[:, 0], diffpos[:, 1])
             ax.set_title('diffraction points')
         except:
-            print 'no diffraction found. Yet computed ?'
+            print ('no diffraction found. Yet computed ?')
 
         try:
             ax = axs[1, 0]
             f, ax = self.showG('st', labels='t', aw=1, ax=ax, fig=fig)
             ax.set_title('Gt')
         except:
-            print 'no Gt found. Yet computed ?'
+            print ('no Gt found. Yet computed ?')
 
         try:
             ax = axs[1, 1]
             f, ax = self.showG('sv', aw=1, ax=ax, fig=fig)
             ax.set_title('Gv')
         except:
-            print 'no Gv found. Yet computed ?'
+            print ('no Gv found. Yet computed ?')
         plt.tight_layout()
         # axs[2,1].remove()
 
@@ -6004,7 +6004,7 @@ class Layout(pro.PyLayers):
                 # Rgeu.append(geu.Polygon(r))
                 # Rgeu[-1].setvnodes(self)
             except:
-                print "reject"
+                print ("reject")
             # if area are not the same, it means that there is inner holes in r
             if not np.allclose(Rgeu[ur].area, r.area):
                 # detect inclusion
@@ -6052,7 +6052,7 @@ class Layout(pro.PyLayers):
         ncpol = {}
         for ur, r in enumerate(Rgeu):
             if not r.isconvex():
-                print 'nt cvx'
+                print ('nt cvx')
                 ncpol[ur] = self._delaunay(r)
 
                 # plt.ion()
@@ -6266,7 +6266,7 @@ class Layout(pro.PyLayers):
                     self.Gs.node[n]['ncycles'].append(ncy)
                     if n > 0:
                         if len(self.Gs.node[n]['ncycles']) > 2:
-                            print n, self.Gs.node[n]['ncycles']
+                            print (n, self.Gs.node[n]['ncycles'])
                             logging.warning(
                                 'A segment cannot relate more than 2 cycles')
 
@@ -6298,7 +6298,7 @@ class Layout(pro.PyLayers):
             seg0 = seg0 + seg
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         if check:
-            print "check len(ncycles) == 2",
+            print ("check len(ncycles) == 2",)
             nodes = [i for i in self.Gs.nodes() if i > 0]
             cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy < 2)[0]
@@ -6307,7 +6307,7 @@ class Layout(pro.PyLayers):
                 str(np.array(nodes)[ucncyl])
             assert len(ucncym) == 0, "Some segments are connected to MORE than 2 cycles" + \
                 str(np.array(nodes)[ucncym])
-            print "passed"
+            print ("passed")
 
     def _interlist(self, nodelist=[]):
         """ Construct the list of interactions associated to each cycle
@@ -7468,7 +7468,7 @@ class Layout(pro.PyLayers):
         # display degree 1 nodes
         if 1 in self.degree:
             ldeg1 = list(self.degree[1])
-            print ldeg1
+            print (ldeg1)
             fig, ax = self.showG('s',
                                  fig=fig,
                                  ax=ax,
@@ -7987,11 +7987,11 @@ class Layout(pro.PyLayers):
                 imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
-                    print "flip v"
+                    print ("flip v")
                     image = image.transpose(Image.FLIP_LEFT_RIGHT)
                 if 'h' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_TOP_BOTTOM)
-                    print "flip h"
+                    print ("flip h")
                 plt.axis()
                 kwargs['ax'].imshow(np.array(image), extent=self.display[
                                     'overlay_axis'], alpha=self.display['alpha'], origin='lower')
@@ -8865,38 +8865,38 @@ class Layout(pro.PyLayers):
     def info(self):
         """ gives information about the Layout
         """
-        print "filestr : ", self._filename
-        # print "filematini : ", self.filematini
-        # print "fileslabini : ", self.fileslabini
+        print ("filestr : ", self._filename)
+        # print ("filematini : ", self.filematini)
+        # print ("fileslabini : ", self.fileslabini)
         try:
-            print "filegeom : ", self.filegeom
+            print ("filegeom : ", self.filegeom)
         except:
-            print "geomfile (.off) has no been generated"
+            print ("geomfile (.off) has no been generated")
 
         # self.boundary()
-        print "boundaries ", self.ax
-        print "number of Points :", self.Np
-        print "number of Segments :", self.Ns
-        print "number of Sub-Segments :", self.Nss
+        print ("boundaries ", self.ax)
+        print ("number of Points :", self.Np)
+        print ("number of Segments :", self.Ns)
+        print ("number of Sub-Segments :", self.Nss)
         try:
-            print "Gs Nodes : ", self.Gs.number_of_nodes()
-            print "Gs Edges : ", self.Gs.number_of_edges()
+            print ("Gs Nodes : ", self.Gs.number_of_nodes())
+            print ("Gs Edges : ", self.Gs.number_of_edges())
         except:
-            print "no Gs graph"
+            print ("no Gs graph")
 
         try:
-            print "Gt Nodes : ", self.Gt.number_of_nodes()
-            print "Gt Edges : ", self.Gt.number_of_edges()
-            print "vnodes = Gt.node[Nc]['polyg'].vnodes"
-            print "poly = Gt.node[Nc]['polyg']"
+            print ("Gt Nodes : ", self.Gt.number_of_nodes())
+            print ("Gt Edges : ", self.Gt.number_of_edges())
+            print ("vnodes = Gt.node[Nc]['polyg'].vnodes")
+            print ("poly = Gt.node[Nc]['polyg']")
         except:
-            print "no Gt graph"
+            print ("no Gt graph")
 
         try:
-            print "Gr Nodes    :", self.Gr.number_of_nodes()
-            print "Gr Edges    :", self.Gr.number_of_edges()
+            print ("Gr Nodes    :", self.Gr.number_of_nodes())
+            print ("Gr Edges    :", self.Gr.number_of_edges())
         except:
-            print "no Gr graph"
+            print ("no Gr graph")
 
     def facets3D(self, edlist, name='Layer', subseg=False):
         """
@@ -9120,7 +9120,7 @@ class Layout(pro.PyLayers):
                     fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
             except:
-                print 'no subsegment on ', s
+                print ('no subsegment on ', s)
                 return('void')
         else:
             name = self.Gs.node[s]['name']
