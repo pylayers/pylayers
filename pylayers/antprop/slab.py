@@ -1113,9 +1113,17 @@ class MatDB(PyLayers,dict):
         self.di = {}
         for k,matname in enumerate(materials.sections()):
             M = Mat(name=matname)
-            M['sigma'] = eval(materials.get(matname,'sigma'))
+            sigma = eval(materials.get(matname,'sigma'))
+            epr = eval(materials.get(matname,'epr'))
+            if type(sigma)==tuple:
+                M['sigma'] = sigma[0]*self.fGHz**sigma[1]
+            else:
+                M['sigma'] = sigma
             M['roughness'] = eval(materials.get(matname,'roughness'))
-            M['epr'] = eval(materials.get(matname,'epr'))
+            if type(epr)==tuple:
+                M['epr'] = epr[0]*self.fGHz**epr[1]
+            else:
+                M['epr'] = epr
             M['index'] = k
             self.di[k]=matname
             M['mur'] = eval(materials.get(matname,'mur'))
@@ -2215,14 +2223,12 @@ def calsig(cval, fGHz, typ='epsr'):
 
     return(epr1, sigma, delta)
 
-
-
-
 if (__name__ == "__main__"):
     #plt.ion()
     doctest.testmod()
     sl = SlabDB('matDB.ini','slabDB.ini')
-    s1 = sl['PILLAR']
+    #s1 = sl['PILLAR']
+    s1 = sl['BRICK_ITUR']
     fGHz=np.arange(0.6,5.0,0.1)
 
 
