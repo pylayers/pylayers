@@ -202,6 +202,9 @@ class Layout(pro.PyLayers):
             elif ext == '.osm':
                 self._filename = arg + '.ini'
                 loadosm = True
+            elif ext == '.res':
+                self._filename = arg + '.ini'
+                loadres = True
             else:
                 self.typ = 'outdoor'
         else:  # No argument
@@ -219,6 +222,8 @@ class Layout(pro.PyLayers):
             elif loadosm:  # load .osm file
                 self.importosm(_fileosm=string, cart=True)
                 self.loadosm = True
+            elif loadres:
+                self.importres(_fileres=string)
             elif '(' in string:  # load from osmapi latlon in string
                 self.importosm(latlon=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
@@ -1027,6 +1032,58 @@ class Layout(pro.PyLayers):
                     pos[k, 0] - Dx, pos[k, 1] - Dy, inverse=True)
 
             self.coordinates = 'latlon'
+
+    def importres(self,_fileres,**kwargs):
+        """ import res format 
+        
+        col1 : x1 coordinates
+        col2 : y1 coordinates 
+        col3 : x2 coordinates
+        col4 : y2 coordinates
+        col5 : building height
+        col6 : building number
+        col7 : building class 
+        col8 : ground height  
+
+        """
+        fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
+        D  = np.fromfile(fileres,dtype='int',sep=' ')
+        N1 = len(D)
+        N2 = N1/8
+        D = D.reshape(N2,8)
+        lcoords = []
+        lring = [] 
+        zring = [] 
+        bdgold  = 1
+        for e in range(N2):
+            p1 = ([D[e,0],D[e,1]])
+            p2 = ([D[e,2],D[e,3]])
+            z  = (D[e,7],D[e,4])
+            bdg =  D[e,5] 
+            bdc =  D[e,6] 
+            if (bdgold-bdg)!=0:
+                ring = sh.LinearRing(lcoords)
+                lring.append(ring)
+                zring.append(z)
+                lcoords = []
+            bdgold=bdg
+            if p1 not in lcoords:
+                lcoords.append(p1)
+            if p2 not in lcoords:
+                lcoords.append(p2)
+
+        npt = 1
+        for r1,z1 in zip(lring,zring):
+            x,y = r1.xy 
+            n0  =   -npt
+            for k2 in range(len(x)):
+                self.Gs.add_node(-npt)
+                self.Gs.pos[-npt] = (x[k2],y[k2])
+                if k2>0:
+                    ns = self.add_segment(-npt, -(npt-1), name='WALL', z=z1)
+                npt = npt + 1
+            ns = self.add_segment(-(npt-1), n0, name='WALL', z=z1)
+        #pdb.set_trace()
 
     def importosm(self, **kwargs):
         """ import layout from osm file or osmapi
