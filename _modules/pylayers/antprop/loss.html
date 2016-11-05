@@ -967,6 +967,7 @@
 <span class="sd">    pylayers.slab.Interface.losst</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">):</span>
         <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fGHz</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
@@ -988,7 +989,7 @@
 
     <span class="c1"># as many slabs as segments and subsegments</span>
     <span class="n">us</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> 
-    <span class="n">slabs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">us</span> <span class="p">]</span> 
+    <span class="n">slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">us</span> <span class="p">])</span>
     <span class="c1">#slabs = L.sla[us]</span>
     <span class="n">check</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slabs</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
@@ -1004,11 +1005,12 @@
     <span class="n">EdWallo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="n">Nlink</span><span class="p">))</span>
     <span class="n">EdWallp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="n">Nlink</span><span class="p">))</span>
 
+    
     <span class="k">for</span> <span class="n">slname</span> <span class="ow">in</span> <span class="n">cslab</span><span class="p">:</span>
         <span class="c1"># u index of slabs of name slname</span>
         <span class="c1"># data[&#39;a&#39;][u] angle</span>
         <span class="c1"># data[&#39;s&#39;][u] segment number including subsegment</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">slabs</span><span class="o">==</span><span class="n">slname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slabs</span><span class="p">)</span><span class="o">==</span><span class="n">slname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1">#</span>
         <span class="c1"># calculate Loss for slab slname</span>
         <span class="c1">#</span>
@@ -1740,7 +1742,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 24, 2016.
+      Last updated on Nov 05, 2016.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
