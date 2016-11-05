@@ -396,6 +396,7 @@ class Coverage(PyLayers):
         nf = self.nf
         #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+        
         self.Lwo = Lwo.reshape(nf,ng,na)
         self.Edo = Edo.reshape(nf,ng,na)
         self.Lwp = Lwp.reshape(nf,ng,na)
@@ -756,6 +757,8 @@ class Coverage(PyLayers):
                      'f' : 0,
                      'a' : 0,
                      'db':True,
+                     'label':'',
+                     'pol':'p',
                      'col':'b'
                    }
         for k in defaults:
@@ -774,18 +777,24 @@ class Coverage(PyLayers):
 
         if kwargs['typ']=='pr':
             if kwargs['a']<>-1:
-                U = self.CmW[kwargs['f'],:,kwargs['a']]
+                if kwargs['pol']=='p':
+                    U = self.CmWp[kwargs['f'],:,kwargs['a']]
+                if kwargs['pol']=='o':
+                    U = self.CmWo[kwargs['f'],:,kwargs['a']]
             else:
-                U = self.CmW[kwargs['f'],:,:].reshape(self.na*self.ng)
+                if kwargs['pol']=='p':
+                    U = self.CmWp[kwargs['f'],:,:].reshape(self.na*self.ng)
+                else:
+                    U = self.CmWo[kwargs['f'],:,:].reshape(self.na*self.ng)
             if kwargs['db']:
                 U = 10*np.log10(U)
 
         D = np.sqrt(np.sum((self.pa-self.pg)*(self.pa-self.pg),axis=0))
         if kwargs['a']<>-1:
             D = D.reshape(self.ng,self.na)
-            ax.semilogx(D[:,kwargs['a']],U,'.',color=kwargs['col'])
+            ax.semilogx(D[:,kwargs['a']],U,'.',color=kwargs['col'],label=kwargs['label'])
         else:
-            ax.semilogx(D,U,'.',color=kwargs['col'])
+            ax.semilogx(D,U,'.',color=kwargs['col'],label=kwargs['label'])
 
         return fig,ax
 
@@ -985,7 +994,14 @@ class Coverage(PyLayers):
                             vmax = vmax,
                             cmap = kwargs['cmap'])
             else:
-                img=ax.scatter(self.grid[:,0],self.grid[:,1],c=U,s=20,linewidth=0,cmap=kwargs['cmap'])
+                img=ax.scatter(self.grid[:,0],
+                               self.grid[:,1],
+                               c=U,
+                               s=20,
+                               linewidth=0,
+                               cmap=kwargs['cmap'],
+                               vmin=vmin,
+                               vmax=vmax)
 
             for k in range(self.na):
                 ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
