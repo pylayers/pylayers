@@ -289,7 +289,7 @@ if basename != os.path.join(pylayersdir,'data'):
         ,'struc/osm','struc/wrl'
         ,'struc/images','struc/ini'
         ,'ant','output/Tx001','output'
-        ,'geom','output/sig','output/r2d'
+        ,'geom','output/r2d'
         ,'output/r3d','body','body/c3d','body/wear']
     else :
         dirlist=['ini','struc',os.path.join('struc','furnitures')

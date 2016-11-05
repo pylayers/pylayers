@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 #
 #
+from __future__ import print_function
 try:
     from tvtk.api import tvtk
     from mayavi import mlab
 except:
-    print 'Layout:Mayavi is not installed'
+    print('Layout:Mayavi is not installed')
 import pdb
 import sys
 import os
 import copy
 import glob
-import ConfigParser
 import numpy as np
 import numpy.random as rd
 import scipy as sp
@@ -34,6 +34,7 @@ import logging
 import urllib2 as urllib
 import hashlib
 from cStringIO import StringIO
+import ConfigParser
 
 import pylayers.antprop.slab as sb
 from pylayers.util import geomutil as geu
@@ -218,7 +219,7 @@ class Layout(pro.PyLayers):
                     self.load()
                 else:  # which do not exist
                     newfile = True
-                    print "new file - creating a void Layout", self._filename
+                    print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
                 self.importosm(_fileosm=string, cart=True)
                 self.loadosm = True
@@ -237,7 +238,7 @@ class Layout(pro.PyLayers):
             try:
                 self.geomfile()
             except:
-                print "problem to construct geomfile"
+                print("problem to construct geomfile")
 
             if check:
                 self.check()
@@ -648,9 +649,9 @@ class Layout(pro.PyLayers):
                     if (n1 != n) & (n2 != n):
                         p = np.array(self.Gs.pos[n])
                         if geu.isBetween(p1, p2, p):
-                            print n1, p1
-                            print n2, p2
-                            print n, p
+                            print(n1, p1)
+                            print(n2, p2)
+                            print(n, p)
 
                             logging.critical(
                                 "segment %d contains point %d", s, n)
@@ -1179,8 +1180,8 @@ class Layout(pro.PyLayers):
                 if y[u] == y_prev:
                     # node u is a duplicate
                     # udate dup dictionnary
-                    # print u_prev ,k_prev, x_prev,y_prev
-                    # print " ",u ,kp[u], x[u],y[u]
+                    # printu_prev ,k_prev, x_prev,y_prev
+                    # print" ",u ,kp[u], x[u],y[u]
                     dup[kp[u]] = k_prev
             else:
                 x_prev = x[u]
@@ -1390,7 +1391,7 @@ class Layout(pro.PyLayers):
         """ save structure in an ini file
 
         """
-        print self._filename
+        print(self._filename)
         current_version = 1.2
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
@@ -1557,7 +1558,7 @@ class Layout(pro.PyLayers):
                 try:
                     di[section][option] = config.get(section, option)
                 except:
-                    print section, option
+                    print(section, option)
 
         self.Np = len(di['points'])
         self.Ns = len(di['segments'])
@@ -1823,7 +1824,7 @@ class Layout(pro.PyLayers):
         else:  # which do not exist
             self._filename = _filename
             newfile = True
-            print "new file", self._filename
+            print("new file", self._filename)
 
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
@@ -1831,7 +1832,7 @@ class Layout(pro.PyLayers):
             try:
                 self.geomfile()
             except:
-                print "problem to construct geomfile"
+                print("problem to construct geomfile")
         # if check:
         #     self.check()
 
@@ -1942,17 +1943,17 @@ class Layout(pro.PyLayers):
         yD = self.Gs.pos[np2[1]][1]
         xP = self.Gs.pos[np0][0]
         yP = self.Gs.pos[np0][1]
-        # print xA,yA
-        # print xB,yB
-        # print xC,yC
-        # print xD,yD
-        # print xP,yP
+        # printxA,yA
+        # printxB,yB
+        # printxC,yC
+        # printxD,yD
+        # printxP,yP
         A = np.array([[xB - xA, xD - xC], [yB - yA, yD - yC]])
         b = np.array([xP - xA, yP - yA])
         x = sp.linalg.solve(A, b)
         if ((x[0] > 0.) & (x[0] < 1.0)):
             self.add_pons(e1, 1 - x[0])
-        # print x
+        # printx
 
     def add_pons(self, ns, alpha=0.5):
         """ add point on segment
@@ -2035,7 +2036,7 @@ class Layout(pro.PyLayers):
                 num = 1
         else:
             if verbose:
-                print "add_segment : error not a node", n1, n2
+                print("add_segment : error not a node", n1, n2)
             return
 
         transition = False
@@ -2345,16 +2346,16 @@ class Layout(pro.PyLayers):
         if (type(lp) != list):
             lp = [lp]
 
-        print "lp : ", lp
+        print("lp : ", lp)
         # get segments involved in points list
         ls = self.nd2seg(lp)
 
-        print "ls : ", ls
+        print("ls : ", ls)
         # 1) delete involved segments
         for k in ls:
             assert(k > 0)
             self.del_segment(k)
-            print 'del ', k
+            print('del ', k)
         # 2) delete involved points
         for n1 in lp:
             assert(n1 < 0)
@@ -2495,15 +2496,15 @@ class Layout(pro.PyLayers):
             seg1 = tseg[k[0]]
             seg2 = tseg[k[1]]
             if seg1.crosses(seg2):
-                print "crosses :", k[0], k[1]
+                print("crosses :", k[0], k[1])
             if seg1.contains(seg2):
-                print "contains :", k[0], k[1]
+                print("contains :", k[0], k[1])
             if seg2.contains(seg1):
-                print "contains :", k[0], k[1]
+                print("contains :", k[0], k[1])
             if seg1.overlaps(seg2):
-                print "overlaps :", k[0], k[1]
+                print("overlaps :", k[0], k[1])
             if seg2.overlaps(seg1):
-                print "overlaps :", k[0], k[1]
+                print("overlaps :", k[0], k[1])
 
         return(tseg)
 
@@ -2594,17 +2595,17 @@ class Layout(pro.PyLayers):
         nns1 = self.Gs.neighbors(n1)
         nns2 = self.Gs.neighbors(n2)
         ds1 = self.Gs.node[s1]
-        print n1, ' : ', nns1
-        print n2, ' : ', nns2
-        print '------------'
-        print 'Slab     : ', ds1['name']
-        print 'zmin (m) : ', ds1['z'][0]
-        print 'zmax (m) : ', ds1['z'][1]
+        print(n1, ' : ', nns1)
+        print(n2, ' : ', nns2)
+        print('------------')
+        print('Slab     : ', ds1['name'])
+        print('zmin (m) : ', ds1['z'][0])
+        print('zmax (m) : ', ds1['z'][1])
         try:
-            print '------------'
+            print('------------')
             a = ds1['ss_name']
-            print 'subseg Slabs  : ', ds1['ss_name']
-            print 'subseg (zmin,zmax) (m) : ', ds1['ss_z']
+            print('subseg Slabs  : ', ds1['ss_name'])
+            print('subseg (zmin,zmax) (m) : ', ds1['ss_z'])
         except:
             pass
 
@@ -2762,9 +2763,9 @@ class Layout(pro.PyLayers):
                 # val = '1'
                 # while(val!='0'):
                 #     clear
-                #     print '0 : exit'
+                #     print'0 : exit'
                 #     for e,(k,v) in enumerate(zip(de1k,de1v)):
-                #         print str(e+1)+ ' '+k+': '+  str(v)+'\n'
+                #         printstr(e+1)+ ' '+k+': '+  str(v)+'\n'
                 #     val = input('Your choice :')
                 #     if val!='0':
                 #         pass
@@ -2866,7 +2867,7 @@ class Layout(pro.PyLayers):
             self.Gs.node[e1].pop('transition')
             self.Nss -= 1
         elif verbose:
-            print "no subseg to delete"
+            print("no subseg to delete")
 
     def add_subseg(self, s1, name='DOOR', zmin=0, zmax=2.24, offset=0, transition=True):
         """ add a subsegment on a segment WITH EasyGUI
@@ -2930,7 +2931,7 @@ class Layout(pro.PyLayers):
             old_nbss = 0
         # update the number of subsegments for self.Nss
         deltaNss = new_nbss - old_nbss
-        # print deltaNss
+        # printdeltaNss
         if new_nbss != 0:
             self.Gs.node[s1]['ss_name'] = [data['ss_name']]
             self.Nss += deltaNss
@@ -3567,11 +3568,11 @@ class Layout(pro.PyLayers):
         unn = abs(np.sum(uu * n, axis=0))
         theta = np.arccos(unn)
 
-        # print vn
-        # print mvn
-        # print 'n :',n
-        # print 'un : ',unn
-        # print 'theta (deg)',the*180./pi
+        # printvn
+        # printmvn
+        # print'n :',n
+        # print'un : ',unn
+        # print'theta (deg)',the*180./pi
 
         # seglist = seglist+1
         seglist = np.array(map(lambda x: self.tsg[x], seglist))
@@ -3998,7 +3999,7 @@ class Layout(pro.PyLayers):
 
             if line.intersects(segline):
                 lc.extend(self.Gs.node[seg]['ncycles'])
-            # print seg,self.Gs.node[seg]['ncycles']
+            # printseg,self.Gs.node[seg]['ncycles']
                 ls.append(seg)
                 psh = line.intersection(segline)
                 I = np.hstack((I, np.array([[psh.x], [psh.y]])))
@@ -4183,7 +4184,7 @@ class Layout(pro.PyLayers):
         # elif ndlist[0]==1e8:
         #    ndlist  = self.Gs.node.keys()
 
-        # print ndlist
+        # printndlist
         Z = nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
                                    node_size=size, nodelist=ndlist, alpha=alpha,
                                    node_shape=node_shape, fig=fig, ax=ax)
@@ -4228,7 +4229,7 @@ class Layout(pro.PyLayers):
         elif type(edlist) == int:
             edlist = [edlist]
 
-        # print ndlist
+        # printndlist
         nx.draw_networkx_nodes(
             self.Gs, self.Gs.pos, node_size=size, nodelist=edlist)
         if dlabels:
@@ -4313,7 +4314,7 @@ class Layout(pro.PyLayers):
                 pass
 
         if kwargs['dlabels']:
-                # print edlist
+                # printedlist
                 # nodelist = self.ed2nd(edlist)
             fig, ax = self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
                                       color='b', font_size=kwargs['font_size'],
@@ -4405,15 +4406,15 @@ class Layout(pro.PyLayers):
         # interactions corresponding to edge en
         int0, int1 = self.Gi.edges()[kwargs['en']]
 
-        print "int0 : ", int0
-        print "int1 : ", int1
+        print("int0 : ", int0)
+        print("int1 : ", int1)
 
         # if interaction is tuple (R or T)
         if ((len(int0) > 1) & (len(int1) > 1)):
             nstr0 = int0[0]
             nstr1 = int1[0]
             output = self.Gi.edge[int0][int1]['output']
-            print " output ", output
+            print(" output ", output)
             ltup = filter(lambda x: type(x) == tuple, output.keys())
             lref = filter(lambda x: len(x) == 2, ltup)
             ltran = filter(lambda x: len(x) == 3, ltup)
@@ -4424,9 +4425,9 @@ class Layout(pro.PyLayers):
             segT = np.array(map(lambda x: x[0], lref))
             dprobR = dict(zip(segR, probR))
             dprobT = dict(zip(segT, probT))
-            # print " Sum pR : ",sum(dprobR.values())
-            # print " Sum pT : ",sum(dprobT.values())
-            # print "lseg", lseg
+            # print" Sum pR : ",sum(dprobR.values())
+            # print" Sum pT : ",sum(dprobT.values())
+            # print"lseg", lseg
             # termination points from seg0 and seg1
             pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
             pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
@@ -4678,13 +4679,13 @@ class Layout(pro.PyLayers):
                         #color = 'red'
                     else:
                         color = 'black'
-                        # print k,color
+                        # printk,color
                 edlist2 = []
                 for ts in dico[k]:
                     edlist2.append(ts[0])
                     # edlist2.append(ts)
                 edlist3 = list(set(edlist2).intersection(set(edlist)))
-                # print k , color , edlist
+                # printk , color , edlist
                 fig, ax = self.show_segment(
                     edlist=edlist3, color=color, alpha=1.0, width=2, fig=fig, ax=ax)
 
@@ -4704,7 +4705,7 @@ class Layout(pro.PyLayers):
                     if fur1.Matname == 'METAL':
                         fig, ax = fur1.show(fig, ax)
             else:
-                print "Warning : no furniture file loaded"
+                print("Warning : no furniture file loaded")
 
         for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']
@@ -4748,29 +4749,29 @@ class Layout(pro.PyLayers):
         # to save graoh Gs
         self.lbltg.extend('s')
 
-        print "building Layout ..."
+        print("building Layout ...")
         if 't' in graph:
             if verbose:
-                print "Gt"
+                print("Gt")
             self.buildGt()
             self.lbltg.extend('t')
 
         if 'v' in graph:
             if verbose:
-                print "Gv"
+                print("Gv")
             self.buildGv()
             self.lbltg.extend('v')
 
         if 'i' in graph:
             if verbose:
-                print "Gi"
+                print("Gi")
             self.buildGi()
             self.outputGi()
             self.lbltg.extend('i')
 
         # if 'r' in graph:
         #     if verbose:
-        #         print "Gr"
+        #         print"Gr"
         #     self.buildGr()
         #     self.lbltg.extend('r')
 
@@ -4898,7 +4899,7 @@ class Layout(pro.PyLayers):
         #                 if k not in self.Gs.node[inode]['ncycles']:
         #                     self.Gs.node[inode]['ncycles'].append(k)
         #                     if len(self.Gs.node[inode]['ncycles'])>2:
-        #                         print inode,self.Gs.node[inode]['ncycles']
+        #                         printinode,self.Gs.node[inode]['ncycles']
         #                         logging.warning('dumpr : a segment cannot relate more than 2 cycles')
         # if ncycles is a list with only one element the other cycle is the
         # outside region (cycle -1)
@@ -5523,7 +5524,7 @@ class Layout(pro.PyLayers):
                 #         if self.Gt.has_edge(n0,ncy):
                 #             dseg_prev = self.Gt.edge[n0][ncy]
                 #             dseg['segment']=list(set(dseg['segment']+dseg_prev['segment']))
-                #         print n0,ncy,dseg['segment']
+                #         printn0,ncy,dseg['segment']
                 #         self.Gt.add_edge(n0,ncy,segment=dseg['segment'])
 
                 self.Gt.add_edges_from([(n0, x[0], x[1])
@@ -5569,7 +5570,7 @@ class Layout(pro.PyLayers):
             self.Gt.add_edge(0, cy, segment=[seg])
 
         if check:
-            print "check len(ncycles) == 2",
+            print("check len(ncycles) == 2",)
             nodes = [i for i in self.Gs.nodes() if i > 0]
             cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy < 2)[0]
@@ -5578,7 +5579,7 @@ class Layout(pro.PyLayers):
                 str(np.array(nodes)[ucncyl])
             assert len(ucncym) == 0, "Some segments are connected to MORE than 2 cycles" + \
                 str(np.array(nodes)[ucncym])
-            print "passed"
+            print("passed")
 
         # self.degree is updated in g2npy
         # self.degree has to be called before determination of diffraction points
@@ -5636,8 +5637,7 @@ class Layout(pro.PyLayers):
             neighbors = nx.neighbors(self.Gt, cur_cy)
             # get neighbors separated by an air_wall
             neighbors_aw = [x for x in neighbors 
-                            if ( len(self.Gt[cur_cy][x]['segment'])==1 
-                                and 
+                            if (len(self.Gt[cur_cy][x]['segment'])==1 and
                                 self.Gt[cur_cy][x]['segment'][0] in law
                                 )
                             ]
@@ -5670,7 +5670,7 @@ class Layout(pro.PyLayers):
             self.pltpoly(outdoor, color='g', ax=ax, fig=fig)
             ax.set_title('indoor red,outdoor green')
         except:
-            print 'error with polyg in Gt or indoor parameter'
+            print('error with polyg in Gt or indoor parameter')
 
         # try:
 
@@ -5680,7 +5680,7 @@ class Layout(pro.PyLayers):
         #     self.pltpoly(isopen,ax=ax,fig=fig)
         #     ax.set_title('isopen red')
         # except:
-        #     print 'error with isopen parameter in Gt'
+        #     print('error with isopen parameter in Gt')
 
         try:
             ax = axs[0, 1]
@@ -5689,21 +5689,21 @@ class Layout(pro.PyLayers):
             ax.scatter(diffpos[:, 0], diffpos[:, 1])
             ax.set_title('diffraction points')
         except:
-            print 'no diffraction found. Yet computed ?'
+            print('no diffraction found. Yet computed ?')
 
         try:
             ax = axs[1, 0]
             f, ax = self.showG('st', labels='t', aw=1, ax=ax, fig=fig)
             ax.set_title('Gt')
         except:
-            print 'no Gt found. Yet computed ?'
+            print('no Gt found. Yet computed ?')
 
         try:
             ax = axs[1, 1]
             f, ax = self.showG('sv', aw=1, ax=ax, fig=fig)
             ax.set_title('Gv')
         except:
-            print 'no Gv found. Yet computed ?'
+            print('no Gv found. Yet computed ?')
         plt.tight_layout()
         # axs[2,1].remove()
 
@@ -6059,7 +6059,7 @@ class Layout(pro.PyLayers):
                 # Rgeu.append(geu.Polygon(r))
                 # Rgeu[-1].setvnodes(self)
             except:
-                print "reject"
+                print("reject")
             # if area are not the same, it means that there is inner holes in r
             if not np.allclose(Rgeu[ur].area, r.area):
                 # detect inclusion
@@ -6107,7 +6107,7 @@ class Layout(pro.PyLayers):
         ncpol = {}
         for ur, r in enumerate(Rgeu):
             if not r.isconvex():
-                print 'nt cvx'
+                print('nt cvx')
                 ncpol[ur] = self._delaunay(r)
 
                 # plt.ion()
@@ -6321,7 +6321,7 @@ class Layout(pro.PyLayers):
                     self.Gs.node[n]['ncycles'].append(ncy)
                     if n > 0:
                         if len(self.Gs.node[n]['ncycles']) > 2:
-                            print n, self.Gs.node[n]['ncycles']
+                            print(n, self.Gs.node[n]['ncycles'])
                             logging.warning(
                                 'A segment cannot relate more than 2 cycles')
 
@@ -6353,7 +6353,7 @@ class Layout(pro.PyLayers):
             seg0 = seg0 + seg
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         if check:
-            print "check len(ncycles) == 2",
+            print("check len(ncycles) == 2",)
             nodes = [i for i in self.Gs.nodes() if i > 0]
             cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy < 2)[0]
@@ -6362,7 +6362,7 @@ class Layout(pro.PyLayers):
                 str(np.array(nodes)[ucncyl])
             assert len(ucncym) == 0, "Some segments are connected to MORE than 2 cycles" + \
                 str(np.array(nodes)[ucncym])
-            print "passed"
+            print("passed")
 
     def _interlist(self, nodelist=[]):
         """ Construct the list of interactions associated to each cycle
@@ -6947,7 +6947,7 @@ class Layout(pro.PyLayers):
                                 l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
                                 l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
                                 for vlink in product(l0,l1):
-                                    #print icycle,vlink[0],vlink[1]
+                                    #printicycle,vlink[0],vlink[1]
                                     Gv.add_edge(vlink[0], vlink[1])
 
                     #
@@ -7149,49 +7149,49 @@ class Layout(pro.PyLayers):
                                     li2 = [(nstrb,)]
 
                                 # if cy==4:
-                                #     print nstr,nstrb
-                                #     print "li1",li1
-                                #     print "li2",li2
+                                #     printnstr,nstrb
+                                #     print"li1",li1
+                                #     print"li2",li2
 
                                 for i1 in li1:
-                                    # print li1
+                                    # printli1
                                     for i2 in li2:
-                                        # print li2
+                                        # printli2
                                         if (i1[0] != i2[0]):
                                             if ((len(i1) == 2) & (len(i2) == 2)):
-                                                # print "RR"
+                                                # print"RR"
                                                 self.Gi.add_edge(i1, i2)
                                                 self.Gi.add_edge(i2, i1)
                                             if ((len(i1) == 2) & (len(i2) == 3)):
-                                                # print "RT"
+                                                # print"RT"
                                                 if i1[1] == i2[1]:
                                                     self.Gi.add_edge(i1, i2)
                                             if ((len(i1) == 3) & (len(i2) == 2)):
-                                                # print "TR"
+                                                # print"TR"
                                                 if i1[2] == i2[1]:
                                                     self.Gi.add_edge(i1, i2)
                                             if ((len(i1) == 3) & (len(i2) == 3)):
-                                                # print "TT"
+                                                # print"TT"
                                                 if i1[2] == i2[1]:
                                                     self.Gi.add_edge(i1, i2)
                                                 if i2[1] == i1[2]:
                                                     self.Gi.add_edge(i2, i1)
                                             if ((len(i1) == 1) & (len(i2) == 3)):
-                                                # print "DT"
+                                                # print"DT"
                                                 if i2[1] == cy:
                                                     self.Gi.add_edge(i1, i2)
                                             if ((len(i1) == 3) & (len(i2) == 1)):
-                                                # print "TD"
+                                                # print"TD"
                                                 if i1[2] == cy:
                                                     self.Gi.add_edge(i1, i2)
                                             if ((len(i1) == 1) & (len(i2) == 2)):
-                                                # print "DR"
+                                                # print"DR"
                                                 self.Gi.add_edge(i1, i2)
                                             if ((len(i1) == 2) & (len(i2) == 1)):
-                                                # print "RD"
+                                                # print"RD"
                                                 self.Gi.add_edge(i1, i2)
                                             if ((len(i1) == 1) & (len(i2) == 1)):
-                                                # print "DD"
+                                                # print"DD"
                                                 self.Gi.add_edge(i1, i2)
 
         # updating the list of interactions of a given cycle
@@ -7259,10 +7259,10 @@ class Layout(pro.PyLayers):
         assert('Gi' in self.__dict__)
         # loop over all edges of Gi
         Nedges = len(self.Gi.edges())
-        # print "Gi Nedges :",Nedges
+        # print"Gi Nedges :",Nedges
         for k, e in enumerate(self.Gi.edges()):
             # if (k%100)==0:
-            # print "edge :  ",k
+            # print"edge :  ",k
             # extract  both termination interactions nodes
 
             i0 = e[0]
@@ -7328,7 +7328,7 @@ class Layout(pro.PyLayers):
                     # cn.show()
 
                     # if i0 == (38,79) and i1 == (135,79,23):
-                    #     print i0,i1
+                    #     printi0,i1
                     #     import ipdb
                     #     ipdb.set_trace()
                     # i1 : interaction T
@@ -7344,7 +7344,7 @@ class Layout(pro.PyLayers):
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
                         typ, prob = cn.belong_seg(Mpta, Mphe)
-                        # print i0,i1
+                        # printi0,i1
                         # if ((i0 == (6, 0)) & (i1 == (7, 0))):
                         #    pdb.set_trace()
                         # if bs.any():
@@ -7523,7 +7523,7 @@ class Layout(pro.PyLayers):
         # display degree 1 nodes
         if 1 in self.degree:
             ldeg1 = list(self.degree[1])
-            print ldeg1
+            print(ldeg1)
             fig, ax = self.showG('s',
                                  fig=fig,
                                  ax=ax,
@@ -8042,11 +8042,11 @@ class Layout(pro.PyLayers):
                 imok = True
             if imok:
                 if 'v' in self.display['overlay_flip']:
-                    print "flip v"
+                    print("flip v")
                     image = image.transpose(Image.FLIP_LEFT_RIGHT)
                 if 'h' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_TOP_BOTTOM)
-                    print "flip h"
+                    print("flip h")
                 plt.axis()
                 kwargs['ax'].imshow(np.array(image), extent=self.display[
                                     'overlay_axis'], alpha=self.display['alpha'], origin='lower')
@@ -8565,7 +8565,7 @@ class Layout(pro.PyLayers):
     #     cur_cy = to_visit[0]
     #     while len(to_visit)>0:
     #         cur_cy = to_visit.pop()
-    #         #print cur_cy
+    #         #printcur_cy
     #         # get neighbors of current_cycle
     #         neighbors = nx.neighbors(self.Gt,cur_cy)
     #         # get neighbors separated from the current cycle by an air_wall
@@ -8920,38 +8920,38 @@ class Layout(pro.PyLayers):
     def info(self):
         """ gives information about the Layout
         """
-        print "filestr : ", self._filename
-        # print "filematini : ", self.filematini
-        # print "fileslabini : ", self.fileslabini
+        print("filestr : ", self._filename)
+        # print("filematini : ", self.filematini)
+        # print("fileslabini : ", self.fileslabini)
         try:
-            print "filegeom : ", self.filegeom
+            print("filegeom : ", self.filegeom)
         except:
-            print "geomfile (.off) has no been generated"
+            print("geomfile (.off) has no been generated")
 
         # self.boundary()
-        print "boundaries ", self.ax
-        print "number of Points :", self.Np
-        print "number of Segments :", self.Ns
-        print "number of Sub-Segments :", self.Nss
+        print("boundaries ", self.ax)
+        print("number of Points :", self.Np)
+        print("number of Segments :", self.Ns)
+        print("number of Sub-Segments :", self.Nss)
         try:
-            print "Gs Nodes : ", self.Gs.number_of_nodes()
-            print "Gs Edges : ", self.Gs.number_of_edges()
+            print("Gs Nodes : ", self.Gs.number_of_nodes())
+            print("Gs Edges : ", self.Gs.number_of_edges())
         except:
-            print "no Gs graph"
+            print("no Gs graph")
 
         try:
-            print "Gt Nodes : ", self.Gt.number_of_nodes()
-            print "Gt Edges : ", self.Gt.number_of_edges()
-            print "vnodes = Gt.node[Nc]['polyg'].vnodes"
-            print "poly = Gt.node[Nc]['polyg']"
+            print("Gt Nodes : ", self.Gt.number_of_nodes())
+            print("Gt Edges : ", self.Gt.number_of_edges())
+            print("vnodes = Gt.node[Nc]['polyg'].vnodes")
+            print("poly = Gt.node[Nc]['polyg']")
         except:
-            print "no Gt graph"
+            print("no Gt graph")
 
         try:
-            print "Gr Nodes    :", self.Gr.number_of_nodes()
-            print "Gr Edges    :", self.Gr.number_of_edges()
+            print("Gr Nodes    :", self.Gr.number_of_nodes())
+            print("Gr Edges    :", self.Gr.number_of_edges())
         except:
-            print "no Gr graph"
+            print("no Gr graph")
 
     def facets3D(self, edlist, name='Layer', subseg=False):
         """
@@ -9054,7 +9054,7 @@ class Layout(pro.PyLayers):
         pylayers.util.geomutil.Polygon.setvnodes
 
         """
-        # print "ispoint : pt ", pt
+        # print"ispoint : pt ", pt
         pts = np.array(self.Gs.pos.values()).T
         ke = np.array(self.Gs.pos.keys())
         u = pts - pt.reshape(2, 1)
@@ -9101,7 +9101,7 @@ class Layout(pro.PyLayers):
             n = len(nb)
             p = np.outer(pt, np.ones(n))
 
-            # print ta
+            # printta
             v1 = p - pts[:, ta]
             v2 = pts[:, he] - p
 
@@ -9175,7 +9175,7 @@ class Layout(pro.PyLayers):
                     fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
             except:
-                print 'no subsegment on ', s
+                print('no subsegment on ', s)
                 return('void')
         else:
             name = self.Gs.node[s]['name']
@@ -9295,23 +9295,23 @@ class Layout(pro.PyLayers):
                 nebr = self.Gs.neighbors(l[0])
                 n1 = nebr[0]
                 n2 = nebr[1]
-                # print ik,n1,n2
+                # printik,n1,n2
 
                 P1[0:2, ik] = np.array(self.Gs.pos[n1]) - pg
                 P1[2, ik] = self.Gs.node[ids]['ss_z'][order][0]
-                # print P1[:,ik]
+                # printP1[:,ik]
 
                 P2[0:2, ik] = np.array(self.Gs.pos[n2]) - pg
                 P2[2, ik] = self.Gs.node[ids]['ss_z'][order][0]
-                # print P2[:,ik]
+                # printP2[:,ik]
 
                 P3[0:2, ik] = np.array(self.Gs.pos[n2]) - pg
                 P3[2, ik] = self.Gs.node[ids]['ss_z'][order][1]
-                # print P3[:,ik]
+                # printP3[:,ik]
 
                 P4[0:2, ik] = np.array(self.Gs.pos[n1]) - pg
                 P4[2, ik] = self.Gs.node[ids]['ss_z'][order][1]
-                # print P4[:,ik]
+                # printP4[:,ik]
 
                 dikn[ik] = l
                 ik = ik + 1
@@ -9476,23 +9476,23 @@ class Layout(pro.PyLayers):
                 nebr = self.Gs.neighbors(l[0])
                 n1 = nebr[0]
                 n2 = nebr[1]
-                # print ik,n1,n2
+                # printik,n1,n2
 
                 P1[0:2, ik] = np.array(self.Gs.pos[n1]) - pg
                 P1[2, ik] = self.Gs.node[ids]['ss_z'][order][0]
-                # print P1[:,ik]
+                # printP1[:,ik]
 
                 P2[0:2, ik] = np.array(self.Gs.pos[n2]) - pg
                 P2[2, ik] = self.Gs.node[ids]['ss_z'][order][0]
-                # print P2[:,ik]
+                # printP2[:,ik]
 
                 P3[0:2, ik] = np.array(self.Gs.pos[n2]) - pg
                 P3[2, ik] = self.Gs.node[ids]['ss_z'][order][1]
-                # print P3[:,ik]
+                # printP3[:,ik]
 
                 P4[0:2, ik] = np.array(self.Gs.pos[n1]) - pg
                 P4[2, ik] = self.Gs.node[ids]['ss_z'][order][1]
-                # print P4[:,ik]
+                # printP4[:,ik]
 
                 dikn[ik] = l
                 ik = ik + 1
@@ -9771,14 +9771,14 @@ class Layout(pro.PyLayers):
                         addpath = True
                     except:
                         pass
-                        # print 'no path between ',nt,nr
+                        # print'no path between ',nt,nr
                 elif (nt != nr):
                     try:
                         path = nx.dijkstra_path(self.Gi, nt, nr)
                         addpath = True
                     except:
                         pass
-                        # print 'no path between ',nt,nr
+                        # print'no path between ',nt,nr
                 else:
                     addpath = True
                     path = [nt]
