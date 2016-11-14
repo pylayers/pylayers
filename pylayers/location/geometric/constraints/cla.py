@@ -714,6 +714,102 @@ class CLA(object):
                 self.iter = 0
                 self.Nc = l
 
+
+
+    def _show3(self, l=-1, amb=False, sc='all'):
+
+        """
+        Parameters
+        ----------
+
+        l       : layer number to observe. If -1 estimation is made on the highest available layer. default = -1
+        amb     : display ambiguous boxes. default = false
+        sc      : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default 'all'
+
+        Returns
+        -------        
+
+        Nothing but calls a geomview instance
+
+
+        """
+        Nc = self.Nc
+        par = self.parmsh
+
+        if l == -1:
+            if sc == 'all':
+                for c in self.c:
+                    if c.runable:
+                        c.parmsh['display'] = False
+                        c.parmsh['scene'] = False
+                        # if constrinat boxes has to be displayed 
+                        if par['constr_boxes']:
+                            c.parmsh['boxes'] = False
+                        else :
+                            c.parmsh['boxes'] = True
+                        c._show3()
+
+            else:
+                try:
+                    for vsc in sc:
+                        if self.c[vsc].runable:
+                            self.c[vsc].parmsh['display'] = False
+                            self.c[vsc].parmsh['scene'] = False
+                        if par['constr_boxes']:
+                            self.c[vsc].parmsh['boxes'] = False
+                        else :
+                            self.c[vsc].parmsh['boxes'] = True
+                            fname = self.c[vsc]._show3()
+                except:
+                    if self.c[sc].runable:
+                        self.c[sc].parmsh['display'] = False
+                        self.c[sc].parmsh['scene'] = False
+                        if par['constr_boxes']:
+                            self.c[sc].parmsh['boxes'] = False
+                        else :
+                            self.c[sc].parmsh['boxes'] = True
+                        fname = self.c[sc]._show3()
+
+        else:
+            if c[l].runable:
+                self.c[l].parmsh['dispay'] = False
+                self.c[l].parmsh['scene'] = False
+                fname = self.c[l]._show3()
+
+        col = ['r', 'b', 'g', 'm', 'y', 'b', 'r']
+
+        if par['scene']:
+            an = np.zeros(len(self.bn))
+            for c in self.c:
+                if c.runable:
+                    an = np.vstack((an, c.p))
+            import ipdb
+            ipdb.set_trace()
+            # S = Scene(an=an, bn=self.bn)
+            # sce = S.generate()
+
+        if par['estimated']:
+
+            try:
+                mlab.point3d(self.pe[0],self.pe[1],self.pe[2])
+            except:
+                pass
+
+        if par['boxes']:
+
+            for l in self.dlayer.keys():
+                self.dlayer[l][0].parmsh['display'] = False
+                self.dlayer[l][1].parmsh['display'] = False
+
+                try:
+                    self.dlayer[l][0]._show3(col='b', Id=l)
+                except:
+                    pass
+
+                if amb:
+                    fname = self.dlayer[l][1]._show3(col='r', Id=l + 1)
+#
+
     def show3(self, l=-1, amb=False, sc='all'):
         """ Display constraints and theirs boxes through geomview.
 

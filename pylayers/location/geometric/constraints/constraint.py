@@ -278,6 +278,71 @@ class Constraint(object):
         np.set_printoptions(precision=3)
         print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
 
+
+    def _show3(self):
+
+
+        if self.runable:
+            
+
+            #
+            # Display scene
+            #
+            # if self.parmsh['scene']:
+
+            if self.parmsh['mode'] == 'Current':
+                #
+                # Display current box
+                #
+                color = ['m', 'g', 'c', 'y', 'm', 'b', 'r',
+                         'm', 'g', 'c', 'y', 'orange', 'skyblue']
+                #color = ['skyblue','skyblue','orange']
+                if self.parmsh['boxes']:
+                    lb = self.lbox
+                    lb.parmsh['display'] = False
+                    filename2 = lb._show3(Id=[self.id], col='m')  # )color[self.Id])
+                #
+                # Display Spherical Constraint
+                #
+                if self.parmsh['quadric']:
+                    if self.type == 'TOA':
+                        # Create inner and outer sphere
+                        ro = self.range + self.vcw * self.sstd
+                        ri = max(0, self.range - self.vcw * self.sstd)
+                        pi = np.pi
+                        cos = np.cos
+                        sin = np.sin
+                        phi, theta = np.mgrid[0.0:pi:100j, 0.0:2.0*pi:100j]
+                        xi = ri*sin(phi)*cos(theta)
+                        yi = ri*sin(phi)*sin(theta)
+                        zi = ri*cos(phi)
+                        xo = ro*sin(phi)*cos(theta)
+                        yo = ro*sin(phi)*sin(theta)
+                        zo = ro*cos(phi)
+
+                        si = mlab.mesh(xi+self.p[0] , yi+self.p[1] , zi+self.p[2],opacity=0.1,color=(0,1,0.5))
+                        so = mlab.mesh(xo+self.p[0] , yo+self.p[1] , zo+self.p[2],opacity=0.1,color=(0,1,1))
+
+            #
+            # Display points
+            #
+            if self.parmsh['point']:
+                if self.type != 'Fusion':
+                    mlab.points3d(self.p.T,color=(1,1,1),opacity=1)
+                    # mlab.text3d(self.p[0],self.p[1],self.p[2],'p',color=(0,0,0))
+                
+            if self.evaluated:
+                if self.parmsh['estimated']:
+                    mlab.points3d(self.pe.T,color=(0,0,1))
+                    mlab.text3d(self.pe[0],self.pe[1],self.pe[2],'pe',color=(0,0,0))
+                if self.parmsh['estimated_LS']:
+                    mlab.points3d(self.p_LS.T,color=(1,0,1))
+                    mlab.text3d(self.p_LS[0],self.p_LS[1],self.p_LS[2],'p_LS',color=(0,0,0))
+        else:
+            print 'constraint is not runnable. It can not be displayed'
+
+
+
     def show3(self):
         """ display constraint on Geomview
 
