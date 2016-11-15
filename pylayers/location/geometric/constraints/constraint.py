@@ -328,15 +328,15 @@ class Constraint(object):
             #
             if self.parmsh['point']:
                 if self.type != 'Fusion':
-                    mlab.points3d(self.p.T,color=(1,1,1),opacity=1)
+                    mlab.points3d(self.p[0],self.p[1],self.p[2],color=(1,1,1),opacity=1)
                     # mlab.text3d(self.p[0],self.p[1],self.p[2],'p',color=(0,0,0))
                 
             if self.evaluated:
                 if self.parmsh['estimated']:
-                    mlab.points3d(self.pe.T,color=(0,0,1))
+                    mlab.points3d(self.pe[0],self.pe[1],self.pe[2],color=(0,0,1))
                     mlab.text3d(self.pe[0],self.pe[1],self.pe[2],'pe',color=(0,0,0))
                 if self.parmsh['estimated_LS']:
-                    mlab.points3d(self.p_LS.T,color=(1,0,1))
+                    mlab.points3d(self.p_LS[0],self.p_LS[1],self.p_LS[2],color=(1,0,1))
                     mlab.text3d(self.p_LS[0],self.p_LS[1],self.p_LS[2],'p_LS',color=(0,0,0))
         else:
             print 'constraint is not runnable. It can not be displayed'
