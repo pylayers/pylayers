@@ -4693,7 +4693,7 @@ bernard
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
-        if ('HK' in techno) :
+        if ('HK' in techno.upper()) :
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
             elif (b +'-' + a) in self.hkb.keys():
@@ -4702,7 +4702,7 @@ bernard
                 raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in hkb dataframe')
             df = self.hkb
 
-        elif ('BS' in techno):
+        elif ('BS' in techno.upper()):
             if (a +'-' + b) in self.bespo.keys():
                 link = a +'-' + b
             elif (b +'-' + a) in self.bespo.keys():
@@ -4712,7 +4712,7 @@ bernard
 
             df = self.bespo
 
-        elif ('TCR' in techno):
+        elif ('TCR' in techno.upper()):
             if (a +'-' + b) in self.tcr.keys():
                 link = a +'-' + b
             elif (b +'-' + a) in self.tcr.keys():
