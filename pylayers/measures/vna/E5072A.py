@@ -16,7 +16,7 @@ import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
 from pylayers.measures.exploith5 import Mesh5
-import pylayers.measures.switch.ni_usb_6501 as sw
+#import pylayers.measures.switch.ni_usb_6501 as sw
 #from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns

@@ -203,6 +203,9 @@ class Layout(pro.PyLayers):
             elif ext == '.osm':
                 self._filename = arg + '.ini'
                 loadosm = True
+            elif ext == '.res':
+                self._filename = arg + '.ini'
+                loadres = True
             else:
                 self.typ = 'outdoor'
         else:  # No argument
@@ -220,6 +223,8 @@ class Layout(pro.PyLayers):
             elif loadosm:  # load .osm file
                 self.importosm(_fileosm=string, cart=True)
                 self.loadosm = True
+            elif loadres:
+                self.importres(_fileres=string)
             elif '(' in string:  # load from osmapi latlon in string
                 self.importosm(latlon=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
@@ -1028,6 +1033,58 @@ class Layout(pro.PyLayers):
                     pos[k, 0] - Dx, pos[k, 1] - Dy, inverse=True)
 
             self.coordinates = 'latlon'
+
+    def importres(self,_fileres,**kwargs):
+        """ import res format 
+        
+        col1 : x1 coordinates
+        col2 : y1 coordinates 
+        col3 : x2 coordinates
+        col4 : y2 coordinates
+        col5 : building height
+        col6 : building number
+        col7 : building class 
+        col8 : ground height  
+
+        """
+        fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
+        D  = np.fromfile(fileres,dtype='int',sep=' ')
+        N1 = len(D)
+        N2 = N1/8
+        D = D.reshape(N2,8)
+        lcoords = []
+        lring = [] 
+        zring = [] 
+        bdgold  = 1
+        for e in range(N2):
+            p1 = ([D[e,0],D[e,1]])
+            p2 = ([D[e,2],D[e,3]])
+            z  = (D[e,7],D[e,4])
+            bdg =  D[e,5] 
+            bdc =  D[e,6] 
+            if (bdgold-bdg)!=0:
+                ring = sh.LinearRing(lcoords)
+                lring.append(ring)
+                zring.append(z)
+                lcoords = []
+            bdgold=bdg
+            if p1 not in lcoords:
+                lcoords.append(p1)
+            if p2 not in lcoords:
+                lcoords.append(p2)
+
+        npt = 1
+        for r1,z1 in zip(lring,zring):
+            x,y = r1.xy 
+            n0  =   -npt
+            for k2 in range(len(x)):
+                self.Gs.add_node(-npt)
+                self.Gs.pos[-npt] = (x[k2],y[k2])
+                if k2>0:
+                    ns = self.add_segment(-npt, -(npt-1), name='WALL', z=z1)
+                npt = npt + 1
+            ns = self.add_segment(-(npt-1), n0, name='WALL', z=z1)
+        #pdb.set_trace()
 
     def importosm(self, **kwargs):
         """ import layout from osm file or osmapi
@@ -3180,15 +3237,17 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
 
-        p1 : np.array (3 x Np) or (3,)
-        p2 : np.array (3 x Np) or (3,)
+        p1 : np.array (3 x N) or (3,)  
+        p2 : np.array (3 x N) or (3,)
 
         Returns
         -------
 
-        seglist : list
-                  list of segment number on the link
-        angle   : angle (in radians) between segment and LOS axis
+        data : structured array x N
+            'i' : index 
+            's' : slab 
+            'a' : angle (in radians)
+
 
         Examples
         --------
@@ -3197,7 +3256,7 @@ class Layout(pro.PyLayers):
         >>> L = Layout('DLR.ini')
         >>> p1 = np.array([0,0,1])
         >>> p2 = np.array([10,3,2])
-        >>> alpha = L.angleonlink3(p1,p2)
+        >>> data = L.angleonlink3(p1,p2)
 
         #array([(0, 141, 1.2793395519256592), (0, 62, 0.29145678877830505),
                (0, 65, 0.29145678877830505)],
@@ -3232,18 +3291,21 @@ class Layout(pro.PyLayers):
         # warning : seglist contains the segment number in tahe not in Gs
         #
         #
-        seglist = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
+        
+        seglist  = np.unique(self.seginframe2(p1[0:2], p2[0:2]))
+    
 
         upos = np.nonzero(seglist >= 0)[0]
         uneg = np.nonzero(seglist < 0)[0]
+        
 
-        nNLOS = len(uneg) + 1
-        # retrieve the number of segments per link
-        if nNLOS > 1:
-            llink = np.hstack(
-                (uneg[0], np.hstack((uneg[1:], array([len(seglist)]))) - uneg - 1))
-        else:
-            llink = np.array([len(seglist)])
+        # nNLOS = len(uneg) + 1
+        # # retrieve the number of segments per link
+        # if nNLOS > 1:
+        #     llink = np.hstack(
+        #         (uneg[0], np.hstack((uneg[1:], array([len(seglist)]))) - uneg - 1))
+        # else:
+        #     llink = np.array([len(seglist)])
         # [(link id,number of seg),...]
         # nl = zip(np.arange(nlink),llink)n
 
@@ -3253,20 +3315,21 @@ class Layout(pro.PyLayers):
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
-        #
-        # This part should possibly be improved
-        #
+        
+        # #
+        # # This part should possibly be improved
+        # #
 
-        for i, nl in enumerate(llink):
-            try:
-                # P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
-                # P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
-                ilink = np.hstack(
-                    (ilink, array([-1]), i * np.ones(nl, dtype='int')))
-            except:
-                # P1 = np.outer(p1[:,i],np.ones(nl))
-                # P2 = np.outer(p2[:,i],np.ones(nl))
-                ilink = i * np.ones(nl, dtype='int')
+        # for i, nl in enumerate(llink):
+        #     try:
+        #         # P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
+        #         # P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
+        #         ilink = np.hstack(
+        #             (ilink, array([-1]), i * np.ones(nl, dtype='int')))
+        #     except:
+        #         # P1 = np.outer(p1[:,i],np.ones(nl))
+        #         # P2 = np.outer(p2[:,i],np.ones(nl))
+        #         ilink = i * np.ones(nl, dtype='int')
 
         # check for intersection P1P2 PtaPhe
         # bo = geu.intersect(P1[0:-1], P2[0:-1], Pta, Phe)
@@ -3287,36 +3350,26 @@ class Layout(pro.PyLayers):
 
         bo = geu.intersect3(p1, p2, Pg, U1, U2, L1, L2)
 
-        # pdb.set_trace()
-        upos_intersect = upos[bo[0, :]]
+        ubo = np.where(bo)
 
-        seglist2 = seglist[upos_intersect]
-        idxlnk = ilink[upos_intersect]
+        Nseg = len(ubo[0])
+        data = np.zeros(Nseg, dtype=[
+                        ('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
 
+        data['i']=ubo[0]
+        data['s']=self.tsg[ubo[1]]
+        
         #
         # Calculate angle of incidence refered from segment normal
         #
 
-        norm = self.normal[:, seglist2]
+        norm = self.normal[:, ubo[1]]
         # vector along the link
-        uu = un[:, idxlnk]
+        uu = un[:, ubo[0]]
         unn = abs(np.sum(uu * norm, axis=0))
         angle = np.arccos(unn)
 
-        # seglist = seglist+1
-        seglist = np.array(map(lambda x: self.tsg[x], seglist2))
-
-        data = np.zeros(len(seglist), dtype=[
-                        ('i', 'i8'), ('s', 'i8'), ('a', np.float32)])
-
-        #
-        # update subsegment in seglist
-        #
-        #
-
-        data['i'] = idxlnk
-        data['s'] = seglist[0]
-        data['a'] = angle[0]
+        data['a'] = angle
         return(data)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
@@ -3385,8 +3438,8 @@ class Layout(pro.PyLayers):
                 (uneg[0], np.hstack((uneg[1:], array([len(seglist)]))) - uneg - 1))
         else:
             llink = np.array([len(seglist)])
-        # [(link id,number of seg),...]
-        #nl = zip(np.arange(nlink),llink)
+        
+        # llink : list of link length 
 
         npta = self.tahe[0, seglist[upos]]
         nphe = self.tahe[1, seglist[upos]]
@@ -3394,6 +3447,7 @@ class Layout(pro.PyLayers):
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
+        
         #
         # This part should possibly be improved
         #
@@ -3414,6 +3468,7 @@ class Layout(pro.PyLayers):
         upos_intersect = upos[bo]
 
         seglist2 = seglist[upos_intersect]
+
         idxlnk = ilink[upos_intersect]
         #
         # Calculate angle of incidence refered from segment normal
@@ -3421,7 +3476,7 @@ class Layout(pro.PyLayers):
 
         norm = self.normal[0:2, seglist2]
         # vector along the linkco
-        uu = un[:, idxlnk]
+        uu = un[:,idxlnk]
         unn = abs(np.sum(uu * norm, axis=0))
         angle = np.arccos(unn)
 
@@ -3802,7 +3857,7 @@ class Layout(pro.PyLayers):
                       zip(min_x, max_x, min_y, max_y))
 
         # np.array stacking
-        # -1 acts as a deliminiter (not a segment number)
+        # -1 acts as a deliminiter (not as a segment number)
 
         seglist = reduce(lambda x, y: np.hstack((x, array([-1]), y)), seglist)
 
@@ -10118,4 +10173,4 @@ if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
     # L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
-    # L.build()
+    # L.build()iiii    
