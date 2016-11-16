@@ -36,6 +36,13 @@ class Observables(object):
         self.noise_model : noise matrix ()
 
         """
+
+        if len(an.shape) > 2:
+            raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
+
+        if len(bn.shape) > 2:
+            raise AttributeError('Blind nodes \'bn\' shape must be (3 x Nb)')
+
         if an.shape[0] == 2:
             an = np.vstack((an, np.zeros(an.shape[1])))
         elif an.shape[0] != 3:
@@ -47,6 +54,13 @@ class Observables(object):
         elif bn.shape[0] != 3:
             raise AttributeError('Blind nodes bn first dimension reserved to \
                                   space (x,y,z) coordinates')
+
+        if len(an.shape) == 1:
+            an = np.array([an])
+        if len(bn.shape) == 1:
+            bn = np.array([bn])
+
+
 
         self.an = an
         self.bn = bn
@@ -302,6 +316,7 @@ class Observables(object):
         ax.scatter(self.bn[0,:],self.bn[1,:], c='r', marker='o', label='Blind nodes')
         plt.legend()
 
+        return fig, ax
 
 if (__name__ == "__main__"):
 
