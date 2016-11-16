@@ -197,7 +197,10 @@ class CLA(object):
         for c in self.c:
             node = c.origin['id']
             peer = c.origin['link']
-            wstd  = c.origin['wstd']
+            try:
+                wstd  = c.origin['wstd']
+            except:
+                wstd = '---'
             if c.type != 'TDOA':
                 s = s + '\n' + '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format(node,peer,c.type,wstd, c.p, c.value, c.std, c.runable, c.usable)
             else:

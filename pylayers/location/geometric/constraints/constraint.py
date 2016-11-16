@@ -309,16 +309,13 @@ class Constraint(object):
                         # Create inner and outer sphere
                         ro = self.range + self.vcw * self.sstd
                         ri = max(0, self.range - self.vcw * self.sstd)
-                        pi = np.pi
-                        cos = np.cos
-                        sin = np.sin
-                        phi, theta = np.mgrid[0.0:pi:100j, 0.0:2.0*pi:100j]
-                        xi = ri*sin(phi)*cos(theta)
-                        yi = ri*sin(phi)*sin(theta)
-                        zi = ri*cos(phi)
-                        xo = ro*sin(phi)*cos(theta)
-                        yo = ro*sin(phi)*sin(theta)
-                        zo = ro*cos(phi)
+                        phi, theta = np.mgrid[0.0:np.pi:100j, 0.0:2.0*np.pi:100j]
+                        xi = ri*np.sin(phi)*np.cos(theta)
+                        yi = ri*np.sin(phi)*np.sin(theta)
+                        zi = ri*np.cos(phi)
+                        xo = ro*np.sin(phi)*np.cos(theta)
+                        yo = ro*np.sin(phi)*np.sin(theta)
+                        zo = ro*np.cos(phi)
 
                         si = mlab.mesh(xi+self.p[0] , yi+self.p[1] , zi+self.p[2],opacity=0.1,color=(0,1,0.5))
                         so = mlab.mesh(xo+self.p[0] , yo+self.p[1] , zo+self.p[2],opacity=0.1,color=(0,1,1))
