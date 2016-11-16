@@ -4,7 +4,7 @@ import scipy as sp
 import pylayers.antprop.loss as plm
 import matplotlib.pyplot as plt
 
-class Observables():
+class Observables(object):
     """ Generate observables for localization prupose
     """
     def __init__(self, an=10 * sp.rand(3, 5), bn=5 * sp.rand(3,4)):
@@ -54,6 +54,7 @@ class Observables():
         self.Na = self.an.shape[1]
         self.Nb = self.bn.shape[1]
 
+
         self.compute_distances()
         self.compute_diff_distances()
         self.compute_ranges()
@@ -61,6 +62,23 @@ class Observables():
         self.compute_rpower()
 
         self.create_noise()
+
+
+    @property
+    def rp_model(self):
+        return self._rp_model
+
+    @rp_model.setter
+    def rp_model(self, value):
+        if hasattr(self,'rp_model'):
+            if self._rp_model != value:
+                self.compute_rpower()
+                self._rp_model = value
+        else:
+            print('c')
+            # first call from compute_power
+            self._rp_model = value
+
 
 
     def __repr__(self):
@@ -164,6 +182,7 @@ class Observables():
                 config['pl_exp'] : pathloss exponent
 
         """
+        print('compute power')
         if config== {}:
             config['model']='PL'
             config['d0']=1.
