@@ -109,6 +109,7 @@ class Algloc(object):
                      'an_rss': np.ndarray(shape=(3,0)),
                      'toa': np.ndarray(shape=(0)),
                      'tdoa': np.ndarray(shape=(0)),
+                     'tdoa_ref': 0,
                      'rss': np.ndarray(shape=(0)),
                      'toa_std': np.ndarray(shape=(0)),
                      'tdoa_std': np.ndarray(shape=(0)),
@@ -255,6 +256,9 @@ class Algloc(object):
                 self.PL0 = np.array(self.PL0)*np.ones(self.Nrss)
             else:
                 raise AttributeError('PL0 shape mishmatch or missing')
+
+        if np.alltrue(self.rss<0):
+            self.rss=-self.rss
 
         if self.Nrss > 0:
             self._av_ldp.append('rss')
@@ -469,7 +473,8 @@ class Algloc(object):
                not self.used_ldp['toa'] and\
                not self.used_ldp['rss']:
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+                # rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
                 sh = np.shape(rn_tdoa)
 
@@ -620,7 +625,8 @@ class Algloc(object):
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+                #rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
                 sh1 = np.shape(rn_toa)
                 sh2 = np.shape(rn_tdoa)
@@ -660,7 +666,9 @@ class Algloc(object):
                 d0 = self.d0
                 pl0 = self.PL0
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
+
                 tdoa_ns = self.tdoa
                 sh1 = np.shape(rn_rss)
                 sh2 = np.shape(rn_tdoa)
@@ -699,7 +707,8 @@ class Algloc(object):
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
                 sh1 = np.shape(rn_toa)
                 sh2 = np.shape(rn_rss)
@@ -775,9 +784,10 @@ class Algloc(object):
                not self.used_ldp['toa'] and\
                not self.used_ldp['rss']:
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+                #rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
-                tdoa_std = self.ldp['TDOA_std']
+                tdoa_std = self.tdoa_std
                 sh = np.shape(rn_tdoa)
                 if sh[1] >= sh[0]:
                     # Construct the vector K (see theory)
@@ -945,9 +955,10 @@ class Algloc(object):
                 toa_ns = self.toa
                 toa_std = self.toa_std
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
-                tdoa_std = self.ldp['TDOA_std']
+                tdoa_std = self.tdoa_std
                 sh1 = np.shape(rn_toa)
                 sh2 = np.shape(rn_tdoa)
                 # Construct the vector K_toa (see theory)
@@ -988,9 +999,10 @@ class Algloc(object):
                 d0 = self.d0
                 pl0 = self.PL0
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
-                tdoa_std = self.ldp['TDOA_std']
+                tdoa_std = self.tdoa_std
                 sh1 = np.shape(rn_rss)
                 sh2 = np.shape(rn_tdoa)
                 # Construct the vector K_rss (see theory)
@@ -1031,9 +1043,10 @@ class Algloc(object):
                 toa_ns = self.toa
                 toa_std = self.toa_std
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
-                tdoa_std = self.ldp['TDOA_std']
+                tdoa_std = self.tdoa_std
                 sh1 = np.shape(rn_toa)
                 sh2 = np.shape(rn_rss)
                 sh3 = np.shape(rn_tdoa)
@@ -1101,9 +1114,10 @@ class Algloc(object):
                not self.used_ldp['toa'] and\
                not self.used_ldp['rss']:
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
-                tdoa_std = self.ldp['TDOA_std']
+                tdoa_std = self.tdoa_std
                 sh1 = np.shape(rn_tdoa)[1]
                 drg = self.c * tdoa_ns
                 drg_std = self.c * tdoa_std
@@ -1237,9 +1251,10 @@ class Algloc(object):
             # only TDOA
             if self.used_ldp['tdoa'] and np.sum(self.used_ldp.values()) == 1:
                 rn_tdoa = self.an_tdoa
-                rnr_tdoa = self.nodes['RNr_TDOA']
+                rnr_tdoa = self.an_tdoa[:,self.tdoa_ref]*np.ones((3,self.Ntdoa))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
-                tdoa_std = self.ldp['TDOA_std']
+                tdoa_std = self.tdoa_std
                 sh1 = np.shape(rn_tdoa)
                 drg = self.c * tdoa_ns
                 drg_std = self.c * tdoa_std

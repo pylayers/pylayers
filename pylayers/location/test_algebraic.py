@@ -36,3 +36,17 @@ print ('WLS')
 print(A.wls_locate())
 print ('ML')
 print(A.ml_locate())
+
+
+
+O = Observables(an=an,bn=bn,mode='tdoa')
+
+A = Algloc(an_tdoa=O.an, tdoa=O.drng[0] , tdoa_std=O.noise_model['std'],)
+print ('RSS')
+print ('---\n')
+print ('LS')
+print(A.ls_locate())
+print ('WLS')
+print(A.wls_locate())
+print ('ML')
+print(A.ml_locate())
