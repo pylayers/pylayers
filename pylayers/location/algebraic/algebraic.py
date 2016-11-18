@@ -231,7 +231,7 @@ class Algloc(object):
 
         if len(self.rss_std.shape) > 1:
             try:
-                self.rss_std = self._std.reshape(self.Nrss)
+                self.rss_std = self.rss_std.reshape(self.Nrss)
             except:
                 raise AttributeError('Wrong shape for rss_std')
 
@@ -531,7 +531,7 @@ class Algloc(object):
                     # Construct the vector K (see theory)
                     rn2 = np.sum(rn_rss * rn_rss, axis=0)
                     k1 = rn2[1:] - rn2[0:1]
-                    rg = self.get_range(self.Rest)
+                    rg = self.get_range()
                     rg2 = rg * rg
                     k2 = rg2[0:1] - rg2[1:]
                     K = k1 + k2
@@ -562,7 +562,7 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                    rg_rss = self.get_range(self.Rest)
+                    rg_rss = self.get_range()
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                     K_rss = k1_rss + k2_rss
@@ -597,7 +597,7 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[:] - rn2_toa[0:1]
-                    rg_rss = self.get_range(self.Rest)
+                    rg_rss = self.get_range()
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_toa[0:1] - rg2_rss[:]
                     K_rss = k1_rss + k2_rss
@@ -667,7 +667,7 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg = self.get_range(self.Rest)
+                rg = self.get_range()
                 rg2 = rg * rg
                 k2_rss = rg2[0:1] - rg2[1:]
                 K_rss = k1_rss + k2_rss
@@ -707,7 +707,7 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                rg_rss = self.get_range(self.Rest)
+                rg_rss = self.get_range()
                 rg2_rss = rg_rss * rg_rss
                 k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                 K_rss = k1_rss + k2_rss
@@ -840,8 +840,8 @@ class Algloc(object):
                     # Construct the vector K (see theory)
                     rn2 = np.sum(rn_rss * rn_rss, axis=0)
                     k1 = rn2[1:] - rn2[0:1]
-                    rg = self.get_range(self.Rest)
-                    rg_std = self.get_range_std(self.Rest)
+                    rg = self.get_range()
+                    rg_std = self.get_range_std()
                     rg2 = rg * rg
                     k2 = rg2[0:1] - rg2[1:]
                     K = k1 + k2
@@ -875,8 +875,8 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                    rg_rss = self.get_range(self.Rest)
-                    rg_rss_std = self.get_range_std(self.Rest)
+                    rg_rss = self.get_range()
+                    rg_rss_std = self.get_range_std()
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                     K_rss = k1_rss + k2_rss
@@ -916,8 +916,8 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[:] - rn2_toa[0:1]
-                    rg_rss = self.get_range(self.Rest)
-                    rg_rss_std = self.get_range_std(self.Rest)
+                    rg_rss = self.get_range()
+                    rg_rss_std = self.get_range_std()
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_toa[0:1] - rg2_rss[:]
                     K_rss = k1_rss + k2_rss
@@ -996,8 +996,8 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg = self.get_range(self.Rest)
-                rg_std = self.get_range_std(self.Rest)
+                rg = self.get_range()
+                rg_std = self.get_range_std()
                 rg2 = rg * rg
                 k2_rss = rg2[0:1] - rg2[1:]
                 K_rss = k1_rss + k2_rss
@@ -1040,8 +1040,8 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg_rss = self.get_range(self.Rest)
-                rg_rss_std = self.get_range_std(self.Rest)
+                rg_rss = self.get_range()
+                rg_rss_std = self.get_range_std()
                 rg2_rss = rg_rss * rg_rss
                 k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                 K_rss = k1_rss + k2_rss
