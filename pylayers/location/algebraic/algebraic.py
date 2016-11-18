@@ -47,13 +47,6 @@ class algloc(object):
     Attributes
     ----------
 
-    nodes : dictionnary
-    ldp : dictionnary
-=======
-    This class regroups algebraic localization algorithms
-        All nodes positions are gatherred in nodes dictionnary
-        All location dependent parameters are gathered in ldp dictionnary
->>>>>>> 95d88122037bbe1e5d26beff4fd79e7448eb3dd8
 
     Methods
     --------
@@ -71,34 +64,35 @@ class algloc(object):
 
         Parameters
         ----------
+        an_toa: np.ndarray(shape=(3,0))
+            anchor nodes for toa
+        an_tdoa: np.ndarray(shape=(3,0))
+            anchor nodes for tdoa
+        an_rss: np.ndarray(shape=(3,0))
+            anchor nodes for rss
+        toa: np.ndarray(shape=(0))
+            toa in ns 
+        tdoa: np.ndarray(shape=(0))
+            tdoa in ns 
+        rss: np.ndarray(shape=(0))
+            rss value in dB
+        toa_std: np.ndarray(shape=(0))
+            toa standard deviation in ns 
+        tdoa_std: np.ndarray(shape=(0))
+            tdoa standard deviation in ns 
+        rss_std: np.ndarray(shape=(0))
+            rss standard deviation in dB
+        rss_np: np.ndarray(shape=(0))
+            pathloss exponent
+        PL0: np.ndarray(shape=(0))
+            loss at d0
+        d0: 1.
+        Rest: str
+            'mode'(default)|'median'|'mean'
+            range estimation mode
 
-        dim ( dimension 2 or 3 )
-        N : number of nodes
-
-        nodes : dict
-            the keys of nodes dict :
-
-
-        nodes['BN'] : blind node position (dim x N)
-        an_rss= RSS nodes position (dim x N)
-        an_toa= TOA nodes position (dim x N)
-        nodes['RN_TDOA']= TDOA nodes position (dim x N)
-        nodes['RNr_TDOA']= TDOA reference nodes position (dim x N)
-            you need to repeat along N the reference node ( to be broacasted)
-
-        ldp : dict
-            dictionnary containing the location depend parameters
-            (between parenthesis is the shape of the value)
-
-        ldp['RSS'] = received power value in dB ( N )
-        ldp['RSS_std'] = received power standard ddeviation dB ( N )
-        ldp['RSS_np'] = path loss exponent ( N )
-        ldp['d0'] = reference distance (integer)
-        ldp['PL0'] = path loss @ d0 ( N )
-        ldp['TOA'] = Time of arrival in nano seconds (N)
-        ldp['TOA_std'] = standard ddeviation in ns ( N )
-        ldp['TDOA'] = Time difference of arrival in ns ( N )
-        ldp['TDOA_std'] = Time difference of arrival standard dev. in ns ( N )
+        used_ldp : list 
+            dictionnary to determien which ldp are used for localization etaimtion
 
 
     Examples
@@ -107,96 +101,186 @@ class algloc(object):
     .. plot::
         :include-source:
 
-
-        >>> from pylayers.location.algebraic.algebraic import *
-        >>> import scipy as sp
-        >>> from pylayers.util.geomutil import dist
-
-        >>> nodes,ldp = scenario()
-        >>> L = algloc()
-        >>> L.nodes=nodes
-        >>> L.ldp=ldp
-
-        >>> print "least square locate RSS + TDOA"
-        >>> L.ls_locate(rss=True,toa= False,tdoa = True)
         """
 
 
-        defaults = { 'an_toa': [],
-                     'an_tdoa': [],
-                     'an_rss': [],
-                     'toa': [],
-                     'tdoa': [],
-                     'rss': [],
-                     'toa_std': [],
-                     'tdoa_std': [],
-                     'rss_std': [],
-                     'rss_np': [],
-                     'PL0':[],
+        defaults = { 'an_toa': np.ndarray(shape=(3,0)),
+                     'an_tdoa': np.ndarray(shape=(3,0)),
+                     'an_rss': np.ndarray(shape=(3,0)),
+                     'toa': np.ndarray(shape=(0)),
+                     'tdoa': np.ndarray(shape=(0)),
+                     'rss': np.ndarray(shape=(0)),
+                     'toa_std': np.ndarray(shape=(0)),
+                     'tdoa_std': np.ndarray(shape=(0)),
+                     'rss_std': np.ndarray(shape=(0)),
+                     'rss_np': np.ndarray(shape=(0)),
+                     'PL0': np.ndarray(shape=(0)),
                      'd0': 1.,
+                     'Rest': 'mode' 
                      }
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
-
-
-        self.an_toa = kwargs['an_toa']
-        self.an_tdoa = kwargs['an_tdoa']
-        self.an_rss = kwargs['an_rss']
-
-        self.toa = kwargs['toa']
-        self.tdoa = kwargs['tdoa']
-        self.rss = kwargs['rss']
-
-        self.toa_std = kwargs['toa_std']
-        self.tdoa_std = kwargs['tdoa_std']
-        self.rss_std = kwargs['rss_std']
-
-        self.rss_np = kwargs['rss_np']
-        self.d0 = kwargs['d0']
-
+            if not isinstance(kwargs[k],np.ndarray):
+                if not isinstance(kwargs[k],str):
+                    kwargs[k]=np.array([kwargs[k]])
+            setattr(self,k,kwargs[k])
         self.c = 0.2997924583
 
         # available ldp
         self._av_ldp = []
 
-
+        ###########
         # TOA check
-        toa_check = np.array([(self.an_toa != defaults['an_toa']), (self.toa != defaults['toa']), (self.toa_std != defaults['toa_std'])])
-        if np.alltrue(toa_check) or np.alltrue(~toa_check):
+        ###########
+
+        if len(self.an_toa.shape) > 2:
+            raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
+        if self.an_toa.shape[0] == 2:
+            self.an_toa = np.vstack((self.an_toa, np.zeros(self.an_toa.shape[1])))
+        elif self.an_toa.shape[0] != 3:
+            raise AttributeError('Anchors TOA first dimension reserved to space\
+                                  (x,y,z) coordinates')
+
+        self.Ntoa = self.an_toa.shape[1]
+
+
+        if len(self.toa.shape) > 1:
+            try:
+                self.toa = self.toa.reshape(self.Ntoa)
+            except:
+                raise AttributeError('Wrong shape for toa')
+        if len(self.toa_std.shape) > 1:
+            try:
+                self.toa_std = self.toa_std.reshape(self.Ntoa)
+            except:
+                raise AttributeError('Wrong shape for toa_std')
+
+        if (self.an_toa.shape[1] != self.toa.shape[0]):
+            raise AttributeError('toa shape mishmatch or missing')
+        elif (self.an_toa.shape[1] != self.toa_std.shape[0]):
+            if len(self.toa_std)==1:
+                self.toa_std = np.array(self.toa_std)*np.ones(self.Ntoa)
+            else:
+                raise AttributeError('toa_std shape mishmatch or missing')
+            
+
+        if self.Ntoa > 0:
             self._av_ldp.append('toa')
-        else:
-            raise AttributeError('missing info for TOA')
+
+
+        ###########
+        # TDOA check
+        ###########
 
 
 
 
-        
+        if len(self.an_tdoa.shape) > 2:
+            raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
+        if self.an_tdoa.shape[0] == 2:
+            self.an_tdoa = np.vstack((self.an_tdoa, np.zeros(self.an_tdoa.shape[1])))
+        elif self.an_tdoa.shape[0] != 3:
+            raise AttributeError('Anchors TDOA first dimension reserved to space\
+                                  (x,y,z) coordinates')
 
+        self.Ntdoa = self.an_tdoa.shape[1]
 
-        if self.toa != []:
-            self._av_ldp.append('toa')
-        if self.tdoa != []:
+        if len(self.tdoa.shape) > 1:
+            try:
+                self.tdoa = self.tdoa.reshape(self.Ntdoa)
+            except:
+                raise AttributeError('Wrong shape for tdoa')
+        if len(self.tdoa_std.shape) > 1:
+            try:
+                self.tdoa_std = self.tdoa_std.reshape(self.Ntdoa)
+            except:
+                raise AttributeError('Wrong shape for tdoa_std')
+
+        if (self.an_tdoa.shape[1] != self.tdoa.shape[0]):
+            raise AttributeError('tdoa shape mishmatch or missing')
+        elif (self.an_tdoa.shape[1] != self.tdoa_std.shape[0]):
+            if len(self.tdoa_std)==1:
+                self.tdoa_std = np.array(self.tdoa_std)*np.ones(self.Ntdoa)
+            else:
+                raise AttributeError('tdoa_std shape mishmatch or missing')
+
+        if self.Ntdoa > 0:
             self._av_ldp.append('tdoa')
-        if self.rss != []:
+
+
+
+        #### RSS
+
+        if len(self.an_rss.shape) > 2:
+            raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
+        if self.an_rss.shape[0] == 2:
+            self.an_rss = np.vstack((self.an_rss, np.zeros(self.an_rss.shape[1])))
+        elif self.an_rss.shape[0] != 3:
+            raise AttributeError('Anchors RSS first dimension reserved to space\
+                                  (x,y,z) coordinates')
+
+        self.Nrss = self.an_rss.shape[1]
+
+        if len(self.rss.shape) > 1:
+            try:
+                self.rss = self.rss.reshape(self.Nrss)
+            except:
+                raise AttributeError('Wrong shape for rss')
+
+        if len(self.rss_std.shape) > 1:
+            try:
+                self.rss_std = self._std.reshape(self.Nrss)
+            except:
+                raise AttributeError('Wrong shape for rss_std')
+
+
+
+
+        if not (self.an_rss.shape[1] == self.rss.shape[0]):
+            raise AttributeError('rss shape mishmatch or missing')
+        elif (self.an_rss.shape[1] != self.rss_std.shape[0]):
+            if len(self.rss_std)==1:
+                self.rss_std = np.array(self.rss_std)*np.ones(self.Nrss)
+            else:
+                raise AttributeError('rss_std shape mishmatch or missing')
+        elif (self.an_rss.shape[1] != self.rss_np.shape[0]):
+            if len(self.rss_np)==1:
+                self.rss_np = np.array(self.rss_np)*np.ones(self.Nrss)
+            else:
+                raise AttributeError('rss_np shape mishmatch or missing')
+        elif (self.an_rss.shape[1] != self.PL0.shape[0]):
+            if len(self.PL0)==1:
+                self.PL0 = np.array(self.PL0)*np.ones(self.Nrss)
+            else:
+                raise AttributeError('PL0 shape mishmatch or missing')
+
+        if self.Nrss > 0:
             self._av_ldp.append('rss')
 
+
+
+
         # used ldp initilalised at available ldp
-        self.used_ldp = self._av_ldp
+        self.used_ldp = {'toa':False,'tdoa':False,'rss':False}
+        self.used_ldp.update({v:True for v in self._av_ldp}) 
+
+
 
 
     def __repr__(self):
         s = 'Available ldp:\n'
-        s = s + str(self._av_ldp)[1:-1]
+        s = s + str(self._av_ldp)
         s = s + '\nUsed ldp for Loc.:\n'
-        if 'tdoa' in self.used_ldp:
-            s = s + 'tdoa:\n'
+        s = s + str(self.used_ldp) + '\n'
+        if self.used_ldp['tdoa']:
+            s = s + '\ntdoa:\n'
             s = s + str(self.an_tdoa)
-        if 'toa' in self.used_ldp:
+        if self.used_ldp['toa']:
             s = s + '\ntoa:\n'
             s = s + str(self.an_toa)
-        if 'rss' in self.used_ldp:
+        if self.used_ldp['rss']:
             s = s + '\nrss:\n'
             s = s + str(self.an_rss)
 
@@ -205,16 +289,6 @@ class algloc(object):
 
     def plot(self):
         """ plot scenario
-
-        Parameters
-        ----------
-
-        rss : boolean
-            False
-        toa : boolean
-            True
-        tdoa : boolean
-            False
 
         """
 
@@ -228,20 +302,20 @@ class algloc(object):
             #     ax.plot(bn[0, :], bn[1, :], bn[2, :], 'r*', zdir='z', label='blind node')
             # except:
             #     plt.plot(bn[0, :], bn[1, :], 'r*', label='blind node')
-            if 'rss' in self.used_ldp:
+            if self.used_ldp['rss']:
                 rn = self.an_rss
                 try:
                     ax.plot(rn[0, :], rn[1, :], rn[2, :], 'ro', zdir='z', label='RSS node')
                 except:
                     plt.plot(rn[0, :], rn[1, :], 'ro', label='RSS node')
-            if 'toa' in self.used_ldp:
+            if self.used_ldp['toa']:
                 rn = self.an_toa
                 try:
                     ax.plot(rn[0, :], rn[1, :], rn[2, :], 'gs', zdir='z', label='TOA node')
                 except:
                     plt.plot(rn[0, :], rn[1, :], 'gs', label='TOA node')
 
-            if 'tdoa' in self.used_ldp:
+            if self.used_ldp['tdoa']:
                 rn= self.an_tdoa
                 rnr = self.nodes['RNr_TDOA']
                 try:
@@ -282,13 +356,8 @@ class algloc(object):
         plt.legend(numpoints=1)
         plt.show()
 
-    def get_range(self, Rest='mode'):
-        """ Compute the range from RSS using the "Rest" estimator
-
-        Parameters
-        ----------
-
-         Rest : string
+    def get_range(self):
+        """ Compute the range from RSS using the "self.Rest" estimator
 
         Returns
         -------
@@ -316,24 +385,21 @@ class algloc(object):
         pl0 = self.PL0
         s = (np.log(10) / 10) * rss_std / rss_np
         m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
-        if string.lower(Rest) == 'mode':
+        if string.lower(self.Rest) == 'mode':
             rg = np.exp(m - s**2)
-        elif string.lower(Rest) == 'median':
+        elif string.lower(self.Rest) == 'median':
             rg = np.exp(m)
-        elif string.lower(Rest) == 'mean':
+        elif string.lower(self.Rest) == 'mean':
             rg = np.exp(m + 0.5*s**2)
         else:
-            raise ValueError(Rest + ": no such ranging estimator")
+            raise ValueError(self.Rest + ": no such ranging estimator")
         return rg
 
-    def get_range_std(self, Rest='mode'):
+    def get_range_std(self):
         """
-        Compute the RSS range standard deviation using the "Rest" \
+        Compute the RSS range standard deviation using the "self.Rest" \
         estimator
 
-        Parameters
-        ----------
-            Rest : string
 
         Returns
         -------
@@ -360,18 +426,18 @@ class algloc(object):
         s = (np.log(10) / 10) * rss_std / rss_np
         m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
 
-        if string.lower(Rest) == 'mode':
+        if string.lower(self.Rest) == 'mode':
             rg_std = np.sqrt((np.exp(2*m - 2*s**2))*(1 - np.exp(-s**2)))
-        elif string.lower(Rest) == 'median':
+        elif string.lower(self.Rest) == 'median':
             rg_std = np.sqrt(
                 (np.exp(2*m + s**2)) * (np.exp(s**2) - 1))
-        elif string.lower(Rest) == 'mean':
+        elif string.lower(self.Rest) == 'mean':
             rg_std = np.sqrt((np.exp(2*m + 3*s**2))*(np.exp(s**2) - 1))
         else:
-            raise ValueError(Rest + ": no such ranging estimator")
+            raise ValueError(self.Rest + ": no such ranging estimator")
         return rg_std
 
-    def ls_locate(self, Rest='mode'):
+    def ls_locate(self):
         """
         This method applies least squares (LS) approximation to get
         position P.
@@ -380,7 +446,7 @@ class algloc(object):
         ----------
 
 
-        Rest : string
+        self.Rest : string
 
         Returns
         -------
@@ -393,22 +459,15 @@ class algloc(object):
         .. plot::
             :include-source:
 
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> P_rss = S.ls_locate(1, 0, 0, 'mode')
-            >>> P_toa = S.ls_locate(0, 1, 0, 'mode')
-            >>> P_tdoa = S.ls_locate(0, 0, 1, 'mode')
-            >>> P_rsstoa = S.ls_locate(1, 1, 0, 'mode')
-            >>> P_rsstdoa = S.ls_locate(1, 0, 1, 'mode')
-            >>> P_toatdoa = S.ls_locate(0, 1, 1, 'mode')
-            >>> P_rsstoatdoa = S.ls_locate(1, 1, 1, 'mode')
 
         """
-        if len(self.used_ldp) == 0:
+        if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
         else:
             # only TDOA
-            if 'tdoa' in self.used_ldp and len(self.used_ldp) == 1:
+            if self.used_ldp['tdoa'] and\
+               not self.used_ldp['toa'] and\
+               not self.used_ldp['rss']:
                 rn_tdoa = self.an_tdoa
                 rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
@@ -428,14 +487,16 @@ class algloc(object):
                     # Construct the matrix A (see theory)
                     A = np.hstack((rn_tdoa.T-rnr_tdoa.T,drg.reshape(np.shape(tdoa_ns)[0],1)))
                     # Apply LS operator
-                    #Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    #Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                     Pr = 0.5 * np.dot(nplg.pinv(A),K)
                     P = Pr[:sh[0]].reshape(sh[0], 1)
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
 
             # only TOA
-            elif 'toa' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['toa'] and\
+                 not self.used_ldp['tdoa'] and\
+                 not self.used_ldp['rss']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 sh = np.shape(rn_toa)
@@ -450,13 +511,15 @@ class algloc(object):
                     # Construct the matrix A (see theory)
                     A = rn_toa[:, 1:].T - rn_toa[:, 0]
                     # Apply LS operator
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                     P = P.reshape(np.shape(rn_toa[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
 
             # only Rss
-            elif 'rss' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['rss'] and\
+               not self.used_ldp['tdoa'] and\
+               not self.used_ldp['toa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -468,23 +531,23 @@ class algloc(object):
                     # Construct the vector K (see theory)
                     rn2 = np.sum(rn_rss * rn_rss, axis=0)
                     k1 = rn2[1:] - rn2[0:1]
-                    rg = self.get_range(Rest)
+                    rg = self.get_range(self.Rest)
                     rg2 = rg * rg
                     k2 = rg2[0:1] - rg2[1:]
                     K = k1 + k2
                     # Construct the matrix A (see theory)
                     A = rn_rss[:, 1:].T - rn_rss[:, 0]
                     # Apply LS operator
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
 
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
 
             # TOA + RSS
-            elif 'toa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['toa'] and \
+                 self.used_ldp['rss'] and \
+                 not self.used_ldp['tdoa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -499,7 +562,7 @@ class algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                    rg_rss = self.get_range(Rest)
+                    rg_rss = self.get_range(self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                     K_rss = k1_rss + k2_rss
@@ -519,7 +582,7 @@ class algloc(object):
                     sh4 = np.shape(K_toa)[0]
                     K = np.vstack((K_rss.reshape(sh3, 1),K_toa.reshape(sh4, 1)))
                     A = np.vstack((A_rss, A_toa))
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 elif sh2[1] > 1 and sh1[1]+sh2[1] > sh1[0]:
                     # Construct the vector K_toa (see theory)
@@ -534,7 +597,7 @@ class algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[:] - rn2_toa[0:1]
-                    rg_rss = self.get_range(Rest)
+                    rg_rss = self.get_range(self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_toa[0:1] - rg2_rss[:]
                     K_rss = k1_rss + k2_rss
@@ -545,15 +608,15 @@ class algloc(object):
                     sh4 = np.shape(K_toa)[0]
                     K = np.vstack((K_rss.reshape(sh3, 1),K_toa.reshape(sh4, 1)))
                     A = np.vstack((A_rss, A_toa))
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
                     
             # TDOA + TOA
-            elif 'tdoa' in self.used_ldp and \
-                 'toa' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['toa'] and \
+                 not self.used_ldp['rss']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 rn_tdoa = self.an_tdoa
@@ -583,13 +646,13 @@ class algloc(object):
                 sh4 = np.shape(K_tdoa)[0]
                 K = np.vstack((K_toa.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
                 A = np.vstack((A_toa, A_tdoa))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                 P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             # TDOA + RSS
-            elif 'tdoa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['rss'] and \
+                 not self.used_ldp['toa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -604,7 +667,7 @@ class algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg = self.get_range(Rest)
+                rg = self.get_range(self.Rest)
                 rg2 = rg * rg
                 k2_rss = rg2[0:1] - rg2[1:]
                 K_rss = k1_rss + k2_rss
@@ -622,7 +685,7 @@ class algloc(object):
                 sh4 = np.shape(K_tdoa)[0]
                 K = np.vstack((K_rss.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
                 A = np.vstack((A_rss, A_tdoa))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                 P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             # TDOA + TOA + RSS
@@ -644,7 +707,7 @@ class algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                rg_rss = self.get_range(Rest)
+                rg_rss = self.get_range(self.Rest)
                 rg2_rss = rg_rss * rg_rss
                 k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                 K_rss = k1_rss + k2_rss
@@ -673,22 +736,15 @@ class algloc(object):
                 sh6 = np.shape(K_tdoa)[0]
                 K = np.vstack((np.vstack((K_rss.reshape(sh4, 1), K_toa.reshape(sh5, 1))),K_tdoa.reshape(sh6, 1)))
                 A = np.vstack((np.vstack((A_rss, A_toa)), A_tdoa))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                 P = Pr[:sh3[0]].reshape(sh3[0], 1)
 
             return P
 
-    def wls_locate(self, Rest='mode'):
+    def wls_locate(self):
         """
         This method applies weighted least squares (WLS) approximation
         to get position P.
-
-        Parameters
-        ----------
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
-            Rest : string
 
         Returns
         -------
@@ -711,11 +767,13 @@ class algloc(object):
             >>> P_rsstoatdoa = S.wls_locate(1, 1, 1, 'mode')
 
         """
-        if len(self.used_ldp) == 0:
+        if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
         else:
             # only TDOA
-            if 'tdoa' in self.used_ldp and len(self.used_ldp) == 1:
+            if self.used_ldp['tdoa'] and\
+               not self.used_ldp['toa'] and\
+               not self.used_ldp['rss']:
                 rn_tdoa = self.an_tdoa
                 rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
@@ -733,14 +791,16 @@ class algloc(object):
                     # Construct the Covariance Matrix
                     C = np.diag(drg_std[:] ** 2)
                     # Apply LS operator
-                    Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                     P = Pr[:sh[0]].reshape(sh[0], 1)
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
                 
 
             # only TOA
-            elif 'toa' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['toa'] and\
+                 not self.used_ldp['rss'] and\
+                 not self.used_ldp['tdoa']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 toa_std = self.toa_std
@@ -759,14 +819,16 @@ class algloc(object):
                     # Construct the Covariance Matrix
                     C = np.diag(rg_std[1:] ** 2)
                     # Apply LS operator
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                     P = P.reshape(np.shape(rn_toa[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
                 
 
             # only Rss
-            elif 'rss' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['rss'] and\
+                 not self.used_ldp['toa'] and\
+                 not self.used_ldp['tdoa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -778,8 +840,8 @@ class algloc(object):
                     # Construct the vector K (see theory)
                     rn2 = np.sum(rn_rss * rn_rss, axis=0)
                     k1 = rn2[1:] - rn2[0:1]
-                    rg = self.get_range(Rest)
-                    rg_std = self.get_range_std(Rest)
+                    rg = self.get_range(self.Rest)
+                    rg_std = self.get_range_std(self.Rest)
                     rg2 = rg * rg
                     k2 = rg2[0:1] - rg2[1:]
                     K = k1 + k2
@@ -788,16 +850,16 @@ class algloc(object):
                     # Construct the Covariance Matrix
                     C = np.diag((rg_std[1:]) ** 2)
                     # Apply LS operator
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
 
 
             # TOA + RSS
-            elif 'toa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['toa'] and \
+                 self.used_ldp['rss'] and \
+                 not self.used_ldp['tdoa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -813,8 +875,8 @@ class algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                    rg_rss = self.get_range(Rest)
-                    rg_rss_std = self.get_range_std(Rest)
+                    rg_rss = self.get_range(self.Rest)
+                    rg_rss_std = self.get_range_std(self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                     K_rss = k1_rss + k2_rss
@@ -838,7 +900,7 @@ class algloc(object):
                     A = np.vstack((A_rss, A_toa))
                     C = np.diag(np.hstack((rg_rss_std[1:] ** 2,
                                            rg_toa_std[:] ** 2)))
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 elif sh2[1] > 1 and sh1[1]+sh2[1] > sh1[0]:
                     # Construct the vector K_toa (see theory)
@@ -854,8 +916,8 @@ class algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[:] - rn2_toa[0:1]
-                    rg_rss = self.get_range(Rest)
-                    rg_rss_std = self.get_range_std(Rest)
+                    rg_rss = self.get_range(self.Rest)
+                    rg_rss_std = self.get_range_std(self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_toa[0:1] - rg2_rss[:]
                     K_rss = k1_rss + k2_rss
@@ -869,16 +931,16 @@ class algloc(object):
                     A = np.vstack((A_rss, A_toa))
                     C = np.diag(np.hstack((rg_rss_std[:] ** 2,
                                            rg_toa_std[1:] ** 2)))
-                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
 
 
             # TDOA + TOA
-            elif 'tdoa' in self.used_ldp and \
-                 'toa' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['toa'] and \
+                 self.used_ldp['rss']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 toa_std = self.toa_std
@@ -912,13 +974,13 @@ class algloc(object):
                 K = np.vstack((K_toa.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
                 A = np.vstack((A_toa, A_tdoa))
                 C = np.diag(np.hstack((rg_toa_std[1:] ** 2, drg_std[:] ** 2)))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                 P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             # TDOA + RSS
-            elif 'tdoa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and\
+                 self.used_ldp['rss'] and\
+                 not self.used_ldp['toa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -934,8 +996,8 @@ class algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg = self.get_range(Rest)
-                rg_std = self.get_range_std(Rest)
+                rg = self.get_range(self.Rest)
+                rg_std = self.get_range_std(self.Rest)
                 rg2 = rg * rg
                 k2_rss = rg2[0:1] - rg2[1:]
                 K_rss = k1_rss + k2_rss
@@ -955,7 +1017,7 @@ class algloc(object):
                 K = np.vstack((K_rss.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
                 A = np.vstack((A_rss, A_tdoa))
                 C = np.diag(np.hstack((rg_std[1:] ** 2, drg_std[:] ** 2)))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                 P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             else:
@@ -978,8 +1040,8 @@ class algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg_rss = self.get_range(Rest)
-                rg_rss_std = self.get_range_std(Rest)
+                rg_rss = self.get_range(self.Rest)
+                rg_rss_std = self.get_range_std(self.Rest)
                 rg2_rss = rg_rss * rg_rss
                 k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                 K_rss = k1_rss + k2_rss
@@ -1010,7 +1072,7 @@ class algloc(object):
                 K = np.vstack((np.vstack((K_rss.reshape(sh5, 1), K_toa.reshape(sh4, 1))), K_tdoa.reshape(sh6, 1)))
                 A = np.vstack((np.vstack((A_rss, A_toa)), A_tdoa))
                 C = np.diag(np.hstack((np.hstack((rg_rss_std[1:] ** 2, rg_toa_std[1:] ** 2)), drg_std[:] ** 2)))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, np.dot(nplg.pinv(C), A))), np.dot(np.dot(A.T, nplg.pinv(C)), K))
                 P = Pr[:sh3[0]].reshape(sh3[0], 1)
 
             return P
@@ -1031,11 +1093,13 @@ class algloc(object):
         -------
             ML : numpy.ndarray
         """
-        if len(self.used_ldp) == 0:
+        if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
         else:
             # only TDOA
-            if 'tdoa' in self.used_ldp and len(self.used_ldp) == 1:
+            if self.used_ldp['tdoa'] and\
+               not self.used_ldp['toa'] and\
+               not self.used_ldp['rss']:
                 rn_tdoa = self.an_tdoa
                 rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
@@ -1053,7 +1117,9 @@ class algloc(object):
                 ML = dd.sum(axis=0)
 
             # only TOA
-            elif 'toa' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['toa'] and\
+                 not self.used_ldp['tdoa'] and\
+                 not self.used_ldp['rss']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 toa_std = self.toa_std
@@ -1068,7 +1134,9 @@ class algloc(object):
                 ML = uu.sum(axis=0)
 
             # only Rss
-            elif 'rss' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['rss'] and\
+                 not self.used_ldp['toa'] and\
+                 not self.used_ldp['tdoa']:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -1086,24 +1154,24 @@ class algloc(object):
                 ML = uu.sum(axis=0)
 
             # TDOA + TOA
-            elif 'tdoa' in self.used_ldp and \
-                 'toa' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['toa'] and \
+                 not self.used_ldp['rss']:
                 ML = self.ml_function(P, 0, 1, 0) +\
                      self.ml_function(P, 0, 0, 1)
 
             # TDOA + RSS
-            elif 'tdoa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['rss'] and \
+                 not self.used_ldp['toa']:
                 ML = self.ml_function(P, 1, 0, 0) +\
                      self.ml_function(P, 0, 0, 1)
 
 
             # TOA + RSS
-            elif 'toa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['toa'] and \
+                 self.used_ldp['rss'] and \
+                 not self.used_ldp['tdoa']:
                 ML = self.ml_function(P, 1, 0, 0) +\
                      self.ml_function(P, 0, 1, 0)
             # TDOA + TOA + RSS
@@ -1114,16 +1182,14 @@ class algloc(object):
 
             return ML
 
-    def ml_locate(self, P0):
+    def ml_locate(self, P0=np.zeros((3,1))):
         """
         This applies ML estimator to compute position P
 
         Parameters
         ----------
             P0 : numpy.ndarray
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
+                initial guess of gradient
 
         Returns
         -------
@@ -1145,7 +1211,7 @@ class algloc(object):
             >>> P_toatdoa = S.ml_locate(BN0, 0, 1, 1)
             >>> P_rsstoatdoa = S.ml_locate(BN0, 1, 1, 1)
         """
-        if len(self.used_ldp) == 0:
+        if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
         else:
             P = optimize.fmin(self.ml_function, P0, disp=0)
@@ -1154,24 +1220,22 @@ class algloc(object):
     def fim(self, P):
         """
         Compute the fisher information matrix in P for the given
+
         Parameters
         ----------
             P : numpy.ndarray
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
 
         Returns
         -------
             FIM : numpy.ndarray
 
         """
-        if len(self.used_ldp) == 0:
+        if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
 
         else:
             # only TDOA
-            if 'tdoa' in self.used_ldp and len(self.used_ldp) == 1:
+            if self.used_ldp['tdoa'] and np.sum(self.used_ldp.values()) == 1:
                 rn_tdoa = self.an_tdoa
                 rnr_tdoa = self.nodes['RNr_TDOA']
                 tdoa_ns = self.tdoa
@@ -1188,7 +1252,7 @@ class algloc(object):
                     FIM += (1 / drg_std[i] ** 2) * np.dot(f1 / pmrn - f2 / pmrnr, (f1 / pmrn - f2 / pmrnr).T)
 
             # only TOA
-            elif 'toa' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['toa'] and np.sum(self.used_ldp.values()) == 1:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 toa_std = self.toa_std
@@ -1202,7 +1266,7 @@ class algloc(object):
                     FIM += np.dot(f1 , f1.T) / ((rg_ramerstd[i] ** 2) *np.dot(f1.T , f1))
 
             # only Rss
-            elif 'rss' in self.used_ldp and len(self.used_ldp) == 1:
+            elif self.used_ldp['rss'] and np.sum(self.used_ldp.values()) == 1:
                 rn_rss = self.an_rss
                 rss_db = self.rss
                 rss_std = self.rss_std
@@ -1216,22 +1280,22 @@ class algloc(object):
                     f1 = P - rn_rss[:, i:i + 1]
                     FIM += np.dot(f1, f1.T) / ((S[0] ** 2) * (np.dot( f1.T, f1)) ** 2)
             # TDOA + TOA
-            elif 'tdoa' in self.used_ldp and \
-                 'toa' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['toa'] and \
+                  np.sum(self.used_ldp.values()) == 2:
                 FIM = self.fim(P, 0, 1, 0) + self.fim(P, 0, 0, 1)
 
 
             # TDOA + RSS
-            elif 'tdoa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['tdoa'] and \
+                 self.used_ldp['rss'] and \
+                  np.sum(self.used_ldp.values()) == 2:
                 FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 0, 1)
 
             # TOA + RSS
-            elif 'toa' in self.used_ldp and \
-                 'rss' in self.used_ldp and \
-                  len(self.used_ldp) == 2:
+            elif self.used_ldp['toa'] and \
+                 self.used_ldp['rss'] and \
+                  np.sum(self.used_ldp.values()) == 2:
                 FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 1, 0)
 
             # TDOA + TOA + RSS
@@ -1248,9 +1312,6 @@ class algloc(object):
         Parameters
         ----------
             P : numpy.ndarray
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
 
         Returns
         -------
@@ -1273,7 +1334,7 @@ class algloc(object):
         """
 
         FIM = self.fim(P)
-        CRB = np.sqrt(np.trace(nplg.inv(FIM)))
+        CRB = np.sqrt(np.trace(nplg.pinv(FIM)))
         return CRB
 
 
@@ -1399,8 +1460,8 @@ def scenario():
     
     nodes = {}
     nodes['BN'] = bn
-    an_rss = rn_rss
-    an_toa = rn_toa
+    nodes['RN_RSS'] = rn_rss
+    nodes['RN_TOA'] = rn_toa
     nodes['RN_TDOA'] = rn_tdoa
     nodes['RNr_TDOA'] = rnr_tdoa
 

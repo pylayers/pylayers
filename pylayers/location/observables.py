@@ -47,6 +47,16 @@ class Observables(object):
         if len(bn.shape) > 2:
             raise AttributeError('Blind nodes \'bn\' shape must be (3 x Nb)')
 
+        if len(an.shape) == 1:
+            an = np.array([an])
+            if an.shape[0] == 1:
+                an = an.T
+        if len(bn.shape) == 1:
+            bn = np.array([bn])
+            if bn.shape[0] == 1:
+                bn = bn.T
+
+
         if an.shape[0] == 2:
             an = np.vstack((an, np.zeros(an.shape[1])))
         elif an.shape[0] != 3:
@@ -59,10 +69,7 @@ class Observables(object):
             raise AttributeError('Blind nodes bn first dimension reserved to \
                                   space (x,y,z) coordinates')
 
-        if len(an.shape) == 1:
-            an = np.array([an])
-        if len(bn.shape) == 1:
-            bn = np.array([bn])
+
 
 
 
@@ -163,6 +170,7 @@ class Observables(object):
             (Nb x Nc)
 
         """
+        
         self.dist = np.sqrt(np.sum((self.an[:, None, :] - self.bn[:, :, None])**2, axis=0))
 
     def compute_ranges(self):
