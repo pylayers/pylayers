@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class Observables(object):
     """ Generate observables for localization prupose
     """
-    def __init__(self, an=10 * sp.rand(3, 5), bn=5 * sp.rand(3,4)):
+    def __init__(self, an=10 * sp.rand(3, 5), bn=5 * sp.rand(3,4),mode = 'all'):
         """
         Init
 
@@ -17,7 +17,11 @@ class Observables(object):
             anchors node(3 x Na)
         bn : ndarray
             blind node (3 x Nb)
-
+        mode : str
+            'all' : compute ranges/diff of ranges and received poser
+            "toa" : compute ranges
+            "tdoa" : compute diff of ranges
+            "rss" : compute recived power
 
         Notes
         -----
@@ -68,11 +72,16 @@ class Observables(object):
         self.Na = self.an.shape[1]
         self.Nb = self.bn.shape[1]
 
+        self.mode = mode
+
         self.compute_distances()
-        self.compute_diff_distances()
-        self.compute_ranges()
-        self.compute_diff_ranges()
-        self.compute_rpower()
+        if mode.lower() == 'toa' or mode.lower() =='all':
+            self.compute_ranges()
+        if mode.lower() == 'tdoa' or mode.lower() =='all':
+            self.compute_diff_distances()
+            self.compute_diff_ranges()
+        if mode.lower() == 'rss' or mode.lower() == 'all':
+            self.compute_rpower()
 
         self.config_noise()
 
@@ -125,11 +134,16 @@ class Observables(object):
         s = s + '\n' + 'self.Nb : Number of blind nodes  (Nb)'
 
         s = s + '\n' + 'self.dist : distances matrix (Nb x Na)'
-        s = s + '\n' + 'self.rng : range matrix (Nb x Na)'
-        s = s + '\n' + 'self.drng : difference of ranges matrix (Na x Nb x Na)'
 
-        s = s + '\n' + 'self.rp : received power ( Nb x Na)'
-        s = s + '\n' + 'self.rp_model : power model'
+        if self.mode == 'all' or self.mode =='toa':
+            s = s + '\n' + 'self.rng : range matrix (Nb x Na)'
+
+        if self.mode == 'all' or self.mode =='tdoa':
+            s = s + '\n' + 'self.drng : difference of ranges matrix (Na x Nb x Na)'
+
+        if self.mode == 'all' or self.mode =='rss':
+            s = s + '\n' + 'self.rp : received power ( Nb x Na)'
+            s = s + '\n' + 'self.rp_model : power model'
 
         s = s + '\n' + 'self.noise : noise matrix ()'
         s = s + '\n' + 'self.noise_model : noise matrix ()'
