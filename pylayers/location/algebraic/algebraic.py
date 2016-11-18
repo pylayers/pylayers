@@ -39,7 +39,7 @@ import string
 import pdb
 
 
-class algloc(object):
+class Algloc(object):
     """
 <<<<<<< HEAD
     This class gathers algebraic localization algorithms

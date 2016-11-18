@@ -71,6 +71,7 @@ class Observables(object):
 
 
 
+        self._implemented_law = ['norm']
 
 
         self.an = an
@@ -112,11 +113,15 @@ class Observables(object):
     @noise_model.setter
     def noise_model(self, value):
         if hasattr(self, 'noise_model'):
-            idem = np.alltrue(np.array([i in value.items() for i in self.noise_model.items()]))
-            # check if any key/values of self.noise != new assigned value
+            if not isinstance(value['law'],list):
+                value['law']=[value['law']]*self.Na
+            idem = np.alltrue(np.array([i in self._implemented_law for i in value['law']]))
+            # check 
             if not idem:
+                raise AttributeError('A specified law of noise model is not yet implemented')
+            else:
                 self._noise_model = value
-                self.create_noise(config=value)
+                self.generate_noise(config=value)
         else:
             # first call from compute_power
             self._noise_model = value
@@ -124,20 +129,7 @@ class Observables(object):
 
     def __repr__(self):
 
-        s = str(self.Na) + ' Anchors:\n'
-        s = s + '--------\n\n'
-
-        for a in self.an:
-            s = s + str(a) + "\n"
-
-        s = s + '\n' + str(self.Nb) + ' Blind nodes:\n'
-        s = s + '------------\n\n'
-
-        for b in self.bn:
-            s = s + str(b) + "\n"
-
-        s = s + '\n'
-        s = s + '\n' + 'self.Na : Number of anchor nodes (Na)'
+        s = 'self.Na : Number of anchor nodes (Na)'
         s = s + '\n' + 'self.Nb : Number of blind nodes  (Nb)'
 
         s = s + '\n' + 'self.dist : distances matrix (Nb x Na)'
@@ -152,10 +144,33 @@ class Observables(object):
             s = s + '\n' + 'self.rp : received power ( Nb x Na)'
             s = s + '\n' + 'self.rp_model : power model'
 
-        s = s + '\n' + 'self.noise : noise matrix ()'
-        s = s + '\n' + 'self.noise_model : noise matrix ()'
+        s = s + '\n' + 'self.noise : noise matrix (Nb x Na)'
+        s = s + '\n' + 'self.noise_model : noise config dict'
 
         s = s + '\n' + 'self.generate_noise_samples() : update self.noise'
+
+
+        s = s + '\n\n' +str(self.Na) + ' Anchors:\n'
+        s = s + '--------------\n\n'
+
+        for a in self.an:
+            s = s + str(a) + "\n"
+
+        s = s + '\n' + str(self.Nb) + ' Blind nodes:\n'
+        s = s + '--------------\n\n'
+
+        for b in self.bn:
+            s = s + str(b) + "\n"
+
+        s = s + '\n' +'noise configuration:\n'
+        s = s + '---------------------\n\n'
+
+        for n in self.noise_model:
+            s = s + n + ' : ' + str(self.noise_model[n ])+ "\n"
+
+        s = s + '\n' +'noise realizations:\n'
+        s = s + '-------------------\n\n'
+        s = s + str(self.noise) + "\n"
 
         return s
 
@@ -170,7 +185,7 @@ class Observables(object):
             (Nb x Nc)
 
         """
-        
+
         self.dist = np.sqrt(np.sum((self.an[:, None, :] - self.bn[:, :, None])**2, axis=0))
 
     def compute_ranges(self):
@@ -278,8 +293,6 @@ class Observables(object):
         -------
         """
 
-        implemented_law = ['norm']
-
         if config == {}:
             config['law'] = 'norm'
             config['mean'] = 0.
@@ -287,18 +300,31 @@ class Observables(object):
         else:
             if isinstance(config, dict):
                 if config.has_key('law'):
-                    if config['law'] in implemented_law:
-                        pass
-                    else:
-                        raise AttributeError('law ' + str(config['law']) +
-                                              'is not yet implemented')
+                    if not isinstance(config['law'],list):
+                        config['law']=[config['law']]*self.Na
+                    for na in range(self.Na):
+                        if config['law'][na] in self._implemented_law:
+                            pass
+                        else:
+                            raise AttributeError('law ' + str(config['law'][na]) +
+                                                  ' is not yet implemented')
                 else:
                     raise AttributeError('config dict has no \'law\' key')
             else:
                 raise AttributeError('config must be a dict instance')
 
-        if config['law'] == 'norm':
-            self.law = sp.stats.norm(loc=config['mean'], scale=config['std'])
+        if not isinstance(config['law'],list):
+            config['law']=[config['law']]*self.Na
+        if not isinstance(config['mean'],list):
+            config['mean']=[config['mean']]*self.Na
+        if not isinstance(config['std'],list):
+            config['std']=[config['std']]*self.Na
+
+        self.law = [np.nan]*self.Na
+
+        for na in range(self.Na):
+            if config['law'][na] == 'norm':
+                self.law[na] = sp.stats.norm(loc=config['mean'][na], scale=config['std'][na])
 
         self.noise_model = config
         self.generate_noise_samples()
@@ -308,9 +334,10 @@ class Observables(object):
         Generate new noise samples relying on the law configuration 
         setup in self.configure_noise
         """
+        self.noise = np.ndarray((self.Nb,self.Na))
 
-        self.noise = self.law.rvs((self.Nb, self.Na))
-
+        for na in range(self.Na):
+            self.noise[:,na] = self.law[na].rvs((self.Nb))
     def show(self, **kwargs):
         """
             Show scene
@@ -341,5 +368,5 @@ class Observables(object):
         return fig, ax
 
 if (__name__ == "__main__"):
-
+    import copy
     O = Observables()
