@@ -167,7 +167,7 @@ class Layout(PyLayers):
         self.hasboundary=False
         self.coordinates='cart'
         self.version='1.0'
-        
+
         #
         # setting display option
         #
@@ -244,7 +244,6 @@ class Layout(PyLayers):
                 self.importosm(address=string,dist_m=dist_m,cart=True)
                 self.loadosm = True
 
-
             self.boundary()
             self.subseg()
             self.updateshseg()
@@ -252,12 +251,8 @@ class Layout(PyLayers):
                 self.geomfile()
             except:
                 print "problem to construct geomfile"
-            
-        
             if check:
                 self.check()
-            
-            
             # check if the graph gpickle files have been built
             if build:
                 if os.path.exists(os.path.join(basename,'struc','gpickle',self._filename)):
@@ -270,7 +265,7 @@ class Layout(PyLayers):
                     #  
                     self.dumpr('t')
                     # If node 0 exists : the layout has been built
-                    
+
                     # If .ini file has changed rebuild 
                     if self._hash != self.Gt.node[0]['hash']:
                         rebuild = True 
@@ -278,7 +273,7 @@ class Layout(PyLayers):
                         self.dumpr('stvirw')
                         self.isbuilt=True
                         rebuild = False
-                    
+
                 else: 
                     rebuild = True
 
@@ -295,8 +290,7 @@ class Layout(PyLayers):
         st = '\n'
         st = st + "----------------\n"
         st = st + self._filename + ' : '+self._hash +"\n"
-       
-        
+
         if self.isbuilt:
             st = st + 'Built with : '+ self.Gt.node[0]['hash']+"\n"
         else:
