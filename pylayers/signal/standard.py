@@ -398,6 +398,9 @@ class Wstandard(dict):
                 if fc<4:
                     channum = k+1
                 self.chan[channum] = Channel(fc,bmhz,gmhz)
+        else:
+            for k,fc in enumerate(fcghz):
+                self.chan[k]=Channel(fc,fcghz[1]-fcghz[0],0)
         try:
             self.fcghz=np.hstack((self.fcghz,fcghz))
         except:

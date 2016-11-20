@@ -13,7 +13,7 @@ from pylayers.util.project import *
 from pylayers.antprop.aarray import *
 from pylayers.measures.exploith5 import *
 from pylayers.measures.vna.E5072A import *
-import pylayers.measures.switch.ni_usb_6501 as sw
+#import pylayers.measures.switch.ni_usb_6501 as sw
 
 """
 
@@ -77,7 +77,7 @@ Scanner Class
     Scanner.home
     Scanner.upd_pos
     Scanner.mv
-    Scanner.meash5
+    Scanner.meas
 
 """
 
@@ -594,7 +594,7 @@ class Axes(PyLayers):
                 self.com(cstr,verbose=False)
 
     def home(self,cmd='set',**kwargs):
-        """ enables back material home for each axe.
+        """ enables back home for each axe.
             for more informations see Parker book page 108.
 
         Parameters
@@ -1193,6 +1193,7 @@ class Scanner(PyLayers):
 
     def __init__(self,port=gettty(),anchors={},reset=True,vel=15,acc=15,**kwargs):
         """
+
         Parameters
         ----------
 

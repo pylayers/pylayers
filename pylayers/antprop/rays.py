@@ -60,7 +60,9 @@ import pylayers.signal.bsignal as bs
 import shapely.geometry as shg
 import h5py
 
-class Rays(PyLayers,dict):
+
+class Rays(PyLayers, dict):
+
     """ A set of rays
 
     Attributes
@@ -639,7 +641,7 @@ class Rays(PyLayers,dict):
 
         return(fig,ax)
 
-    def mirror(self, H=3, N=1, a = [], b= []):
+    def mirror(self, H=3, N=1, za = [], zb= []):
         """ mirror a ray termination
 
         Parameters
@@ -652,10 +654,10 @@ class Rays(PyLayers,dict):
         N : int
             handle the number of mirror reflexions
 
-        a : float
+        za : float
             height of the point where the parametrization starts ( e.g. pTx[2])
 
-        b : float
+        zb : float
             height of the point where the parametrization ends ( e.g. pRx[2])
 
 
@@ -694,12 +696,12 @@ class Rays(PyLayers,dict):
         #
         # heights of transmitter and receiver
         #
-        if a == []:
-            a=self.pTx[2]
-        if b == []:
-            b=self.pRx[2]
-        ht = a
-        hr = b
+        if za == []:
+            za=self.pTx[2]
+        if zb == []:
+            zb=self.pRx[2]
+        ht = za
+        hr = zb
         assert (hr<H or H==0 or H == -1),"mirror : receiver higher than ceil height"
         assert (ht<H or H==0 or H == -1),"mirror : transmitter higher than ceil height"
 
@@ -778,7 +780,14 @@ class Rays(PyLayers,dict):
         # vertical plane
         #
 
-        d = self.mirror(H=H, N=N, a=tx[2], b=rx[2])
+        d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])
+        
+
+        #
+        # Elimination of invalid diffraction point 
+        # If the diffaction point is a separation between 2 air wall 
+        # it should be removed.
+
 
         #
         # Phase 2 : calculate 2D parameterization in the horizontal plane
@@ -874,8 +883,9 @@ class Rays(PyLayers,dict):
                     # a1es : extended sorted horizontal + vertical parameterization
                     a1es = np.sort(a1e, axis=0)
 
-                    # #### Check if it exist same parameter value  in horizontal plane
-                    # #### and vertical plane. Move parameter is so.
+                    # #### Check if it exists the same parameter value in the horizontal plane
+                    # #### and the vertical plane. Move parameter if so.
+
                     da1es = np.diff(a1es,axis=0)
                     pda1es = np.where(da1es<1e-10)
                     a1es[pda1es]=a1es[pda1es]-1e-3
@@ -901,10 +911,10 @@ class Rays(PyLayers,dict):
                     #     u = 1 - np.mod(range(Nint), 2)
 
 
-                    if l < 0 and Nint%2 ==1: #l<0 Nint odd
+                    if l < 0 and Nint%2 ==1: # l<0 Nint odd
                         u = np.mod(range(Nint), 2)
 
-                    elif l > 0 and Nint%2 ==1: #l>0 Nint odd
+                    elif l > 0 and Nint%2 ==1: # l>0 Nint odd
                         u = 1 - np.mod(range(Nint), 2)
 
 
@@ -914,8 +924,6 @@ class Rays(PyLayers,dict):
                     elif l > 0 and Nint%2 ==0: # l>0 Nint even
                         u = np.mod(range(Nint), 2)
                     
-
-
                     #
                     u = u + 4
                     #
@@ -1048,111 +1056,75 @@ class Rays(PyLayers,dict):
                 #---------------------------------
                 #
                 #   ptes (3 x i+2 x r )
-                if L.Nss>0:
-                    # lsss[k] = n means subsegment k belongs to segment n
-                    # a same segment n can have several subsegments
-                    # (multi-subsegment case) that is the reason of unique
-                    lsss = np.unique(np.array(L.lsss))
-
-                    # index of signature which corresponds to subsegment
-                    u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
-
-                    # dimension extension of index u for :
-                    #    z coordinate extraction (append line 2 on dimension 0)
-                    #    0 signature extraction  (append line 0 on  dimension 0)
-
-                    # v : index 2 is for getting z coordinate
-                    # w : index 0 is for getting segment number (first line of
-                    # siges)
-                    v   = [2*np.ones(len(u[0]),dtype=int)]+u
-                    w   = [0*np.ones(len(u[0]),dtype=int)]+u
-
-                    # zss : height of interactions on subsegments
-                    zss = ptees[v]
-                    #if k==1:
-                    #    print "l",l
-                    #    print "ptees : ",ptees
-                    #    print "u ",u
-                    #    print "v ",v
-                    #    print "w ",w
-                    # structure index of corresponding subsegments
-
-                    # nstrs = [ 1 , 1 , 1 , 1, 1 , 1]
-                    nstrs = siges[w]
-
-                    #if k==1:
-                    #    print "nstrs: ",nstrs
-                    #    print "zss:",zss
+                if len(L.lsss)>0:
                     #
-                    # Determine which subsegment has been intersected
-                    # k = 0 : no subsegment intersected
-                    zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
+                    # lsss : list of sub segments ( iso segments siges)
+                    # lnss : list of diffaction point involving air walls
 
+                    lsss = np.array(L.lsss)
+                    lnss = np.array(L.lnss)
 
-                    # Example
-                    #
-                    # zinterval = [[(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
-                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
-                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
-                    #              [(0 .0, 2.4), (2.7, 2.8), (2.8, 3)],
-                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
-                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)]]
-                    # zss = array([ 2.62590637,  2.62589727,  1.34152518,
-                    # 2.0221785 ,  0.23706671, 0.2378053])
-                    #
-                    # tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]
-                    #
-                    tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
-                                                           (z[1]>x[1])),x[0]),zip(zinterval,zss))
-                    #print tab
-                    def findindex(x):
-                        if len(x[1])>0:
-                            k = x[0].index(x[1][0])+1
-                            return(k)
-                        else:
-                            return(0)
-                    #
-                    # indexss = [0, 0 , 1 , 1 ,1 ,1]
-                    # L.stridess[nstrs] = [ 9 , 9 , 9, 9 , 9 , 9 ]
-                    # indexnex = [ 9 , 9 , 10 , 10 , 10 , 10 ]
-                    #
-                    indexss = np.array(map(findindex,zip(zinterval,tab)))
-                    uw = np.where(indexss==0)[0]
-                    indexnew = L.stridess[nstrs]+indexss
-                    indexnew[uw] = nstrs[uw]
-                    #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
-                    #iindexnex = L.isss[ind]
-                    #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                    #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                    # update signature
-                    siges[w] = indexnew
-                    #if k==3:
-                    #    print siges
+                    # number of structure element 
+                    nstr = siges[0,:,:]
+                    # type of interaction
+                    typi = siges[1,:,:]
 
-                    #if k==1:
-                    #    print "indexss:",indexss
-                    #    print "indexnew:",indexnew
-                    #    print "siges",siges
-                    #print siges
+                    # lss : list of subsegments in the current signature 
+                    #
+                    # scalability : avoid a loop over all the subsegments in lsss
+                    #
+                    lss = [ x for x in lsss if x in nstr.ravel()]
+                    
+                    for s in lss: 
+                        u  = np.where(nstr==s)
+                        if len(u)>0:
+                            try:
+                                zs = ptees[2,u[0],u[1]][0]
+                            except:
+                                pass
+                            zinterval = L.Gs.node[s]['z']
+                            if (zs<=zinterval[1]) & (zs>=zinterval[0]):
+                                # print s , zs , zinterval
+                                pass
+                            else: # signature is not valid
+                                # nstr : structure number
+                                nstr  = np.delete(nstr,u[1],axis=1)
+                                # typi : type of interaction 
+                                typi  = np.delete(typi,u[1],axis=1)
+                                # 3d sequence of points
+                                ptees = np.delete(ptees,u[1],axis=2)
+                                # extended (floor/ceil) signature
+                                siges = np.delete(siges,u[1],axis=2)
+                            
+                    # lns : list of diffraction pointx in the current signature 
+                    #
+                    # scalability : avoid a loop over all the points in lnss
+                    #
+                    lns = [ x for x in lnss if x in nstr.ravel()]
                     #pdb.set_trace()
-                    #pdb.set_trace()
-                    # expand dimension add z dimension (2)
-                    # tuple concatenation doesn't work with array this is strange!!
-                    #
-                    # >> a = (1,2,3)
-                    # >> b = (3,5,6)
-                    # >> a+b
-                    # (1,2,3,3,5,6)
-                    # but
-                    # >> u = (array([1,2]),array([1,2]))
-                    # >> v = (array([2,2]))
-                    # >> u + v
-                    # array([[3,4],[3,4]])  inconsistent !
-                    #
-                    #   z --> kl subseg level 
-                    #   siges[0,:] --> Ms + nstr *Mss + (kl)
-                    #
-
+                    for p in lns: 
+                        u  = np.where(nstr==p)
+                        if len(u)>0:
+                            try:
+                                zp = ptees[2,u[0],u[1]][0]
+                            except:
+                                pass
+                            #zinterval = L.Gs.node[s]['z']
+                            # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
+                            if zp < 1.5:
+                                # print s , zs , zinterval
+                                pass
+                            else: # signature is not valid
+                                # nstr : structure number
+                                nstr  = np.delete(nstr,u[1],axis=1)
+                                # typi : type of interaction 
+                                typi  = np.delete(typi,u[1],axis=1)
+                                # 3d sequence of points
+                                ptees = np.delete(ptees,u[1],axis=2)
+                                # extended (floor/ceil) signature
+                                siges = np.delete(siges,u[1],axis=2)
+                
+                    
                 if rmoutceilR:
                     # 1 determine Ceil reflexion index
                     # uc (inter x ray)
@@ -1166,7 +1138,7 @@ class Rays(PyLayers,dict):
                         uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in mapnode if x>0] for p in P])
                         # import ipdb
                         # ipdb.set_trace()
-                        # [plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
+                        #[plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
                         #[ plt.scatter(p.xy[0],p.xy[1],c='r') for up,p in enumerate(P) if uinter[0,up]]
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
@@ -1180,16 +1152,13 @@ class Rays(PyLayers,dict):
 
                 
                 if r3d.has_key(k+Nint):
-                    # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
-                    # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
+            
                     r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
                     r3d[k+Nint]['sig2d'].append(sigsave)
                 else:
                     if ptees.shape[2]!=0:
                         r3d[k+Nint] = {}
-                        # r3d[k+Nint]['alpha'] = a1es
-                        # r3d[k+Nint]['ks'] = ks
                         r3d[k+Nint]['pt'] = ptees
                         r3d[k+Nint]['sig'] = siges
                         r3d[k+Nint]['sig2d'] = [sigsave]
@@ -1592,7 +1561,7 @@ class Rays(PyLayers,dict):
                 self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                                                    eph[:,np.newaxis,:]),axis=1)
 
-                #Creatinon of B from Bi and Bo
+                # Creation of B from Bi and Bo
                 # is done after the potential diffraction 
                 # computation
 
@@ -1655,36 +1624,28 @@ class Rays(PyLayers,dict):
                     # get points positions
                     #pdb.set_trace()
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-                    # get associated slab ind.seex face_0,face_n
-                    # self[k]['diffslabs']=[[L.sl[L.sla[y]]['index'] for y in x] for x in aseg]
-                    # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
-                    #diffslab = [ idslab0-idslabn ]
+                    
+                    self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']]['index'])+'_'
+                                        + str(L.sl[L.Gs.node[x[1]]['name']]['index']) for x in aseg]
 
-                    #
-                    # slab name are converted in lower case since v1.0 file format of layout
-                    #
-                    #self[k]['diffslabs']=[str(L.sl[L.sla[x[0]].lower()]['index'])+'_'
-                    #                    + str(L.sl[L.sla[x[1]].lower()]['index']) for x in aseg]
-                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'_'
-                                        + str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)
 
 
-                    pt1 = pts[:,0:2,0]#tail seg1
-                    ph1 = pts[:,2:4,0]#head seg1
-                    pt2 = pts[:,0:2,1]#tail seg2
-                    ph2 = pts[:,2:4,1]#head seg2
+                    pt1 = pts[:,0:2,0] #tail seg1
+                    ph1 = pts[:,2:4,0] #head seg1
+                    pt2 = pts[:,0:2,1] #tail seg2
+                    ph2 = pts[:,2:4,1] #head seg2
 
 
                     #pts is (nb_diffraction_points x 4 x 2)
                     #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
-                    # tail and head of segemnt 1 and 2 respectively
-                    #a segment 
+                    # tail and head of segment 1 and 2 respectively
+                    # a segment 
                     #- The dimension 2 is x,y
                     #
                     # The following aims to determine which tails and heads of 
-                    # segments associated to a give diffraction point 
+                    # segments associated to a given diffraction point 
                     # are connected
                     #
                     # 
@@ -1924,11 +1885,12 @@ class Rays(PyLayers,dict):
         # slv = nx.get_node_attributes(L.Gs, "name").values()
         # slk = nx.get_node_attributes(L.Gs, "name").keys()
         # find all material used in simulation
-        uslv = np.unique(L.sla[1:])
+        #uslv = np.unique(L.sla[1:])
+        uslv = L.sl.keys()
         #
         # add CEIL and FLOOR
         #
-        uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
+        #uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
 
         # create reverse dictionnary with all material as a key
         # and associated point/segment as a value
@@ -1953,8 +1915,8 @@ class Rays(PyLayers,dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        #to be specified and limited to used wedges
         
+        #to be specified and limited to used wedges
         if hasattr(self,'_luw'):
             D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
 
@@ -2080,13 +2042,13 @@ class Rays(PyLayers,dict):
                 # assign floor and ceil slab
                 ############################
 
-                slT=L.sla[nstrf[uT]]
-                slR=L.sla[nstrf[uR]]
+                slT=[ L.Gs.node[x]['name'] for x in nstrf[uT] ]
+                slR=[ L.Gs.node[x]['name'] for x in nstrf[uR] ]
 
                 # WARNING
-                # in future version floor and ceil could be different for each cycle.
+                # in future versions floor and ceil could be different for each cycle.
                 # this information would be directly obtained from L.Gs
-                # then the two following lines would have to be  modified
+                # then the two following lines would have to be modified
 
                 slRf=np.array(['FLOOR']*len(uRf))
                 slRc=np.array(['CEIL']*len(uRc))
@@ -2210,7 +2172,10 @@ class Rays(PyLayers,dict):
         #print 'Rays evaluation'
         self.fGHz=fGHz
         # evaluation of interaction
+        
         self.I.eval(fGHz)
+        # if np.isnan(self.I.I).any():
+        #     pdb.set_trace()
         # evaluation of base B  (2x2)
         # B and B0 do no depend on frequency
         # just an axis extension (np.newaxis)

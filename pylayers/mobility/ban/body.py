@@ -68,12 +68,12 @@ from pylayers.util.project import *
 
 
 
-# try:
-#     from mayavi import mlab
-#     from tvtk.tools import visual
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
 
-# except:
-#     print 'mayavi not installed'
+except:
+    print 'mayavi not installed'
 
 
 class Body(PyLayers):
@@ -997,7 +997,7 @@ class Body(PyLayers):
         return(kf,kt,vsn,wsn,vtn,wtn)
 
     def time2frame(self,t):
-        return np.where(self.time<=15)[0][-1]
+        return np.where(self.time<=t)[0][-1]
 
     def frame2time(self,f):
         return self.time[f]

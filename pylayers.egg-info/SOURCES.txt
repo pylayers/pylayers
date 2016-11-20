@@ -6,7 +6,6 @@ pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
 pylayers.egg-info/top_level.txt
-pylayers/antprop/SalehValenzuela.py
 pylayers/antprop/__init__.py
 pylayers/antprop/aarray.py
 pylayers/antprop/antenna.py
