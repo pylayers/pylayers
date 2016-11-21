@@ -41,7 +41,6 @@ import pdb
 
 class Algloc(object):
     """
-<<<<<<< HEAD
     This class gathers algebraic localization algorithms
 
     Attributes
@@ -55,8 +54,6 @@ class Algloc(object):
     ml_locate : perform maximum likelihood position evaluation
 
     plot : plot scenario
-    show : plot scenario
-    get_range
     """
 
     def __init__(self, **kwargs):
@@ -132,20 +129,16 @@ class Algloc(object):
         # available ldp
         self._av_ldp = []
 
-
-
-
         if len(self.bnGT.shape) > 2:
             raise AttributeError('blind node \'bn\' shape must be (3 x 1)')
         if len(self.bnGT.shape) < 2:
-            self.bnGT = self.bnGT.reshape((self.bnGT.shape[0],1))
+            self.bnGT = self.bnGT.reshape((self.bnGT.shape[0], 1))
         if self.bnGT.shape[0] == 2:
             self.bnGT = np.vstack(
                 (self.bnGT, np.zeros(self.bnGT.shape[1])))
         elif self.bnGT.shape[0] != 3:
             raise AttributeError('Blind node first dimension reserved to space\
                                   (x,y,z) coordinates')
-
 
         ###########
         # TOA check
@@ -154,7 +147,7 @@ class Algloc(object):
         if len(self.an_toa.shape) > 2:
             raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
         if len(self.an_toa.shape) < 2:
-            self.an_toa = self.an_toa.reshape((self.an_toa.shape[0],1))
+            self.an_toa = self.an_toa.reshape((self.an_toa.shape[0], 1))
         if self.an_toa.shape[0] == 2:
             self.an_toa = np.vstack(
                 (self.an_toa, np.zeros(self.an_toa.shape[1])))
@@ -193,7 +186,7 @@ class Algloc(object):
         if len(self.an_tdoa.shape) > 2:
             raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
         if len(self.an_tdoa.shape) < 2:
-            self.an_tdoa = self.an_tdoa.reshape((self.an_tdoa.shape[0],1))
+            self.an_tdoa = self.an_tdoa.reshape((self.an_tdoa.shape[0], 1))
         if self.an_tdoa.shape[0] == 2:
             self.an_tdoa = np.vstack(
                 (self.an_tdoa, np.zeros(self.an_tdoa.shape[1])))
@@ -205,7 +198,7 @@ class Algloc(object):
 
         if len(self.tdoa.shape) > 1:
             try:
-                self.tdoa = self.tdoa.reshape(self.Ntdoa -1)
+                self.tdoa = self.tdoa.reshape(self.Ntdoa - 1)
             except:
                 raise AttributeError('Wrong shape for tdoa')
         if len(self.tdoa_std.shape) > 1:
@@ -232,7 +225,7 @@ class Algloc(object):
         if len(self.an_rss.shape) > 2:
             raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
         if len(self.an_rss.shape) < 2:
-            self.an_rss = self.an_rss.reshape((self.an_rss.shape[0],1))
+            self.an_rss = self.an_rss.reshape((self.an_rss.shape[0], 1))
         if self.an_rss.shape[0] == 2:
             self.an_rss = np.vstack(
                 (self.an_rss, np.zeros(self.an_rss.shape[1])))
@@ -299,45 +292,107 @@ class Algloc(object):
 
         return(s)
 
-    def plot(self):
+    def __add__(self, A):
+
+        nd = {}
+
+        nd['an_toa'] = np.hstack((self.an_toa, A.an_toa))
+        nd['toa'] = np.hstack((self.toa, A.toa))
+        nd['toa_std'] = np.hstack((self.toa_std, A.toa_std))
+
+
+        if 'tdoa' in self._av_ldp and 'tdoa' in A._av_ldp:
+            if not np.alltrue(self.an_tdoa[self.tdoa_ref] == A.an_tdoa[A.tdoa_ref]):
+                raise AttributeError(
+                    'tdoa reference nodes are note the same => cannot add these 2 algloc Algloc objects')
+            ext_an = np.delete(A.an_tdoa,A.tdoa_ref,1)
+
+        else :
+            ext_an = A.an_tdoa
+
+        nd['an_tdoa'] = np.hstack((self.an_tdoa, ext_an))
+        nd['tdoa'] = np.hstack((self.tdoa, A.tdoa))
+        nd['tdoa_std'] = np.hstack((self.tdoa_std, A.tdoa_std))
+        nd['tdoa_ref'] = self.tdoa_ref
+
+        nd['an_rss'] = np.hstack((self.an_rss, A.an_rss))
+        nd['rss'] = np.hstack((self.rss, A.rss))
+        nd['rss_std'] = np.hstack((self.rss_std, A.rss_std))
+        nd['rss_np'] = np.hstack((self.rss_np, A.rss_np))
+        nd['PL0'] = np.hstack((self.PL0, A.PL0))
+        nd['Rest'] = self.Rest
+        nd['d0'] = self.d0
+
+
+        return Algloc(**nd)
+
+
+    def show(self, **kwargs):
+        self.plot(**kwargs)
+
+    def plot(self, **kwargs):
         """ plot scenario
 
         """
 
-        fig = plt.figure()
-        ax = Axes3D(fig)
-        try:
-            ax.plot(self.bnGT[0, :], self.bnGT[1, :], self.bnGT[
-                    2, :], 'r*', zdir='z', label='blind node')
-        except:
-            plt.plot(self.bnGT[0, :], self.bnGT[
-                     1, :], 'r*', label='blind node')
+        defaults = {'fig': [],
+                    'ax': [],
+                    'pe_ls': np.ndarray(shape=(3, 0)),
+                    'pe_wls': np.ndarray(shape=(3, 0)),
+                    'pe_ml': np.ndarray(shape=(3, 0)),
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = Axes3D(fig)
+        else:
+            ax = kwargs['ax']
+
+        ax.plot(self.bnGT[0, :], self.bnGT[1, :], self.bnGT[
+                2, :], 'r*', zdir='z', label='blind node')
+
         if self.used_ldp['rss']:
-            rn = self.an_rss
-            try:
-                ax.plot(rn[0, :], rn[1, :], rn[2, :],
-                        'ro', zdir='z', label='RSS node')
-            except:
-                plt.plot(rn[0, :], rn[1, :], 'ro', label='RSS node')
+            ax.plot(self.an_rss[0, :], self.an_rss[1, :], self.an_rss[2, :],
+                    'ks', zdir='z', label='RSS node')
+
         if self.used_ldp['toa']:
-            rn = self.an_toa
-            try:
-                ax.plot(rn[0, :], rn[1, :], rn[2, :],
-                        'gs', zdir='z', label='TOA node')
-            except:
-                plt.plot(rn[0, :], rn[1, :], 'gs', label='TOA node')
+            ax.plot(self.an_toa[0, :], self.an_toa[1, :], self.an_toa[2, :],
+                    'gs', zdir='z', label='TOA node')
 
         if self.used_ldp['tdoa']:
-            rn = self.an_tdoa
-            rnr = self.an_tdoa[:, self.tdoa_ref]
-            try:
-                ax.plot(rn[0, :], rn[1, :], rn[2, :],
-                        'bD', zdir='z', label='TDOA node')
-                ax.plot(rnr[0, :], rnr[1, :], rnr[2, :],
-                        'kD', zdir='z', label='Ref TDOA node')
-            except:
-                plt.plot(rn[0, :], rn[1, :], 'bD', label='TDOA node')
-                plt.plot(rnr[0, :], rnr[1, :], 'kD', label='Ref TDOA node')
+
+            ax.plot(self.an_tdoa[0, :], self.an_tdoa[1, :], self.an_tdoa[2, :],
+                    'bs', zdir='z', label='TDOA node')
+            ax.plot(self.an_tdoa[0, self.tdoa_ref], self.an_tdoa[1, self.tdoa_ref], self.an_tdoa[2, self.tdoa_ref],
+                    'ks', zdir='z', label='Ref TDOA node')
+
+        if hasattr(self, 'pe_ls'):
+            X = np.concatenate([self.pe_ls, self.bnGT], axis=1)
+
+            ax.plot(self.pe_ls[0, :], self.pe_ls[1, :], self.pe_ls[2, :],
+                    'gD', zdir='z', label='Pe LS')
+            ax.plot(X[0, :], X[1, :], X[2, :], linewidth=0.5, color='k')
+
+        if hasattr(self, 'pe_wls'):
+            X = np.concatenate([self.pe_wls, self.bnGT], axis=1)
+            ax.plot(self.pe_wls[0, :], self.pe_wls[1, :], self.pe_wls[2, :],
+                    'cD', zdir='z', label='Pe WLS')
+            ax.plot(X[0, :], X[1, :], X[2, :], linewidth=0.5, color='k')
+
+        if hasattr(self, 'pe_ml'):
+            X = np.concatenate([self.pe_ml, self.bnGT], axis=1)
+            ax.plot(self.pe_ml[0, :], self.pe_ml[1, :], self.pe_ml[2, :],
+                    'mD', zdir='z', label='Pe ML')
+            ax.plot(X[0, :], X[1, :], X[2, :], linewidth=0.5, color='k')
+
+        ax.legend()
 
         return(fig, ax)
 
@@ -779,6 +834,7 @@ class Algloc(object):
                 Pr = 0.5 * np.dot(nplg.pinv(np.dot(A.T, A)), np.dot(A.T, K))
                 P = Pr[:sh3[0]].reshape(sh3[0], 1)
 
+            self.pe_ls = P
             return P
 
     def wls_locate(self):
@@ -989,7 +1045,7 @@ class Algloc(object):
             # TDOA + TOA
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['toa'] and \
-                    self.used_ldp['rss']:
+                not self.used_ldp['rss']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 toa_std = self.toa_std
@@ -1131,7 +1187,7 @@ class Algloc(object):
                 K_tdoa = k1_tdoa - k2_tdoa
                 # Construct the matrix A (see theory)
                 A_tdoa = np.hstack(
-                    (rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh2[1], 1)))
+                    (rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh3[1], 1)))
                 # Apply LS operator
                 sh4 = np.shape(K_toa)[0]
                 sh5 = np.shape(K_rss)[0]
@@ -1145,7 +1201,90 @@ class Algloc(object):
                                   np.dot(np.dot(A.T, nplg.pinv(C)), K))
                 P = Pr[:sh3[0]].reshape(sh3[0], 1)
 
+            self.pe_wls = P
+
             return P
+
+    def ml_function_TOA(self, P):
+        """
+        This defines the ML function to be minimized if ML estimator
+        is used for TOA
+
+        Parameters
+        ----------
+            P : numpy.ndarray
+        """
+        rn_toa = self.an_toa
+        toa_ns = self.toa
+        toa_std = self.toa_std
+        sh1 = np.shape(rn_toa)[1]
+        rg = self.c * toa_ns
+        rg_std = self.c * toa_std
+        # construct the ML function to be minimized
+        rnmp = rn_toa - np.outer(P, np.ones(sh1))
+        mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
+        dd = (rg - mrnmp) ** 2
+        uu = dd / (2 * rg_std ** 2) + \
+            np.log(np.sqrt(2 * np.pi) * rg_std)
+        ML = uu.sum(axis=0)
+
+        return ML
+
+    def ml_function_TDOA(self, P):
+        """
+        This defines the ML function to be minimized if ML estimator
+        is used for TDOA
+
+        Parameters
+        ----------
+            P : numpy.ndarray
+        """
+        rn_tdoa = np.delete(self.an_tdoa, self.tdoa_ref, 1)
+        rnr_tdoa = self.an_tdoa[
+            :, self.tdoa_ref] * np.ones((3, self.Ntdoa - 1))
+#                rnr_tdoa = self.nodes['RNr_TDOA']
+        tdoa_ns = self.tdoa
+        tdoa_std = self.tdoa_std
+        sh1 = np.shape(rn_tdoa)[1]
+        drg = self.c * tdoa_ns
+        drg_std = self.c * tdoa_std
+        # construct the ML function to be minimized
+        rnmp = rn_tdoa - np.outer(P, np.ones(sh1))
+        mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
+        rnrmp = rnr_tdoa - np.outer(P, np.ones(sh1))
+        mrnrmp = np.sqrt(np.diag(np.dot(rnrmp.T, rnrmp)))
+        rdrg = mrnmp - mrnrmp
+        dd = (drg - rdrg) ** 2 / (2 * drg_std ** 2)
+        ML = dd.sum(axis=0)
+
+        return ML
+
+    def ml_function_RSS(self, P):
+        """
+        This defines the ML function to be minimized if ML estimator
+        is used for RSS
+
+        Parameters
+        ----------
+            P : numpy.ndarray
+        """
+        rn_rss = self.an_rss
+        rss_db = self.rss
+        rss_std = self.rss_std
+        rss_np = self.rss_np
+        d0 = self.d0
+        pl0 = self.PL0
+        sh1 = np.shape(rn_rss)[1]
+        S = (np.log(10) / 10) * rss_std / rss_np
+        M = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
+        # construct the ML function to be minimized
+        rnmp = rn_rss - np.outer(P, np.ones(sh1))
+        mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
+        dd = (M - S ** 2 - np.log(mrnmp)) ** 2
+        uu = dd / (2 * S ** 2)
+        ML = uu.sum(axis=0)
+
+        return ML
 
     def ml_function(self, P):
         """
@@ -1170,87 +1309,46 @@ class Algloc(object):
             if self.used_ldp['tdoa'] and\
                not self.used_ldp['toa'] and\
                not self.used_ldp['rss']:
-                rn_tdoa = np.delete(self.an_tdoa, self.tdoa_ref, 1)
-                rnr_tdoa = self.an_tdoa[
-                    :, self.tdoa_ref] * np.ones((3, self.Ntdoa - 1))
-#                rnr_tdoa = self.nodes['RNr_TDOA']
-                tdoa_ns = self.tdoa
-                tdoa_std = self.tdoa_std
-                sh1 = np.shape(rn_tdoa)[1]
-                drg = self.c * tdoa_ns
-                drg_std = self.c * tdoa_std
-                # construct the ML function to be minimized
-                rnmp = rn_tdoa - np.outer(P, np.ones(sh1))
-                mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
-                rnrmp = rnr_tdoa - np.outer(P, np.ones(sh1))
-                mrnrmp = np.sqrt(np.diag(np.dot(rnrmp.T, rnrmp)))
-                rdrg = mrnmp - mrnrmp
-                dd = (drg - rdrg) ** 2 / (2 * drg_std ** 2)
-                ML = dd.sum(axis=0)
+                ML = self.ml_function_TDOA(P)
 
             # only TOA
             elif self.used_ldp['toa'] and\
                     not self.used_ldp['tdoa'] and\
                     not self.used_ldp['rss']:
-                rn_toa = self.an_toa
-                toa_ns = self.toa
-                toa_std = self.toa_std
-                sh1 = np.shape(rn_toa)[1]
-                rg = self.c * toa_ns
-                rg_std = self.c * toa_std
-                # construct the ML function to be minimized
-                rnmp = rn_toa - np.outer(P, np.ones(sh1))
-                mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
-                dd = (rg - mrnmp) ** 2
-                uu = dd / (2 * rg_std ** 2) + \
-                    np.log(np.sqrt(2 * np.pi) * rg_std)
-                ML = uu.sum(axis=0)
+                ML = self.ml_function_TOA(P)
 
             # only Rss
             elif self.used_ldp['rss'] and\
                     not self.used_ldp['toa'] and\
                     not self.used_ldp['tdoa']:
-                rn_rss = self.an_rss
-                rss_db = self.rss
-                rss_std = self.rss_std
-                rss_np = self.rss_np
-                d0 = self.d0
-                pl0 = self.PL0
-                sh1 = np.shape(rn_rss)[1]
-                S = (np.log(10) / 10) * rss_std / rss_np
-                M = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
-                # construct the ML function to be minimized
-                rnmp = rn_rss - np.outer(P, np.ones(sh1))
-                mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
-                dd = (M - S ** 2 - np.log(mrnmp)) ** 2
-                uu = dd / (2 * S ** 2)
-                ML = uu.sum(axis=0)
+                ML = self.ml_function_RSS(P)
 
             # TDOA + TOA
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['toa'] and \
                     not self.used_ldp['rss']:
-                ML = self.ml_function(P, 0, 1, 0) +\
-                    self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function_TDOA(P) +\
+                    self.ml_function_TOA(P)
 
             # TDOA + RSS
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['rss'] and \
                     not self.used_ldp['toa']:
-                ML = self.ml_function(P, 1, 0, 0) +\
-                    self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function_TDOA(P) +\
+                    self.ml_function_RSS(P)
 
             # TOA + RSS
             elif self.used_ldp['toa'] and \
                     self.used_ldp['rss'] and \
                     not self.used_ldp['tdoa']:
-                ML = self.ml_function(P, 1, 0, 0) +\
-                    self.ml_function(P, 0, 1, 0)
+                ML = self.ml_function_TOA(P) +\
+                    self.ml_function_RSS(P)
+
             # TDOA + TOA + RSS
             else:
-                ML = self.ml_function(P, 1, 0, 0) +\
-                    self.ml_function(P, 0, 1, 0) +\
-                    self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function_TDOA(P) +\
+                    self.ml_function_TOA(P) +\
+                    self.ml_function_RSS(P)
 
             return ML
 
@@ -1287,7 +1385,11 @@ class Algloc(object):
             raise ValueError("inputs missed")
         else:
             P = optimize.fmin(self.ml_function, P0, disp=0)
-            return P.reshape(np.shape(P0))
+
+            P = P.reshape(np.shape(P0))
+            self.pe_ml = P
+
+            return P
 
     def fim(self, P):
         """

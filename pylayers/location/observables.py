@@ -237,7 +237,7 @@ class Observables(object):
         """
         ddist = np.ndarray(shape=(0, self.Nb, self.Na))
         for a in xrange(self.Na):
-            diff = self.dist[:, a][:, None] - self.dist[:, :]
+            diff = self.dist[:, :] - self.dist[:, a][:, None]
             ddist = np.vstack((ddist, diff[None, ...]))
         self._ddist = ddist
 
@@ -334,7 +334,7 @@ class Observables(object):
         if param == {}:
             param['law'] = 'norm'
             param['mean'] = 0.
-            param['std'] = 2.
+            param['std'] = 0.2
         else:
             if isinstance(param, dict):
                 if param.has_key('law'):
