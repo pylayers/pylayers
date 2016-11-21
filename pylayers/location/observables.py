@@ -1,13 +1,14 @@
 from __future__ import print_function
 import numpy as np
 import scipy as sp
+from copy import copy
 import pylayers.antprop.loss as plm
 import matplotlib.pyplot as plt
 
 class Observables(object):
     """ Generate observables for localization prupose
     """
-    def __init__(self, an=10 * sp.rand(3, 5), bn=5 * sp.rand(3,4),mode = 'all'):
+    def __init__(self, an=10 * sp.rand(3, 5), bn=5 * sp.rand(3,4),mode = 'toa'):
         """
         Init
 
@@ -18,7 +19,6 @@ class Observables(object):
         bn : ndarray
             blind node (3 x Nb)
         mode : str
-            'all' : compute ranges/diff of ranges and received poser
             "toa" : compute ranges
             "tdoa" : compute diff of ranges
             "rss" : compute recived power
@@ -83,48 +83,65 @@ class Observables(object):
         self.mode = mode
 
         self.compute_distances()
-        if mode.lower() == 'toa' or mode.lower() =='all':
+        if mode.lower() == 'toa':
             self.compute_ranges()
-        if mode.lower() == 'tdoa' or mode.lower() =='all':
+        if mode.lower() == 'tdoa':
+            self.an_ref = 0
             self.compute_diff_distances()
             self.compute_diff_ranges()
-        if mode.lower() == 'rss' or mode.lower() == 'all':
+            self._change_an_ref()
+        if mode.lower() == 'rss':
             self.compute_rpower()
+        self.param_noise(param={})
 
-        self.config_noise()
-
-    @property
-    def rp_model(self):
-        return self._rp_model
-
-    @rp_model.setter
-    def rp_model(self, value):
-        if hasattr(self, 'rp_model'):
-            if self._rp_model != value:
-                self.compute_rpower(config=value)
-        else:
-            # first call from compute_power
-            self._rp_model = value
 
     @property
-    def noise_model(self):
-        return self._noise_model
+    def an_ref(self):
+        return self._an_ref
 
-    @noise_model.setter
-    def noise_model(self, value):
-        if hasattr(self, 'noise_model'):
-            if not isinstance(value['law'],list):
-                value['law']=[value['law']]*self.Na
-            idem = np.alltrue(np.array([i in self._implemented_law for i in value['law']]))
-            # check 
-            if not idem:
-                raise AttributeError('A specified law of noise model is not yet implemented')
-            else:
-                self._noise_model = value
-                self.generate_noise(config=value)
+    @an_ref.setter
+    def an_ref(self, value):
+        if hasattr(self, 'an_ref'):
+            self._change_an_ref(value)
         else:
             # first call from compute_power
-            self._noise_model = value
+            self._an_ref = value
+
+    # @property
+    # def rp_model(self):
+    #     return self._rp_model
+
+    # @rp_model.setter
+    # def rp_model(self, value):
+    #     if hasattr(self, 'rp_model'):
+    #         if self._rp_model != value:
+    #             self.compute_rpower(param=value)
+    #     else:
+    #         # first call from compute_power
+    #         self._rp_model = value
+
+    # @property
+    # def noise_model(self):
+    #     return self._noise_model
+
+    # @noise_model.setter
+    # def noise_model(self, value):
+    #     if hasattr(self, 'noise_model'):
+    #         if not isinstance(value['law'],list):
+    #             if self.mode != 'tdoa':
+    #                 value['law']=[value['law']]*self.Na
+    #             else: 
+    #                 value['law']=[value['law']]*self.Na-1
+    #         idem = np.alltrue(np.array([i in self._implemented_law for i in value['law']]))
+    #         # check 
+    #         if not idem:
+    #             raise AttributeError('A specified law of noise model is not yet implemented')
+    #         else:
+    #             self._noise_model = value
+    #             self.generate_noise(param=value)
+    #     else:
+    #         # first call from compute_power
+    #         self._noise_model = value
 
 
     def __repr__(self):
@@ -134,27 +151,30 @@ class Observables(object):
 
         s = s + '\n' + 'self.dist : distances matrix (Nb x Na)'
 
-        if self.mode == 'all' or self.mode =='toa':
+        if self.mode =='toa':
             s = s + '\n' + 'self.rng : range matrix (Nb x Na)'
 
-        if self.mode == 'all' or self.mode =='tdoa':
+        if self.mode =='tdoa':
             s = s + '\n' + 'self.drng : difference of ranges matrix (Na x Nb x Na)'
 
-        if self.mode == 'all' or self.mode =='rss':
+        if self.mode =='rss':
             s = s + '\n' + 'self.rp : received power ( Nb x Na)'
             s = s + '\n' + 'self.rp_model : power model'
 
         s = s + '\n' + 'self.noise : noise matrix (Nb x Na)'
-        s = s + '\n' + 'self.noise_model : noise config dict'
+        s = s + '\n' + 'self.noise_model : noise param dict'
 
         s = s + '\n' + 'self.generate_noise_samples() : update self.noise'
 
 
         s = s + '\n\n' +str(self.Na) + ' Anchors:\n'
+        if self.mode =='tdoa':
+            s = s + 'reference node: ' + str(self.an_ref) + '\n'
         s = s + '--------------\n\n'
 
         for a in self.an:
             s = s + str(a) + "\n"
+
 
         s = s + '\n' + str(self.Nb) + ' Blind nodes:\n'
         s = s + '--------------\n\n'
@@ -162,7 +182,7 @@ class Observables(object):
         for b in self.bn:
             s = s + str(b) + "\n"
 
-        s = s + '\n' +'noise configuration:\n'
+        s = s + '\n' +'noise paramuration:\n'
         s = s + '---------------------\n\n'
 
         for n in self.noise_model:
@@ -213,14 +233,13 @@ class Observables(object):
 
         self.ddist : ndarray
             difference of distances for each node as refernce:
-            (Na x Nb x Na)
+            (Nb x Na-1)
         """
         ddist = np.ndarray(shape=(0, self.Nb, self.Na))
         for a in xrange(self.Na):
             diff = self.dist[:, a][:, None] - self.dist[:, :]
-
             ddist = np.vstack((ddist, diff[None, ...]))
-        self.ddist = ddist
+        self._ddist = ddist
 
     def compute_diff_ranges(self):
         """
@@ -231,53 +250,67 @@ class Observables(object):
 
         self.drng : ndarray
             difference of ranges in nanoseconds for each node as refernce:
-            (Na x Nb x Na)
+            (Nb x Na-1)
         """
         if not hasattr(self,'ddist'):
             self.compute_diff_distances()
-        self.drng = self.ddist/0.3
+        self._drng = self._ddist/0.3
 
-    def compute_rpower(self,config={}):
+    def _change_an_ref(self, an_ref = 0):
+        """ 
+        Changing the reference node of TDOA
+
+        Parameters
+        ----------
+
+        an_ref : int
+            index of an column indicating the refeernce node
+        """
+
+        self.ddist = np.delete(self._ddist[an_ref,:,:],an_ref,1)
+        self.drng = np.delete(self._drng[an_ref,:,:],an_ref,1)
+
+    def compute_rpower(self,param={}):
         """
         Compute received power given a model
 
         Parameters
         ----------
-        config : dict
+        param : dict
             for Pathloss shadowing :
-                config['model']='PL'
-                config['d0'] : reference distance
-                config['fGHz'] : frequency in GHz
-                config['pl_exp'] : pathloss exponent
+                param['model']='PL'
+                param['d0'] : reference distance
+                param['fGHz'] : frequency in GHz
+                param['pl_exp'] : pathloss exponent
 
         """
 
         implemented_model=['PL']
 
-        if config == {}:
-            config['model'] = 'PL'
-            config['d0'] = 1.
-            config['fGHz'] = 2.4
-            config['pl_exp'] = 2.
+        if param == {}:
+            param['model'] = 'PL'
+            param['d0'] = 1.
+            param['fGHz'] = 2.4
+            param['pl_exp'] = 2.
         else:
-            if isinstance(config, dict):
-                if config.has_key('model'):
-                    if config['model'] in implemented_model:
+            if isinstance(param, dict):
+                if param.has_key('model'):
+                    if param['model'] in implemented_model:
                         pass
                     else:
-                        raise AttributeError('model ' + str(config['model']) +
+                        raise AttributeError('model ' + str(param['model']) +
                                               ' is not yet implemented')
                 else:
-                    raise AttributeError('config dict has no \'model\' key')
+                    raise AttributeError('param dict has no \'model\' key')
             else:
-                raise AttributeError('config must be a dict instance')
+                raise AttributeError('param must be a dict instance')
 
-        if config['model'] == 'PL':
-            self.rp = -plm.PL0(config['fGHz'], config['d0']) +\
-                          10 * config['pl_exp'] * np.log10(self.dist / config['d0'])
-            self.rp_model = config
+        if param['model'] == 'PL':
+            self.rp = -plm.PL0(param['fGHz'], param['d0']) +\
+                          10 * param['pl_exp'] * np.log10(self.dist / param['d0'])
+            self.rp_model = param
 
-    def config_noise(self, config={}):
+    def param_noise(self, param={}):
         """
 
         Create a noise matrix for obserables
@@ -286,58 +319,71 @@ class Observables(object):
         ----------
 
         model : dict
-            config['law'] = name of distrib
+            param['law'] = name of distrib
             'norm'
 
         Returns
         -------
         """
 
-        if config == {}:
-            config['law'] = 'norm'
-            config['mean'] = 0.
-            config['std'] = 2.
+        if self.mode != 'tdoa':
+            Na = self.Na
         else:
-            if isinstance(config, dict):
-                if config.has_key('law'):
-                    if not isinstance(config['law'],list):
-                        config['law']=[config['law']]*self.Na
-                    for na in range(self.Na):
-                        if config['law'][na] in self._implemented_law:
+            Na = self.Na -1
+
+        if param == {}:
+            param['law'] = 'norm'
+            param['mean'] = 0.
+            param['std'] = 2.
+        else:
+            if isinstance(param, dict):
+                if param.has_key('law'):
+                    if not isinstance(param['law'],list):
+                        param['law']=[param['law']]*Na
+                    for na in range(Na):
+                        if param['law'][na] in self._implemented_law:
                             pass
                         else:
-                            raise AttributeError('law ' + str(config['law'][na]) +
+                            raise AttributeError('law ' + str(param['law'][na]) +
                                                   ' is not yet implemented')
                 else:
-                    raise AttributeError('config dict has no \'law\' key')
+                    raise AttributeError('param dict has no \'law\' key')
             else:
-                raise AttributeError('config must be a dict instance')
+                raise AttributeError('param must be a dict instance')
 
-        if not isinstance(config['law'],list):
-            config['law']=[config['law']]*self.Na
-        if not isinstance(config['mean'],list):
-            config['mean']=[config['mean']]*self.Na
-        if not isinstance(config['std'],list):
-            config['std']=[config['std']]*self.Na
+        if not isinstance(param['law'],list):
+            param['law']=[param['law']]*Na
+        if not isinstance(param['mean'],list):
+            param['mean']=[param['mean']]*Na
+        if not isinstance(param['std'],list):
+            param['std']=[param['std']]*Na
 
-        self.law = [np.nan]*self.Na
+        self.law = [np.nan]*Na
 
-        for na in range(self.Na):
-            if config['law'][na] == 'norm':
-                self.law[na] = sp.stats.norm(loc=config['mean'][na], scale=config['std'][na])
+        for na in range(Na):
+            if param['law'][na] == 'norm':
+                self.law[na] = sp.stats.norm(loc=param['mean'][na], scale=param['std'][na])
 
-        self.noise_model = config
+
+        self.noise_model = param
+        del param
         self.generate_noise_samples()
 
     def generate_noise_samples(self):
         """
-        Generate new noise samples relying on the law configuration 
-        setup in self.configure_noise
+        Generate new noise samples relying on the law paramuration 
+        setup in self.paramure_noise
         """
-        self.noise = np.ndarray((self.Nb,self.Na))
+        if self.mode != 'tdoa':
+            Na = self.Na
+        else:
+            Na = self.Na -1
 
-        for na in range(self.Na):
+        self.noise = np.ndarray((self.Nb,Na))
+
+        for na in range(Na):
             self.noise[:,na] = self.law[na].rvs((self.Nb))
+
     def show(self, **kwargs):
         """
             Show scene
