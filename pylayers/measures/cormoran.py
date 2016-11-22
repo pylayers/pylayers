@@ -1384,6 +1384,7 @@ bernard
         """
 
         fig =plt.figure(num='Jog',figsize=(5,1.5))
+        
 
         #set time to -10 is a trick to make appear interferers cylinder
         #because __refreshshow3i only update the data of the cylinder.
@@ -1407,6 +1408,7 @@ bernard
         slax.set_title('t='+str(time[fId]),loc='left')
         sliderx = Slider(slax, "time", 0, len(time),
                         valinit=fId, color='#AAAAAA')
+
 
         def update_x(val):
             value = int(sliderx.val)
@@ -1460,6 +1462,139 @@ bernard
         axpp = plt.axes([0.8, 0.05, 0.1, 0.15])
         bpp = Button(axpp, '+10')
         bpp.on_clicked(pplus)
+
+
+
+        plt.show()
+
+
+    def _show3idemo(self,t=0,**kwargs):
+        """ show3 interactive
+        """
+
+        defaults={'nodename':'TorsoTopLeft'}
+
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        fig =plt.figure(num='Jog',figsize=(5,1.5))
+        
+
+        #set time to -10 is a trick to make appear interferers cylinder
+        #because __refreshshow3i only update the data of the cylinder.
+        # if cylinder is not present in the first _show3, they are not displayed
+        # later.
+        time=self.B[self.subject[0]].time
+
+        fId = np.where(time<= t)[0][-1]
+
+        kwargs['bodytime']=[self.tmocap[-10]]
+        kwargs['returnfig']=True
+        kwargs['tagtraj']=False
+        mayafig = self._show3(**kwargs)
+        self.__refreshshow3i(fId)
+        # ax.grid()
+
+
+        # matplotlib Widgets 
+
+        slax=plt.axes([0.1, 0.5, 0.8, 0.3])
+        slax.set_title('t='+str(time[fId]),loc='left')
+        sliderx = Slider(slax, "time", 0, len(time),
+                        valinit=fId, color='#AAAAAA')
+
+
+        def update_x(val):
+            value = int(sliderx.val)
+            self.__refreshshow3i(val)
+            slax.set_title('t='+str(time[val]),loc='left')
+            vline0.set_data(([time[value],time[value]],[0,1]))
+            vline1.set_data(([time[value],time[value]],[0,1]))
+            vline2.set_data(([time[value],time[value]],[0,1]))
+            vline3.set_data(([time[value],time[value]],[0,1]))
+            fig.canvas.draw_idle()
+            fig2.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def plus(event):
+            sliderx.set_val(sliderx.val +1)
+            fig.canvas.draw_idle()
+
+        def minus(event):
+            sliderx.set_val(sliderx.val -1)
+            fig.canvas.draw_idle()
+
+        def pplus(event):
+            sliderx.set_val(sliderx.val +10)
+            fig.canvas.draw_idle()
+
+
+        def mminus(event):
+            sliderx.set_val(sliderx.val -10)
+            fig.canvas.draw_idle()
+
+        #QUIT by pressing 'q'
+        def press(event):
+            if event.key == 'q':
+                mlab.close(mayafig)
+                plt.close(fig)
+                plt.close(fig2)
+        fig.canvas.mpl_connect('key_press_event', press)
+
+
+        #-1 frame axes
+        axm = plt.axes([0.2, 0.05, 0.1, 0.15])
+        bm = Button(axm, '-1')
+        bm.on_clicked(minus)
+                #+1 frame axes
+        axp = plt.axes([0.7, 0.05, 0.1, 0.15])
+        bp = Button(axp, '+1')
+        bp.on_clicked(plus)
+
+        #-10 frames axes
+        axmm = plt.axes([0.1, 0.05, 0.1, 0.15])
+        bmm = Button(axmm, '-10')
+        bmm.on_clicked(mminus)
+
+
+        #+10 frames axes
+        axpp = plt.axes([0.8, 0.05, 0.1, 0.15])
+        bpp = Button(axpp, '+10')
+        bpp.on_clicked(pplus)
+
+
+
+        fig2,ax2 = plt.subplots(4,1,figsize=(12,6))
+        ax2=ax2.ravel()
+
+        df0 = self.getlink(kwargs['nodename'],'AP1',techno='HKB')
+        df0.plot(ax=ax2[0],fig=fig2)
+        
+        df1 = self.getlink(kwargs['nodename'],'AP2',techno='HKB')
+        df1.plot(ax=ax2[1],fig=fig2)
+
+        df2 = self.getlink(kwargs['nodename'],'AP3',techno='HKB')
+        df2.plot(ax=ax2[2],fig=fig2)
+
+        df3 = self.getlink(kwargs['nodename'],'AP4',techno='HKB')
+        df3.plot(ax=ax2[3],fig=fig2)
+
+        ax2[0].set_ylabel('AP1')
+        ax2[1].set_ylabel('AP2')
+        ax2[2].set_ylabel('AP3')
+        ax2[3].set_ylabel('AP4')
+
+        vline0 = ax2[0].axvline(x=time[fId], color='red')
+        vline1 = ax2[1].axvline(x=time[fId], color='red')
+        vline2 = ax2[2].axvline(x=time[fId], color='red')
+        vline3 = ax2[3].axvline(x=time[fId], color='red')
+
+        fig2.suptitle(kwargs['nodename'])
+
+
         plt.show()
 
 
@@ -4693,7 +4828,7 @@ bernard
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
-        if ('HK' in techno) :
+        if ('HK' in techno.upper()) :
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
             elif (b +'-' + a) in self.hkb.keys():
@@ -4702,7 +4837,7 @@ bernard
                 raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in hkb dataframe')
             df = self.hkb
 
-        elif ('BS' in techno):
+        elif ('BS' in techno.upper()):
             if (a +'-' + b) in self.bespo.keys():
                 link = a +'-' + b
             elif (b +'-' + a) in self.bespo.keys():
@@ -4712,7 +4847,7 @@ bernard
 
             df = self.bespo
 
-        elif ('TCR' in techno):
+        elif ('TCR' in techno.upper()):
             if (a +'-' + b) in self.tcr.keys():
                 link = a +'-' + b
             elif (b +'-' + a) in self.tcr.keys():

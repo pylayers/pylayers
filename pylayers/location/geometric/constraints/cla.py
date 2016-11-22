@@ -786,8 +786,7 @@ class CLA(object):
             for c in self.c:
                 if c.runable:
                     an = np.vstack((an, c.p))
-            import ipdb
-            ipdb.set_trace()
+
             # S = Scene(an=an, bn=self.bn)
             # sce = S.generate()
 
