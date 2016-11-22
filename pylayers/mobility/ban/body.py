@@ -44,6 +44,12 @@ Miscelianous Functions
 
 """
 #import mayavi.mlab as mlab
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
+
+except:
+    print 'mayavi not installed'
 import numpy as np
 import scipy.stats as sp
 import ConfigParser
@@ -68,12 +74,7 @@ from pylayers.util.project import *
 
 
 
-try:
-    from mayavi import mlab
-    from tvtk.tools import visual
 
-except:
-    print 'mayavi not installed'
 
 
 class Body(PyLayers):
