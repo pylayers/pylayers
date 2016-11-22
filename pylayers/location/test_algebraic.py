@@ -45,8 +45,8 @@ print(A_rss.crb(A_rss.bnGT))
 
 
 O_tdoa = Observables(an=an, bn=bn, mode='tdoa')
-A_tdoa = Algloc(an_tdoa=O_tdoa.an, tdoa=O_tdoa.drng + O_tdoa.noise,
-                tdoa_ref=O_tdoa.an_ref, tdoa_std=O_tdoa.noise_model['std'], bnGT=bn)
+A_tdoa = Algloc(an_tdoa=O_tdoa.an, tdoa=O_tdoa.drng,
+                tdoa_ref=O_tdoa.an_ref, tdoa_std=0.05, bnGT=bn)
 
 print('---')
 print('TDOA')

@@ -207,12 +207,12 @@ class Algloc(object):
 
         self.Ntdoa = self.an_tdoa.shape[1]
 
-        if len(self.tdoa.shape) > 1:
+        if self.tdoa.ndim > 1:
             try:
                 self.tdoa = self.tdoa.reshape(self.Ntdoa - 1)
             except:
                 raise AttributeError('Wrong shape for tdoa')
-        if len(self.tdoa_std.shape) > 1:
+        if self.tdoa_std.ndim > 1:
             try:
                 self.tdoa_std = self.tdoa_std.reshape(self.Ntdoa - 1)
             except:
@@ -224,7 +224,7 @@ class Algloc(object):
         elif (self.an_tdoa.shape[1] != self.tdoa_std.shape[0] + 1) and\
                 self.an_tdoa.shape[1] != 0:
             if len(self.tdoa_std) == 1:
-                self.tdoa_std = np.array(self.tdoa_std) * np.ones(self.Ntdoa)
+                self.tdoa_std = np.array(self.tdoa_std) * np.ones(self.Ntdoa - 1)
             else:
                 raise AttributeError('tdoa_std shape mishmatch or missing')
 
