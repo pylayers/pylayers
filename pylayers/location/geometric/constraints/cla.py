@@ -223,6 +223,7 @@ class CLA(object):
         """update
                 update all constraints of the CLA
         """
+
         [c.update() for c in self.c if c.runable]
         self.runable=[c.runable for c in self.c]
         self.obsolete=[c.obsolete for c in self.c]
@@ -969,9 +970,9 @@ class CLA(object):
 #
 #                       v = (1/(((self.c[c].sstd)*self.c[c].vcw)*np.sqrt(2*np.pi)))*np.exp(-(d-self.c[c].value*0.3)**2/(2*(self.c[c].sstd)*self.c[c].vcw)**2)
 #                       v=v[0]
-            S = (-self.c[c].sstd * np.log(10)) / (-10 * self.c[c].model.rssnp)
-            M = ((self.c[c].model.PL0 - self.c[c].value) *
-                 np.log(10)) / (10 * self.c[c].model.rssnp)
+            S = (-self.c[c].sstd * np.log(10)) / (-10 * self.c[c].model['rss_np'])
+            M = ((self.c[c].model['PL0'] - self.c[c].value) *
+                 np.log(10)) / (10 * self.c[c].model['rss_np'])
             v = 1 / (d * S * np.sqrt(2 * np.pi)) * np.exp(
                 -(((np.log(d) - M) ** 2) / (2. * (S ** 2))))
 
@@ -1447,9 +1448,9 @@ class CLA(object):
                     if len(np.shape(drss))==1:
                         drss=drss.reshape(1,2)    
 
-                    M = (((-self.c[icr[0]].model.PL0 - self.c[icr[0]].value) * np.log(10) ) / (10. * self.c[icr[0]].model.rssnp))
-                    PL0= -self.c[icr[0]].model.PL0 
-                    NP = self.c[icr[0]].model.rssnp
+                    M = (((-self.c[icr[0]].model['PL0'] - self.c[icr[0]].value) * np.log(10) ) / (10. * self.c[icr[0]].model['rss_np']))
+                    PL0= -self.c[icr[0]].model['PL0'] 
+                    NP = self.c[icr[0]].model['rss_np']
                     
                     mu1=PL0-10*NP*np.log10(drss[:,0])
                     mu2=PL0-10*NP*np.log10(drss[:,1])

@@ -1,25 +1,25 @@
 # -*- coding:Utf-8 -*-
 #####################################################################
-#This file is part of RGPA.
+# This file is part of RGPA.
 
-#Foobar is free software: you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation, either version 3 of the License, or
+# Foobar is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
 #(at your option) any later version.
 
-#Foobar is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
+# Foobar is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-#You should have received a copy of the GNU General Public License
-#along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 #-------------------------------------------------------------------
-#authors :
-#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr
-#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr
-#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr
+# authors :
+# Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr
+# Bernard UGUEN          : bernard.uguen@univ-rennes1.fr
+# Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
 import numpy as np
 import scipy as sp
@@ -30,8 +30,9 @@ import pylayers.util.pyutil as pyu
 
 from pylayers.location.geometric.util.boxn import *
 from pylayers.location.geometric.constraints.constraint import *
+from pylayers.antprop.loss import get_range, get_range_std
 #from pylayers.location.algebraic.RSSLocation import *
-from pylayers.network.model import *
+# from pylayers.network.model import *
 
 
 class RSS(Constraint):
@@ -90,23 +91,32 @@ class RSS(Constraint):
         self.std = std
         self.vcw = vcw
         if model == {}:
-            self.config = ConfigParser.ConfigParser()
-            self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
-            param = dict(self.config.items('rat1_PLM'))
-            self.model = PLSmodel(f=eval(param['f']), 
-                                  rssnp=eval(param['rssnp']), 
-                                  d0=eval(param['d0']), 
-                                  method=param['method'])
-#                       self.model={}
-#                       self.model['PL0'] =-34.7
-#                       self.model['d0']  = 1.0
-#                       self.model['RSSnp'] = 2.64
-#                       self.model['RSSStd'] = 4.34
-#                       self.model['Rest'] = 'mode'
-            self.param = self.model.param
+
+
+            self.model = {}
+            self.model['PL0'] = -34.7
+            self.model['d0'] = 1.0
+            self.model['rss_np'] = 2.64
+            self.model['Rest'] = 'mode'
+            # the following lines are to be considered
+            # for reactivating Real time computaion using SimPy
+            ######
+            # self.config = ConfigParser.ConfigParser()
+            # self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
+            # param = dict(self.config.items('rat1_PLM'))
+            # model = PLSmodel(f=eval(param['f']),
+            #                       rssnp=eval(param['rssnp']),
+            #                       d0=eval(param['d0']),
+            #                       method=param['method'])
+            # self.model = {}
+            # self.model['PL0'] = model.PL0
+            # self.model['d0'] = model.d0
+            # self.model['rss_np'] = model.rssnp
+            # self.model['Rest'] = model.method
+            # self.param = self.model.param
         else:
             self.model = model
-            self.param = self.model.param
+            # self.param = self.model.param
         self.update()
 
     def update(self):
@@ -117,12 +127,23 @@ class RSS(Constraint):
         # else:
         #     self.runable = False
 #               self.LOC = RSSLocation(self.p)
-        self.updc('p',value=self.p)
-        self.updc('value',value=self.value)
-        self.updc('std',value=self.std)
-        self.sstd = self.model.getRangeStd(self.value, self.std)  # (self.LOC.getRangeStd(self.p, self.model['PL0'], self.model['d0'], self.value,self.model['RSSnp'], self.model['RSSStd'], self.model['Rest']))/0.3
-        self.range = self.model.getRange(self.value, self.std)  # self.LOC.getRange(self.p, self.model['PL0'], self.model['d0'], self.value, self.model['RSSnp'], self.model['RSSStd'], self.model['Rest'])
-#               self.sstd   = self.std*0.3
+        self.updc('p', value=self.p)
+        self.updc('value', value=self.value)
+        self.updc('std', value=self.std)
+        self.sstd = get_range_std(rss=self.value,
+                                       rss_std=self.std,
+                                       rss_np=self.model['rss_np'],
+                                       d0=self.model['d0'],
+                                       PL0=self.model['PL0'],
+                                       Rest=self.model['Rest'])
+        self.range = get_range(rss=self.value,
+                                    rss_std=self.std,
+                                    rss_np=self.model['rss_np'],
+                                    d0=self.model['d0'],
+                                    PL0=self.model['PL0'],
+                                    Rest=self.model['Rest'])
+        # self.sstd = self.model.getRangeStd(self.value, self.std)  
+        # self.range = self.model.getRange(self.value, self.std)  #
         self.rescale(self.vcw)
         self.evaluated = False
         self.annulus_bound()
@@ -175,16 +196,14 @@ class RSS(Constraint):
         else:
             return False
 
-
-
     def valid_v(self, v):
         """ Test if a list of vertexes from a box is compatible with the constraint. 
-        
+
         vertices are obtained with LBoxN.bd2coordinates()
 
         valid_v(v) : check if a set of vertices are valid for the given constraint
 
-       
+
         Parameters
         ----------
 
@@ -199,7 +218,7 @@ class RSS(Constraint):
         TB      : np.array 4 v vertexes
                 Multiple test for error checker in Lboxn boundaries  with contraint
 
-        
+
         DDbound = list[[tested vertex DD>self.cmin],[tested vertex DD<self.cmax]]
 
 
@@ -235,7 +254,8 @@ class RSS(Constraint):
 
         # calculate all distance from constraint origin to all vertexes
         DD = np.sqrt(np.sum(D * D, axis=1))
-        # for each box , find the vertex closest to the constraint origin and the farest.
+        # for each box , find the vertex closest to the constraint origin and
+        # the farest.
         T = np.array((np.min(DD.reshape(nbbox, ppb), axis=1),
                       np.max(DD.reshape(nbbox, ppb), axis=1)))
 
@@ -249,14 +269,6 @@ class RSS(Constraint):
 #               DDbound[3,:]=(DD<=self.cmax)
 
         return DDbound, TB
-
-
-
-
-
-
-
-
 
     def valid(self, b):
         """check if a box is valid for the given constraint
@@ -309,7 +321,6 @@ class RSS(Constraint):
     #     DD2 = (DD >= self.cmin) & (DD <= self.cmax)
 
     #     return DD2
-
 
     def estvol(self):
         """ Constraint Volume estimation

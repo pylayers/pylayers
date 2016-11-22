@@ -21,8 +21,7 @@ import numpy.linalg as nplg
 import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.util.geomutil import dist
-from pylayers.antprop.loss import PL0
-import string
+from pylayers.antprop.loss import get_range, get_range_std
 import pdb
 
 
@@ -337,7 +336,9 @@ class Algloc(object):
         return Algloc(**nd)
 
     def show(self, **kwargs):
-        self.plot(**kwargs)
+        fig, ax = self.plot(**kwargs)
+        return fig, ax
+
 
     def plot(self, **kwargs):
         """ plot scenario
@@ -346,6 +347,7 @@ class Algloc(object):
 
         defaults = {'fig': [],
                     'ax': [],
+                    "legend":True
                     }
 
         for k in defaults:
@@ -398,94 +400,11 @@ class Algloc(object):
                     'mD', zdir='z', label='Pe ML')
             ax.plot(X[0, :], X[1, :], X[2, :], linewidth=0.5, color='k')
 
-        ax.legend()
+        if kwargs['legend']:
+            ax.legend()
 
-        return(fig, ax)
+        return fig, ax
 
-    def show(self):
-        """ show scenario
-
-        Parameters
-        ----------
-
-        rss : boolean
-            False
-        toa : boolean
-            True
-        tdoa : boolean
-            False
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> S.show(1,1,1)
-            >>> plt.show()
-        """
-
-        self.plot()
-        plt.legend(numpoints=1)
-        plt.show()
-
-    def get_range(self):
-        """ Compute the range from RSS using the "self.Rest" estimator
-
-        Returns
-        -------
-
-        rg : numpy.ndarray
-
-
-
-        """
-
-        rss_db = self.rss
-        rss_std = self.rss_std
-        rss_np = self.rss_np
-        d0 = self.d0
-        pl0 = self.PL0
-        s = (np.log(10) / 10) * rss_std / rss_np
-        m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
-        if string.lower(self.Rest) == 'mode':
-            rg = np.exp(m - s**2)
-        elif string.lower(self.Rest) == 'median':
-            rg = np.exp(m)
-        elif string.lower(self.Rest) == 'mean':
-            rg = np.exp(m + 0.5 * s**2)
-        else:
-            raise ValueError(self.Rest + ": no such ranging estimator")
-        return rg
-
-    def get_range_std(self):
-        """
-        Compute the RSS range standard deviation using the "self.Rest" \
-        estimator
-
-
-        """
-
-        rss_db = self.rss
-        rss_std = self.rss_std
-        rss_np = self.rss_np
-        d0 = self.d0
-        pl0 = self.PL0
-        s = (np.log(10) / 10) * rss_std / rss_np
-        m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
-
-        if string.lower(self.Rest) == 'mode':
-            rg_std = np.sqrt((np.exp(2 * m - 2 * s**2)) * (1 - np.exp(-s**2)))
-        elif string.lower(self.Rest) == 'median':
-            rg_std = np.sqrt(
-                (np.exp(2 * m + s**2)) * (np.exp(s**2) - 1))
-        elif string.lower(self.Rest) == 'mean':
-            rg_std = np.sqrt((np.exp(2 * m + 3 * s**2)) * (np.exp(s**2) - 1))
-        else:
-            raise ValueError(self.Rest + ": no such ranging estimator")
-        return rg_std
 
     def locate(self, method='ls'):
         """
@@ -622,7 +541,7 @@ class Algloc(object):
                     # Construct the vector K (see theory)
                     rn2 = np.sum(rn_rss * rn_rss, axis=0)
                     k1 = rn2[1:] - rn2[0:1]
-                    rg = self.get_range()
+                    rg = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                     rg2 = rg * rg
                     k2 = rg2[0:1] - rg2[1:]
                     K = k1 + k2
@@ -654,7 +573,7 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                    rg_rss = self.get_range()
+                    rg_rss = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                     K_rss = k1_rss + k2_rss
@@ -690,7 +609,7 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[:] - rn2_toa[0:1]
-                    rg_rss = self.get_range()
+                    rg_rss = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_toa[0:1] - rg2_rss[:]
                     K_rss = k1_rss + k2_rss
@@ -769,7 +688,7 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg = self.get_range()
+                rg = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                 rg2 = rg * rg
                 k2_rss = rg2[0:1] - rg2[1:]
                 K_rss = k1_rss + k2_rss
@@ -814,7 +733,7 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                rg_rss = self.get_range()
+                rg_rss = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                 rg2_rss = rg_rss * rg_rss
                 k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                 K_rss = k1_rss + k2_rss
@@ -962,8 +881,8 @@ class Algloc(object):
                     # Construct the vector K (see theory)
                     rn2 = np.sum(rn_rss * rn_rss, axis=0)
                     k1 = rn2[1:] - rn2[0:1]
-                    rg = self.get_range()
-                    rg_std = self.get_range_std()
+                    rg = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
+                    rg_std = get_range_std(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                     rg2 = rg * rg
                     k2 = rg2[0:1] - rg2[1:]
                     K = k1 + k2
@@ -998,8 +917,8 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[1:] - rn2_rss[0:1]
-                    rg_rss = self.get_range()
-                    rg_rss_std = self.get_range_std()
+                    rg_rss = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
+                    rg_rss_std = get_range_std(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                     K_rss = k1_rss + k2_rss
@@ -1040,8 +959,8 @@ class Algloc(object):
                     # Construct the vector K_rss (see theory)
                     rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
                     k1_rss = rn2_rss[:] - rn2_toa[0:1]
-                    rg_rss = self.get_range()
-                    rg_rss_std = self.get_range_std()
+                    rg_rss = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
+                    rg_rss_std = get_range_std(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                     rg2_rss = rg_rss * rg_rss
                     k2_rss = rg2_toa[0:1] - rg2_rss[:]
                     K_rss = k1_rss + k2_rss
@@ -1129,8 +1048,8 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg = self.get_range()
-                rg_std = self.get_range_std()
+                rg = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
+                rg_std = get_range_std(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                 rg2 = rg * rg
                 k2_rss = rg2[0:1] - rg2[1:]
                 K_rss = k1_rss + k2_rss
@@ -1179,8 +1098,8 @@ class Algloc(object):
                 # Construct the vector K_rss (see theory)
                 rn2 = np.sum(rn_rss * rn_rss, axis=0)
                 k1_rss = rn2[1:] - rn2[0:1]
-                rg_rss = self.get_range()
-                rg_rss_std = self.get_range_std()
+                rg_rss = get_range(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
+                rg_rss_std = get_range_std(rss=self.rss,rss_std=self.rss_std,rss_np=self.rss_np, d0=self.d0, PL0=self.PL0 , Rest=self.Rest)
                 rg2_rss = rg_rss * rg_rss
                 k2_rss = rg2_rss[0:1] - rg2_rss[1:]
                 K_rss = k1_rss + k2_rss

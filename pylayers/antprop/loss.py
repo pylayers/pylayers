@@ -1466,6 +1466,97 @@ def two_rays_curvedearthold(P,h0,h1,fGHz=2.4,**kwargs):
         return P
 
 
+def get_range(rss,rss_std,rss_np=2., d0=1, PL0=32.4 , Rest='mode'):
+    """ Compute the range from RSS using the "Rest" estimator
+
+
+    Parameters
+    ----------
+        rss: np.ndarray
+            rss dB (positive value)
+        rss_std
+            rss standard dev
+        rss_np
+            pathloss exponent
+        PL0 : pathloss @ d0
+        d0 
+        Rest : range evaluation method
+            'mode' | 'mean' | 'median'
+
+    Returns
+    -------
+    
+
+    rg : numpy.ndarray
+        range value
+
+
+    """
+
+    rss_db = rss
+    rss_std = rss_std
+    rss_np = rss_np
+    d0 = d0
+    pl0 = PL0
+    s = (np.log(10) / 10) * rss_std / rss_np
+    m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
+    if Rest == 'mode':
+        rg = np.exp(m - s**2)
+    elif Rest == 'median':
+        rg = np.exp(m)
+    elif Rest == 'mean':
+        rg = np.exp(m + 0.5 * s**2)
+    else:
+        raise ValueError(Rest + ": no such ranging estimator")
+    return rg
+
+def get_range_std(rss,rss_std,rss_np=2., d0=1, PL0=32.4 , Rest='mode'):
+    """
+    Compute the RSS range standard deviation using the "Rest" \
+    estimator
+
+    Parameters
+    ----------
+        rss: np.ndarray
+            rss dB (positive value)
+        rss_std
+            rss standard dev
+        rss_np
+            pathloss exponent
+        PL0 : pathloss @ d0
+        d0 
+        Rest : range evaluation method
+            'mode' | 'mean' | 'median'
+
+    Returns
+    -------
+    
+
+    rg : numpy.ndarray
+        range value
+
+    """
+
+    rss_db = rss
+    rss_std = rss_std
+    rss_np = rss_np
+    d0 = d0
+    pl0 = PL0
+    s = (np.log(10) / 10) * rss_std / rss_np
+    m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
+
+    if Rest == 'mode':
+        rg_std = np.sqrt((np.exp(2 * m - 2 * s**2)) * (1 - np.exp(-s**2)))
+    elif Rest == 'median':
+        rg_std = np.sqrt(
+            (np.exp(2 * m + s**2)) * (np.exp(s**2) - 1))
+    elif Rest == 'mean':
+        rg_std = np.sqrt((np.exp(2 * m + 3 * s**2)) * (np.exp(s**2) - 1))
+    else:
+        raise ValueError(Rest + ": no such ranging estimator")
+    return rg_std
+
+
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
     """ visuPt  : Visualization of values a given points
 
