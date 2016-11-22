@@ -489,6 +489,38 @@ class Algloc(object):
             raise ValueError(self.Rest + ": no such ranging estimator")
         return rg_std
 
+
+
+    def locate(self,method='ls'):
+        """
+        This methos perform location estimation using 
+        the method precised in the method attriubte
+
+        Parameters
+        ----------
+        
+        method : str | list
+            'ls' : least square
+            'wls' : weighted least square
+            'ml' : maximum likelihood
+
+        """
+
+        if isinstance(method,str):
+            method = [method]
+
+        method = [m.lower() for m in method]
+
+        if 'ls' in method or 'all' in method:
+            pe = self.ls_locate()
+        if 'wls' in method or 'all' in method:
+            pe = self.wls_locate()
+        if 'ml' in method or 'all' in method:
+            pe = self.ml_locate()
+
+        return pe
+
+
     def ls_locate(self):
         """
         This method applies least squares (LS) approximation to get
