@@ -98,6 +98,28 @@ class Algloc(object):
     .. plot::
         :include-source:
 
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.location.algebraic.algebraic import Algloc
+        >>> from pylayers.location.observables import Observables
+        >>> an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
+               [2, 3, -1], [1, 0, 5], [1, 4, 0]])
+        >>> an = an.T
+        >>> bn = np.array([1, 1, 2.])
+        >>> O_toa = Observables(an=an, bn=bn, mode='toa')
+        >>> A = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,
+                       toa_std=O_toa.noise_model['std'], bnGT=bn)
+        >>> print('Blind node :' + str(bn) + '\n')
+        >>> print('TOA')
+        >>> print('---')
+        >>> print('LS')
+        >>> print(A.ls_locate())
+        >>> print('WLS')
+        >>> print(A.wls_locate())
+        >>> print('ML')
+        >>> print(A.ml_locate())
+        >>> A.show()
+        >>> plt.show()
         """
 
         defaults = {'an_toa': np.ndarray(shape=(3, 0)),
@@ -129,9 +151,9 @@ class Algloc(object):
         # available ldp
         self._av_ldp = []
 
-        if len(self.bnGT.shape) > 2:
+        if self.bnGT.ndim > 2:
             raise AttributeError('blind node \'bn\' shape must be (3 x 1)')
-        if len(self.bnGT.shape) < 2:
+        if self.bnGT.ndim < 2:
             self.bnGT = self.bnGT.reshape((self.bnGT.shape[0], 1))
         if self.bnGT.shape[0] == 2:
             self.bnGT = np.vstack(
@@ -144,9 +166,9 @@ class Algloc(object):
         # TOA check
         ###########
 
-        if len(self.an_toa.shape) > 2:
+        if self.an_toa.ndim > 2:
             raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
-        if len(self.an_toa.shape) < 2:
+        if self.an_toa.ndim < 2:
             self.an_toa = self.an_toa.reshape((self.an_toa.shape[0], 1))
         if self.an_toa.shape[0] == 2:
             self.an_toa = np.vstack(
@@ -183,9 +205,9 @@ class Algloc(object):
         # TDOA check
         ###########
 
-        if len(self.an_tdoa.shape) > 2:
+        if self.an_tdoa.ndim > 2:
             raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
-        if len(self.an_tdoa.shape) < 2:
+        if self.an_tdoa.ndim < 2:
             self.an_tdoa = self.an_tdoa.reshape((self.an_tdoa.shape[0], 1))
         if self.an_tdoa.shape[0] == 2:
             self.an_tdoa = np.vstack(
@@ -222,9 +244,9 @@ class Algloc(object):
 
         # RSS
 
-        if len(self.an_rss.shape) > 2:
+        if self.an_rss.ndim > 2:
             raise AttributeError('Anchors \'an\' shape must be (3 x Na)')
-        if len(self.an_rss.shape) < 2:
+        if self.an_rss.ndim < 2:
             self.an_rss = self.an_rss.reshape((self.an_rss.shape[0], 1))
         if self.an_rss.shape[0] == 2:
             self.an_rss = np.vstack(
@@ -235,13 +257,13 @@ class Algloc(object):
 
         self.Nrss = self.an_rss.shape[1]
 
-        if len(self.rss.shape) > 1:
+        if self.rss.ndim > 1:
             try:
                 self.rss = self.rss.reshape(self.Nrss)
             except:
                 raise AttributeError('Wrong shape for rss')
 
-        if len(self.rss_std.shape) > 1:
+        if self.rss_std.ndim > 1:
             try:
                 self.rss_std = self.rss_std.reshape(self.Nrss)
             except:
