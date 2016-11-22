@@ -13,7 +13,7 @@ import pandas as pd
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import Node, Network
 from pylayers.network.communication import Gcom, TX, RX
-from pylayers.location.localization import Localization, PLocalization
+from pylayers.location.localizationRT import Localization, PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
 #from pylayers.util.pymysqldb import Database
