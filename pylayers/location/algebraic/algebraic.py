@@ -311,14 +311,13 @@ class Algloc(object):
         nd['toa'] = np.hstack((self.toa, A.toa))
         nd['toa_std'] = np.hstack((self.toa_std, A.toa_std))
 
-
         if 'tdoa' in self._av_ldp and 'tdoa' in A._av_ldp:
             if not np.alltrue(self.an_tdoa[self.tdoa_ref] == A.an_tdoa[A.tdoa_ref]):
                 raise AttributeError(
                     'tdoa reference nodes are note the same => cannot add these 2 algloc Algloc objects')
-            ext_an = np.delete(A.an_tdoa,A.tdoa_ref,1)
+            ext_an = np.delete(A.an_tdoa, A.tdoa_ref, 1)
 
-        else :
+        else:
             ext_an = A.an_tdoa
 
         nd['an_tdoa'] = np.hstack((self.an_tdoa, ext_an))
@@ -336,7 +335,6 @@ class Algloc(object):
         nd['bnGT'] = self.bnGT
 
         return Algloc(**nd)
-
 
     def show(self, **kwargs):
         self.plot(**kwargs)
@@ -489,16 +487,14 @@ class Algloc(object):
             raise ValueError(self.Rest + ": no such ranging estimator")
         return rg_std
 
-
-
-    def locate(self,method='ls'):
+    def locate(self, method='ls'):
         """
         This methos perform location estimation using 
         the method precised in the method attriubte
 
         Parameters
         ----------
-        
+
         method : str | list
             'ls' : least square
             'wls' : weighted least square
@@ -506,7 +502,7 @@ class Algloc(object):
 
         """
 
-        if isinstance(method,str):
+        if isinstance(method, str):
             method = [method]
 
         method = [m.lower() for m in method]
@@ -519,7 +515,6 @@ class Algloc(object):
             pe = self.ml_locate()
 
         return pe
-
 
     def ls_locate(self):
         """
@@ -1070,7 +1065,7 @@ class Algloc(object):
             # TDOA + TOA
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['toa'] and \
-                not self.used_ldp['rss']:
+            not self.used_ldp['rss']:
                 rn_toa = self.an_toa
                 toa_ns = self.toa
                 toa_std = self.toa_std
@@ -1416,7 +1411,6 @@ class Algloc(object):
 
             return P
 
-
     def fim(self, P):
         """
         Compute the fisher information matrix in P for the given
@@ -1491,8 +1485,7 @@ class Algloc(object):
 
             return FIM
 
-
-    def _fim_TDOA(self,P):
+    def _fim_TDOA(self, P):
         """
         Compute the fisher information matrix in P for the given
         for TDOA observables
@@ -1526,7 +1519,7 @@ class Algloc(object):
                                                   pmrn - f2 / pmrnr, (f1 / pmrn - f2 / pmrnr).T)
         return FIM
 
-    def _fim_TOA(self,P):
+    def _fim_TOA(self, P):
         """
         Compute the fisher information matrix in P for the given
         for TOA observables
@@ -1555,7 +1548,7 @@ class Algloc(object):
                 ((rg_std[i] ** 2) * np.dot(f1.T, f1))
         return FIM
 
-    def _fim_RSS(self,P):
+    def _fim_RSS(self, P):
         """
         Compute the fisher information matrix in P for the given
         for RSS observables
@@ -1583,7 +1576,6 @@ class Algloc(object):
             FIM += np.dot(f1, f1.T) / \
                 ((S[0] ** 2) * (np.dot(f1.T, f1)) ** 2)
         return FIM
-
 
     def crb(self, P):
         """
@@ -1620,7 +1612,6 @@ class Algloc(object):
         FIM = self.fim(P)
         CRB = np.sqrt(np.trace(nplg.pinv(FIM)))
         return CRB
-
 
 
 if __name__ == "__main__":

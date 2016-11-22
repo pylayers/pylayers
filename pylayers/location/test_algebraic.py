@@ -3,7 +3,7 @@ import numpy as np
 from pylayers.location.algebraic.algebraic import Algloc
 from pylayers.location.observables import Observables
 
-method = ['ls','wls','ml']
+method = ['ls', 'wls', 'ml']
 
 an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
                [2, 3, -1], [1, 0, 5], [1, 4, 0]])
@@ -96,7 +96,6 @@ print('crb')
 print(A_tdoa_rss.crb(A_tdoa_rss.bnGT))
 
 
-
 A_full = A_tdoa + A_rss + A_toa
 
 print('---')
@@ -108,4 +107,3 @@ for m in method:
     print(pe)
 print('crb')
 print(A_full.crb(A_full.bnGT))
-
