@@ -107,41 +107,41 @@ class Observables(object):
             # first call from compute_power
             self._an_ref = value
 
-    # @property
-    # def rp_model(self):
-    #     return self._rp_model
+    @property
+    def rp_model(self):
+        return self._rp_model
 
-    # @rp_model.setter
-    # def rp_model(self, value):
-    #     if hasattr(self, 'rp_model'):
-    #         if self._rp_model != value:
-    #             self.compute_rpower(param=value)
-    #     else:
-    #         # first call from compute_power
-    #         self._rp_model = value
+    @rp_model.setter
+    def rp_model(self, value):
+        if hasattr(self, 'rp_model'):
+            if self._rp_model != value:
+                self.compute_rpower(param=value)
+        else:
+            # first call from compute_power
+            self._rp_model = value
 
-    # @property
-    # def noise_model(self):
-    #     return self._noise_model
+    @property
+    def noise_model(self):
+        return self._noise_model
 
-    # @noise_model.setter
-    # def noise_model(self, value):
-    #     if hasattr(self, 'noise_model'):
-    #         if not isinstance(value['law'],list):
-    #             if self.mode != 'tdoa':
-    #                 value['law']=[value['law']]*self.Na
-    #             else: 
-    #                 value['law']=[value['law']]*self.Na-1
-    #         idem = np.alltrue(np.array([i in self._implemented_law for i in value['law']]))
-    #         # check 
-    #         if not idem:
-    #             raise AttributeError('A specified law of noise model is not yet implemented')
-    #         else:
-    #             self._noise_model = value
-    #             self.generate_noise(param=value)
-    #     else:
-    #         # first call from compute_power
-    #         self._noise_model = value
+    @noise_model.setter
+    def noise_model(self, value):
+        if hasattr(self, 'noise_model'):
+            if not isinstance(value['law'],list):
+                if self.mode != 'tdoa':
+                    value['law']=[value['law']]*self.Na
+                else: 
+                    value['law']=[value['law']]*self.Na-1
+            idem = np.alltrue(np.array([i in self._implemented_law for i in value['law']]))
+            # check 
+            if not idem:
+                raise AttributeError('A specified law of noise model is not yet implemented')
+            else:
+                self._noise_model = value
+                self.generate_noise(param=value)
+        else:
+            # first call from compute_power
+            self._noise_model = value
 
 
     def __repr__(self):
