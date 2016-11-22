@@ -24,7 +24,8 @@ print('WLS')
 print(A_toa.wls_locate())
 print('ML')
 print(A_toa.ml_locate())
-
+print('CRB')
+print(A_toa.crb(A_toa.bnGT))
 
 O_rss = Observables(an=an, bn=bn, mode='rss')
 
@@ -38,6 +39,8 @@ print('WLS')
 print(A_rss.wls_locate())
 print('ML')
 print(A_rss.ml_locate())
+print('CRB')
+print(A_rss.crb(A_toa.bnGT))
 
 O_tdoa = Observables(an=an, bn=bn, mode='tdoa')
 
@@ -52,6 +55,8 @@ print('WLS')
 print(A_tdoa.wls_locate())
 print('ML')
 print(A_tdoa.ml_locate())
+print('CRB')
+print(A_tdoa.crb(A_tdoa.bnGT))
 
 
 A_toa_tdoa = A_toa + A_tdoa
@@ -63,6 +68,8 @@ print('WLS')
 print(A_toa_tdoa.wls_locate())
 print('ML')
 print(A_toa_tdoa.ml_locate())
+print('CRB')
+print(A_toa_tdoa.crb(A_toa_tdoa.bnGT))
 
 A_toa_rss = A_toa + A_rss
 print('TOA + RSS')
@@ -73,6 +80,8 @@ print('WLS')
 print(A_toa_rss.wls_locate())
 print('ML')
 print(A_toa_rss.ml_locate())
+print('CRB')
+print(A_toa_rss.crb(A_toa_rss.bnGT))
 
 
 A_tdoa_rss = A_tdoa + A_rss
@@ -85,6 +94,8 @@ print('WLS')
 print(A_tdoa_rss.wls_locate())
 print('ML')
 print(A_tdoa_rss.ml_locate())
+print('CRB')
+print(A_tdoa_rss.crb(A_tdoa_rss.bnGT))
 
 
 A_full = A_tdoa + A_rss + A_toa
@@ -92,11 +103,13 @@ A_full = A_tdoa + A_rss + A_toa
 print('full')
 print('---')
 print('LS')
-print(A_tdoa_rss.ls_locate())
+print(A_full.ls_locate())
 print('WLS')
-print(A_tdoa_rss.wls_locate())
+print(A_full.wls_locate())
 print('ML')
-print(A_tdoa_rss.ml_locate())
+print(A_full.ml_locate())
+print('CRB')
+print(A_full.crb(A_full.bnGT))
 
 
 # A_toa_tdoa = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,

@@ -7,25 +7,12 @@ r"""
     :toctree: generated
 
 """
-#####################################################################
-# PYLAYERS is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-#(at your option) any later version.
 
-# PYLAYERS is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with PYLAYERS.  If not, see <http://www.gnu.org/licenses/>.
-
-#-------------------------------------------------------------------
 # authors :
 # Mohamed LAARAIEDH
+# Nicolas AMIOT
 # Bernard Uguen
-#####################################################################
+
 import numpy as np
 import doctest
 import scipy as sp
@@ -91,6 +78,8 @@ class Algloc(object):
         used_ldp : list 
             dictionnary to determien which ldp are used for localization etaimtion
 
+        bnGT : np.ndarray(shape=(3,0))
+            blind node position
 
     Examples
     --------
@@ -344,7 +333,7 @@ class Algloc(object):
         nd['PL0'] = np.hstack((self.PL0, A.PL0))
         nd['Rest'] = self.Rest
         nd['d0'] = self.d0
-
+        nd['bnGT'] = self.bnGT
 
         return Algloc(**nd)
 
@@ -359,9 +348,6 @@ class Algloc(object):
 
         defaults = {'fig': [],
                     'ax': [],
-                    'pe_ls': np.ndarray(shape=(3, 0)),
-                    'pe_wls': np.ndarray(shape=(3, 0)),
-                    'pe_ml': np.ndarray(shape=(3, 0)),
                     }
 
         for k in defaults:
@@ -455,17 +441,7 @@ class Algloc(object):
 
         rg : numpy.ndarray
 
-        Examples
-        --------
 
-        .. plot::
-            :include-source:
-
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> r_mode = S.get_range('mode')
-            >>> r_median = S.get_range('median')
-            >>> r_mean = S.get_range('mean')
 
         """
 
@@ -492,21 +468,6 @@ class Algloc(object):
         estimator
 
 
-        Returns
-        -------
-            rg_std : numpy.ndarray
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> rs_mode = S.get_range_std('mode')
-            >>> rs_median = S.get_range_std('median')
-            >>> rs_mean = S.get_range_std('mean')
         """
 
         rss_db = self.rss
@@ -533,16 +494,11 @@ class Algloc(object):
         This method applies least squares (LS) approximation to get
         position P.
 
-        Parameters
-        ----------
-
-
-        self.Rest : string
 
         Returns
         -------
 
-        P : numpy.ndarray
+        pe_ls : numpy.ndarray
 
         Examples
         --------
@@ -550,6 +506,18 @@ class Algloc(object):
         .. plot::
             :include-source:
 
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.location.algebraic.algebraic import Algloc
+        >>> from pylayers.location.observables import Observables
+        >>> an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
+               [2, 3, -1], [1, 0, 5], [1, 4, 0]])
+        >>> an = an.T
+        >>> bn = np.array([1, 1, 2.])
+        >>> O_toa = Observables(an=an, bn=bn, mode='toa')
+        >>> A = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,
+                       toa_std=O_toa.noise_model['std'], bnGT=bn)
+        >>> A.ls_locate()
 
         """
         if np.sum(self.used_ldp.values()) == 0:
@@ -866,7 +834,7 @@ class Algloc(object):
 
         Returns
         -------
-            P : numpy.ndarray
+            pe_wls : numpy.ndarray
 
         Examples
         --------
@@ -874,15 +842,18 @@ class Algloc(object):
         .. plot::
             :include-source:
 
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> P_rss = S.wls_locate(1, 0, 0, 'mode')
-            >>> P_toa = S.wls_locate(0, 1, 0, 'mode')
-            >>> P_tdoa = S.wls_locate(0, 0, 1, 'mode')
-            >>> P_rsstoa = S.wls_locate(1, 1, 0, 'mode')
-            >>> P_rsstdoa = S.wls_locate(1, 0, 1, 'mode')
-            >>> P_toatdoa = S.wls_locate(0, 1, 1, 'mode')
-            >>> P_rsstoatdoa = S.wls_locate(1, 1, 1, 'mode')
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.location.algebraic.algebraic import Algloc
+        >>> from pylayers.location.observables import Observables
+        >>> an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
+               [2, 3, -1], [1, 0, 5], [1, 4, 0]])
+        >>> an = an.T
+        >>> bn = np.array([1, 1, 2.])
+        >>> O_toa = Observables(an=an, bn=bn, mode='toa')
+        >>> A = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,
+                       toa_std=O_toa.noise_model['std'], bnGT=bn)
+        >>> A.wls_locate()
 
         """
         if np.sum(self.used_ldp.values()) == 0:
@@ -1227,14 +1198,14 @@ class Algloc(object):
 
             return P
 
-    def ml_function_TOA(self, P):
+    def _ml_function_TOA(self, P):
         """
         This defines the ML function to be minimized if ML estimator
         is used for TOA
 
         Parameters
         ----------
-            P : numpy.ndarray
+            pe_ml : numpy.ndarray
         """
         rn_toa = self.an_toa
         toa_ns = self.toa
@@ -1252,7 +1223,7 @@ class Algloc(object):
 
         return ML
 
-    def ml_function_TDOA(self, P):
+    def _ml_function_TDOA(self, P):
         """
         This defines the ML function to be minimized if ML estimator
         is used for TDOA
@@ -1281,7 +1252,7 @@ class Algloc(object):
 
         return ML
 
-    def ml_function_RSS(self, P):
+    def _ml_function_RSS(self, P):
         """
         This defines the ML function to be minimized if ML estimator
         is used for RSS
@@ -1316,10 +1287,7 @@ class Algloc(object):
         Parameters
         ----------
             P : numpy.ndarray
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
-
+                gradient initial guess 
         Returns
         -------
             ML : numpy.ndarray
@@ -1331,46 +1299,46 @@ class Algloc(object):
             if self.used_ldp['tdoa'] and\
                not self.used_ldp['toa'] and\
                not self.used_ldp['rss']:
-                ML = self.ml_function_TDOA(P)
+                ML = self._ml_function_TDOA(P)
 
             # only TOA
             elif self.used_ldp['toa'] and\
                     not self.used_ldp['tdoa'] and\
                     not self.used_ldp['rss']:
-                ML = self.ml_function_TOA(P)
+                ML = self._ml_function_TOA(P)
 
             # only Rss
             elif self.used_ldp['rss'] and\
                     not self.used_ldp['toa'] and\
                     not self.used_ldp['tdoa']:
-                ML = self.ml_function_RSS(P)
+                ML = self._ml_function_RSS(P)
 
             # TDOA + TOA
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['toa'] and \
                     not self.used_ldp['rss']:
-                ML = self.ml_function_TDOA(P) +\
-                    self.ml_function_TOA(P)
+                ML = self._ml_function_TDOA(P) +\
+                    self._ml_function_TOA(P)
 
             # TDOA + RSS
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['rss'] and \
                     not self.used_ldp['toa']:
-                ML = self.ml_function_TDOA(P) +\
-                    self.ml_function_RSS(P)
+                ML = self._ml_function_TDOA(P) +\
+                    self._ml_function_RSS(P)
 
             # TOA + RSS
             elif self.used_ldp['toa'] and \
                     self.used_ldp['rss'] and \
                     not self.used_ldp['tdoa']:
-                ML = self.ml_function_TOA(P) +\
-                    self.ml_function_RSS(P)
+                ML = self._ml_function_TOA(P) +\
+                    self._ml_function_RSS(P)
 
             # TDOA + TOA + RSS
             else:
-                ML = self.ml_function_TDOA(P) +\
-                    self.ml_function_TOA(P) +\
-                    self.ml_function_RSS(P)
+                ML = self._ml_function_TDOA(P) +\
+                    self._ml_function_TOA(P) +\
+                    self._ml_function_RSS(P)
 
             return ML
 
@@ -1385,7 +1353,7 @@ class Algloc(object):
 
         Returns
         -------
-            P : numpy.ndarray
+            pe_ml : numpy.ndarray
 
         Examples
         --------
@@ -1393,15 +1361,18 @@ class Algloc(object):
         .. plot::
             :include-source:
 
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> P_rss = S.ml_locate(BN0, 1, 0, 0)
-            >>> P_toa = S.ml_locate(BN0, 0, 1, 0)
-            >>> P_tdoa = S.ml_locate(BN0, 0, 0, 1)
-            >>> P_rsstoa = S.ml_locate(BN0, 1, 1, 0)
-            >>> P_rsstdoa = S.ml_locate(BN0, 1, 0, 1)
-            >>> P_toatdoa = S.ml_locate(BN0, 0, 1, 1)
-            >>> P_rsstoatdoa = S.ml_locate(BN0, 1, 1, 1)
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.location.algebraic.algebraic import Algloc
+        >>> from pylayers.location.observables import Observables
+        >>> an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
+               [2, 3, -1], [1, 0, 5], [1, 4, 0]])
+        >>> an = an.T
+        >>> bn = np.array([1, 1, 2.])
+        >>> O_toa = Observables(an=an, bn=bn, mode='toa')
+        >>> A = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,
+                       toa_std=O_toa.noise_model['std'], bnGT=bn)
+        >>> A.ml_locate()
         """
         if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
@@ -1412,6 +1383,7 @@ class Algloc(object):
             self.pe_ml = P
 
             return P
+
 
     def fim(self, P):
         """
@@ -1425,6 +1397,26 @@ class Algloc(object):
         -------
             FIM : numpy.ndarray
 
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.location.algebraic.algebraic import Algloc
+        >>> from pylayers.location.observables import Observables
+        >>> an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
+               [2, 3, -1], [1, 0, 5], [1, 4, 0]])
+        >>> an = an.T
+        >>> bn = np.array([1, 1, 2.])
+        >>> O_toa = Observables(an=an, bn=bn, mode='toa')
+        >>> A = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,
+                       toa_std=O_toa.noise_model['std'], bnGT=bn)
+        >>> A.fim(A.bnGT)
+
         """
         if np.sum(self.used_ldp.values()) == 0:
             raise ValueError("inputs missed")
@@ -1432,79 +1424,134 @@ class Algloc(object):
         else:
             # only TDOA
             if self.used_ldp['tdoa'] and np.sum(self.used_ldp.values()) == 1:
-                rn_tdoa = np.delete(self.an_tdoa, self.tdoa_ref, 1)
-                rnr_tdoa = self.an_tdoa[
-                    :, self.tdoa_ref] * np.ones((3, self.Ntdoa - 1))
-#                rnr_tdoa = self.nodes['RNr_TDOA']
-                tdoa_ns = self.tdoa
-                tdoa_std = self.tdoa_std
-                sh1 = np.shape(rn_tdoa)
-                drg = self.c * tdoa_ns
-                drg_std = self.c * tdoa_std
-                FIM = np.zeros((sh1[0], sh1[0]))
-                for i in range(sh1[1]):
-                    f1 = P - rn_tdoa[:, i:i + 1]
-                    f2 = P - rnr_tdoa[:, i:i + 1]
-                    pmrn = np.sqrt(np.dot(f1.T, f1))
-                    pmrnr = np.sqrt(np.dot(f2.T, f2))
-                    FIM += (1 / drg_std[i] ** 2) * np.dot(f1 /
-                                                          pmrn - f2 / pmrnr, (f1 / pmrn - f2 / pmrnr).T)
+                FIM = self._fim_TDOA(P)
 
             # only TOA
             elif self.used_ldp['toa'] and np.sum(self.used_ldp.values()) == 1:
-                rn_toa = self.an_toa
-                toa_ns = self.toa
-                toa_std = self.toa_std
-                sh1 = np.shape(rn_toa)
-                rg = self.c * toa_ns
-                rg_std = self.c * toa_std
-                FIM = np.zeros((sh1[0], sh1[0]))
-                for i in range(sh1[1]):
-                    f1 = P - rn_toa[:, i:i + 1]
-                    FIM += np.dot(f1, f1.T) / \
-                        ((rg_std[i] ** 2) * np.dot(f1.T, f1))
-                    FIM += np.dot(f1, f1.T) / \
-                        ((rg_ramerstd[i] ** 2) * np.dot(f1.T, f1))
+                FIM = self._fim_TOA(P)
 
             # only Rss
             elif self.used_ldp['rss'] and np.sum(self.used_ldp.values()) == 1:
-                rn_rss = self.an_rss
-                rss_db = self.rss
-                rss_std = self.rss_std
-                rss_np = self.rss_np
-                sh1 = np.shape(rn_rss)
-                d0 = self.d0
-                pl0 = self.PL0
-                S = (np.log(10) / 10) * rss_std / rss_np
-                FIM = np.zeros((sh1[0], sh1[0]))
-                for i in range(sh1[1]):
-                    f1 = P - rn_rss[:, i:i + 1]
-                    FIM += np.dot(f1, f1.T) / \
-                        ((S[0] ** 2) * (np.dot(f1.T, f1)) ** 2)
+                FIM = self._fim_RSS(P)
+
             # TDOA + TOA
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['toa'] and \
-                    np.sum(self.used_ldp.values()) == 2:
-                FIM = self.fim(P, 0, 1, 0) + self.fim(P, 0, 0, 1)
+                    not self.used_ldp['rss']:
+                FIM = self._fim_TDOA(P) + self._fim_TOA(P)
 
             # TDOA + RSS
             elif self.used_ldp['tdoa'] and \
                     self.used_ldp['rss'] and \
-                    np.sum(self.used_ldp.values()) == 2:
-                FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 0, 1)
+                    not self.used_ldp['toa']:
+                FIM = self._fim_TDOA(P) + self._fim_RSS(P)
 
             # TOA + RSS
             elif self.used_ldp['toa'] and \
                     self.used_ldp['rss'] and \
-                    np.sum(self.used_ldp.values()) == 2:
-                FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 1, 0)
+                    not self.used_ldp['tdoa']:
+                FIM = self._fim_TOA(P) + self._fim_RSS(P)
 
             # TDOA + TOA + RSS
             else:
-                FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 1, 0) +\
-                    self.fim(P, 0, 0, 1)
+                FIM = self._fim_TDOA(P) + self._fim_TOA(P) +\
+                    self._fim_RSS(P)
 
             return FIM
+
+
+    def _fim_TDOA(self,P):
+        """
+        Compute the fisher information matrix in P for the given
+        for TDOA observables
+
+        Parameters
+        ----------
+            P : numpy.ndarray
+
+        Returns
+        -------
+            FIM : numpy.ndarray
+
+        """
+
+        rn_tdoa = np.delete(self.an_tdoa, self.tdoa_ref, 1)
+        rnr_tdoa = self.an_tdoa[
+            :, self.tdoa_ref] * np.ones((3, self.Ntdoa - 1))
+    #                rnr_tdoa = self.nodes['RNr_TDOA']
+        tdoa_ns = self.tdoa
+        tdoa_std = self.tdoa_std
+        sh1 = np.shape(rn_tdoa)
+        drg = self.c * tdoa_ns
+        drg_std = self.c * tdoa_std
+        FIM = np.zeros((sh1[0], sh1[0]))
+        for i in range(sh1[1]):
+            f1 = P - rn_tdoa[:, i:i + 1]
+            f2 = P - rnr_tdoa[:, i:i + 1]
+            pmrn = np.sqrt(np.dot(f1.T, f1))
+            pmrnr = np.sqrt(np.dot(f2.T, f2))
+            FIM += (1 / drg_std[i] ** 2) * np.dot(f1 /
+                                                  pmrn - f2 / pmrnr, (f1 / pmrn - f2 / pmrnr).T)
+        return FIM
+
+    def _fim_TOA(self,P):
+        """
+        Compute the fisher information matrix in P for the given
+        for TOA observables
+
+        Parameters
+        ----------
+            P : numpy.ndarray
+
+        Returns
+        -------
+            FIM : numpy.ndarray
+
+        """
+        rn_toa = self.an_toa
+        toa_ns = self.toa
+        toa_std = self.toa_std
+        sh1 = np.shape(rn_toa)
+        rg = self.c * toa_ns
+        rg_std = self.c * toa_std
+        FIM = np.zeros((sh1[0], sh1[0]))
+        for i in range(sh1[1]):
+            f1 = P - rn_toa[:, i:i + 1]
+            FIM += np.dot(f1, f1.T) / \
+                ((rg_std[i] ** 2) * np.dot(f1.T, f1))
+            FIM += np.dot(f1, f1.T) / \
+                ((rg_std[i] ** 2) * np.dot(f1.T, f1))
+        return FIM
+
+    def _fim_RSS(self,P):
+        """
+        Compute the fisher information matrix in P for the given
+        for RSS observables
+
+        Parameters
+        ----------
+            P : numpy.ndarray
+
+        Returns
+        -------
+            FIM : numpy.ndarray
+
+        """
+        rn_rss = self.an_rss
+        rss_db = self.rss
+        rss_std = self.rss_std
+        rss_np = self.rss_np
+        sh1 = np.shape(rn_rss)
+        d0 = self.d0
+        pl0 = self.PL0
+        S = (np.log(10) / 10) * rss_std / rss_np
+        FIM = np.zeros((sh1[0], sh1[0]))
+        for i in range(sh1[1]):
+            f1 = P - rn_rss[:, i:i + 1]
+            FIM += np.dot(f1, f1.T) / \
+                ((S[0] ** 2) * (np.dot(f1.T, f1)) ** 2)
+        return FIM
+
 
     def crb(self, P):
         """
@@ -1520,164 +1567,28 @@ class Algloc(object):
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
-            >>> nodes, ldp, BN0 = scenario()
-            >>> S = algloc(nodes, ldp)
-            >>> crb_rss = S.crb(BN, 1, 0, 0)
-            >>> crb_toa = S.crb(BN, 0, 1, 0)
-            >>> crb_tdoa = S.crb(BN, 0, 0, 1)
-            >>> crb_rsstoa = S.crb(BN, 1, 1, 0)
-            >>> crb_rsstdoa = S.crb(BN, 1, 0, 1)
-            >>> crb_toatdoa = S.crb(BN, 0, 1, 1)
-            >>> crb_rsstoatdoa = S.crb(BN, 1, 1, 1)
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.location.algebraic.algebraic import Algloc
+        >>> from pylayers.location.observables import Observables
+        >>> an = np.array([[0, 1, 2.], [0, 3, 1], [2, 1, 3],
+               [2, 3, -1], [1, 0, 5], [1, 4, 0]])
+        >>> an = an.T
+        >>> bn = np.array([1, 1, 2.])
+        >>> O_toa = Observables(an=an, bn=bn, mode='toa')
+        >>> A = Algloc(an_toa=O_toa.an, toa=O_toa.rng + O_toa.noise,
+                       toa_std=O_toa.noise_model['std'], bnGT=bn)
+        >>> A.crb(A.bnGT)
         """
 
         FIM = self.fim(P)
         CRB = np.sqrt(np.trace(nplg.pinv(FIM)))
         return CRB
 
-
-def scenario():
-    """
-    This method is not a class member, it defines a sample scenario.
-    Defines a sample scenario for testing
-
-    Returns
-    -------
-        nodes : dictionnary 
-            'BN' 
-            'RN_RSS'
-            'RN_TDOA'
-            'RN_TOA'
-            'RNr_TDOA'
-        ldp   : all ldps of bn0
-            'PL0'
-            'RSS'
-            'RSS_np'
-            'RSS_std'
-            'TDOA'
-            'TDOA_std'
-            'TOA'
-            'TOA_std'
-        bn0   : The true position of blind node
-
-
-    Examples
-    --------
-
-    .. plot::
-        :include-source:
-
-
-        >>> from pylayers.location.algebraic import *
-        >>> import scipy as sp
-        >>> from pylayers.util.geomutil import dist
-        >>> nRN = 4
-        >>> dim = 3 # 2 for 2D, 3 for 3D
-        >>> L = 20.
-        >>> c = 0.3
-        >>> BN = L*sp.rand(dim,1)
-        >>> BN0 = L*sp.rand(dim,1)
-        >>> RN_TOA = L*sp.rand(dim,nRN)
-        >>> RN_RSS = L*sp.rand(dim,nRN)
-        >>> RN_TDOA = L*sp.rand(dim,nRN)
-
-        >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-        >>> TOF = d_TOA/c # actual TOA
-        >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-        >>> TOA = TOF + TOA_std
-
-        >>> rss_std = 0.001 * np.ones(nRN)
-        >>> rss_np = 2.645 * np.ones(nRN)
-        >>> pl0 = 34.7*np.ones(nRN)
-        >>> d0 = 1.
-        >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-        >>> X = rss_std * np.random.randn(np.shape(pl0)[0])
-        >>> rss_db = pl0-10*rss_np*np.log10(d_RSS/d0)+X
-
-        >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-        >>> d = dist(RN_TDOA,BN,0)
-        >>> dr = dist(RNr_TDOA,BN,0)
-        >>> TDOF = (d-dr)/c # actual TDOA
-        >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-        >>> TDOA = TDOF + TDOA_std
-
-        >>> nodes={}
-        >>> nodes['BN']= BN
-        >>> an_rss= RN_RSS
-        >>> an_toa= RN_TOA
-        >>> nodes['RN_TDOA']= RN_TDOA
-        >>> nodes['RNr_TDOA']= RNr_TDOA
-
-        >>> ldp={}
-        >>> ldp['RSS'] = rss_db
-        >>> ldp['RSS_std'] = rss_std
-        >>> ldp['RSS_np'] = rss_np
-        >>> ldp['d0'] = d0
-        >>> ldp['PL0'] = pl0
-        >>> ldp['TOA'] = TOA
-        >>> ldp['TOA_std'] = TOA_std
-        >>> ldp['TDOA'] = TDOA
-        >>> ldp['TDOA_std'] = TDOA_std
-
-        >>> print 'Nodes'
-        >>> print nodes
-        >>> print 'LDPs'
-        >>> print ldp
-        >>> print 'BN0:initial guess for ML estimator'
-        >>> print BN0
-        """
-    nrn = 4
-    dim = 3  # 2 for 2D, 3 for 3D
-    L = 20.
-    c = 0.3
-    bn = L * sp.rand(dim, 1)
-    bn0 = L * sp.rand(dim, 1)
-    rn_toa = L * sp.rand(dim, nrn)
-    rn_rss = L * sp.rand(dim, nrn)
-    rn_tdoa = L * sp.rand(dim, nrn)
-
-    d_toa = dist(rn_toa, bn, 0)  # actual distances
-    tof = d_toa / c  # actual TOA
-    toa_std = 0.001 / c * np.ones(np.shape(tof))
-    toa_ns = tof + toa_std
-
-    rss_std = 0.001 * np.ones(nrn)
-    rss_np = 2.645 * np.ones(nrn)
-    pl0 = 34.7 * np.ones(nrn)
-    d0 = 1.
-    d_rss = dist(rn_rss, bn, 0)  # actual distances
-    x = rss_std * np.random.randn(np.shape(pl0)[0])
-    rss_db = pl0 - 10 * rss_np * np.log10(d_rss / d0) + x
-
-    rnr_tdoa = np.zeros((dim, nrn))  # L*sp.rand(dim,nRN)
-    d = dist(rn_tdoa, bn, 0)
-    dr = dist(rnr_tdoa, bn, 0)
-    tdof = (d - dr) / c  # actual TDOA
-    tdoa_std = 0.001 / c * np.ones(np.shape(tdof))
-    tdoa_ns = tdof + tdoa_std
-
-    nodes = {}
-    nodes['BN'] = bn
-    nodes['RN_RSS'] = rn_rss
-    nodes['RN_TOA'] = rn_toa
-    nodes['RN_TDOA'] = rn_tdoa
-    nodes['RNr_TDOA'] = rnr_tdoa
-
-    ldp = {}
-    ldp['RSS'] = rss_db
-    ldp['RSS_std'] = rss_std
-    ldp['RSS_np'] = rss_np
-    ldp['d0'] = d0
-    ldp['PL0'] = pl0
-    ldp['TOA'] = toa_ns
-    ldp['TOA_std'] = toa_std
-    ldp['TDOA'] = tdoa_ns
-    ldp['TDOA_std'] = tdoa_std
-
-    return nodes, ldp, bn0
 
 
 if __name__ == "__main__":
