@@ -246,8 +246,8 @@ class Bsignal(PyLayers):
         label : list of labels
 
         """
-        self.x = x
-        self.y = y
+        self.x = x.astype(float)
+        self.y = y.astype(complex)
         ndim = self.y.ndim
         if ndim==1:
             self.y=self.y.reshape((1,len(self.y)))
@@ -1748,6 +1748,56 @@ class TBsignal(Bsignal):
 
         return U
 
+    def b2tu2(self, fsGHz ,Tobsns):
+        """ conversion from TBsignal to TUsignal
+
+        Parameters
+        ----------
+
+        N : integer
+            Number of points
+
+        Returns
+        -------
+
+        U : TUsignal
+
+
+        Notes
+        -----
+
+        This function exploits linear interp1d
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import matplotlib.pyplot as plt
+            >>> x = np.array( [ 1, 3 , 6 , 11 , 18])
+            >>> y = np.array( [ 0,1 ,-5, 8 , 10])
+            >>> sb = TBsignal(x,y)
+            >>> su20 = sb.b2tu(20)
+            >>> su100 = sb.b2tu(100)
+            >>> fi = plt.figure()
+            >>> st = sb.stem()
+            >>> fig,ax = su20.plot(color='k')
+            >>> fig,ax = su100.plot(color='r')
+            >>> ti = plt.title('b2tu : sb(blue) su20(black) su200(red)')
+
+        """
+        Nf = np.round(fsGHz*Tobsns)
+        dfGHz = fsGHz/(1.0*Nf)
+        fGHz = np.linspace(0,fsGHz,Nf)
+        tns = np.arange(0,Tobsns,1./fsGHz)
+        assert(len(tns)==len(fGHz))
+        uf = np.sum(self.y.T * np.exp(-2*1j*np.pi*fGHz[None,:]*self.x[:,None]),axis=0)
+        ut = np.fft.ifft(uf)
+        U = TUsignal(tns, ut)
+
+        return U
 
 class TUsignal(TBsignal, Usignal):
     """ Uniform signal in time domain
