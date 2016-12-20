@@ -522,8 +522,19 @@ class Bsignal(PyLayers):
 
         sax : list
             selected output axis from y default [0,1]
-        typ : string
-            ['l10','l20','d','r','du','ru','m','re','im']
+            typ : string
+            'm'   : modulus
+            'v'   : value
+            'l10' : dB (10 log10)
+            'l20' : dB (20 log10)
+            'd'   : phase degrees
+            'r'   : phase radians
+            'du'  : phase degrees unwrap
+            'ru'  : phase radians unwrap
+            'gdn' : group delay (ns)
+            'gdm' : group distance (m)
+            're'  : real part
+            'im'  : imaginary part
         sel  : list of ndarray()
             data selection along selected axis, all the axis void
             default [[],[]]
@@ -714,7 +725,9 @@ class Bsignal(PyLayers):
                     'typ':'l20',
                     'function':'imshow',
                     'sax':[0,1],
-                    'bindex':[]}
+                    'bindex':[],
+                    'xlabel':'',
+                    'ylabel':''}
 
         for k in defaults.keys():
             if not kwargs.has_key(k):
@@ -747,60 +760,63 @@ class Bsignal(PyLayers):
         # axis selection with sax
         sax = kwargs['sax']
 
-        if self.y.ndim>1:
-            # convert y data in desired format
-            dt,ylabels = self.cformat(**kwargs)
+        # convert y data in desired format
+        dt,ylabels = self.cformat(**kwargs)
 
-            if 'vmin' not in kwargs:
-                vmin = dt.min()
-            else:
-                vmin = kwargs['vmin']
+        if 'vmin' not in kwargs:
+            vmin = dt.min()
+        else:
+            vmin = kwargs['vmin']
 
-            if 'vmax' not in kwargs:
-                vmax = dt.max()
-            else:
-                vmax = kwargs['vmax']
+        if 'vmax' not in kwargs:
+            vmax = dt.max()
+        else:
+            vmax = kwargs['vmax']
 
-            xmin = self.x[ixmin]
-            xmax = self.x[ixmax]
-            if hasattr(self,'a'): 
-                ymin = self.a[iamin]
-                ymax = self.a[iamax]
-            else:
-                ymin = max(iamin,0)
-                imax = np.squeeze(dt).shape[0]
-                ymax = min(iamax,imax)
-
-
-            if kwargs['function']=='imshow':
-                im = ax.imshow(np.squeeze(dt)[iamin:iamax,ixmin:ixmax],
-                           origin = 'lower',
-                           vmin = vmin,
-                           vmax = vmax,
-                           aspect = kwargs['aspect'],
-                           extent = (xmin,xmax,ymin,ymax),
-                           interpolation=kwargs['interpolation'],
-                           cmap = kwargs['cmap'],
-                           )
-
-            ll = ax.get_xticklabels()+ax.get_yticklabels()
-            for l in ll:
-                l.set_fontsize(kwargs['fontsize'])
+        xmin = self.x[ixmin]
+        xmax = self.x[ixmax]
+        
+        if hasattr(self,'a'): 
+            ymin = self.a[iamin]
+            ymax = self.a[iamax]
+        else:
+            ymin = max(iamin,0)
+            imax = np.squeeze(dt).shape[0]
+            ymax = min(iamax,imax)
 
 
-            if kwargs['function'] =='pcolormesh':
-                im = ax.pcolormesh(xn,np.arange(dt.shape[0]),dt)
+        if kwargs['function']=='imshow':
+            im = ax.imshow(np.squeeze(dt)[iamin:iamax,ixmin:ixmax],
+                       origin = 'lower',
+                       vmin = vmin,
+                       vmax = vmax,
+                       aspect = kwargs['aspect'],
+                       extent = (xmin,xmax,ymin,ymax),
+                       interpolation=kwargs['interpolation'],
+                       cmap = kwargs['cmap'],
+                       )
 
-            cb = fig.colorbar(im)
-            cb.set_label(ylabels,size=kwargs['fontsize'])
+        ax.set_xlabel(kwargs['xlabel'],fontsize=kwargs['fontsize'])
+        ax.set_ylabel(kwargs['ylabel'],fontsize=kwargs['fontsize'])
 
-            for t in cb.ax.get_yticklabels():
-                t.set_fontsize(kwargs['fontsize'])
+        ll = ax.get_xticklabels()+ax.get_yticklabels()
+        for l in ll:
+            l.set_fontsize(kwargs['fontsize'])
 
-            plt.axis('auto')
-            fig.tight_layout()
 
-            return fig, ax
+        if kwargs['function'] =='pcolormesh':
+            im = ax.pcolormesh(xn,np.arange(dt.shape[0]),dt)
+
+        cb = fig.colorbar(im)
+        cb.set_label(ylabels,size=kwargs['fontsize'])
+
+        for t in cb.ax.get_yticklabels():
+            t.set_fontsize(kwargs['fontsize'])
+
+        plt.axis('auto')
+        fig.tight_layout()
+
+        return fig, ax
 
     def plot(self, **kwargs):
         r""" plot signal Bsignal
@@ -1752,7 +1768,8 @@ class TUsignal(TBsignal, Usignal):
             x,y1,y2 = self.align(u)
             U = type(self)()
             U.x = x
-            U.y = y1 + y2
+            #U.y = y1 + y2
+            U.y = np.vstack((y1,y2))
         return(U)
 
     def __sub__(self, u):
@@ -1782,7 +1799,7 @@ class TUsignal(TBsignal, Usignal):
 
 
     def diff(self):
-        """ numerical differentiation
+        """ numerical differentiation TUsignal
 
         Warnings
         ---------
@@ -1818,7 +1835,7 @@ class TUsignal(TBsignal, Usignal):
         return(V)
 
     def info(self):
-        """ display information
+        """ display information about TUsignal
 
         """
         print 'TUsignal'
@@ -1834,7 +1851,7 @@ class TUsignal(TBsignal, Usignal):
 
 
     def fft(self, shift=False):
-        """  forward fast Fourier transform
+        """  forward fast Fourier transform of TUsignal
 
 
         Parameters
@@ -1873,7 +1890,7 @@ class TUsignal(TBsignal, Usignal):
         return(S)
 
     def fftsh(self):
-        """ return an FHsignal
+        """ return an FHsignal 
 
         Warnings
         --------
@@ -1903,7 +1920,7 @@ class TUsignal(TBsignal, Usignal):
 
 
     def align(self, u2):
-        """ align two Usignal on a same base
+        """ align two TUsignal on a same base
 
         returns a list which contains the two aligned signals
 
@@ -1966,13 +1983,14 @@ class TUsignal(TBsignal, Usignal):
         #    u2.y = u2.y.reshape(1,M2)
 
         # get left shape and number of points on the last axis (time)
+        
         shl1 = u1.y.shape[0:-1]
         M1 = u1.y.shape[-1]
 
         shl2 = u2.y.shape[0:-1]
         M2 = u2.y.shape[-1]
 
-        # test wheter both signals share the same time support
+        # test if both signals share the same time support
         bool1 = abs(u1_start - u2_start) < 1e-10
         bool2 = abs(u1_stop - u2_stop) < 1e-10
 
@@ -2038,7 +2056,7 @@ class TUsignal(TBsignal, Usignal):
             # u2 is included in u1
                 U1 = u1
                 x = u1.x
-                indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
+                indx = np.where((x >= u2_start) & (x <= u2_stop))[0]
                 U2 = Usignal(x=x,
                              y = np.zeros(list(shl2)+[len(x)] ))
                 U2.y[...,indx] = u2.y[..., 0:np.shape(indx)[0]]
@@ -2047,10 +2065,10 @@ class TUsignal(TBsignal, Usignal):
             # u1 is included in u2
                 U2 = u2
                 x = u2.x
-                indx = np.nonzero((x >= u1_start) & (x <= u1_stop))[0]
+                indx = np.where((x >= u1_start) & (x <= u1_stop))[0]
                 U1 = Usignal(x=x,
                              y = np.zeros(list(shl1)+[len(x)]))
-                U1.y[...,indx] = u1.y
+                U1.y[...,indx] = u1.y[...,0:np.shape(indx)[0]]
 
             #L = [U1, U2]
             #L   = Usignal()
@@ -2059,7 +2077,7 @@ class TUsignal(TBsignal, Usignal):
         return U1.x,U1.y,U2.y
 
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
-        """ signal filtering
+        """ TUsignal filtering
 
         Parameters
         ----------
@@ -2086,28 +2104,28 @@ class TUsignal(TBsignal, Usignal):
         O.x = self.x
         return(O)
 
-    def ftshift(self):
-        """ return the associated FUsignal
+    # def ftshift(self):
+    #     """ return the associated FUsignal
 
-        Returns
-        -------
+    #     Returns
+    #     -------
 
-        H : FUsignal
+    #     H : FUsignal
 
-        See Also
-        --------
+    #     See Also
+    #     --------
 
-        pylayers.signal.bsignal.TUsignal.fftsh
-        pylayers.signal.waveform.ip_generic
+    #     pylayers.signal.bsignal.TUsignal.fftsh
+    #     pylayers.signal.waveform.ip_generic
 
-        """
-        A  = self.fftsh()
-        AU = A.unrex()
-        return(AU)
+    #     """
+    #     A  = self.fftsh()
+    #     AU = A.unrex()
+    #     return(AU)
 
 
     def psd(self, Tpns=100, R=50,periodic=True):
-        """ calculate power spectral density
+        """ calculate TUsignal power spectral density
 
         Parameters
         ----------
@@ -2127,7 +2145,7 @@ class TUsignal(TBsignal, Usignal):
         return(P)
 
 
-    def show(self,fig=[],ax=[],display=True,PRPns=100):
+    def showpsd(self,fig=[],ax=[],display=True,PRPns=100):
         """  show psd
 
         Parameters
@@ -2208,9 +2226,6 @@ class TUsignal(TBsignal, Usignal):
         return(O)
 
 
-
-
-
     def shift(self, tau):
         """ shift the Usignal by tau (expressed in the same unit as Bsignal.x)
 
@@ -2243,7 +2258,7 @@ class TUsignal(TBsignal, Usignal):
         return(self)
 
     def correlate(self, s, normalized = True):
-        """ correlates with an other signal
+        """ correlates with an other TUsignal
 
         Parameters
         ----------
@@ -2324,7 +2339,7 @@ class TUsignal(TBsignal, Usignal):
         return p
 
     def Efirst_loc(self, nint, E0):
-        """ find the Efirst using the mean like toa_max
+        """ find the Efirst using the mean like
 
         Parameters
         ----------
@@ -3210,7 +3225,7 @@ class FUsignal(FBsignal,Usignal):
             Npt = len(self.x)
 
         Y = self.y
-        y = fft.ifft(Y, Npt)
+        y = fft.ifft(Y, Npt,axis=-1)
         df = self.dx()
         x = np.linspace(0, 1 / df, Npt)
         tc = TUsignal(x, y)
