@@ -803,7 +803,7 @@ class Bsignal(PyLayers):
             return fig, ax
 
     def plot(self, **kwargs):
-        r""" plot signal
+        r""" plot signal Bsignal
 
         Parameters
         ----------
@@ -1318,14 +1318,15 @@ class Usignal(Bsignal):
 
         return (m)
 
-    def truncate(self, posmin, posmax):
+    def truncate(self, imin, imax,axis=-1):
         """ truncate USignal in range [posmin, posmax]
 
         Parameters
         ----------
 
-        posmin  : float
-        posmax  : float
+        imin  : int 
+        imax  : int 
+        axis  : axis to truncate (default -1)
 
         Returns
         -------
@@ -1333,14 +1334,21 @@ class Usignal(Bsignal):
         Usignal
 
         """
-        t = type(self).__name__
-        ndim = self.y.ndim
 
-        x_new = self.x[posmin:posmax]
-        if ndim > 1:
-            y_new = self.y[..., posmin:posmax]
+        t = type(self).__name__
+        shap = self.y.shape
+
+        if axis==-1:
+            x_new = self.x[imin:imax]
         else:
-            y_new = self.y[posmin:posmax]
+            x_new = self.x
+        
+        if (axis==-1):
+            y_new = self.y[..., imin:imax]
+        if (axis==0):
+            y_new = self.y[imin:imax,...]
+        if (axis==1):
+            y_new = self.y[...,imin:imax,...]
 
         U = type(self)(x_new, y_new)
 
@@ -1631,7 +1639,7 @@ class TBsignal(Bsignal):
         return(fig,ax)
 
     def integ(self,Tns,Tsns=50):
-        """ integtation of alphak tauk
+        """ integation of alphak tauk of TBsignal
 
         used energy detector for IEEE 802.15.6 standard
 
@@ -1646,7 +1654,7 @@ class TBsignal(Bsignal):
         return(Hp,Hi)
 
     def translate(self, tau):
-        """  translate signal by tau
+        """  translate TBsignal signal by tau
 
         Parameters
         ----------
@@ -1677,7 +1685,7 @@ class TBsignal(Bsignal):
         self.x = self.x + tau
 
     def b2tu(self, N):
-        """ conversion into a TUsignal
+        """ conversion from TBsignal to TUsignal
 
         Parameters
         ----------
@@ -1720,7 +1728,7 @@ class TBsignal(Bsignal):
         fi = interp.interp1d(self.x, self.y, kind='linear')
         xn = np.linspace(self.x[0], self.x[-1], N)
         yn = fi(xn)
-        U = TUsignal(xn, yn)
+        U  = TUsignal(xn, yn)
 
         return U
 
@@ -2805,7 +2813,7 @@ class FUsignal(FBsignal,Usignal):
 
     def get(self, k):
         """
-        get the kh signal
+        get the kth signal from the FUsignal
 
         Parameters
         ----------
@@ -2824,7 +2832,7 @@ class FUsignal(FBsignal,Usignal):
 
     def info(self):
         """
-        Display Information on the FUsignal
+        Display Information about the FUsignal
         """
         N = len(self.x)
         sh = np.shape(self.y)
@@ -2838,11 +2846,11 @@ class FUsignal(FBsignal,Usignal):
         print 'shape(y)  ', sh
         print 'Fmin (GHz) : ', fmin
         print 'Fmax (GHz) : ', fmax
-        print 'Duration (ns) :', T
+
         print 'Frequency sampling step : ', df
 
     def energy(self,axis=-1,Friis=False,mode='mean'):
-        r""" calculate energy along a given axis
+        r""" calculate energy along a given axis of the FUsignal
 
         Parameters
         ----------
@@ -2850,7 +2858,7 @@ class FUsignal(FBsignal,Usignal):
         axis : (default 0)
         Friis : boolean
         mode : string
-            mean | center | integ | first | last
+            mean (default)  | center | integ | first | last
 
         Examples
         --------
