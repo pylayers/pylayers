@@ -66,8 +66,6 @@ class Rays(PyLayers, dict):
     """ A set of rays
 
     Attributes
-    ----------
-
     rays   :
     nbrays :
     rayidx :
@@ -151,31 +149,45 @@ class Rays(PyLayers, dict):
         s = ''
         ni = 0
         nl = 0
+        
+        if self.is3D:
+            s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
 
-        try:
-            if self.is3D:
-                s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
+            for k in self:
+                r = self[k]['rayidx']
+                nr = len(r)
+                s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
+                ni = ni + nr*k
+                nl = nl + nr*(2*k+1)
+            nray2D = self.nray2D
+        else:
+            s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
+            nray2D = len(self)
 
-                for k in self:
-                    r = self[k]['rayidx']
-                    nr = len(r)
-                    s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
-                    ni = ni + nr*k
-                    nl = nl + nr*(2*k+1)
-                s = s + '-----'+'\n'
-                s = s + 'N2Drays : '+ str(nray) + '\n'
-                s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
-                s = s + '#Rays/#Sig: '+ str( len(self)/(1.*self.nb_origin_sig) )
+        s = s + 'N2Drays : '+ str(nray2D) + '\n'
+        s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
+        s = s + '#Rays/#Sig: '+ str(nray2D/(1.*self.nb_origin_sig) )
 
-                s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
+        s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
 
-                for k in self:
-                    #sk = np.shape(self[k]['sig'])[2]
-                    s = s + str(k) + ': '+ str(self[k]['sig'][0,:])+'\n'
-                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
-        except:
-            print "problem"
-            return(s)
+        if not self.is3D:
+            ray_cpt = 0  
+            for k in self:
+                #sk = np.shape(self[k]['sig'])[2]
+                s = s + str(k) + ':\n'
+                sig = self[k]['sig'][0,:]
+                sha0 = sig.shape[0]
+                sha1 = sig.shape[1]
+                #pdb.set_trace()
+                for l in np.arange(sha1):
+                    s = s + '  '+str(ray_cpt)+':'
+                    ray_cpt +=1
+                    for n in np.arange(sha0):
+                        s = s + '      '+str(sig[n,l])
+                    s = s+'\n'
+                #pdb.set_trace()
+                #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
+        
 
         return(s)
 
@@ -782,7 +794,6 @@ class Rays(PyLayers, dict):
 
         d = self.mirror(H=H, N=N, za=tx[2], zb=rx[2])
         
-
         #
         # Elimination of invalid diffraction point 
         # If the diffaction point is a separation between 2 air wall 
@@ -828,7 +839,8 @@ class Rays(PyLayers, dict):
         r3d = Rays(tx, rx)
         r3d.los = self.los
         r3d.is3D = True
-
+        r3d.nray2D = len(self)
+        r3d.nb_origin_sig = self.nb_origin_sig
         #
         # Phase 4 : Fill 3D rays information
         #

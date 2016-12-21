@@ -1424,6 +1424,7 @@ class DLink(Link):
             if self.verbose :
                 print "load signature"
         else :
+            ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
                 Si.run(cutoff=kwargs['cutoff'],
                         diffraction=kwargs['diffraction'],
@@ -1487,6 +1488,7 @@ class DLink(Link):
             else:
                 ceilheight = kwargs['ra_ceil_H']
 
+
             R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
 
             R.locbas(self.L)
@@ -1498,6 +1500,7 @@ class DLink(Link):
             C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
+        self.r2d = r2d
         self.R = R
         toc = time.time()
         if self.verbose :
