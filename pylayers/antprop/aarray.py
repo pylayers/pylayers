@@ -98,7 +98,7 @@ class Array(ant.Pattern):
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
         ax.set_zlabel('Z axis')
-        plt.show()
+        return(fig,ax)
 
 class ULArray(Array):
     """ Uniform Linear Array
