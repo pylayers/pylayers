@@ -148,6 +148,7 @@ class Layout(pro.PyLayers):
         self.coordinates = 'cart'
         self.version = '1.1'
         self.typ = typ
+        
         #
         # setting display option
         #
@@ -233,6 +234,7 @@ class Layout(pro.PyLayers):
                 self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
 
+            
             self.boundary()
             self.subseg()
             self.updateshseg()
@@ -288,6 +290,7 @@ class Layout(pro.PyLayers):
     def __repr__(self):
         st = '\n'
         st = st + "----------------\n"
+        st = st + "Project : " + os.environ['BASENAME']+'\n'
         st = st + self._filename + ' : ' + self._hash + "\n"
 
         if self.isbuilt:
@@ -1717,8 +1720,9 @@ class Layout(pro.PyLayers):
                                            offset=offset,
                                            z=(self.zfloor,z[0]))
 
+        
         self.boundary()
-
+        
         # compliant with config file without  material/slab information
 
 
@@ -1755,6 +1759,7 @@ class Layout(pro.PyLayers):
         self.g2npy()
         #
         self._hash = hashlib.md5(open(fileini, 'rb').read()).hexdigest()
+        
 
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
@@ -10113,10 +10118,14 @@ class Layout(pro.PyLayers):
             self.lboundary = [n1, n2, n3, n4]
 
             self.segboundary = []
-            self.segboundary.append(self.add_segment(n1, n2, name='_AIR'))
-            self.segboundary.append(self.add_segment(n2, n3, name='_AIR'))
-            self.segboundary.append(self.add_segment(n3, n4, name='_AIR'))
-            self.segboundary.append(self.add_segment(n4, n1, name='_AIR'))
+            ns1 = self.add_segment(n1, n2, name='_AIR')
+            ns2 = self.add_segment(n2, n3, name='_AIR')
+            ns3 = self.add_segment(n3, n4, name='_AIR')
+            ns4 = self.add_segment(n4, n1, name='_AIR')
+            self.segboundary.append(ns1)
+            self.segboundary.append(ns2)
+            self.segboundary.append(ns3)
+            self.segboundary.append(ns4)
 
             self.axn = (xmin, xmax, ymin, ymax)
             self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)

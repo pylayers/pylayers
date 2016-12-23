@@ -573,7 +573,8 @@ class Rays(PyLayers, dict):
                     'colray':'black',
                     'ms':5,
                     'layout':True,
-                    'points':True
+                    'points':True,
+                    'labels':True
                    }
         for key, value in defaults.items():
             if key not in kwargs:
