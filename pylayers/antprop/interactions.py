@@ -870,6 +870,7 @@ class IntD(Inter):
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4]),slab={}):
         Inter.__init__(self, data=data, idx=idx, typ=1,slab=slab)
         self.dusl = {}
+
     def __repr__(self):
         s = 'number of D interaction :' + str(np.shape(self.data)[0])
         return s
@@ -892,9 +893,9 @@ class IntD(Inter):
 
         if len(self.data) != 0 :
             self.phi0 = self.data[:,0]
-            self.phi = self.data[:,1]
+            self.phi  = self.data[:,1]
             self.beta = self.data[:,2]
-            self.N = self.data[:,3]
+            self.N    = self.data[:,3]
             self.sinsout()
             D = np.zeros([self.nf, len(self.phi), 2, 2], dtype=complex)
             mapp=[]
