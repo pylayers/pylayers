@@ -823,6 +823,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
     pylayers.slab.Interface.losst
 
     """
+    
     if (type(fGHz)==float) | (type(fGHz)==int):
         fGHz=np.array([fGHz],dtype=float)
 
@@ -844,7 +845,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
 
     # as many slabs as segments and subsegments
     us    = data['s'] 
-    slabs = [ L.Gs.node[x]['name'] for x in us ] 
+    slabs = np.array([ L.Gs.node[x]['name'] for x in us ])
     #slabs = L.sla[us]
     check = np.where(slabs=='')
 
@@ -860,11 +861,12 @@ def Losst(L,fGHz,p1,p2,dB=True):
     EdWallo = np.zeros((len(fGHz),Nlink))
     EdWallp = np.zeros((len(fGHz),Nlink))
 
+    
     for slname in cslab:
         # u index of slabs of name slname
         # data['a'][u] angle
         # data['s'][u] segment number including subsegment
-        u = np.nonzero(slabs==slname)[0]
+        u = np.nonzero(np.array(slabs)==slname)[0]
         #
         # calculate Loss for slab slname
         #

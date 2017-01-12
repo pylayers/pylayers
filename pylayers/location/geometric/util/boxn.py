@@ -27,8 +27,11 @@ import os
 import pdb
 import copy
 import time
-
-
+try:
+    from tvtk.api import tvtk
+    from mayavi import mlab
+except:
+    print('Layout:Mayavi is not installed')
 
 #GeomNetType = np.dtype([('Id',np.uint64), 
 #        ('time',np.uint64), 
@@ -190,7 +193,7 @@ class LBoxN(PyLayers):
 
         """
 #        for i in xrange(len(lb.box)):self.append(lb.box[i])
-        self.box=np.append(self.box,lb.box)
+        self.box=np.append(self.box,lb.box) 
 
         try :    
 
@@ -428,6 +431,53 @@ class LBoxN(PyLayers):
                 if b.vol>0:   # si intersection non vide
                     new_lb.append(b)
         return(new_lb)        
+
+
+    def _show3(self,col='r',Id=[0],H_Id=0,alpha=0.2):
+
+        # gett list of all boundaries
+        lbd = np.array([b.bd for b in self.box])
+        shb = lbd.shape
+        lbdr = lbd.reshape(shb[0]*shb[1],shb[2])
+
+        # mapping of single boundaries to get the 8 vertices of the boxN
+        mapp=np.array([[0,0,0],[0,1,0],[1,1,0],[1,0,0],[0,0,1],[0,1,1],[1,1,1],[1,0,1]],dtype='int')
+
+        # repeat the coordinates mapping for all the boxes + shift index
+        mappe=np.tile(mapp,(shb[0],1)) + np.repeat(np.arange(shb[0]),8)[:,None]
+
+        # get coordintaes of all verticesof all boxN
+        allpt = np.array([lbdr[mappe[:,0],0],lbdr[mappe[:,1],1],lbdr[mappe[:,2],2]])
+        
+
+        edges=[[0,1,2],
+               [0,2,3],
+               [0,1,5],
+               [0,4,5],
+               [1,5,2],
+               [5,6,2],
+               [2,6,7],
+               [2,7,3],
+               [0,3,4],
+               [3,7,4],
+               [4,5,6],
+               [4,6,7]]
+
+        # as many edges as boxN
+        edgese = np.tile(edges,(shb[0],1)) + np.repeat(np.arange(shb[0])*8,12)[:,None]
+
+
+        mesh=tvtk.PolyData(points=allpt.T,polys=edgese)
+        if col =='r':
+            color=(1,0,0)
+        elif col =='b':
+            color=(0,0,1)
+        mlab.pipeline.surface(mesh,opacity=alpha,color=color) 
+
+        # for b in self.box:
+        #     b._show3(col='r',Id=[0],H_Id=0,alpha=0.2)
+
+
 
 
     def show3(self,col='b',Id=0):
@@ -738,6 +788,33 @@ class BoxN(PyLayers):
         return(new_box)    
 
 
+
+    def _show3(self,col='r',Id=[0],H_Id=0,alpha=0.2):
+
+
+        mapp=np.array([[0,0,0],[0,1,0],[1,1,0],[1,0,0],[0,0,1],[0,1,1],[1,1,1],[1,0,1]],dtype='int')
+        b= np.array([self.bd[mapp[:,0],0],self.bd[mapp[:,1],1],self.bd[mapp[:,2],2]])
+        edges=[[0,1,2],
+               [0,2,3],
+               [0,1,5],
+               [0,4,5],
+               [1,5,2],
+               [5,6,2],
+               [2,6,7],
+               [2,7,3],
+               [0,3,4],
+               [3,7,4],
+               [4,5,6],
+               [4,6,7]]
+
+        # trick for correcting  color assignement
+
+        mesh=tvtk.PolyData(points=b.T,polys=edges)
+        if col =='r':
+            color=(1,0,0)
+        elif col =='b':
+            color=(0,0,1)
+        mlab.pipeline.surface(mesh,opacity=alpha,color=color) 
 
 
     def show3(self,dim=(0,1,2),col='r',Id=[0],H_Id=0,alpha=0.2):

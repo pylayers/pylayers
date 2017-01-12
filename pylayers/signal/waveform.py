@@ -160,7 +160,7 @@ class Waveform(dict):
         w = bs.TUsignal()
         w.EnImpulse(fcGHz=fcGHz,WGHz=band,threshdB=thresh,feGHz=feGHz)
         #W = w.ft()
-        W = w.ftshift()
+        W = w.ft()
         return (w,W)
 
     def ref156(self):

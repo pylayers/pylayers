@@ -20,13 +20,13 @@ std = 5
 #nb of trials
 N=100
 
-P = np.random.rand(2,N)
+P = np.random.rand(3,N)
 
 #anchors :
-A = np.array(([[0,0],
-                [0,Lmax],
-                [Lmax,0],
-                [Lmax,Lmax]]
+A = np.array(([[0,0,3],
+                [0,Lmax,3],
+                [Lmax,0,1],
+                [Lmax,Lmax,1]]
                 )).T
 
 # distance / TOA

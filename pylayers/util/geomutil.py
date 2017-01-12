@@ -2693,7 +2693,7 @@ def Lr2n(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]]), closed=True):
             p0                   p1
             x------------------x
             |        |         |
-            |        v         |
+            |        v  l       |
             |                  |
             |->              <-|
             |        ^         |
@@ -3236,7 +3236,7 @@ def intersect_line_seg(line, seg):
     -------
 
     k : intersection parameter (0<k<1 if intersection)
-    M : intersection point 
+    M : intersection point M = pta + k vseg
 
     """
     pt, v = line
@@ -4544,6 +4544,56 @@ def dist(x, y, ax):
     d = np.sqrt(np.sum((x - y)**2, axis=ax))
     return d
 
+def angle_intersection(a1,a2,b1,b2):
+    def inters(b,ags,age):
+        if ags>age:
+            if b >=ags or b<=age:
+                return True
+        else:
+            if b>ags and b<=age:
+                return True
+        return False
+    bol = inters(b1,a1,a2) | inters (b2,a1,a2) | inters(a1,b1,b2) | inters(a2,b1,b2)     
+    return bol
+
+def angle_intersection2(a1,a2,b1,b2):
+    
+
+    r1 = (max(a1,a2)-min(a1,a2))/2 
+    if r1 > np.pi/2: 
+        r1 = np.pi-r1 
+        ainf = max(a1,a2)
+        asup = min(a1,a2)
+    else:
+        ainf = min(a1,a2)
+        asup = max(a1,a2)
+
+    r2 = (max(b1,b2)-min(b1,b2))/2
+    if r2 > np.pi/2.: 
+        r2 = np.pi-r2
+        binf = max(b1,b2)
+        bsup = min(b1,b2)
+    else:
+        binf = min(b1,b2)
+        bsup = max(b1,b2)
+
+    c1 = (ainf+asup)/2
+    if (c1<ainf) & (c1>asup):
+        c1 = np.mod(c1+np.pi,2*np.pi)
+    
+    c2 = (binf+bsup)/2
+    
+    if (c2<binf) & (c2>bsup):
+        c2 = np.mod(c2+np.pi,2*np.pi)
+
+    
+    dc = max(c2,c1)-min(c2,c1)
+
+    if dc > np.pi:
+        dc = 2*np.pi-dc
+
+
+    return((r1+r2)-dc)
 
 def line_intersection(l1, l2):
     """ intersection between two 2D lines using shapely

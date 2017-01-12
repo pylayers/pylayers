@@ -18,7 +18,7 @@ rcParams['text.latex.unicode'] = True
 
 
 class CDF(object):
-    def __init__(self, ld, filename):
+    def __init__(self, ld, filename=''):
         """
         cdf = CDF(ld)
         
@@ -47,23 +47,28 @@ class CDF(object):
         """
         
         self.ld = ld
-        self.parmsh = {}
-        self.parmsh['file'] = True
         self.filename = filename
-        
-        plt.rcParams['xtick.labelsize'] ='x-large'
-        plt.rcParams['ytick.labelsize'] ='x-large'
-        plt.rcParams['axes.labelsize']  ='large'
-        plt.rcParams['font.weight']     ='normal'
-        plt.rcParams['xtick.minor.size']=2
-        plt.rcParams['legend.fontsize'] = 'xx-large'
-        plt.rcParams['font.size']       =20
-        plt.rcParams['grid.linewidth']  =3.5
-        plt.rcParams['xtick.major.pad'] =20
+        if self.filename == '':
+            self.save=False
+        else:
+            self.save=True
+            plt.rcParams['xtick.labelsize'] ='x-large'
+            plt.rcParams['ytick.labelsize'] ='x-large'
+            plt.rcParams['axes.labelsize']  ='large'
+            plt.rcParams['font.weight']     ='normal'
+            plt.rcParams['xtick.minor.size']=2
+            plt.rcParams['legend.fontsize'] = 'xx-large'
+            plt.rcParams['font.size']       =20
+            plt.rcParams['grid.linewidth']  =3.5
+            plt.rcParams['xtick.major.pad'] =20
+
        
         self.cdf = []
         for d in self.ld:
-            bound = d['bound']
+            if d.has_key('bound'):
+                bound = d['bound']
+            else:
+                bound = np.arange(d['values'].min(),d['values'].max(),len(d['values']*0.1))
             values = d['values']
             Nv = len(values)
             cdf = np.array([])
@@ -93,31 +98,69 @@ class CDF(object):
         for k in range(len(self.ld)):
 
             d = self.ld[k]
-            bound = d['bound']
-            marker = d['marker']
-            markersize = d['markersize']
-            markercolor = d['markercolor']
-            markerfrequency = d['markerfrequency']
-            linewidth = d['linewidth']
-            linestyle = d['linestyle']
-            color = d['color']
-            legend = d['legend']
+            if d.has_key('bound'):
+                bound = d['bound']
+            else:
+                bound = np.arange(d['values'].min(),d['values'].max(),len(d['values']*0.1))
+            if d.has_key('marker'):
+                marker = d['marker']
+            else:
+                marker = ''
+            if d.has_key('markersize'):
+                markersize = d['markersize']
+            else:
+                markersize = 5
+            if d.has_key('markercolor'):
+                markercolor = d['markercolor']
+            else:
+                markercolor = 'k'
+            if d.has_key('markerfrequency'):
+                markerfrequency = d['markerfrequency']
+            else:
+                markerfrequency = 10
+            if d.has_key('linewidth'):
+                linewidth = d['linewidth']
+            else:
+                linewidth = 1
+            if d.has_key('linestyle'):
+                linestyle = d['linestyle']
+            else:
+                linestyle = '-'
+            if d.has_key('color'):
+                color = d['color']
+            else:
+                color ='k'
+            if d.has_key('legend'):
+                legend = d['legend']
+            else:
+                legend=''
+            if k == 0:
+                if d.has_key('x_label'):
+                    xlabel=d['x_label']
+                else:
+                    xlabel=''
+                if d.has_key('y_label'):
+                    ylabel=d['y_label']
+                else:
+                    ylabel=''
+
 #                       leg.append(legend)
             cdf = self.cdf[k]
             c.append(ax.plot(bound, cdf, marker=marker,
               markevery=markerfrequency, ms=markersize, mfc=markercolor,
                              ls=linestyle, c=color, linewidth=linewidth,
                              label=legend))
-            plt.xlabel(self.ld[0]['xlabel'])
+            plt.xlabel(xlabel)
 
-        plt.ylabel(self.ld[0]['ylabel'])
+        plt.ylabel(ylabel)
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)
         plt.grid()
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-        plt.savefig(self.filename + '.pdf', format='pdf',
-                    bbox_inches='tight', pad_inches=0)
-        plt.savefig(self.filename + '.eps', format='eps',
-                    bbox_inches='tight', pad_inches=0)
+        if self.save :
+            plt.savefig(self.filename + '.pdf', format='pdf',
+                        bbox_inches='tight', pad_inches=0)
+            plt.savefig(self.filename + '.eps', format='eps',
+                        bbox_inches='tight', pad_inches=0)
 
 
 if __name__ == "__main__":
