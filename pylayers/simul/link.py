@@ -1363,6 +1363,7 @@ class DLink(Link):
                    'ra_ceil_H':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
+                   'bt':True,
                    'alg':1,
                    'si_reverb':4,
                    'threshold':0.1,
@@ -1429,7 +1430,9 @@ class DLink(Link):
                 Si.run(cutoff=kwargs['cutoff'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'])
+                        progress=kwargs['si_progress'],
+                        bt=kwargs['bt'])
+
                 if self.verbose :
                     print "default algorithm"
 
