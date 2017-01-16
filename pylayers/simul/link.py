@@ -446,17 +446,20 @@ class DLink(Link):
         #
         # In outdoor situation we delete all reference to transmission node in Gi 
         #
+        cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
+        
         if kwargs['outdoor']:
             u = self.L.Gi.node.keys()
             
-            lT = [k for k in u if len(k)==3]
-            self.L.Gi.remove_nodes_from(lT)
+            lT  =  [k for k in u if (len(k)==3)]
+            lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
+            self.L.Gi.remove_nodes_from(lTi)
             lE = self.L.Gi.edges()
             for k in range(len(lE)):
                 e = lE[k]
                 output = self.L.Gi.edge[e[0]][e[1]]['output']
                 for l in output.keys():
-                    if len(l)==3:
+                    if l in lTi:
                         del output[l]
                 self.L.Gi.edge[e[0]][e[1]]['output']=output
             

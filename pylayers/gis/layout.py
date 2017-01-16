@@ -7029,13 +7029,13 @@ class Layout(pro.PyLayers):
         """
         self.Gi = nx.DiGraph()
         self.Gi.pos = {}
-
+        
         #
         # 1 ) Create nodes of Gi and their positions
         #
-        # (D,)
-        # (R,cy0)
-        # (T,cy0,cy1)
+        # diffraction node  (D,)
+        # reflexion node    (R,cy0)
+        # transmission node (T,cy0,cy1)
         #
         for n in self.Gv.node:
             if n < 0:  # D
@@ -7082,12 +7082,15 @@ class Layout(pro.PyLayers):
         #
         # 2) Establishing link between interactions
         #
-
+        
         for cy in self.Gt.node:
-            # fot all convex cycles
+            # for all >0 convex cycles
             if cy > 0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
                 # indoor = self.Gt.node[cy]['indoor']
+                #
+                # find all diffraction point involved in the cycle cy 
+                #
                 npt = []
                 for x in vnodes:
                     if x < 0:
@@ -7095,26 +7098,30 @@ class Layout(pro.PyLayers):
                             for y in self.ddiff[x][0]:
                                 if y == cy:
                                     npt.append(x)
-
-                nseg = filter(lambda x: x > 0, vnodes)
+                
+                nseg =[ k for k in vnodes if k>0 ]
+                # all segment and difraction point of the cycle
                 vnodes = nseg + npt
 
                 for nstr in vnodes:
 
                     if nstr in self.Gv.nodes():
+                        # list 1 of intercations
                         li1 = []
                         if nstr > 0:
+                            # output cycle 
+                            # cy -> cyo1 
                             cyo1 = self.Gs.node[nstr]['ncycles']
                             cyo1 = filter(lambda x: x != cy, cyo1)[0]
 
                             # R , Tin , Tout
                             if cyo1 > 0:
                                 if (nstr, cy) in self.Gi.nodes():
-                                    li1.append((nstr, cy))
+                                    li1.append((nstr, cy))  # R 
                                 if (nstr, cy, cyo1) in self.Gi.nodes():
-                                    li1.append((nstr, cy, cyo1))
+                                    li1.append((nstr, cy, cyo1)) # T cy -> cyo1 
                                 if (nstr, cyo1, cy) in self.Gi.nodes():
-                                    li1.append((nstr, cyo1, cy))
+                                    li1.append((nstr, cyo1, cy)) # T : cyo1 -> cy 
                                 # if (nstr,cy) in self.Gi.nodes():
                                 #     li1 = [(nstr,cy),(nstr,cy,cyo1),(nstr,cyo1,cy)]
                                 # else:# no reflection on airwall
@@ -7129,7 +7136,8 @@ class Layout(pro.PyLayers):
                             li1 = [(nstr,)]
                         # list of cycle entities in visibility of nstr
                         lneighb = nx.neighbors(self.Gv, nstr)
-                        lneighcy = filter(lambda x: x in vnodes, lneighb)
+                        lneighcy = [ x for x in lneighb if x in vnodes ] 
+                        # lneighcy = filter(lambda x: x in vnodes, lneighb)
 
                         for nstrb in lneighcy:
                             if nstrb in self.Gv.nodes():
@@ -7158,7 +7166,7 @@ class Layout(pro.PyLayers):
                                 #     printnstr,nstrb
                                 #     print"li1",li1
                                 #     print"li2",li2
-
+                                
                                 for i1 in li1:
                                     # printli1
                                     for i2 in li2:
@@ -7180,7 +7188,7 @@ class Layout(pro.PyLayers):
                                                 # print"TT"
                                                 if i1[2] == i2[1]:
                                                     self.Gi.add_edge(i1, i2)
-                                                if i2[1] == i1[2]:
+                                                if i2[2] == i1[1]:
                                                     self.Gi.add_edge(i2, i1)
                                             if ((len(i1) == 1) & (len(i2) == 3)):
                                                 # print"DT"
@@ -7209,7 +7217,7 @@ class Layout(pro.PyLayers):
                     self.Gt.node[c]['inter'] += [(k,)]
 
     def filterGi(self, situ='outdoor'):
-        """ Filter Gi to manage indoor/outdoor situations
+        """ filter Gi to manage indoor/outdoor situations
 
         Not called
 
@@ -7429,9 +7437,12 @@ class Layout(pro.PyLayers):
         lint = self.Gi.node
 
         # list of tuple interactions (R|T)
-        lD = filter(lambda x: len(x) == 1, lint)
-        lR = filter(lambda x: len(x) == 2, lint)
-        lT = filter(lambda x: len(x) == 3, lint)
+        lD = [x for x in lint if len(x)==1]
+        lR = [x for x in lint if len(x)==2]
+        lT = [x for x in lint if len(x)==3]
+        # lD = filter(lambda x: len(x) == 1, lint)
+        # lR = filter(lambda x: len(x) == 2, lint)
+        # lT = filter(lambda x: len(x) == 3, lint)
 
         # visible R|T source cycle is ncy
 
