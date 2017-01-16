@@ -1145,7 +1145,7 @@ class Rays(PyLayers, dict):
                     ptc = ptees[:,uc[0],uc[1]]
                     if len(uc[0]) !=0:
                         P = shg.MultiPoint(ptc[:2,:].T)
-                        # 2 determine the cycle where ceil reflexions append
+                        # to determine the cycle where ceil reflexions append
                         # uinter(nb pt x nb cycles)
                         mapnode=L.Gt.nodes()
                         uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in mapnode if x>0] for p in P])
@@ -1185,7 +1185,7 @@ class Rays(PyLayers, dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-        pdb.set_trace()
+        #pdb.set_trace()
         if (self.los) & (np.sqrt(np.sum((tx-rx)**2)) !=0) :
             r3d[0] = {}
             r3d[0]['sig'] = np.zeros((2,2,1))
