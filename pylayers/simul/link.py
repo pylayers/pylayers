@@ -368,6 +368,7 @@ class DLink(Link):
                    'Tb':np.eye(3),
                    'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
+                   'outdoor':False,
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
@@ -441,6 +442,25 @@ class DLink(Link):
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
             self.L.build(graph=self.graph)
             self.L.dumpw()
+        
+        #
+        # In outdoor situation we delete all reference to transmission node in Gi 
+        #
+        if kwargs['outdoor']:
+            u = self.L.Gi.node.keys()
+            
+            lT = [k for k in u if len(k)==3]
+            self.L.Gi.remove_nodes_from(lT)
+            lE = self.L.Gi.edges()
+            for k in range(len(lE)):
+                e = lE[k]
+                output = self.L.Gi.edge[e[0]][e[1]]['output']
+                for l in output.keys():
+                    if len(l)==3:
+                        del output[l]
+                self.L.Gi.edge[e[0]][e[1]]['output']=output
+            
+            #self.L.dumpw()
         #self.L.build()
 
         ###########
@@ -1363,6 +1383,7 @@ class DLink(Link):
                    'ra_ceil_H':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
+                   'bt':True,
                    'alg':1,
                    'si_reverb':4,
                    'threshold':0.1,
@@ -1429,8 +1450,10 @@ class DLink(Link):
                 Si.run(cutoff=kwargs['cutoff'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'])
-                if self.verbose :
+                        progress=kwargs['si_progress'],
+                        bt=kwargs['bt'])
+
+                if self.verbose:
                     print "default algorithm"
 
             if kwargs['alg']=='exp':

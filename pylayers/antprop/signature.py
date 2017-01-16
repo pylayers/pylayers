@@ -3266,6 +3266,9 @@ class Signatures(PyLayers,dict):
                             else:
                                 vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
                                 vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                                vrdotvl = np.dot(vr_n,vl_n)
+                                # cone angle 
+                                angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
 
                             al = np.arctan2(vl_n[1],vl_n[0])
                             ar = np.arctan2(vr_n[1],vr_n[0])
@@ -3279,7 +3282,7 @@ class Signatures(PyLayers,dict):
                             
                             I=geu.angle_intersection2(al,ar,aseg0,aseg1)
                             if I>0:
-                                ratio = 1
+                                ratio = I/angle_cone
                             else:
                                 ratio = 0
                             # mina  = min(al,ar)
@@ -3439,7 +3442,7 @@ class Signatures(PyLayers,dict):
                             lawp.pop()
 
                 else:
-                    #print '---',visited
+                    #print '---',visited,cond1,cond2,cond3
                     if len(visited)>1:
                         if len(visited[-2])==2:
                             R.pop()
