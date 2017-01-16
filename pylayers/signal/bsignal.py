@@ -2049,8 +2049,12 @@ class TUsignal(TBsignal, Usignal):
         if (bool):
         # same x support (concatenation is direct)
         #    L = Usignal(u1.x, np.vstack((u1.y,u2.y)))
-            L = Usignal(x = u1.x,
-                        y = np.concatenate((u1.y,u2.y),axis=-1))
+            #L = Usignal(x = u1.x,
+            #            y = np.concatenate((u1.y,u2.y),axis=-1))
+            #L = Usignal(x = u1.x,
+            #            y = np.concatenate((u1.y,u2.y),axis=0))
+            U1 = Usignal(x=u1.x,y=u1.y)
+            U2 = Usignal(x=u1.x,y=u2.y)
         else:
         # different x support
         # => extension to the largest interval
