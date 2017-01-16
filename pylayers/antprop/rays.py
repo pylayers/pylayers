@@ -131,7 +131,7 @@ class Rays(PyLayers, dict):
         self.pRx = pRx
         self.nray = 0
         self.raypt = 0
-        self.los = False
+        self.los = False  
         self.is3D = False
         self.isbased = False
         self.filled = False
@@ -772,7 +772,7 @@ class Rays(PyLayers, dict):
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
-        rmoutceilR ; bool
+        rmoutceilR : bool
             Remove Ceil reflexions in cycles (Gt nodes) 
             with indoor=False attribute 
 
@@ -1185,7 +1185,7 @@ class Rays(PyLayers, dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-
+        pdb.set_trace()
         if (self.los) & (np.sqrt(np.sum((tx-rx)**2)) !=0) :
             r3d[0] = {}
             r3d[0]['sig'] = np.zeros((2,2,1))
@@ -1610,8 +1610,8 @@ class Rays(PyLayers, dict):
                 self.raypt = self.raypt + self[k]['nbrays']
 
                 #################################
-                # Start of diffraction specific process
-                ##############################
+                # Start diffraction specific case
+                #################################
                 
                 if len(udiff[0]) != 0 :
                     Z=np.where(ityp.T==1)
@@ -1783,11 +1783,11 @@ class Rays(PyLayers, dict):
                     #update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
                 #################################
-                # End of diffraction specifc process
-                ##############################
+                # End of diffraction specific case
+                ##################################
 
 
-#
+                #
                 # pasting (Bo0,B,BiN)
                 #
 

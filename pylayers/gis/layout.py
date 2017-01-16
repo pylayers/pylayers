@@ -4726,7 +4726,7 @@ class Layout(pro.PyLayers):
 
         return fig, ax
 
-    def build(self, graph='tvirw', verbose=False):
+    def build(self, graph='tvirw', verbose=False,difftol=0.15):
         """ build graphs
 
         Parameters
@@ -4759,7 +4759,7 @@ class Layout(pro.PyLayers):
         if 't' in graph:
             if verbose:
                 print("Gt")
-            self.buildGt()
+            self.buildGt(difftol=difftol)
             self.lbltg.extend('t')
 
         if 'v' in graph:
@@ -5324,7 +5324,7 @@ class Layout(pro.PyLayers):
         # plt.show()
         return T, map_vertices
 
-    def buildGt(self, check=True):
+    def buildGt(self, check=True , difftol=0.15):
         """ build graph of convex cycle 
 
         Parameters
@@ -5594,7 +5594,7 @@ class Layout(pro.PyLayers):
 
         self.g2npy()
         # find diffraction points : updating self.ddiff
-        self._find_diffractions()
+        self._find_diffractions(difftol=difftol)
         # list of diffraction point involving airwall
         # needs checking height in rays.to3D for constructing the 3D ray
         self.lnss = [x for x in self.ddiff if len(
@@ -8455,13 +8455,13 @@ class Layout(pro.PyLayers):
 
         return np.sort(nod.tolist())
 
-    def _find_diffractions(self, tol=0.01):
+    def _find_diffractions(self, difftol=0.01):
         """ find diffractions points of the Layout
 
         Parameters
         ----------
 
-        tol : float
+        difftol : float
 
             tolerance in radians
 
@@ -8545,7 +8545,7 @@ class Layout(pro.PyLayers):
                         save.append((cy, da[1, u]))
                         dagtot[s] = dagtot[s] + da[1, u]
                 for s in dagtot:
-                    if dagtot[s] > (np.pi + tol):
+                    if dagtot[s] > (np.pi + difftol):
                         self.ddiff[k] = (dsector[s], dagtot[s])
                         break
 

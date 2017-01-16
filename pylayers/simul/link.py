@@ -448,6 +448,7 @@ class DLink(Link):
         #
         cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
         
+    
         if kwargs['outdoor']:
             u = self.L.Gi.node.keys()
             
@@ -1502,7 +1503,7 @@ class DLink(Link):
         else :
 
             # perform computation ...
-            # ... with vetorized ray evaluation approach
+            # ... with vectorized ray evaluation 
             if kwargs['ra_vectorized']:
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
