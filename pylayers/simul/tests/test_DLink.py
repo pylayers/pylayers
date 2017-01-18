@@ -14,7 +14,7 @@ DL.b = np.array([761.5,1113,1.2])
 
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
-DL.eval(verbose=True,force=True,bt=False,cutoff=2,threshold=0.1,ra_vectorized=False)
+DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)
 toc = time.time()
 print toc-tic
 #DL.b=np.array([755,1110,1.5])

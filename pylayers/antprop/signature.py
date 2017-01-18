@@ -3148,8 +3148,8 @@ class Signatures(PyLayers,dict):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
                         #print visited
-                        if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
-                            pdb.set_trace()
+                        # if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
+                        #     pdb.set_trace()
                         
                         
                         if interaction[0] in lair:
@@ -3296,7 +3296,10 @@ class Signatures(PyLayers,dict):
                                 ratio = I/angle_cone
                             else:
                                 ratio = 0
-                            print visited,len(stack),ratio
+                            # 
+                            # UNCOMMENT BELOW FOR DEBUG
+                            #
+                            #print visited,len(stack),ratio
                             # mina  = min(al,ar)
                             # maxa  = max(al,ar)
                             
@@ -3441,7 +3444,8 @@ class Signatures(PyLayers,dict):
                             # move forward even when arrived in the target cycle
                             
                             outint = Gi[visited[-2]][interaction]['output'].keys()
-                            proint = Gi[visited[-2]][interaction]['output'].values()
+                            #outint = nx.neighbors(self.L.Gi,interaction)
+                            # proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
                             nexti  = [it for k,it in enumerate(outint)]
                             stack.append(iter(nexti))
