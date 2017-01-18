@@ -7,7 +7,7 @@ fGHz=np.arange(2.41,10.,0.005)
 # set the layout
 L=Layout('defstr.ini')
 # set the link
-DL=DLink(L=L,fGHz=fGHz,outdoor=False)
+DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
 DL.b = np.array([761.5,1113,1.2])
 #DL.Aa=Antenna(typ='Omni')
 #DL.Ab=Antenna(typ='Omn')

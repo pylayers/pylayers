@@ -3457,7 +3457,7 @@ class Tchannel(bs.FUsignal):
             ----------
 
             Pt : Power transmitted
-            T : Temperrature Kelvin
+            T : Temperature (Kelvin)
             mode : string
 
             Returns
