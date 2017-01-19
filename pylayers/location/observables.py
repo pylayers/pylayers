@@ -21,6 +21,7 @@ class Observables():
 
         Notes
         -----
+
         self.Na : Number of anchor nodes (Na)
         self.Nb : Number of blind nodes  (Nb)
 
