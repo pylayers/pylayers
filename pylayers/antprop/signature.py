@@ -474,6 +474,7 @@ class Signatures(PyLayers,dict):
 
         """
         self.L = L
+        self.dump = -1
         self.source = source
         self.target = target
         self.cutoff = cutoff
@@ -494,13 +495,23 @@ class Signatures(PyLayers,dict):
         for k in self:
             size[k] = len(self[k])/2
         s = s + 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
-        for k in self:
+        if self.dump==-1:
+            ldump = self.keys()
+        else:
+            ldump = self.dump
+        for k in ldump:
             s = s + str(k) + ' : ' + str(size[k]) + '\n'
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
             # nl x 2 x nsig
-            for i in range(k):
-                s = s + '   '+ str(a[i,0,:]) + '\n'
-                s = s + '   '+ str(a[i,1,:]) + '\n'
+            
+            for l in np.arange(a.shape[2]):
+                for i in range(k):
+                    if i==k-1:
+                        s = s + '('+str(a[i,0,l])+','+str(a[i,1,l])+')'
+                    else:
+                        s = s + '('+str(a[i,0,l])+','+str(a[i,1,l])+'),'
+                s = s+'\n'
+                
 
         return(s)
 
@@ -564,6 +575,8 @@ class Signatures(PyLayers,dict):
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
 
     def check(self):
+        """ check signature
+        """
 
         OK = Signatures(self.L,self.target,self.source)
         KO = Signatures(self.L,self.target,self.source)
@@ -2998,14 +3011,14 @@ class Signatures(PyLayers,dict):
 
         cutoff : int
             limit the exploration of all_simple_path
-        algo: string
-            'old' : call propaths2
-            'new' : call procone2
         bt : bool
             backtrace (allow to visit already visited nodes in simple path algorithm)
         progress : bool
             display the time passed in the loop
-
+        diffraction : boolean 
+            activate diffraction 
+        threshold : float 
+            for reducing calculation time
 
         Returns
         -------
@@ -3087,6 +3100,7 @@ class Signatures(PyLayers,dict):
             R = [(np.eye(2),np.array([0,0]))]
 
             visited = [s]
+            
             if (s in lit) or (s[-1]==self.target):
                 anstr = np.array(map(lambda x: x[0],visited))
                 typ  = np.array(map(lambda x: len(x),visited))
@@ -3104,8 +3118,8 @@ class Signatures(PyLayers,dict):
             # lawp = list of airwall position in visited
             lawp = []
             # while the stack of iterators is not void
+            
             while stack: #
-                
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
                 # next interaction child
@@ -3124,6 +3138,8 @@ class Signatures(PyLayers,dict):
                 if (not cond1):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
+                        # if visited==[(7, 2), (3, 2, 3), (10, 3, 4)]:
+                        #     pdb.set_trace()
                         
                         #print visited,len(stack)
                         if interaction[0] in lair:
@@ -3184,98 +3200,194 @@ class Signatures(PyLayers,dict):
                             phe_ = tahe[-1][1]  # head last segment 
 
                             #
-                            # Calculates the left and righ vector of the cone 
+                            # Detect situations of connected segments
+                            #
+                            connected = False
+                            if (pta0==pta_).all():
+                                apex = phe0
+                                connected = True
+                                vl=(apex,pta0)
+                                vr=(apex,phe_)
+                            elif (pta0==phe_).all():
+                                apex = phe0
+                                connected = True
+                                vl=(apex,pta0)
+                                vr=(apex,pta_)
+                            elif (phe0==pta_).all():
+                                apex = pta0
+                                connected = True
+                                vl=(apex,phe0)
+                                vr=(apex,phe_)
+                            elif (phe0==phe_).all():
+                                apex = pta0    
+                                connected = True
+                                vl=(apex,phe0)
+                                vr=(apex,pta_)
+                            #
+                            # Calculates the left and right vector of the cone 
                             #
                             #  vl left vector 
                             #  vr right vector 
-                            if not (geu.ccw(pta0,phe0,phe_) ^
-                                    geu.ccw(phe0,phe_,pta_) ):
-                                vr = (pta0,phe_)
-                                vl = (phe0,pta_)
-                            else:  # twisted case
-                                vr = (pta0,pta_)
-                                vl = (phe0,phe_)
+                            #
+                            if not connected:
+                                if not (geu.ccw(pta0,phe0,phe_) ^
+                                        geu.ccw(phe0,phe_,pta_) ):
+                                    vr = (pta0,phe_)
+                                    vl = (phe0,pta_)
+                                else:  # twisted case
+                                    vr = (pta0,pta_)
+                                    vl = (phe0,phe_)
 
-                            # cone dot product 
-                            # print vr
-                            # print vl
-                            vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
-                            vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
-                            
-                        
-                            vrdotvl = np.dot(vr_n,vl_n)
-                            # cone angle 
-                            angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
-                            #angle_cone = np.arccos(vrdotvl)
-                            # prepare lines and seg argument for intersection checking
-                            linel = (vl[0],vl[1]-vl[0])
-                            liner = (vr[0],vr[1]-vr[0])
-                            # from origin mirrored segment to be tested 
-                            seg   = (th[0],th[1])
-
-                            # apex calculation 
-                            a0u = np.dot(pta0,vr_n)
-                            a0v = np.dot(pta0,vl_n)
-                            b0u = np.dot(phe0,vr_n)
-                            b0v = np.dot(phe0,vl_n)
-
-                            kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
-                            apex = phe0 + kb*vl_n
-
-                            
-                            
-                            kl,p_int_left  = geu.intersect_line_seg(linel,seg)
-                            kr,p_int_right = geu.intersect_line_seg(liner,seg)
-                            
-                            # signature is valid until proved non valid
-                            # valid_bool = True
-
-                            seg_ratio = 1.0
-                            
-                            bkl = (kl<=1) & (kl>=0) 
-                            bkr = (kr<=1) & (kr>=0)
-
-                            if (not bkl) & (not bkr) & (kl*kr>0): # outside cone
-                                ratio = 0
-
-                            elif (not bkl) & (not bkr) & (kl*kr<=0): # fully in cone
-                                tha = th
-                                wseg0 = th[0]-apex
-                                wseg1 = th[1]-apex
-                                wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                                wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
-                                useg  = np.arccos(np.minimum(np.dot(wseg0_n,wseg1_n),1.0))
-                                ratio = useg/angle_cone
-
-                            elif (bkl & bkr): # 2 intersection points 
-                                tha = np.vstack((p_int_left,p_int_right))
-                                ratio = 1.0
-
-                            elif (bkl & (not bkr)): # left line intersects while right line don't
-                                if kr<kl: 
-                                    wseg = th[0]-apex
-                                    tha = np.vstack((th[0],p_int_left))
-                                else:
-                                    wseg = th[1]-apex
-                                    tha = np.vstack((p_int_left,th[1]))
+                                # cone dot product 
+                                # print vr
+                                # print vl
+                                vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
+                                vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
                                 
-                                wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
-                                useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
-                                ratio = useg/angle_cone
+                            
+                                vrdotvl = np.dot(vr_n,vl_n)
+                                # cone angle 
+                                angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+                                #angle_cone = np.arccos(vrdotvl)
+                                # prepare lines and seg argument for intersection checking
+                                linel = (vl[0],vl[1]-vl[0])
+                                liner = (vr[0],vr[1]-vr[0])
+                                # from origin mirrored segment to be tested 
+                                seg   = (th[0],th[1])
 
-                            elif (bkr & (not bkl)): # right line intersects while left line don't
-                                if kl<kr:
-                                    wseg = th[0]-apex
-                                    tha = np.vstack((th[0],p_int_right))
-                                else:
-                                    wseg = th[1]-apex
-                                    tha = np.vstack((p_int_right,th[1]))
-                                    
-                                wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
-                                useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
-                                ratio = useg/angle_cone
+                                # apex calculation 
+                                a0u = np.dot(pta0,vr_n)
+                                a0v = np.dot(pta0,vl_n)
+                                b0u = np.dot(phe0,vr_n)
+                                b0v = np.dot(phe0,vl_n)
+
+                                kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
+                                apex = phe0 + kb*vl_n
+                            else:
+                                vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
+                                vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                                vrdotvl = np.dot(vr_n,vl_n)
+                                # cone angle 
+                                angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+
+                            al = np.arctan2(vl_n[1],vl_n[0])
+                            ar = np.arctan2(vr_n[1],vr_n[0])
+
+                            wseg0 = th[0]-apex
+                            wseg1 = th[1]-apex
+                            wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                            wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                            aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
+                            aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+                            
+                            I=geu.angle_intersection2(al,ar,aseg0,aseg1)
+                            if I>0:
+                                ratio = I/angle_cone
                             else:
                                 ratio = 0
+                            # mina  = min(al,ar)
+                            # maxa  = max(al,ar)
+                            
+                            # bseg0 = False
+                            # bseg1 = False
+                            # ratio = 0 
+                            # if (maxa-mina)>np.pi:
+                            #     I1 = (maxa,2*np.pi)
+                            #     I2 = (0,mina)
+                            #     if (((aseg0>I1[0]) & (aseg0<I1[1])) | ((aseg0>I2[0]) & (aseg0 <I2[1]))):
+                            #         # seg0 in cone
+                            #         bseg0 = True
+                            #     if (((aseg1>I1[0]) & (aseg1<I1[1])) | ((aseg1>I2[0]) & (aseg1 <I2[1]))):
+                            #         # seg1 in cone
+                            #         bseg1 = True    
+                            # else:
+                            #     I1 = (mina,maxa)
+                            #     if ((aseg0>I1[0]) & (aseg0<I1[1])):
+                            #         # seg0 in cone
+                            #         bseg0 = True
+                            #     if ((aseg1>I1[0]) & (aseg1<I1[1])):
+                            #         # seg1 in cone
+                            #         bseg1 = True
+                            # if ( bseg0 | bseg1 ):
+                            #     ratio = 1
+
+
+                            
+                            
+
+                            # lw0 = np.cross(vl_n,wseg0_n)
+                            # w0r = np.cross(wseg0_n,vr_n)
+                            # lw1 = np.cross(vl_n,wseg1_n)
+                            # w1r = np.cross(wseg1_n,vr_n)
+
+                            # s0 = np.sign(lw0*w0r)
+                            # s1 = np.sign(lw1*w1r)
+
+                            # if (s0>0) & (s1>0):
+                            #     ratio = 1 
+                            # if (s0>0) & (s1<0):
+                            #     ratio = 0.5
+
+                            # if (s1>0) & (s0<0):
+                            #     ratio = 0.5
+
+                            # if (s0<0) & (s1<0):
+                            #     ratio = 0         
+                            
+
+
+                            # kl,p_int_left  = geu.intersect_line_seg(linel,seg)
+                            # kr,p_int_right = geu.intersect_line_seg(liner,seg)
+                            
+                            # # signature is valid until proved non valid
+                            # # valid_bool = True
+
+                            # seg_ratio = 1.0
+                            
+                            # bkl = (kl<=1) & (kl>=0) 
+                            # bkr = (kr<=1) & (kr>=0)
+
+                            # if (not bkl) & (not bkr) & (kl*kr>0): # outside cone
+                            #     ratio = 0
+
+                            # elif (not bkl) & (not bkr) & (kl*kr<=0): # fully in cone
+                            #     tha = th
+                            #     wseg0 = th[0]-apex
+                            #     wseg1 = th[1]-apex
+                            #     wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                            #     wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                            #     useg  = np.arccos(np.minimum(np.dot(wseg0_n,wseg1_n),1.0))
+                            #     ratio = useg/angle_cone
+
+                            # elif (bkl & bkr): # 2 intersection points 
+                            #     tha = np.vstack((p_int_left,p_int_right))
+                            #     ratio = 1.0
+
+                            # elif (bkl & (not bkr)): # left line intersects while right line don't
+                            #     if kr<kl: 
+                            #         wseg = th[0]-apex
+                            #         tha = np.vstack((th[0],p_int_left))
+                            #     else:
+                            #         wseg = th[1]-apex
+                            #         tha = np.vstack((p_int_left,th[1]))
+                                
+                            #     wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
+                            #     useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
+                            #     ratio = useg/angle_cone
+
+                            # elif (bkr & (not bkl)): # right line intersects while left line don't
+                            #     if kl<kr:
+                            #         wseg = th[0]-apex
+                            #         tha = np.vstack((th[0],p_int_right))
+                            #     else:
+                            #         wseg = th[1]-apex
+                            #         tha = np.vstack((p_int_right,th[1]))
+                                    
+                            #     wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
+                            #     useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
+                            #     ratio = useg/angle_cone
+                            # else:
+                            #     ratio = 0
                                 #pdb.set_trace()
 
                             #
@@ -3297,11 +3409,11 @@ class Signatures(PyLayers,dict):
                             # plt.axis('auto')
                             # plt.show()
                             # pdb.set_trace()
-
+                        #print '+++ ',visited,ratio
                         if ratio > threshold:
                             tahe.append(tha)
                             # 
-                            # Check if the targer has been reached
+                            # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
                             if (interaction in lit) or (interaction[-1]==self.target):
                                 anstr = np.array(map(lambda x: x[0],visited))
@@ -3312,7 +3424,7 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)] = np.vstack((anstr,typ))
                                 cptsig +=1
                                 #print visited,len(stack),cptsig  
-
+                                #print '    ',cptsig,zip(anstr,typ),ratio
                             # move forward even when arrived in the target cycle
                             
                             outint = Gi[visited[-2]][interaction]['output'].keys()
@@ -3330,7 +3442,7 @@ class Signatures(PyLayers,dict):
                             lawp.pop()
 
                 else:
-                    #print visited
+                    #print '---',visited,cond1,cond2,cond3
                     if len(visited)>1:
                         if len(visited[-2])==2:
                             R.pop()
