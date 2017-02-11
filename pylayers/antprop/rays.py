@@ -309,16 +309,24 @@ class Rays(PyLayers, dict):
         try:
 
             fh5=h5py.File(filenameh5,'a')
-            if not grpname in fh5['ray'].keys():
-                fh5['ray'].create_group(grpname)
-            else :
-                print 'ray/'+grpname +'already exists in '+filenameh5
-            f = fh5['ray/'+grpname]
-            # keys not saved as attribute of h5py file
-            notattr = ['I','B','B0','delays','dis']
-            for a in self.__dict__.keys():
-                if a not in notattr:
-                    f.attrs[a]=getattr(self,a)
+            if self.is3D:
+                if not grpname in fh5['ray'].keys():
+                    fh5['ray'].create_group(grpname)
+                else :
+                    print 'ray/'+grpname +'already exists in '+filenameh5
+                f = fh5['ray/'+grpname]
+
+                # keys not saved as attribute of h5py file
+                notattr = ['I','B','B0','delays','dis']
+                for a in self.__dict__.keys():
+                    if a not in notattr:
+                        f.attrs[a]=getattr(self,a)
+            else:
+                if not grpname in fh5['ray2'].keys():
+                    fh5['ray2'].create_group(grpname)
+                else :
+                    print 'ray2/'+grpname +'already exists in '+filenameh5
+                f = fh5['ray2/'+grpname]
 
             for k in self.keys():
                 f.create_group(str(k))
