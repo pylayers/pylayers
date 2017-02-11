@@ -316,17 +316,18 @@ class Rays(PyLayers, dict):
                     print 'ray/'+grpname +'already exists in '+filenameh5
                 f = fh5['ray/'+grpname]
 
-                # keys not saved as attribute of h5py file
-                notattr = ['I','B','B0','delays','dis']
-                for a in self.__dict__.keys():
-                    if a not in notattr:
-                        f.attrs[a]=getattr(self,a)
+                
             else:
                 if not grpname in fh5['ray2'].keys():
                     fh5['ray2'].create_group(grpname)
                 else :
                     print 'ray2/'+grpname +'already exists in '+filenameh5
                 f = fh5['ray2/'+grpname]
+             # keys not saved as attribute of h5py file
+            notattr = ['I','B','B0','delays','dis']
+            for a in self.__dict__.keys():
+                if a not in notattr:
+                    f.attrs[a]=getattr(self,a)  
 
             for k in self.keys():
                 f.create_group(str(k))
@@ -369,7 +370,14 @@ class Rays(PyLayers, dict):
         # read/write error
         try:
             fh5=h5py.File(filename,'r')
-            f = fh5['ray/'+grpname]
+
+            if self.is3D:
+                argfile = 'ray/'+grpname
+            else:
+                argfile = 'ray2/'+grpname
+
+            f = fh5[argfile]
+
             for k in f.keys():
                 self.update({eval(k):{}})
                 for kk in f[k].keys():
@@ -377,6 +385,8 @@ class Rays(PyLayers, dict):
 
             for a,va in f.attrs.items():
                 setattr(self,a,va)
+            
+
             fh5.close()
 
         except:
@@ -392,8 +402,8 @@ class Rays(PyLayers, dict):
             L=Layout(self.Lfilename,build=True)
             self.fillinter(L)
 
-        if self.evaluated:
-            return self.eval(self.fGHz)
+        # if self.evaluated:
+        #     return self.eval(self.fGHz)
 
 
     def reciprocal(self):

@@ -1510,7 +1510,8 @@ class DLink(Link):
         if self.verbose :
             print "Start Rays"
         tic = time.time()
-        R = Rays(self.a,self.b)
+        r2d = Rays(self.a,self.b)
+       
 
         #
         # get 2D rays 
@@ -1533,7 +1534,8 @@ class DLink(Link):
         #
         # get 3D rays 
         #
-
+        R = Rays(self.a,self.b)
+        R.is3D = True
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
             self.load(R,self.dexist['ray']['grpname'])
         else :
