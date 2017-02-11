@@ -3994,15 +3994,24 @@ class Signatures(PyLayers,dict):
         polyctx = self.L.Gt.node[cyptx]['polyg']
         polycrx = self.L.Gt.node[cyprx]['polyg']
 
+        # The Line of sight situation is detected here 
+        # dtxtx : distance between Tx and Rx 
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
             if polyctx.contains(los):
                 rays.los = True
+
             else:
                 rays.los = False
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
+        # 
+        # Add LOS ray in ray 2D 
+        #
+        if rays.los:
+            R[0]= {'sig':np.zeros(shape=(0,0,1)),'pt': np.zeros(shape=(2,1,0))}
+        
         rays.update(R)
         rays.nb_origin_sig = len(self)
         rays.origin_sig_name = self.filename
