@@ -383,7 +383,9 @@ class DLink(Link):
         specset  = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         # set default attribute
+       
         for key, value in defaults.items():
+        
             if key not in kwargs:
                 if key in specset :
                     setattr(self,'_'+key,value)
@@ -396,7 +398,7 @@ class DLink(Link):
                 else :
                     setattr(self,key,kwargs[key])
 
-    
+        
 
         force=self.force_create
         delattr(self,'force_create')
@@ -449,7 +451,7 @@ class DLink(Link):
         cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
         
     
-        if kwargs['outdoor']:
+        if self.outdoor:
             u = self.L.Gi.node.keys()
             
             lT  =  [k for k in u if (len(k)==3)]
