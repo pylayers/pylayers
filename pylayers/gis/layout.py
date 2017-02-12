@@ -232,6 +232,7 @@ class Layout(pro.PyLayers):
                 self.loadosm = True
             elif loadres:
                 self.importres(_fileres=string)
+                self.sl = sb.SlabDB()
             elif '(' in string:  # load from osmapi latlon in string
                 self.importosm(latlon=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
@@ -287,7 +288,6 @@ class Layout(pro.PyLayers):
                 if rebuild:
                     # ans = raw_input('Do you want to build the layout (y/N) ? ')
                     # if ans.lower()=='y'
-
                     self.build()
                     self.lbltg.append('s')
                     self.dumpw()
@@ -888,7 +888,7 @@ class Layout(pro.PyLayers):
             normy = X[1, :] - X[0, :]
 
             scale = np.sqrt(normx * normx + normy * normy)
-            assert (scale.all() > 0)
+            assert (scale.all() > 0), pdb.set_trace()
             self.normal = np.vstack(
                 (normx, normy, np.zeros(len(scale)))) / scale
 
@@ -1061,25 +1061,40 @@ class Layout(pro.PyLayers):
         """
         fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
         D  = np.fromfile(fileres,dtype='int',sep=' ')
+        # number of integer
         N1 = len(D)
+        # number of lines
         N2 = N1/8
         D = D.reshape(N2,8)
+        # list of coordinates
         lcoords = []
+        # list of ring
         lring = [] 
+        # list of (z_ground, height_building)
         zring = [] 
-        bdgold  = 1
+        # 
+        bdg_old = 1
         for e in range(N2):
+            # p1 point coordinate
             p1 = ([D[e,0],D[e,1]])
+            # p2 point coordinate
             p2 = ([D[e,2],D[e,3]])
-            z  = (D[e,7],D[e,4])
+            # (ground height,building height) 
+            z  = (D[e,7]-500,D[e,4])
+            # building number
             bdg =  D[e,5] 
+            # building class 
             bdc =  D[e,6] 
-            if (bdgold-bdg)!=0:
+            # detect change of building 
+            if (bdg_old-bdg)!=0:
                 ring = sh.LinearRing(lcoords)
-                lring.append(ring)
-                zring.append(z)
-                lcoords = []
-            bdgold=bdg
+                poly = sh.Polygon(ring)
+                if poly.area>0:
+                    lring.append(ring)
+                    zring.append(z)
+                    lcoords = []
+            bdg_old=bdg
+            # update lcoords
             if p1 not in lcoords:
                 lcoords.append(p1)
             if p2 not in lcoords:
@@ -5332,7 +5347,7 @@ class Layout(pro.PyLayers):
         # plt.show()
         return T, map_vertices
 
-    def buildGt(self, check=True , difftol=0.01):
+    def buildGt(self, check=True , difftol=0.01,verbose=False):
         """ build graph of convex cycle 
 
         Parameters
@@ -5353,8 +5368,10 @@ class Layout(pro.PyLayers):
         # if vnodes == 0 it means this is a created
         # segment which is tagged as _AIR
         ###
-
+        
         T, map_vertices = self._triangle()
+        if verbose:
+            print('Triangulation : Done')
         # point index are integer
         map_vertices = map_vertices.astype(int)
         ptri = T['vertices'][T['triangles']]
@@ -5362,15 +5379,21 @@ class Layout(pro.PyLayers):
         # List of Triangle Polygons
 
         lTP = [geu.Polygon(x) for x in ptri]
+        if verbose:
+            print('transfer in a list of polygons : Done')
 
         # update vnodes of Polygons
         [p.setvnodes(self) for p in lTP]
+        if verbose:
+            print('update vnodes of polygons : Done')
 
         # 2.add air walls to triangle poly
         ###
         # luaw  : list of tuples
         # ( polygon , array of _AIR segments)
         luaw = [(p, np.where(p.vnodes == 0)[0]) for p in lTP]
+        if verbose:
+            print('construction of a list of air wall  : Done')
 
         #
         # For a triangle polygon the number of vnodes
@@ -5388,6 +5411,8 @@ class Layout(pro.PyLayers):
                                                 verbose=False))
             # update polygon segments with new added airwalls
             p.setvnodes(self)
+        if verbose:
+            print('loop on airwalls  : Done')
 
         tri = T['triangles']
         nbtri = len(T['triangles'])
@@ -5485,6 +5510,9 @@ class Layout(pro.PyLayers):
 
         # self.showG('st',aw=1)
 
+        if verbose:
+            print('upddating graphs  : Done')
+            print('starting Mikado ... ')
         for a in _airseg:
             #
             # n0,n1 : cycle number
@@ -5557,6 +5585,8 @@ class Layout(pro.PyLayers):
         ######
         # fix renumbering Gt nodes
 
+        if verbose:
+            print('end Mikado ... ')
         pos = self.Gt.pos
         nl = {c: uc + 1 for uc, c in enumerate(self.Gt.nodes())}
         self.Gt = nx.relabel_nodes(self.Gt, nl)
@@ -5564,6 +5594,8 @@ class Layout(pro.PyLayers):
         self.Gt.pos = {nl[n]: pos[n] for n in nl}
 
         self._updGsncy()
+        if verbose:
+            print('end update Gs ncy ... ')
         #
         # add cycle 0 to boundaries segments
         # cycle 0 is necessarily outdoor
@@ -10220,4 +10252,4 @@ if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
     # L = Layout('Servon Sur Vilaine',verbose=True,dist_m=60)
-    # L.build()iiii    
+    # L.build()    
