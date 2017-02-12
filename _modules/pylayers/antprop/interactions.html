@@ -685,7 +685,7 @@
             <span class="c1">#return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])</span>
             <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s1">&#39;no B interaction to evaluate&#39;</span>
+            <span class="k">print</span> <span class="s1">&#39;no B interactions to evaluate&#39;</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span></div>
 
 <span class="c1">#####Interaction Loss in not used for speed purpose</span>
@@ -778,7 +778,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="IntR.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntR.__repr__.html#pylayers.antprop.interactions.IntR.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of R interaction :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of R interactions :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">s</span>    </div>
 
 <div class="viewcode-block" id="IntR.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntR.eval.html#pylayers.antprop.interactions.IntR.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
@@ -1014,6 +1014,7 @@
 <div class="viewcode-block" id="IntD.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntD.__init__.html#pylayers.antprop.interactions.IntD.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span><span class="n">slab</span><span class="o">=</span><span class="p">{}):</span>
         <span class="n">Inter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">slab</span><span class="o">=</span><span class="n">slab</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dusl</span> <span class="o">=</span> <span class="p">{}</span></div>
+
 <div class="viewcode-block" id="IntD.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntD.__repr__.html#pylayers.antprop.interactions.IntD.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of D interaction :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">s</span></div>
@@ -1036,9 +1037,9 @@
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">phi0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">N</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sinsout</span><span class="p">()</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
             <span class="n">mapp</span><span class="o">=</span><span class="p">[]</span>
@@ -1095,7 +1096,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

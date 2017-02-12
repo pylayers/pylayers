@@ -341,7 +341,10 @@
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">:</span>
             <span class="n">node</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
             <span class="n">peer</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="s1">&#39;link&#39;</span><span class="p">]</span>
-            <span class="n">wstd</span>  <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">wstd</span>  <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">wstd</span> <span class="o">=</span> <span class="s1">&#39;---&#39;</span>
             <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;TDOA&#39;</span><span class="p">:</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">,</span><span class="n">peer</span><span class="p">,</span><span class="n">c</span><span class="o">.</span><span class="n">type</span><span class="p">,</span><span class="n">wstd</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">std</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">runable</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">usable</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -857,6 +860,101 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span> <span class="o">=</span> <span class="n">l</span></div>
+
+
+
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sc</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        l       : layer number to observe. If -1 estimation is made on the highest available layer. default = -1</span>
+<span class="sd">        amb     : display ambiguous boxes. default = false</span>
+<span class="sd">        sc      : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default &#39;all&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------        </span>
+
+<span class="sd">        Nothing but calls a geomview instance</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Nc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span>
+        <span class="n">par</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span>
+
+        <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sc</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;scene&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="c1"># if constrinat boxes has to be displayed </span>
+                        <span class="k">if</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;constr_boxes&#39;</span><span class="p">]:</span>
+                            <span class="n">c</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">else</span> <span class="p">:</span>
+                            <span class="n">c</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">vsc</span> <span class="ow">in</span> <span class="n">sc</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">vsc</span><span class="p">]</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">vsc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">vsc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;scene&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">if</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;constr_boxes&#39;</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">vsc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">else</span> <span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">vsc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">vsc</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">sc</span><span class="p">]</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">sc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">sc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;scene&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">if</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;constr_boxes&#39;</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">sc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">else</span> <span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">sc</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">sc</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;dispay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;scene&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+
+        <span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;scene&#39;</span><span class="p">]:</span>
+            <span class="n">an</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+                    <span class="n">an</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">an</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">p</span><span class="p">))</span>
+
+            <span class="c1"># S = Scene(an=an, bn=self.bn)</span>
+            <span class="c1"># sce = S.generate()</span>
+
+        <span class="k">if</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;estimated&#39;</span><span class="p">]:</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">mlab</span><span class="o">.</span><span class="n">point3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">]:</span>
+
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s1">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">Id</span><span class="o">=</span><span class="n">l</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+                <span class="k">if</span> <span class="n">amb</span><span class="p">:</span>
+                    <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">Id</span><span class="o">=</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1">#</span>
 
 <div class="viewcode-block" id="CLA.show3"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.show3.html#pylayers.location.geometric.constraints.cla.CLA.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sc</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display constraints and theirs boxes through geomview.</span>
@@ -1603,7 +1701,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

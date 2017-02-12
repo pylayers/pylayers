@@ -164,8 +164,8 @@
 <span class="sd">TUchannel class</span>
 <span class="sd">===============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
+<span class="sd">.. autosummar::::</span>
+<span class="sd">    :toctree:generated/</span>
 
 <span class="sd">    TUchannel.psd</span>
 <span class="sd">    TUchannel.awgn</span>
@@ -1982,7 +1982,7 @@
 <span class="sd">        direction of depature (rad) [theta_t,phi_t]  nray x 2</span>
 <span class="sd">    doa  :</span>
 <span class="sd">        direction of arrival (rad)  [theta_r,phi_r]  nray x 2</span>
-<span class="sd">    tauk :</span>
+<span class="sd">    tau  :</span>
 <span class="sd">        delay ray k in ns</span>
 
 <span class="sd">    Methods</span>
@@ -2385,14 +2385,51 @@
         <span class="n">ri</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">ri</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">baseband</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Channel transfer function in baseband</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fcGHz : center frequency </span>
+<span class="sd">        WMHz  : bandwidth in MHz </span>
+<span class="sd">        Nf    : Number of frequency points</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.5</span><span class="p">,</span>
+                    <span class="s1">&#39;WMHz&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span>
+                    <span class="s1">&#39;Nf&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">fcGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span>
+        <span class="n">WMHz</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;WMHz&#39;</span><span class="p">]</span>
+        <span class="n">Nf</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Nf&#39;</span><span class="p">]</span>
+
+        <span class="c1"># self.y : Nray x Nr x Nt x Nf</span>
+        <span class="c1"># self.taud : (,Nray)</span>
+
+        <span class="c1"># complex amplitude in baseband</span>
+        <span class="c1"># Nray x Nr x Nt x Nf1 </span>
+        <span class="n">abb</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">fcGHz</span> <span class="p">)</span>
+        <span class="n">fMHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">WMHz</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">WMHz</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">fMHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">abb</span><span class="o">*</span><span class="n">E</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fMHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Tchannel.chantap"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.chantap.html#pylayers.antprop.channel.Tchannel.chantap">[docs]</a>    <span class="k">def</span> <span class="nf">chantap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; channel tap</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        fcGHz :</span>
-<span class="sd">            WGHz  :</span>
+<span class="sd">        fcGHz : center frequency </span>
+<span class="sd">        WGHz  : bandwidth </span>
 <span class="sd">        Ntap  : int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2405,9 +2442,24 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">h</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">Tchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">)</span>
-        <span class="n">htap</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">chantap</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">htap</span></div>
+        <span class="n">fcGHz</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fcGHz&#39;</span><span class="p">]</span>
+        <span class="n">WGHz</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;WGHz&#39;</span><span class="p">]</span>
+        <span class="n">Ntap</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Ntap&#39;</span><span class="p">]</span>
+        <span class="c1"># yb : tau x f x 1</span>
+        <span class="n">yb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">fcGHz</span> <span class="p">)</span>
+        <span class="c1"># l : 1 x 1 x tap</span>
+        <span class="n">l</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ntap</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+        <span class="c1"># l : tau x 1 x 1</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="c1"># S : tau x f x tap</span>
+        <span class="n">S</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="n">tau</span><span class="o">*</span><span class="n">WGHz</span><span class="p">)</span>
+        <span class="c1"># htap : f x tap</span>
+        <span class="n">htap</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">yb</span><span class="o">*</span><span class="n">S</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">htapi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">htap</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">htapi</span></div>
+
+
 
 <div class="viewcode-block" id="Tchannel.applywavB"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.applywavB.html#pylayers.antprop.channel.Tchannel.applywavB">[docs]</a>    <span class="k">def</span> <span class="nf">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; apply waveform method B (time domain )</span>
@@ -3601,7 +3653,7 @@
 <span class="sd">            ----------</span>
 
 <span class="sd">            Pt : Power transmitted</span>
-<span class="sd">            T : Temperrature Kelvin</span>
+<span class="sd">            T : Temperature (Kelvin)</span>
 <span class="sd">            mode : string</span>
 
 <span class="sd">            Returns</span>
@@ -4961,7 +5013,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -244,7 +244,7 @@
 <td>imshow of y matrix</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.plot.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.plot</span></code></a>(**kwargs)</td>
-<td>plot signal</td>
+<td>plot signal Bsignal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.flatteny.html#pylayers.signal.bsignal.Bsignal.flatteny" title="pylayers.signal.bsignal.Bsignal.flatteny"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.flatteny</span></code></a>([yrange,&nbsp;reversible])</td>
 <td>flatten y array</td>
@@ -287,7 +287,7 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.min.html#pylayers.signal.bsignal.Usignal.min" title="pylayers.signal.bsignal.Usignal.min"><code class="xref py py-obj docutils literal"><span class="pre">Usignal.min</span></code></a>()</td>
 <td>minimum of Usignal</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.truncate.html#pylayers.signal.bsignal.Usignal.truncate" title="pylayers.signal.bsignal.Usignal.truncate"><code class="xref py py-obj docutils literal"><span class="pre">Usignal.truncate</span></code></a>(posmin,&nbsp;posmax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.truncate.html#pylayers.signal.bsignal.Usignal.truncate" title="pylayers.signal.bsignal.Usignal.truncate"><code class="xref py py-obj docutils literal"><span class="pre">Usignal.truncate</span></code></a>(imin,&nbsp;imax[,&nbsp;axis])</td>
 <td>truncate USignal in range [posmin, posmax]</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.abs.html#pylayers.signal.bsignal.Usignal.abs" title="pylayers.signal.bsignal.Usignal.abs"><code class="xref py py-obj docutils literal"><span class="pre">Usignal.abs</span></code></a>()</td>
@@ -332,10 +332,10 @@
 <td>plot TBsignal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.translate.html#pylayers.signal.bsignal.TBsignal.translate" title="pylayers.signal.bsignal.TBsignal.translate"><code class="xref py py-obj docutils literal"><span class="pre">TBsignal.translate</span></code></a>(tau)</td>
-<td>translate signal by tau</td>
+<td>translate TBsignal signal by tau</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TBsignal.b2tu.html#pylayers.signal.bsignal.TBsignal.b2tu" title="pylayers.signal.bsignal.TBsignal.b2tu"><code class="xref py py-obj docutils literal"><span class="pre">TBsignal.b2tu</span></code></a>(N)</td>
-<td>conversion into a TUsignal</td>
+<td>conversion from TBsignal to TUsignal</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TBsignal.b2fu</span></code></td>
 <td></td>
@@ -361,22 +361,22 @@
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.diff.html#pylayers.signal.bsignal.TUsignal.diff" title="pylayers.signal.bsignal.TUsignal.diff"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.diff</span></code></a>()</td>
-<td>numerical differentiation</td>
+<td>numerical differentiation TUsignal</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.info.html#pylayers.signal.bsignal.TUsignal.info" title="pylayers.signal.bsignal.TUsignal.info"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.info</span></code></a>()</td>
-<td>display information</td>
+<td>display information about TUsignal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.align.html#pylayers.signal.bsignal.TUsignal.align" title="pylayers.signal.bsignal.TUsignal.align"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.align</span></code></a>(u2)</td>
-<td>align two Usignal on a same base</td>
+<td>align two TUsignal on a same base</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.filter.html#pylayers.signal.bsignal.TUsignal.filter" title="pylayers.signal.bsignal.TUsignal.filter"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.filter</span></code></a>([order,&nbsp;wp,&nbsp;ws,&nbsp;ftype])</td>
-<td>signal filtering</td>
+<td>TUsignal filtering</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ftshift.html#pylayers.signal.bsignal.TUsignal.ftshift" title="pylayers.signal.bsignal.TUsignal.ftshift"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.ftshift</span></code></a>()</td>
-<td>return the associated FUsignal</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.ftshift</span></code></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.show.html#pylayers.signal.bsignal.TUsignal.show" title="pylayers.signal.bsignal.TUsignal.show"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.show</span></code></a>([fig,&nbsp;ax,&nbsp;display,&nbsp;PRPns])</td>
-<td>show psd</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.show</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.esd.html#pylayers.signal.bsignal.TUsignal.esd" title="pylayers.signal.bsignal.TUsignal.esd"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.esd</span></code></a>([mode])</td>
 <td>Calculate the energy spectral density of the U signal</td>
@@ -398,16 +398,16 @@
 <td>return the associated FUsignal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.fft.html#pylayers.signal.bsignal.TUsignal.fft" title="pylayers.signal.bsignal.TUsignal.fft"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.fft</span></code></a>([shift])</td>
-<td>forward fast Fourier transform</td>
+<td>forward fast Fourier transform of TUsignal</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.fftsh.html#pylayers.signal.bsignal.TUsignal.fftsh" title="pylayers.signal.bsignal.TUsignal.fftsh"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.fftsh</span></code></a>()</td>
 <td>return an FHsignal</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ftshift.html#pylayers.signal.bsignal.TUsignal.ftshift" title="pylayers.signal.bsignal.TUsignal.ftshift"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.ftshift</span></code></a>()</td>
-<td>return the associated FUsignal</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.ftshift</span></code></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.psd</span></code>([Tpns,&nbsp;R,&nbsp;periodic])</td>
-<td>calculate power spectral density</td>
+<td>calculate TUsignal power spectral density</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.Yadd_zeros2l.html#pylayers.signal.bsignal.TUsignal.Yadd_zeros2l" title="pylayers.signal.bsignal.TUsignal.Yadd_zeros2l"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Yadd_zeros2l</span></code></a>(N)</td>
 <td>time domain extension on the left with N zeros</td>
@@ -429,14 +429,14 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.show.html#pylayers.signal.bsignal.TUsignal.show" title="pylayers.signal.bsignal.TUsignal.show"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.show</span></code></a>([fig,&nbsp;ax,&nbsp;display,&nbsp;PRPns])</td>
-<td>show psd</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.show</span></code></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.shift.html#pylayers.signal.bsignal.TUsignal.shift" title="pylayers.signal.bsignal.TUsignal.shift"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.shift</span></code></a>(tau)</td>
 <td>shift the Usignal by tau (expressed in the same unit as Bsignal.x)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.filter.html#pylayers.signal.bsignal.TUsignal.filter" title="pylayers.signal.bsignal.TUsignal.filter"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.filter</span></code></a>([order,&nbsp;wp,&nbsp;ws,&nbsp;ftype])</td>
-<td>signal filtering</td>
+<td>TUsignal filtering</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.correlate.html#pylayers.signal.bsignal.TUsignal.correlate" title="pylayers.signal.bsignal.TUsignal.correlate"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.correlate</span></code></a>(s[,&nbsp;normalized])</td>
 <td>The time step dx should be the same</td>
@@ -530,13 +530,13 @@
 <td>windowing Usignal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.get.html#pylayers.signal.bsignal.FUsignal.get" title="pylayers.signal.bsignal.FUsignal.get"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.get</span></code></a>(k)</td>
-<td>get the kh signal</td>
+<td>get the kth signal from the FUsignal</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.info.html#pylayers.signal.bsignal.FUsignal.info" title="pylayers.signal.bsignal.FUsignal.info"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.info</span></code></a>()</td>
-<td>Display Information on the FUsignal</td>
+<td>Display Information about the FUsignal</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.energy.html#pylayers.signal.bsignal.FUsignal.energy" title="pylayers.signal.bsignal.FUsignal.energy"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.energy</span></code></a>([axis,&nbsp;Friis,&nbsp;mode])</td>
-<td>calculate energy along a given axis</td>
+<td>calculate energy along a given axis of the FUsignal</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.applyFriis.html#pylayers.signal.bsignal.FUsignal.applyFriis" title="pylayers.signal.bsignal.FUsignal.applyFriis"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.applyFriis</span></code></a>()</td>
 <td>apply Friis factor</td>
@@ -645,7 +645,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.signal.bsignal.rst.txt"

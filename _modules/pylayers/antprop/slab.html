@@ -1430,18 +1430,18 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;       &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]:</span>
-                <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
-                <span class="n">nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">nf</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;f(GHz) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nf</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="k">else</span><span class="p">:</span>
+            <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="n">nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nf</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;f(GHz) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nf</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
 
-                    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;f(GHz) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;f(GHz) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
 
-                <span class="k">if</span> <span class="n">nt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">st</span><span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;theta (rad) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nt</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;theta (rad) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">if</span> <span class="n">nt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;theta (rad) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nt</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s2">&quot;theta (rad) : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Slab.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.info.html#pylayers.antprop.slab.Slab.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1518,6 +1518,7 @@
 <span class="sd">        theta : np.array</span>
 <span class="sd">            incidence angle (from normal) radians</span>
 <span class="sd">        compensate : boolean</span>
+<span class="sd">        RT : string </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1556,7 +1557,7 @@
         <span class="n">Co</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
         <span class="n">Co</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">Co</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="c1"># _Co= np.eye(2,dtype=complex)</span>
+        <span class="c1"># _Co= np.eye(2,dtype=complex)</span>
 
 
 
@@ -2382,7 +2383,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

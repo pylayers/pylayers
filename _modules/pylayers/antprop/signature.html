@@ -609,6 +609,7 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        L : Layout</span>
+<span class="sd">        dump : int </span>
 <span class="sd">        source : int</span>
 <span class="sd">            cycle number</span>
 <span class="sd">        target : int</span>
@@ -616,8 +617,17 @@
 <span class="sd">        cutoff : int</span>
 <span class="sd">            limiting depth level in graph exploration (default 3)</span>
 
+<span class="sd">        A signature ia a dict of arrays</span>
+
+<span class="sd">        The array is an interleaving between nstr and type of interaction </span>
+<span class="sd">        typeInt = 1,2,3 (extremity,diffraction,reflexion,transmission)</span>
+
+<span class="sd">        Si[1]</span>
+<span class="sd">        np.array([5,2,19,2,26,2,72,2]) </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span>
@@ -638,13 +648,23 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;from cycle : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; to cycle &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">ldump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ldump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dump</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ldump</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
             <span class="c1"># nl x 2 x nsig</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;   &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">,:])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;   &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">,:])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">l</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;)&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">l</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;),&#39;</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                
 
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
 
@@ -708,6 +728,9 @@
                 <span class="c1"># s = s + &#39;   &#39;+ str(a[i,1,:]) + &#39;\n&#39;</span>
 
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check signature</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">OK</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
         <span class="n">KO</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
@@ -3142,14 +3165,14 @@
 
 <span class="sd">        cutoff : int</span>
 <span class="sd">            limit the exploration of all_simple_path</span>
-<span class="sd">        algo: string</span>
-<span class="sd">            &#39;old&#39; : call propaths2</span>
-<span class="sd">            &#39;new&#39; : call procone2</span>
 <span class="sd">        bt : bool</span>
 <span class="sd">            backtrace (allow to visit already visited nodes in simple path algorithm)</span>
 <span class="sd">        progress : bool</span>
 <span class="sd">            display the time passed in the loop</span>
-
+<span class="sd">        diffraction : boolean </span>
+<span class="sd">            activate diffraction </span>
+<span class="sd">        threshold : float </span>
+<span class="sd">            for reducing calculation time</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -3177,7 +3200,6 @@
 
         <span class="c1"># list of interactions visible from target</span>
         <span class="n">litR</span><span class="p">,</span><span class="n">litT</span><span class="p">,</span><span class="n">litD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
            <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span> <span class="o">+</span> <span class="n">litD</span>
         <span class="k">else</span><span class="p">:</span>
@@ -3231,6 +3253,7 @@
             <span class="n">R</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))]</span>
 
             <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">]</span>
+            
             <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="ow">in</span> <span class="n">lit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">):</span>
                 <span class="n">anstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">visited</span><span class="p">))</span>
                 <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">visited</span><span class="p">))</span>
@@ -3248,15 +3271,15 @@
             <span class="c1"># lawp = list of airwall position in visited</span>
             <span class="n">lawp</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="c1"># while the stack of iterators is not void</span>
+            
             <span class="k">while</span> <span class="n">stack</span><span class="p">:</span> <span class="c1">#</span>
-                
                 <span class="c1"># iter_on_interactions is the last iterator in the stack</span>
                 <span class="n">iter_on_interactions</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="c1"># next interaction child</span>
                 <span class="n">interaction</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iter_on_interactions</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
                 <span class="c1">#if visited==[(4,2),(5,2)]:</span>
                 <span class="c1">#     print visited</span>
-                <span class="c1">#   print interaction</span>
+                <span class="c1">#print s,interaction</span>
                 <span class="c1">#     pdb.set_trace()</span>
                 <span class="n">cond1</span> <span class="o">=</span> <span class="n">interaction</span> <span class="ow">is</span> <span class="bp">None</span>
                 <span class="c1"># test whether the interaction has already been visited (reverberation)</span>
@@ -3268,8 +3291,11 @@
                 <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond1</span><span class="p">):</span>
                     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond3</span><span class="p">):</span>
                         <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interaction</span><span class="p">)</span>
+                        <span class="c1">#print visited</span>
+                        <span class="c1"># if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:</span>
+                        <span class="c1">#     pdb.set_trace()</span>
                         
-                        <span class="c1">#print visited,len(stack)</span>
+                        
                         <span class="k">if</span> <span class="n">interaction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lair</span><span class="p">:</span>
                             <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
@@ -3285,11 +3311,12 @@
 
                         <span class="c1"># diffraction (retrieve a point)</span>
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span>
+                            <span class="c1">#th = self.L.Gs.pos[nstr]</span>
+                            <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
                             <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">th</span><span class="p">,</span><span class="n">th</span><span class="p">])</span>
                             <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])))</span>
                         <span class="c1"># reflexion </span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
 
                             <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">nstr</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                             <span class="c1">#th (Npt x xy)</span>
@@ -3328,98 +3355,198 @@
                             <span class="n">phe_</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># head last segment </span>
 
                             <span class="c1">#</span>
-                            <span class="c1"># Calculates the left and righ vector of the cone </span>
+                            <span class="c1"># Detect situations of connected segments</span>
+                            <span class="c1">#</span>
+                            <span class="n">connected</span> <span class="o">=</span> <span class="bp">False</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">pta0</span><span class="o">==</span><span class="n">pta_</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                                <span class="n">apex</span> <span class="o">=</span> <span class="n">phe0</span>
+                                <span class="n">connected</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="n">vl</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">pta0</span><span class="p">)</span>
+                                <span class="n">vr</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="p">(</span><span class="n">pta0</span><span class="o">==</span><span class="n">phe_</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                                <span class="n">apex</span> <span class="o">=</span> <span class="n">phe0</span>
+                                <span class="n">connected</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="n">vl</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">pta0</span><span class="p">)</span>
+                                <span class="n">vr</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="p">(</span><span class="n">phe0</span><span class="o">==</span><span class="n">pta_</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                                <span class="n">apex</span> <span class="o">=</span> <span class="n">pta0</span>
+                                <span class="n">connected</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="n">vl</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">phe0</span><span class="p">)</span>
+                                <span class="n">vr</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="p">(</span><span class="n">phe0</span><span class="o">==</span><span class="n">phe_</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                                <span class="n">apex</span> <span class="o">=</span> <span class="n">pta0</span>    
+                                <span class="n">connected</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="n">vl</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">phe0</span><span class="p">)</span>
+                                <span class="n">vr</span><span class="o">=</span><span class="p">(</span><span class="n">apex</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
+                            <span class="c1">#</span>
+                            <span class="c1"># Calculates the left and right vector of the cone </span>
                             <span class="c1">#</span>
                             <span class="c1">#  vl left vector </span>
                             <span class="c1">#  vr right vector </span>
-                            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span> <span class="o">^</span>
-                                    <span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span> <span class="p">):</span>
-                                <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
-                                <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
-                            <span class="k">else</span><span class="p">:</span>  <span class="c1"># twisted case</span>
-                                <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
-                                <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
+                            <span class="c1">#</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">connected</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span> <span class="o">^</span>
+                                        <span class="n">geu</span><span class="o">.</span><span class="n">ccw</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span> <span class="p">):</span>
+                                    <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
+                                    <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>  <span class="c1"># twisted case</span>
+                                    <span class="n">vr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">pta_</span><span class="p">)</span>
+                                    <span class="n">vl</span> <span class="o">=</span> <span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">phe_</span><span class="p">)</span>
 
-                            <span class="c1"># cone dot product </span>
-                            <span class="c1"># print vr</span>
-                            <span class="c1"># print vl</span>
-                            <span class="n">vr_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-                            <span class="n">vl_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-                            
-                        
-                            <span class="n">vrdotvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vr_n</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
-                            <span class="c1"># cone angle </span>
-                            <span class="n">angle_cone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">vrdotvl</span><span class="p">,</span><span class="mf">1.0</span><span class="p">))</span>
-                            <span class="c1">#angle_cone = np.arccos(vrdotvl)</span>
-                            <span class="c1"># prepare lines and seg argument for intersection checking</span>
-                            <span class="n">linel</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                            <span class="n">liner</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                            <span class="c1"># from origin mirrored segment to be tested </span>
-                            <span class="n">seg</span>   <span class="o">=</span> <span class="p">(</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-                            <span class="c1"># apex calculation </span>
-                            <span class="n">a0u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">vr_n</span><span class="p">)</span>
-                            <span class="n">a0v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
-                            <span class="n">b0u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">vr_n</span><span class="p">)</span>
-                            <span class="n">b0v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
-
-                            <span class="n">kb</span>  <span class="o">=</span> <span class="p">((</span><span class="n">b0v</span><span class="o">-</span><span class="n">a0v</span><span class="p">)</span><span class="o">-</span><span class="n">vrdotvl</span><span class="o">*</span><span class="p">(</span><span class="n">b0u</span><span class="o">-</span><span class="n">a0u</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">vrdotvl</span><span class="o">*</span><span class="n">vrdotvl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-                            <span class="n">apex</span> <span class="o">=</span> <span class="n">phe0</span> <span class="o">+</span> <span class="n">kb</span><span class="o">*</span><span class="n">vl_n</span>
-
-                            
-                            
-                            <span class="n">kl</span><span class="p">,</span><span class="n">p_int_left</span>  <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">linel</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
-                            <span class="n">kr</span><span class="p">,</span><span class="n">p_int_right</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">liner</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
-                            
-                            <span class="c1"># signature is valid until proved non valid</span>
-                            <span class="c1"># valid_bool = True</span>
-
-                            <span class="n">seg_ratio</span> <span class="o">=</span> <span class="mf">1.0</span>
-                            
-                            <span class="n">bkl</span> <span class="o">=</span> <span class="p">(</span><span class="n">kl</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">kl</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span> 
-                            <span class="n">bkr</span> <span class="o">=</span> <span class="p">(</span><span class="n">kr</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">kr</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span>
-
-                            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bkl</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bkr</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">kl</span><span class="o">*</span><span class="n">kr</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span> <span class="c1"># outside cone</span>
-                                <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span>
-
-                            <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bkl</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bkr</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">kl</span><span class="o">*</span><span class="n">kr</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">):</span> <span class="c1"># fully in cone</span>
-                                <span class="n">tha</span> <span class="o">=</span> <span class="n">th</span>
-                                <span class="n">wseg0</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
-                                <span class="n">wseg1</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
-                                <span class="n">wseg0_n</span> <span class="o">=</span> <span class="n">wseg0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wseg0</span><span class="o">*</span><span class="n">wseg0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-                                <span class="n">wseg1_n</span> <span class="o">=</span> <span class="n">wseg1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wseg1</span><span class="o">*</span><span class="n">wseg1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-                                <span class="n">useg</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">wseg0_n</span><span class="p">,</span><span class="n">wseg1_n</span><span class="p">),</span><span class="mf">1.0</span><span class="p">))</span>
-                                <span class="n">ratio</span> <span class="o">=</span> <span class="n">useg</span><span class="o">/</span><span class="n">angle_cone</span>
-
-                            <span class="k">elif</span> <span class="p">(</span><span class="n">bkl</span> <span class="o">&amp;</span> <span class="n">bkr</span><span class="p">):</span> <span class="c1"># 2 intersection points </span>
-                                <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_left</span><span class="p">,</span><span class="n">p_int_right</span><span class="p">))</span>
-                                <span class="n">ratio</span> <span class="o">=</span> <span class="mf">1.0</span>
-
-                            <span class="k">elif</span> <span class="p">(</span><span class="n">bkl</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bkr</span><span class="p">)):</span> <span class="c1"># left line intersects while right line don&#39;t</span>
-                                <span class="k">if</span> <span class="n">kr</span><span class="o">&lt;</span><span class="n">kl</span><span class="p">:</span> 
-                                    <span class="n">wseg</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
-                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p_int_left</span><span class="p">))</span>
-                                <span class="k">else</span><span class="p">:</span>
-                                    <span class="n">wseg</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
-                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_left</span><span class="p">,</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                                <span class="c1"># cone dot product </span>
+                                <span class="c1"># print vr</span>
+                                <span class="c1"># print vl</span>
+                                <span class="n">vr_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                                <span class="n">vl_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
                                 
-                                <span class="n">wseg_n</span> <span class="o">=</span> <span class="n">wseg</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wseg</span><span class="o">*</span><span class="n">wseg</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-                                <span class="n">useg</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vr_n</span><span class="p">,</span><span class="n">wseg_n</span><span class="p">),</span><span class="mf">1.0</span><span class="p">))</span>
-                                <span class="n">ratio</span> <span class="o">=</span> <span class="n">useg</span><span class="o">/</span><span class="n">angle_cone</span>
+                            
+                                <span class="n">vrdotvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vr_n</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
+                                <span class="c1"># cone angle </span>
+                                <span class="n">angle_cone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">vrdotvl</span><span class="p">,</span><span class="mf">1.0</span><span class="p">))</span>
+                                <span class="c1">#angle_cone = np.arccos(vrdotvl)</span>
+                                <span class="c1"># prepare lines and seg argument for intersection checking</span>
+                                <span class="n">linel</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                                <span class="n">liner</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                                <span class="c1"># from origin mirrored segment to be tested </span>
+                                <span class="n">seg</span>   <span class="o">=</span> <span class="p">(</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-                            <span class="k">elif</span> <span class="p">(</span><span class="n">bkr</span> <span class="o">&amp;</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bkl</span><span class="p">)):</span> <span class="c1"># right line intersects while left line don&#39;t</span>
-                                <span class="k">if</span> <span class="n">kl</span><span class="o">&lt;</span><span class="n">kr</span><span class="p">:</span>
-                                    <span class="n">wseg</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
-                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p_int_right</span><span class="p">))</span>
-                                <span class="k">else</span><span class="p">:</span>
-                                    <span class="n">wseg</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
-                                    <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p_int_right</span><span class="p">,</span><span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-                                    
-                                <span class="n">wseg_n</span> <span class="o">=</span> <span class="n">wseg</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wseg</span><span class="o">*</span><span class="n">wseg</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-                                <span class="n">useg</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vr_n</span><span class="p">,</span><span class="n">wseg_n</span><span class="p">),</span><span class="mf">1.0</span><span class="p">))</span>
-                                <span class="n">ratio</span> <span class="o">=</span> <span class="n">useg</span><span class="o">/</span><span class="n">angle_cone</span>
+                                <span class="c1"># apex calculation </span>
+                                <span class="n">a0u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">vr_n</span><span class="p">)</span>
+                                <span class="n">a0v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pta0</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
+                                <span class="n">b0u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">vr_n</span><span class="p">)</span>
+                                <span class="n">b0v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phe0</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
+
+                                <span class="n">kb</span>  <span class="o">=</span> <span class="p">((</span><span class="n">b0v</span><span class="o">-</span><span class="n">a0v</span><span class="p">)</span><span class="o">-</span><span class="n">vrdotvl</span><span class="o">*</span><span class="p">(</span><span class="n">b0u</span><span class="o">-</span><span class="n">a0u</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">vrdotvl</span><span class="o">*</span><span class="n">vrdotvl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="n">apex</span> <span class="o">=</span> <span class="n">phe0</span> <span class="o">+</span> <span class="n">kb</span><span class="o">*</span><span class="n">vl_n</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">vr_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">vr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vr</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                                <span class="n">vl_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">vl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">vl</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                                <span class="n">vrdotvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vr_n</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
+                                <span class="c1"># cone angle </span>
+                                <span class="n">angle_cone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">vrdotvl</span><span class="p">,</span><span class="mf">1.0</span><span class="p">))</span>
+
+                            <span class="n">al</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">vl_n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">vl_n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">vr_n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">vr_n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                            <span class="n">wseg0</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
+                            <span class="n">wseg1</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">apex</span>
+                            <span class="n">wseg0_n</span> <span class="o">=</span> <span class="n">wseg0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wseg0</span><span class="o">*</span><span class="n">wseg0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                            <span class="n">wseg1_n</span> <span class="o">=</span> <span class="n">wseg1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wseg1</span><span class="o">*</span><span class="n">wseg1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                            <span class="n">aseg0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">wseg0_n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wseg0_n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">aseg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">wseg1_n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wseg1_n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            
+                            <span class="n">I</span><span class="o">=</span><span class="n">geu</span><span class="o">.</span><span class="n">angle_intersection2</span><span class="p">(</span><span class="n">al</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">aseg0</span><span class="p">,</span><span class="n">aseg1</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">I</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                                <span class="n">ratio</span> <span class="o">=</span> <span class="n">I</span><span class="o">/</span><span class="n">angle_cone</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="c1"># </span>
+                            <span class="c1"># UNCOMMENT BELOW FOR DEBUG</span>
+                            <span class="c1">#</span>
+                            <span class="c1">#print visited,len(stack),ratio</span>
+                            <span class="c1"># mina  = min(al,ar)</span>
+                            <span class="c1"># maxa  = max(al,ar)</span>
+                            
+                            <span class="c1"># bseg0 = False</span>
+                            <span class="c1"># bseg1 = False</span>
+                            <span class="c1"># ratio = 0 </span>
+                            <span class="c1"># if (maxa-mina)&gt;np.pi:</span>
+                            <span class="c1">#     I1 = (maxa,2*np.pi)</span>
+                            <span class="c1">#     I2 = (0,mina)</span>
+                            <span class="c1">#     if (((aseg0&gt;I1[0]) &amp; (aseg0&lt;I1[1])) | ((aseg0&gt;I2[0]) &amp; (aseg0 &lt;I2[1]))):</span>
+                            <span class="c1">#         # seg0 in cone</span>
+                            <span class="c1">#         bseg0 = True</span>
+                            <span class="c1">#     if (((aseg1&gt;I1[0]) &amp; (aseg1&lt;I1[1])) | ((aseg1&gt;I2[0]) &amp; (aseg1 &lt;I2[1]))):</span>
+                            <span class="c1">#         # seg1 in cone</span>
+                            <span class="c1">#         bseg1 = True    </span>
+                            <span class="c1"># else:</span>
+                            <span class="c1">#     I1 = (mina,maxa)</span>
+                            <span class="c1">#     if ((aseg0&gt;I1[0]) &amp; (aseg0&lt;I1[1])):</span>
+                            <span class="c1">#         # seg0 in cone</span>
+                            <span class="c1">#         bseg0 = True</span>
+                            <span class="c1">#     if ((aseg1&gt;I1[0]) &amp; (aseg1&lt;I1[1])):</span>
+                            <span class="c1">#         # seg1 in cone</span>
+                            <span class="c1">#         bseg1 = True</span>
+                            <span class="c1"># if ( bseg0 | bseg1 ):</span>
+                            <span class="c1">#     ratio = 1</span>
+
+
+                            
+                            
+
+                            <span class="c1"># lw0 = np.cross(vl_n,wseg0_n)</span>
+                            <span class="c1"># w0r = np.cross(wseg0_n,vr_n)</span>
+                            <span class="c1"># lw1 = np.cross(vl_n,wseg1_n)</span>
+                            <span class="c1"># w1r = np.cross(wseg1_n,vr_n)</span>
+
+                            <span class="c1"># s0 = np.sign(lw0*w0r)</span>
+                            <span class="c1"># s1 = np.sign(lw1*w1r)</span>
+
+                            <span class="c1"># if (s0&gt;0) &amp; (s1&gt;0):</span>
+                            <span class="c1">#     ratio = 1 </span>
+                            <span class="c1"># if (s0&gt;0) &amp; (s1&lt;0):</span>
+                            <span class="c1">#     ratio = 0.5</span>
+
+                            <span class="c1"># if (s1&gt;0) &amp; (s0&lt;0):</span>
+                            <span class="c1">#     ratio = 0.5</span>
+
+                            <span class="c1"># if (s0&lt;0) &amp; (s1&lt;0):</span>
+                            <span class="c1">#     ratio = 0         </span>
+                            
+
+
+                            <span class="c1"># kl,p_int_left  = geu.intersect_line_seg(linel,seg)</span>
+                            <span class="c1"># kr,p_int_right = geu.intersect_line_seg(liner,seg)</span>
+                            
+                            <span class="c1"># # signature is valid until proved non valid</span>
+                            <span class="c1"># # valid_bool = True</span>
+
+                            <span class="c1"># seg_ratio = 1.0</span>
+                            
+                            <span class="c1"># bkl = (kl&lt;=1) &amp; (kl&gt;=0) </span>
+                            <span class="c1"># bkr = (kr&lt;=1) &amp; (kr&gt;=0)</span>
+
+                            <span class="c1"># if (not bkl) &amp; (not bkr) &amp; (kl*kr&gt;0): # outside cone</span>
+                            <span class="c1">#     ratio = 0</span>
+
+                            <span class="c1"># elif (not bkl) &amp; (not bkr) &amp; (kl*kr&lt;=0): # fully in cone</span>
+                            <span class="c1">#     tha = th</span>
+                            <span class="c1">#     wseg0 = th[0]-apex</span>
+                            <span class="c1">#     wseg1 = th[1]-apex</span>
+                            <span class="c1">#     wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))</span>
+                            <span class="c1">#     wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))</span>
+                            <span class="c1">#     useg  = np.arccos(np.minimum(np.dot(wseg0_n,wseg1_n),1.0))</span>
+                            <span class="c1">#     ratio = useg/angle_cone</span>
+
+                            <span class="c1"># elif (bkl &amp; bkr): # 2 intersection points </span>
+                            <span class="c1">#     tha = np.vstack((p_int_left,p_int_right))</span>
+                            <span class="c1">#     ratio = 1.0</span>
+
+                            <span class="c1"># elif (bkl &amp; (not bkr)): # left line intersects while right line don&#39;t</span>
+                            <span class="c1">#     if kr&lt;kl: </span>
+                            <span class="c1">#         wseg = th[0]-apex</span>
+                            <span class="c1">#         tha = np.vstack((th[0],p_int_left))</span>
+                            <span class="c1">#     else:</span>
+                            <span class="c1">#         wseg = th[1]-apex</span>
+                            <span class="c1">#         tha = np.vstack((p_int_left,th[1]))</span>
+                                
+                            <span class="c1">#     wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))</span>
+                            <span class="c1">#     useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))</span>
+                            <span class="c1">#     ratio = useg/angle_cone</span>
+
+                            <span class="c1"># elif (bkr &amp; (not bkl)): # right line intersects while left line don&#39;t</span>
+                            <span class="c1">#     if kl&lt;kr:</span>
+                            <span class="c1">#         wseg = th[0]-apex</span>
+                            <span class="c1">#         tha = np.vstack((th[0],p_int_right))</span>
+                            <span class="c1">#     else:</span>
+                            <span class="c1">#         wseg = th[1]-apex</span>
+                            <span class="c1">#         tha = np.vstack((p_int_right,th[1]))</span>
+                                    
+                            <span class="c1">#     wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))</span>
+                            <span class="c1">#     useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))</span>
+                            <span class="c1">#     ratio = useg/angle_cone</span>
+                            <span class="c1"># else:</span>
+                            <span class="c1">#     ratio = 0</span>
                                 <span class="c1">#pdb.set_trace()</span>
 
                             <span class="c1">#</span>
@@ -3427,7 +3554,8 @@
                             <span class="c1">#</span>
                             <span class="c1"># print nstr</span>
                             <span class="c1"># print visited</span>
-                            <span class="c1"># fig ,ax = self.L.showG(&#39;s&#39;,aw=1,labels=1)</span>
+                            <span class="c1"># #if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:</span>
+                            <span class="c1"># fig ,ax = self.L.showG(&#39;s&#39;,aw=1,labels=0)</span>
                             <span class="c1"># ax = geu.linet(ax,pta0,phe0,al=1,color=&#39;magenta&#39;,linewidth=3)</span>
                             <span class="c1"># ax = geu.linet(ax,pta_,phe_,al=1,color=&#39;cyan&#39;,linewidth=3)</span>
 
@@ -3436,16 +3564,16 @@
                             <span class="c1"># ax = geu.linet(ax,vl[0],vl[1],al=1,color=&#39;blue&#39;,linewidth=3)</span>
                             <span class="c1"># #ax = geu.linet(ax,seg[0],seg[1],al=1,color=&#39;k&#39;,linewidth=3)</span>
                             <span class="c1"># ax = geu.linet(ax,th[0,:],th[1,:],al=1,color=&#39;green&#39;,linewidth=3)</span>
-                            <span class="c1"># plt.title(str(visited)+&#39;  &#39;+str(seg_ratio))</span>
+                            <span class="c1"># plt.title(str(visited)+&#39;  &#39;+str(ratio))</span>
                             <span class="c1"># ax.plot(apex[0],apex[1],&#39;or&#39;)</span>
                             <span class="c1"># plt.axis(&#39;auto&#39;)</span>
                             <span class="c1"># plt.show()</span>
                             <span class="c1"># pdb.set_trace()</span>
-
+                        <span class="c1">#print &#39;+++ &#39;,visited,ratio</span>
                         <span class="k">if</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
                             <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span>
                             <span class="c1"># </span>
-                            <span class="c1"># Check if the targer has been reached</span>
+                            <span class="c1"># Check if the target has been reached</span>
                             <span class="c1"># sequence is valid and last interaction is in the list of targets   </span>
                             <span class="k">if</span> <span class="p">(</span><span class="n">interaction</span> <span class="ow">in</span> <span class="n">lit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">interaction</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">):</span>
                                 <span class="n">anstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">visited</span><span class="p">))</span>
@@ -3455,12 +3583,13 @@
                                 <span class="k">except</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">anstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
                                 <span class="n">cptsig</span> <span class="o">+=</span><span class="mi">1</span>
-                                <span class="c1">#print visited,len(stack),cptsig  </span>
-
+                                <span class="c1"># print visited,len(stack),cptsig  </span>
+                                <span class="c1"># print &#39;    &#39;,cptsig,zip(anstr,typ),ratio</span>
                             <span class="c1"># move forward even when arrived in the target cycle</span>
                             
                             <span class="n">outint</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]][</span><span class="n">interaction</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                            <span class="n">proint</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]][</span><span class="n">interaction</span><span class="p">][</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                            <span class="c1">#outint = nx.neighbors(self.L.Gi,interaction)</span>
+                            <span class="c1"># proint = Gi[visited[-2]][interaction][&#39;output&#39;].values()</span>
                             <span class="c1">#nexti  = [it for k,it in enumerate(outint) if ((it[0]&gt;0) and (proint[k]&gt;threshold))]</span>
                             <span class="n">nexti</span>  <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">it</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outint</span><span class="p">)]</span>
                             <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">nexti</span><span class="p">))</span>
@@ -3474,7 +3603,7 @@
                             <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="c1">#print visited</span>
+                    <span class="c1">#print &#39;---&#39;,visited,cond1,cond2,cond3</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
                             <span class="n">R</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -3846,6 +3975,9 @@
         <span class="n">polyctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyptx</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span>
         <span class="n">polycrx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyprx</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span>
 
+        <span class="c1">#</span>
+        <span class="c1"># Handling LOS ray</span>
+        <span class="c1">#</span>
         <span class="n">dtxrx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">ptx</span><span class="o">-</span><span class="n">prx</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ptx</span><span class="o">-</span><span class="n">prx</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">dtxrx</span><span class="o">&gt;</span><span class="mf">1e-15</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">cyptx</span><span class="o">==</span><span class="n">cyprx</span><span class="p">:</span>
@@ -4006,19 +4138,28 @@
         <span class="n">polyctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyptx</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span>
         <span class="n">polycrx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyprx</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span>
 
+        <span class="c1"># The Line of sight situation is detected here </span>
+        <span class="c1"># dtxtx : distance between Tx and Rx </span>
         <span class="n">dtxrx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">ptx</span><span class="o">-</span><span class="n">prx</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ptx</span><span class="o">-</span><span class="n">prx</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">dtxrx</span><span class="o">&gt;</span><span class="mf">1e-15</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">polyctx</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">los</span><span class="p">):</span>
                 <span class="n">rays</span><span class="o">.</span><span class="n">los</span> <span class="o">=</span> <span class="bp">True</span>
+
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">rays</span><span class="o">.</span><span class="n">los</span> <span class="o">=</span> <span class="bp">False</span>
 
-
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image2</span><span class="p">(</span><span class="n">ptx</span><span class="p">)</span>
         <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span><span class="n">prx</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+        <span class="c1"># </span>
+        <span class="c1"># Add LOS ray in ray 2D </span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">rays</span><span class="o">.</span><span class="n">los</span><span class="p">:</span>
+            <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sig&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span><span class="s1">&#39;pt&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))}</span>
+        
         <span class="n">rays</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
         <span class="n">rays</span><span class="o">.</span><span class="n">nb_origin_sig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">rays</span><span class="o">.</span><span class="n">origin_sig_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
+        <span class="c1">#pdb.set_trace()</span>
         <span class="k">return</span> <span class="n">rays</span></div>
 
     <span class="k">def</span> <span class="nf">backtrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
@@ -5266,7 +5407,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

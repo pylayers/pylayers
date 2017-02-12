@@ -2837,7 +2837,7 @@
 <span class="sd">            p0                   p1</span>
 <span class="sd">            x------------------x</span>
 <span class="sd">            |        |         |</span>
-<span class="sd">            |        v         |</span>
+<span class="sd">            |        v  l       |</span>
 <span class="sd">            |                  |</span>
 <span class="sd">            |-&gt;              &lt;-|</span>
 <span class="sd">            |        ^         |</span>
@@ -3380,7 +3380,7 @@
 <span class="sd">    -------</span>
 
 <span class="sd">    k : intersection parameter (0&lt;k&lt;1 if intersection)</span>
-<span class="sd">    M : intersection point </span>
+<span class="sd">    M : intersection point M = pta + k vseg</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pt</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">line</span>
@@ -4688,6 +4688,56 @@
     <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">ax</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">d</span></div>
 
+<span class="k">def</span> <span class="nf">angle_intersection</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inters</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">ags</span><span class="p">,</span><span class="n">age</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ags</span><span class="o">&gt;</span><span class="n">age</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;=</span><span class="n">ags</span> <span class="ow">or</span> <span class="n">b</span><span class="o">&lt;=</span><span class="n">age</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">b</span><span class="o">&gt;</span><span class="n">ags</span> <span class="ow">and</span> <span class="n">b</span><span class="o">&lt;=</span><span class="n">age</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">bol</span> <span class="o">=</span> <span class="n">inters</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span> <span class="o">|</span> <span class="n">inters</span> <span class="p">(</span><span class="n">b2</span><span class="p">,</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span> <span class="o">|</span> <span class="n">inters</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span> <span class="o">|</span> <span class="n">inters</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span>     
+    <span class="k">return</span> <span class="n">bol</span>
+
+<span class="k">def</span> <span class="nf">angle_intersection2</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">):</span>
+    
+
+    <span class="n">r1</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span> 
+    <span class="k">if</span> <span class="n">r1</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span> 
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">r1</span> 
+        <span class="n">ainf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
+        <span class="n">asup</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ainf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
+        <span class="n">asup</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
+
+    <span class="n">r2</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+    <span class="k">if</span> <span class="n">r2</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">:</span> 
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">r2</span>
+        <span class="n">binf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span>
+        <span class="n">bsup</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">binf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span>
+        <span class="n">bsup</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">)</span>
+
+    <span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="n">ainf</span><span class="o">+</span><span class="n">asup</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">c1</span><span class="o">&lt;</span><span class="n">ainf</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">c1</span><span class="o">&gt;</span><span class="n">asup</span><span class="p">):</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">c1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    
+    <span class="n">c2</span> <span class="o">=</span> <span class="p">(</span><span class="n">binf</span><span class="o">+</span><span class="n">bsup</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">c2</span><span class="o">&lt;</span><span class="n">binf</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">c2</span><span class="o">&gt;</span><span class="n">bsup</span><span class="p">):</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">c2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+    
+    <span class="n">dc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span><span class="n">c1</span><span class="p">)</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span><span class="n">c1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dc</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">dc</span>
+
+
+    <span class="k">return</span><span class="p">((</span><span class="n">r1</span><span class="o">+</span><span class="n">r2</span><span class="p">)</span><span class="o">-</span><span class="n">dc</span><span class="p">)</span>
 
 <div class="viewcode-block" id="line_intersection"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.line_intersection.html#pylayers.util.geomutil.line_intersection">[docs]</a><span class="k">def</span> <span class="nf">line_intersection</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; intersection between two 2D lines using shapely</span>
@@ -5276,7 +5326,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

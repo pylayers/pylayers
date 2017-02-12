@@ -192,11 +192,20 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sax</strong> : list</p>
 <blockquote>
-<div><p>selected output axis from y default [0,1]</p>
-</div></blockquote>
-<p><strong>typ</strong> : string</p>
-<blockquote>
-<div><p>[&#8216;l10&#8217;,&#8217;l20&#8217;,&#8217;d&#8217;,&#8217;r&#8217;,&#8217;du&#8217;,&#8217;ru&#8217;,&#8217;m&#8217;,&#8217;re&#8217;,&#8217;im&#8217;]</p>
+<div><p>selected output axis from y default [0,1]
+typ : string
+&#8216;m&#8217;   : modulus
+&#8216;v&#8217;   : value
+&#8216;l10&#8217; : dB (10 log10)
+&#8216;l20&#8217; : dB (20 log10)
+&#8216;d&#8217;   : phase degrees
+&#8216;r&#8217;   : phase radians
+&#8216;du&#8217;  : phase degrees unwrap
+&#8216;ru&#8217;  : phase radians unwrap
+&#8216;gdn&#8217; : group delay (ns)
+&#8216;gdm&#8217; : group distance (m)
+&#8216;re&#8217;  : real part
+&#8216;im&#8217;  : imaginary part</p>
 </div></blockquote>
 <p><strong>sel</strong> : list of ndarray()</p>
 <blockquote>
@@ -252,7 +261,7 @@ could be x :  f and y : t x r x f</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.signal.bsignal.Bsignal.cformat.rst.txt"

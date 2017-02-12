@@ -185,15 +185,25 @@
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.save_init">
 <code class="descclassname">DLink.</code><code class="descname">save_init</code><span class="sig-paren">(</span><em>filename_long</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/link.html#DLink.save_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.save_init" title="Permalink to this definition">¶</a></dt>
-<dd><p>initialize save Link</p>
+<dd><p>initialize the hdf5 file for link saving</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename_long</strong> : str</p>
-<blockquote class="last">
+<blockquote>
 <div><p>complete path and filename</p>
 </div></blockquote>
+<p><strong>&#8216;sig&#8217;</strong> : Signatures</p>
+<p><strong>&#8216;ray2&#8217;</strong> : 2D rays</p>
+<p><strong>&#8216;ray&#8217;</strong> : 3D rays</p>
+<p><strong>&#8216;Ct&#8217;</strong> : Propagation channel</p>
+<p><strong>&#8216;H&#8217;</strong> : Transmission channel</p>
+<p><strong>&#8216;p_map&#8217;</strong> : points</p>
+<p><strong>&#8216;c_map&#8217;</strong> : cycles</p>
+<p><strong>&#8216;f_map&#8217;</strong> : frequency</p>
+<p><strong>&#8216;A_map&#8217;</strong> : antennas</p>
+<p class="last"><strong>&#8216;T_map&#8217;</strong> : rotation</p>
 </td>
 </tr>
 </tbody>
@@ -213,7 +223,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 05, 2016.
+      Last updated on Feb 12, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.save_init.rst.txt"
