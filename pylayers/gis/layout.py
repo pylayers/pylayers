@@ -291,7 +291,10 @@ class Layout(pro.PyLayers):
         st = '\n'
         st = st + "----------------\n"
         st = st + "Project : " + os.environ['BASENAME']+'\n'
-        st = st + self._filename + ' : ' + self._hash + "\n"
+        if hasattr(self,'_hash'):
+            st = st + self._filename + ' : ' + self._hash + "\n"
+        else:
+            st = st + self._filename + "\n"
 
         if self.isbuilt:
             st = st + 'Built with : ' + self.Gt.node[0]['hash'] + "\n"

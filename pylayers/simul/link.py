@@ -1295,14 +1295,15 @@ class DLink(Link):
             ufst = np.where(fa[:,2]<=array[2])[0]
             lufst = len(ufst)
             # if fmin, fmax or fstep
-            if (lufmi==0) and (lufma==0) and (lufst==0):
+            #if (lufmi==0) and (lufma==0) and (lufst==0):
+            if (lufmi==0) and (lufma==0):
                 ua = np.array([])
-            else :
-                # find comon lines of fmin and fmax and fstep
+            else:
+                # find common lines of fmin and fmax and fstep
                 ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
-                # # find comon lines of fmin and fmax
+                # # find common lines of fmin and fmax
                 # ufmima = np.where(np.in1d(ufmi,ufma))[0]
-                # # find comon lines of fmin, fmax and fstep
+                # # find common lines of fmin, fmax and fstep
                 # ua = np.where(np.in1d(ufmima,ufst))[0]
 
         elif key == 'A_map':
@@ -1584,7 +1585,7 @@ class DLink(Link):
         else :
             #if not hasattr(R,'I'):
             # Ctilde...
-            # Find an other criteria in order to decide whether the R has
+            # Find an other criteria in order to decide if the R has
             # already been evaluated
             
             C = R.eval(self.fGHz)
