@@ -4771,7 +4771,6 @@ class Ctilde(PyLayers):
             a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
-
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)

@@ -81,7 +81,6 @@ class Layout(pro.PyLayers):
                  _filematini='matDB.ini',
                  _fileslabini='slabDB.ini',
                  _filefur='',
-                 force=False,
                  check=True,
                  build=True,
                  verbose=False,
@@ -103,6 +102,13 @@ class Layout(pro.PyLayers):
             furniture file name
         force : booleanlo
         check : boolean
+        build : boolean 
+        verbose : boolean 
+        cartesian : boolean 
+        dist_m : int 
+        typ : string 
+            'floorplan' | 'outdoor'
+
 
         """
 
@@ -137,7 +143,7 @@ class Layout(pro.PyLayers):
         self.Gt.pos = {}
 
         #
-        # related file names
+        # related files
         #
 
         self.fileslabini = _fileslabini
@@ -196,7 +202,6 @@ class Layout(pro.PyLayers):
         #   If no .ini extension provided it is added
         #
         arg, ext = os.path.splitext(string)
-        # force .ini extension
     
         if arg != '':
             if ext == '.ini':
