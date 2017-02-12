@@ -62,14 +62,15 @@ class CDF(object):
             plt.rcParams['grid.linewidth']  =3.5
             plt.rcParams['xtick.major.pad'] =20
 
-       
+        self.bound = []
         self.cdf = []
         for d in self.ld:
             if d.has_key('bound'):
                 bound = d['bound']
             else:
-                bound = np.arange(d['values'].min(),d['values'].max(),len(d['values']*0.1))
+                bound = np.linspace(d['values'].min(),d['values'].max(),len(d['values']*0.1))
             values = d['values']
+
             Nv = len(values)
             cdf = np.array([])
             for k in bound:
@@ -78,7 +79,7 @@ class CDF(object):
                 cdf = np.hstack((cdf, lu))
 
             self.cdf.append(cdf)
-
+            self.bound.append(bound)
     def show(self,**kwargs):
         """ show cdf
         """
@@ -101,7 +102,7 @@ class CDF(object):
             if d.has_key('bound'):
                 bound = d['bound']
             else:
-                bound = np.arange(d['values'].min(),d['values'].max(),len(d['values']*0.1))
+                bound = np.linspace(d['values'].min(),d['values'].max(),len(d['values']*0.1))
             if d.has_key('marker'):
                 marker = d['marker']
             else:
@@ -143,7 +144,7 @@ class CDF(object):
                     ylabel=d['y_label']
                 else:
                     ylabel=''
-
+            self.bound[k] = bound
 #                       leg.append(legend)
             cdf = self.cdf[k]
             c.append(ax.plot(bound, cdf, marker=marker,
