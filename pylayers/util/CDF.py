@@ -18,7 +18,7 @@ rcParams['text.latex.unicode'] = True
 
 
 class CDF(object):
-    def __init__(self, ld, filename=''):
+    def __init__(self, ld, filename='',filetype=[]):
         """
         cdf = CDF(ld)
         
@@ -45,7 +45,7 @@ class CDF(object):
         d0['linewidth']   : linewidth
 
         """
-        
+
         self.ld = ld
         self.filename = filename
         if self.filename == '':
@@ -58,9 +58,14 @@ class CDF(object):
             plt.rcParams['font.weight']     ='normal'
             plt.rcParams['xtick.minor.size']=2
             plt.rcParams['legend.fontsize'] = 'xx-large'
-            plt.rcParams['font.size']       =20
+            plt.rcParams['font.size']       =10
             plt.rcParams['grid.linewidth']  =3.5
             plt.rcParams['xtick.major.pad'] =20
+
+            if filetype == []:
+                self.filetype = ['jpg','eps','pdf']
+            else:
+                self.filetype = filetype
 
         self.bound = []
         self.cdf = []
@@ -77,7 +82,7 @@ class CDF(object):
                 u = np.nonzero(values <= k)
                 lu = len(u[0]) / (Nv * 1.0)
                 cdf = np.hstack((cdf, lu))
-
+            self.axis=[0,bound[-1],0,1.]
             self.cdf.append(cdf)
             self.bound.append(bound)
     def show(self,**kwargs):
@@ -95,6 +100,7 @@ class CDF(object):
 
         leg = []
         c = []
+
 
         for k in range(len(self.ld)):
 
@@ -135,6 +141,10 @@ class CDF(object):
                 legend = d['legend']
             else:
                 legend=''
+            if d.has_key('title'):
+                title = d['title']
+            else:
+                title=''
             if k == 0:
                 if d.has_key('x_label'):
                     xlabel=d['x_label']
@@ -155,14 +165,16 @@ class CDF(object):
 
         plt.ylabel(ylabel)
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)
+        plt.axis(self.axis)
         plt.grid()
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+        if title != '':
+            plt.title(title)
         if self.save :
-            plt.savefig(self.filename + '.pdf', format='pdf',
+            for typ in self.filetype:
+                plt.savefig(self.filename + '.' + typ, format=typ,
                         bbox_inches='tight', pad_inches=0)
-            plt.savefig(self.filename + '.eps', format='eps',
-                        bbox_inches='tight', pad_inches=0)
-
+            
 
 if __name__ == "__main__":
     d0 = {}
