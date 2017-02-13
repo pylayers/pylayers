@@ -13,6 +13,7 @@ import os
 import copy
 import glob
 import time
+import tqdm
 import numpy as np
 import numpy.random as rd
 import scipy as sp
@@ -5474,8 +5475,19 @@ class Layout(pro.PyLayers):
         # creates new _AIR segments
         #
         _airseg = []
+        #pbar = tqdm.tqdm(total=100)
+        Niter = len(luaw)
+        print('Niter ',Niter)
+        print('Niter ',Niter)
+        print('Niter ',Niter)
+        print('Niter ',Niter)
+        cpt = 0 
+        #for p, uaw in tqdm(luaw):
         for p, uaw in luaw:
             # for each vnodes == 0, add an _AIR
+            cpt +=1
+            print(100.*cpt/Niter)
+            #pbar.update(100.*cpt/Niter)
             for aw in uaw:
                 modpt = len(p.vnodes)
                 _airseg.append(self.add_segment(p.vnodes[np.mod(aw - 1, modpt)],
@@ -5484,7 +5496,7 @@ class Layout(pro.PyLayers):
                                                 z=(0, 40000000),
                                                 verbose=False))
             # update polygon segments with new added airwalls
-            p.setvnodes(self)
+            p.setvnodes_new(self.get_points(p),self)
         if verbose:
             print('loop on airwalls  : Done')
 

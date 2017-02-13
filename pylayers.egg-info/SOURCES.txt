@@ -55,6 +55,7 @@ pylayers/gui/editor_select.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
+pylayers/location/observables.py
 pylayers/location/algebraic/PyGraphTool.py
 pylayers/location/algebraic/PyMathTool.py
 pylayers/location/algebraic/__init__.py
