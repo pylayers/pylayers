@@ -2190,7 +2190,7 @@ bernard
                         v[i][1]['p'][1],
                         v[i][1]['p'][2]+v[i][1]['s3off'],
                         v[i][0],
-                        scale=kwargs['innamesize']) for i in range(len(v))]
+                        scale=kwargs['innamesize'],color=in_color) for i in range(len(v))]
         if kwargs['body']:
 
             if kwargs['bodytime']==[]:
