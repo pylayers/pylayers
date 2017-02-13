@@ -370,7 +370,7 @@ class DLink(Link):
                    'wav':wvf.Waveform(),
                    'outdoor':False,
                    'cutoff':3,
-                   'save_opt':['sig','ray','Ct','H'],
+                   'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
                    'verbose':False,
@@ -383,7 +383,9 @@ class DLink(Link):
         specset  = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         # set default attribute
+       
         for key, value in defaults.items():
+        
             if key not in kwargs:
                 if key in specset :
                     setattr(self,'_'+key,value)
@@ -396,9 +398,8 @@ class DLink(Link):
                 else :
                     setattr(self,key,kwargs[key])
 
-    
-
-        force=self.force_create
+        
+        force = self.force_create
         delattr(self,'force_create')
 
        
@@ -432,6 +433,7 @@ class DLink(Link):
         # dictionnary data exists
         self.dexist={'sig':{'exist':False,'grpname':''},
                      'ray':{'exist':False,'grpname':''},
+                     'ray2':{'exist':False,'grpname':''},
                      'Ct':{'exist':False,'grpname':''},
                      'H':{'exist':False,'grpname':''}
                     }
@@ -446,17 +448,21 @@ class DLink(Link):
         #
         # In outdoor situation we delete all reference to transmission node in Gi 
         #
-        if kwargs['outdoor']:
+        cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
+        
+    
+        if self.outdoor:
             u = self.L.Gi.node.keys()
             
-            lT = [k for k in u if len(k)==3]
-            self.L.Gi.remove_nodes_from(lT)
+            lT  =  [k for k in u if (len(k)==3)]
+            lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
+            self.L.Gi.remove_nodes_from(lTi)
             lE = self.L.Gi.edges()
             for k in range(len(lE)):
                 e = lE[k]
                 output = self.L.Gi.edge[e[0]][e[1]]['output']
                 for l in output.keys():
-                    if len(l)==3:
+                    if l in lTi:
                         del output[l]
                 self.L.Gi.edge[e[0]][e[1]]['output']=output
             
@@ -906,14 +912,24 @@ class DLink(Link):
 
 
     def save_init(self,filename_long):
-        """ initialize save Link
+        """ initialize the hdf5 file for link saving 
 
         Parameters
         ----------
 
         filename_long : str
             complete path and filename
-
+        
+        'sig'    : Signatures
+        'ray2'   : 2D rays 
+        'ray'    : 3D rays 
+        'Ct'     : Propagation channel 
+        'H'      : Transmission channel 
+        'p_map'  : points  
+        'c_map'  : cycles 
+        'f_map'  : frequency 
+        'A_map'  : antennas 
+        'T_map'  : rotation 
 
         """
 
@@ -925,6 +941,7 @@ class DLink(Link):
         try:
 
             f.create_group('sig')
+            f.create_group('ray2')
             f.create_group('ray')
             f.create_group('Ct')
             f.create_group('H')
@@ -990,8 +1007,8 @@ class DLink(Link):
             groupe name of the h5py file
 
         """
-        lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
-        f=h5py.File(lfilename,'a')
+        lfilename = pyu.getlong(self.filename,pstruc['DIRLNK'])
+        f = h5py.File(lfilename,'a')
         # try/except to avoid loosing the h5 file if
         # read/write error
 
@@ -1017,6 +1034,7 @@ class DLink(Link):
             key of the h5py file
         gpname : string
             groupe name of the h5py file
+        force : boolean or list 
         """
 
         
@@ -1027,7 +1045,7 @@ class DLink(Link):
         else :
             if self.dexist[key]['exist']:
                 self._delete(key,grpname)
-
+              
             obj._saveh5(self.filename,grpname)
 
         if self.verbose :
@@ -1091,8 +1109,9 @@ class DLink(Link):
         # Write in h5py if no prior a-b link
 
         grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
+        self.dexist['ray2']['grpname']=grpname
         self.dexist['ray']['grpname']=grpname
-
+        
 
 
         ############
@@ -1276,14 +1295,15 @@ class DLink(Link):
             ufst = np.where(fa[:,2]<=array[2])[0]
             lufst = len(ufst)
             # if fmin, fmax or fstep
-            if (lufmi==0) and (lufma==0) and (lufst==0):
+            #if (lufmi==0) and (lufma==0) and (lufst==0):
+            if (lufmi==0) and (lufma==0):
                 ua = np.array([])
-            else :
-                # find comon lines of fmin and fmax and fstep
+            else:
+                # find common lines of fmin and fmax and fstep
                 ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
-                # # find comon lines of fmin and fmax
+                # # find common lines of fmin and fmax
                 # ufmima = np.where(np.in1d(ufmi,ufma))[0]
-                # # find comon lines of fmin, fmax and fstep
+                # # find common lines of fmin, fmax and fstep
                 # ua = np.where(np.in1d(ufmima,ufst))[0]
 
         elif key == 'A_map':
@@ -1315,7 +1335,7 @@ class DLink(Link):
         applywav :boolean
          Apply waveform to H
         force : list
-            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
+            Force the computation (['sig','ray2','ray,'Ct','H']) AND save (replace previous computations)
         alg : 1|'old'|'exp'|'exp2'
             version of run for signature
         si_progress: bollean ( False)
@@ -1376,7 +1396,7 @@ class DLink(Link):
 
 
 
-        defaults={ 'applywav':True,
+        defaults={ 'applywav':False,
                    'si_progress':False,
                    'diffraction':True,
                    'ra_vectorized':True,
@@ -1407,7 +1427,7 @@ class DLink(Link):
         if 'force' in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
-                    kwargs['force'] = ['sig','ray','Ct','H']
+                    kwargs['force'] = ['sig','ray2','ray','Ct','H']
                 else :
                     kwargs['force'] = []
 
@@ -1491,20 +1511,35 @@ class DLink(Link):
         if self.verbose :
             print "Start Rays"
         tic = time.time()
-        R = Rays(self.a,self.b)
+        r2d = Rays(self.a,self.b)
+       
 
-        if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
-            self.load(R,self.dexist['ray']['grpname'])
-
+        #
+        # get 2D rays 
+        #
+        if self.dexist['ray2']['exist'] and not ('ray2' in kwargs['force']):
+            self.load(r2d,self.dexist['ray2']['grpname'])
         else :
-
             # perform computation ...
-            # ... with vetorized ray evaluation approach
+            # ... with vectorized ray evaluation 
             if kwargs['ra_vectorized']:
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
             else :
                 r2d = Si.rays(self.a,self.b)
+            # save 2D rays
+            self.save(r2d,'ray2',self.dexist['ray2']['grpname'],force = kwargs['force'])
+
+        self.r2d = r2d
+
+        #
+        # get 3D rays 
+        #
+        R = Rays(self.a,self.b)
+        R.is3D = True
+        if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
+            self.load(R,self.dexist['ray']['grpname'])
+        else :
 
             if kwargs['ra_ceil_H'] == []:
                 ceilheight = self.L.maxheight
@@ -1512,18 +1547,22 @@ class DLink(Link):
                 ceilheight = kwargs['ra_ceil_H']
 
 
-            R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
+            R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
 
             R.locbas(self.L)
-            # ...and save
+            
 
             R.fillinter(self.L)
 
-            C = Ctilde()
-            C = R.eval(self.fGHz)
+            # C = Ctilde()
+
+            # C = R.eval(self.fGHz)
+
+            # save 3D rays 
+
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
-        self.r2d = r2d
+        
         self.R = R
         toc = time.time()
         if self.verbose :
@@ -1540,13 +1579,13 @@ class DLink(Link):
         ############
         
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
-            C=Ctilde()
+            C = Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
             #if not hasattr(R,'I'):
             # Ctilde...
-            # Find an other criteria in order to decide whether the R has
+            # Find an other criteria in order to decide if the R has
             # already been evaluated
             
             C = R.eval(self.fGHz)

@@ -1054,8 +1054,10 @@ class Pattern(PyLayers):
 
         self.G  : np.array(Nt,Np,Nf) dtype:float
             linear gain 
+                  or np.array(Nr,Nf)
         self.sqG : np.array(Nt,Np,Nf) dtype:float 
             linear sqare root of gain 
+                  or np.array(Nr,Nf)
         self.efficiency : np.array (,Nf) dtype:float 
             efficiency 
         self.hpster : np.array (,Nf) dtype:float
@@ -1063,31 +1065,40 @@ class Pattern(PyLayers):
         self.ehpbw : np.array (,Nf) dtyp:float 
             equivalent half power beamwidth (radians)
 
+        Notes
+        -----
+
+        .. math:: G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
+
         """
         self.G = np.real( self.Fp * np.conj(self.Fp)
                          +  self.Ft * np.conj(self.Ft) )
-        dt = self.theta[1]-self.theta[0]
-        dp = self.phi[1]-self.phi[0]
-        Nt = len(self.theta)
-        Np = len(self.phi)
-        Gs = self.G*np.sin(self.theta)[:,None,None]*np.ones(Np)[None,:,None]
-        self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
+        if len(self.G.shape)==3:
+            dt = self.theta[1]-self.theta[0]
+            dp = self.phi[1]-self.phi[0]
+            Nt = len(self.theta)
+            Np = len(self.phi)
+            Gs = self.G*np.sin(self.theta)[:,None,None]*np.ones(Np)[None,:,None]
+            self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
 
-        self.sqG = np.sqrt(self.G)
-        self.GdB = 10*np.log10(self.G)
-        # GdBmax (,Nf)
-        self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
-        #assert((self.efficiency<1.0).all()),pdb.set_trace()
-        self.hpster=np.zeros(len(self.fGHz))
-        self.ehpbw=np.zeros(len(self.fGHz))
-        for k in range(len(self.fGHz)):
-            U  = np.zeros((Nt,Np))
-            A = self.GdB[:,:,k]*np.ones(Nt)[:,None]*np.ones(Np)[None,:]
-            u = np.where(A>(self.GdBmax[k]-3))
-            U[u] = 1
-            V  = U*np.sin(self.theta)[:,None]
-            self.hpster[k] = np.sum(V)*dt*dp/(4*np.pi)
-            self.ehpbw[k] = np.arccos(1-2*self.hpster[k])
+            self.sqG = np.sqrt(self.G)
+            self.GdB = 10*np.log10(self.G)
+            # GdBmax (,Nf)
+            self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
+            #assert((self.efficiency<1.0).all()),pdb.set_trace()
+            self.hpster=np.zeros(len(self.fGHz))
+            self.ehpbw=np.zeros(len(self.fGHz))
+            for k in range(len(self.fGHz)):
+                U  = np.zeros((Nt,Np))
+                A = self.GdB[:,:,k]*np.ones(Nt)[:,None]*np.ones(Np)[None,:]
+                u = np.where(A>(self.GdBmax[k]-3))
+                U[u] = 1
+                V  = U*np.sin(self.theta)[:,None]
+                self.hpster[k] = np.sum(V)*dt*dp/(4*np.pi)
+                self.ehpbw[k] = np.arccos(1-2*self.hpster[k])
+        if len(self.G.shape)==2:
+            self.sqG = np.sqrt(self.G)
+            self.GdB = 10*np.log10(self.G)
 
     def plotG(self,**kwargs):
         """ antenna plot gain in 2D
