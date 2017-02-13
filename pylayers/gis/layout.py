@@ -12,6 +12,7 @@ import sys
 import os
 import copy
 import glob
+import time
 import numpy as np
 import numpy.random as rd
 import scipy as sp
@@ -728,7 +729,7 @@ class Layout(pro.PyLayers):
 
         return np.setdiff1d(iseg, u)
 
-    def g2npy(self):
+    def g2npy(self,verbose=False):
         """ conversion from graphs to numpy arrays
 
         Notes
@@ -809,7 +810,8 @@ class Layout(pro.PyLayers):
             return n
 
         nairwall = np.array(map(nairwall, upnt))
-
+        if verbose:
+            print('buildging nairwall : Done')
         #
         # if a node is connected to N air wall ==> deg = deg - N
         #
@@ -822,6 +824,8 @@ class Layout(pro.PyLayers):
             degmax = 1
 
         self.degree = {}
+        if verbose:
+            print('Start node degree determination')
         for deg in range(degmax + 1):
             num = filter(lambda x: degpnt[x] == deg, range(
                 len(degpnt)))  # position of degree 1 point
@@ -829,6 +833,8 @@ class Layout(pro.PyLayers):
             npt = np.array(map(lambda x: upnt[x], num))
             self.degree[deg] = npt
 
+        if verbose:
+            print('Node degree determination  : Done')
         #
         # convert geometric information in numpy array
         #
@@ -842,17 +848,27 @@ class Layout(pro.PyLayers):
         self.pt[0, :] = np.array([self.Gs.pos[k][0] for k in upnt])
         self.pt[1, :] = np.array([self.Gs.pos[k][1] for k in upnt])
 
+        if verbose:
+            print('pt in np.array  : Done')
+
         self.pg = np.sum(self.pt, axis=1) / np.shape(self.pt)[1]
         self.pg = np.hstack((self.pg, 0.))
 
         ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
         nhead = map(lambda x: nx.neighbors(self.Gs, x)[1], useg)
 
-        self.tahe[0, :] = np.array(
-            map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
-        self.tahe[1, :] = np.array(
-            map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], nhead))
-
+        # tic = time.time()
+        # self.tahe[0, :] = np.array(
+        #      map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
+        # self.tahe[1, :] = np.array(
+        #    map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], nhead))
+        
+        aupnt = np.array(upnt)
+        self.tahe[0, :] = np.array([np.where(aupnt==x)[0][0] for x in ntail ])
+        self.tahe[1, :] = np.array([np.where(aupnt==x)[0][0] for x in nhead ])
+        
+        if verbose:
+            print('tahe in numpy array : Done')
         #
         # transcoding array between graph numbering (discontinuous) and numpy numbering (continuous)
         #
@@ -866,7 +882,7 @@ class Layout(pro.PyLayers):
         #
         # handling of segment related arrays
         #
-        # pdb.set_trace()
+       
         if Nsmax > 0:
             self.tgs = np.zeros(Nsmax + 1, dtype=int)
             rag = np.arange(len(useg))
@@ -1101,16 +1117,31 @@ class Layout(pro.PyLayers):
                 lcoords.append(p2)
 
         npt = 1
+        
         for r1,z1 in zip(lring,zring):
             x,y = r1.xy 
-            n0  =   -npt
+            
             for k2 in range(len(x)):
-                self.Gs.add_node(-npt)
-                self.Gs.pos[-npt] = (x[k2],y[k2])
-                if k2>0:
-                    ns = self.add_segment(-npt, -(npt-1), name='WALL', z=z1)
-                npt = npt + 1
-            ns = self.add_segment(-(npt-1), n0, name='WALL', z=z1)
+                new_pt = (x[k2],y[k2])
+                kpos = self.Gs.pos.keys()
+                vpos = self.Gs.pos.values()
+                if new_pt not in vpos:
+                    current_node_index = -npt
+                    self.Gs.add_node(current_node_index)
+                    self.Gs.pos[-npt] = new_pt
+                    npt = npt + 1
+                else:
+                    u = [k for k in range(len(vpos)) if (vpos[k] == new_pt)]
+                    
+                    current_node_index = kpos[u[0]]
+
+                if k2>0: # at least already one point
+                    ns = self.add_segment(current_node_index, previous_node_index, name='WALL', z=z1)
+                else:
+                    starting_node_index  =   current_node_index
+                previous_node_index = current_node_index
+            # last segment    
+            #ns = self.add_segment(previous_node_index, starting_node_index, name='WALL', z=z1)
         #pdb.set_trace()
 
     def importosm(self, **kwargs):
@@ -3260,6 +3291,49 @@ class Layout(pro.PyLayers):
 
         return ptlist, seglist
 
+    def get_points(self, ax):
+        """ get point list and segment list in a rectangular zone
+
+        Parameters
+        ----------
+
+        ax  : list ot tuple
+            [xmin,xmax,ymin,ymax]
+              or shapely Polygon 
+
+        Returns
+        -------
+
+        (pt,ke)
+
+        """
+
+
+        if type(ax)==geu.Polygon:
+            eax = ax.exterior.xy
+            xmin = np.min(eax[0])
+            xmax = np.max(eax[0])
+            ymin = np.min(eax[1])
+            ymax = np.max(eax[1])
+        else:
+            xmin = ax[0]
+            xmax = ax[1]
+            ymin = ax[2]
+            ymax = ax[3]
+
+        x = self.pt[0,:]
+        y = self.pt[1,:]
+        uxmin = (x>=xmin)
+        uymin = (y>=ymin)
+        uxmax = (x<=xmax)
+        uymax = (y<=ymax)
+        k  = np.where(uxmin*uymin*uxmax*uymax==1)[0]
+        pt = np.array(zip(x[k],y[k])).T
+        ke = self.upnt[k]
+        # ux = ((x>=xmin).all() and (x<=xmax).all())
+        # uy = ((y>=ymin).all() and (y<=ymax).all())
+        return((pt,ke))
+
     def angleonlink3(self, p1=np.array([0, 0, 1]), p2=np.array([10, 3, 1])):
         """ angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2
 
@@ -5383,7 +5457,7 @@ class Layout(pro.PyLayers):
             print('transfer in a list of polygons : Done')
 
         # update vnodes of Polygons
-        [p.setvnodes(self) for p in lTP]
+        [p.setvnodes_new(self.get_points(p),self) for p in lTP]
         if verbose:
             print('update vnodes of polygons : Done')
 
