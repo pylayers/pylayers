@@ -1655,6 +1655,7 @@ class Rays(PyLayers, dict):
                 except:
                     self._ray2nbi=_ray2nbi
 
+               
                 self._ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']

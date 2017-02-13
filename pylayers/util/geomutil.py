@@ -180,6 +180,58 @@ COLOR = {
     False: '#ff3333'
 }
 
+def ispoint(tpts, pt, tol=0.05):
+        """ check if pt is a point in a tuple of ponts
+
+        Parameters
+        ----------
+
+        tpts : tuple (point (2xN) , index (1xN))
+        pt  : point (2,1)
+        tol : float
+            default (0.05 meters)
+
+        if True the point number (<0) is returned
+        else 0 is return
+
+        Returns
+        -------
+
+        k : point index if point exists, 0 otherwise
+
+        Example
+        -------
+
+            >>> from pylayers.util.geomutil.util import *
+            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([1,2,3]))
+            >>> pt = np.array([[1],[5]])
+            >>> ispoint(tpts,pt)
+            1
+
+        See Also
+        --------
+
+        pylayers.util.geomutil.Polygon.setvnodes
+
+        """
+        # print"ispoint : pt ", pt
+        pts = tpts[0]
+        ke =  tpts[1]
+        
+        u = pts - pt.reshape(2, 1)
+        v = np.sqrt(np.sum(u * u, axis=0))
+        nz = (v > tol)
+        b = nz.prod()
+        if b == 1:
+            # if all points are different from pt
+            return(0)
+        else:
+            nup = np.where(nz == False)[0]
+            if len(nup) == 1:
+                return(ke[nup][0])
+            else:
+                mi = np.where(min(v[nup]) == v[nup])[0]
+                return(ke[nup[mi]][0])
 
 def isconvex(poly, tol=1e-2):
     """ Determine if a polygon is convex
@@ -638,16 +690,20 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of point and segments of the polygon, is there are isosegments the sequence of iso segments 
-        is repeated between the termination points. L.numseg has been adapted in oreder to return either the first segment (default)
+        vnodes is a list of point and segments of the polygon. 
+        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
         """
+        # get coordinates of the exterior of the polygon 
         x, y = self.exterior.xy
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
-        npts = [L.ispoint(np.array(xx), tol=0.01)
-                for xx in zip(x[0:-1], y[0:-1])]
+        #
+        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        #
+        npts = [L.ispoint(np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
         assert (0 not in npts), pdb.set_trace()
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
@@ -672,6 +728,58 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = np.array(vnodes)
 
+    
+    def setvnodes_new(self, tpts,L):
+        """ update vnodes member from Layout
+
+        Parameters
+        ----------
+
+        L : pylayers.layout.Layout
+
+        See Also
+        --------
+
+        pylayers.layout.Layout.ispoint
+
+        vnodes is a list of point and segments of the polygon. 
+        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        L.numseg has been adapted in order to return either the first segment (default)
+        or the list of all segments
+
+        """
+        # get coordinates of the exterior of the polygon 
+        x, y = self.exterior.xy
+        # npts = map(lambda x :
+        #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        #
+        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        #
+        npts = [ispoint(tpts,np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
+        assert (0 not in npts), pdb.set_trace()
+        # seg list of tuple [(n1,n2),(n2,n3),....(,)]
+        seg = zip(npts, np.roll(npts, -1))
+        vnodes = []
+        for pseg in seg:
+            vnodes = vnodes + [pseg[0]]
+            nseg = L.numseg(pseg[0], pseg[1], first=False)
+            # if nseg==0:
+            #     pdb.set_trace()
+            if type(nseg) == int:
+                nseg = [nseg]
+            else:
+                nseg = list(nseg)
+            vnodes = vnodes + nseg
+
+        # pdb.set_trace()
+        # try:
+        #     nseg = map(lambda x : L.numseg(x[0],x[1],first=False),seg)
+        # except:
+        #     import ipdb
+        #     ipdb.set_trace()
+        # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
+        self.vnodes = np.array(vnodes)
+         
     def ndarray(self):
         """ get a ndarray from a Polygon
 
