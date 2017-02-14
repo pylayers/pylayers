@@ -7520,7 +7520,7 @@ class Layout(pro.PyLayers):
             # print"edge :  ",k
             # extract  both termination interactions nodes
             if verbose:
-                oGibar.update(100./Nedge)
+                oGipbar.update(100./Nedges)
             i0 = e[0]
             i1 = e[1]
             if (e[0]==(141,6,33)) and (e[1]==(23,33)):
