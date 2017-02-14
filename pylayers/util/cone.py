@@ -292,8 +292,10 @@ class Cone(PyLayers):
         """
 
         a = self.apex[:,np.newaxis]
-        b = a + self.u.reshape(2,1)
-        c = a + self.v.reshape(2,1)
+        # b = a + self.u.reshape(2,1)
+        # c = a + self.v.reshape(2,1)
+        b = a + self.u[:,None]
+        c = a + self.v[:,None]
 
         p0a0 = p[0,:]-a[0,:]
         p1a1 = p[1,:]-a[1,:]
