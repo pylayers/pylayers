@@ -54,6 +54,12 @@ import pylayers.util.graphutil as gph
 import pylayers.util.easygui as eag
 import pylayers.util.project as pro
 
+def pbar(verbose,**kwargs):
+    if verbose:
+        pbar=tqdm.tqdm(**kwargs)
+        return pbar
+
+
 class Layout(pro.PyLayers):
     """ Handling Layout
 
@@ -4853,26 +4859,22 @@ class Layout(pro.PyLayers):
         # to save graoh Gs
         self.lbltg.extend('s')
 
-        print("building Layout ...")
+        Buildpbar = pbar(verbose,total=5,desc='Build Layout',position=0)
+        
+        Buildpbar.update(1)
         if 't' in graph:
-            if verbose:
-                print("Gt")
-            self.buildGt(difftol=difftol)
+            self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
             self.lbltg.extend('t')
-
+        Buildpbar.update(2)
         if 'v' in graph:
-            if verbose:
-                print("Gv")
-            self.buildGv()
+            self.buildGv(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('v')
-
+        Buildpbar.update(3)
         if 'i' in graph:
-            if verbose:
-                print("Gi")
-            self.buildGi()
-            self.outputGi()
+            self.buildGi(verbose=verbose,tqdmpos=1)
+            self.outputGi(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('i')
-
+        Buildpbar.update(4)
         # if 'r' in graph:
         #     if verbose:
         #         print"Gr"
@@ -4892,6 +4894,7 @@ class Layout(pro.PyLayers):
         # There is a dumpw after each build
         self.dumpw()
         self.isbuilt = True
+        Buildpbar.update(5)
 
     def dumpw(self):
         """ write a dump of given Graph
@@ -5422,7 +5425,7 @@ class Layout(pro.PyLayers):
         # plt.show()
         return T, map_vertices
 
-    def buildGt(self, check=True , difftol=0.01,verbose=False):
+    def buildGt(self, check=True , difftol=0.01,verbose=False,tqdmpos=0):
         """ build graph of convex cycle 
 
         Parameters
@@ -5444,16 +5447,13 @@ class Layout(pro.PyLayers):
         # segment which is tagged as _AIR
         ###
 
-        def pbar(verbose,**kwargs):
-            if verbose:
-                pbar=tqdm.tqdm(**kwargs)
-                return pbar
+
 
         # if verbose :
         #     Gtpbar = tqdm.tqdm(total=100., desc='BuildGt',position=0)
         #     pbar_awloop =  tqdm.tqdm(total=100., desc ='airwalls loop',leave=False,position=1)
-        Gtpbar = pbar(verbose,total=100., desc ='BuildGt',position=0)
-        pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=1)
+        Gtpbar = pbar(verbose,total=100., desc ='BuildGt',position=tqdmpos)
+        pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
 
         T, map_vertices = self._triangle()
         if verbose:
@@ -5468,23 +5468,21 @@ class Layout(pro.PyLayers):
         pbartmp = pbar(verbose,total=100., 
                         desc ='Transfer polygons list',
                         leave=True,
-                        position=1)
+                        position=tqdmpos+1)
 
         lTP = [geu.Polygon(x) for x in ptri]
         if verbose:
             pbartmp.update(100.)
-            # print('transfer in a list of polygons : Done 2/12')
             Gtpbar.update(100./12.)
 
         # update vnodes of Polygons
         pbartmp = pbar(verbose,total=100., 
                         desc ='Update Polygons vnodes',
                         leave=True,
-                        position=1)
+                        position=tqdmpos+1)
         [p.setvnodes_new(self.get_points(p),self) for p in lTP]
         if verbose:
             pbartmp.update(100.)
-            # print('update vnodes of polygons : Done')
             Gtpbar.update(100./12.)
 
 
@@ -5495,11 +5493,10 @@ class Layout(pro.PyLayers):
         pbartmp = pbar(verbose,total=100., 
                         desc ='Buiild list of airwalls',
                         leave=True,
-                        position=1)
+                        position=tqdmpos+1)
         luaw = [(p, np.where(p.vnodes == 0)[0]) for p in lTP]
         if verbose:
             pbartmp.update(100.)
-            # print('construction of a list of air wall  : Done 3/12')
             Gtpbar.update(100./12.)
 
 
@@ -5511,7 +5508,7 @@ class Layout(pro.PyLayers):
         cpt = 1./(len(luaw)+1)
         _airseg = []
 
-        pbartmp = pbar(verbose,total=100., desc ='Add airwalls',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Add airwalls',leave=True,position=tqdmpos+1)
 
         for p, uaw in luaw:
             # for each vnodes == 0, add an _AIR
@@ -5530,7 +5527,7 @@ class Layout(pro.PyLayers):
             Gtpbar.update(100./12.)
 
 
-        pbartmp = pbar(verbose,total=100., desc ='Update Graph',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Update Graph',leave=True,position=tqdmpos+1)
 
 
         tri = T['triangles']
@@ -5630,16 +5627,14 @@ class Layout(pro.PyLayers):
         # self.showG('st',aw=1)
 
         if verbose:
-            # print('upddating graphs  : Done 5/12')
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
 
-            # print('starting Mikado ... ')
 
 
         Nairseg = len(_airseg)
         cpt = 1./(Nairseg+1)
-        pbartmp = pbar(verbose,total=100., desc ='Mikado',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Mikado',leave=True,position=tqdmpos+1)
         for a in _airseg:
             if verbose:
                 pbartmp.update(100.*cpt)
@@ -5717,7 +5712,7 @@ class Layout(pro.PyLayers):
         if verbose:
             Gtpbar.update(100./12.)
         
-        pbartmp = pbar(verbose,total=100., desc ='Update Gs ncy',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Update Gs ncy',leave=True,position=tqdmpos+1)
 
         pos = self.Gt.pos
         nl = {c: uc + 1 for uc, c in enumerate(self.Gt.nodes())}
@@ -5774,7 +5769,7 @@ class Layout(pro.PyLayers):
             Gtpbar.update(100./12.)
         # list of diffraction point involving airwall
         # needs checking height in rays.to3D for constructing the 3D ray
-        pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=tqdmpos+1)
 
         self.lnss = [x for x in self.ddiff if len(
             set(nx.neighbors(self.Gs, x)).intersection(set(self.lsss))) > 0]
@@ -5802,7 +5797,7 @@ class Layout(pro.PyLayers):
         #
         # dca : dictionnary of cycles which have an air wall
         #
-        pbartmp = pbar(verbose,total=100., desc ='Build dca',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Build dca',leave=True,position=tqdmpos+1)
 
         self.dca = {}
         for seg, d in self.Gs.node.items():
@@ -5825,7 +5820,7 @@ class Layout(pro.PyLayers):
         #
         # indoor property is spread by contagion
         #
-        pbartmp = pbar(verbose,total=100., desc ='Indoor propoerties',leave=True,position=1)
+        pbartmp = pbar(verbose,total=100., desc ='Indoor propoerties',leave=True,position=tqdmpos+1)
 
 
         visited = [0]
@@ -5853,7 +5848,6 @@ class Layout(pro.PyLayers):
             to_visit.extend(nv_neighbors_aw)
             visited.append(cur_cy)
         if verbose:
-            # print('indoor property update...Done 12/12')
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
 
@@ -7068,7 +7062,7 @@ class Layout(pro.PyLayers):
 
         self.Gv = Gv
 
-    def buildGv(self, show=False,verbose=False):
+    def buildGv(self, show=False,verbose=False,tqdmpos=0):
         """ build visibility graph
 
         Parameters
@@ -7094,6 +7088,8 @@ class Layout(pro.PyLayers):
 
         """
 
+        Gvpbar = pbar(verbose,total=100., desc ='build Gv',position=tqdmpos)
+
         self.Gv = nx.Graph()
         #
         # loop over cycles
@@ -7101,12 +7097,10 @@ class Layout(pro.PyLayers):
         self.dGv = {}  # dict of Gv graph
 
         cpt = 1./(len(self.Gt.node) + 1.)
-        if verbose:
-            pbar = tqdm.tqdm(total=100., desc ='build Gv')
-    
+        
         for icycle in self.Gt.node:
             if verbose:
-                pbar.update(100.*cpt)
+                Gvpbar.update(100.*cpt)
             if icycle != 0:
                 if self.indoor or not self.Gt.node[icycle]['indoor']:
                 
@@ -7226,7 +7220,7 @@ class Layout(pro.PyLayers):
                     self.Gv = nx.compose(self.Gv, Gv)
                     self.dGv[icycle] = Gv
 
-    def buildGi(self):
+    def buildGi(self,verbose=False,tqdmpos=0):
         """ build graph of interactions
 
         Notes
@@ -7242,6 +7236,11 @@ class Layout(pro.PyLayers):
         (ns,cy1,cy0) T 1->0
 
         """
+
+        Gipbar = pbar(verbose,total=100., desc ='Build Gi',position=tqdmpos)
+        if verbose:
+            Gipbar.update(0.)
+
         self.Gi = nx.DiGraph()
         self.Gi.pos = {}
         
@@ -7252,7 +7251,14 @@ class Layout(pro.PyLayers):
         # reflexion node    (R,cy0)
         # transmission node (T,cy0,cy1)
         #
+
+        cpt = 100./(len(self.Gv.node)+1)
+        pbartmp = pbar(verbose,total=100., desc ='Create Gi nodes',position=tqdmpos+1)
+
         for n in self.Gv.node:
+            if verbose:
+                pbartmp.update(cpt)
+
             if n < 0:  # D
                 self.Gi.add_node((n,))
                 self.Gi.pos[(n,)] = self.Gs.pos[n]
@@ -7297,8 +7303,16 @@ class Layout(pro.PyLayers):
         #
         # 2) Establishing link between interactions
         #
-        
+        if verbose :
+            Gipbar.update(33.)
+
+        cpt = 100./(len(self.Gt.node)+1)
+        pbartmp = pbar(verbose,total=100., desc ='Create Gi nodes',position=tqdmpos+1)
+
+
         for cy in self.Gt.node:
+            if verbose:
+                pbartmp.update(cpt)
             # for all >0 convex cycles
             if cy > 0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
@@ -7422,14 +7436,22 @@ class Layout(pro.PyLayers):
                                             if ((len(i1) == 1) & (len(i2) == 1)):
                                                 # print"DD"
                                                 self.Gi.add_edge(i1, i2)
-
+        if verbose :
+            Gipbar.update(66.)
         # updating the list of interactions of a given cycle
         # pdb.set_trace()
+        pbartmp = pbar(verbose,total=100., desc ='update interraction list',position=tqdmpos+1)
+
         for c in self.Gt.node:
+            if verbose:
+                pbartmp.update(cpt)
             if c != 0:
                 vnodes = self.Gt.node[c]['polyg'].vnodes
                 for k in npt:
                     self.Gt.node[c]['inter'] += [(k,)]
+
+        if verbose :
+            Gipbar.update(100.)
 
     def filterGi(self, situ='outdoor'):
         """ filter Gi to manage indoor/outdoor situations
@@ -7460,7 +7482,7 @@ class Layout(pro.PyLayers):
         self.Gi = rGi
         self.Gi.pos = rGi.pos
 
-    def outputGi(self):
+    def outputGi(self,verbose=False,tqdmpos=0.):
         """ filter output of Gi edges
 
         Parameters
@@ -7485,7 +7507,11 @@ class Layout(pro.PyLayers):
 
 
         """
+
+
         assert('Gi' in self.__dict__)
+
+        oGipbar=pbar(verbose,desc='OutputGi',position=tqdmpos)
         # loop over all edges of Gi
         Nedges = len(self.Gi.edges())
         # print "Gi Nedges :",Nedges
@@ -7493,7 +7519,8 @@ class Layout(pro.PyLayers):
             # if (k%100)==0:
             # print"edge :  ",k
             # extract  both termination interactions nodes
-
+            if verbose:
+                oGibar.update(100./Nedge)
             i0 = e[0]
             i1 = e[1]
             if (e[0]==(141,6,33)) and (e[1]==(23,33)):
