@@ -2131,6 +2131,7 @@ bernard
                      'subject':[],
                      'interf':True,
                      'trajectory' :False,
+                     'trajectory_list' :[],
                      'devsize':100,
                      'devlist':[],
                      'pattern':False,
@@ -2147,7 +2148,8 @@ bernard
                      'tagname':[],
                      'tagpoffset':[],
                      'fontsizetag':0.1,
-                     'trajectory_color_range':True
+                     'trajectory_color_range':True,
+                     'trajectory_linewidth':0.01
                     }
 
         for k in defaults:
@@ -2225,8 +2227,14 @@ bernard
                         self.B[b]._show3(name=kwargs['bodyname'],tube_sides=12)
 
         if kwargs['trajectory']:
-            for b in subject:
-                self.B[b].traj._show3(kwargs['trajectory_color_range'])
+            if kwargs['trajectory_list']==[]:
+                tr_subject = subject
+            else:
+                tr_subject = kwargs['trajectory_list']
+
+            for b in tr_subject:
+                self.B[b].traj._show3(color_range=kwargs['trajectory_color_range'],
+                                      linewidth=kwargs['trajectory_linewidth'])
         if kwargs['camera'] :
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,

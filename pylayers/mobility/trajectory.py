@@ -730,15 +730,15 @@ class Trajectory(PyLayers,pd.DataFrame):
         return  self.t
 
 
-    def _show3(self,color_range=True):
+    def _show3(self,color_range=True,linewidth=0.01):
 
         X=self[['x','y','z']].values
 
         if color_range:
             t = np.linspace(0, 100, len(X))
-            mlab.plot3d(X[:,0],X[:,1],X[:,2],-t,colormap='gist_gray')
+            mlab.plot3d(X[:,0],X[:,1],X[:,2],-t,colormap='gist_gray',tube_radius=linewidth)
         else:
-            mlab.plot3d(X[:,0],X[:,1],X[:,2],color=(0,0,0))
+            mlab.plot3d(X[:,0],X[:,1],X[:,2],color=(0,0,0),tube_radius=linewidth)
 
     def plot(self, fig=[], ax=[],tmin=0,tmax=None,Nlabels=5, typ='plot', L=[]):
         """ plot trajectory

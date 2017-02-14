@@ -1962,12 +1962,12 @@ class Body(PyLayers):
 
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
-
-            self._mayadev = mlab.points3d(X[0,:],X[1,:], X[2,:], 
-                          scale_factor=kwargs['devsize']*self._unit, 
-                          resolution=10, 
-                          color = dev_color,
-                          opacity=kwargs['devopacity'])
+            if len(devlist) != 0:
+                self._mayadev = mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                              scale_factor=kwargs['devsize']*self._unit, 
+                              resolution=10, 
+                              color = dev_color,
+                              opacity=kwargs['devopacity'])
             nodename = self.dev.keys()
 
             if kwargs['devid']:
