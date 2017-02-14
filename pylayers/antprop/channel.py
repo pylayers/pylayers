@@ -98,6 +98,7 @@ import pylayers.util.geomutil as geu
 import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import cvxpy as cvx
 
 try:
     import h5py
@@ -1628,6 +1629,32 @@ class Mchannel(bs.FUsignal):
 
         return (U,S,V)
 
+    def svd_m(self):
+        """ calculate the SVD of the transfer matrix H.
+        
+        Parameters
+        ----------
+        H   : Hermitian transfer matrix  (nf x nr x nt)
+
+        Returns
+        -------
+
+        U   : Unitary tensor :  nf x nr x nr
+        S   : Singular values: nf x min(nr,nt) 
+        Vd  : Unitary tensor : nf x nt x nt
+        """
+
+        # H  : nm x nr x nt x nf
+        H   = self.y
+        # Hd : nm x nf x nr x nt
+        H  = np.conj(self.y.swapaxes(1,3))
+
+        U,S,Vd  = la.svd(H,full_matrices=True)
+        
+        return (U,S,Vd)
+
+
+
     def Bcapacity(self,Pt=np.array([1e-3]),Tp=273):
         """ calculates BLAST deterministic MIMO channel capacity
 
@@ -1694,7 +1721,6 @@ class Mchannel(bs.FUsignal):
         # rho : nm x nf x nr x power
         #
         rho  = (Ps[None,None,None,:]/Pb)*S[:,:,:,None]
-        
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=2)
        
         return(rho,CB)
@@ -1746,7 +1772,8 @@ class Mchannel(bs.FUsignal):
 
         # pb : (nm,nf,nt)   noise power (Watt)
         pb = N0*dfGHz*1e9*np.ones((self.Nm,self.Nf,self.Nt))
-        # pt : (nm,nf,nt,power)  Total power uniformly spread over (nt*nf-1)
+        # pt : (nm,nf,nt,power)  Total power uniformly spread 
+        # over (nt*nf-1)
         pt = Pt[None,None,None,:]/((self.Nf-1)*self.Nt)
         mu = pt
         Q0 = np.maximum(0,mu-pb[:,:,:,None]/ld[:,:,:,None])
@@ -1768,7 +1795,162 @@ class Mchannel(bs.FUsignal):
         Cwf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=2)
 
 
-        return(rho,Cwf)
+        return(rho,Cwf,Q)
+
+
+    def channel_normalization(self):
+        """Normalize the raw channel matrix that will 
+           be used in the computation of capacities.
+           Implemented from "Massive MIMO Performance Evaluation
+           Based on Measured Propagation Data", Gao et al.
+        """
+        
+        # H  : K x nt x nf
+        H   = self.y[0]
+        # H  : nf x nt x K
+        H   = H.swapaxes(0,2)
+        
+        # H: nf x K x nt
+        H   = H.swapaxes(1,2)
+
+        K = np.shape(H)[1]  # number of users
+        Nt = np.shape(H)[2] # number of antennas
+
+        #pdb.set_trace()
+        cst = K*Nt/(la.norm(H)**2)
+                
+        # Hnorm: nf x K x nt
+        Hnorm = np.sqrt(cst)*H
+
+        return(Hnorm)
+
+    def DPC_capacity(self,Pt=np.array([1e-3]),Tp=273):
+        """Non linear Dirty Paper Coding capacity
+
+        Parameters
+        ----------
+
+        K : number of user with single antenna.
+            in our case: K = 3
+        mt : number of antennas at the BS 
+            in our case: nt \in {8,16,24,32}
+        
+        """
+        
+        # H  : K x nt x nf
+        H   = self.y[0]
+        # H  : nt x K x nf
+        Hd  = np.conj(H.swapaxes(0,1))
+        
+        # White Noise definition        
+        fGHz  = self.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0] # Bandwidth
+        dfGHz = fGHz[1]-fGHz[0] # Frequency step
+        kB = 1.03806488e-23
+        N0 = kB*Tp # N0 ~ J ~ W/Hz ~ W.s
+
+        # Parameters
+        Nf = np.shape(H)[2]  # frequency points
+        K   = np.shape(H)[0] # number of users
+        mt  = np.shape(H)[1] # Tx antennas
+        Ik = np.eye(K)       # Identity with shape of K
+
+        # SNR available at the Tx side
+        snr_at_tx = Pt/(K*kB*BGHz*1e9)
+        # snr_at_tx = Pt/(Nt*kB*BGHz*1e9)
+        # snr_at_tx = (Pt*Nt*K)/(kB*BGHz*1e9)
+        
+        tS = np.ndarray(shape=(K,0))
+        tpower = np.ndarray(shape=(K,0))
+
+        for ii in range(Nf):
+            # if ii%10==0:
+            #     print ii
+            pdb.set_trace()
+            HHd = np.dot(H[:,:,ii],Hd[:,:,ii]) #  (K x K)
+
+            # Construct the convex optimization problem
+            ppp = cvx.Variable(K)
+            # diagonal matrix for power allocation (K x K)
+            P = cvx.diag(ppp)
+            U,S,Vt = la.svd(HHd) # (K,)
+            Sd = cvx.diag(S)
+            PHHd = P*Sd
+            # pdb.set_trace()
+            cdpc = cvx.log_det(Ik + (snr_at_tx*PHHd))
+            
+            obj = cvx.Maximize(cdpc)
+            constraints = [ppp > 0, cvx.sum_entries(ppp) == Pt]
+                    
+            prob = cvx.Problem(obj, constraints)
+            opt_value = prob.solve(solver='CVXOPT')
+            
+            # K x 1 : here, we have 1 due to the for loop
+            valopt = np.array(ppp.value).reshape(K,1) # (K x 1)
+            tpower = np.hstack((tpower,valopt))       # (K x 1)
+            tS = np.hstack((tS,S.reshape(K,1)))       # (K x 1
+            
+        return(H,Hd,tS,tpower)
+
+    def linear_MRC(self):
+        """linear maximum ratio combining for downlink case.
+        This is used to maximze the SNR at the user side.
+        We assume here nr = 1 i.e. the user have one antenna 
+        at the receiver.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        
+        """
+
+        # H  : nm x nr x nt x nf
+        H   = self.y
+        # H  : nm x nf x nt x nr
+        H   = H.swapaxes(1,3)
+        # H  : nm x nf x nr x nt
+        H   = H.swapaxes(2,3)
+        
+        # Hd : nm x nf x nt x nr
+        Hd  = np.conj(H.swapaxes(2,3))
+
+        # number of users
+        Kr = np.shape(H)[2]
+        # Pre-allocation of MRC : nm x nf x nt x nr
+        Wmrc = np.zeros((np.shape(Hd)))
+        cst = la.norm(H)
+        
+
+        for k in range(Kr): # loop over users
+            # pdb.set_trace()
+            Wmrc[:,:,:,k] = Hd[:,:,:,k]/cst
+        
+        return(Wmrc)
+
+
+    def linear_ZF(self,cmd='QPSK',
+        m = 4, snrdB = np.linspace(0,25,100)):
+        """linear Zero Forcing precoding
+        Parameters
+        ----------
+        
+        """
+
+        # # H  : nm x nr x nt x nf
+        # H   = self.y
+
+        # H  : nr x nt x nf
+        H = self.Hcal.y
+        # Hd : nt x nr x nf
+        Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
+        H_inv = np.linalg.inv(H)
+        H_inv_d = np.transpose(H_inv)
+        tr_mat = np.matrix.trace(H_inv*H_inv_d)
+        beta = sqrt(self.Nt/(tr_mat))
+        W_zf = np.dot(beta,H_inv)
 
     def plot2(self,fig=[],ax=[],mode='time'):
         
