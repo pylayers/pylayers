@@ -1797,6 +1797,32 @@ class Mchannel(bs.FUsignal):
 
         return(rho,Cwf,Q)
 
+    # def channel_normalization(self):
+    #     """Normilize the raw channel matrix that will 
+    #        be used in the computation of capacities.
+    #        Implemented from "Massive MIMO Performance Evaluation
+    #        Based on Measured Propagation Data", Gao et al.
+    #     """
+        
+    #     # H  : nm x K x nt x nf
+    #     H   = self.y
+    #     # H  : nm x nf x nt x K
+    #     H   = H.swapaxes(1,3)
+        
+    #     # BE CAREFULL, HERE H SHOULD BE NORMALIZED!!!!!!!
+
+    #     # H  : nm x nf x K x nt
+    #     H   = H.swapaxes(2,3)
+
+    #     K = np.shape(H)[2]  # number of users
+    #     Nt = np.shape(H)[3] # number of antennas
+
+    #     #pdb.set_trace()
+    #     cst = K*Nt/(la.norm(H)**2)
+    #     #cst = K*Nt/la.norm(H,ord='fro')
+    #     Hnorm = np.sqrt(cst)*H
+
+    #     return(Hnorm)
 
     def channel_normalization(self):
         """Normalize the raw channel matrix that will 
@@ -1824,6 +1850,7 @@ class Mchannel(bs.FUsignal):
 
         return(Hnorm)
 
+
     def DPC_capacity(self,Pt=np.array([1e-3]),Tp=273):
         """Non linear Dirty Paper Coding capacity
 
@@ -1832,34 +1859,31 @@ class Mchannel(bs.FUsignal):
 
         K : number of user with single antenna.
             in our case: K = 3
-        mt : number of antennas at the BS 
+        nt : number of antennas at the BS 
             in our case: nt \in {8,16,24,32}
         
         """
-        
+
         # H  : K x nt x nf
         H   = self.y[0]
-        # H  : nt x K x nf
         Hd  = np.conj(H.swapaxes(0,1))
         
-        # White Noise definition        
+        # White Noise definition
         fGHz  = self.x
         Nf    = len(fGHz)
         BGHz  = fGHz[-1]-fGHz[0] # Bandwidth
-        dfGHz = fGHz[1]-fGHz[0] # Frequency step
-        kB = 1.03806488e-23
+        dfGHz = fGHz[1]-fGHz[0]  # Frequency step
+        kB = 1.03806488e-23 # Boltzman constant
         N0 = kB*Tp # N0 ~ J ~ W/Hz ~ W.s
 
         # Parameters
-        Nf = np.shape(H)[2]  # frequency points
+        Nf = np.shape(H)[2]
         K   = np.shape(H)[0] # number of users
-        mt  = np.shape(H)[1] # Tx antennas
-        Ik = np.eye(K)       # Identity with shape of K
+        Nt  = np.shape(H)[1]
+        Int = np.eye(Nt)
+        Ik = np.eye(K)
 
-        # SNR available at the Tx side
-        snr_at_tx = Pt/(K*kB*BGHz*1e9)
-        # snr_at_tx = Pt/(Nt*kB*BGHz*1e9)
-        # snr_at_tx = (Pt*Nt*K)/(kB*BGHz*1e9)
+        snr_at_tx = Pt/(Nt*kB*BGHz*1e9)
         
         tS = np.ndarray(shape=(K,0))
         tpower = np.ndarray(shape=(K,0))
@@ -1867,19 +1891,19 @@ class Mchannel(bs.FUsignal):
         for ii in range(Nf):
             # if ii%10==0:
             #     print ii
-            pdb.set_trace()
-            HHd = np.dot(H[:,:,ii],Hd[:,:,ii]) #  (K x K)
+            
+            HHd = np.dot(H[:,:,ii],Hd[:,:,ii]) #  K x K
 
             # Construct the convex optimization problem
             ppp = cvx.Variable(K)
             # diagonal matrix for power allocation (K x K)
             P = cvx.diag(ppp)
-            U,S,Vt = la.svd(HHd) # (K,)
-            Sd = cvx.diag(S)
-            PHHd = P*Sd
-            # pdb.set_trace()
-            cdpc = cvx.log_det(Ik + (snr_at_tx*PHHd))
             
+            U,S,Vt = la.svd(HHd) # S : (K,)
+            Sd = cvx.diag(S)
+            HdPH = P*Sd
+
+            cdpc = cvx.log_det(Ik + (snr_at_tx*HdPH))
             obj = cvx.Maximize(cdpc)
             constraints = [ppp > 0, cvx.sum_entries(ppp) == Pt]
                     
@@ -1889,9 +1913,88 @@ class Mchannel(bs.FUsignal):
             # K x 1 : here, we have 1 due to the for loop
             valopt = np.array(ppp.value).reshape(K,1) # (K x 1)
             tpower = np.hstack((tpower,valopt))       # (K x 1)
-            tS = np.hstack((tS,S.reshape(K,1)))       # (K x 1
+            tS = np.hstack((tS,S.reshape(K,1)))       # (K x 1)
             
         return(H,Hd,tS,tpower)
+
+    # def DPC_capacity(self,Pt=np.array([1e-3]),Tp=273):
+    #     """Non linear Dirty Paper Coding capacity
+
+    #     Parameters
+    #     ----------
+
+    #     K : number of user with single antenna.
+    #         in our case: K = 3
+    #     nt : number of antennas at the BS 
+    #         in our case: nt \in {8,16,24,32}
+        
+    #     """
+
+    #     # H  : K x nt x nf
+    #     H   = self.y[0]
+    #     Hd  = np.conj(H.swapaxes(0,1))
+
+    #     # pdb.set_trace()
+    #     #HHd = np.einsum('ijk,ikl->ijl',H,Hd) # nf x K x K
+        
+    #     fGHz  = self.x
+    #     Nf    = len(fGHz)
+    #     # Bandwidth
+    #     BGHz  = fGHz[-1]-fGHz[0]
+    #     # Frequency step
+    #     dfGHz = fGHz[1]-fGHz[0]
+
+    #     # White Noise definition
+    #     #
+    #     # Boltzman constant
+
+    #     kB = 1.03806488e-23
+
+    #     # N0 ~ J ~ W/Hz ~ W.s
+    #     N0 = kB*Tp
+
+
+    #     Nf = np.shape(H)[2]
+    #     K   = np.shape(H)[0] # number of users
+    #     Nt  = np.shape(H)[1]
+    #     Int = np.eye(Nt)
+    #     Ik = np.eye(K)
+
+    #     snr_at_tx = Pt/(Nt*kB*BGHz*1e9)
+        
+    #     tS = np.ndarray(shape=(K,0))
+    #     tpower = np.ndarray(shape=(K,0))
+    #     for ii in range(Nf):
+    #         if ii%10==0:
+    #             print ii
+    #         # pdb.set_trace()
+    #         HHd = np.dot(H[:,:,ii],Hd[:,:,ii]) #  K x K
+    #         # HHd = HHd
+
+    #         # Construct the convex optimization problem
+    #         ppp = cvx.Variable(K)
+    #         # diagonal matrix for power allocation (K x K)
+    #         P = cvx.diag(ppp)
+            
+    #         U,S,Vt = la.svd(HHd)
+    #         Sd = cvx.diag(S)
+    #         # pdb.set_trace()
+    #         HdPH = P*Sd
+
+    #         # pdb.set_trace()
+    #         cdpc = cvx.log_det(Ik + (snr_at_tx*HdPH))
+    #         obj = cvx.Maximize(cdpc)
+    #         constraints = [ppp > 0, cvx.sum_entries(ppp) == Pt]
+                    
+    #         prob = cvx.Problem(obj, constraints)
+    #         opt_value = prob.solve(solver='CVXOPT')
+            
+    #         # K x nf
+    #         valopt = np.array(ppp.value).reshape(K,1)
+    #         tpower = np.hstack((tpower,valopt))
+    #         tS = np.hstack((tS,S.reshape(K,1)))
+            
+    #     return(H,Hd,tS,tpower)
 
     def linear_MRC(self):
         """linear maximum ratio combining for downlink case.
