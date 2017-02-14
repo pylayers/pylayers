@@ -4865,16 +4865,16 @@ class Layout(pro.PyLayers):
         if 't' in graph:
             self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
             self.lbltg.extend('t')
-        Buildpbar.update(2)
+        Buildpbar.update(1)
         if 'v' in graph:
             self.buildGv(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('v')
-        Buildpbar.update(3)
+        Buildpbar.update(1)
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
             self.outputGi(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('i')
-        Buildpbar.update(4)
+        Buildpbar.update(1)
         # if 'r' in graph:
         #     if verbose:
         #         print"Gr"
@@ -4894,7 +4894,7 @@ class Layout(pro.PyLayers):
         # There is a dumpw after each build
         self.dumpw()
         self.isbuilt = True
-        Buildpbar.update(5)
+        Buildpbar.update(1)
 
     def dumpw(self):
         """ write a dump of given Graph
@@ -5820,7 +5820,7 @@ class Layout(pro.PyLayers):
         #
         # indoor property is spread by contagion
         #
-        pbartmp = pbar(verbose,total=100., desc ='Indoor propoerties',leave=True,position=tqdmpos+1)
+        pbartmp = pbar(verbose,total=100., desc ='Indoor propoerties',leave=False,position=tqdmpos+1)
 
 
         visited = [0]
@@ -7440,7 +7440,10 @@ class Layout(pro.PyLayers):
             Gipbar.update(66.)
         # updating the list of interactions of a given cycle
         # pdb.set_trace()
-        pbartmp = pbar(verbose,total=100., desc ='update interraction list',position=tqdmpos+1)
+        pbartmp = pbar(verbose,total=100.,
+                       desc ='update interraction list',
+                       leave=False,
+                       position=tqdmpos+1)
 
         for c in self.Gt.node:
             if verbose:
@@ -7452,6 +7455,7 @@ class Layout(pro.PyLayers):
 
         if verbose :
             Gipbar.update(100.)
+
 
     def filterGi(self, situ='outdoor'):
         """ filter Gi to manage indoor/outdoor situations
@@ -7511,16 +7515,17 @@ class Layout(pro.PyLayers):
 
         assert('Gi' in self.__dict__)
 
-        oGipbar=pbar(verbose,desc='OutputGi',position=tqdmpos)
+        oGipbar=pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
         # loop over all edges of Gi
         Nedges = len(self.Gi.edges())
+        cpt = 100./Nedges
         # print "Gi Nedges :",Nedges
         for k, e in enumerate(self.Gi.edges()):
             # if (k%100)==0:
             # print"edge :  ",k
             # extract  both termination interactions nodes
             if verbose:
-                oGipbar.update(100./Nedges)
+                oGipbar.update(cpt)
             i0 = e[0]
             i1 = e[1]
             if (e[0]==(141,6,33)) and (e[1]==(23,33)):
@@ -7672,6 +7677,8 @@ class Layout(pro.PyLayers):
                 dintprob = {k: v for k, v in zip(output, probint)}
 
             self.Gi.add_edge(i0, i1, output=dintprob)
+
+
 
     def intercy(self, ncy, typ='source'):
         """ return the list of interactions seen from a cycle
