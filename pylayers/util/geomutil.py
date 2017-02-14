@@ -4821,12 +4821,12 @@ def mirror(p, pa, pb):
     S[0, 1] = b
     S[1, 0] = b
     S[1, 1] = a
-    A = np.eye(2)
-    y = np.zeros(2)
+    # A = np.eye(2)
+    # y = np.zeros(2)
     vc0 = np.array([c[0], d[0]]).reshape(2, 1)
     v0 = np.dot(-S, p) + vc0
-    x = la.solve(A, v0)
-    return x
+    # x = la.solve(A, v0)
+    return v0
 
 
 def axmat(pa, pb):

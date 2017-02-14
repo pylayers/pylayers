@@ -4861,20 +4861,24 @@ class Layout(pro.PyLayers):
 
         Buildpbar = pbar(verbose,total=5,desc='Build Layout',position=0)
         
-        Buildpbar.update(1)
+        if verbose:
+            Buildpbar.update(1)
         if 't' in graph:
             self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
             self.lbltg.extend('t')
-        Buildpbar.update(1)
+        if verbose:
+            Buildpbar.update(1)
         if 'v' in graph:
             self.buildGv(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('v')
-        Buildpbar.update(1)
+        if verbose:
+            Buildpbar.update(1)
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
             self.outputGi(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('i')
-        Buildpbar.update(1)
+        if verbose:
+            Buildpbar.update(1)
         # if 'r' in graph:
         #     if verbose:
         #         print"Gr"
@@ -4894,7 +4898,8 @@ class Layout(pro.PyLayers):
         # There is a dumpw after each build
         self.dumpw()
         self.isbuilt = True
-        Buildpbar.update(1)
+        if verbose:
+            Buildpbar.update(1)
 
     def dumpw(self):
         """ write a dump of given Graph
@@ -7646,8 +7651,10 @@ class Layout(pro.PyLayers):
                     # dict   {numint : proba}
                     dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
                     #########
-                    output = filter(lambda x: x[0] in isegkeep, i2)
-                    probint = map(lambda x: dsegprob[x[0]], output)
+                    # output = filter(lambda x: x[0] in isegkeep, i2)
+                    output = [x for x in i2 if x[0] in isegkeep]
+                    # probint = map(lambda x: dsegprob[x[0]], output)
+                    probint = [dsegprob[x[0]] for x in output]
                     # dict interaction : proba
                     dintprob = {k: v for k, v in zip(output, probint)}
 
