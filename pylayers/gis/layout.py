@@ -304,7 +304,12 @@ class Layout(pro.PyLayers):
     def __repr__(self):
         st = '\n'
         st = st + "----------------\n"
-        st = st + "Project : " + os.environ['BASENAME']+'\n'
+        home = os.path.expanduser('~')
+        with open(os.path.join(home,'.pylayers'),'r') as f:
+            paths = f.readlines()
+        uporj = paths.index('project\n')
+        project = paths[uporj+1]
+        st = st + "Project : " + project+'\n'
         if hasattr(self,'_hash'):
             st = st + self._filename + ' : ' + self._hash + "\n"
         else:
@@ -3837,6 +3842,8 @@ class Layout(pro.PyLayers):
 
         pth = pth.reshape(pth.shape[0], pth.shape[-1])
         return pth
+
+
 
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
