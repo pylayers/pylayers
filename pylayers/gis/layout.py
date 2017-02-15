@@ -2491,24 +2491,27 @@ class Layout(pro.PyLayers):
         This function assumes graph Gt has been generated
 
         """
-        # takes the 1st cycle polygon
-        p = self.Gt.node[1]['polyg']
-        # get the exterior of the polygon
-        ps = sh.Polygon(p.exterior)
-        # make the union of the exterior of all the cycles
-        #
-        # cycle : -1 exterior
-        #          0 ??
-        #
+        if hasattr(self,Gt):
+            # takes the 1st cycle polygon
+            p = self.Gt.node[1]['polyg']
+            # get the exterior of the polygon
+            ps = sh.Polygon(p.exterior)
+            # make the union of the exterior of all the cycles
+            #
+            # cycle : -1 exterior
+            #          0 ??
+            #
 
-        for k in self.Gt.node:
-            if (k != 0) & (k != -1):
-                p = self.Gt.node[k]['polyg']
-                ps = ps.union(sh.Polygon(p.exterior))
+            for k in self.Gt.node:
+                if (k != 0) & (k != -1):
+                    p = self.Gt.node[k]['polyg']
+                    ps = ps.union(sh.Polygon(p.exterior))
 
-        mask = geu.Polygon(ps)
-        mask.setvnodes(self)
-        return(mask)
+            mask = geu.Polygon(ps)
+            mask.setvnodes(self)
+            return(mask)
+        else:
+            print("Gt not built")
 
     def translate(self, vec):
         """ translate layout
@@ -5461,9 +5464,9 @@ class Layout(pro.PyLayers):
         pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
 
         T, map_vertices = self._triangle()
+
         if verbose:
             pbartmp.update(100.)
-            # print('Triangulation : Done 1/12')
             Gtpbar.update(100./12.)
         # point index are integer
         map_vertices = map_vertices.astype(int)
@@ -9673,6 +9676,7 @@ class Layout(pro.PyLayers):
             create a new mayavi Figure
         opacity : float ([0,1])
             set slab opacity
+        ceil_opacity : float
         centered : Boolean
             if True the layout is centered around its center of gravity
         cyid : boolean

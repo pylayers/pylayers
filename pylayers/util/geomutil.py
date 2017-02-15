@@ -4755,7 +4755,7 @@ def linepoly_intersection(l, poly):
 
 
 def mirror(p, pa, pb):
-    """ Compute the image of p wrt the segment pa pb
+    """ compute the image of p wrt the segment (pa,pb)
 
     Parameters
     ----------
@@ -4782,10 +4782,14 @@ def mirror(p, pa, pb):
     >>> from pylayers.util.plotutil import *
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
-    >>> p = np.random.randn(2,10)
+    >>> np.random.seed(0)
+    >>> p = np.random.randint(-2,2,(2,3))
     >>> pa  = np.array([-0.5,1])
     >>> pb  = np.array([0,0])
     >>> M = mirror(p,pa,pb)
+    >>> print M
+    [[ 2.8 -1.4 -0.2]
+     [ 0.4 -0.2  1.4]]
     >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
     >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
     >>> displot(p,M,alpha=0.2)
@@ -4805,15 +4809,22 @@ def mirror(p, pa, pb):
     alpha = np.sum(pab * pab, axis=0)
     zalpha = np.where(alpha == 0.)
     alpha[zalpha] = 1.
-
-    a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
-    b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
-    c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
-                        pa[1, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
-    d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
-                        pa[0, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
+   
+    dsa  = 2.0/alpha
+    pab0 = pa[0, :] - pb[0, :]
+    pab1 = pa[1, :] - pb[1, :]
+    #a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+    a = 1 - dsa * (pab1** 2)
+    #b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+    b = -dsa * pab0 * pab1
+    #c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+    #                    pa[1, :] * (pa[1, :] - pb[1, :]) *
+    #                    (pb[0, :] - pa[0, :]))
+    c = dsa * (pa[0, :]*pab1**2 - pa[1, :]*pab1*pab0)
+    #d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+    #                    pa[0, :] * (pa[1, :] - pb[1, :]) *
+    #                    (pb[0, :] - pa[0, :]))
+    d = dsa * (pa[1, :]*pab0**2 - pa[0, :]*pab1*pab0)
 
     N = 1
     S = np.zeros((2, 2))
@@ -4821,11 +4832,8 @@ def mirror(p, pa, pb):
     S[0, 1] = b
     S[1, 0] = b
     S[1, 1] = a
-    # A = np.eye(2)
-    # y = np.zeros(2)
     vc0 = np.array([c[0], d[0]]).reshape(2, 1)
     v0 = np.dot(-S, p) + vc0
-    # x = la.solve(A, v0)
     return v0
 
 
