@@ -92,7 +92,7 @@ class Cone(PyLayers):
         self.angle = np.arccos(self.dot)
         self.pcone = self.angle/(1.0*np.pi)
 
-    def belong_seg(self,pta,phe,prob=True):
+    def belong_seg(self,pta,phe,prob=False):
         """ test if segment belong to cone
 
 
@@ -136,8 +136,8 @@ class Cone(PyLayers):
         w = w.reshape(2,1)
         #w  = np.array([vcn[1],-vcn[0]])
 
-        ptama = pta - self.apex.reshape(2,1)
-        phema = phe - self.apex.reshape(2,1)
+        ptama = pta - self.apex[:,None]
+        phema = phe - self.apex[:,None]
 
         dtaw = np.sum(ptama*w,axis=0)
         dhew = np.sum(phema*w,axis=0)
@@ -291,7 +291,7 @@ class Cone(PyLayers):
 
         """
 
-        a = self.apex[:,np.newaxis]
+        a = self.apex[:,None]
         # b = a + self.u.reshape(2,1)
         # c = a + self.v.reshape(2,1)
         b = a + self.u[:,None]
