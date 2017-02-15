@@ -1,3 +1,4 @@
+#
 from multiprocessing import Pool
 from functools import partial
 
@@ -24,24 +25,32 @@ import copy_reg
 import types
 copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
+
+
 class someClass(object):
 	def __init__(self):
 		pass
 	
-	def f(self, x=None):
+	def fgo_func(self, x=None):
 		#can put something expensive here to verify CPU utilization
 		if x is None: return 99
 		return x*x
 
-	def go(self):
+	def go_mp(self):
 		pool = Pool()             
-		print pool.map(self.f, range(10))
+		print pool.map(self.fgo_func, range(10))
+
+        def build(self):
+    	        self.go_mp()
+
+
+
 
 if __name__=='__main__':
 	sc = someClass()
-	sc.go()
-	x=[someClass(),someClass(),someClass()]
-	p=Pool()
-	filled_f=partial(someClass.f,x=9)
-	print p.map(filled_f,x)
-	print p.map(someClass.f,x)
+	sc.build()
+	#x=[someClass(),someClass(),someClass()]
+	#p=Pool()
+	#filled_f=partial(someClass.f,x=9)
+	#print p.map(filled_f,x)
+	#print p.map(someClass.f,x)
