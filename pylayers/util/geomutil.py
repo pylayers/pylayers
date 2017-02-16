@@ -180,6 +180,58 @@ COLOR = {
     False: '#ff3333'
 }
 
+def ispoint(tpts, pt, tol=0.05):
+        """ check if pt is a point in a tuple of ponts
+
+        Parameters
+        ----------
+
+        tpts : tuple (point (2xN) , index (1xN))
+        pt  : point (2,1)
+        tol : float
+            default (0.05 meters)
+
+        if True the point number (<0) is returned
+        else 0 is return
+
+        Returns
+        -------
+
+        k : point index if point exists, 0 otherwise
+
+        Example
+        -------
+
+            >>> from pylayers.util.geomutil.util import *
+            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([1,2,3]))
+            >>> pt = np.array([[1],[5]])
+            >>> ispoint(tpts,pt)
+            1
+
+        See Also
+        --------
+
+        pylayers.util.geomutil.Polygon.setvnodes
+
+        """
+        # print"ispoint : pt ", pt
+        pts = tpts[0]
+        ke =  tpts[1]
+        
+        u = pts - pt.reshape(2, 1)
+        v = np.sqrt(np.sum(u * u, axis=0))
+        nz = (v > tol)
+        b = nz.prod()
+        if b == 1:
+            # if all points are different from pt
+            return(0)
+        else:
+            nup = np.where(nz == False)[0]
+            if len(nup) == 1:
+                return(ke[nup][0])
+            else:
+                mi = np.where(min(v[nup]) == v[nup])[0]
+                return(ke[nup[mi]][0])
 
 def isconvex(poly, tol=1e-2):
     """ Determine if a polygon is convex
@@ -544,6 +596,22 @@ class Polygon(pro.PyLayers, shg.Polygon):
             u = np.array([-1, 1])
             v = np.arange(self.Np) + 1
             self.vnodes = np.kron(v, u)
+            pass
+
+    def __reduce__(self):
+        # Get the parent's __reduce__ tuple
+        pickled_state = super(Polygon, self).__reduce__()
+        # Create our own tuple to pass to __setstate__
+        new_state = (pickled_state[2],) + (self.vnodes,)
+        # Return a tuple that replaces the parent's __setstate__ tuple with our own
+        return (pickled_state[0], pickled_state[1], new_state)
+
+    def __setstate__(self, state):
+        self.vnodes = state[-1]  # Set the info attribute
+        staten=state[0:-1][0]
+        # Call the parent's __setstate__ with the other tuple elements.
+        super(Polygon, self).__setstate__(staten)
+
 
     def __add__(self, p):
         """ add 2 polygons
@@ -638,16 +706,20 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of point and segments of the polygon, is there are isosegments the sequence of iso segments 
-        is repeated between the termination points. L.numseg has been adapted in oreder to return either the first segment (default)
+        vnodes is a list of point and segments of the polygon. 
+        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
         """
+        # get coordinates of the exterior of the polygon 
         x, y = self.exterior.xy
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
-        npts = [L.ispoint(np.array(xx), tol=0.01)
-                for xx in zip(x[0:-1], y[0:-1])]
+        #
+        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        #
+        npts = [L.ispoint(np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
         assert (0 not in npts), pdb.set_trace()
         # seg list of tuple [(n1,n2),(n2,n3),....(,)]
         seg = zip(npts, np.roll(npts, -1))
@@ -672,6 +744,58 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = np.array(vnodes)
 
+    
+    def setvnodes_new(self, tpts,L):
+        """ update vnodes member from Layout
+
+        Parameters
+        ----------
+
+        L : pylayers.layout.Layout
+
+        See Also
+        --------
+
+        pylayers.layout.Layout.ispoint
+
+        vnodes is a list of point and segments of the polygon. 
+        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        L.numseg has been adapted in order to return either the first segment (default)
+        or the list of all segments
+
+        """
+        # get coordinates of the exterior of the polygon 
+        x, y = self.exterior.xy
+        # npts = map(lambda x :
+        #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        #
+        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        #
+        npts = [ispoint(tpts,np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
+        assert (0 not in npts), pdb.set_trace()
+        # seg list of tuple [(n1,n2),(n2,n3),....(,)]
+        seg = zip(npts, np.roll(npts, -1))
+        vnodes = []
+        for pseg in seg:
+            vnodes = vnodes + [pseg[0]]
+            nseg = L.numseg(pseg[0], pseg[1], first=False)
+            # if nseg==0:
+            #     pdb.set_trace()
+            if type(nseg) == int:
+                nseg = [nseg]
+            else:
+                nseg = list(nseg)
+            vnodes = vnodes + nseg
+
+        # pdb.set_trace()
+        # try:
+        #     nseg = map(lambda x : L.numseg(x[0],x[1],first=False),seg)
+        # except:
+        #     import ipdb
+        #     ipdb.set_trace()
+        # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
+        self.vnodes = np.array(vnodes)
+        # self.
     def ndarray(self):
         """ get a ndarray from a Polygon
 
@@ -2693,7 +2817,7 @@ def Lr2n(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]]), closed=True):
             p0                   p1
             x------------------x
             |        |         |
-            |        v         |
+            |        v  l       |
             |                  |
             |->              <-|
             |        ^         |
@@ -3236,7 +3360,7 @@ def intersect_line_seg(line, seg):
     -------
 
     k : intersection parameter (0<k<1 if intersection)
-    M : intersection point 
+    M : intersection point M = pta + k vseg
 
     """
     pt, v = line
@@ -4544,6 +4668,56 @@ def dist(x, y, ax):
     d = np.sqrt(np.sum((x - y)**2, axis=ax))
     return d
 
+def angle_intersection(a1,a2,b1,b2):
+    def inters(b,ags,age):
+        if ags>age:
+            if b >=ags or b<=age:
+                return True
+        else:
+            if b>ags and b<=age:
+                return True
+        return False
+    bol = inters(b1,a1,a2) | inters (b2,a1,a2) | inters(a1,b1,b2) | inters(a2,b1,b2)     
+    return bol
+
+def angle_intersection2(a1,a2,b1,b2):
+    
+
+    r1 = (max(a1,a2)-min(a1,a2))/2 
+    if r1 > np.pi/2: 
+        r1 = np.pi-r1 
+        ainf = max(a1,a2)
+        asup = min(a1,a2)
+    else:
+        ainf = min(a1,a2)
+        asup = max(a1,a2)
+
+    r2 = (max(b1,b2)-min(b1,b2))/2
+    if r2 > np.pi/2.: 
+        r2 = np.pi-r2
+        binf = max(b1,b2)
+        bsup = min(b1,b2)
+    else:
+        binf = min(b1,b2)
+        bsup = max(b1,b2)
+
+    c1 = (ainf+asup)/2
+    if (c1<ainf) & (c1>asup):
+        c1 = np.mod(c1+np.pi,2*np.pi)
+    
+    c2 = (binf+bsup)/2
+    
+    if (c2<binf) & (c2>bsup):
+        c2 = np.mod(c2+np.pi,2*np.pi)
+
+    
+    dc = max(c2,c1)-min(c2,c1)
+
+    if dc > np.pi:
+        dc = 2*np.pi-dc
+
+
+    return((r1+r2)-dc)
 
 def line_intersection(l1, l2):
     """ intersection between two 2D lines using shapely
@@ -4597,7 +4771,7 @@ def linepoly_intersection(l, poly):
 
 
 def mirror(p, pa, pb):
-    """ Compute the image of p wrt the segment pa pb
+    """ compute the image of p wrt the segment (pa,pb)
 
     Parameters
     ----------
@@ -4624,10 +4798,14 @@ def mirror(p, pa, pb):
     >>> from pylayers.util.plotutil import *
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
-    >>> p = np.random.randn(2,10)
+    >>> np.random.seed(0)
+    >>> p = np.random.randint(-2,2,(2,3))
     >>> pa  = np.array([-0.5,1])
     >>> pb  = np.array([0,0])
     >>> M = mirror(p,pa,pb)
+    >>> print M
+    [[ 2.8 -1.4 -0.2]
+     [ 0.4 -0.2  1.4]]
     >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
     >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
     >>> displot(p,M,alpha=0.2)
@@ -4647,15 +4825,22 @@ def mirror(p, pa, pb):
     alpha = np.sum(pab * pab, axis=0)
     zalpha = np.where(alpha == 0.)
     alpha[zalpha] = 1.
-
-    a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
-    b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
-    c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
-                        pa[1, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
-    d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
-                        pa[0, :] * (pa[1, :] - pb[1, :]) *
-                        (pb[0, :] - pa[0, :]))
+   
+    dsa  = 2.0/alpha
+    pab0 = pa[0, :] - pb[0, :]
+    pab1 = pa[1, :] - pb[1, :]
+    #a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+    a = 1 - dsa * (pab1** 2)
+    #b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+    b = -dsa * pab0 * pab1
+    #c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+    #                    pa[1, :] * (pa[1, :] - pb[1, :]) *
+    #                    (pb[0, :] - pa[0, :]))
+    c = dsa * (pa[0, :]*pab1**2 - pa[1, :]*pab1*pab0)
+    #d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+    #                    pa[0, :] * (pa[1, :] - pb[1, :]) *
+    #                    (pb[0, :] - pa[0, :]))
+    d = dsa * (pa[1, :]*pab0**2 - pa[0, :]*pab1*pab0)
 
     N = 1
     S = np.zeros((2, 2))
@@ -4663,12 +4848,9 @@ def mirror(p, pa, pb):
     S[0, 1] = b
     S[1, 0] = b
     S[1, 1] = a
-    A = np.eye(2)
-    y = np.zeros(2)
     vc0 = np.array([c[0], d[0]]).reshape(2, 1)
     v0 = np.dot(-S, p) + vc0
-    x = la.solve(A, v0)
-    return x
+    return v0
 
 
 def axmat(pa, pb):

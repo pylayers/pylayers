@@ -541,7 +541,7 @@ class IntB(Inter):
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
             return(np.ones((len(fGHz),1,1,1))*data[None, :, :, :])
         else:
-            print 'no B interaction to evaluate'
+            print 'no B interactions to evaluate'
             return(self.data[:, None, None, None])
 
 #####Interaction Loss in not used for speed purpose
@@ -634,7 +634,7 @@ class IntR(Inter):
         self.gamma = [1]
 
     def __repr__(self):
-        s = 'number of R interaction :' + str(np.shape(self.data)[0])
+        s = 'number of R interactions :' + str(np.shape(self.data)[0])
         return s    
 
     def eval(self,fGHz=np.array([2.4])):
@@ -870,6 +870,7 @@ class IntD(Inter):
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4]),slab={}):
         Inter.__init__(self, data=data, idx=idx, typ=1,slab=slab)
         self.dusl = {}
+
     def __repr__(self):
         s = 'number of D interaction :' + str(np.shape(self.data)[0])
         return s
@@ -892,9 +893,9 @@ class IntD(Inter):
 
         if len(self.data) != 0 :
             self.phi0 = self.data[:,0]
-            self.phi = self.data[:,1]
+            self.phi  = self.data[:,1]
             self.beta = self.data[:,2]
-            self.N = self.data[:,3]
+            self.N    = self.data[:,3]
             self.sinsout()
             D = np.zeros([self.nf, len(self.phi), 2, 2], dtype=complex)
             mapp=[]

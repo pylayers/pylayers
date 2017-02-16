@@ -13,4 +13,7 @@ DL.b=np.array([767,1114,1.5])
 DL.wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 DL.eval(diffraction=True,force=True,cutoff=6,ra_vectorized=True,applywav=False)
 cir = DL.H.get_cir(DL.wav.sfg)
+
+
+
 cir.plot(typ='v')

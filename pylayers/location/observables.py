@@ -3,6 +3,7 @@ import numpy as np
 import scipy as sp
 import pylayers.antprop.loss as plm
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 class Observables(object):
     """ Generate observables for localization prupose
@@ -21,6 +22,7 @@ class Observables(object):
 
         Notes
         -----
+
         self.Na : Number of anchor nodes (Na)
         self.Nb : Number of blind nodes  (Nb)
 
@@ -294,7 +296,8 @@ class Observables(object):
             Show scene
         """
         defaults = {'fig': [],
-                    'ax': []
+                    'ax': [],
+                    'mode3d':False ,
                     }
 
         for key, value in defaults.items():
@@ -307,13 +310,21 @@ class Observables(object):
             fig = kwargs['fig']
 
         if kwargs['ax'] == []:
-            ax = fig.add_subplot(111)
+            if kwargs['d3']:
+                ax = fig.add_subplot(111,projection='3d')
+            else:
+                ax = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
 
 
-        ax.scatter(self.an[0,:],self.an[1,:], c='k', marker='o', label='Anchors')
-        ax.scatter(self.bn[0,:],self.bn[1,:], c='r', marker='o', label='Blind nodes')
+        if kwargs['d3']:
+            ax.scatter(self.an[0,:],self.an[1,:],self.an[2,:], c='k', marker='o', label='Anchors')
+            ax.scatter(self.bn[0,:],self.bn[1,:],self.bn[2,:], c='r', marker='o', label='Blind nodes')
+        else:
+            ax.scatter(self.an[0,:],self.an[1,:], c='k', marker='o', label='Anchors')
+            ax.scatter(self.bn[0,:],self.bn[1,:], c='r', marker='o', label='Blind nodes')
+
         plt.legend()
 
         return fig, ax

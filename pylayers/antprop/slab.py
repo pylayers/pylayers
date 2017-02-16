@@ -1286,18 +1286,18 @@ class Slab(Interface,dict):
         st = st + str(self['lthick'])+'\n'
         st = st + '       ' + str(self['color'])+' '+str(self['linewidth'])+'\n'
         if self['evaluated']:
-                nf = len(self.fGHz)
-                nt = len(self.theta)
-                if nf > 1:
-                    st = st + "f(GHz) : " + str((self.fGHz[0], self.fGHz[-1], nf))+'\n'
-                else:
+            nf = len(self.fGHz)
+            nt = len(self.theta)
+            if nf > 1:
+                st = st + "f(GHz) : " + str((self.fGHz[0], self.fGHz[-1], nf))+'\n'
+            else:
 
-                    st = st + "f(GHz) : " + str(self.fGHz[0])+'\n'
+                st = st + "f(GHz) : " + str(self.fGHz[0])+'\n'
 
-                if nt > 1:
-                    st= st + "theta (rad) : " + str((self.theta[0], self.theta[-1], nt))+'\n'
-                else:
-                    st = st + "theta (rad) : " + str(self.theta[0])+'\n'
+            if nt > 1:
+                st= st + "theta (rad) : " + str((self.theta[0], self.theta[-1], nt))+'\n'
+            else:
+                st = st + "theta (rad) : " + str(self.theta[0])+'\n'
         return(st)
 
     def info(self):
@@ -1374,6 +1374,7 @@ class Slab(Interface,dict):
         theta : np.array
             incidence angle (from normal) radians
         compensate : boolean
+        RT : string 
 
         """
 
@@ -1412,7 +1413,7 @@ class Slab(Interface,dict):
         Co = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Co[:, :, 0, 0] = 1
         Co[:, :, 1, 1] = 1
-# _Co= np.eye(2,dtype=complex)
+        # _Co= np.eye(2,dtype=complex)
 
 
 

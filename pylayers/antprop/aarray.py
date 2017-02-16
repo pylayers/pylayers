@@ -2,6 +2,7 @@
 import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
+import scipy.signal as si
 import doctest
 
 r"""
@@ -42,7 +43,7 @@ class Array(ant.Pattern):
     """ Array class
 
     An array is defined as the association of a set of points and a set of
-    exitations
+    frequency dependent weights
 
     """
 
@@ -64,6 +65,8 @@ class Array(ant.Pattern):
         assert p.shape[0] == 3, " Array not a 3D point"
 
         self.p = p
+        if len(p.shape)==2:
+            self.Np = p.shape[1]
         self.fGHz = fGHz
         shp = np.shape(p)
 
@@ -87,13 +90,15 @@ class Array(ant.Pattern):
         return(st)
 
     def show(self):
+        """ show array configuration in 3D
+        """
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         ax.scatter(self.p[0,:], self.p[1,:], self.p[2,:], s=20)
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
         ax.set_zlabel('Z axis')
-        plt.show()
+        return(fig,ax)
 
 class ULArray(Array):
     """ Uniform Linear Array
@@ -119,7 +124,7 @@ class ULArray(Array):
         dm : list of floats
             [dxm,dym,dzm] distance are expressed in meters
         T  : np.array
-            basis of the ULA (by default the othonormal basis x,y,z)
+            basis of the ULA (by default the othonormal basis I3)
         mode : string
             'step' | 'point'
 
@@ -184,6 +189,8 @@ class AntArray(Array, ant.Antenna):
 
     inherits from Array and Antenna classes
 
+    An AntArray is the combination of an Array and an Antenna
+
     """
 
     def __init__(self,**kwargs):
@@ -194,8 +201,8 @@ class AntArray(Array, ant.Antenna):
 
         mode : string
             'array' | 'grid'
-            array is for antenna array and grid for scanner cloud of
-            points.
+            'array' is for antenna array 
+            'grid' for cloud of points (scanner).
         typant : string
             either a selected string among the implemented predefined patterns.
             ['Omni','Hertz','Huygens','3gpp','Array'] or a filename of an antenna

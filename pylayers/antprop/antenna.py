@@ -396,7 +396,7 @@ class Pattern(PyLayers):
 
 
     def __pazel(self,**kwargs):
-        """ Gauss pattern
+        """ Azimuth Elevation pattern from file
 
         Parameters
         ----------
@@ -477,11 +477,14 @@ class Pattern(PyLayers):
         t0 : theta main lobe (0-pi)
         t3 : 3dB aperture angle
 
+        TODO : finish implementation of polar
+
         """
         defaults = {'param':{'p0' : 0,
                     't0' : np.pi/2,
                     'p3' : np.pi/6,
-                    't3' : np.pi/6
+                    't3' : np.pi/6,
+                    'pol':'th'
                    }}
 
         if 'param' not in kwargs or kwargs['param']=={}:
@@ -494,6 +497,7 @@ class Pattern(PyLayers):
         t0 = self.param['t0']
         p3 = self.param['p3']
         t3 = self.param['t3']
+        pol = self.param['pol']
 
         self.Gmax = 16/(t3*p3)
         self.GdB = 10*np.log10(self.Gmax)
@@ -506,20 +510,33 @@ class Pattern(PyLayers):
 
         e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
         argphi = (e**2)/p3
+        Nf = len(self.fGHz)
 
         if self.grid :
+            Nt = len(self.theta)
+            Np = len(self.phi)
             # Nth x Nph x Nf
             # self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
             # self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
-            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
-            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
+            if pol=='th':
+                self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
+                self.Fp = np.zeros((Nt,Np,Nf))
+            if pol=='ph':
+                self.Ft = np.zeros((Nt,Np,Nf))
+                self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) *np.ones(len(self.fGHz))[None,None,:])
             self.evaluated = True
         else:
             #
             #  Nd x Nf
             #
-            Ft = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
-            Fp = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+            Nd = len(self.theta)
+            assert(len(self.phi)==Nd)
+            if pol=='th':
+                Ft = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fp = np.zeros(Nd)
+            if pol=='ph':
+                Ft = np.zeros(Nd)
+                Fp = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
             # add frequency axis (Ndir x Nf)
             self.Ft = np.dot(Ft[:,None],np.ones(len(self.fGHz))[None,:])
             self.Fp = np.dot(Fp[:,None],np.ones(len(self.fGHz))[None,:])
@@ -931,7 +948,7 @@ class Pattern(PyLayers):
         # sdotp : Nd x Np
 
         sdotp  = np.dot(self.s,self.p)   # s . p
-
+        
         for a in self.la:
             a.eval()
             # aFt : Nt x Np x Nf  |Nd x Nf
@@ -945,7 +962,10 @@ class Pattern(PyLayers):
         shF = aFt.shape
         aFt = aFt.reshape(np.prod(shF[0:-1]),shF[-1])
         aFp = aFp.reshape(np.prod(shF[0:-1]),shF[-1])
-
+        
+        #
+        # Same pattern on each point
+        #
         aFt = aFt[:,None,:]
         aFp = aFp[:,None,:]
 
@@ -967,6 +987,7 @@ class Pattern(PyLayers):
         # w    :  Np(k) x Nf(i)
         # Sc   :  Np(k) x Np(m) x Nf(i)
         # wp   :  Np(m) x Nf(i)
+
         wp = np.einsum('ki,kmi->mi',self.w,self.Sc)
 
         # add direction axis (=0) in w
@@ -980,12 +1001,12 @@ class Pattern(PyLayers):
         E    = np.exp(1j*k[None,None,:]*sdotp[:,:,None])
 
         #
+        # wp  : Np x Nf 
         # Fp  : Nd x Np x Nf
         # Ft  : Nd x Np x Nf
         #
-
-        self.Ft = wp*aFt*E
-        self.Fp = wp*aFp*E
+        self.Ft = wp[None,...]*aFt*E
+        self.Fp = wp[None,...]*aFp*E
 
         if self.grid:
         #
@@ -1027,17 +1048,57 @@ class Pattern(PyLayers):
 
     def gain(self):
         """  calculates antenna gain
+        
+        Returns
+        -------
+
+        self.G  : np.array(Nt,Np,Nf) dtype:float
+            linear gain 
+                  or np.array(Nr,Nf)
+        self.sqG : np.array(Nt,Np,Nf) dtype:float 
+            linear sqare root of gain 
+                  or np.array(Nr,Nf)
+        self.efficiency : np.array (,Nf) dtype:float 
+            efficiency 
+        self.hpster : np.array (,Nf) dtype:float
+            half power solid angle :  1 ~ 4pi steradian 
+        self.ehpbw : np.array (,Nf) dtyp:float 
+            equivalent half power beamwidth (radians)
 
         Notes
         -----
 
-        TODO introduce efficiency
+        .. math:: G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2
 
         """
-        self.G   = np.real( self.Fp * np.conj(self.Fp)
+        self.G = np.real( self.Fp * np.conj(self.Fp)
                          +  self.Ft * np.conj(self.Ft) )
-        self.sqG = np.sqrt(self.G)
-        self.GdB = 10*np.log10(self.G)
+        if len(self.G.shape)==3:
+            dt = self.theta[1]-self.theta[0]
+            dp = self.phi[1]-self.phi[0]
+            Nt = len(self.theta)
+            Np = len(self.phi)
+            Gs = self.G*np.sin(self.theta)[:,None,None]*np.ones(Np)[None,:,None]
+            self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
+
+            self.sqG = np.sqrt(self.G)
+            self.GdB = 10*np.log10(self.G)
+            # GdBmax (,Nf)
+            self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
+            #assert((self.efficiency<1.0).all()),pdb.set_trace()
+            self.hpster=np.zeros(len(self.fGHz))
+            self.ehpbw=np.zeros(len(self.fGHz))
+            for k in range(len(self.fGHz)):
+                U  = np.zeros((Nt,Np))
+                A = self.GdB[:,:,k]*np.ones(Nt)[:,None]*np.ones(Np)[None,:]
+                u = np.where(A>(self.GdBmax[k]-3))
+                U[u] = 1
+                V  = U*np.sin(self.theta)[:,None]
+                self.hpster[k] = np.sum(V)*dt*dp/(4*np.pi)
+                self.ehpbw[k] = np.arccos(1-2*self.hpster[k])
+        if len(self.G.shape)==2:
+            self.sqG = np.sqrt(self.G)
+            self.GdB = 10*np.log10(self.G)
 
     def plotG(self,**kwargs):
         """ antenna plot gain in 2D
