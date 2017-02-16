@@ -17,6 +17,7 @@ import tqdm
 import numpy as np
 import numpy.random as rd
 import scipy as sp
+import scipy.sparse as sparse
 import doctest
 import triangle
 import matplotlib.pyplot as plt
@@ -38,7 +39,8 @@ import hashlib
 from cStringIO import StringIO
 import ConfigParser
 
-from multiprocessing import Pool
+from pathos.multiprocessing import ProcessingPool as Pool
+# from multiprocessing import Pool
 from functools import partial
 
 def _pickle_method(method):
@@ -784,10 +786,36 @@ class Layout(pro.PyLayers):
         # nodes include points and segments
 
         # segment index
-        useg = filter(lambda x: x > 0, nodes)
+        # useg = filter(lambda x: x > 0, nodes)
+        useg = [n for n in nodes if n >0]
 
         # points index
-        upnt = filter(lambda x: x < 0, nodes)
+        # upnt = filter(lambda x: x < 0, nodes)
+        upnt = [n for n in nodes if n < 0]
+
+
+        # matrix segment-segment 
+        # usage 
+        # self.sgsg[seg1,seg2] => return common point
+        mno = max(self.Gs.nodes())
+        self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
+
+        for s in useg:
+
+            lpts = self.Gs.edge[s].keys()
+            a = self.Gs.edge[lpts[0]].keys()
+            b = self.Gs.edge[lpts[1]].keys()
+
+            nsa = np.setdiff1d(a,b)
+            nsb = np.setdiff1d(b,a)
+            u = np.hstack((nsa,nsb))
+
+            npta = [lpts[0]]*len(nsa)
+            nptb = [lpts[1]]*len(nsb)
+            ns = np.hstack((npta,nptb))
+
+            self.sgsg[s,u]=ns
+
 
         # conversion in numpy array
         self.upnt = np.array((upnt))
@@ -887,9 +915,16 @@ class Layout(pro.PyLayers):
         self.pg = np.sum(self.pt, axis=1) / np.shape(self.pt)[1]
         self.pg = np.hstack((self.pg, 0.))
 
-        ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
-        nhead = map(lambda x: nx.neighbors(self.Gs, x)[1], useg)
+        # ntail = map(lambda x: nx.neighbors(self.Gs, x)[0], useg)
+        # nhead = map(lambda x: nx.neighbors(self.Gs, x)[1], useg)
+        ntahe = np.array([nx.neighbors(self.Gs, x) for x in useg])
 
+        ntail = ntahe[:,0]
+        nhead = ntahe[:,1]
+        # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) index
+        mlgsn = max(self.Gs.nodes())+1
+        self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
+        self.s2pu[useg,:] = ntahe
         # tic = time.time()
         # self.tahe[0, :] = np.array(
         #      map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
@@ -917,7 +952,7 @@ class Layout(pro.PyLayers):
         #
        
         if Nsmax > 0:
-            self.tgs = np.zeros(Nsmax + 1, dtype=int)
+            self.tgs = -np.ones(Nsmax + 1, dtype=int)
             rag = np.arange(len(useg))
             self.tgs[self.tsg] = rag
 
@@ -995,6 +1030,18 @@ class Layout(pro.PyLayers):
             #             index = index+1
 
         # append sub segment normal to normal
+
+        # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) coordinates
+        self.s2pc = sparse.lil_matrix((mlgsn,4))
+
+        ptail = self.pt[:,self.tahe[0,:]]
+        phead = self.pt[:,self.tahe[1,:]]
+        A = np.vstack((ptail,phead)).T
+        self.s2pc[self.tsg,:]=A
+        # for k in self.tsg:
+        #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
+        
+
 
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
@@ -3825,7 +3872,8 @@ class Layout(pro.PyLayers):
         return(seglist)
 
     def seg2pts(self, aseg):
-        """ convert segments array to corresponding termination points array
+        """ convert segments array from Gs numerotation 
+        to corresponding termination points array in pt
 
         Parameters
         ----------
@@ -3855,13 +3903,16 @@ class Layout(pro.PyLayers):
 
         assert(len(np.where(aseg < 0)[0]) == 0)
         utahe = self.tgs[aseg]
-        tahe = self.tahe[:, utahe]
-        ptail = self.pt[:, tahe[0, :]]
-        phead = self.pt[:, tahe[1, :]]
-        pth = np.vstack((ptail, phead))
+        if (utahe>=0).all():
+            tahe = self.tahe[:, utahe]
+            ptail = self.pt[:, tahe[0, :]]
+            phead = self.pt[:, tahe[1, :]]
+            pth = np.vstack((ptail, phead))
 
-        pth = pth.reshape(pth.shape[0], pth.shape[-1])
-        return pth
+            pth = pth.reshape(pth.shape[0], pth.shape[-1])
+            return pth
+        else:
+            pdb.set_trace()
 
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
@@ -4904,9 +4955,9 @@ class Layout(pro.PyLayers):
             Buildpbar.update(1)
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
-            self.outputGi(verbose=verbose,tqdmpos=1)
+            #self.outputGi(verbose=verbose,tqdmpos=1)
             #pdb.set_trace()
-            #self.outputGi_mp()
+            self.outputGi_mp()
             self.lbltg.extend('i')
         if verbose:
             Buildpbar.update(1)
@@ -7574,14 +7625,18 @@ class Layout(pro.PyLayers):
             # nstr1 : segment number of central interaction
             if nstr1 > 0:
                 # central interaction is a segment
-                pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
+                pseg1 = np.array(self.s2pc[nstr1,:].todense()).reshape(2, 2).T
+                # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
+
                 # create a Cone object
                 cn = cone.Cone()
                 # if starting from segment
                 if nstr0 > 0:
-                    pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
+                    pseg0 = np.array(self.s2pc[nstr0,:].todense()).reshape(2, 2).T
+                    # pseg0o = self.seg2pts(nstr0).reshape(2, 2).T
+
                     # if nstr0 and nstr1 are connected segments
-                    if (len(np.intersect1d(nx.neighbors(self.Gs, nstr0), nx.neighbors(self.Gs, nstr1))) == 0):
+                    if self.sgsg[nstr0,nstr1] == 0:
                         # from 2 not connected segment
                         cn.from2segs(pseg0, pseg1)
                     else:
@@ -7594,6 +7649,21 @@ class Layout(pro.PyLayers):
 
                 # list all potential successors of interaction i1
                 i2 = nx.neighbors(self.Gi, i1)
+
+                # how to find neighbors without network
+                # ngi=L.Gi.nodes()
+                # A=nx.adjacency_matrix(L.Gi)
+                # inter = ngi[10]
+                # u = ngi.index(inter)
+                # ui = A[u,:].indices
+                # neigh_inter = np.array([ngi[u] for u in ui])
+
+
+
+
+
+
+
                 ipoints = [x for x in i2 if len(x)==1 ]
                 #ipoints = filter(lambda x: len(x) == 1, i2)
                 pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
@@ -7608,8 +7678,11 @@ class Layout(pro.PyLayers):
                 # Fix 01/2017
                 # This is not always True if the angle between 
                 # the two adjascent segments is < pi/2
-                nb_nstr0 = self.Gs.neighbors(nstr0)
-                nb_nstr1 = self.Gs.neighbors(nstr1)
+                # nb_nstr0 = self.Gs.neighbors(nstr0)
+                # nb_nstr1 = self.Gs.neighbors(nstr1)
+                nb_nstr0 = np.array([self.s2pu[nstr0,0],self.s2pu[nstr0,1]])
+                nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
+                pdb.set_trace()
                 common_point = np.intersect1d(nb_nstr0,nb_nstr1)
                 if len(common_point) == 1:
                     num0 = [x for x in nb_nstr0 if x != common_point]
@@ -7626,7 +7699,9 @@ class Layout(pro.PyLayers):
                     #    filter(lambda x: x != nstr0, isegments))
                 # there are one or more segments
                 if len(isegments) > 0:
-                    points = self.seg2pts(isegments)
+                    points = np.array(self.s2pc[isegments,:].todense()).T
+                    # pointso = self.seg2pts(isegments)
+
                     pta = points[0:2, :]
                     phe = points[2:, :]
                     # add difraction points
@@ -7751,168 +7826,185 @@ class Layout(pro.PyLayers):
         # cpt = 100./Nedges
         # print "Gi Nedges :",Nedges
         e = self.Gi.edges()
+        s2pc = [self.s2pc]*len(e)
+        sgsg = [self.sgsg]*len(e)
+        Gs = [self.Gs]*len(e)
+        Gi = [self.Gi]*len(e)
         pool = Pool(32)
-        pool.map(self.outputGi_func,e)
 
-    def outputGi_func(self,e):
-       
+        # res = pool.map(outputGi_func,)
+        # Z=zip(e,s2pc,Gs,Gi)
+        res = pool.map(outputGi_func,sgsg)
+
+    def outputGi_func(arg):
+           
         # if (k%100)==0:
         # print"edge :  ",k
         # extract  both termination interactions nodes
-        if verbose:
-            oGipbar.update(cpt)
-        i0 = e[0]
-        i1 = e[1]
-        nstr0 = i0[0]
-        nstr1 = i1[0]
 
-        # list of authorized outputs. Initialized void
-        output = []
-        print(i0,i1)
-        # nstr1 : segment number of central interaction
-        if nstr1 > 0:
-            # central interaction is a segment
-            pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
-            # create a Cone object
-            cn = cone.Cone()
-            # if starting from segment
-            if nstr0 > 0:
-                pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
-                # if nstr0 and nstr1 are connected segments
-                if (len(np.intersect1d(nx.neighbors(self.Gs, nstr0), nx.neighbors(self.Gs, nstr1))) == 0):
-                    # from 2 not connected segment
-                    cn.from2segs(pseg0, pseg1)
-                else:
-                    # from 2 connected segments
-                    cn.from2csegs(pseg0, pseg1)
-            # if starting from a point
-            else:
-                pt = np.array(self.Gs.pos[nstr0])
-                cn.fromptseg(pt, pseg1)
+        for k in arg:
+            Z=arg*arg
+        # e=arg[0]
+        # s2pc=arg[1]
+        # Gs=arg[2]
+        # Gi=arg[3]
 
-            # list all potential successors of interaction i1
-            i2 = nx.neighbors(self.Gi, i1)
-            ipoints = [x for x in i2 if len(x)==1 ]
-            #ipoints = filter(lambda x: len(x) == 1, i2)
-            pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
-            # filter tuple (R | T)
-            #istup = filter(lambda x : type(eval(x))==tuple,i2)
-            # map first argument segment number
-            #isegments = np.unique(map(lambda x : eval(x)[0],istup))
-            isegments = np.unique(
-                filter(lambda y: y > 0, map(lambda x: x[0], i2)))
-            # if nstr0 and nstr1 are adjescent segment remove nstr0 from
-            # potential next interaction
-            # Fix 01/2017
-            # This is not always True if the angle between 
-            # the two adjascent segments is < pi/2
-            nb_nstr0 = self.Gs.neighbors(nstr0)
-            nb_nstr1 = self.Gs.neighbors(nstr1)
-            common_point = np.intersect1d(nb_nstr0,nb_nstr1)
-            if len(common_point) == 1:
-                num0 = [x for x in nb_nstr0 if x != common_point]
-                num1 = [x for x in nb_nstr1 if x != common_point]
-                p0 = np.array(self.Gs.pos[num0[0]])
-                p1 = np.array(self.Gs.pos[num1[0]])
-                pc = np.array(self.Gs.pos[common_point[0]])
-                v0 = p0-pc 
-                v1 = p1-pc 
-                v0n = v0/np.sqrt(np.sum(v0*v0))
-                v1n = v1/np.sqrt(np.sum(v1*v1))
-                if np.dot(v0n,v1n)<=0:
-                    isegments = np.array([ x for x in isegments if x != nstr0 ]) 
-                #    filter(lambda x: x != nstr0, isegments))
-            # there are one or more segments
-            if len(isegments) > 0:
-                points = self.seg2pts(isegments)
-                pta = points[0:2, :]
-                phe = points[2:, :]
-                # add difraction points
-                # WARNING Diffraction points are added only if a segment is seen
-                # it should be the case in 99% of cases
+        # i0 = e[0]
+        # i1 = e[1]
+        # nstr0 = i0[0]
+        # nstr1 = i1[0]
+        # print(i0,i1)
 
-                if len(ipoints) > 0:
-                    isegments = np.hstack(
-                        (isegments, np.array(ipoints)[:, 0]))
-                    pta = np.hstack((pta, pipoints))
-                    phe = np.hstack((phe, pipoints))
+        # for k in range(1000):
+        #     y=k*k
+        # # list of authorized outputs. Initialized void
+        # output = []
+        # # nstr1 : segment number of central interaction
+        # if nstr1 > 0:
+        #     # central interaction is a segment
+        #     pseg1 = np.array(s2pc[nstr1,:].todense()).reshape(2, 2).T
+        #     # create a Cone object
+        #     cn = cone.Cone()
+        #     # if starting from segment
+        #     if nstr0 > 0:
+        #         pseg0 = np.array(s2pc[nstr0,:].todense()).reshape(2, 2).T
+        #         # if nstr0 and nstr1 are connected segments
+        #         if (len(np.intersect1d(nx.neighbors(Gs, nstr0), nx.neighbors(Gs, nstr1))) == 0):
+        #             # from 2 not connected segment
+        #             cn.from2segs(pseg0, pseg1)
+        #         else:
+        #             # from 2 connected segments
+        #             cn.from2csegs(pseg0, pseg1)
+        #     # if starting from a point
+        #     else:
+        #         pt = np.array(Gs.pos[nstr0])
+        #         cn.fromptseg(pt, pseg1)
 
-                # cn.show()
+        #     # list all potential successors of interaction i1
+        #     i2 = nx.neighbors(Gi, i1)
+        #     ipoints = [x for x in i2 if len(x)==1 ]
+        #     #ipoints = filter(lambda x: len(x) == 1, i2)
+        #     pipoints = np.array([Gs.pos[ip[0]] for ip in ipoints]).T
+        #     # filter tuple (R | T)
+        #     #istup = filter(lambda x : type(eval(x))==tuple,i2)
+        #     # map first argument segment number
+        #     #isegments = np.unique(map(lambda x : eval(x)[0],istup))
+        #     isegments = np.unique(
+        #         filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+        #     # if nstr0 and nstr1 are adjescent segment remove nstr0 from
+        #     # potential next interaction
+        #     # Fix 01/2017
+        #     # This is not always True if the angle between 
+        #     # the two adjascent segments is < pi/2
+        #     nb_nstr0 = Gs.neighbors(nstr0)
+        #     nb_nstr1 = Gs.neighbors(nstr1)
+        #     common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+        #     if len(common_point) == 1:
+        #         num0 = [x for x in nb_nstr0 if x != common_point]
+        #         num1 = [x for x in nb_nstr1 if x != common_point]
+        #         p0 = np.array(Gs.pos[num0[0]])
+        #         p1 = np.array(Gs.pos[num1[0]])
+        #         pc = np.array(Gs.pos[common_point[0]])
+        #         v0 = p0-pc 
+        #         v1 = p1-pc 
+        #         v0n = v0/np.sqrt(np.sum(v0*v0))
+        #         v1n = v1/np.sqrt(np.sum(v1*v1))
+        #         if np.dot(v0n,v1n)<=0:
+        #             isegments = np.array([ x for x in isegments if x != nstr0 ]) 
+        #         #    filter(lambda x: x != nstr0, isegments))
+        #     # there are one or more segments
+        #     if len(isegments) > 0:
+        #         points = np.array(s2pc[isegments,:].todense()).T
+        #         pta = points[0:2, :]
+        #         phe = points[2:, :]
+        #         # add difraction points
+        #         # WARNING Diffraction points are added only if a segment is seen
+        #         # it should be the case in 99% of cases
 
-                # if i0 == (38,79) and i1 == (135,79,23):
-                #     printi0,i1
-                #     import ipdb
-                #     ipdb.set_trace()
-                # i1 : interaction T
-                if len(i1) == 3:
-                    typ, prob = cn.belong_seg(pta, phe)
-                    # if bs.any():
-                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
-                    # if ~bs.any():
-                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+        #         if len(ipoints) > 0:
+        #             isegments = np.hstack(
+        #                 (isegments, np.array(ipoints)[:, 0]))
+        #             pta = np.hstack((pta, pipoints))
+        #             phe = np.hstack((phe, pipoints))
 
-                # i1 : interaction R --> mirror
-                if len(i1) == 2:
-                    Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
-                    Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
-                    typ, prob = cn.belong_seg(Mpta, Mphe)
-                    # printi0,i1
-                    # if ((i0 == (6, 0)) & (i1 == (7, 0))):
-                    #    pdb.set_trace()
-                    # if bs.any():
-                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
-                    # if ~bs.any():
-                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
-                    #    plt.show()
-                    #    pdb.set_trace())
-                ########
-                # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
-                ###########
-                # # keep segment with prob above a threshold
-                # isegkeep = isegments[prob>0]
-                # # dict   {numint : proba}
-                # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
-                # 4 lines are replaced by
-                # keep segment with prob above a threshold
-                utypseg = typ != 0
-                isegkeep = isegments[utypseg]
-                # dict   {numint : proba}
-                dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
-                #########
-                # output = filter(lambda x: x[0] in isegkeep, i2)
-                output = [x for x in i2 if x[0] in isegkeep]
-                # probint = map(lambda x: dsegprob[x[0]], output)
-                probint = [dsegprob[x[0]] for x in output]
-                # dict interaction : proba
-                dintprob = {k: v for k, v in zip(output, probint)}
+        #         # cn.show()
 
-                # keep all segment above nstr1 and in Cone if T
-                # keep all segment below nstr1 and in Cone if R
+        #         # if i0 == (38,79) and i1 == (135,79,23):
+        #         #     printi0,i1
+        #         #     import ipdb
+        #         #     ipdb.set_trace()
+        #         # i1 : interaction T
+        #         if len(i1) == 3:
+        #             typ, prob = cn.belong_seg(pta, phe)
+        #             # if bs.any():
+        #             #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+        #             # if ~bs.any():
+        #             #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
 
-        else:
-            # central interaction is a point
+        #         # i1 : interaction R --> mirror
+        #         if len(i1) == 2:
+        #             Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
+        #             Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
+        #             typ, prob = cn.belong_seg(Mpta, Mphe)
+        #             # printi0,i1
+        #             # if ((i0 == (6, 0)) & (i1 == (7, 0))):
+        #             #    pdb.set_trace()
+        #             # if bs.any():
+        #             #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+        #             # if ~bs.any():
+        #             #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+        #             #    plt.show()
+        #             #    pdb.set_trace())
+        #         ########
+        #         # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+        #         ###########
+        #         # # keep segment with prob above a threshold
+        #         # isegkeep = isegments[prob>0]
+        #         # # dict   {numint : proba}
+        #         # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+        #         # 4 lines are replaced by
+        #         # keep segment with prob above a threshold
+        #         utypseg = typ != 0
+        #         isegkeep = isegments[utypseg]
+        #         # dict   {numint : proba}
+        #         dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
+        #         #########
+        #         # output = filter(lambda x: x[0] in isegkeep, i2)
+        #         output = [x for x in i2 if x[0] in isegkeep]
+        #         # probint = map(lambda x: dsegprob[x[0]], output)
+        #         probint = [dsegprob[x[0]] for x in output]
+        #         # dict interaction : proba
+        #         dintprob = {k: v for k, v in zip(output, probint)}
 
-            # 1) Simple approach
-            #       output interaction are all visible interactions
-            # 2) TO BE DONE
-            #
-            #       output of the diffraction points
-            #       exploring
-            # b
-            #          + right of ISB
-            #          + right of RSB
-            #
-            #  + using the wedge cone
-            #  + using the incident cone
-            #
+        #         # keep all segment above nstr1 and in Cone if T
+        #         # keep all segment below nstr1 and in Cone if R
 
-            output = nx.neighbors(self.Gi, (nstr1,))
-            nout = len(output)
-            probint = np.ones(nout)  # temporarybns
-            dintprob = {k: v for k, v in zip(output, probint)}
+        # else:
+        #     # central interaction is a point
 
-        return(i0,i1,dintprob)
+        #     # 1) Simple approach
+        #     #       output interaction are all visible interactions
+        #     # 2) TO BE DONE
+        #     #
+        #     #       output of the diffraction points
+        #     #       exploring
+        #     # b
+        #     #          + right of ISB
+        #     #          + right of RSB
+        #     #
+        #     #  + using the wedge cone
+        #     #  + using the incident cone
+        #     #
+
+        #     output = nx.neighbors(Gi, (nstr1,))
+        #     nout = len(output)
+        #     probint = np.ones(nout)  # temporarybns
+        #     dintprob = {k: v for k, v in zip(output, probint)}
+
+        # return(i0,i1,dintprob)
         #self.Gi.add_edge(i0, i1, output=dintprob)
+
+        
 
     def intercy(self, ncy, typ='source'):
         """ return the list of interactions seen from a cycle
@@ -10701,6 +10793,168 @@ class Layout(pro.PyLayers):
         paths = gph.find_all_paths(self.Gs, nd_in, nd_fin)
         return paths
 
+def outputGi_func(arg):
+       
+
+    e=arg[0]
+    s2pc=arg[1]
+    Gs=arg[2]
+    Gi=arg[3]
+    sgsg=arg[4]
+
+    i0 = e[0]
+    i1 = e[1]
+    nstr0 = i0[0]
+    nstr1 = i1[0]
+    # print(i0,i1)
+
+    # list of authorized outputs. Initialized void
+    output = []
+    # nstr1 : segment number of central interaction
+    if nstr1 > 0:
+        # central interaction is a segment
+        pseg1 = np.array(s2pc[nstr1,:].todense()).reshape(2, 2).T
+        # create a Cone object
+        cn = cone.Cone()
+        # if starting from segment
+        if nstr0 > 0:
+            pseg0 = np.array(s2pc[nstr0,:].todense()).reshape(2, 2).T
+            # if nstr0 and nstr1 are connected segments
+            # if (len(np.intersect1d(nx.neighbors(Gs, nstr0), nx.neighbors(Gs, nstr1))) == 0):
+            if sgsg[nstr0,nstr1] == 0:
+                # from 2 not connected segment
+                cn.from2segs(pseg0, pseg1)
+            else:
+                # from 2 connected segments
+                cn.from2csegs(pseg0, pseg1)
+        # if starting from a point
+        else:
+            pt = np.array(Gs.pos[nstr0])
+            cn.fromptseg(pt, pseg1)
+
+        # list all potential successors of interaction i1
+        i2 = nx.neighbors(Gi, i1)
+        ipoints = [x for x in i2 if len(x)==1 ]
+        #ipoints = filter(lambda x: len(x) == 1, i2)
+        pipoints = np.array([Gs.pos[ip[0]] for ip in ipoints]).T
+        # filter tuple (R | T)
+        #istup = filter(lambda x : type(eval(x))==tuple,i2)
+        # map first argument segment number
+        #isegments = np.unique(map(lambda x : eval(x)[0],istup))
+        isegments = np.unique(
+            filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+        # if nstr0 and nstr1 are adjescent segment remove nstr0 from
+        # potential next interaction
+        # Fix 01/2017
+        # This is not always True if the angle between 
+        # the two adjascent segments is < pi/2
+        nb_nstr0 = Gs.neighbors(nstr0)
+        nb_nstr1 = Gs.neighbors(nstr1)
+        common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+        if len(common_point) == 1:
+            num0 = [x for x in nb_nstr0 if x != common_point]
+            num1 = [x for x in nb_nstr1 if x != common_point]
+            p0 = np.array(Gs.pos[num0[0]])
+            p1 = np.array(Gs.pos[num1[0]])
+            pc = np.array(Gs.pos[common_point[0]])
+            v0 = p0-pc 
+            v1 = p1-pc 
+            v0n = v0/np.sqrt(np.sum(v0*v0))
+            v1n = v1/np.sqrt(np.sum(v1*v1))
+            if np.dot(v0n,v1n)<=0:
+                isegments = np.array([ x for x in isegments if x != nstr0 ]) 
+            #    filter(lambda x: x != nstr0, isegments))
+        # there are one or more segments
+        if len(isegments) > 0:
+            points = np.array(s2pc[isegments,:].todense()).T
+            pta = points[0:2, :]
+            phe = points[2:, :]
+            # add difraction points
+            # WARNING Diffraction points are added only if a segment is seen
+            # it should be the case in 99% of cases
+
+            if len(ipoints) > 0:
+                isegments = np.hstack(
+                    (isegments, np.array(ipoints)[:, 0]))
+                pta = np.hstack((pta, pipoints))
+                phe = np.hstack((phe, pipoints))
+
+            # cn.show()
+
+            # if i0 == (38,79) and i1 == (135,79,23):
+            #     printi0,i1
+            #     import ipdb
+            #     ipdb.set_trace()
+            # i1 : interaction T
+            if len(i1) == 3:
+                typ, prob = cn.belong_seg(pta, phe)
+                # if bs.any():
+                #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                # if ~bs.any():
+                #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+
+            # i1 : interaction R --> mirror
+            if len(i1) == 2:
+                Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
+                Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
+                typ, prob = cn.belong_seg(Mpta, Mphe)
+                # printi0,i1
+                # if ((i0 == (6, 0)) & (i1 == (7, 0))):
+                #    pdb.set_trace()
+                # if bs.any():
+                #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                # if ~bs.any():
+                #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                #    plt.show()
+                #    pdb.set_trace())
+            ########
+            # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+            ###########
+            # # keep segment with prob above a threshold
+            # isegkeep = isegments[prob>0]
+            # # dict   {numint : proba}
+            # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+            # 4 lines are replaced by
+            # keep segment with prob above a threshold
+            utypseg = typ != 0
+            isegkeep = isegments[utypseg]
+            # dict   {numint : proba}
+            dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
+            #########
+            # output = filter(lambda x: x[0] in isegkeep, i2)
+            output = [x for x in i2 if x[0] in isegkeep]
+            # probint = map(lambda x: dsegprob[x[0]], output)
+            probint = [dsegprob[x[0]] for x in output]
+            # dict interaction : proba
+            dintprob = {k: v for k, v in zip(output, probint)}
+
+            # keep all segment above nstr1 and in Cone if T
+            # keep all segment below nstr1 and in Cone if R
+
+    else:
+        # central interaction is a point
+
+        # 1) Simple approach
+        #       output interaction are all visible interactions
+        # 2) TO BE DONE
+        #
+        #       output of the diffraction points
+        #       exploring
+        # b
+        #          + right of ISB
+        #          + right of RSB
+        #
+        #  + using the wedge cone
+        #  + using the incident cone
+        #
+
+        output = nx.neighbors(Gi, (nstr1,))
+        nout = len(output)
+        probint = np.ones(nout)  # temporarybns
+        dintprob = {k: v for k, v in zip(output, probint)}
+
+    return(i0,i1,dintprob)
+    self.Gi.add_edge(i0, i1, output=dintprob)
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
