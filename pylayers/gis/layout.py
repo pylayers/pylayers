@@ -928,7 +928,7 @@ class Layout(pro.PyLayers):
 
         ntail = ntahe[:,0]
         nhead = ntahe[:,1]
-        
+
         # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) index
         mlgsn = max(self.Gs.nodes())+1
         self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
@@ -7564,8 +7564,8 @@ class Layout(pro.PyLayers):
         if verbose :
             Gipbar.update(100.)
 
-        # build adjacency list of Gi graph
-        self.Gi_al = self.Gi.adjacency_list()
+        # build adjacency matrix of Gi graph
+        self.Gi_A = nx.adjacency_matrix(self.Gi)
         #store list of nodes of Gi ( for keeping order)
         self.Gi_no = self.Gi.nodes()
 
@@ -7625,7 +7625,7 @@ class Layout(pro.PyLayers):
         """
         s2pc = self.s2pc.toarray()
         s2pu = self.s2pu.toarray()
-
+        A = self.Gi_A.toarray()
         assert('Gi' in self.__dict__)
 
         oGipbar=pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
@@ -7678,7 +7678,9 @@ class Layout(pro.PyLayers):
 
                 # list all potential successors of interaction i1
                 ui2 = self.Gi_no.index(i1)
-                i2 = self.Gi_al[ui2]
+                ui = np.where(A[ui2,:]!=0)[0]
+                i2 = [self.Gi_no[u] for u in ui]
+
                 # i2 = nx.neighbors(self.Gi, i1)
 
                 # how to find neighbors without network
@@ -7690,11 +7692,6 @@ class Layout(pro.PyLayers):
                 # neigh_inter = np.array([ngi[u] for u in ui])
 
 
-
-
-
-
-
                 ipoints = [x for x in i2 if len(x)==1 ]
                 #ipoints = filter(lambda x: len(x) == 1, i2)
                 pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
@@ -7702,8 +7699,10 @@ class Layout(pro.PyLayers):
                 #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
                 #isegments = np.unique(map(lambda x : eval(x)[0],istup))
-                isegments = np.unique(
-                    filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+                # isegments = np.unique(
+                #     filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+                isegments = np.unique([x[0] for x in i2 if x[0]>0])
+
                 # if nstr0 and nstr1 are adjescent segment remove nstr0 from
                 # potential next interaction
                 # Fix 01/2017
@@ -7736,6 +7735,9 @@ class Layout(pro.PyLayers):
                 # there are one or more segments
                 # if len(isegments) > 0:
                 if isegments.any():
+
+                    li1 = len(i1)
+
                     # points = self.s2pc[isegments,:].toarray().T
                     points = s2pc[isegments,:].T
                     # points = self.s2pc[isegments,:].data.reshape(4,len(isegments))
@@ -7760,7 +7762,7 @@ class Layout(pro.PyLayers):
                     #     import ipdb
                     #     ipdb.set_trace()
                     # i1 : interaction T
-                    if len(i1) == 3:
+                    if li1 == 3:
                         typ, prob = cn.belong_seg(pta, phe)
                         # if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
@@ -7768,7 +7770,7 @@ class Layout(pro.PyLayers):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
 
                     # i1 : interaction R --> mirror
-                    if len(i1) == 2:
+                    elif li1 == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
                         typ, prob = cn.belong_seg(Mpta, Mphe)
@@ -7824,7 +7826,9 @@ class Layout(pro.PyLayers):
 
                 # output = nx.neighbors(self.Gi, (nstr1,))
                 uout = self.Gi.no.index((nstr1,))
-                output = self.Gi_al[uout]
+                ui = np.where(A[uout,:]!=0)[0]
+                output = [self.Gi_no[u] for u in ui]
+                
                 nout = len(output)
                 probint = np.ones(nout)  # temporarybns
                 dintprob = {k: v for k, v in zip(output, probint)}
@@ -7867,15 +7871,31 @@ class Layout(pro.PyLayers):
         # cpt = 100./Nedges
         # print "Gi Nedges :",Nedges
         e = self.Gi.edges()
-        s2pc = [self.s2pc]*len(e)
-        sgsg = [self.sgsg]*len(e)
-        Gs = [self.Gs]*len(e)
-        Gi = [self.Gi]*len(e)
-        pool = Pool(32)
+        Gi_no = [self.Gi_no]*len(e)
+        Gspos = [self.Gs.pos]*len(e)
+
+        # densify sparse matrix
+        tGi_A = self.Gi_A.toarray()
+        tsgsg = self.sgsg.toarray()
+        ts2pc = self.s2pc.toarray()
+        ts2pu = self.s2pu.toarray()
+
+
+        Gi_A = [tGi_A]*len(e)
+        s2pc = [ts2pc]*len(e)
+        s2pu = [ts2pu]*len(e)
+        sgsg = [tsgsg]*len(e)
+
+        pool = Pool(8)
 
         # res = pool.map(outputGi_func,)
-        # Z=zip(e,s2pc,Gs,Gi)
-        res = pool.map(outputGi_func,sgsg)
+        Z=zip(e, Gi_no, Gi_A, Gspos, sgsg, s2pc, s2pu)
+
+        # res = pool.map(outputGi_func,Z)
+        res = pool.map(outputGi_func,Z)
+
+        self.Gi.add_edges_from(res)
+
 
     def outputGi_func(arg):
            
@@ -10834,35 +10854,52 @@ class Layout(pro.PyLayers):
         paths = gph.find_all_paths(self.Gs, nd_in, nd_fin)
         return paths
 
-def outputGi_func(arg):
+def outputGi_func(args):
        
 
-    e=arg[0]
-    s2pc=arg[1]
-    Gs=arg[2]
-    Gi=arg[3]
-    sgsg=arg[4]
+    # for k in range(10000):
+    #     y = k*k
+    #     # time.sleep(0.01)
+    # return y
+
+    e = args[0]
+    Gi_no = args[1]
+    Gi_A = args[2]
+    Gspos = args[3]
+    sgsg = args[4]
+    s2pc = args[5]
+    s2pu = args[6]
+
+
+
+
 
     i0 = e[0]
     i1 = e[1]
     nstr0 = i0[0]
     nstr1 = i1[0]
-    # print(i0,i1)
 
     # list of authorized outputs. Initialized void
     output = []
+
     # nstr1 : segment number of central interaction
     if nstr1 > 0:
         # central interaction is a segment
-        pseg1 = np.array(s2pc[nstr1,:].todense()).reshape(2, 2).T
+        # pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
+        pseg1 = s2pc[nstr1,:].reshape(2, 2).T
+        # pseg1 = self.s2pc[nstr1,:].data.reshape(2, 2).T
+        # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
 
         # create a Cone object
         cn = cone.Cone()
         # if starting from segment
         if nstr0 > 0:
-            pseg0 = np.array(s2pc[nstr0,:].todense()).reshape(2, 2).T
+            # pseg0 = self.s2pc[nstr0,:].toarray().reshape(2, 2).T
+            pseg0 = s2pc[nstr0,:].reshape(2, 2).T
+            # pseg0 = self.s2pc[nstr0,:].data.reshape(2, 2).T
+            # pseg0o = self.seg2pts(nstr0).reshape(2, 2).T
+
             # if nstr0 and nstr1 are connected segments
-            # if (len(np.intersect1d(nx.neighbors(Gs, nstr0), nx.neighbors(Gs, nstr1))) == 0):
             if sgsg[nstr0,nstr1] == 0:
                 # from 2 not connected segment
                 cn.from2segs(pseg0, pseg1)
@@ -10871,34 +10908,57 @@ def outputGi_func(arg):
                 cn.from2csegs(pseg0, pseg1)
         # if starting from a point
         else:
-            pt = np.array(Gs.pos[nstr0])
+            pt = np.array(Gspos[nstr0])
             cn.fromptseg(pt, pseg1)
 
         # list all potential successors of interaction i1
-        i2 = nx.neighbors(Gi, i1)
+        ui2 = Gi_no.index(i1)
+        ui = np.where(Gi_A[ui2,:]!=0)[0]
+        i2 = [Gi_no[u] for u in ui]
+        # i2 = nx.neighbors(self.Gi, i1)
+
+        # how to find neighbors without network
+        # ngi=L.Gi.nodes()
+        # A=nx.adjacency_matrix(L.Gi)
+        # inter = ngi[10]
+        # u = ngi.index(inter)
+        # ui = A[u,:].indices
+        # neigh_inter = np.array([ngi[u] for u in ui])
+
+
         ipoints = [x for x in i2 if len(x)==1 ]
         #ipoints = filter(lambda x: len(x) == 1, i2)
-        pipoints = np.array([Gs.pos[ip[0]] for ip in ipoints]).T
+        pipoints = np.array([Gspos[ip[0]] for ip in ipoints]).T
         # filter tuple (R | T)
         #istup = filter(lambda x : type(eval(x))==tuple,i2)
         # map first argument segment number
         #isegments = np.unique(map(lambda x : eval(x)[0],istup))
-        isegments = np.unique(
-            filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+        # isegments = np.unique(
+        #     filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+        isegments = np.unique([x[0] for x in i2 if x[0]>0])
+        
         # if nstr0 and nstr1 are adjescent segment remove nstr0 from
         # potential next interaction
         # Fix 01/2017
         # This is not always True if the angle between 
         # the two adjascent segments is < pi/2
-        nb_nstr0 = Gs.neighbors(nstr0)
-        nb_nstr1 = Gs.neighbors(nstr1)
-        common_point = np.intersect1d(nb_nstr0,nb_nstr1)
-        if len(common_point) == 1:
+        # nb_nstr0 = self.Gs.neighbors(nstr0)
+        # nb_nstr1 = self.Gs.neighbors(nstr1)
+        # nb_nstr0 = np.array([self.s2pu[nstr0,0],self.s2pu[nstr0,1]])
+        # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
+        # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
+        # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
+        nb_nstr0 = s2pu[nstr0,:]
+        nb_nstr1 = s2pu[nstr1,:]
+        # common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+        common_point = np.array([x for x in nb_nstr0 if x in nb_nstr1])
+        # if len(common_point) == 1:
+        if common_point.any():
             num0 = [x for x in nb_nstr0 if x != common_point]
             num1 = [x for x in nb_nstr1 if x != common_point]
-            p0 = np.array(Gs.pos[num0[0]])
-            p1 = np.array(Gs.pos[num1[0]])
-            pc = np.array(Gs.pos[common_point[0]])
+            p0 = np.array(Gspos[num0[0]])
+            p1 = np.array(Gspos[num1[0]])
+            pc = np.array(Gspos[common_point[0]])
             v0 = p0-pc 
             v1 = p1-pc 
             v0n = v0/np.sqrt(np.sum(v0*v0))
@@ -10907,8 +10967,16 @@ def outputGi_func(arg):
                 isegments = np.array([ x for x in isegments if x != nstr0 ]) 
             #    filter(lambda x: x != nstr0, isegments))
         # there are one or more segments
-        if len(isegments) > 0:
-            points = np.array(s2pc[isegments,:].todense()).T
+        # if len(isegments) > 0:
+        if isegments.any():
+
+            li1 = len(i1)
+
+            # points = self.s2pc[isegments,:].toarray().T
+            points = s2pc[isegments,:].T
+            # points = self.s2pc[isegments,:].data.reshape(4,len(isegments))
+            # pointso = self.seg2pts(isegments)
+
             pta = points[0:2, :]
             phe = points[2:, :]
             # add difraction points
@@ -10928,7 +10996,7 @@ def outputGi_func(arg):
             #     import ipdb
             #     ipdb.set_trace()
             # i1 : interaction T
-            if len(i1) == 3:
+            if li1 == 3:
                 typ, prob = cn.belong_seg(pta, phe)
                 # if bs.any():
                 #    plu.displot(pta[:,bs],phe[:,bs],color='g')
@@ -10936,7 +11004,7 @@ def outputGi_func(arg):
                 #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
 
             # i1 : interaction R --> mirror
-            if len(i1) == 2:
+            elif li1 == 2:
                 Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                 Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
                 typ, prob = cn.belong_seg(Mpta, Mphe)
@@ -10990,13 +11058,19 @@ def outputGi_func(arg):
         #  + using the incident cone
         #
 
-        output = nx.neighbors(Gi, (nstr1,))
+        # output = nx.neighbors(self.Gi, (nstr1,))
+        uout = Gi.no.index((nstr1,))
+        ui = np.where(Gi_A[uout,:]!=0)[0]
+        output = [Gi_no[u] for u in ui]
+
         nout = len(output)
         probint = np.ones(nout)  # temporarybns
         dintprob = {k: v for k, v in zip(output, probint)}
 
-    return(i0,i1,dintprob)
-    self.Gi.add_edge(i0, i1, output=dintprob)
+    return (i0,i1, {'output':dintprob})
+    # self.Gi.add_edge(i0, i1, output=dintprob)
+
+
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
