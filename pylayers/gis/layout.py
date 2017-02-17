@@ -822,6 +822,8 @@ class Layout(pro.PyLayers):
             self.sgsg[s,u]=ns
 
 
+
+
         # conversion in numpy array
         self.upnt = np.array((upnt))
 
@@ -926,10 +928,16 @@ class Layout(pro.PyLayers):
 
         ntail = ntahe[:,0]
         nhead = ntahe[:,1]
+        
         # create sparse matrix from a Gs segment node to its 2 extremal points (tahe) index
         mlgsn = max(self.Gs.nodes())+1
         self.s2pu = sparse.lil_matrix((mlgsn,2),dtype='int')
         self.s2pu[useg,:] = ntahe
+        # convert to compressed row sparse matrix 
+        # to be more efficient on row slicing
+        self.s2pu = self.s2pu.tocsr()
+        
+
         # tic = time.time()
         # self.tahe[0, :] = np.array(
         #      map(lambda x: np.nonzero(np.array(upnt) == x)[0][0], ntail))
@@ -1043,6 +1051,11 @@ class Layout(pro.PyLayers):
         phead = self.pt[:,self.tahe[1,:]]
         A = np.vstack((ptail,phead)).T
         self.s2pc[self.tsg,:]=A
+
+
+        # convert to compressed row sparse matrix 
+        # to be more efficient on row slicing
+        self.s2pc = self.s2pc.tocsr()
         # for k in self.tsg:
         #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
         
@@ -7551,6 +7564,10 @@ class Layout(pro.PyLayers):
         if verbose :
             Gipbar.update(100.)
 
+        # build adjacency list of Gi graph
+        self.Gi_al = self.Gi.adjacency_list()
+        #store list of nodes of Gi ( for keeping order)
+        self.Gi_no = self.Gi.nodes()
 
     def filterGi(self, situ='outdoor'):
         """ filter Gi to manage indoor/outdoor situations
@@ -7606,7 +7623,8 @@ class Layout(pro.PyLayers):
 
 
         """
-
+        s2pc = self.s2pc.toarray()
+        s2pu = self.s2pu.toarray()
 
         assert('Gi' in self.__dict__)
 
@@ -7632,14 +7650,18 @@ class Layout(pro.PyLayers):
             # nstr1 : segment number of central interaction
             if nstr1 > 0:
                 # central interaction is a segment
-                pseg1 = np.array(self.s2pc[nstr1,:].todense()).reshape(2, 2).T
+                # pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
+                pseg1 = s2pc[nstr1,:].reshape(2, 2).T
+                # pseg1 = self.s2pc[nstr1,:].data.reshape(2, 2).T
                 # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
 
                 # create a Cone object
                 cn = cone.Cone()
                 # if starting from segment
                 if nstr0 > 0:
-                    pseg0 = np.array(self.s2pc[nstr0,:].todense()).reshape(2, 2).T
+                    # pseg0 = self.s2pc[nstr0,:].toarray().reshape(2, 2).T
+                    pseg0 = s2pc[nstr0,:].reshape(2, 2).T
+                    # pseg0 = self.s2pc[nstr0,:].data.reshape(2, 2).T
                     # pseg0o = self.seg2pts(nstr0).reshape(2, 2).T
 
                     # if nstr0 and nstr1 are connected segments
@@ -7655,7 +7677,9 @@ class Layout(pro.PyLayers):
                     cn.fromptseg(pt, pseg1)
 
                 # list all potential successors of interaction i1
-                i2 = nx.neighbors(self.Gi, i1)
+                ui2 = self.Gi_no.index(i1)
+                i2 = self.Gi_al[ui2]
+                # i2 = nx.neighbors(self.Gi, i1)
 
                 # how to find neighbors without network
                 # ngi=L.Gi.nodes()
@@ -7687,11 +7711,16 @@ class Layout(pro.PyLayers):
                 # the two adjascent segments is < pi/2
                 # nb_nstr0 = self.Gs.neighbors(nstr0)
                 # nb_nstr1 = self.Gs.neighbors(nstr1)
-                nb_nstr0 = np.array([self.s2pu[nstr0,0],self.s2pu[nstr0,1]])
-                nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
-                pdb.set_trace()
-                common_point = np.intersect1d(nb_nstr0,nb_nstr1)
-                if len(common_point) == 1:
+                # nb_nstr0 = np.array([self.s2pu[nstr0,0],self.s2pu[nstr0,1]])
+                # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
+                # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
+                # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
+                nb_nstr0 = s2pu[nstr0,:]
+                nb_nstr1 = s2pu[nstr1,:]
+                # common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+                common_point = np.array([x for x in nb_nstr0 if x in nb_nstr1])
+                # if len(common_point) == 1:
+                if common_point.any():
                     num0 = [x for x in nb_nstr0 if x != common_point]
                     num1 = [x for x in nb_nstr1 if x != common_point]
                     p0 = np.array(self.Gs.pos[num0[0]])
@@ -7705,8 +7734,11 @@ class Layout(pro.PyLayers):
                         isegments = np.array([ x for x in isegments if x != nstr0 ]) 
                     #    filter(lambda x: x != nstr0, isegments))
                 # there are one or more segments
-                if len(isegments) > 0:
-                    points = np.array(self.s2pc[isegments,:].todense()).T
+                # if len(isegments) > 0:
+                if isegments.any():
+                    # points = self.s2pc[isegments,:].toarray().T
+                    points = s2pc[isegments,:].T
+                    # points = self.s2pc[isegments,:].data.reshape(4,len(isegments))
                     # pointso = self.seg2pts(isegments)
 
                     pta = points[0:2, :]
@@ -7790,7 +7822,9 @@ class Layout(pro.PyLayers):
                 #  + using the incident cone
                 #
 
-                output = nx.neighbors(self.Gi, (nstr1,))
+                # output = nx.neighbors(self.Gi, (nstr1,))
+                uout = self.Gi.no.index((nstr1,))
+                output = self.Gi_al[uout]
                 nout = len(output)
                 probint = np.ones(nout)  # temporarybns
                 dintprob = {k: v for k, v in zip(output, probint)}
@@ -10821,6 +10855,7 @@ def outputGi_func(arg):
     if nstr1 > 0:
         # central interaction is a segment
         pseg1 = np.array(s2pc[nstr1,:].todense()).reshape(2, 2).T
+
         # create a Cone object
         cn = cone.Cone()
         # if starting from segment
