@@ -40,6 +40,9 @@ from cStringIO import StringIO
 import ConfigParser
 
 from pathos.multiprocessing import ProcessingPool as Pool
+from pathos.multiprocessing import cpu_count
+
+
 # from multiprocessing import Pool
 from functools import partial
 
@@ -484,6 +487,62 @@ class Layout(pro.PyLayers):
 
         Ls.g2npy()
         return Ls
+
+
+    def _help(self):
+        st = ''
+        st = st + "\nUseful dictionnaries" + "\n----------------\n"
+        if hasattr(self,'dca'):
+            st = st + "dca {cycle : []} cycle with an airwall" +"\n"
+        if hasattr(self,'di'):
+            st = st + "di {interaction : [nstr,typi]}" +"\n"
+        if hasattr(self,'sl'):
+            st = st + "sl {slab name : slab dictionary}" +"\n"
+        if hasattr(self,'name'):
+            st = st + "name :  {slab :seglist} " +"\n"
+        st = st + "\nUseful arrays"+"\n----------------\n"
+        if hasattr(self,'pt'):
+            st = st + "pt : numpy array of points " +"\n"
+        if hasattr(self,'normal'):
+            st = st + "normal : numpy array of normal " +"\n"
+        if hasattr(self,'offset'):
+            st = st + "offset : numpy array of offset " +"\n"
+        if hasattr(self,'tsg'):
+            st = st + "tsg : get segment index in Gs from tahe" +"\n"
+        if hasattr(self,'isss'):
+            st = st + "isss :  sub-segment index above Nsmax"+"\n"
+        if hasattr(self,'tgs'):
+            st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
+        if hasattr(self,'upnt'):
+            st = st + "upnt : get point id index from self.pt"+"\n"
+
+        st = st + "\nUseful Sparse arrays"+"\n----------------\n"
+        if hasattr(self,'sgsg'):
+            st = st + "sgsg : "+"get common point of 2 segment (usage self.sgsg[seg1,seg2] => return common point \n"
+        if hasattr(self,'s2pc'):
+            st = st + "s2pc : "+"from a Gs segment node to its 2 extremal points (tahe) coordinates\n"
+        if hasattr(self,'s2pu'):
+            st = st + "s2pc : "+"from a Gs segment node to its 2 extremal points (tahe) index\n"
+        if hasattr(self,'p2pu'):
+            st = st + "p2pc : "+"from a Gs point node to its coordinates\n"
+        st = st + "\nUseful lists"+"\n----------------\n"
+        #if hasattr(self,'iupnt'):
+        #    st = st + "iupnt : get point index in self.pt from point id  "+"\n"
+        if hasattr(self,'lsss'):
+            st = st + "lsss : list of segments with sub-segment"+"\n"
+        if hasattr(self,'sridess'): 
+            st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
+        if hasattr(self,'sla'):
+            st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
+        if hasattr(self,'degree'):
+            st = st + "degree : degree of nodes " +"\n"
+        st = st + "\nUseful tip" + "\n----------------\n"
+        st = st + "Point p in Gs => p_coord: Not implemented\n"
+        # st = st + "p -> u = self.upnt[-p] -> p_coord = self.pt[:,-u]\n\n"
+        st = st + "Segment s in Gs => s_ab coordinates \n"
+        st = st + \
+            "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
+        print(st)
 
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
@@ -1058,9 +1117,10 @@ class Layout(pro.PyLayers):
         self.s2pc = self.s2pc.tocsr()
         # for k in self.tsg:
         #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
-        
-
-
+        mino = -min(self.Gs.nodes())+1
+        self.p2pc = sparse.lil_matrix((mino,2))
+        self.p2pc[-self.upnt,:]=self.pt.T
+        self.p2pc = self.p2pc.tocsr()
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
 
@@ -7623,8 +7683,17 @@ class Layout(pro.PyLayers):
 
 
         """
+
+
+        def Gspos(n):
+            if n>0:
+                return np.mean(s2pc[n].reshape(2,2),axis=0)
+            else:
+                return p2pc[-n]
+
         s2pc = self.s2pc.toarray()
         s2pu = self.s2pu.toarray()
+        p2pc = self.p2pc.toarray()
         A = self.Gi_A.toarray()
         assert('Gi' in self.__dict__)
 
@@ -7673,14 +7742,14 @@ class Layout(pro.PyLayers):
                         cn.from2csegs(pseg0, pseg1)
                 # if starting from a point
                 else:
-                    pt = np.array(self.Gs.pos[nstr0])
+                    pt = Gspos(nstr0)
+                    # pt = np.array(self.Gs.pos[nstr0])
                     cn.fromptseg(pt, pseg1)
 
                 # list all potential successors of interaction i1
                 ui2 = self.Gi_no.index(i1)
                 ui = np.where(A[ui2,:]!=0)[0]
                 i2 = [self.Gi_no[u] for u in ui]
-
                 # i2 = nx.neighbors(self.Gi, i1)
 
                 # how to find neighbors without network
@@ -7694,7 +7763,8 @@ class Layout(pro.PyLayers):
 
                 ipoints = [x for x in i2 if len(x)==1 ]
                 #ipoints = filter(lambda x: len(x) == 1, i2)
-                pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
+                # pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
+                pipoints = np.array([Gspos(ip) for ip in ipoints]).T
                 # filter tuple (R | T)
                 #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
@@ -7722,9 +7792,10 @@ class Layout(pro.PyLayers):
                 if common_point.any():
                     num0 = [x for x in nb_nstr0 if x != common_point]
                     num1 = [x for x in nb_nstr1 if x != common_point]
-                    p0 = np.array(self.Gs.pos[num0[0]])
-                    p1 = np.array(self.Gs.pos[num1[0]])
-                    pc = np.array(self.Gs.pos[common_point[0]])
+                    p0 = Gspos(num0[0])
+                    p1 = Gspos(num1[0])
+                    pc = Gspos(common_point[0])
+
                     v0 = p0-pc 
                     v1 = p1-pc 
                     v0n = v0/np.sqrt(np.sum(v0*v0))
@@ -7872,29 +7943,56 @@ class Layout(pro.PyLayers):
         # print "Gi Nedges :",Nedges
         e = self.Gi.edges()
         Gi_no = [self.Gi_no]*len(e)
-        Gspos = [self.Gs.pos]*len(e)
 
         # densify sparse matrix
-        tGi_A = self.Gi_A.toarray()
-        tsgsg = self.sgsg.toarray()
-        ts2pc = self.s2pc.toarray()
-        ts2pu = self.s2pu.toarray()
+        aGi_A = self.Gi_A.toarray()
+        ap2pc = self.p2pc.toarray()
+        asgsg = self.sgsg.toarray()
+        as2pc = self.s2pc.toarray()
+        as2pu = self.s2pu.toarray()
 
 
-        Gi_A = [tGi_A]*len(e)
-        s2pc = [ts2pc]*len(e)
-        s2pu = [ts2pu]*len(e)
-        sgsg = [tsgsg]*len(e)
+        Gi_A = [aGi_A]*len(e)
+        p2pc = [ap2pc]*len(e)
+        s2pc = [as2pc]*len(e)
+        s2pu = [as2pu]*len(e)
+        sgsg = [asgsg]*len(e)
 
-        pool = Pool(8)
+        pool = Pool(cpu_count())
 
-        # res = pool.map(outputGi_func,)
-        Z=zip(e, Gi_no, Gi_A, Gspos, sgsg, s2pc, s2pu)
-
-        # res = pool.map(outputGi_func,Z)
+        # multiprocessing style
+        Z=zip(e, Gi_no, Gi_A, p2pc, sgsg, s2pc, s2pu)
         res = pool.map(outputGi_func,Z)
-
         self.Gi.add_edges_from(res)
+
+
+
+
+        # res = pool.map(outputGi_func_test,e)
+        # print('e')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,Gi_no)
+        # print('no')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,Gi_A)
+        # print('A')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,Gspos)
+        # print('pos')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,sgsg)
+        # print('sgsg')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,s2pc)
+        # print('s2pc')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,s2pu)
+        # print('s2pu')
+        # time.sleep(1)
+        # res = pool.map(outputGi_func_test,Z)
+        # print('Z')
+        
+
 
 
     def outputGi_func(arg):
@@ -10854,7 +10952,14 @@ class Layout(pro.PyLayers):
         paths = gph.find_all_paths(self.Gs, nd_in, nd_fin)
         return paths
 
+
+def outputGi_func_test(args):
+    for k in range(10000):
+        y = k*k+k*k
+    return y
+
 def outputGi_func(args):
+# def outputGi_func(e, Gi_no, Gi_A, Gspos, sgsg, s2pc, s2pu):
        
 
     # for k in range(10000):
@@ -10862,10 +10967,16 @@ def outputGi_func(args):
     #     # time.sleep(0.01)
     # return y
 
+    def Gspos(n):
+        if n>0:
+            return np.mean(s2pc[n].reshape(2,2),axis=0)
+        else:
+            return p2pc[-n]
+
     e = args[0]
     Gi_no = args[1]
     Gi_A = args[2]
-    Gspos = args[3]
+    p2pc = args[3]
     sgsg = args[4]
     s2pc = args[5]
     s2pu = args[6]
@@ -10908,7 +11019,7 @@ def outputGi_func(args):
                 cn.from2csegs(pseg0, pseg1)
         # if starting from a point
         else:
-            pt = np.array(Gspos[nstr0])
+            pt = Gspos(nstr0)
             cn.fromptseg(pt, pseg1)
 
         # list all potential successors of interaction i1
@@ -10928,7 +11039,7 @@ def outputGi_func(args):
 
         ipoints = [x for x in i2 if len(x)==1 ]
         #ipoints = filter(lambda x: len(x) == 1, i2)
-        pipoints = np.array([Gspos[ip[0]] for ip in ipoints]).T
+        pipoints = np.array([Gspos(ip[0]) for ip in ipoints]).T
         # filter tuple (R | T)
         #istup = filter(lambda x : type(eval(x))==tuple,i2)
         # map first argument segment number
@@ -10956,9 +11067,9 @@ def outputGi_func(args):
         if common_point.any():
             num0 = [x for x in nb_nstr0 if x != common_point]
             num1 = [x for x in nb_nstr1 if x != common_point]
-            p0 = np.array(Gspos[num0[0]])
-            p1 = np.array(Gspos[num1[0]])
-            pc = np.array(Gspos[common_point[0]])
+            p0 = Gspos(num0[0])
+            p1 = Gspos(num1[0])
+            pc = Gspos(common_point[0])
             v0 = p0-pc 
             v1 = p1-pc 
             v0n = v0/np.sqrt(np.sum(v0*v0))
