@@ -596,6 +596,22 @@ class Polygon(pro.PyLayers, shg.Polygon):
             u = np.array([-1, 1])
             v = np.arange(self.Np) + 1
             self.vnodes = np.kron(v, u)
+            pass
+
+    def __reduce__(self):
+        # Get the parent's __reduce__ tuple
+        pickled_state = super(Polygon, self).__reduce__()
+        # Create our own tuple to pass to __setstate__
+        new_state = (pickled_state[2],) + (self.vnodes,)
+        # Return a tuple that replaces the parent's __setstate__ tuple with our own
+        return (pickled_state[0], pickled_state[1], new_state)
+
+    def __setstate__(self, state):
+        self.vnodes = state[-1]  # Set the info attribute
+        staten=state[0:-1][0]
+        # Call the parent's __setstate__ with the other tuple elements.
+        super(Polygon, self).__setstate__(staten)
+
 
     def __add__(self, p):
         """ add 2 polygons
@@ -779,7 +795,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
         #     ipdb.set_trace()
         # vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = np.array(vnodes)
-         
+        # self.
     def ndarray(self):
         """ get a ndarray from a Polygon
 
