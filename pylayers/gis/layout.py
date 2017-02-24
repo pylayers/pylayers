@@ -4990,7 +4990,7 @@ class Layout(pro.PyLayers):
 
         return fig, ax
 
-    def build(self, graph='tvirw', verbose=False,difftol=0.15):
+    def build(self, graph='tvirw', verbose=False,difftol=0.15,multi=False):
         """ build graphs
 
         Parameters
@@ -5035,9 +5035,11 @@ class Layout(pro.PyLayers):
             Buildpbar.update(1)
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
-            #self.outputGi(verbose=verbose,tqdmpos=1)
             #pdb.set_trace()
-            self.outputGi_mp()
+            if not multi:
+                self.outputGi(verbose=verbose,tqdmpos=1)
+            else:
+                self.outputGi_mp()
             self.lbltg.extend('i')
         if verbose:
             Buildpbar.update(1)
@@ -7942,26 +7944,42 @@ class Layout(pro.PyLayers):
         # cpt = 100./Nedges
         # print "Gi Nedges :",Nedges
         e = self.Gi.edges()
-        Gi_no = [self.Gi_no]*len(e)
+        #Gi_no = [self.Gi_no]*len(e)
 
         # densify sparse matrix
-        aGi_A = self.Gi_A.toarray()
-        ap2pc = self.p2pc.toarray()
-        asgsg = self.sgsg.toarray()
-        as2pc = self.s2pc.toarray()
-        as2pu = self.s2pu.toarray()
+        #aGi_A = self.Gi_A.toarray()
+        #ap2pc = self.p2pc.toarray()
+        #asgsg = self.sgsg.toarray()
+        #as2pc = self.s2pc.toarray()
+        #as2pu = self.s2pu.toarray()
+        
+        global Gi_A
+        global Gi_no
+        global p2pc 
+        global sgsg 
+        global s2pc 
+        global s2pu 
+        
+        Gi_A = self.Gi_A
+        Gi_no = self.Gi_no
+        p2pc = self.p2pc
+        sgsg = self.sgsg
+        s2pc = self.s2pc
+        s2pu = self.s2pu
 
 
-        Gi_A = [aGi_A]*len(e)
-        p2pc = [ap2pc]*len(e)
-        s2pc = [as2pc]*len(e)
-        s2pu = [as2pu]*len(e)
-        sgsg = [asgsg]*len(e)
+        #Gi_A = [aGi_A]*len(e)
+        #p2pc = [ap2pc]*len(e)
+        #s2pc = [as2pc]*len(e)
+        #s2pu = [as2pu]*len(e)
+        #sgsg = [asgsg]*len(e)
 
         pool = Pool(cpu_count())
 
         # multiprocessing style
-        Z=zip(e, Gi_no, Gi_A, p2pc, sgsg, s2pc, s2pu)
+        #Z=zip(e, Gi_no, Gi_A, p2pc, sgsg, s2pc, s2pu)
+        #res = pool.map(outputGi_func,Z)
+        Z = zip(e)
         res = pool.map(outputGi_func,Z)
         self.Gi.add_edges_from(res)
 
@@ -7995,14 +8013,14 @@ class Layout(pro.PyLayers):
 
 
 
-    def outputGi_func(arg):
+    #def outputGi_func(arg):
            
         # if (k%100)==0:
         # print"edge :  ",k
         # extract  both termination interactions nodes
 
-        for k in arg:
-            Z=arg*arg
+        #for k in arg:
+        #    Z=arg*arg
         # e=arg[0]
         # s2pc=arg[1]
         # Gs=arg[2]
@@ -10969,19 +10987,20 @@ def outputGi_func(args):
 
     def Gspos(n):
         if n>0:
-            return np.mean(s2pc[n].reshape(2,2),axis=0)
+            #return np.mean(s2pc[n].reshape(2,2),axis=0)
+            return np.mean(s2pc[n].toarray().reshape(2,2),axis=0)
         else:
             return p2pc[-n]
 
     e = args[0]
-    Gi_no = args[1]
-    Gi_A = args[2]
-    p2pc = args[3]
-    sgsg = args[4]
-    s2pc = args[5]
-    s2pu = args[6]
+    #Gi_no = args[1]
+    #Gi_A = args[2]
+    #p2pc = args[3]
+    #sgsg = args[4]
+    #s2pc = args[5]
+    #s2pu = args[6]
 
-
+    print(e)
 
 
 
@@ -10997,7 +11016,7 @@ def outputGi_func(args):
     if nstr1 > 0:
         # central interaction is a segment
         # pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
-        pseg1 = s2pc[nstr1,:].reshape(2, 2).T
+        pseg1 = s2pc[nstr1,:].toarray().reshape(2, 2).T
         # pseg1 = self.s2pc[nstr1,:].data.reshape(2, 2).T
         # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
 
@@ -11006,7 +11025,7 @@ def outputGi_func(args):
         # if starting from segment
         if nstr0 > 0:
             # pseg0 = self.s2pc[nstr0,:].toarray().reshape(2, 2).T
-            pseg0 = s2pc[nstr0,:].reshape(2, 2).T
+            pseg0 = s2pc[nstr0,:].toarray().reshape(2, 2).T
             # pseg0 = self.s2pc[nstr0,:].data.reshape(2, 2).T
             # pseg0o = self.seg2pts(nstr0).reshape(2, 2).T
 
@@ -11057,10 +11076,11 @@ def outputGi_func(args):
         # nb_nstr1 = self.Gs.neighbors(nstr1)
         # nb_nstr0 = np.array([self.s2pu[nstr0,0],self.s2pu[nstr0,1]])
         # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
-        # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
-        # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
-        nb_nstr0 = s2pu[nstr0,:]
-        nb_nstr1 = s2pu[nstr1,:]
+        nb_nstr0 = s2pu[nstr0,:].toarray()[0]
+        nb_nstr1 = s2pu[nstr1,:].toarray()[0]
+        print('nb_nstr0',nb_nstr0)
+        #nb_nstr0 = s2pu[nstr0,:]
+        #nb_nstr1 = s2pu[nstr1,:]
         # common_point = np.intersect1d(nb_nstr0,nb_nstr1)
         common_point = np.array([x for x in nb_nstr0 if x in nb_nstr1])
         # if len(common_point) == 1:
@@ -11083,8 +11103,8 @@ def outputGi_func(args):
 
             li1 = len(i1)
 
-            # points = self.s2pc[isegments,:].toarray().T
-            points = s2pc[isegments,:].T
+            points = self.s2pc[isegments,:].toarray().T
+            #points = s2pc[isegments,:].T
             # points = self.s2pc[isegments,:].data.reshape(4,len(isegments))
             # pointso = self.seg2pts(isegments)
 

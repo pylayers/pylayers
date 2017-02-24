@@ -674,6 +674,10 @@ class Pattern(PyLayers):
 
     def __psh3(self,**kwargs):
         """ calculate pattern for sh3
+        
+        Parameters
+        ----------
+
         """
 
         if self.grid:
@@ -683,7 +687,6 @@ class Pattern(PyLayers):
             theta = self.theta
             phi = self.phi
 
-        #pdb.set_trace()
         cx = self.S.Cx.s3
         cy = self.S.Cy.s3
         cz = self.S.Cz.s3
@@ -707,7 +710,7 @@ class Pattern(PyLayers):
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
             Ez = np.dot(cz,Y[k])
-            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
+            Fth,Fph = CartToSphere(theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
             self.Ft = Fth.transpose()
             self.Fp = Fph.transpose()
 
@@ -1394,7 +1397,7 @@ class Antenna(Pattern):
         Parameters
         ----------
 
-        typ  : 'Omni','Gauss','WirePlate','3GPP'
+        typ  : 'Omni','Gauss','WirePlate','3GPP','atoll'
 
         _filename : string
                     antenna file name
@@ -1418,6 +1421,7 @@ class Antenna(Pattern):
         'mat': Matlab File
         'vsh2': unthresholded vector spherical coefficients
         'vsh3': thresholded vector spherical cpoefficients
+        'atoll': Atoll antenna file format
         'trx' : Satimo NFC raw data
         'trx1' : Satimo NFC raw data  (deprecated)
 
@@ -1491,6 +1495,9 @@ class Antenna(Pattern):
                 if self.ext == 'mat':
                     self.typ='mat'
                     self.loadmat(kwargs['directory'])
+                if self.ext == 'txt':
+                    self.typ='txt'
+                    self.load_atoll(kwargs['directory'])
             elif isinstance(typ,list):
                 self._filename = typ
                 self.ext='hfss'
@@ -1667,6 +1674,40 @@ class Antenna(Pattern):
         filename = pyu.getlong(_filename,directory)
         I = Image.open(filename)
         I.show()
+
+
+    def load_atoll(self,directory="ant"):
+        """ load antenna from Atoll file 
+
+        """
+        _filemat = self._filename
+        fileatoll = pyu.getlong(_filemat, directory)
+        fd = open(fileatoll)
+        lis = fd.readlines()
+        tab = []
+        for li in lis:
+            tab.append(li.split('\t'))
+
+        deg_to_rad = np.pi/180.
+        columns = tab[0]
+        df = pd.DataFrame([tab[1]],columns=columns)
+        Gmax = eval(df['Gain  (dBi)'].values[0])
+        str1 = df.iloc[:,5].values[0].replace('  ',' ')
+        lstr = str1.split(' ')
+        Pattern = [ eval(x) for x in lstr[0:-1]]
+        Nd,b,c,Np = Pattern[0:4]
+        Ghor = Gmax-np.array(Pattern[4:4+2*Np]).reshape(Np,2)
+        a,b,c,d = Pattern[4+2*Np:4+2*Np+4]
+        Gver = Gmax-np.array(Pattern[4+2*Np+4:]).reshape(c,2)
+        #fig = plt.figure()
+        #ax =plt.gca(projection='polar')
+        #ax =plt.gca()
+        #ax.plot(H2[:,1]*deg_to_rad,Gain-H2[:,0],'r',label='vertical',linewidth=2)
+        #ax.plot(H1[:,0]*deg_to_rad,Gain-H1[:,1],'b',label='horizontal',linewidth=2)
+        #ax.set_rmin(-30)
+        #plt.title(dir1+'/'+filename+' Gain : '+df['Gain  (dBi)'].values[0])
+        #BXD-634X638XCF-EDIN.txt
+        #BXD-636X638XCF-EDIN.txt
 
 
     def loadmat(self, directory="ant"):
