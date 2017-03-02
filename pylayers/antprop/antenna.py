@@ -139,10 +139,8 @@ Miscellaneous  functions
 
 
 """
-try:
-    import mayavi.mlab as mlab
-except:
-    pass
+#from __future__ import print_function
+import mayavi.mlab as mlab
 import doctest
 import os
 import glob
@@ -761,6 +759,64 @@ class Pattern(PyLayers):
             self.Ft = np.dot(Fat[:,None],np.ones(len(self.fGHz))[None,:])
             self.Fp = np.dot(Fap[:,None],np.ones(len(self.fGHz))[None,:])
 
+        self.gain()
+
+    def __pcst(self,**kwargs):
+       
+        defaults = {'param':{'p' : 1,
+                    'directory':'ant/FF_Results_txt_port_1_2/',
+                    'fGHz':np.arange(2,6.5,0.5)}}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            param=defaults['param']
+        else:
+            param=kwargs['param']
+       
+        self.fGHz = param['fGHz']
+        
+        for f in param['fGHz']:
+            if ((int(f*10))%10)==0:
+               _filename1 = 'E_port'+str(param['p'])+'_f'+str(int(f))+'GHz.txt'
+               _filename2 = 'E_port'+str(param['p'])+'_f'+str(int(f))+'Ghz.txt'
+        #    print 'toto'
+            else:
+                _filename1 = 'E_port'+str(param['p'])+'_f'+str(f)+'GHz.txt'
+                _filename2 = 'E_port'+str(param['p'])+'_f'+str(f)+'Ghz.txt'
+        
+            
+            filename1 = pyu.getlong(_filename1, param['directory'])
+            filename2 = pyu.getlong(_filename2, param['directory'])
+            
+            try:
+                df = pd.read_csv(filename1,sep=';')
+            except:
+                df = pd.read_csv(filename2,sep=';')
+
+            columns = df.columns
+            theta = (df[columns[0]]*np.pi/180).values.reshape(72,37)
+            phi = (df[columns[1]]*np.pi/180).values.reshape(72,37)
+            modGrlzdB = df[columns[2]]
+            mFt = df[columns[3]]
+            pFt = df[columns[4]]
+            mFp = df[columns[5]]
+            pFp = df[columns[6]]
+            ratiodB = df[columns[7]]
+            Ft = (10**(mFt/20)*np.exp(1j*pFt*np.pi/180)).values.reshape(72,37)
+            Fp = (10**(mFp/20)*np.exp(1j*pFp*np.pi/180)).values.reshape(72,37)
+            Ft = Ft.swapaxes(0,1)
+            Fp = Fp.swapaxes(0,1)
+            try:
+                tFt=np.concatenate((tFt,Ft[...,None]),axis=2)
+                tFp=np.concatenate((tFp,Fp[...,None]),axis=2)
+            except:
+                tFt=Ft[...,None]
+                tFp=Fp[...,None]
+        self.phi = phi[:,0]
+        self.theta = theta[0,:]
+        self.nth = len(self.theta)
+        self.nph = len(self.phi)
+        self.Ft = tFt
+        self.Fp = tFp 
         self.gain()
 
     def __pHertz(self,**kwargs):
@@ -1495,8 +1551,10 @@ class Antenna(Pattern):
                 if self.ext == 'mat':
                     self.typ='mat'
                     self.loadmat(kwargs['directory'])
+                if self.ext == 'cst':
+                    self.typ='cst'
                 if self.ext == 'txt':
-                    self.typ='txt'
+                    self.typ='atoll'
                     self.load_atoll(kwargs['directory'])
             elif isinstance(typ,list):
                 self._filename = typ
@@ -1518,6 +1576,11 @@ class Antenna(Pattern):
         if 'param' in self.__dict__:
             for k in self.param:
                 st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
+        if hasattr(self,'atoll'):
+            for k1 in self.atoll.keys():
+                st = st + str(k1)+'\n'
+                for k2 in self.atoll[k1]:
+                    st = st + ' '+ str(k2)+'\n'
         st = st+'------------------------\n'
         rtd = 180./np.pi
         if self.fromfile:
@@ -1537,6 +1600,7 @@ class Antenna(Pattern):
             st = st + "Nf : %d" % (len(self.fGHz)) +"\n"
 #
 #
+
         if self.evaluated:
             st = st + '-----------------------\n'
             st = st + '      evaluated        \n'
@@ -1678,6 +1742,9 @@ class Antenna(Pattern):
 
     def load_atoll(self,directory="ant"):
         """ load antenna from Atoll file 
+        
+        In Atoll format an Antenna gain is given for the horizontal and vertical plane 
+        for different frequencies and different tilt values 
 
         """
         _filemat = self._filename
@@ -1686,19 +1753,91 @@ class Antenna(Pattern):
         lis = fd.readlines()
         tab = []
         for li in lis:
-            tab.append(li.split('\t'))
+            lispl= li.split('\t')
+            if (lispl[0]!=''):
+                tab.append(lispl)
 
         deg_to_rad = np.pi/180.
+        lbs_to_kg = 0.45359237
         columns = tab[0]
-        df = pd.DataFrame([tab[1]],columns=columns)
-        Gmax = eval(df['Gain  (dBi)'].values[0])
-        str1 = df.iloc[:,5].values[0].replace('  ',' ')
-        lstr = str1.split(' ')
-        Pattern = [ eval(x) for x in lstr[0:-1]]
-        Nd,b,c,Np = Pattern[0:4]
-        Ghor = Gmax-np.array(Pattern[4:4+2*Np]).reshape(Np,2)
-        a,b,c,d = Pattern[4+2*Np:4+2*Np+4]
-        Gver = Gmax-np.array(Pattern[4+2*Np+4:]).reshape(c,2)
+        #pdb.set_trace()
+        for k in np.arange(len(tab)-1):
+            df = pd.DataFrame([tab[k+1]],columns=columns)
+            try:
+                dff=dff.append(df)
+            except:
+                dff= df
+        self.raw = dff
+        dff = dff.iloc[:,[0,8,9,10,2,5,7,14,11,16,17,13,6,12]]
+        #dff = df['Name','Gain  (dBi)','FMin','FMax','FREQUENCY','Pattern','V_WIDTH','H_WIDTH','DIMENSIONS HxWxD   (INCHES)','WEIGHT (LBS)']
+        dff.columns = ['Name','Fmin','Fmax','F','Gmax','G','Hpbw','H_width','V_width','HxWxD','Weight','Tilt','Etilt','Ftob']
+        dff=dff.apply(lambda x :pd.to_numeric(x,errors='ignore'))
+        #
+        # Parse polarization in the field name
+        #
+        upolarp45 = ['(+45)' in x for x in dff['Name']]
+        upolarm45 = ['(-45)' in x for x in dff['Name']]  
+        if (sum(upolarp45)>0):
+            dff.loc[upolarp45,'Polar']=45
+        if (sum(upolarm45)>0):
+            dff.loc[upolarm45,'Polar']=-45
+
+        atoll = {}
+        dfband = dff.groupby(['Fmin'])
+        for b in dfband:
+            keyband = str(b[0])+'-'+str(b[1]['Fmax'].values[0])
+            atoll[keyband]={}  # band
+            dfpol = b[1].groupby(['Polar'])
+            for p in dfpol:
+                atoll[keyband][p[0]] = {} # polar
+                dftilt = p[1].groupby(['Tilt'])
+                Ghor = np.empty((360,1))  # angle , tilt , frequency
+                Gver = np.empty((360,1))  # angle , 
+                ct = 0
+                tilt = []
+                for t in dftilt:
+                    dffreq = t[1].groupby(['F'])
+                    ct+=1
+                    cf=0 
+                    tilt.append(t[0])
+                    freq = []
+                    for f in dffreq:
+                        freq.append(f[0])
+                        cf+=1
+                        if len(f[1])==1:
+                            df = f[1]
+                        else:
+                            df = f[1].iloc[0:1]
+                        Gmax = df['Gmax'].values
+                        str1 = df.loc[:,'G'].values[0].replace('  ',' ')
+                        lstr = str1.split(' ')
+                        Pattern = [ eval(x) for x in lstr[0:-1]]
+                        # 4 fist field / # of points
+                        Nd,db,dc,Np = Pattern[0:4]
+                        #print(Nd,b,c,Np)
+                        tmp = np.array(Pattern[4:4+2*Np]).reshape(Np,2)
+                        ah   = tmp[:,0]
+                        ghor = Gmax-tmp[:,1]
+                        # 4 fist field / # of points
+                        da,db,dc,dd = Pattern[4+2*Np:4+2*Np+4]
+                        #pdb.set_trace()
+                        #print a,b,c,d
+                        tmp = np.array(Pattern[4+2*Np+4:]).reshape(dc,2)
+                        gver = Gmax-tmp[:,0]
+                        av = tmp[:,1]
+                        try:
+                            Ghor = np.hstack((Ghor,ghor[:,None]))
+                            Gver = np.hstack((Gver,gver[:,None]))
+                        except:
+                            pdb.set_trace()
+                Ghor = np.delete(Ghor,0,1)
+                Gver = np.delete(Gver,0,1)
+                atoll[keyband][p[0]]['hor'] = Ghor.reshape(360,ct,cf)
+                atoll[keyband][p[0]]['ver'] = Gver.reshape(360,ct,cf)
+                atoll[keyband][p[0]]['tilt'] = np.array(tilt)
+                atoll[keyband][p[0]]['freq'] = np.array(freq)
+        self.atoll = atoll
+        # Gmax = eval(self.df['Gain  (dBi)'].values[0])
         #fig = plt.figure()
         #ax =plt.gca(projection='polar')
         #ax =plt.gca()
@@ -1707,8 +1846,7 @@ class Antenna(Pattern):
         #ax.set_rmin(-30)
         #plt.title(dir1+'/'+filename+' Gain : '+df['Gain  (dBi)'].values[0])
         #BXD-634X638XCF-EDIN.txt
-        #BXD-636X638XCF-EDIN.txt
-
+        #BXD-636X638XCF-EDIN.txt        
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
@@ -2237,7 +2375,7 @@ class Antenna(Pattern):
 
         f = d[:, 0]
         if f[0] == 0:
-            print "error : frequency cannot be zero"
+            print("error : frequency cannot be zero")
         # detect frequency unit
         # if values are above 2000 its means frequency is not expressed
         # in GHz
@@ -2372,7 +2510,7 @@ class Antenna(Pattern):
 
 
         """
-        print self._filename
+        print(self._filename)
         print "type : ", self.typ
         if self.typ == 'mat':
             print self.DataFile
@@ -2401,8 +2539,12 @@ class Antenna(Pattern):
             print "No vsh coefficient calculated yet"
 
     #@mlab.show
-    def _show3(self,newfig = True,colorbar =True,
-                    name=[],interact=False,title=True,**kwargs ):
+    def _show3(self,newfig = True,
+                    colorbar =True,
+                    name=[],
+                    interact=False,
+                    title=True,
+                    **kwargs ):
         """ show3 mayavi
 
         Parameters
@@ -2410,12 +2552,13 @@ class Antenna(Pattern):
 
         fGHz : float
             frequency
-        title : bool
+        title : boolean
             display title
-        colorbar :
+        colorbar : boolean
             display colorbar
-        interact :
+        interact : boolean 
             enable interactive mode
+        newfig: boolean
 
 
         see also
@@ -2431,7 +2574,7 @@ class Antenna(Pattern):
         if not self.evaluated:
             self.eval(pattern=True)
 
-
+        # k is frequency index
         x, y, z, k, scalar  = self._computemesh(**kwargs)
 
         if newfig:
@@ -2535,7 +2678,7 @@ class Antenna(Pattern):
         if fGHz == []:
             k = len(self.fGHz)/2
         else :
-            k = np.where(fGHz>self.fGHz)[0]
+            k = np.where(self.fGHz>=fGHz)[0][0]
 
         if len(self.Ft.shape)==3:
             r = self.sqG[:,:,k]
@@ -4563,6 +4706,42 @@ def show3D(F, theta, phi, k, col=True):
     else:
         ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
 
+class AntPosRot(Antenna):
+    """ Antenna + position + Rotation
+    """
+    def __init__(self,name,p,T):
+        Antenna.__init__(self,name)
+        self.p = p 
+        self.T = T 
+    def _show3(self,**kwargs):
+        Antenna._show3(self,newfig=False,interact=False,T=self.T,po=self.p,**kwargs)
+
+    def field(self,p):
+        """
+        Parameters
+        ----------
+
+        p : np.array (N,3)
+
+        """
+        rad_to_deg = 180/np.pi
+        assert p.shape[-1]==3
+
+        if len(p.shape)==1:
+            r = p[None,:]-self.p[None,:]
+        else:
+            r = p-self.p[None,:]
+        u = r/np.sqrt(np.sum(r*r,axis=-1))[:,None]
+        th = np.arccos(u[:,2])
+        ph = np.arctan2(u[:,1],u[:,0])
+        tang = np.vstack((th,ph)).T
+        #print("global",tang*rad_to_deg)
+        Rt, tangl = geu.BTB_tx(tang, self.T)
+        print("local",tangl*rad_to_deg)
+        self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
+        E = self.Ft*self.T[:,2]+self.Fp*self.T[:,0]
+        return(E)
+        #Rr, rangl = geu.BTB_rx(rang, self.Tr)
 
 if (__name__ == "__main__"):
     doctest.testmod()

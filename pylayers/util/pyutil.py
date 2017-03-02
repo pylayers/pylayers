@@ -49,6 +49,7 @@ r"""
     in_ipynb
 
 """
+from __future__ import print_function
 import os
 import re
 import numpy as np
@@ -1683,7 +1684,7 @@ def unzipd(path, zipfilename):
         os.makedirs(path)    
 
     for each in zip_file.namelist():
-        print each
+        print(each)
         if not each.endswith('/') or not each.endswith('\\'): 
             root, name = os.path.split(each)
             directory = os.path.normpath(os.path.join(path, root))

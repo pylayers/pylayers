@@ -82,6 +82,7 @@ Members
     Tchannel.pdp
 
 """
+from __future__ import print_function
 import doctest
 import pdb
 import numpy as np
@@ -102,7 +103,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 try:
     import h5py
 except:
-    print 'h5py is not installed: Ctilde(object cannot be saved)'
+    print('h5py is not installed: Ctilde(object cannot be saved)')
 
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
@@ -727,7 +728,7 @@ class TUchannel(TBchannel,bs.TUsignal):
                 d = 0
                 n = u[0]
                 N = np.hstack((N, n))
-                #print N
+                #print(N)
 
             thre = thre - step
             if thre < 0:
@@ -899,7 +900,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         t = self.x
 
         alpha = np.sqrt(self.Emax()) / np.sqrt(self.Etot())
-        print alpha
+        print(alpha)
         th = alpha * maxy2
 
         v = np.nonzero(y2 >= th)[0]
@@ -916,7 +917,7 @@ class TUchannel(TBchannel,bs.TUsignal):
 
         alpha = (np.sqrt(self.Etot(
         )) - np.sqrt(self.Emax())) / np.sqrt(self.Etot())
-        print alpha
+        print(alpha)
         th = alpha * maxy2
 
         v = np.nonzero(y2 >= th)[0]
@@ -1347,7 +1348,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         outdir : string
             output directory
         """
-        if outdir <> []:
+        if outdir != []:
             outdir = 'output/'+outdir
             filename = getlong(filename, outdir)
 
@@ -2048,11 +2049,11 @@ class Tchannel(bs.FUsignal):
             if not grpname in fh5['H'].keys():
                 fh5['H'].create_group(grpname)
             else :
-                print 'Warning : H/'+grpname +'already exists in '+filenameh5
+                print('Warning : H/'+grpname +'already exists in '+filenameh5)
             f=fh5['H/'+grpname]
 
             for k,va in self.__dict__.items():
-                #print k,va
+                #print(k,va)
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
         except:
@@ -2219,8 +2220,8 @@ class Tchannel(bs.FUsignal):
 
 
         """
-        print DeprecationWarning(
-            'WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav')
+        print(DeprecationWarning(
+            'WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav'))
         H = self.H
         h = H.ft1(500, 1)
         dxh = h.dx()
@@ -2348,8 +2349,8 @@ class Tchannel(bs.FUsignal):
 
         """
 
-        print DeprecationWarning(
-            'WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav')
+        print(DeprecationWarning(
+            'WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav'))
 
         # product in frequency domain between Channel (self) and waveform
         Y = self.apply(Wgam)
@@ -2377,8 +2378,8 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal
 
         """
-        print DeprecationWarning(
-            'WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav')
+        print(DeprecationWarning(
+            'WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav'))
         Hab = self.H.ft2(0.001)
         HabW = Hab * Wgam
         RI = HabW.symHz(10000)
@@ -2494,8 +2495,8 @@ class Tchannel(bs.FUsignal):
         col = 10 * np.log10(Etot)
         kwargs['c'] = col
         if len(col) != len(di):
-            print "len(col):", len(col)
-            print "len(di):", len(di)
+            print("len(col):", len(col))
+            print("len(di):", len(di))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
         if reverse :
@@ -2642,8 +2643,8 @@ class Tchannel(bs.FUsignal):
         cv = np.where(col >= clipval)[0]
         kwargs['c'] = col[cv]
         if len(col) != len(di):
-            print "len(col):", len(col)
-            print "len(di):", len(dir)
+            print("len(col):", len(col))
+            print("len(di):", len(dir))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
         if a == 'phi':
@@ -2841,13 +2842,13 @@ class Tchannel(bs.FUsignal):
         if (abs(dxh - dxw) > 1e-10):
             if (dxh < dxw):
                 # reinterpolate w
-                print " resampling w"
+                print(" resampling w")
                 x_new = arange(W.x[0], W.x[-1] + dxh, dxh)[0:-1]
                 Wk = W.resample(x_new)
                 dx = dxh
             else:
                 # reinterpolate h
-                print " resampling h"
+                print(" resampling h")
                 x_new = arange(Hk.x[0], Hk.x[-1] + dxw, dxw)[0:-1]
                 Hk = Hk.resample(x_new)
                 dx = dxw
@@ -3795,7 +3796,7 @@ class Ctilde(PyLayers):
             if not grpname in fh5['Ct'].keys():
                 fh5['Ct'].create_group(grpname)
             else :
-                print 'Warning : Ct/'+grpname +'already exists in '+filenameh5
+                print('Warning : Ct/'+grpname +'already exists in '+filenameh5)
             f=fh5['Ct/'+grpname]
 
             # save channel in global basis
@@ -4173,8 +4174,8 @@ class Ctilde(PyLayers):
         col = 10 * np.log10(Etot)
         kwargs['c'] = col
         if len(col) != len(di):
-            print "len(col):", len(col)
-            print "len(di):", len(dir)
+            print("len(col):", len(col))
+            print("len(di):", len(dir))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
 
@@ -4347,7 +4348,7 @@ class Ctilde(PyLayers):
                 else:
                     raise NameError ('self.Tt and self.Tr should exist')
             else:
-                print "nothing to do to return in global basis"
+                print("nothing to do to return in global basis")
                 return self
         # if Tt and Tr == []
         else:
@@ -4600,11 +4601,11 @@ class Ctilde(PyLayers):
             if not np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
                 issue.append(r)
         if len(issue) == 0:
-            print "Channel is reciprocal"
+            print("Channel is reciprocal")
         else: 
-            print "WARNING Reciprocity issue WARNING"
-            print len(issue),'/',self.nray, 'rays are not reciprocal,'
-            print "rays number with an issue :",issue
+            print("WARNING Reciprocity issue WARNING")
+            print(len(issue),'/',self.nray, 'rays are not reciprocal,')
+            print("rays number with an issue :",issue)
 
         # assert np.allclose(self.tang,C.rang)
         # assert np.allclose(self.rang,C.tang)

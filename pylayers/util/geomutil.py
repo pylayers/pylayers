@@ -3797,10 +3797,14 @@ def SphericalBasis(a):
 
     M = N x [th,ph,s]  : 3 x 3 x N
     """
+    assert(a.shape[1]==2)
 
-    tha = np.vstack((np.cos(a[:, 0]) * np.cos(
-        a[:, 1]), np.cos(a[:, 0]) * np.sin(a[:, 1]), -np.sin(a[:, 0]))).T
-    pha = np.vstack((-np.sin(a[:, 1]), np.cos(a[:, 1]), 0 * a[:, 0])).T
+    tha = np.vstack((np.cos(a[:, 0]) * \
+                     np.cos(a[:, 1]), np.cos(a[:, 0]) * \
+                     np.sin(a[:, 1]), -np.sin(a[:, 0]))).T
+    pha = np.vstack((-np.sin(a[:, 1]),
+                      np.cos(a[:, 1]),
+                      0 * a[:, 0])).T
     sa = np.vstack((np.sin(a[:, 0]) * np.cos(
         a[:, 1]), np.sin(a[:, 0]) * np.sin(a[:, 1]), np.cos(a[:, 0]))).T
 
@@ -3929,6 +3933,12 @@ def BTB_tx(a_g, T):
 
     a_g  : angle in global reference frame      2 x N  :  (theta,phi) x N
     T    : Tx rotation matrix     3 x 3
+
+    Returns
+    -------
+
+    R : 
+    al : angle in local frame
 
     """
     G = SphericalBasis(a_g)

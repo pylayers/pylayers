@@ -108,7 +108,7 @@ try:
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
 except:
-    print 'Layout:Mayavi is not installed'
+    print('Layout:Mayavi is not installed')
 import doctest
 import time
 import numpy as np
@@ -426,8 +426,8 @@ class DLink(Link):
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
-            print 'Links save file for ' + self.L._filename + ' does not exist.'
-            print 'Creating file. You\'ll see this message only once per Layout'
+            print('Links save file for ' + self.L._filename + ' does not exist.')
+            print('Creating file. You\'ll see this message only once per Layout')
             self.save_init(filenameh5)
 
         # dictionnary data exists
@@ -666,7 +666,7 @@ class DLink(Link):
         self.Ta = rot
         if Ant.fromfile:
             self.fGHz = Ant.fGHz
-            print "Warning : frequency range modified by antenna Aa"
+            print("Warning : frequency range modified by antenna Aa")
         else:
             self._Aa.fGHz = self.fGHz
 
@@ -689,7 +689,7 @@ class DLink(Link):
         self.Tb = rot
         if Ant.fromfile:
            self.fGHz = Ant.fGHz
-           print "Warning : frequency range modified by antenna Ab"
+           print("Warning : frequency range modified by antenna Ab")
         else:
            self._Ab.fGHz = self.fGHz
 
@@ -729,9 +729,9 @@ class DLink(Link):
 
 
         if (self.Aa.fromfile) & cond_a:
-            print " Antenna Aa frequency range is fixed, you cannot change frequency"
+            print(" Antenna Aa frequency range is fixed, you cannot change frequency")
         elif (self.Ab.fromfile) & cond_b:
-            print " Antenna Ab frequency range is fixed,you cannot change frequency"
+            print(" Antenna Ab frequency range is fixed,you cannot change frequency")
         else:
             self._fGHz = freq
             self.Aa.fGHz=self.fGHz
@@ -871,8 +871,8 @@ class DLink(Link):
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         if not os.path.exists(filenameh5) :
-            print 'Links save file for ' + self.L._filename + ' does not exist.'
-            print 'It is beeing created. You\'ll see that message only once per Layout'
+            print('Links save file for ' + self.L._filename + ' does not exist.')
+            print('It is beeing created. You\'ll see that message only once per Layout')
             self.save_init(filenameh5)
 
 
@@ -1049,7 +1049,7 @@ class DLink(Link):
             obj._saveh5(self.filename,grpname)
 
         if self.verbose :
-            print str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved'
+            print(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved')
 
 
     def load(self,obj,grpname):
@@ -1071,7 +1071,7 @@ class DLink(Link):
 
         obj._loadh5(self.filename,grpname)
         if self.verbose :
-            print str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded'
+            print(str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded')
 
 
     def get_grpname(self):
@@ -1438,7 +1438,7 @@ class DLink(Link):
         
         # must be placed after all the init !!!!
         if self.verbose :
-            print "checkh5"
+            print("checkh5")
         self.checkh5()
 
         if isinstance(kwargs['progressbar'],str):
@@ -1456,14 +1456,14 @@ class DLink(Link):
         ############
         
         if self.verbose :
-            print "Start Signatures"
+            print("Start Signatures")
         tic = time.time()
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'])
             if self.verbose :
-                print "load signature"
+                print("load signature")
         else :
             ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
@@ -1474,19 +1474,19 @@ class DLink(Link):
                         bt=kwargs['bt'])
 
                 if self.verbose:
-                    print "default algorithm"
+                    print("default algorithm")
 
             if kwargs['alg']=='exp':
                 TMP = Si.run_exp(cutoff=kwargs['cutoff'],
                          cutoffbound=kwargs['si_reverb'])
                 if self.verbose :
-                    print "experimental (ex 2015)"
+                    print("experimental (ex 2015)")
 
             if kwargs['alg']=='exp2':
                 TMP = Si.run_exp2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
                 if self.verbose :
-                    print "algo exp2 ( ex 20152)"
+                    print("algo exp2 ( ex 20152)")
 
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
@@ -1496,7 +1496,7 @@ class DLink(Link):
         self.Si = Si
         toc = time.time()
         if self.verbose :
-            print "Stop signature",toc-tic
+            print("Stop signature",toc-tic)
         try:
             pbar.update(20)
         except: 
@@ -1509,7 +1509,7 @@ class DLink(Link):
         ############
 
         if self.verbose :
-            print "Start Rays"
+            print("Start Rays")
         tic = time.time()
         r2d = Rays(self.a,self.b)
        
@@ -1566,7 +1566,7 @@ class DLink(Link):
         self.R = R
         toc = time.time()
         if self.verbose :
-            print "Stop rays",toc-tic
+            print("Stop rays",toc-tic)
         
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
@@ -1944,7 +1944,7 @@ class DLink(Link):
                     kwargs['ER']=ER
                 self.R._show3(**kwargs)
             except:
-                print 'Rays not computed yet'
+                print('Rays not computed yet')
 
         fp = (self.a+self.b)/2.
         dab = np.sqrt(np.sum((self.a-self.b)**2))

@@ -31,7 +31,7 @@ class PyLayers(object):
         lmeth = [ x for x in np.sort(dir(self)) if x not in dict.__dict__]
 
         if typ=='mb':
-            print np.sort(self.__dict__.keys())
+            print(np.sort(self.__dict__.keys()))
         if typ=='mt':
             for s in lmeth:
                 if s not in members:
@@ -40,14 +40,14 @@ class PyLayers(object):
                             if (s[0]>=letter[0])&(s[0]<letter[1]):
                                 try:
                                     doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
+                                    print(s+': '+ doc[0])
                                 except:
                                     pass
                         else:
                             if (s[0]==letter[0]):
                                 try:
                                     doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
+                                    print(s+': '+ doc[0])
                                 except:
                                     pass
 
@@ -98,13 +98,13 @@ else:
     if os.getenv('PYLAYERS') != None:
         pylayersdir = os.getenv('PYLAYERS')
         _writedotpylayers('source',pylayersdir)
-        print 'PYLAYERS environement variable detected: ~/.pylayers updated'
+        print('PYLAYERS environement variable detected: ~/.pylayers updated')
     else :
         raise EnvironmentError('pylayers source path not found. Try to re-run setup.py')
     if os.getenv('BASENAME') != None:
         basename = os.getenv('BASENAME')
         _writedotpylayers('project',basename)
-        print 'BASENAME environement variable detected: ~/.pylayers updated'
+        print('BASENAME environement variable detected: ~/.pylayers updated')
     else :
         raise EnvironmentError('pylayers source path not found. Try to re-run setup.py')
 
@@ -194,7 +194,7 @@ pstruc['DIRWEAR'] = os.path.join('body','wear')
 try:
     os.chdir(basename)
 except:
-    print "Create directory " + basename
+    print("Create directory " + basename)
     os.mkdir(basename)
 
 #
@@ -213,11 +213,11 @@ for nm,nv in pstruc.items():
         if not os.path.isdir(os.path.join(basename ,spl[0])):
             os.mkdir(os.path.join(basename ,spl[0]))
             os.mkdir(os.path.join(basename,nv))
-            print "create ",os.path.join(basename ,nv)
+            print("create ",os.path.join(basename ,nv))
         else:
             if not os.path.isdir(os.path.join(basename ,nv)):
                 os.mkdir(os.path.join(basename ,nv))
-                print "create ",os.path.join(basename ,nv)
+                print("create ",os.path.join(basename ,nv))
     else :
 
         if not os.path.isdir(dirname):
@@ -230,7 +230,7 @@ for nm,nv in pstruc.items():
                 os.mkdir(dirtmp)
                 os.mkdir(dirname)
 
-            print "create ",dirname
+            print("create ",dirname)
 
 
 
@@ -311,7 +311,7 @@ if basename != os.path.join(pylayersdir,'data'):
                 if os.path.isfile(os.path.join(basename,dl,fi)): # file already exists
                     pass
                 else:
-                    print dl,fi
+                    print(dl,fi)
                     shutil.copy(
                         os.path.join(pylayersdir,'data',dl,fi),
                         os.path.join(basename,dl,fi))
