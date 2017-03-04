@@ -299,6 +299,7 @@ class Layout(pro.PyLayers):
             if self.typ=='outdoor':
                 self.indoor = False
 
+            
             if build:
                 path = os.path.join(pro.basename,
                                     'struc',
@@ -5005,12 +5006,16 @@ class Layout(pro.PyLayers):
             'r' : Gr
             'w" : Gw
         verbose : boolean
+        difftol : diffraction tolerance
+        multi : boolean 
+            enable multi processing
         
         Notes
         -----
 
-        This function can build all the graph associated with the Layout. 
-        Warning : by default the layout is saved after each build
+        This function build all the graph associated with the Layout. 
+
+        Warning : by default the layout is saved (dumpw) after each build
 
         """
         # list of built graphs
@@ -5098,7 +5103,7 @@ class Layout(pro.PyLayers):
             except:
                 raise NameError(
                     'G' + g + ' graph cannot be saved, probably because it has not been built')
-        # save dictionnary which maps string interaction to [interactionnode,
+        # save dictionnary which maps string interaction to [interaction node,
         # interaction type]
         if 't' in self.lbltg:
             write_gpickle(getattr(self, 'ddiff'),
@@ -5137,10 +5142,12 @@ class Layout(pro.PyLayers):
                 #     setattr(self, gname1, read_gpickle(os.path.join(pro.basename,'struc','gpickle','G'+g+'_'+self._filename+'.gpickle')))
                 # else:
                 gname = 'G' + g
-                setattr(self, gname, read_gpickle(
-                    os.path.join(path, 'G' + g + '.gpickle')))
+                filename = os.path.join(path, 'G' + g + '.gpickle')
+                G = read_gpickle(filename)
+                setattr(self, gname, G)
                 self.lbltg.extend(g)
             except:
+                print("Warning Unable to read graph G"+g)
                 pass
 
         # retrieve md5 sum of the original ini file
@@ -7407,6 +7414,8 @@ class Layout(pro.PyLayers):
         (ns,cy0,cy1) T 0->1
         (ns,cy1,cy0) T 1->0
 
+        Gi is an oriented Graph (DiGraph) 
+
         """
 
         Gipbar = pbar(verbose,total=100., desc ='Build Gi',position=tqdmpos)
@@ -9262,82 +9271,82 @@ class Layout(pro.PyLayers):
         lpnt = [x for x in self.Gs.node if (x < 0 and x not in self.degree[0])]
 
         self.ddiff = {}
-        # pdb.set_trace()
+        
         if verbose :
             cpt = 1./(len(lpnt)+1)
             pbar = tqdm.tqdm(tqdmkwargs)
-            for k in lpnt:
-                if verbose :
-                    pbar.update(100.*cpt)
-                # list of cycles associated with point k
-                lcyk = self.Gs.node[k]['ncycles']
-                if len(lcyk) > 2:
-                    # Subgraph of connected cycles around k
-                    Gtk = nx.subgraph(self.Gt, lcyk)
-                    # ordered list of connections between cycles
-                    try:
-                        lccyk = nx.find_cycle(Gtk)
-                    except:
-                        pdb.set_trace()
+        for k in lpnt:
+            if verbose :
+                pbar.update(100.*cpt)
+            # list of cycles associated with point k
+            lcyk = self.Gs.node[k]['ncycles']
+            if len(lcyk) > 2:
+                # Subgraph of connected cycles around k
+                Gtk = nx.subgraph(self.Gt, lcyk)
+                # ordered list of connections between cycles
+                try:
+                    lccyk = nx.find_cycle(Gtk)
+                except:
+                    pdb.set_trace()
 
-                    neigh = self.Gs[k].keys()
-                    sega = [n for n in neigh if
-                            (self.Gs.node[n]['name'] == 'AIR' or
-                             self.Gs.node[n]['name'] == '_AIR')]
+                neigh = self.Gs[k].keys()
+                sega = [n for n in neigh if
+                        (self.Gs.node[n]['name'] == 'AIR' or
+                         self.Gs.node[n]['name'] == '_AIR')]
 
-                    sega_iso = [n for n in sega if len(self.Gs.node[n]['iso']) > 0]
-                    sega_eff = list(set(sega).difference(set(sega_iso)))
-                    nsector = len(neigh) - len(sega)
+                sega_iso = [n for n in sega if len(self.Gs.node[n]['iso']) > 0]
+                sega_eff = list(set(sega).difference(set(sega_iso)))
+                nsector = len(neigh) - len(sega)
 
-                    dsector = {i: [] for i in range(nsector)}
-                    #
-                    # team building algo
-                    #
-                    ct = 0
-                    # if k ==-44:
-                    #     pdb.set_trace()
-                    for ccy in lccyk:
+                dsector = {i: [] for i in range(nsector)}
+                #
+                # team building algo
+                #
+                ct = 0
+                # if k ==-44:
+                #     pdb.set_trace()
+                for ccy in lccyk:
 
-                        #segsep = self.Gt[ccy[0]][ccy[1]]['segment'][0]
-                        segsep = self.Gt[ccy[0]][ccy[1]]['segment']
-                        # filter only segments connected to point k (neigh)
-                        lvseg = [x for x in segsep if x in neigh]
-                        if len(lvseg) == 1 and (lvseg[0] in sega_eff):  # same sector
-                            dsector[ct].append(ccy[1])
-                        else:  # change sector
-                            ct = (ct + 1) % nsector
-                            dsector[ct].append(ccy[1])
+                    #segsep = self.Gt[ccy[0]][ccy[1]]['segment'][0]
+                    segsep = self.Gt[ccy[0]][ccy[1]]['segment']
+                    # filter only segments connected to point k (neigh)
+                    lvseg = [x for x in segsep if x in neigh]
+                    if len(lvseg) == 1 and (lvseg[0] in sega_eff):  # same sector
+                        dsector[ct].append(ccy[1])
+                    else:  # change sector
+                        ct = (ct + 1) % nsector
+                        dsector[ct].append(ccy[1])
 
-                        # typslab = self.Gs.node[segsep]['name']
-                        # if (typslab=='AIR' or typslab=='_AIR'): # same sector
-                            # dsector[ct].append(ccy[1])
-                        # else: # change sector
-                            # ct=(ct+1)%nsector
-                            # dsector[ct].append(ccy[1])
-                            # lcy2.append(ccy[1])
-                            # lcy1,lcy2 = lcy2,lcy1
+                    # typslab = self.Gs.node[segsep]['name']
+                    # if (typslab=='AIR' or typslab=='_AIR'): # same sector
+                        # dsector[ct].append(ccy[1])
+                    # else: # change sector
+                        # ct=(ct+1)%nsector
+                        # dsector[ct].append(ccy[1])
+                        # lcy2.append(ccy[1])
+                        # lcy1,lcy2 = lcy2,lcy1
 
-                    dagtot = {s: 0 for s in range(nsector)}
-                    save = []
-                    for s in dsector:
-                        for cy in dsector[s]:
-                            da = dangles[cy]
-                            u = np.where(da[0, :].astype('int') == k)[0][0]
-                            save.append((cy, da[1, u]))
-                            dagtot[s] = dagtot[s] + da[1, u]
-                    for s in dagtot:
-                        if dagtot[s] > (np.pi + difftol):
-                            self.ddiff[k] = (dsector[s], dagtot[s])
-                            break
+                dagtot = {s: 0 for s in range(nsector)}
+                save = []
+                for s in dsector:
+                    for cy in dsector[s]:
+                        da = dangles[cy]
+                        u = np.where(da[0, :].astype('int') == k)[0][0]
+                        save.append((cy, da[1, u]))
+                        dagtot[s] = dagtot[s] + da[1, u]
+                for s in dagtot:
+                    if dagtot[s] > (np.pi + difftol):
+                        self.ddiff[k] = (dsector[s], dagtot[s])
+                        break
 
-                    # if agtot1 > (np.pi+tol):
-                    #     self.ddiff[k]=(lcy1,agtot1)
-                    # elif 2*np.pi-agtot1 > (np.pi+tol):
-                    #     self.ddiff[k]=(lcy2,2*np.pi-agtot1)
-                else:
-                    # diffraction by half-plane detected
-                    if k in self.degree[1]:
-                        self.ddiff[k] = (lcyk, 2 * np.pi)
+                # if agtot1 > (np.pi+tol):
+                #     self.ddiff[k]=(lcy1,agtot1)
+                # elif 2*np.pi-agtot1 > (np.pi+tol):
+                #     self.ddiff[k]=(lcy2,2*np.pi-agtot1)
+            else:
+                # diffraction by half-plane detected
+                if k in self.degree[1]:
+                    self.ddiff[k] = (lcyk, 2 * np.pi)
 
     # def buildGr(self):
     #     """ build the graph of rooms Gr
