@@ -8,12 +8,14 @@ WMHz = 3000
 Nf = 400 
 fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 # set the layout
+#L=Layout('defstr.ini',build=False)
 L=Layout('defstr.ini')
+#L=Layout('W2PTIN.ini',build=False)
 # set the link
 DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
-DL.b = np.array([761.5,1113,1.2])
-#DL.Aa=Antenna(typ='Omni')
-#DL.Ab=Antenna(typ='Omn')
+#DL.b = np.array([761.5,1113,1.2])
+DL.Aa=Antenna(typ='CEA_OTA.vsh3')
+DL.Ab=Antenna(typ='CEA_OTA.vsh3')
 
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()

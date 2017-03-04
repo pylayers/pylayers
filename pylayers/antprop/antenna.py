@@ -763,7 +763,7 @@ class Pattern(PyLayers):
 
     def __pcst(self,**kwargs):
        
-        defaults = {'param':{'p' : 1,
+        defaults = {'param':{'p' : 2,
                     'directory':'ant/FF_Results_txt_port_1_2/',
                     'fGHz':np.arange(2,6.5,0.5)}}
 
@@ -773,6 +773,7 @@ class Pattern(PyLayers):
             param=kwargs['param']
        
         self.fGHz = param['fGHz']
+        self.nf = len(self.fGHz)
         
         for f in param['fGHz']:
             if ((int(f*10))%10)==0:
@@ -3749,10 +3750,10 @@ class Antenna(Pattern):
         """
 
         # create sh2 file
-        typ = self._filename.split('.')[1]
-        self.typ = typ
+        #typ = self._filename.split('.')[1]
+        #self.typ = typ
 
-        _filesh2 = self._filename.replace('.'+ typ, '.sh2')
+        _filesh2 = self._filename.replace('.'+ self.typ, '.sh2')
         filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
         if os.path.isfile(filesh2):
             print filesh2, ' already exist'
@@ -3778,19 +3779,18 @@ class Antenna(Pattern):
     def savesh3(self):
         """ save antenna in sh3 format
 
-        Create a .sh3 antenna file
-
+        create a .sh3 antenna file
 
         """
         # create sh3 file
-        typ = self._filename.split('.')[1]
-        self.typ = typ
-        _filesh3 = self._filename.replace('.'+ typ, '.sh3')
+        # if self._filename has an extension 
+        # it is replace by .sh3
+        #typ = self._filename.split('.')[1]
+        #self.typ = typ
+        _filesh3 = self._filename.replace('.'+ self.typ, '.sh3')
         filesh3 = pyu.getlong(_filesh3, pstruc['DIRANT'])
         if os.path.isfile(filesh3):
             print filesh3, ' already exist'
-
-
         else:
             print 'create ', filesh3, ' file'
 
@@ -3820,7 +3820,7 @@ class Antenna(Pattern):
     def loadvsh3(self):
         """ Load antenna's vsh3 file
 
-            vsh3 file contains a thesholded version of vsh coefficients in shape 3
+            vsh3 file contains a thresholded version of vsh coefficients in shape 3
 
         """
 
@@ -4731,16 +4731,19 @@ class AntPosRot(Antenna):
             r = p[None,:]-self.p[None,:]
         else:
             r = p-self.p[None,:]
-        u = r/np.sqrt(np.sum(r*r,axis=-1))[:,None]
+        dist = np.sqrt(np.sum(r*r,axis=-1))[:,None]
+        u = r/dist
         th = np.arccos(u[:,2])
         ph = np.arctan2(u[:,1],u[:,0])
         tang = np.vstack((th,ph)).T
         #print("global",tang*rad_to_deg)
         Rt, tangl = geu.BTB_tx(tang, self.T)
-        print("local",tangl*rad_to_deg)
+        #print("local",tangl*rad_to_deg)
         self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
-        E = self.Ft*self.T[:,2]+self.Fp*self.T[:,0]
-        return(E)
+        E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]+self.Fp[:,None,:]*self.T[:,0][None,:,None])
+        P = np.exp(-1j*2*np.pi*self.fGHz[None,None,:]*dist[...,None]/0.3)/dist[...,None]
+        EP = E*P
+        return(EP)
         #Rr, rangl = geu.BTB_rx(rang, self.Tr)
 
 if (__name__ == "__main__"):

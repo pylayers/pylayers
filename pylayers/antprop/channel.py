@@ -1830,6 +1830,8 @@ class Tchannel(bs.FUsignal):
 
     The transmission channel TChannel is obtained through combination of the propagation
     channel and the antenna transfer functions from both transmitter and receiver.
+    This channel contains all the spatial information for each individual ray. 
+    Warning : This is a frequency domain channel deriving from bs.FUsignal 
 
     Members
     -------
@@ -1988,9 +1990,9 @@ class Tchannel(bs.FUsignal):
 
         with
             a = np.ndarray
-                postion of point a (transmitter)
+                position of point a (transmitter)
             b = np.ndarray
-                postion of point b (receiver)
+                position of point b (receiver)
             Ta = np.ndarray
                 rotation matrice of antenna a
             Tb = np.ndarray
@@ -2109,7 +2111,6 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
-        mport ipdb
         V : FUDAsignal
 
         Notes
@@ -2119,7 +2120,7 @@ class Tchannel(bs.FUsignal):
 
             + W may have a more important number of points and a smaller frequency band.
             + If the frequency band of the waveform exceeds the one of the
-            Transmission Channel, a warning is sent.
+            transmission channel, a warning is sent.
             + W is a FUsignal whose shape doesn't need to be homogeneous with FUChannel H
 
         """
@@ -2742,7 +2743,7 @@ class Tchannel(bs.FUsignal):
 
     def field(self):
 
-        tau  = self.tk[:,None,None,None]
+        tau  = self.tau[:,None,None,None]
         fGHz = self.x[None,None,None,:]
         E = np.exp(-2*1j*tau*fGHz)
         F = self.y*E
@@ -2878,10 +2879,12 @@ class Tchannel(bs.FUsignal):
         This function will be deprecated by energy function
 
         """
-
-        Ak   = self.y[:, ufreq]
-        Pr   = np.sum(Ak*np.conj(Ak))
-        akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.tk)
+        # Amplitude
+        Ak    = self.y[:, ufreq]
+        # Power 
+        Pr    = np.sum(Ak*np.conj(Ak))
+        # Complex amplitude
+        akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.taud)
         Prp   = np.abs(np.sum(akp))**2
         PrdB  = 10*np.log10(Pr)
         PrpdB = 10*np.log10(Prp)
@@ -4735,7 +4738,7 @@ class Ctilde(PyLayers):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a=[],b=[],Friis=True,debug=True):
+    def prop2tran(self,a=[],b=[],Friis=True,debug=False):
         r""" transform propagation channel into transmission channel
 
         Parameters
@@ -4847,10 +4850,6 @@ class Ctilde(PyLayers):
         if Friis:
             H.applyFriis()
 
-        # # average w.r.t frequency
-        # Nf   = H.y.shape[-1]
-        # H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))
-        # H.tk = H.taud
 
         return(H)
 

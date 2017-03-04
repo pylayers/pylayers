@@ -263,7 +263,7 @@ class DLink(Link):
             information to be saved in the Links h5 file. Should never be Modified !
 
         force_create : Boolean (False)
-            forcecreating the h5py file (if already exist, will be erased)
+            force creating the h5py file (if already exist, will be erased)
 
 
         Notes
@@ -1319,6 +1319,8 @@ class DLink(Link):
         return ua
 
     def evalH(self,**kwargs):
+        """ evaluate channel transfer function
+        """
         # Antenna Rotation
         self.C.locbas(Tt=self.Ta, Tr=self.Tb)
         # Transmission channel calculation
@@ -1407,6 +1409,7 @@ class DLink(Link):
                    'alg':1,
                    'si_reverb':4,
                    'threshold':0.1,
+                   'debug':False,
                    'verbose':[],
                    'progressbar':None,
                    }
@@ -1610,7 +1613,7 @@ class DLink(Link):
             # Ctilde antenna
             C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
-            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
+            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=kwargs['debug'])
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
         self.H = H
         try:

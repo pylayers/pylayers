@@ -747,7 +747,7 @@ class SCoeff(PyLayers):
                 L = self.L1
             if M == -1:
                 M = self.M1
-            Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
+            Mg, Ng = np.meshgrid(np.arange(M), np.arange(N))
             if anim:
                 fig = plt.gcf()
                 ax = fig.gca()
@@ -1201,7 +1201,7 @@ class VCoeff(object):
                 L = self.L1
             if M == -1:
                 M = self.M1
-            Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
+            Mg, Ng = np.meshgrid(np.arange(M), np.arange(N))
             if anim:
                 fig = plt.gcf()
                 ax = fig.gca()

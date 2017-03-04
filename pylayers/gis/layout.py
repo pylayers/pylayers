@@ -258,6 +258,7 @@ class Layout(pro.PyLayers):
             self._filename = 'newfile.ini'
             newfile = True
 
+        #pdb.set_trace()
         if not newfile:
             if loadini:
                 filename = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
@@ -291,6 +292,7 @@ class Layout(pro.PyLayers):
             if check:
                 self.check()
 
+            
             # check if the graph gpickle files have been built
             if self.typ=='floorplan':
                 self.indoor = True
@@ -1331,7 +1333,7 @@ class Layout(pro.PyLayers):
         """
         defaults = {'_fileosm': '',
                     'address': 'Rennes',
-                    'typ': 'floorplan',
+                    'type': 'floorplan',
                     'latlon': '0',
                     'dist_m': 200,
                     'cart': False
@@ -1341,7 +1343,7 @@ class Layout(pro.PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        typ = kwargs['typ']
+        typ = kwargs['type']
         address = kwargs['address']
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
@@ -1364,7 +1366,7 @@ class Layout(pro.PyLayers):
             fileosm = pyu.getlong(
                 kwargs['_fileosm'], os.path.join('struc', 'osm'))
             coords, nodes, ways, relations, m = osm.osmparse(
-                fileosm, typ=kwargs['typ'])
+                fileosm, typ=kwargs['type'])
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'ini')
         
@@ -1798,8 +1800,8 @@ class Layout(pro.PyLayers):
             for k in self.sl.keys():
                 self.name[k] = []
 
-        if di['info'].has_key('typ'):
-            self.typ = di['info']['typ']
+        if di['info'].has_key('type'):
+            self.typ = di['info']['type']
             if self.typ == 'floorplan':
                 self.zceil = eval(di['floorplan']['zceil'])
                 self.zfloor = eval(di['floorplan']['zfloor'])

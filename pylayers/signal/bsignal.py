@@ -3363,10 +3363,12 @@ class FUsignal(FBsignal,Usignal):
         return(uh)
 
     def show(self,**kwargs):
-        """ pcolor visualization of Modulus and Phase
+        """ imshow visualization of Modulus and Phase
 
-        vmin 
-        vmax
+        vmin : 
+        vmax : 
+        cmap : colormap 
+
         """
 
         if 'fig' not in kwargs:
@@ -3385,24 +3387,6 @@ class FUsignal(FBsignal,Usignal):
         fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]
-#       def fig(self,N):
-#          """
-#          """
-#          x = self.x
-#          min   = abs(self.y).min()
-#          max   = abs(self.y).max()
-#          ec    = max-min
-#          ecmax = ec.max()
-#          sh = shape(self.y)
-#          Nmax    = sh[0]
-#          N1    = int(minimum(N,Nmax))
-#          y1    = abs(self.y)[0,:] + (N1-1)*ecmax
-#          yN1   = abs(self.y)[N1-1,:]
-#          r.par(yaxt="n")
-#          r.plot(x, yN1, main='Ray Transfer function', xlab='Freq (GHz)', ylab='', type='l', col='black' ,frame='False',  ylim=r.range(y1,yN1) )
-#          for i in range(N1-1):
-#              yi = abs(self.y)[i+1,:] + (N1-(i+1))*ecmax
-#              r.lines(x,yi,col='black')
 
     def decimate(self, N=2):
         """ decimate FUsignal by N
