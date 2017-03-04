@@ -1885,55 +1885,29 @@ class Layout(pro.PyLayers):
                 offset = 0
             else:
                 offset = d['offset']
-            #
-            # iso segments
-            #
-            if d.has_key('ss_name'):
+            
+            name = d['name']
+            z = d['z']
+            num = self.add_segment(nta, nhe,
+                                   name=name,
+                                   offset=offset,
+                                   z=z)
 
-                for k in range(len(d['ss_name'])):
-                    if not d.has_key('ss_offset'):
-                        offset = 0
-                    else:
-                        offset = d['ss_offset'][k]
+            # #
+            # # Complement single segment which do not reach zceil or zfloor with
+            # # an iso segment with _AIR property
+            # #
+            # if z[1] < self.zceil:
+            #     num = self.add_segment(nta, nhe,
+            #                            name='AIR',
+            #                            offset=offset,
+            #                            z=(z[1], self.zceil))
 
-                    ssname = d['ss_name'][k]
-
-                    # add a new segment
-
-                    num = self.add_segment(nta, nhe,
-                                           name=ssname,
-                                           offset=offset,
-                                           z=d['ss_z'][k])
-
-                    # x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-                    # # round to mm
-                    # self.Gs.pos[num] = (round(1000*x)/1000.,round(1000*y)/1000.)
-            #
-            # single segment
-            #
-            else:
-                name = d['name']
-                z = d['z']
-                num = self.add_segment(nta, nhe,
-                                       name=name,
-                                       offset=offset,
-                                       z=z)
-
-                #
-                # Complement single segment which do not reach zceil or zfloor with
-                # an iso segment with _AIR property
-                #
-                if z[1] < self.zceil:
-                    num = self.add_segment(nta, nhe,
-                                           name='AIR',
-                                           offset=offset,
-                                           z=(z[1], self.zceil))
-
-                if z[0] > self.zfloor:
-                    num = self.add_segment(nta, nhe,
-                                           name='AIR',
-                                           offset=offset,
-                                           z=(self.zfloor,z[0]))
+            # if z[0] > self.zfloor:
+            #     num = self.add_segment(nta, nhe,
+            #                            name='AIR',
+            #                            offset=offset,
+            #                            z=(self.zfloor,z[0]))
 
         pdb.set_trace()
         self.boundary()
