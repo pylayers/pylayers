@@ -1935,7 +1935,7 @@ class Layout(pro.PyLayers):
                                            offset=offset,
                                            z=(self.zfloor,z[0]))
 
-        pdb.set_trace()
+        
         self.boundary()
         
         # compliant with config file without  material/slab information
