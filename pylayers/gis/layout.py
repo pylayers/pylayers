@@ -5195,9 +5195,11 @@ class Layout(pro.PyLayers):
         #             self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode,
         # interaction type]
+        #pdb.set_trace()
         if 't' in graphs:
-            setattr(self, 'ddiff', read_gpickle(
-                os.path.join(path, 'ddiff.gpickle')))
+            filediff = os.path.join(path, 'ddiff.gpickle')
+            ddiff = read_gpickle(filediff)
+            setattr(self, 'ddiff', ddiff)
             setattr(self, 'lnss', read_gpickle(
                 os.path.join(path, 'lnss.gpickle')))
         setattr(self, 'dca', read_gpickle(os.path.join(path, 'dca.gpickle')))
@@ -7775,9 +7777,10 @@ class Layout(pro.PyLayers):
 
 
                 ipoints = [x for x in i2 if len(x)==1 ]
+                
                 #ipoints = filter(lambda x: len(x) == 1, i2)
                 # pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
-                pipoints = np.array([Gspos(ip) for ip in ipoints]).T
+                pipoints = np.array([Gspos(ip[0]) for ip in ipoints]).T
                 # filter tuple (R | T)
                 #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
@@ -7797,6 +7800,7 @@ class Layout(pro.PyLayers):
                 # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
                 # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
                 # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
+                pdb.set_trace()
                 nb_nstr0 = s2pu[nstr0,:]
                 nb_nstr1 = s2pu[nstr1,:]
                 # common_point = np.intersect1d(nb_nstr0,nb_nstr1)
@@ -7909,7 +7913,7 @@ class Layout(pro.PyLayers):
                 #
 
                 # output = nx.neighbors(self.Gi, (nstr1,))
-                uout = self.Gi.no.index((nstr1,))
+                uout = self.Gi_no.index((nstr1,))
                 ui = np.where(A[uout,:]!=0)[0]
                 output = [self.Gi_no[u] for u in ui]
                 
@@ -11201,7 +11205,7 @@ def outputGi_func(args):
         #
 
         # output = nx.neighbors(self.Gi, (nstr1,))
-        uout = Gi.no.index((nstr1,))
+        uout = Gi_no.index((nstr1,))
         ui = np.where(Gi_A[uout,:]!=0)[0]
         output = [Gi_no[u] for u in ui]
 
