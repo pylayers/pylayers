@@ -236,6 +236,7 @@ class Layout(pro.PyLayers):
         loadini = False
         loadosm = False
         loadres = False
+       
         #
         # Layout main argument
         #   If no .ini extension provided it is added
