@@ -1893,6 +1893,7 @@ class Layout(pro.PyLayers):
                                    offset=offset,
                                    z=z)
 
+            # TODO : exploit iso for segment completion 
             # #
             # # Complement single segment which do not reach zceil or zfloor with
             # # an iso segment with _AIR property
@@ -1909,7 +1910,7 @@ class Layout(pro.PyLayers):
             #                            offset=offset,
             #                            z=(self.zfloor,z[0]))
 
-        pdb.set_trace()
+       
         self.boundary()
         
         # compliant with config file without  material/slab information
