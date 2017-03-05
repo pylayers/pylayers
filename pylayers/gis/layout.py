@@ -7233,6 +7233,8 @@ class Layout(pro.PyLayers):
             default False
         diffraction : boolean
             activate diffraction 
+        verbose : boolean 
+        tqdmpos : progressbar
 
         Examples
         --------
@@ -7284,6 +7286,7 @@ class Layout(pro.PyLayers):
                     lair  = lair1 + lair2
 
                     airwalls = filter(lambda x: x in lair, nseg_single)
+
                     if diffraction:
                         ndiff = [x for x in npt if x in self.ddiff.keys()]
                     #
@@ -7335,8 +7338,7 @@ class Layout(pro.PyLayers):
                     #    iii) all valid diffraction points see segments non aligned
                     #    with adjascent segments
                     if diffraction:
-                        ndiffvalid = [
-                            x for x in ndiff if icycle in self.ddiff[x][0]]
+                        ndiffvalid = [ x for x in ndiff if icycle in self.ddiff[x][0]]
 
                         # non adjascent segment of vnodes see valid diffraction
                         # points
