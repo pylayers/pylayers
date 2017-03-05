@@ -360,7 +360,7 @@ class Layout(pro.PyLayers):
         st = st + "----------------\n\n"
         st = st + "Number of points  : " + str(self.Np) + "\n"
         st = st + "Number of segments  : " + str(self.Ns) + "\n"
-        st = st + "Number of sub segments  : " + str(self.Nss) + "\n"
+        st = st + "Number of iso segments  : " + str(len(self.lsss)) + "\n"
         st = st + "Number of cycles  : " + str(len(self.Gt.node)) + "\n"
         st = st + "Number of rooms  : " + str(len(self.Gr.node)) + "\n"
         if hasattr(self, 'degree'):
@@ -412,6 +412,7 @@ class Layout(pro.PyLayers):
         # st = st + "Point p in Gs => p_coord:\n"
         # #st = st + "p -> u = self.iupnt[-p] -> p_coord = self.pt[:,u]\n\n"
         st = st + "Segment s in Gs => s_ab coordinates \n"
+        st = st + "s2pc : segment to point coordinates (sparse) [p1,p2] = L.s2pc.toarray().reshape(2,2).T \n"
         st = st + \
             "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         return(st)
@@ -3952,6 +3953,8 @@ class Layout(pro.PyLayers):
         >>> aseg = np.array([1,3,6])
         >>> pt =  L.seg2pts(aseg)
 
+        OBSOLETE : Use self.s2pc instead
+
         """
 
         if not isinstance(aseg, np.ndarray):
@@ -4661,24 +4664,27 @@ class Layout(pro.PyLayers):
         if ((len(int0) > 1) & (len(int1) > 1)):
             nstr0 = int0[0]
             nstr1 = int1[0]
-            output = self.Gi.edge[int0][int1]['output']
-            print(" output ", output)
-            ltup = filter(lambda x: type(x) == tuple, output.keys())
-            lref = filter(lambda x: len(x) == 2, ltup)
-            ltran = filter(lambda x: len(x) == 3, ltup)
-            lseg = np.unique(np.array(map(lambda x: x[0], output.keys())))
-            probR = np.array(map(lambda x: output[x], lref))
-            segR = np.array(map(lambda x: x[0], lref))
-            probT = np.array(map(lambda x: output[x], ltran))
-            segT = np.array(map(lambda x: x[0], lref))
-            dprobR = dict(zip(segR, probR))
-            dprobT = dict(zip(segT, probT))
+            e01 = self.Gi.edge[int0][int1]
+            lseg = []
+            if e01.has_key('output'):
+                output = e01['output']
+                print(" output ", output)
+                ltup = filter(lambda x: type(x) == tuple, output.keys())
+                lref = filter(lambda x: len(x) == 2, ltup)
+                ltran = filter(lambda x: len(x) == 3, ltup)
+                lseg = np.unique(np.array(map(lambda x: x[0], output.keys())))
+                probR = np.array(map(lambda x: output[x], lref))
+                segR = np.array(map(lambda x: x[0], lref))
+                probT = np.array(map(lambda x: output[x], ltran))
+                segT = np.array(map(lambda x: x[0], lref))
+                dprobR = dict(zip(segR, probR))
+                dprobT = dict(zip(segT, probT))
             # print" Sum pR : ",sum(dprobR.values())
             # print" Sum pT : ",sum(dprobT.values())
             # print"lseg", lseg
             # termination points from seg0 and seg1
-            pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
-            pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
+            pseg0 = self.s2pc[nstr0].toarray().reshape(2, 2).T
+            pseg1 = self.s2pc[nstr1].toarray().reshape(2, 2).T
             #
             # create the cone seg0 seg1
             #
@@ -4688,7 +4694,7 @@ class Layout(pro.PyLayers):
             # show Gt
             self.display['thin'] = True
             self.display['subseg'] = False
-            fig, ax = self.showGs()
+            fig, ax = self.showG('s',aw=1,labels=True)
             fig, ax = cn.show(fig=fig, ax=ax)
             for nse in lseg:
                 ta, he = self.Gs.neighbors(nse)
@@ -7677,17 +7683,18 @@ class Layout(pro.PyLayers):
 
         def Gspos(n):
             if n>0:
-                return np.mean(s2pc[n].reshape(2,2),axis=0)
+                return np.mean(self.s2pc[n].toarray().reshape(2,2),axis=0)
             else:
-                return p2pc[-n]
+                return self.p2pc[-n].toarray()
 
-        s2pc = self.s2pc.toarray()
-        s2pu = self.s2pu.toarray()
-        p2pc = self.p2pc.toarray()
-        A = self.Gi_A.toarray()
+        #s2pc = self.s2pc.toarray()
+        #s2pu = self.s2pu.toarray()
+        #p2pc = self.p2pc.toarray()
+        #A = self.Gi_A.toarray()
+        
         assert('Gi' in self.__dict__)
 
-        oGipbar=pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
+        oGipbar = pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
         # loop over all edges of Gi
         Nedges = len(self.Gi.edges())
         cpt = 100./Nedges
@@ -7698,8 +7705,8 @@ class Layout(pro.PyLayers):
             # extract  both termination interactions nodes
             if verbose:
                 oGipbar.update(cpt)
-            i0 = e[0]
-            i1 = e[1]
+            i0 = e[0]  # first interaction 
+            i1 = e[1]  # central interaction
             nstr0 = i0[0]
             nstr1 = i1[0]
 
@@ -7710,7 +7717,7 @@ class Layout(pro.PyLayers):
             if nstr1 > 0:
                 # central interaction is a segment
                 # pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
-                pseg1 = s2pc[nstr1,:].reshape(2, 2).T
+                pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
                 # pseg1 = self.s2pc[nstr1,:].data.reshape(2, 2).T
                 # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
 
@@ -7719,7 +7726,7 @@ class Layout(pro.PyLayers):
                 # if starting from segment
                 if nstr0 > 0:
                     # pseg0 = self.s2pc[nstr0,:].toarray().reshape(2, 2).T
-                    pseg0 = s2pc[nstr0,:].reshape(2, 2).T
+                    pseg0 = self.s2pc[nstr0,:].toarray().reshape(2, 2).T
                     # pseg0 = self.s2pc[nstr0,:].data.reshape(2, 2).T
                     # pseg0o = self.seg2pts(nstr0).reshape(2, 2).T
 
@@ -7732,13 +7739,13 @@ class Layout(pro.PyLayers):
                         cn.from2csegs(pseg0, pseg1)
                 # if starting from a point
                 else:
-                    pt = Gspos(nstr0)
+                    pt = Gspos(nstr0)[0,:]
                     # pt = np.array(self.Gs.pos[nstr0])
                     cn.fromptseg(pt, pseg1)
 
                 # list all potential successors of interaction i1
                 ui2 = self.Gi_no.index(i1)
-                ui = np.where(A[ui2,:]!=0)[0]
+                ui = np.where(self.Gi_A[ui2,:]!=0)[0]
                 i2 = [self.Gi_no[u] for u in ui]
                 # i2 = nx.neighbors(self.Gi, i1)
 
@@ -7775,18 +7782,25 @@ class Layout(pro.PyLayers):
                 # nb_nstr1 = np.array([self.s2pu[nstr1,0],self.s2pu[nstr1,1]])
                 # nb_nstr0 = self.s2pu[nstr0,:].toarray()[0]
                 # nb_nstr1 = self.s2pu[nstr1,:].toarray()[0]
-                pdb.set_trace()
-                nb_nstr0 = s2pu[nstr0,:]
-                nb_nstr1 = s2pu[nstr1,:]
+                
+                # first interaction is a point
+                if nstr0<0:
+                    nb_nstr0 = [nstr0]
+                else:
+                    nb_nstr0 = self.s2pu[nstr0,:].toarray()[0,:]
+                nb_nstr1 = self.s2pu[nstr1,:].toarray()[0,:]
                 # common_point = np.intersect1d(nb_nstr0,nb_nstr1)
                 common_point = np.array([x for x in nb_nstr0 if x in nb_nstr1])
+                #print(common_point)
+
                 # if len(common_point) == 1:
+                #     pdb.set_trace()
                 if common_point.any():
                     num0 = [x for x in nb_nstr0 if x != common_point]
                     num1 = [x for x in nb_nstr1 if x != common_point]
-                    p0 = Gspos(num0[0])
-                    p1 = Gspos(num1[0])
-                    pc = Gspos(common_point[0])
+                    p0 = Gspos(num0[0])[0,:]
+                    p1 = Gspos(num1[0])[0,:]
+                    pc = Gspos(common_point[0])[0,:]
 
                     v0 = p0-pc 
                     v1 = p1-pc 
@@ -7802,7 +7816,7 @@ class Layout(pro.PyLayers):
                     li1 = len(i1)
 
                     # points = self.s2pc[isegments,:].toarray().T
-                    points = s2pc[isegments,:].T
+                    points = self.s2pc[isegments,:].toarray().T
                     # points = self.s2pc[isegments,:].data.reshape(4,len(isegments))
                     # pointso = self.seg2pts(isegments)
 
@@ -7889,14 +7903,17 @@ class Layout(pro.PyLayers):
 
                 # output = nx.neighbors(self.Gi, (nstr1,))
                 uout = self.Gi_no.index((nstr1,))
-                ui = np.where(A[uout,:]!=0)[0]
+                ui = np.where(self.Gi_A[uout,:].toarray()!=0)[0]
                 output = [self.Gi_no[u] for u in ui]
                 
                 nout = len(output)
                 probint = np.ones(nout)  # temporarybns
-                dintprob = {k: v for k, v in zip(output, probint)}
+                dintprob = {k: v for k, v in zip(output,probint)}
 
-            self.Gi.add_edge(i0, i1, output=dintprob)
+            try:
+                self.Gi.add_edge(i0, i1, output=dintprob)
+            except:
+                pass
 
 
     def outputGi_mp(self):
