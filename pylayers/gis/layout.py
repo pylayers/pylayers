@@ -7252,6 +7252,7 @@ class Layout(pro.PyLayers):
         cpt = 1./(len(self.Gt.node) + 1.)
         
         for icycle in self.Gt.node:
+            print(icycle)
             if verbose:
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
