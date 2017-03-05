@@ -7223,7 +7223,7 @@ class Layout(pro.PyLayers):
 
         self.Gv = Gv
 
-    def buildGv(self, show=False,diffraction=False,verbose=False,tqdmpos=0):
+    def buildGv(self, show=False,verbose=False,tqdmpos=0):
         """ build visibility graph
 
         Parameters
@@ -7251,7 +7251,8 @@ class Layout(pro.PyLayers):
         This method exploits cycles convexity.
 
         """
-
+        if not hasattr(self,'ddiff'):
+            self.ddiff={}
         Gvpbar = pbar(verbose,total=100., desc ='build Gv',position=tqdmpos)
 
         self.Gv = nx.Graph()
@@ -7263,6 +7264,7 @@ class Layout(pro.PyLayers):
         cpt = 1./(len(self.Gt.node) + 1.)
         
         for icycle in self.Gt.node:
+            print(icycle)
             if verbose:
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
@@ -7287,8 +7289,8 @@ class Layout(pro.PyLayers):
 
                     airwalls = filter(lambda x: x in lair, nseg_single)
 
-                    if diffraction:
-                        ndiff = [x for x in npt if x in self.ddiff.keys()]
+                    #if diffraction:
+                    ndiff = [x for x in npt if x in self.ddiff.keys()]
                     #
                     # Create a graph
                     #
@@ -7337,46 +7339,46 @@ class Layout(pro.PyLayers):
                     #    ii) all non adjascent valid diffraction points see each other
                     #    iii) all valid diffraction points see segments non aligned
                     #    with adjascent segments
-                    if diffraction:
-                        ndiffvalid = [ x for x in ndiff if icycle in self.ddiff[x][0]]
+                    #if diffraction:
+                    ndiffvalid = [ x for x in ndiff if icycle in self.ddiff[x][0]]
 
                         # non adjascent segment of vnodes see valid diffraction
                         # points
 
-                        for idiff in ndiffvalid:
+                    for idiff in ndiffvalid:
 
-                            #import ipdb
-                            # ipdb.set_trace()
-                            # if (icycle==2) & (idiff==-2399):
-                            #     ipdb.set_trace()
+                        #import ipdb
+                        # ipdb.set_trace()
+                        # if (icycle==2) & (idiff==-2399):
+                        #     ipdb.set_trace()
 
-                            # idiff segment neighbors
-                            #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
-                            nsneigh = [x for x in 
-                                       nx.neighbors(self.Gs, idiff) 
-                                       if x in nseg_full]
-                            # segvalid : not adjascent segment
-                            seen_from_neighbors = []
+                        # idiff segment neighbors
+                        #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                        nsneigh = [x for x in 
+                                   nx.neighbors(self.Gs, idiff) 
+                                   if x in nseg_full]
+                        # segvalid : not adjascent segment
+                        seen_from_neighbors = []
 
-                            #
-                            # point to point
-                            #
-                            for npoint in ndiffvalid:
-                                if npoint != idiff:
-                                    Gv.add_edge(idiff, npoint)
+                        #
+                        # point to point
+                        #
+                        for npoint in ndiffvalid:
+                            if npoint != idiff:
+                                Gv.add_edge(idiff, npoint)
 
-                            #
-                            # All the neighbors segment in visibility which are not connected to cycle 0
-                            # and which are not neighbrs of the point idiff
-                            #
-                            for x in nsneigh:
-                                neighbx = [ y for y in nx.neighbors(Gv, x) 
-                                            if 0 not in self.Gs.node[y]['ncycles'] 
-                                            and y not in nsneigh]
-                                seen_from_neighbors += neighbx
+                        #
+                        # All the neighbors segment in visibility which are not connected to cycle 0
+                        # and which are not neighbrs of the point idiff
+                        #
+                        for x in nsneigh:
+                            neighbx = [ y for y in nx.neighbors(Gv, x) 
+                                        if 0 not in self.Gs.node[y]['ncycles'] 
+                                        and y not in nsneigh]
+                            seen_from_neighbors += neighbx
 
-                            for ns in seen_from_neighbors:
-                                Gv.add_edge(idiff, ns)
+                        for ns in seen_from_neighbors:
+                            Gv.add_edge(idiff, ns)
 
                     #
                     # Graph Gv composition
