@@ -7252,11 +7252,11 @@ class Layout(pro.PyLayers):
         cpt = 1./(len(self.Gt.node) + 1.)
         
         for icycle in self.Gt.node:
-            print(icycle)
             if verbose:
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
                 if self.indoor or not self.Gt.node[icycle]['indoor']:
+                    print(icycle)
                 
                     polyg = self.Gt.node[icycle]['polyg']
                     # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
