@@ -122,6 +122,7 @@ class Layout(pro.PyLayers):
                  _filefur='',
                  check=True,
                  build=True,
+                 diffraction=False,
                  verbose=False,
                  cartesian=True,
                  dist_m=400,
@@ -165,6 +166,7 @@ class Layout(pro.PyLayers):
         self.Np = 0
         self.Ns = 0
         self.Nss = 0
+        self.diffraction = diffraction
 
         #
         # Initializing graphs
@@ -347,22 +349,35 @@ class Layout(pro.PyLayers):
             st = st + self._filename + ' : ' + self._hash + "\n"
         else:
             st = st + self._filename + "\n"
-
+        
         if self.isbuilt:
             st = st + 'Built with : ' + self.Gt.node[0]['hash'] + "\n"
         else:
             st = st + 'Not built \n'
+        st = st + 'Type : '+ self.typ+'\n'
+        if self.diffraction:
+            st = st + 'Diffraction : Activated'+'\n'
+        else:
+            st = st + 'Diffraction : Not Activated'+'\n'
         if self.display['overlay_file'] != '':
             filename = pyu.getlong(
                 self.display['overlay_file'], os.path.join('struc', 'images'))
             st = st + "Image('" + filename + "')\n"
         st = st + "Coordinates : " + self.coordinates + "\n"
+        st = st + "----------------\n"
+        if hasattr(self,'Gs'):
+            st = st + "Gs : "+str(len(self.Gs.node))+"("+str(self.Np)+'/'+str(self.Ns)+'/'+str(len(self.lsss))+') :'+str(len(self.Gs.edges()))+'\n'
+        if hasattr(self,'Gt'):
+            st = st + "Gt : "+str(len(self.Gt.node))+' : '+str(len(self.Gt.edges()))+'\n'
+        if hasattr(self,'Gv'):
+            st = st + "Gv : "+str(len(self.Gv.node))+' : '+str(len(self.Gv.edges()))+'\n'
+        if hasattr(self,'Gi'):
+            st = st + "Gi : "+str(len(self.Gi.node))+' : '+str(len(self.Gi.edges()))+'\n'
+        if hasattr(self,'Gr'):
+            st = st + "Gr : "+str(len(self.Gr.node))+' : '+str(len(self.Gr.edges()))+'\n'
+        if hasattr(self,'Gw'):
+            st = st + "Gw : "+str(len(self.Gw.node))+' : '+str(len(self.Gw.edges()))+'\n'
         st = st + "----------------\n\n"
-        st = st + "Number of points  : " + str(self.Np) + "\n"
-        st = st + "Number of segments  : " + str(self.Ns) + "\n"
-        st = st + "Number of iso segments  : " + str(len(self.lsss)) + "\n"
-        st = st + "Number of cycles  : " + str(len(self.Gt.node)) + "\n"
-        st = st + "Number of rooms  : " + str(len(self.Gr.node)) + "\n"
         if hasattr(self, 'degree'):
             for k in self.degree:
                 if (k < 2) or (k > 3):
@@ -4974,7 +4989,7 @@ class Layout(pro.PyLayers):
 
         return fig, ax
 
-    def build(self, graph='tvirw', verbose=False,difftol=0.15,multi=False):
+    def build(self, graph='tvirw',verbose=False,diffraction=False,difftol=0.15,multi=False):
         """ build graphs
 
         Parameters
@@ -5006,23 +5021,24 @@ class Layout(pro.PyLayers):
 
         # to save graoh Gs
         self.lbltg.extend('s')
+        self.diffarction = diffraction
 
         Buildpbar = pbar(verbose,total=5,desc='Build Layout',position=0)
         
         if verbose:
             Buildpbar.update(1)
         if 't' in graph:
-            self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
+            self.buildGt(difftol=difftol,diffraction=diffraction,verbose=verbose,tqdmpos=1)
             self.lbltg.extend('t')
         if verbose:
             Buildpbar.update(1)
         if 'v' in graph:
-            self.buildGv(verbose=verbose,tqdmpos=1)
+            self.buildGv(verbose=verbose,diffraction=diffraction,tqdmpos=1)
             self.lbltg.extend('v')
         if verbose:
             Buildpbar.update(1)
         if 'i' in graph:
-            self.buildGi(verbose=verbose,tqdmpos=1)
+            self.buildGi(verbose=verbose,diffraction=diffraction,tqdmpos=1)
             #pdb.set_trace()
             if not multi:
                 self.outputGi(verbose=verbose,tqdmpos=1)
@@ -5087,16 +5103,19 @@ class Layout(pro.PyLayers):
         # save dictionnary which maps string interaction to [interaction node,
         # interaction type]
         if 't' in self.lbltg:
-            write_gpickle(getattr(self, 'ddiff'),
+            if hasattr(self,'ddiff'):
+                write_gpickle(getattr(self, 'ddiff'),
                           os.path.join(path, 'ddiff.gpickle'))
-            write_gpickle(getattr(self, 'lnss'),
+            if hasattr(self,'lnss'):
+                write_gpickle(getattr(self, 'lnss'),
                           os.path.join(path, 'lnss.gpickle'))
-        write_gpickle(getattr(self, 'dca'), os.path.join(path, 'dca.gpickle'))
+        if hasattr(self,'dca'):
+            write_gpickle(getattr(self, 'dca'), os.path.join(path, 'dca.gpickle'))
         # write_gpickle(getattr(self,'sla'),os.path.join(path,'sla.gpickle'))
         if hasattr(self, 'm'):
             write_gpickle(getattr(self, 'm'), os.path.join(path, 'm.gpickle'))
 
-    def dumpr(self, graphs='stvirw'):
+    def dumpr(self, graphs='stvirw',diffraction=False):
         """ read of given graphs
 
         Notes
@@ -5143,48 +5162,24 @@ class Layout(pro.PyLayers):
                     x for x in lseg if self.Gs.node[x]['name'] == name]
 
             self.g2npy()
-        #
-        # fixing bug #136
-        # update ncycles attributes of Gs from information in Gt
-        #
-        # for k in self.Gs.node:
-        #     if k>0:
-        #         self.Gs.node[k]['ncycles']=[]
 
-        #for k in self.Gt.node:
-        #    if k != 0:
-        #        #vnodes = self.Gt.node[k]['cycle'].cycle
-        #        self.Gt.node[k]['polyg'].setvnodes(self)
-        #        vnodes = self.Gt.node[k]['polyg'].vnodes
-        #        if vnodes[0] < 0:
-        #            self.Gt.node[k]['polyg'].vnodes = vnodes
-        #        else:
-        #            self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes, -1)
-
-        #         for inode in vnodes:
-        #             if inode > 0:   # segments
-        #                 if k not in self.Gs.node[inode]['ncycles']:
-        #                     self.Gs.node[inode]['ncycles'].append(k)
-        #                     if len(self.Gs.node[inode]['ncycles'])>2:
-        #                         printinode,self.Gs.node[inode]['ncycles']
-        #                         logging.warning('dumpr : a segment cannot relate more than 2 cycles')
-        # if ncycles is a list with only one element the other cycle is the
-        # outside region (cycle -1)
-        # for k in self.Gs.node:
-        #     if k>0:
-        #         if len(self.Gs.node[k]['ncycles'])==1:
-        #             self.Gs.node[k]['ncycles'].append(-1)
-        # load dictionnary which maps string interaction to [interactionnode,
-        # interaction type]
-        #pdb.set_trace()
         if 't' in graphs:
-            filediff = os.path.join(path, 'ddiff.gpickle')
-            ddiff = read_gpickle(filediff)
-            setattr(self, 'ddiff', ddiff)
-            setattr(self, 'lnss', read_gpickle(
-                os.path.join(path, 'lnss.gpickle')))
-        setattr(self, 'dca', read_gpickle(os.path.join(path, 'dca.gpickle')))
-        #setattr(self,'sla', read_gpickle(os.path.join(path,'sla.gpickle')))
+            if diffraction:
+                filediff = os.path.join(path, 'ddiff.gpickle')
+                if os.path.isfile(filediff):
+                    ddiff = read_gpickle(filediff)
+                    setattr(self, 'ddiff', ddiff)
+                    self.diffraction = True
+                filelnss = os.path.join(path, 'lnss.gpickle')
+                if os.path.isfile(filelnss):
+                    lnss = read_gpickle(filelnss)
+                    setattr(self, 'lnss', lnss) 
+
+        filedca = os.path.join(path, 'dca.gpickle')
+        if os.path.isfile(filedca):
+            dca = read_gpickle(filedca)
+            setattr(self, 'dca',dca) 
+
         filem = os.path.join(path, 'm.gpickle')
         if os.path.isfile(filem):
             setattr(self, 'm', read_gpickle(filem))
@@ -5587,13 +5582,16 @@ class Layout(pro.PyLayers):
         # plt.show()
         return T, map_vertices
 
-    def buildGt(self, check=True , difftol=0.01,verbose=False,tqdmpos=0):
+    def buildGt(self, check=True,diffraction=False,difftol=0.01,verbose=False,tqdmpos=0):
         """ build graph of convex cycle 
 
         Parameters
         ----------
 
         check : boolean 
+        difftol : float 
+        verbose : boolean 
+        tqdmpos : progressbar 
 
         todo :
         - add an option to only take outside polygon 
@@ -5924,16 +5922,17 @@ class Layout(pro.PyLayers):
 
         self.g2npy()
         # find diffraction points : updating self.ddiff
-        tqdmkwargs={'total':100.,'desc':'Find Diffractions','position':1}
-        self._find_diffractions(difftol=difftol,verbose=verbose,tqdmkwargs=tqdmkwargs)
-        if verbose:
+        if diffraction:
+            tqdmkwargs={'total':100.,'desc':'Find Diffractions','position':1}
+            self._find_diffractions(difftol=difftol,verbose=verbose,tqdmkwargs=tqdmkwargs)
+            if verbose:
             # print('find diffraction...Done 8/12')
-            Gtpbar.update(100./12.)
+                Gtpbar.update(100./12.)
         # list of diffraction point involving airwall
         # needs checking height in rays.to3D for constructing the 3D ray
-        pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=tqdmpos+1)
+            pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=tqdmpos+1)
 
-        self.lnss = [x for x in self.ddiff if len(
+            self.lnss = [x for x in self.ddiff if len(
             set(nx.neighbors(self.Gs, x)).intersection(set(self.lsss))) > 0]
         if verbose:
             pbartmp.update(100.)
@@ -7224,7 +7223,7 @@ class Layout(pro.PyLayers):
 
         self.Gv = Gv
 
-    def buildGv(self, show=False,verbose=False,tqdmpos=0):
+    def buildGv(self, show=False,diffraction=False,verbose=False,tqdmpos=0):
         """ build visibility graph
 
         Parameters
@@ -7232,7 +7231,8 @@ class Layout(pro.PyLayers):
 
         show : boolean
             default False
-        
+        diffraction : boolean
+            activate diffraction 
 
         Examples
         --------
@@ -7284,7 +7284,8 @@ class Layout(pro.PyLayers):
                     lair  = lair1 + lair2
 
                     airwalls = filter(lambda x: x in lair, nseg_single)
-                    ndiff = [x for x in npt if x in self.ddiff.keys()]
+                    if diffraction:
+                        ndiff = [x for x in npt if x in self.ddiff.keys()]
                     #
                     # Create a graph
                     #
@@ -7333,47 +7334,47 @@ class Layout(pro.PyLayers):
                     #    ii) all non adjascent valid diffraction points see each other
                     #    iii) all valid diffraction points see segments non aligned
                     #    with adjascent segments
+                    if diffraction:
+                        ndiffvalid = [
+                            x for x in ndiff if icycle in self.ddiff[x][0]]
 
-                    ndiffvalid = [
-                        x for x in ndiff if icycle in self.ddiff[x][0]]
+                        # non adjascent segment of vnodes see valid diffraction
+                        # points
 
-                    # non adjascent segment of vnodes see valid diffraction
-                    # points
+                        for idiff in ndiffvalid:
 
-                    for idiff in ndiffvalid:
+                            #import ipdb
+                            # ipdb.set_trace()
+                            # if (icycle==2) & (idiff==-2399):
+                            #     ipdb.set_trace()
 
-                        #import ipdb
-                        # ipdb.set_trace()
-                        # if (icycle==2) & (idiff==-2399):
-                        #     ipdb.set_trace()
+                            # idiff segment neighbors
+                            #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                            nsneigh = [x for x in 
+                                       nx.neighbors(self.Gs, idiff) 
+                                       if x in nseg_full]
+                            # segvalid : not adjascent segment
+                            seen_from_neighbors = []
 
-                        # idiff segment neighbors
-                        #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
-                        nsneigh = [x for x in 
-                                   nx.neighbors(self.Gs, idiff) 
-                                   if x in nseg_full]
-                        # segvalid : not adjascent segment
-                        seen_from_neighbors = []
+                            #
+                            # point to point
+                            #
+                            for npoint in ndiffvalid:
+                                if npoint != idiff:
+                                    Gv.add_edge(idiff, npoint)
 
-                        #
-                        # point to point
-                        #
-                        for npoint in ndiffvalid:
-                            if npoint != idiff:
-                                Gv.add_edge(idiff, npoint)
+                            #
+                            # All the neighbors segment in visibility which are not connected to cycle 0
+                            # and which are not neighbrs of the point idiff
+                            #
+                            for x in nsneigh:
+                                neighbx = [ y for y in nx.neighbors(Gv, x) 
+                                            if 0 not in self.Gs.node[y]['ncycles'] 
+                                            and y not in nsneigh]
+                                seen_from_neighbors += neighbx
 
-                        #
-                        # All the neighbors segment in visibility which are not connected to cycle 0
-                        # and which are not neighbrs of the point idiff
-                        #
-                        for x in nsneigh:
-                            neighbx = [ y for y in nx.neighbors(Gv, x) 
-                                        if 0 not in self.Gs.node[y]['ncycles'] 
-                                        and y not in nsneigh]
-                            seen_from_neighbors += neighbx
-
-                        for ns in seen_from_neighbors:
-                            Gv.add_edge(idiff, ns)
+                            for ns in seen_from_neighbors:
+                                Gv.add_edge(idiff, ns)
 
                     #
                     # Graph Gv composition
@@ -7382,7 +7383,7 @@ class Layout(pro.PyLayers):
                     self.Gv = nx.compose(self.Gv, Gv)
                     self.dGv[icycle] = Gv
 
-    def buildGi(self,verbose=False,tqdmpos=0):
+    def buildGi(self,verbose=False,diffraction=False,tqdmpos=0):
         """ build graph of interactions
 
         Notes
@@ -7480,21 +7481,25 @@ class Layout(pro.PyLayers):
             # for all >0 convex cycles
             if cy > 0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
-                # indoor = self.Gt.node[cy]['indoor']
-                #
-                # find all diffraction point involved in the cycle cy 
-                #
                 npt = []
-                for x in vnodes:
-                    if x < 0:
-                        if self.ddiff.has_key(x):
-                            for y in self.ddiff[x][0]:
-                                if y == cy:
-                                    npt.append(x)
-                
+                if diffraction:
+                    #
+                    # find all diffraction points involved in the cycle cy 
+                    #
+                    for x in vnodes:
+                        if x < 0:
+                            if self.ddiff.has_key(x):
+                                for y in self.ddiff[x][0]:
+                                    if y == cy:
+                                        npt.append(x)
+                    
                 nseg =[ k for k in vnodes if k>0 ]
-                # all segment and difraction point of the cycle
-                vnodes = nseg + npt
+                if diffraction:
+                # all segments and difraction points of the cycle
+                    vnodes = nseg + npt
+                else:
+                # only segments
+                    vnodes = nseg
 
                 for nstr in vnodes:
 
