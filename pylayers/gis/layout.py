@@ -355,12 +355,20 @@ class Layout(pro.PyLayers):
                 self.display['overlay_file'], os.path.join('struc', 'images'))
             st = st + "Image('" + filename + "')\n"
         st = st + "Coordinates : " + self.coordinates + "\n"
+        st = st + "----------------\n"
+        if hasattr(self,'Gs'):
+            st = st + "Gs : "+str(len(self.Gs.node))+"("+str(self.Np)+'/'+str(self.Ns)+'/'+str(len(self.lnss))+') :'+str(len(self.Gs.edges()))+'\n'
+        if hasattr(self,'Gt'):
+            st = st + "Gt : "+str(len(self.Gt.node))+' : '+str(len(self.Gt.edges()))+'\n'
+        if hasattr(self,'Gv'):
+            st = st + "Gv : "+str(len(self.Gv.node))+' : '+str(len(self.Gv.edges()))+'\n'
+        if hasattr(self,'Gi'):
+            st = st + "Gi : "+str(len(self.Gi.node))+' : '+str(len(self.Gi.edges()))+'\n'
+        if hasattr(self,'Gr'):
+            st = st + "Gr : "+str(len(self.Gr.node))+' : '+str(len(self.Gr.edges()))+'\n'
+        if hasattr(self,'Gw'):
+            st = st + "Gw : "+str(len(self.Gw.node))+' : '+str(len(self.Gw.edges()))+'\n'
         st = st + "----------------\n\n"
-        st = st + "Number of points  : " + str(self.Np) + "\n"
-        st = st + "Number of segments  : " + str(self.Ns) + "\n"
-        st = st + "Number of sub segments  : " + str(self.Nss) + "\n"
-        st = st + "Number of cycles  : " + str(len(self.Gt.node)) + "\n"
-        st = st + "Number of rooms  : " + str(len(self.Gr.node)) + "\n"
         if hasattr(self, 'degree'):
             for k in self.degree:
                 if (k < 2) or (k > 3):
