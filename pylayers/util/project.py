@@ -164,6 +164,7 @@ pstruc['DIROSM'] =os.path.join('struc','osm')
 pstruc['DIRFUR'] = os.path.join('struc','furnitures')
 pstruc['DIRIMAGE'] = os.path.join('struc','images')
 pstruc['DIRPICKLE'] = os.path.join('struc','gpickle')
+pstruc['DIRRES'] = os.path.join('struc','res')
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
 pstruc['DIRMAT'] = 'ini'
@@ -283,16 +284,20 @@ for nm,nv in pstruc.items():
 # copy files from /data/ini in project directory
 #
 
+# IF new file taype is added :
+# 1 - add the directory path to pstruc['DIRFILETYPE'] = os.path.join('path','to','filetype')
+# 2 - add the directory path to dirlist( just below)
+
 if basename != os.path.join(pylayersdir,'data'):
     if not 'win' in sys.platform:
-        dirlist=['ini','struc','struc/furnitures'
+        dirlist=['ini','struc/furnitures'
         ,'struc/osm','struc/wrl','struc/res'
         ,'struc/images','struc/ini'
         ,'ant','output/Tx001','output'
         ,'geom','output/r2d'
         ,'output/r3d','body','body/c3d','body/wear']
     else :
-        dirlist=['ini','struc',os.path.join('struc','furnitures')
+        dirlist=['ini',os.path.join('struc','furnitures')
         ,os.path.join('struc','osm')
         ,os.path.join('struc','wrl')
         ,os.path.join('struc','res')
@@ -315,7 +320,6 @@ if basename != os.path.join(pylayersdir,'data'):
                     shutil.copy(
                         os.path.join(pylayersdir,'data',dl,fi),
                         os.path.join(basename,dl,fi))
-
 ##
 os.chdir(currentdir)
 ## set seaborn style
