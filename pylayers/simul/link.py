@@ -374,6 +374,7 @@ class DLink(Link):
                    'save_idx':0,
                    'force_create':False,
                    'verbose':False,
+                   'seed':0,
                    'graph':'tcvirw'
                 }
 
@@ -460,7 +461,10 @@ class DLink(Link):
             lE = self.L.Gi.edges()
             for k in range(len(lE)):
                 e = lE[k]
-                output = self.L.Gi.edge[e[0]][e[1]]['output']
+                try:
+                    output = self.L.Gi.edge[e[0]][e[1]]['output']
+                except:
+                    pdb.set_trace()
                 for l in output.keys():
                     if l in lTi:
                         del output[l]
@@ -477,10 +481,23 @@ class DLink(Link):
         #
         ###########
         nodes = self.L.Gt.nodes()
-        nodes = [n for n in nodes if n!=0 and self.L.Gt.node[n]['indoor']]
+        #
+        # pick the point outside building if Layout.indoor not activated 
+        #
+        if not self.L.indoor:
+            nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+        else:
+            nodes = [n for n in nodes if n!=0 ]
+        
+        # draw the link extremities randomly
+
+        np.random.seed(self.seed)
+        ia = np.random.randint(0,len(nodes))    
+        ib = np.random.randint(0,len(nodes))    
+
+
         if len(self.a)==0:
-            self.ca = nodes[0]
-            # self.a = self.L.cy2pt(self.ca)
+            self.ca = nodes[ia]
         else:
             if len(kwargs['a']) ==2:
                 a=np.r_[kwargs['a'],1.0]
@@ -490,11 +507,7 @@ class DLink(Link):
             self.a = a
 
         if len(self.b)==0:
-            if len(self.L.Gt.node)>2:
-                self.cb = nodes[1]
-            else:
-                self.cb = nodes[0]
-            self.b = self.L.cy2pt(self.cb)
+            self.cb = nodes[ib]
         else:
             if len(kwargs['b']) ==2:
                 b=np.r_[kwargs['b'],1.0]

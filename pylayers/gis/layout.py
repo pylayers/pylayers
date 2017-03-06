@@ -113,6 +113,100 @@ class Layout(pro.PyLayers):
 
     This class uses `networkx` to store Layout information
 
+    Graphs
+    ------
+    Gs : structure
+    Gt : topology 
+    Gv : visibility
+    Gi : interaction
+    Gr : room  
+    Gm :  
+    Gw : ways 
+
+    Integer
+    -------
+    Np
+    Ns 
+    Nss 
+
+    Tuple
+    -----
+    ax  : (xmin,ymin,xmax,ymax)
+    axn : (0,Dx,0,Dy)
+
+    filefur 
+    filegeom
+    filematini
+    fileslabini 
+    hasboundary
+    segboundary 
+    min_sx
+    min_sy
+    max_sx 
+    max_sy 
+    labels 
+    lbltg 
+    lboundary 
+    listtransition 
+    loadosm
+    lsss
+    name 
+    normal
+    p2pc
+    pg
+
+    array
+    -----
+    pt : points coordinates  
+    tahe : segment tail head 
+    tgs : graph to segment
+    tsg : segment to graph 
+    upnt : array of point index
+
+    sparse array
+    ------------
+
+    s2pc : segment to point coordinates
+    s2pu : segment to point index
+    sgsg 
+
+    Slabs
+    -----
+    sl 
+
+
+    String
+    ------
+    typ  : 'floorplan' | 'outdoor'
+    coordinates : 'cart','lonlat'
+    version
+    _filename 
+    _hash
+
+    Dictionnaries
+    -------------
+
+    _shseg : keys / segment index 
+             values / shapely LineString
+    dca    : keys / Gt node 
+             values / list of air wall 
+    degree : keys / point degree
+             values / array of index 
+    display : dictionnary for controling various visualization
+    dsseg : 
+
+    boolean 
+    -------
+    indoor
+    isbuilt 
+    diffraction 
+
+    heights
+    -------
+    maxheight
+    zceil 
+    zfloor 
+    zmin
 
     """
 
@@ -352,9 +446,12 @@ class Layout(pro.PyLayers):
         
         if self.isbuilt:
             st = st + 'Built with : ' + self.Gt.node[0]['hash'] + "\n"
-        else:
-            st = st + 'Not built \n'
         st = st + 'Type : '+ self.typ+'\n'
+        if self.indoor:
+            st = st + 'Indoor : Activated'+'\n'
+        else:
+            st = st + 'Indoor : Not activated'+'\n'
+
         if self.diffraction:
             st = st + 'Diffraction : Activated'+'\n'
         else:
@@ -731,12 +828,12 @@ class Layout(pro.PyLayers):
                     print("It exists degree 1 points : %r" % deg1)
                     f, a = self.pltvnodes(deg1, fig=f, ax=a)
 
-            self.deg = {}
-            for deg in range(degmax + 1):
-                num = filter(lambda x: degpnt[x] == deg, range(
-                    len(degpnt)))  # position of degree 1 point
-                npt = map(lambda x: upnt[x], num)  # number of degree 1 points
-                self.deg[deg] = npt
+            # self.deg = {}
+            # for deg in range(degmax + 1):
+            #     num = filter(lambda x: degpnt[x] == deg, range(
+            #         len(degpnt)))  # position of degree 1 point
+            #     npt = map(lambda x: upnt[x], num)  # number of degree 1 points
+            #     self.deg[deg] = npt
 
             #
             # check if there are duplicate points or segments
@@ -5024,7 +5121,7 @@ class Layout(pro.PyLayers):
         self.diffarction = diffraction
 
         Buildpbar = pbar(verbose,total=5,desc='Build Layout',position=0)
-        
+
         if verbose:
             Buildpbar.update(1)
         if 't' in graph:
@@ -5033,7 +5130,7 @@ class Layout(pro.PyLayers):
         if verbose:
             Buildpbar.update(1)
         if 'v' in graph:
-            self.buildGv(verbose=verbose,diffraction=diffraction,tqdmpos=1)
+            self.buildGv(verbose=verbose,tqdmpos=1)
             self.lbltg.extend('v')
         if verbose:
             Buildpbar.update(1)
@@ -7268,8 +7365,6 @@ class Layout(pro.PyLayers):
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
                 if self.indoor or not self.Gt.node[icycle]['indoor']:
-                    print(icycle)
-                
                     polyg = self.Gt.node[icycle]['polyg']
                     # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
                     # take a single segment between 2 points 
@@ -7454,8 +7549,8 @@ class Layout(pro.PyLayers):
 
                 if ((name != '_AIR') & (name != 'AIR') & (name != 'ABSORBENT')):
                     self.Gi.add_node((n, cy0))
-                    self.Gi.add_node((n, cy1))
                     self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
+                    self.Gi.add_node((n, cy1))
                     self.Gi.pos[(n, cy1)] = tuple(self.Gs.pos[n] - ln * delta)
 
                 # Through METAL or ABSORBENT there is no transmission
@@ -7499,7 +7594,7 @@ class Layout(pro.PyLayers):
                     
                 nseg =[ k for k in vnodes if k>0 ]
                 if diffraction:
-                # all segments and difraction points of the cycle
+                # all segments and diffraction points of the cycle
                     vnodes = nseg + npt
                 else:
                 # only segments
@@ -7508,7 +7603,7 @@ class Layout(pro.PyLayers):
                 for nstr in vnodes:
 
                     if nstr in self.Gv.nodes():
-                        # list 1 of intercations
+                        # list 1 of interactions
                         li1 = []
                         if nstr > 0:
                             # output cycle 
@@ -7629,6 +7724,17 @@ class Layout(pro.PyLayers):
         if verbose :
             Gipbar.update(100.)
 
+        # cleaning deadend Gi 
+        #ldelete = []
+        #if not self.indoor:
+        #    for k in self.Gi.node.keys():
+        #        if len(k)>1:
+        #            cyend = k[-1] 
+        #            if self.Gt.node[cyend]['indoor']:
+        #                ldelete.append(k)
+        #print(ldelete)
+        #pdb.set_trace()
+        #self.Gi.remove_nodes_from(ldelete)
         # build adjacency matrix of Gi graph
         self.Gi_A = nx.adjacency_matrix(self.Gi)
         #store list of nodes of Gi ( for keeping order)
@@ -7754,7 +7860,7 @@ class Layout(pro.PyLayers):
 
                 # list all potential successors of interaction i1
                 ui2 = self.Gi_no.index(i1)
-                ui = np.where(self.Gi_A[ui2,:]!=0)[0]
+                ui = np.where(self.Gi_A[ui2,:].toarray()!=0)[0]
                 i2 = [self.Gi_no[u] for u in ui]
                 # i2 = nx.neighbors(self.Gi, i1)
 

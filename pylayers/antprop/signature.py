@@ -3442,9 +3442,10 @@ class Signatures(PyLayers,dict):
                                 # print visited,len(stack),cptsig  
                                 # print '    ',cptsig,zip(anstr,typ),ratio
                             # move forward even when arrived in the target cycle
-                            
-                            outint = Gi[visited[-2]][interaction]['output'].keys()
-                        
+                            try: 
+                                outint = Gi[visited[-2]][interaction]['output'].keys()
+                            except:
+                                pdb.set_trace()
                             #outint = nx.neighbors(self.L.Gi,interaction)
                             # proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
