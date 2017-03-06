@@ -7852,8 +7852,6 @@ class Layout(pro.PyLayers):
                 # central interaction is a segment
                 # pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
                 pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
-                import ipdb
-                ipdb.set_trace()
                 # pseg1 = self.s2pc[nstr1,:].data.reshape(2, 2).T
                 # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
 
