@@ -38,6 +38,32 @@ import hashlib
 from cStringIO import StringIO
 import ConfigParser
 
+from multiprocessing import Pool
+from functools import partial
+
+def _pickle_method(method):
+	func_name = method.im_func.__name__
+	obj = method.im_self
+	cls = method.im_class
+	if func_name.startswith('__') and not func_name.endswith('__'): #deal with mangled names
+		cls_name = cls.__name__.lstrip('_')
+		func_name = '_' + cls_name + func_name
+	return _unpickle_method, (func_name, obj, cls)
+
+def _unpickle_method(func_name, obj, cls):
+	for cls in cls.__mro__:
+		try:
+			func = cls.__dict__[func_name]
+		except KeyError:
+			pass
+		else:
+			break
+	return func.__get__(obj, cls)
+
+import copy_reg
+import types
+copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+
 import pylayers.antprop.slab as sb
 from pylayers.util import geomutil as geu
 from pylayers.util import plotutil as plu
@@ -4883,6 +4909,8 @@ class Layout(pro.PyLayers):
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
             self.outputGi(verbose=verbose,tqdmpos=1)
+            #pdb.set_trace()
+            #self.outputGi_mp()
             self.lbltg.extend('i')
         if verbose:
             Buildpbar.update(1)
@@ -5004,15 +5032,16 @@ class Layout(pro.PyLayers):
         #     if k>0:
         #         self.Gs.node[k]['ncycles']=[]
 
-        for k in self.Gt.node:
-            if k != 0:
-                #vnodes = self.Gt.node[k]['cycle'].cycle
-                self.Gt.node[k]['polyg'].setvnodes(self)
-                vnodes = self.Gt.node[k]['polyg'].vnodes
-                if vnodes[0] < 0:
-                    self.Gt.node[k]['polyg'].vnodes = vnodes
-                else:
-                    self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes, -1)
+        #for k in self.Gt.node:
+        #    if k != 0:
+        #        #vnodes = self.Gt.node[k]['cycle'].cycle
+        #        self.Gt.node[k]['polyg'].setvnodes(self)
+        #        vnodes = self.Gt.node[k]['polyg'].vnodes
+        #        if vnodes[0] < 0:
+        #            self.Gt.node[k]['polyg'].vnodes = vnodes
+        #        else:
+        #            self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes, -1)
+
         #         for inode in vnodes:
         #             if inode > 0:   # segments
         #                 if k not in self.Gs.node[inode]['ncycles']:
@@ -5832,7 +5861,7 @@ class Layout(pro.PyLayers):
         #
         # indoor property is spread by contagion
         #
-        pbartmp = pbar(verbose,total=100., desc ='Indoor propoerties',leave=False,position=tqdmpos+1)
+        pbartmp = pbar(verbose,total=100., desc ='Indoor properties',leave=False,position=tqdmpos+1)
 
 
         visited = [0]
@@ -7540,8 +7569,6 @@ class Layout(pro.PyLayers):
                 oGipbar.update(cpt)
             i0 = e[0]
             i1 = e[1]
-            if (e[0]==(141,6,33)) and (e[1]==(23,33)):
-                pdb.set_trace()
             nstr0 = i0[0]
             nstr1 = i1[0]
 
@@ -7693,6 +7720,203 @@ class Layout(pro.PyLayers):
             self.Gi.add_edge(i0, i1, output=dintprob)
 
 
+    def outputGi_mp(self):
+        """ filter output of Gi edges
+
+        Parameters
+        ----------
+
+        L : Layout
+
+        Notes
+        -----
+
+        Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+        This function checks whether this sequence is feasible or not
+        , whatever the type of nstr0 and nstr1.
+        The feasible outputs from nstr0 to nstr1 are stored in an output field of
+        edge (nstr0,nstr1)
+
+        See Also
+        --------
+
+        pylayers.util.cone.Cone.from2seg
+        pylayers.util.cone.Cone.belong_seg
+
+
+        """
+
+
+        # assert('Gi' in self.__dict__)
+
+        # oGipbar=pbar(verbose,total=100.,leave=False,desc='OutputGi',position=tqdmpos)
+        # # loop over all edges of Gi
+        # Nedges = len(self.Gi.edges())
+        # cpt = 100./Nedges
+        # print "Gi Nedges :",Nedges
+        e = self.Gi.edges()
+        pool = Pool(32)
+        pool.map(self.outputGi_func,e)
+
+    def outputGi_func(self,e):
+       
+        # if (k%100)==0:
+        # print"edge :  ",k
+        # extract  both termination interactions nodes
+        if verbose:
+            oGipbar.update(cpt)
+        i0 = e[0]
+        i1 = e[1]
+        nstr0 = i0[0]
+        nstr1 = i1[0]
+
+        # list of authorized outputs. Initialized void
+        output = []
+        print(i0,i1)
+        # nstr1 : segment number of central interaction
+        if nstr1 > 0:
+            # central interaction is a segment
+            pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
+            # create a Cone object
+            cn = cone.Cone()
+            # if starting from segment
+            if nstr0 > 0:
+                pseg0 = self.seg2pts(nstr0).reshape(2, 2).T
+                # if nstr0 and nstr1 are connected segments
+                if (len(np.intersect1d(nx.neighbors(self.Gs, nstr0), nx.neighbors(self.Gs, nstr1))) == 0):
+                    # from 2 not connected segment
+                    cn.from2segs(pseg0, pseg1)
+                else:
+                    # from 2 connected segments
+                    cn.from2csegs(pseg0, pseg1)
+            # if starting from a point
+            else:
+                pt = np.array(self.Gs.pos[nstr0])
+                cn.fromptseg(pt, pseg1)
+
+            # list all potential successors of interaction i1
+            i2 = nx.neighbors(self.Gi, i1)
+            ipoints = [x for x in i2 if len(x)==1 ]
+            #ipoints = filter(lambda x: len(x) == 1, i2)
+            pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
+            # filter tuple (R | T)
+            #istup = filter(lambda x : type(eval(x))==tuple,i2)
+            # map first argument segment number
+            #isegments = np.unique(map(lambda x : eval(x)[0],istup))
+            isegments = np.unique(
+                filter(lambda y: y > 0, map(lambda x: x[0], i2)))
+            # if nstr0 and nstr1 are adjescent segment remove nstr0 from
+            # potential next interaction
+            # Fix 01/2017
+            # This is not always True if the angle between 
+            # the two adjascent segments is < pi/2
+            nb_nstr0 = self.Gs.neighbors(nstr0)
+            nb_nstr1 = self.Gs.neighbors(nstr1)
+            common_point = np.intersect1d(nb_nstr0,nb_nstr1)
+            if len(common_point) == 1:
+                num0 = [x for x in nb_nstr0 if x != common_point]
+                num1 = [x for x in nb_nstr1 if x != common_point]
+                p0 = np.array(self.Gs.pos[num0[0]])
+                p1 = np.array(self.Gs.pos[num1[0]])
+                pc = np.array(self.Gs.pos[common_point[0]])
+                v0 = p0-pc 
+                v1 = p1-pc 
+                v0n = v0/np.sqrt(np.sum(v0*v0))
+                v1n = v1/np.sqrt(np.sum(v1*v1))
+                if np.dot(v0n,v1n)<=0:
+                    isegments = np.array([ x for x in isegments if x != nstr0 ]) 
+                #    filter(lambda x: x != nstr0, isegments))
+            # there are one or more segments
+            if len(isegments) > 0:
+                points = self.seg2pts(isegments)
+                pta = points[0:2, :]
+                phe = points[2:, :]
+                # add difraction points
+                # WARNING Diffraction points are added only if a segment is seen
+                # it should be the case in 99% of cases
+
+                if len(ipoints) > 0:
+                    isegments = np.hstack(
+                        (isegments, np.array(ipoints)[:, 0]))
+                    pta = np.hstack((pta, pipoints))
+                    phe = np.hstack((phe, pipoints))
+
+                # cn.show()
+
+                # if i0 == (38,79) and i1 == (135,79,23):
+                #     printi0,i1
+                #     import ipdb
+                #     ipdb.set_trace()
+                # i1 : interaction T
+                if len(i1) == 3:
+                    typ, prob = cn.belong_seg(pta, phe)
+                    # if bs.any():
+                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    # if ~bs.any():
+                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+
+                # i1 : interaction R --> mirror
+                if len(i1) == 2:
+                    Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
+                    Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
+                    typ, prob = cn.belong_seg(Mpta, Mphe)
+                    # printi0,i1
+                    # if ((i0 == (6, 0)) & (i1 == (7, 0))):
+                    #    pdb.set_trace()
+                    # if bs.any():
+                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    # if ~bs.any():
+                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                    #    plt.show()
+                    #    pdb.set_trace())
+                ########
+                # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+                ###########
+                # # keep segment with prob above a threshold
+                # isegkeep = isegments[prob>0]
+                # # dict   {numint : proba}
+                # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                # 4 lines are replaced by
+                # keep segment with prob above a threshold
+                utypseg = typ != 0
+                isegkeep = isegments[utypseg]
+                # dict   {numint : proba}
+                dsegprob = {k: v for k, v in zip(isegkeep, prob[utypseg])}
+                #########
+                # output = filter(lambda x: x[0] in isegkeep, i2)
+                output = [x for x in i2 if x[0] in isegkeep]
+                # probint = map(lambda x: dsegprob[x[0]], output)
+                probint = [dsegprob[x[0]] for x in output]
+                # dict interaction : proba
+                dintprob = {k: v for k, v in zip(output, probint)}
+
+                # keep all segment above nstr1 and in Cone if T
+                # keep all segment below nstr1 and in Cone if R
+
+        else:
+            # central interaction is a point
+
+            # 1) Simple approach
+            #       output interaction are all visible interactions
+            # 2) TO BE DONE
+            #
+            #       output of the diffraction points
+            #       exploring
+            # b
+            #          + right of ISB
+            #          + right of RSB
+            #
+            #  + using the wedge cone
+            #  + using the incident cone
+            #
+
+            output = nx.neighbors(self.Gi, (nstr1,))
+            nout = len(output)
+            probint = np.ones(nout)  # temporarybns
+            dintprob = {k: v for k, v in zip(output, probint)}
+
+        return(i0,i1,dintprob)
+        #self.Gi.add_edge(i0, i1, output=dintprob)
 
     def intercy(self, ncy, typ='source'):
         """ return the list of interactions seen from a cycle
