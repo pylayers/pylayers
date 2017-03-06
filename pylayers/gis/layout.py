@@ -7743,17 +7743,22 @@ class Layout(pro.PyLayers):
         if verbose :
             Gipbar.update(100.)
 
-        # cleaning deadend Gi 
-        #ldelete = []
-        #if not self.indoor:
-        #    for k in self.Gi.node.keys():
-        #        if len(k)>1:
-        #            cyend = k[-1] 
-        #            if self.Gt.node[cyend]['indoor']:
-        #                ldelete.append(k)
-        #print(ldelete)
-        #pdb.set_trace()
-        #self.Gi.remove_nodes_from(ldelete)
+        #cleaning deadend Gi 
+        ldelete = []
+        if not self.indoor:
+           for k in self.Gi.node.keys():
+               if len(k)>1:
+                   cyend = k[-1] 
+                   if self.Gt.node[cyend]['indoor']:
+                       ldelete.append(k)
+                   if len(k) == 3:
+                        cystart = k[1]
+                        if self.Gt.node[cystart]['indoor']:
+                            ldelete.append(k)
+
+        print(ldelete)
+        # pdb.set_trace()
+        self.Gi.remove_nodes_from(ldelete)
         # build adjacency matrix of Gi graph
         self.Gi_A = nx.adjacency_matrix(self.Gi)
         #store list of nodes of Gi ( for keeping order)
