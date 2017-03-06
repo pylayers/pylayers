@@ -946,6 +946,23 @@ class Layout(pro.PyLayers):
 
         return np.setdiff1d(iseg, u)
 
+
+    def check_Gi(self):
+
+        for nit1 in self.Gi.nodes():
+            if len(nit1)>1:
+                cy1 = nit1[-1]
+                for nint2 in self.Gi[nit1].keys():
+                    if len(nint2) > 1 :
+                        assert nint2[1] == cy1
+
+
+        # for e0,e1 in self.Gi.edges():
+
+
+
+
+
     def g2npy(self,verbose=False):
         """ conversion from graphs to numpy arrays
 
@@ -7835,6 +7852,8 @@ class Layout(pro.PyLayers):
                 # central interaction is a segment
                 # pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
                 pseg1 = self.s2pc[nstr1,:].toarray().reshape(2, 2).T
+                import ipdb
+                ipdb.set_trace()
                 # pseg1 = self.s2pc[nstr1,:].data.reshape(2, 2).T
                 # pseg1o = self.seg2pts(nstr1).reshape(2, 2).T
 
