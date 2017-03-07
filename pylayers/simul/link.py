@@ -440,6 +440,7 @@ class DLink(Link):
                     }
        
         try:
+            print('Layout Graph loaded')
             self.L.dumpr()
         except:
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')

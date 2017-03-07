@@ -5290,6 +5290,8 @@ class Layout(pro.PyLayers):
                 if os.path.isfile(filelnss):
                     lnss = read_gpickle(filelnss)
                     setattr(self, 'lnss', lnss) 
+            else : 
+                self.ddiff={}
 
         filedca = os.path.join(path, 'dca.gpickle')
         if os.path.isfile(filedca):
