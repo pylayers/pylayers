@@ -533,45 +533,110 @@ class Signatures(PyLayers,dict):
 
 
 
-    def sig2inter(self,L,si = []):
+
+
+    def sig2inter(self,L,lsi = []):
         ''' convert signature to corresponding interaction in Gi
+
+            Paramters:
+            ----------
+
+            L : Layout
+            lsi : nd.array 
+                signature (2xnb_sig,sig_length)
+
+            Example:
+            --------
+
+            >>> lsi = DL.Si[3]
+            >>> DL.Si.sig2inter(DL.L,lsi)
+
+        """
+        
         '''
 
         assert L.isbuilt,  AttributeError('Layout is not built')
+        assert len(lsi)%2==0,   AttributeError('Incorrect signature(s) shape')
 
-        lsig = si.shape[1]
-        linter = []
+        
+        tlinter = []
+        for uu in range(0,len(lsi),2):
 
-        for k in range(lsig):
-
-            seg = si[0,k]
-            typ = si[1,k]
-
-            seg_cy = copy.deepcopy(L.Gs.node[seg]['ncycles'])
+            si = lsi[uu:uu+2,:]
 
 
-            if k == 0:
-                cy0 = self.source
+            lsig = si.shape[1]
+            linter = []
 
-            seg_cy.remove(cy0)
-            cy1 = seg_cy[0]
+            for k in range(lsig):
 
-            if k == (lsig -1):
-                cy1 = self.target
+                seg = si[0,k]
+                typ = si[1,k]
 
-            if typ == 1:
-                inter = (seg)
-            elif typ == 2:
-                inter = (seg,cy0)
-            elif typ == 3:
-                inter = (seg,cy0,cy1)
-                cy0 = cy1
+                seg_cy = copy.deepcopy(L.Gs.node[seg]['ncycles'])
 
 
+                if k == 0:
+                    cy0 = self.source
+
+                seg_cy.remove(cy0)
+                cy1 = seg_cy[0]
+
+                if k == (lsig -1):
+                    cy1 = self.target
+
+                if typ == 1:
+                    inter = (seg)
+                elif typ == 2:
+                    inter = (seg,cy0)
+                elif typ == 3:
+                    inter = (seg,cy0,cy1)
+                    cy0 = cy1
+                linter.append(inter)
+            tlinter.append(linter)
+        if len(lsi) == 2:
+            tlinter=tlinter[0]
+
+        return tlinter
 
 
-            linter.append(inter)
-        return linter
+    def sig2prob(self,L,lsi):
+        """ get signatures probability
+            L : Layout
+            lsi : nd.array 
+                signature (2xnb_sig,sig_length)
+
+
+            Returns
+            -------
+
+            tlproba : list  (nb_sig,sig_length-2)
+                output proba of each triplet of interaction
+
+
+
+        """
+
+
+        slsi = lsi.shape[1]
+
+        assert L.isbuilt,  AttributeError('Layout is not built')
+        assert hasattr(L,'Gi'),  AttributeError('Layout has not Gi Graph')
+        assert L.Gi.size != 0,  AttributeError('Gi Graph is empty')
+        assert len(lsi)%2==0,   AttributeError('Incorrect signature(s) shape')
+        assert slsi>=3, AttributeError('Proba available for signature with at least 3 interacitons')
+
+        linter = self.sig2inter(L,lsi)
+
+        tlproba = []
+        for inter in linter:
+            lproba = []
+            for k in range(slsi-2):
+                proba = L.Gi[inter[k]][inter[k+1]]['output'][inter[k+2]]
+                lproba.append(proba)
+            tlproba.append(lproba)
+
+        return tlproba
 
 
     def num(self):
