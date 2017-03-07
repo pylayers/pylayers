@@ -531,6 +531,49 @@ class Signatures(PyLayers,dict):
             nsig += size
         return(nsig)
 
+
+
+    def sig2inter(self,L,si = []):
+        ''' convert signature to corresponding interaction in Gi
+        '''
+
+        assert L.isbuilt,  AttributeError('Layout is not built')
+
+        lsig = si.shape[1]
+        linter = []
+
+        for k in range(lsig):
+
+            seg = si[0,k]
+            typ = si[1,k]
+
+            seg_cy = copy.deepcopy(L.Gs.node[seg]['ncycles'])
+
+
+            if k == 0:
+                cy0 = self.source
+
+            seg_cy.remove(cy0)
+            cy1 = seg_cy[0]
+
+            if k == (lsig -1):
+                cy1 = self.target
+
+            if typ == 1:
+                inter = (seg)
+            elif typ == 2:
+                inter = (seg,cy0)
+            elif typ == 3:
+                inter = (seg,cy0,cy1)
+                cy0 = cy1
+
+
+
+
+            linter.append(inter)
+        return linter
+
+
     def num(self):
         """ determine the number of signatures
         """
