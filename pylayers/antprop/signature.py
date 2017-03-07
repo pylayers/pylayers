@@ -627,7 +627,8 @@ class Signatures(PyLayers,dict):
         assert slsi>=3, AttributeError('Proba available for signature with at least 3 interacitons')
 
         linter = self.sig2inter(L,lsi)
-
+        if len(lsi) == 2:
+            linter=[linter]
         tlproba = []
         for inter in linter:
             lproba = []
@@ -3121,7 +3122,7 @@ class Signatures(PyLayers,dict):
 
 
     # @profile
-    def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1):
+    def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1,animation=False):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -3194,6 +3195,15 @@ class Signatures(PyLayers,dict):
 
         # signature counter
         cptsig = 0
+
+        if animation:
+            fig,ax = self.L.showG('s',aw=1)
+            ax.plot(self.L.Gt.pos[self.source][0],self.L.Gt.pos[self.source][1],'ob')
+            ax.plot(self.L.Gt.pos[self.target][0],self.L.Gt.pos[self.target][1],'or')
+        # import ipdb
+        # ipdb.set_trace()
+    
+
         for us,s in tqdm(enumerate(lis)):
             
             #print s
@@ -3225,6 +3235,7 @@ class Signatures(PyLayers,dict):
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                 except:
                     self[len(typ)] = np.vstack((anstr,typ))
+
                 cptsig +=1
             # stack is a list of iterators
             try:
@@ -3235,7 +3246,7 @@ class Signatures(PyLayers,dict):
             # lawp = list of airwall position in visited
             lawp = []
             # while the stack of iterators is not void
-            
+            cpt=0
             while stack: #
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
@@ -3252,6 +3263,22 @@ class Signatures(PyLayers,dict):
                 cond3 = len(visited) > (cutoff + sum(lawp))
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
+                if animation :
+                    cpt=cpt+1
+                    edge=zip(visited[:-1],visited[1:])
+                    N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,nodelist=visited,labels={},node_size=15,ax=ax,fig=fig)
+                    E = nx.draw_networkx_edges(Gi,pos=Gi.pos,edgelist=edge,labels={},width=0.1,arrows=False,ax=ax,fig=fig)
+
+                    plt.savefig('./figure/' +str(us) +'_' + str(cpt) +'.png')
+                    try:
+                        ax.collections.remove(N)
+                    except:
+                        pass
+                    try:
+                        ax.collections.remove(E)
+                    except:
+                        pass
+
                 if (not cond1):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
@@ -3309,6 +3336,7 @@ class Signatures(PyLayers,dict):
                             ik = ik + 1
                             r  = R[-ik]
                         #vlp vrpdb.set_trace()
+                        # reset ratio when diffraction encountered
                         if len(tahe)<2:
                             tha = th
                             ratio = 1.0
@@ -3546,7 +3574,32 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                                 except:
                                     self[len(typ)] = np.vstack((anstr,typ))
+
                                 cptsig +=1
+
+                                if animation:
+                                    Nf = nx.draw_networkx_nodes(Gi,pos=Gi.pos,nodelist=visited,labels={},node_color='b',node_size=40,ax=ax,fig=fig)
+                                    Ef = nx.draw_networkx_edges(Gi,pos=Gi.pos,edgelist=edge,labels={},width=0.1,arrows=False,ax=ax,fig=fig)
+                                    cpt=cpt+1
+                                    plt.savefig('./figure/' +str(us) +'_' + str(cpt) +'.png')
+                                    try:
+                                        ax.collections.remove(Nf)
+                                    except:
+                                        pass
+                                    try:
+                                        ax.collections.remove(Ef)
+                                    except:
+                                        pass
+
+                                # edge=zip(visited[:-1],visited[1:])
+                                # # dd={v:v for v in visited}
+                                # dd={}
+                                # self.L.showG('s',aw=1)
+                                # import ipdb
+                                # ipdb.set_trace()
+                                # nx.draw_networkx(Gi,pos=Gi.pos,nodelist=visited,edgelist=edge,labels=dd)
+                                # plt.savefig('./figure/' + str(cptsig) +'.png')
+                                # plt.close()
                                 # print visited,len(stack),cptsig  
                                 # print '    ',cptsig,zip(anstr,typ),ratio
                             # move forward even when arrived in the target cycle
@@ -3749,7 +3802,8 @@ class Signatures(PyLayers,dict):
                     'colsig':'black',
                     'ms':5,
                     'ctx':-1,
-                    'crx':-1
+                    'crx':-1,
+                    'aw':True
                    }
 
         for key, value in defaults.items():
