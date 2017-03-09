@@ -496,10 +496,8 @@ class DLink(Link):
         ia = np.random.randint(0,len(nodes))    
         ib = np.random.randint(0,len(nodes))    
 
-        import ipdb
-        ipdb.set_trace()
         if len(self.a)==0:
-            self.ca = nodes[nodes[ia]]
+            self.ca = nodes[ia]
         else:
             if len(kwargs['a']) ==2:
                 a=np.r_[kwargs['a'],1.0]
@@ -509,7 +507,7 @@ class DLink(Link):
             self.a = a
 
         if len(self.b)==0:
-            self.cb = nodes[nodes[ib]]
+            self.cb = nodes[ib]
         else:
             if len(kwargs['b']) ==2:
                 b=np.r_[kwargs['b'],1.0]
