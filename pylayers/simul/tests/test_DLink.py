@@ -14,8 +14,8 @@ L=Layout('defstr.ini')
 # set the link
 DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
 #DL.b = np.array([761.5,1113,1.2])
-DL.Aa=Antenna(typ='CEA_OTA.vsh3')
-DL.Ab=Antenna(typ='CEA_OTA.vsh3')
+DL.Aa=Antenna(typ='Omni')
+DL.Ab=Antenna(typ='Omni')
 
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
