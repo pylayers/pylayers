@@ -9,7 +9,7 @@ Nf = 400
 fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 # set the layout
 #L=Layout('defstr.ini',build=False)
-L=Layout('defstr.ini')
+L=Layout('defstr.ini',diffraction=True)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
 DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
