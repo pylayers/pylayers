@@ -13,8 +13,11 @@ fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 L=Layout('TC2_METIS.ini',build=False)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
-DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
+DL=DLink(L=L,fGHz=fGHz,outdoor=True,applywav=True)
+DL.L.indoor=False
 DL.L.build()
+DL.ca= 23
+DL.cb=14
 #DL.b = np.array([761.5,1113,1.2])
 DL.Aa=Antenna(typ='Omni')
 DL.Ab=Antenna(typ='Omni')
@@ -22,7 +25,7 @@ DL.Ab=Antenna(typ='Omni')
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
 #DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)
-DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=True)
+DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.9,ra_vectorized=True)
 toc = time.time()
 print(toc-tic)
 #DL.b=np.array([755,1110,1.5])

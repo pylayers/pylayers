@@ -3259,6 +3259,8 @@ class Signatures(PyLayers,dict):
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
                 cond2 = (interaction in visited) and bt
+                # cond2 = not (interaction in visited) or bt
+
                 # test the cutoff condition
                 cond3 = len(visited) > (cutoff + sum(lawp))
                 #print cond1,cond2,cond3
@@ -3281,8 +3283,11 @@ class Signatures(PyLayers,dict):
 
                 if (not cond1):
                     if (not cond2) and (not cond3):
+                    # if (cond2) and (not cond3):
                         visited.append(interaction)
-                        #print visited
+                        # print(visited)
+
+
                         # if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
                         #     pdb.set_trace()
                         
@@ -3546,22 +3551,44 @@ class Signatures(PyLayers,dict):
                             #
                             # print nstr
                             # print visited
-                            # #if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
-                            # fig ,ax = self.L.showG('s',aw=1,labels=0)
-                            # ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                            # ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+                            #if visited==[(8,6,3), (-25531299,), (98, 3, 6)]:
+                            # if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+                            if visited == [(104, 23, 17), (1, 17), (53, 17)]:
 
-                            # ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
-                            # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                            # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                            # #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                            # ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
-                            # plt.title(str(visited)+'  '+str(ratio))
-                            # ax.plot(apex[0],apex[1],'or')
-                            # plt.axis('auto')
-                            # plt.show()
+                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                plt.title(str(visited)+'  '+str(ratio))
+                                ax.plot(apex[0],apex[1],'or')
+                                plt.axis('auto')
+                                plt.show()
+                            if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+
+                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                plt.title(str(visited)+'  '+str(ratio))
+                                ax.plot(apex[0],apex[1],'or')
+                                plt.axis('auto')
+                                plt.show()
+                                import ipdb
+                                ipdb.set_trace()
                             # pdb.set_trace()
                         #print '+++ ',visited,ratio
+                        # print (ratio,threshold)
                         if ratio > threshold:
                             tahe.append(tha)
                             # 
@@ -3574,7 +3601,7 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                                 except:
                                     self[len(typ)] = np.vstack((anstr,typ))
-
+                                # print ('added',visited)
                                 cptsig +=1
 
                                 if animation:
