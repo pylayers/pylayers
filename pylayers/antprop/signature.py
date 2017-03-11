@@ -3259,6 +3259,8 @@ class Signatures(PyLayers,dict):
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
                 cond2 = (interaction in visited) and bt
+                # cond2 = not (interaction in visited) or bt
+
                 # test the cutoff condition
                 cond3 = len(visited) > (cutoff + sum(lawp))
                 #print cond1,cond2,cond3
@@ -3281,8 +3283,11 @@ class Signatures(PyLayers,dict):
 
                 if (not cond1):
                     if (not cond2) and (not cond3):
+                    # if (cond2) and (not cond3):
                         visited.append(interaction)
-                        #print visited
+                        # print(visited)
+
+
                         # if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
                         #     pdb.set_trace()
                         
@@ -3313,10 +3318,11 @@ class Signatures(PyLayers,dict):
                             #th (Npt x xy)
                             th = np.array([self.L.Gs.pos[pts[0]],
                                            self.L.Gs.pos[pts[1]]])
-                            # reverse order
+                            # reverse order (reflexion on visited[-2])
                             pts2 = self.L.Gs[visited[-2][0]].keys()
                             ta_seg = np.array(self.L.Gs.pos[pts2[0]])
                             he_seg = np.array(self.L.Gs.pos[pts2[1]])
+                            # get reflection matrix from segment visited[-2]  
                             R.append(geu.axmat(ta_seg,he_seg))
                             # direct order
                             #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
@@ -3329,6 +3335,8 @@ class Signatures(PyLayers,dict):
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
                         
+                        if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                            print("th (avant mirror)",th)
                         ik = 1
                         r = R[-ik]
                         while np.any(r[0]!=np.eye(2)):     
@@ -3410,6 +3418,15 @@ class Signatures(PyLayers,dict):
 
                                 kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
                                 apex = phe0 + kb*vl_n
+                                if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                                    print(visited)
+                                    print("th",th)
+                                    print("tahe",tahe)
+                                    print("ta_,he_",pta_,phe_)
+                                    print("vr,vl",vr_n,vl_n)
+                                    print('angle cone',angle_cone)
+                                    print(apex)
+
                             else:
                                 vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
                                 vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
@@ -3432,6 +3449,10 @@ class Signatures(PyLayers,dict):
                                 ratio = I/angle_cone
                             else:
                                 ratio = 0
+                            if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                                print(I,angle_cone,ratio)
+                                if ratio<0.1:
+                                    pdb.set_trace()
                             # 
                             # UNCOMMENT BELOW FOR DEBUG
                             #
@@ -3546,24 +3567,47 @@ class Signatures(PyLayers,dict):
                             #
                             # print nstr
                             # print visited
-                            # #if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
-                            # fig ,ax = self.L.showG('s',aw=1,labels=0)
-                            # ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                            # ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+                            #if visited==[(8,6,3), (-25531299,), (98, 3, 6)]:
+                            # if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+                            if visited == [(104, 23, 17), (1, 17), (53, 17)]:
 
-                            # ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
-                            # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                            # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                            # #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                            # ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
-                            # plt.title(str(visited)+'  '+str(ratio))
-                            # ax.plot(apex[0],apex[1],'or')
-                            # plt.axis('auto')
-                            # plt.show()
+                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                plt.title(str(visited)+'  '+str(ratio))
+                                ax.plot(apex[0],apex[1],'or')
+                                plt.axis('auto')
+                                plt.show()
+                            if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+
+                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                plt.title(str(visited)+'  '+str(ratio))
+                                ax.plot(apex[0],apex[1],'or')
+                                plt.axis('auto')
+                                plt.show()
+                                #import ipdb
+                                #ipdb.set_trace()
                             # pdb.set_trace()
                         #print '+++ ',visited,ratio
+                        # print (ratio,threshold)
                         if ratio > threshold:
-                            tahe.append(tha)
+                            #tahe.append(tha)
+                            tahe.append(th)
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -3574,7 +3618,7 @@ class Signatures(PyLayers,dict):
                                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                                 except:
                                     self[len(typ)] = np.vstack((anstr,typ))
-
+                                # print ('added',visited)
                                 cptsig +=1
 
                                 if animation:

@@ -9,13 +9,22 @@ Nf = 400
 fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 # set the layout
 #L=Layout('defstr.ini',build=False)
-L=Layout('defstr.ini',diffraction=True)
+#L=Layout('defstr.ini',diffraction=True)
+L=Layout('defstr.ini',build=False)
+#L=Layout('TC2_METIS.ini',build=False)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
-DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
+DL=DLink(L=L,fGHz=fGHz,outdoor=True,applywav=True)
+DL.L.indoor=True
+#DL.L.indoor=False
+DL.L.build()
+#DL.ca= 23
+#DL.cb=14
+DL.ca= 2
+DL.cb= 5
 #DL.b = np.array([761.5,1113,1.2])
-DL.Aa=Antenna(typ='CEA_OTA.vsh3')
-DL.Ab=Antenna(typ='CEA_OTA.vsh3')
+DL.Aa=Antenna(typ='Omni')
+DL.Ab=Antenna(typ='Omni')
 
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()

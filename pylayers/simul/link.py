@@ -496,7 +496,6 @@ class DLink(Link):
         ia = np.random.randint(0,len(nodes))    
         ib = np.random.randint(0,len(nodes))    
 
-
         if len(self.a)==0:
             self.ca = nodes[ia]
         else:

@@ -5309,6 +5309,35 @@ def get_pol_angles(poly, unit='rad', inside=True):
         return upt.astype(int), ang
 
 
+def reflection_matrix(U):
+    """ 
+    https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
+    u = np.ndarray (2,Nvec)
+
+    Returns
+    -------
+
+     M : nd array
+        (2,2,Nvec)
+
+
+    u = np.array([2,2])
+    U=np.vstack((u,u/2.,2*u)).T
+    
+
+    """
+
+    diag_term  = (U[0,:]**2)-(U[1,:]**2)
+    anti_diag = 2*U[0,:]*U[1,:]
+
+    scale = 1/np.linalg.norm(U,axis=0)**2
+
+
+    M = scale * np.array(([[diag_term, anti_diag],[anti_diag, -diag_term]]))
+
+    return M
+
+
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()

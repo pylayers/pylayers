@@ -5292,6 +5292,7 @@ class Layout(pro.PyLayers):
                     setattr(self, 'lnss', lnss) 
             else : 
                 self.ddiff={}
+                self.lnss=[]
 
         filedca = os.path.join(path, 'dca.gpickle')
         if os.path.isfile(filedca):
@@ -7588,6 +7589,13 @@ class Layout(pro.PyLayers):
         #
         # 2) Establishing link between interactions
         #
+        # Loop over all Gt nodes cy 
+        #
+        #   if cy > 0 
+        #     calculates vnodes of cycles
+        #     for all node of vnodes
+        #
+        iprint = 0 
         if verbose :
             Gipbar.update(33.)
 
@@ -7613,7 +7621,7 @@ class Layout(pro.PyLayers):
                                     if y == cy:
                                         npt.append(x)
                     
-                nseg =[ k for k in vnodes if k>0 ]
+                nseg = [ k for k in vnodes if k>0 ]
                 if diffraction:
                 # all segments and diffraction points of the cycle
                     vnodes = nseg + npt
@@ -7625,12 +7633,17 @@ class Layout(pro.PyLayers):
 
                     if nstr in self.Gv.nodes():
                         # list 1 of interactions
+                        if nstr==108:
+                            iprint = 1
+                        else: 
+                            iprint = 0
                         li1 = []
                         if nstr > 0:
                             # output cycle 
                             # cy -> cyo1 
                             cyo1 = self.Gs.node[nstr]['ncycles']
-                            cyo1 = filter(lambda x: x != cy, cyo1)[0]
+                            cyo1 = [ x for x in cyo1 if x!= cy] [0]
+                            #cyo1 = filter(lambda x: x != cy, cyo1)[0]
 
                             # R , Tin , Tout
                             if cyo1 > 0:
@@ -7654,6 +7667,11 @@ class Layout(pro.PyLayers):
                             li1 = [(nstr,)]
                         # list of cycle entities in visibility of nstr
                         lneighb = nx.neighbors(self.Gv, nstr)
+                        #if (self.Gs.node[nstr]['name']=='AIR') or (
+                        #        self.Gs.node[nstr]['name']=='_AIR'):
+                        #    lneighcy = lneighb
+                        #else:
+                        # list of cycle entities in visibility of nstr in the same cycle 
                         lneighcy = [ x for x in lneighb if x in vnodes ] 
                         # lneighcy = filter(lambda x: x in vnodes, lneighb)
 
@@ -7662,7 +7680,8 @@ class Layout(pro.PyLayers):
                                 li2 = []
                                 if nstrb > 0:
                                     cyo2 = self.Gs.node[nstrb]['ncycles']
-                                    cyo2 = filter(lambda x: x != cy, cyo2)[0]
+                                    cyo2 = [ x for x in cyo2 if x!= cy] [0]
+                                    #cyo2 = filter(lambda x: x != cy, cyo2)[0]
                                     if cyo2 > 0:
                                         if (nstrb, cy) in self.Gi.nodes():
                                             li2.append((nstrb, cy))
@@ -7682,8 +7701,9 @@ class Layout(pro.PyLayers):
 
                                 # if cy==4:
                                 #     printnstr,nstrb
-                                #     print"li1",li1
-                                #     print"li2",li2
+                                if iprint:
+                                     print("li1",li1)
+                                     print("li2",li2)
                                 
                                 for i1 in li1:
                                     # printli1
@@ -7745,7 +7765,12 @@ class Layout(pro.PyLayers):
         if verbose :
             Gipbar.update(100.)
 
-        #cleaning deadend Gi 
+        # cleaning deadend Gi 
+        # if not indoor for all nodes of Gi 
+        # if not diffraction 
+        # if termination cycle is indoor 
+        # or if strtaing point is indoor 
+        # then delte interaction 
         ldelete = []
         if not self.indoor:
            for k in self.Gi.node.keys():
@@ -7758,7 +7783,7 @@ class Layout(pro.PyLayers):
                         if self.Gt.node[cystart]['indoor']:
                             ldelete.append(k)
 
-        print(ldelete)
+        #print(ldelete)
         # pdb.set_trace()
         self.Gi.remove_nodes_from(ldelete)
         # build adjacency matrix of Gi graph
@@ -7838,8 +7863,10 @@ class Layout(pro.PyLayers):
             # extract  both termination interactions nodes
             if verbose:
                 oGipbar.update(cpt)
+
             i0 = e[0]
             i1 = e[1]
+
             nstr0 = i0[0]
             nstr1 = i1[0]
 
@@ -7922,7 +7949,11 @@ class Layout(pro.PyLayers):
                     #     ipdb.set_trace()
                     # i1 : interaction T
                     if len(i1) == 3:
-                        typ, prob = cn.belong_seg(pta, phe)
+                        if ((e[0]==(53,17)) and (e[1]==(108,17,18))):
+                            pdb.set_trace()
+                            typ, prob = cn.belong_seg(pta, phe,visu=True)
+                        else:
+                            typ, prob = cn.belong_seg(pta, phe)
                         # if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         # if ~bs.any():

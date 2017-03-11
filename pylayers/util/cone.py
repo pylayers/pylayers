@@ -22,9 +22,11 @@ The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v
 
 """
 import numpy as np
+import doctest
 import shapely as shp
 import matplotlib.pyplot as plt
 import pylayers.util.geomutil as geu
+import pylayers.util.plotutil as plu 
 from pylayers.util.project import *
 from matplotlib.path import Path
 import matplotlib.patches as patches
@@ -92,7 +94,7 @@ class Cone(PyLayers):
         self.angle = np.arccos(self.dot)
         self.pcone = self.angle/(1.0*np.pi)
 
-    def belong_seg(self,pta,phe,prob=True):
+    def belong_seg(self,pta,phe,prob=True,visu=False):
         """ test if segment belong to cone
 
 
@@ -129,6 +131,11 @@ class Cone(PyLayers):
         outside_point
 
         """
+        if visu: 
+            f,a = self.show()
+            plu.displot(pta,phe,fig=f,ax=a)
+            plt.show()
+
 
         vc  = (self.u+self.v)/2
         #vcn = vc/np.sqrt(np.dot(vc,vc))
@@ -142,8 +149,8 @@ class Cone(PyLayers):
         dtaw = np.sum(ptama*w,axis=0)
         dhew = np.sum(phema*w,axis=0)
 
-        blta = (dtaw>0)
-        blhe = (dhew>0)
+        blta = (dtaw>=0)
+        blhe = (dhew>=0)
         #if 'seg1' in self.__dict__:
         #    pa =  self.seg1[:,0].reshape(2,1)
         #    pb = (self.seg1[:,0]+w).reshape(2,1)
@@ -526,7 +533,15 @@ class Cone(PyLayers):
         -----
 
         The only way for the cone to be degenerated is when the two segments are on the same line.
+        
+        Examples
+        --------
 
+            >>> from pylayers.util.cone import *
+            >>> import matplotlib.pyplot as plt 
+            >>> cn = Cone()
+            >>> f,a = cn.show()
+            >>> plt.show()
 
         """
         # bv : (4,1)
@@ -678,11 +693,11 @@ class Cone(PyLayers):
         ax.plot([self.apex[0],self.apex[0]+kwargs['length']*self.v[0]],
                 [self.apex[1],self.apex[1]+kwargs['length']*self.v[1]],lw=1,color='r')
         theta1 = np.arctan2(self.u[1],self.u[0])*180/np.pi
-        print theta1
+        #print theta1
         theta2 = np.arctan2(self.v[1],self.v[0])*180/np.pi
-        print theta2
+        #print theta2
         angle = self.angle*180/np.pi
-        print angle
+        #print angle
         arc = patches.Arc((self.apex[0],self.apex[1]),kwargs['length'],kwargs['length'],theta1=theta1,theta2=theta2,linewidth=2)
         ax.add_patch(arc)
         if 'seg0' in self.__dict__:
