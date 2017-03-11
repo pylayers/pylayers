@@ -3335,8 +3335,8 @@ class Signatures(PyLayers,dict):
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
                         
-                        if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                            print("th (avant mirror)",th)
+                        #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                        #    print("th (avant mirror)",th)
                         ik = 1
                         r = R[-ik]
                         while np.any(r[0]!=np.eye(2)):     
@@ -3418,14 +3418,14 @@ class Signatures(PyLayers,dict):
 
                                 kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
                                 apex = phe0 + kb*vl_n
-                                if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                                    print(visited)
-                                    print("th",th)
-                                    print("tahe",tahe)
-                                    print("ta_,he_",pta_,phe_)
-                                    print("vr,vl",vr_n,vl_n)
-                                    print('angle cone',angle_cone)
-                                    print(apex)
+                                #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                                #    print(visited)
+                                #    print("th",th)
+                                #    print("tahe",tahe)
+                                #    print("ta_,he_",pta_,phe_)
+                                #    print("vr,vl",vr_n,vl_n)
+                                #    print('angle cone',angle_cone)
+                                #    print(apex)
 
                             else:
                                 vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
@@ -3449,10 +3449,10 @@ class Signatures(PyLayers,dict):
                                 ratio = I/angle_cone
                             else:
                                 ratio = 0
-                            if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                                print(I,angle_cone,ratio)
-                                if ratio<0.1:
-                                    pdb.set_trace()
+                            #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                            #    print(I,angle_cone,ratio)
+                            #    if ratio<0.1:
+                            #        pdb.set_trace()
                             # 
                             # UNCOMMENT BELOW FOR DEBUG
                             #

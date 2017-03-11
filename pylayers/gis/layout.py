@@ -4784,70 +4784,130 @@ class Layout(pro.PyLayers):
             edge number
 
         """
+        defaults = {'seed':1,
+                    'alpha':0.4,
+                    'sig':[],
+                    'ninter':0,
+                    'node_size':30,
+                    'inter':[]}
+        for k in defaults: 
+            if k not in kwargs:
+                kwargs[k]=defaults[k] 
 
+        edges = self.Gi.edges()
+
+        if kwargs['sig']!=[]:
+            sig = kwargs['sig']
+            edgelist = zip(sig[0:-1],sig[1:])
+        elif kwargs['inter']!=[]:
+            edinter = kwargs['inter']
+            outlist = self.Gi[edinter[0]][edinter[1]]['output']
+            outprob = outlist.values()
+            edgelist = [(edinter[1],x) for x in outlist] 
+            dprob = dict(zip(edgelist,[str(x) for x in outprob]))
+        elif kwargs['ninter']!=[]:
+            edinter = edges[kwargs['ninter']]
+            outlist = self.Gi[edinter[0]][edinter[1]]['output']
+            outprob = outlist.values()
+            edgelist = [(edinter[1],x) for x in outlist] 
+            dprob = dict(zip(edgelist,[str(x) for x in outprob]))
+        else:
+            pass
+
+
+        ns = kwargs['node_size']
+        np.random.seed(kwargs['seed'])
+        fig = plt.figure(figsize=(20,10))
+        ax1 = plt.subplot(121)
+        pos = nx.spring_layout(self.Gi)
+        nx.draw_networkx_nodes(self.Gi,pos,nodelist=[x for x in self.Gi.nodes() if len(x)==1],
+                node_color='r',node_size=ns,ax=ax1,alpha=kwargs['alpha'])
+        nx.draw_networkx_nodes(self.Gi,pos,nodelist=[x for x in self.Gi.nodes() if len(x)==2],
+                node_color='b',node_size=ns,ax=ax1,alpha=kwargs['alpha'])
+        nx.draw_networkx_nodes(self.Gi,pos,nodelist=[x for x in self.Gi.nodes() if len(x)==3],
+                node_color='g',node_size=ns,ax=ax1,alpha=kwargs['alpha'])
+        nx.draw_networkx_edges(self.Gi,pos,edgelist=self.Gi.edges(),width=.1,edge_color='k',arrow=False,ax=ax1)
+        if (kwargs['sig']==[]):
+            nx.draw_networkx_edges(self.Gi,pos,edgelist=[edinter],width=2,edge_color='g',arrow=False,ax=ax1)
+        nx.draw_networkx_edges(self.Gi,pos,edgelist=edgelist,width=2,edge_color='r',arrow=False,ax=ax1)
+        ax2 = plt.subplot(122)
+        fig,ax2 = self.showG('s',aw=1,ax=ax2)
+        nx.draw_networkx_nodes(self.Gi,self.Gi.pos,nodelist=[x for x in self.Gi.nodes() if len(x)==1],
+                node_color='r',node_size=ns,ax=ax2,alpha=kwargs['alpha'])
+        nx.draw_networkx_nodes(self.Gi,self.Gi.pos,nodelist=[x for x in self.Gi.nodes() if len(x)==2],
+                node_color='b',node_size=ns,ax=ax2,alpha=kwargs['alpha'])
+        nx.draw_networkx_nodes(self.Gi,self.Gi.pos,nodelist=[x for x in self.Gi.nodes() if len(x)==3],
+                node_color='g',node_size=ns,ax=ax2,alpha=kwargs['alpha'])
+        nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=self.Gi.edges(),width=.1,edge_color='k',arrow=False,ax=ax2)
+        if (kwargs['sig']==[]):
+            nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=[edinter],width=2,edge_color='g',arrow=False,ax=ax2)
+        nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=edgelist,width=2,edge_color='r',arrow=False,ax=ax2)
+        #pdb.set_trace()
+        if (kwargs['sig']==[]):
+            nx.draw_networkx_edge_labels(self.Gi,self.Gi.pos,edge_labels=dprob,fontsize=14,ax=ax2)
         # interactions corresponding to edge en
-        int0, int1 = self.Gi.edges()[kwargs['en']]
-
-        print("int0 : ", int0)
-        print("int1 : ", int1)
-
-        # if interaction is tuple (R or T)
-        if ((len(int0) > 1) & (len(int1) > 1)):
-            nstr0 = int0[0]
-            nstr1 = int1[0]
-            e01 = self.Gi.edge[int0][int1]
-            lseg = []
-            if e01.has_key('output'):
-                output = e01['output']
-                print(" output ", output)
-                ltup = filter(lambda x: type(x) == tuple, output.keys())
-                lref = filter(lambda x: len(x) == 2, ltup)
-                ltran = filter(lambda x: len(x) == 3, ltup)
-                lseg = np.unique(np.array(map(lambda x: x[0], output.keys())))
-                probR = np.array(map(lambda x: output[x], lref))
-                segR = np.array(map(lambda x: x[0], lref))
-                probT = np.array(map(lambda x: output[x], ltran))
-                segT = np.array(map(lambda x: x[0], lref))
-                dprobR = dict(zip(segR, probR))
-                dprobT = dict(zip(segT, probT))
-            # print" Sum pR : ",sum(dprobR.values())
-            # print" Sum pT : ",sum(dprobT.values())
-            # print"lseg", lseg
-            # termination points from seg0 and seg1
-            pseg0 = self.s2pc[nstr0].toarray().reshape(2, 2).T
-            pseg1 = self.s2pc[nstr1].toarray().reshape(2, 2).T
-            #
-            # create the cone seg0 seg1
-            #
-            cn = cone.Cone()
-            cn.from2segs(pseg0, pseg1)
-            # show cone
-            # show Gt
-            self.display['thin'] = True
-            self.display['subseg'] = False
-            fig, ax = self.showG('s',aw=1,labels=True)
-            fig, ax = cn.show(fig=fig, ax=ax)
-            for nse in lseg:
-                ta, he = self.Gs.neighbors(nse)
-                pta = np.array(self.Gs.pos[ta])
-                phe = np.array(self.Gs.pos[he])
-
-                try:
-                    pR = dprobR[nse]
-                except:
-                    pR = 0
-
-                try:
-                    pT = dprobT[nse]
-                except:
-                    pT = 0
-
-                alpha = (pR + pT) / 2.
-                segment = ax.plot([pta[0], phe[0]],
-                                  [pta[1], phe[1]],
-                                  'g', linewidth=7, visible=True, alpha=alpha)
-
-            return(fig, ax)
+#        int0, int1 = self.Gi.edges()[kwargs['en']]
+#
+#        print("int0 : ", int0)
+#        print("int1 : ", int1)
+#
+#        # if interaction is tuple (R or T)
+#        if ((len(int0) > 1) & (len(int1) > 1)):
+#            nstr0 = int0[0]
+#            nstr1 = int1[0]
+#            e01 = self.Gi.edge[int0][int1]
+#            lseg = []
+#            if e01.has_key('output'):
+#                output = e01['output']
+#                print(" output ", output)
+#                ltup = filter(lambda x: type(x) == tuple, output.keys())
+#                lref = filter(lambda x: len(x) == 2, ltup)
+#                ltran = filter(lambda x: len(x) == 3, ltup)
+#                lseg = np.unique(np.array(map(lambda x: x[0], output.keys())))
+#                probR = np.array(map(lambda x: output[x], lref))
+#                segR = np.array(map(lambda x: x[0], lref))
+#                probT = np.array(map(lambda x: output[x], ltran))
+#                segT = np.array(map(lambda x: x[0], lref))
+#                dprobR = dict(zip(segR, probR))
+#                dprobT = dict(zip(segT, probT))
+#            # print" Sum pR : ",sum(dprobR.values())
+#            # print" Sum pT : ",sum(dprobT.values())
+#            # print"lseg", lseg
+#            # termination points from seg0 and seg1
+#            pseg0 = self.s2pc[nstr0].toarray().reshape(2, 2).T
+#            pseg1 = self.s2pc[nstr1].toarray().reshape(2, 2).T
+#            #
+#            # create the cone seg0 seg1
+#            #
+#            cn = cone.Cone()
+#            cn.from2segs(pseg0, pseg1)
+#            # show cone
+#            # show Gt
+#            self.display['thin'] = True
+#            self.display['subseg'] = False
+#            fig, ax = self.showG('s',aw=1,labels=True)
+#            fig, ax = cn.show(fig=fig, ax=ax)
+#            for nse in lseg:
+#                ta, he = self.Gs.neighbors(nse)
+#                pta = np.array(self.Gs.pos[ta])
+#                phe = np.array(self.Gs.pos[he])
+#
+#                try:
+#                    pR = dprobR[nse]
+#                except:
+#                    pR = 0
+#
+#                try:
+#                    pT = dprobT[nse]
+#                except:
+#                    pT = 0
+#
+#                alpha = (pR + pT) / 2.
+#                segment = ax.plot([pta[0], phe[0]],
+#                                  [pta[1], phe[1]],
+#                                  'g', linewidth=7, visible=True, alpha=alpha)
+#
+        return(fig, ax1)
 
     def _showGt(self, ax=[], roomlist=[], mode='indoor'):
         """ show topological graph Gt
@@ -7949,11 +8009,10 @@ class Layout(pro.PyLayers):
                     #     ipdb.set_trace()
                     # i1 : interaction T
                     if len(i1) == 3:
-                        if ((e[0]==(53,17)) and (e[1]==(108,17,18))):
-                            pdb.set_trace()
-                            typ, prob = cn.belong_seg(pta, phe,visu=True)
-                        else:
-                            typ, prob = cn.belong_seg(pta, phe)
+                        #if ((e[0]==(53,17)) and (e[1]==(108,17,18))):
+                        #    typ, prob = cn.belong_seg(pta, phe,visu=True)
+                        #else:
+                        typ, prob = cn.belong_seg(pta, phe)
                         # if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         # if ~bs.any():
