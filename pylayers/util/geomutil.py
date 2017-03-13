@@ -4691,8 +4691,58 @@ def angle_intersection(a1,a2,b1,b2):
     return bol
 
 def angle_intersection2(a1,a2,b1,b2):
-    
+    """ angle intersection2 
 
+    Parameters
+    ----------
+
+    a1 : angle in [0,2*pi] first angular sector
+    a2 : angle in [0,2*pi] first angular sector
+    b1 : angle in [0,2*pi] first angular sector
+    b2 : angle in [0,2*pi] first angular sector
+
+    Returns
+    -------
+
+    intersect_angle : float 
+
+    Notes
+    -----
+
+    Given 2 angular sectors (a1,a2) and (b1,b2), this function returns the intersection of the 2 
+    sector if it exists
+
+    See Also 
+    --------
+
+    Signature.run
+
+    Examples
+    --------
+
+    >>> from pylayers.util.geomutil import *
+    >>> a1 = 0. 
+    >>> a2 = np.pi/4.
+    >>> b1 = np.pi/3.
+    >>> b2 = np.pi/2.
+    >>> angle_intersection2(a1,a2,b1,b2)
+    0 
+    >>> a1 = 0. 
+    >>> a2 = np.pi/3.
+    >>> b1 = np.pi/4.
+    >>> b2 = np.pi/2.
+    >>> angle_intersection2(a1,a2,b1,b2)
+    0.26179938779914935
+    >>> a1 = 0. 
+    >>> a2 = np.pi-np.pi/3.
+    >>> b1 = np.pi/2.
+    >>> b2 = 3*np.pi/2.
+    >>> angle_intersection2(a1,a2,b1,b2)
+    0.5235987755982991
+
+
+    """
+    
     r1 = (max(a1,a2)-min(a1,a2))/2 
     if r1 > np.pi/2: 
         r1 = np.pi-r1 
@@ -4726,8 +4776,10 @@ def angle_intersection2(a1,a2,b1,b2):
     if dc > np.pi:
         dc = 2*np.pi-dc
 
-
-    return((r1+r2)-dc)
+    if ((r1+r2)-dc)>0:
+        return((r1+r2)-dc)
+    else:
+        return(0)
 
 def line_intersection(l1, l2):
     """ intersection between two 2D lines using shapely

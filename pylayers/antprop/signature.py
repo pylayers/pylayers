@@ -535,7 +535,7 @@ class Signatures(PyLayers,dict):
 
 
 
-    def sig2inter(self,L,lsi = []):
+    def sig2inter(self,L,lsi=[]):
         ''' convert signature to corresponding interaction in Gi
 
             Paramters:
@@ -545,8 +545,8 @@ class Signatures(PyLayers,dict):
             lsi : nd.array 
                 signature (2xnb_sig,sig_length)
 
-            Example:
-            --------
+            Examples:
+            ---------
 
             >>> lsi = DL.Si[3]
             >>> DL.Si.sig2inter(DL.L,lsi)
@@ -558,7 +558,6 @@ class Signatures(PyLayers,dict):
         assert L.isbuilt,  AttributeError('Layout is not built')
         assert len(lsi)%2==0,   AttributeError('Incorrect signature(s) shape')
 
-        
         tlinter = []
         for uu in range(0,len(lsi),2):
 
@@ -569,29 +568,32 @@ class Signatures(PyLayers,dict):
             linter = []
 
             for k in range(lsig):
-
-                seg = si[0,k]
-                typ = si[1,k]
-
-                seg_cy = copy.deepcopy(L.Gs.node[seg]['ncycles'])
-
+                # nstr : seg or points
+                nstr = si[0,k]
+                typ  = si[1,k]
+                # cycles connected to seg or point
+                seg_cy = copy.deepcopy(L.Gs.node[nstr]['ncycles'])
 
                 if k == 0:
                     cy0 = self.source
-
-                seg_cy.remove(cy0)
-                cy1 = seg_cy[0]
+                    lcy0 =[cy0]
+                
+                if (typ==3) or (typ==2):
+                    cy0 = list(set(seg_cy).intersection(set(lcy0)))[0]
+                    cy1 = [x for x in seg_cy if x!= cy0 ][0]
 
                 if k == (lsig -1):
                     cy1 = self.target
 
                 if typ == 1:
-                    inter = (seg)
+                    inter = (nstr,)
+                    lcy0 = L.Gs.node[nstr]['ncycles']
                 elif typ == 2:
-                    inter = (seg,cy0)
+                    inter = (nstr,cy0)
                 elif typ == 3:
-                    inter = (seg,cy0,cy1)
-                    cy0 = cy1
+                    inter = (nstr,cy0,cy1)
+                    # changing cycle
+                    lcy0 = [cy1]
                 linter.append(inter)
             tlinter.append(linter)
         if len(lsi) == 2:
@@ -3122,7 +3124,8 @@ class Signatures(PyLayers,dict):
 
 
     # @profile
-    def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1,animation=False):
+    #def run(self,cutoff=2,bt=True,progress=False,diffraction=True,threshold=0.1,animation=False):
+    def run(self,**kwargs):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -3138,6 +3141,8 @@ class Signatures(PyLayers,dict):
             activate diffraction 
         threshold : float 
             for reducing calculation time
+        threshold_prob : float 
+            threshold on output probability
 
         Returns
         -------
@@ -3152,8 +3157,27 @@ class Signatures(PyLayers,dict):
         pylayers.antprop.signature.Signatures.procone2
 
         """
+        defaults = {'cutoff' : 2, 
+                    'threshold':0.1,
+                    'threshold_prob':0.1,
+                    'bt' : True,
+                    'progress': False,
+                    'diffraction' : True,
+                    'animation' : False
+                    }
         
-        self.cutoff   = cutoff
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k] 
+        
+        self.cutoff = kwargs['cutoff']
+        threshold = kwargs['threshold'] 
+        threshold_prob = kwargs['threshold_prob']
+        bt = kwargs['bt'] 
+        progress = kwargs['progress'] 
+        diffraction = kwargs['diffraction']
+        animation = kwargs['animation'] 
+
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
         lair = self.L.name['AIR']+self.L.name['_AIR']
         # list of interactions visible from source
@@ -3169,6 +3193,8 @@ class Signatures(PyLayers,dict):
            lit  = litT + litR + litD
         else:
            lit  = litT + litR
+
+
         #pdb.set_trace()
         #print "source,lis :",self.source,lis
         #print "target,lit :",self.target,lit
@@ -3206,7 +3232,7 @@ class Signatures(PyLayers,dict):
 
         for us,s in tqdm(enumerate(lis)):
             
-            #print s
+            #print s,cptsig
             # if s==(4,2):
             #     pdb.set_trace()
 
@@ -3246,15 +3272,12 @@ class Signatures(PyLayers,dict):
             # lawp = list of airwall position in visited
             lawp = []
             # while the stack of iterators is not void
-            cpt=0
+            cpt = 0
             while stack: #
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
-                #if visited==[(4,2),(5,2)]:
-                #     print visited
-                #print s,interaction
                 #     pdb.set_trace()
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
@@ -3262,7 +3285,7 @@ class Signatures(PyLayers,dict):
                 # cond2 = not (interaction in visited) or bt
 
                 # test the cutoff condition
-                cond3 = len(visited) > (cutoff + sum(lawp))
+                cond3 = len(visited) > (self.cutoff + sum(lawp))
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
                 if animation :
@@ -3287,6 +3310,8 @@ class Signatures(PyLayers,dict):
                         visited.append(interaction)
                         # print(visited)
 
+                        #if s==(143, 40, 32):
+                        #   print visited
 
                         # if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
                         #     pdb.set_trace()
@@ -3343,9 +3368,9 @@ class Signatures(PyLayers,dict):
                             th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
-                        #vlp vrpdb.set_trace()
+                        pdb.set_trace()
                         # reset ratio when diffraction encountered
-                        if len(tahe)<2:
+                        if len(th)<2:
                             tha = th
                             ratio = 1.0
                         else:
@@ -3445,12 +3470,9 @@ class Signatures(PyLayers,dict):
                             aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
                             
                             I=geu.angle_intersection2(al,ar,aseg0,aseg1)
-                            if I>0:
-                                ratio = I/angle_cone
-                            else:
-                                ratio = 0
-                            #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                            #    print(I,angle_cone,ratio)
+                            ratio = I/angle_cone
+                            #if (visited[0]==(167,40,53)):
+                            #    print(visited,I,angle_cone,ratio)
                             #    if ratio<0.1:
                             #        pdb.set_trace()
                             # 
@@ -3569,24 +3591,30 @@ class Signatures(PyLayers,dict):
                             # print visited
                             #if visited==[(8,6,3), (-25531299,), (98, 3, 6)]:
                             # if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
-                            if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+                            #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+                            if (1==1):
 
                                 fig ,ax = self.L.showG('s',aw=1,labels=0)
                                 ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
                                 ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),
+                                                  np.array(self.L.Gs.pos[pts[1]]),
+                                                  al=1,color='yellow',linewidth=4)
                                 ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
                                 ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
                                 #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
                                 ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                nx.draw_networkx_labels(self.L.Gi,
+                                        self.L.Gi.pos,labels={x:str(x) for x in visited},
+                                        ax=ax,fontsize=18)
                                 plt.title(str(visited)+'  '+str(ratio))
                                 ax.plot(apex[0],apex[1],'or')
                                 plt.axis('auto')
                                 plt.show()
-                            if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+                                pdb.set_trace()
+                            #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
                             # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-
+                            if (1==0):
                                 fig ,ax = self.L.showG('s',aw=1,labels=0)
                                 ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
                                 ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
@@ -3604,7 +3632,8 @@ class Signatures(PyLayers,dict):
                                 #ipdb.set_trace()
                             # pdb.set_trace()
                         #print '+++ ',visited,ratio
-                        # print (ratio,threshold)
+                        #if s==(143, 40, 32):
+                        #    print (ratio,threshold)
                         if ratio > threshold:
                             #tahe.append(tha)
                             tahe.append(th)
@@ -3612,8 +3641,10 @@ class Signatures(PyLayers,dict):
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
                             if (interaction in lit) or (interaction[-1]==self.target):
-                                anstr = np.array(map(lambda x: x[0],visited))
-                                typ  = np.array(map(lambda x: len(x),visited))
+                                anstr = np.array([x[0] for x in visited ] )
+                                typ  = np.array([len(x) for x in visited] )
+                                #anstr = np.array(map(lambda x: x[0],visited))
+                                #typ  = np.array(map(lambda x: len(x),visited))
                                 try:
                                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
                                 except:
@@ -3622,8 +3653,15 @@ class Signatures(PyLayers,dict):
                                 cptsig +=1
 
                                 if animation:
-                                    Nf = nx.draw_networkx_nodes(Gi,pos=Gi.pos,nodelist=visited,labels={},node_color='b',node_size=40,ax=ax,fig=fig)
-                                    Ef = nx.draw_networkx_edges(Gi,pos=Gi.pos,edgelist=edge,labels={},width=0.1,arrows=False,ax=ax,fig=fig)
+                                    Nf = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
+                                            nodelist=visited,labels={},
+                                            node_color='b',
+                                            node_size=40,
+                                            ax=ax,fig=fig)
+                                    Ef = nx.draw_networkx_edges(Gi,pos=Gi.pos,
+                                            edgelist=edge,labels={},
+                                            width=0.1,arrows=False,
+                                            ax=ax,fig=fig)
                                     cpt=cpt+1
                                     plt.savefig('./figure/' +str(us) +'_' + str(cpt) +'.png')
                                     try:
@@ -3647,14 +3685,14 @@ class Signatures(PyLayers,dict):
                                 # print visited,len(stack),cptsig  
                                 # print '    ',cptsig,zip(anstr,typ),ratio
                             # move forward even when arrived in the target cycle
-                            try: 
-                                outint = Gi[visited[-2]][interaction]['output'].keys()
-                            except:
-                                pdb.set_trace()
+                            #try: 
+                            outint = Gi[visited[-2]][interaction]['output'].keys()
+                            #except:
+                            #pdb.set_trace()
                             #outint = nx.neighbors(self.L.Gi,interaction)
-                            # proint = Gi[visited[-2]][interaction]['output'].values()
-                            #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
-                            nexti  = [it for k,it in enumerate(outint)]
+                            proint = Gi[visited[-2]][interaction]['output'].values()
+                            #nexti  = [it for k,it in enumerate(outint) if (proint[k]>threshold_prob)]
+                            nexti  = [it for it in outint ]
                             stack.append(iter(nexti))
                         else:
                             

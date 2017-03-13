@@ -4779,26 +4779,58 @@ class Layout(pro.PyLayers):
 
         Parameters
         ----------
+        seed : float
+        alpha : float 
+            transparency 
+        sig : list of signatures (isequence of Gi nodes format) 
+        cycles : list 
+            [cystart,cyend] 
+        ninter : int
+            interaction index
+        inter : tuple
+            interaction tuple 
 
-        en  : int
-            edge number
+        See Also 
+        --------
+
+        Signatures.siginter
 
         """
         defaults = {'seed':1,
                     'alpha':0.4,
                     'sig':[],
+                    'cycles':[],
                     'ninter':0,
                     'node_size':30,
+                    'fontsize':18,
+                    'labels':False,
                     'inter':[]}
         for k in defaults: 
             if k not in kwargs:
                 kwargs[k]=defaults[k] 
 
         edges = self.Gi.edges()
+        cy = kwargs['cycles']
+        if cy!=[]:
+            pstart = self.Gt.pos[cy[0]]
+            pstop = self.Gt.pos[cy[1]]
 
         if kwargs['sig']!=[]:
-            sig = kwargs['sig']
-            edgelist = zip(sig[0:-1],sig[1:])
+            lsig = kwargs['sig']
+            edgelist = []
+            startlist = []
+            stoplist = []
+            phe_start = np.array([])
+            phe_stop = np.array([])
+            phe_start.shape = (2,0)
+            phe_stop.shape = (2,0)
+            for sig in lsig:
+                edgelist = edgelist + list(zip(sig[0:-1],sig[1:]))
+                if cy!=[]:
+                    p1 =  np.array(self.Gi.pos[sig[0]])[:,None]
+                    p2 =  np.array(self.Gi.pos[sig[-1]])[:,None]
+                    phe_start=np.hstack((phe_start,p1))
+                    phe_stop=np.hstack((phe_stop,p2))
         elif kwargs['inter']!=[]:
             edinter = kwargs['inter']
             outlist = self.Gi[edinter[0]][edinter[1]]['output']
@@ -4839,12 +4871,19 @@ class Layout(pro.PyLayers):
         nx.draw_networkx_nodes(self.Gi,self.Gi.pos,nodelist=[x for x in self.Gi.nodes() if len(x)==3],
                 node_color='g',node_size=ns,ax=ax2,alpha=kwargs['alpha'])
         nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=self.Gi.edges(),width=.1,edge_color='k',arrow=False,ax=ax2)
+        if kwargs['labels']:
+            nx.draw_networkx_labels(self.Gi,self.Gi.pos,labels=[str(x) for x in self.Gi.nodes()],ax=ax2,fontsize=kwargs['fontsize'])
         if (kwargs['sig']==[]):
             nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=[edinter],width=2,edge_color='g',arrow=False,ax=ax2)
         nx.draw_networkx_edges(self.Gi,self.Gi.pos,edgelist=edgelist,width=2,edge_color='r',arrow=False,ax=ax2)
         #pdb.set_trace()
         if (kwargs['sig']==[]):
-            nx.draw_networkx_edge_labels(self.Gi,self.Gi.pos,edge_labels=dprob,fontsize=14,ax=ax2)
+            nx.draw_networkx_edge_labels(self.Gi,self.Gi.pos,edge_labels=dprob,ax=ax2,fontsize=kwargs['fontsize'])
+        if cy!=[]:
+            ptstart = pstart[:,None]*np.ones(phe_start.shape[1])[None,:]
+            ptstop = pstop[:,None]*np.ones(phe_start.shape[1])[None,:]
+            plu.displot(ptstart,phe_start,ax=ax2,arrow=True)
+            plu.displot(phe_stop,ptstop,ax=ax2,arrow=True)
         # interactions corresponding to edge en
 #        int0, int1 = self.Gi.edges()[kwargs['en']]
 #
@@ -7761,9 +7800,9 @@ class Layout(pro.PyLayers):
 
                                 # if cy==4:
                                 #     printnstr,nstrb
-                                if iprint:
-                                     print("li1",li1)
-                                     print("li2",li2)
+                                #if iprint:
+                                #     print("li1",li1)
+                                #     print("li2",li2)
                                 
                                 for i1 in li1:
                                     # printli1
