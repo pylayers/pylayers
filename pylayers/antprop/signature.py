@@ -3368,9 +3368,8 @@ class Signatures(PyLayers,dict):
                             th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
-                        pdb.set_trace()
                         # reset ratio when diffraction encountered
-                        if len(th)<2:
+                        if len(tahe)<2:
                             tha = th
                             ratio = 1.0
                         else:
