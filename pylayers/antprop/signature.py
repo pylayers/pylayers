@@ -3171,6 +3171,7 @@ class Signatures(PyLayers,dict):
                             th = self.L.Gs.pos[visited[-2][0]]
                             th = np.array([th,th])
                             R.append((np.eye(2),np.array([0,0])))
+                            #tahe= th 
                         # reflexion 
                         elif len(visited[-2])==2:
 
