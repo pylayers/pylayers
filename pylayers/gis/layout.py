@@ -34,10 +34,14 @@ from descartes.patch import PolygonPatch
 from numpy import array
 import PIL.Image as Image
 import logging
-import urllib2 as urllib
+if sys.version_info.major==2:
+    from  urllib2 import urlopen
+    import ConfigParser
+else:
+    from  urllib.request import urlopen
+    import configparser
 import hashlib
-from cStringIO import StringIO
-import ConfigParser
+#from cStringIO import StringIO
 
 from pathos.multiprocessing import ProcessingPool as Pool
 from pathos.multiprocessing import cpu_count
@@ -65,9 +69,13 @@ def _unpickle_method(func_name, obj, cls):
 			break
 	return func.__get__(obj, cls)
 
-import copy_reg
 import types
-copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+if sys.version_info.major==2:
+    import copy_reg
+    copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+else:
+    import copyreg
+    copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
 import pylayers.antprop.slab as sb
 from pylayers.util import geomutil as geu
@@ -5072,8 +5080,9 @@ class Layout(pro.PyLayers):
             # imok : Image is OK
             imok = False
             if len(self.display['overlay_file'].split('http:')) > 1:
-                img_file = urllib.urlopen(self.display['overlay_file'])
-                im = StringIO(img_file.read())
+                #img_file = urllib.urlopen(self.display['overlay_file'])
+                img_file = urlopen(self.display['overlay_file'])
+                #im = StringIO(img_file.read())
                 image = Image.open(im)
                 imok = True
             else:

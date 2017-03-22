@@ -2320,7 +2320,7 @@ class Geomoff(Geomview):
         fo = open(self.filename, 'r')
         lis = fo.readlines()
         typ, nv, nf, ne = lis[0].split(' ')
-        if typ <> 'OFF':
+        if typ != 'OFF':
             logging.critical('not an off file')
         nv = eval(nv)
         nf = eval(nf)
@@ -2340,7 +2340,7 @@ class Geomoff(Geomview):
         fo = open(self.filename, 'r')
         lis = fo.readlines()
         typ, nv, nf, ne = lis[0].split(' ')
-        if typ <> 'OFF':
+        if typ != 'OFF':
             logging.critical('not an off file')
         else:
             try:
@@ -2775,7 +2775,7 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
 
     """
     A = SignedArea(p)
-    assert(A <> 0)
+    assert(A != 0)
     T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - \
         p[1, :] * np.hstack((p[0, 1::], p[0, 0:1]))
     Cx = sum(T * (p[0, :] + np.hstack((p[0, 1::], p[0, 0:1])))) / (6 * A)
@@ -3192,8 +3192,8 @@ def ptonseg(pta, phe, pt):
     u = pt - pta
     Lv = np.sqrt(np.dot(v, v))
     Lu = np.sqrt(np.dot(u, u))
-    assert(Lv <> 0)
-    assert(Lu <> 0)
+    assert(Lv != 0)
+    assert(Lu != 0)
     vn = v / Lv
     un = u / Lu
     ctheta = np.dot(un, vn)
@@ -3698,7 +3698,7 @@ def mul3(A, B):
                 C[:, :, i] = P
             return(C)
         else:
-            print "wrong shape", sa, sb
+            print("wrong shape", sa, sb)
     if ((la == 3) & (lb == 2)):
         if(sa[1] == sb[0]):
             C = np.zeros((sa[0], sb[1], sa[2]))
@@ -3708,7 +3708,7 @@ def mul3(A, B):
                 C[:, :, i] = P
             return(C)
         else:
-            print "wrong shape", sa, sb
+            print("wrong shape", sa, sb)
 
     if ((la == 2) & (lb == 3)):
         if(sa[1] == sb[0]):
@@ -3719,7 +3719,7 @@ def mul3(A, B):
                 C[:, :, i] = P
             return(C)
         else:
-            print "wrong shape", sa, sb
+            print("wrong shape", sa, sb)
 
 
 def MRot3(a, axe):
@@ -4466,11 +4466,11 @@ def agwed_old(v, lwe):
     >>> sd = np.array([-1,1,0])
     >>> v  = np.vstack([u,v1,si,sd]).T
     >>> M = geu.agwed(v,lwe)
-    >>> print M*180/np.pi
+    >>> print(M*180/np.pi)
     [ 315.  135.  225.]
 
     """
-    print DeprecationWarning('Please use vectorized version : agwed')
+    print(DeprecationWarning('Please use vectorized version : agwed'))
     # lwe : (,3)
     lwe = lwe / np.sqrt(np.sum(lwe * lwe, axis=0))
     # v : (3,4)
@@ -4523,7 +4523,7 @@ def agwed(v, lwe):
     >>> sd = np.array([[-1,1,0],[1,-1,0]]).T
     >>> v  = np.hstack((u[:,None,:],v1[:,None,:],si[:,None,:],sd[:,None,:]))
     >>> M = geu.agwed(v,lwe)
-    >>> print M*180/np.pi
+    >>> print(M*180/np.pi)
     array([[ 315.,  315.],
        [ 135.,  225.],
        [ 225.,   45.]])
@@ -4865,7 +4865,7 @@ def mirror(p, pa, pb):
     >>> pa  = np.array([-0.5,1])
     >>> pb  = np.array([0,0])
     >>> M = mirror(p,pa,pb)
-    >>> print M
+    >>> print(M)
     [[ 2.8 -1.4 -0.2]
      [ 0.4 -0.2  1.4]]
     >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)

@@ -21,6 +21,7 @@ pylayers/antprop/diffraction.py
 pylayers/antprop/interactions.py
 pylayers/antprop/loss.py
 pylayers/antprop/rays.py
+pylayers/antprop/signature-old.py
 pylayers/antprop/signature.py
 pylayers/antprop/slab.py
 pylayers/antprop/spharm.py
@@ -54,6 +55,7 @@ pylayers/gis/multi.py
 pylayers/gis/osmparser.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
+pylayers/gis/showGi.py
 pylayers/gis/srtm.py
 pylayers/gui/__init__.py
 pylayers/gui/editor.py

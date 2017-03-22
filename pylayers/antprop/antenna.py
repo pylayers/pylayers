@@ -140,13 +140,17 @@ Miscellaneous  functions
 
 """
 #from __future__ import print_function
-import mayavi.mlab as mlab
+#import mayavi.mlab as mlab
 import doctest
 import os
 import glob
 import re
 import pdb
-import Image
+import sys
+if sys.version_info.major==2:
+    import Image
+else:
+    import image
 import numpy as np
 import scipy.linalg as la
 from scipy import io
@@ -1737,7 +1741,11 @@ class Antenna(Pattern):
 
         _filename = 'IMG_'+self.PhotoFile.split('-')[1]+'.JPG'
         filename = pyu.getlong(_filename,directory)
-        I = Image.open(filename)
+        if sys.version_info.major==2:
+            I = Image.open(filename)
+        else:
+            I = image.open(filename)
+
         I.show()
 
 
@@ -2191,7 +2199,7 @@ class Antenna(Pattern):
         #
         # Construct difference between reference and reconstructed
         #
-        if kf<>-1:
+        if kf!=-1:
             dTh = (FTh[kf, :, :] - self.Ft[kf, ::dsf, ::dsf])
             dPh = (FPh[kf, :, :] - self.Fp[kf, ::dsf, ::dsf])
             #
@@ -2512,32 +2520,32 @@ class Antenna(Pattern):
 
         """
         print(self._filename)
-        print "type : ", self.typ
+        print("type : ", self.typ)
         if self.typ == 'mat':
-            print self.DataFile
-            print self.AntennaName
-            print self.Date
-            print self.StartTime
-            print self.Notes
-            print self.Serie
-            print self.Run
-            print "Nb theta (lat) :", self.nth
-            print "Nb phi (lon) :", self.nph
+            print(self.DataFile)
+            print(self.AntennaName)
+            print(self.Date)
+            print(self.StartTime)
+            print(self.Notes)
+            print(self.Serie)
+            print(self.Run)
+            print("Nb theta (lat) :", self.nth)
+            print("Nb phi (lon) :", self.nph)
         if self.typ =='nfc':
-            print "--------------------------"
-            print "fmin (GHz) :", self.fGHz[0]
-            print "fmax (GHz) :", self.fGHz[-1]
-            print "Nf   :", self.nf
-            print "thmin (rad) :", self.theta[0]
-            print "thmax (rad) :", self.theta[-1]
-            print "Nth  :", self.nth
-            print "phmin (rad) :", self.phi[0]
-            print "phmax (rad) :", self.phi[-1]
-            print "Nph  :", self.nph
+            print( "--------------------------")
+            print( "fmin (GHz) :", self.fGHz[0])
+            print( "fmax (GHz) :", self.fGHz[-1])
+            print( "Nf   :", self.nf)
+            print( "thmin (rad) :", self.theta[0])
+            print( "thmax (rad) :", self.theta[-1])
+            print( "Nth  :", self.nth)
+            print( "phmin (rad) :", self.phi[0])
+            print( "phmax (rad) :", self.phi[-1])
+            print( "Nph  :", self.nph)
         try:
             self.C.info()
         except:
-            print "No vsh coefficient calculated yet"
+            print("No vsh coefficient calculated yet")
 
     #@mlab.show
     def _show3(self,newfig = True,
@@ -3610,7 +3618,7 @@ class Antenna(Pattern):
         Cimin = abs(self.C.Ci[:, 0:20, 0:20]).min()
         Cimax = abs(self.C.Ci[:, 0:20, 0:20]).max()
 
-        print Brmin, Brmax, Bimin, Bimax, Crmin, Crmax, Cimin, Cimax
+        # print(Brmin, Brmax, Bimin, Bimax, Crmin, Crmax, Cimin, Cimax)
 
         for k in range(self.nf):
             plt.figure()
@@ -3723,9 +3731,9 @@ class Antenna(Pattern):
         #filevsh3 = pyu.getlong(self._filename,'ant')
 
         if os.path.isfile(filevsh3):
-            print filevsh3, ' already exist'
+            print( filevsh3, ' already exist')
         else:
-            print 'create ', filevsh3, ' file'
+            print( 'create ', filevsh3, ' file')
 
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
@@ -3756,9 +3764,9 @@ class Antenna(Pattern):
         _filesh2 = self._filename.replace('.'+ self.typ, '.sh2')
         filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
         if os.path.isfile(filesh2):
-            print filesh2, ' already exist'
+            print(filesh2, ' already exist')
         else:
-            print 'create ', filesh2, ' file'
+            print('create ', filesh2, ' file')
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
             coeff['fmax'] = self.fGHz[-1]
@@ -3790,9 +3798,9 @@ class Antenna(Pattern):
         _filesh3 = self._filename.replace('.'+ self.typ, '.sh3')
         filesh3 = pyu.getlong(_filesh3, pstruc['DIRANT'])
         if os.path.isfile(filesh3):
-            print filesh3, ' already exist'
+            print(filesh3, ' already exist')
         else:
-            print 'create ', filesh3, ' file'
+            print('create ', filesh3, ' file')
 
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
@@ -3856,7 +3864,7 @@ class Antenna(Pattern):
             self.nf = np.shape(Br.s3)[0]
             self.fGHz = np.linspace(fmin, fmax, self.nf)
         else:
-            print _filevsh3, ' does not exist'
+            print(_filevsh3, ' does not exist')
 
     def loadsh3(self):
         """ Load antenna's sh3 file
@@ -3928,7 +3936,7 @@ class Antenna(Pattern):
             self.nf = np.shape(Cx.s3)[0]
             self.fGHz = np.linspace(fmin, fmax, self.nf)
         else:
-            print _filesh3, ' does not exist'
+            print(_filesh3, ' does not exist')
 
     def savevsh2(self, filename = ''):
         """ save coeff in  a .vsh2 antenna file
@@ -3948,9 +3956,9 @@ class Antenna(Pattern):
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
-            print filevsh2, ' already exist'
+            print(filevsh2, ' already exist')
         else:
-            print 'create ', filevsh2, ' file'
+            print('create ', filevsh2, ' file')
 
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
@@ -4020,7 +4028,7 @@ class Antenna(Pattern):
             Nf = np.shape(Cx.s2)[0]
             self.fGHz = np.linspace(fmin, fmax, Nf)
         else:
-            print _filesh2, ' does not exist'
+            print( _filesh2, ' does not exist')
 
 
 
@@ -4060,7 +4068,7 @@ class Antenna(Pattern):
             Nf = np.shape(Br.s2)[0]
             self.fGHz = np.linspace(fmin, fmax, Nf)
         else:
-            print _filevsh2, ' does not exist'
+            print( _filevsh2, ' does not exist')
 
     def loadvsh3_old(self):
         """ Load antenna vsh coefficients in shape 3
@@ -4084,7 +4092,7 @@ class Antenna(Pattern):
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             self.fGHz = np.linspace(fmin, fmax, 121)
         else:
-            print _filevsh3, ' does not exist'
+            print(_filevsh3, ' does not exist')
 
     def pol2cart(self, ith):
         """ converts FTheta, FPhi to Fx,Fy,Fz for theta=ith
@@ -4364,7 +4372,7 @@ def forcesympol(A):
         plt.show()
 
     else:
-        print "Error: m>n!!!"
+        print("Error: m>n!!!")
 
 def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=18):
     """ makes comparison between original pattern and reconstructed pattern
@@ -4676,12 +4684,12 @@ def show3D(F, theta, phi, k, col=True):
     nph = len(phi)
 
     if k >= np.shape(F)[0]:
-        print 'Error: frequency index k not in F defined interval'
+        print('Error: frequency index k not in F defined interval')
     if nth != np.shape(F)[1]:
-        print 'Error: shape mistmatch between theta and F'
+        print('Error: shape mistmatch between theta and F')
 
     if nph != np.shape(F)[2]:
-        print 'Error: shape mistmatch between phi and F'
+        print('Error: shape mistmatch between phi and F')
 
     fig = plt.figure()
     ax = axes3d.Axes3D(fig)

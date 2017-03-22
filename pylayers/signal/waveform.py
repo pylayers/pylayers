@@ -3,15 +3,14 @@ import doctest
 import os
 import logging
 import pdb
+import sys
 import numpy as np
 import scipy as sp
 import scipy.io as io
 import scipy.signal as si
 import scipy.linalg as la
-import ConfigParser
 import matplotlib.pylab as plt
 import pylayers.signal.bsignal as bs
-from pylayers.util     import easygui
 from pylayers.measures import mesuwb
 
 class Waveform(dict):
@@ -118,9 +117,10 @@ class Waveform(dict):
         """
         if self['typ']=='generic':
             for k in self.keys():
-                print k , " : ",self[k]
+                print(k , " : ",self[k])
         else:
-            print "typ:",self['typ']
+            print("typ:",self['typ'])
+
 
     def show2(self,Tpns=1000):
         """ show2

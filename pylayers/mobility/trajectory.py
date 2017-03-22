@@ -42,7 +42,7 @@ try:
     from mayavi import mlab
     from tvtk.tools import visual
 except:
-    print 'mayavi not installed'
+    print('mayavi not installed')
 import numpy as np
 import scipy as sp
 import pdb

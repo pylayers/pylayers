@@ -124,8 +124,12 @@ Utility Functions
 """
 from __future__ import division, print_function, absolute_import 
 import os
+import sys
 import string
-import cPickle
+if sys.version_info.major==2:
+    import cPickle
+else:
+    import _pickle as cPickle
 import doctest
 #import objxml
 import numpy as np

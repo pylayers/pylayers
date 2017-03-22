@@ -1173,7 +1173,7 @@ class Usignal(Bsignal):
         elif naxis2==naxis1+2: # w(2) x H (4)
             u1.y=u1.y[:,None,None,:]
         elif naxis2!=naxis1:
-            print "alignement not allowed"
+            print("alignement not allowed")
 
         #   Function to determine iuf 2 shape are compatible
         #    if naxis1>naxis2:
@@ -1217,7 +1217,7 @@ class Usignal(Bsignal):
 
         dx = min(dx1, dx2)
         if tstincl(u1.x, u2.x) == 0:
-            print 'Warning: impossible to align the 2 signals'
+            print('Warning: impossible to align the 2 signals')
 
         if (dx1 <= dx2):
 
@@ -1888,15 +1888,15 @@ class TUsignal(TBsignal, Usignal):
         """ display information about TUsignal
 
         """
-        print 'TUsignal'
-        print '--------'
-        print 'shx : ', np.shape(self.x)
-        print 'shy : ', np.shape(self.y)
-        print 'dx :  ', self.dx()
-        print 'xmin :', self.x.min()
-        print 'xmax :', self.x.max()
-        print 'ymin :', self.y.min()
-        print 'ymax :', self.y.max()
+        print('TUsignal')
+        print('--------')
+        print('shx : ', np.shape(self.x))
+        print('shy : ', np.shape(self.y))
+        print('dx :  ', self.dx())
+        print('xmin :', self.x.min())
+        print('xmax :', self.x.max())
+        print('ymin :', self.y.min())
+        print('ymax :', self.y.max())
 
 
 
@@ -2150,8 +2150,8 @@ class TUsignal(TBsignal, Usignal):
         """
         O = TUsignal()
         #ba  = iirfilter(order,[wp,ws],ftype=ftype)
-        print "wp = ", wp
-        print "ws = ", ws
+        print("wp = ", wp)
+        print("ws = ", ws)
         #ba  = iirdesign(wp,ws,1,40,ftype=ftype)
         h = firwin(1001, [wp, ws])
         O.y = lfilter(h, 1, self.y)
@@ -2909,14 +2909,14 @@ class FUsignal(FBsignal,Usignal):
         fmax = self.x[-1]
         df = self.x[1] - self.x[0]
         T = 1.0 / df
-        print 'FUsignal'
-        print '--------'
-        print 'N Freq    ', N
-        print 'shape(y)  ', sh
-        print 'Fmin (GHz) : ', fmin
-        print 'Fmax (GHz) : ', fmax
+        print('FUsignal')
+        print('--------')
+        print('N Freq    ', N)
+        print('shape(y)  ', sh)
+        print('Fmin (GHz) : ', fmin)
+        print('Fmax (GHz) : ', fmax)
 
-        print 'Frequency sampling step : ', df
+        print('Frequency sampling step : ', df)
 
     def energy(self,axis=-1,Friis=False,mode='mean'):
         r""" calculate energy along a given axis of the FUsignal
@@ -3029,16 +3029,11 @@ class FUsignal(FBsignal,Usignal):
         MH2 = abs(H * np.conjugate(H))
         EMH2 = MH2.sum(axis=1)
         EMH2dB = 10 * np.log10(EMH2)
-        print EMH2dB
         EMH2dBmax = EMH2dB.max()
-
         ind1 = EMH2.argsort()
-        print ind1
-
         EMH2dBsorted = EMH2dB[ind1]
         ind2 = np.nonzero(EMH2dBsorted > (EMH2dBmax - threshdB))[0]
         indices = ind1[ind2]
-        print indices
         return indices
 
     def zp(self, N):

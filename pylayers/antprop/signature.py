@@ -108,6 +108,13 @@ from tqdm import tqdm
 
 
 def plot_lines(ax, ob, color = []):
+    """
+    Parameters
+    ----------
+
+    ax : 
+    ob : 
+    """
 
     from descartes.patch import PolygonPatch
     for ii,line in enumerate(ob):
@@ -125,11 +132,20 @@ def plot_lines(ax, ob, color = []):
         
         ax.plot(x, y, color=c, alpha=0.7, linewidth=3, solid_capstyle='round', zorder=2)
     return ax
+
 def plot_poly(ax, ob, color = []):
+    """ plot polygon 
+
+    Parameters
+    ----------
+
+    ax : 
+    ob : 
+
+    """
     
     from descartes.patch import PolygonPatch
     for ii,poly in enumerate(ob):
-        
         pp = PolygonPatch(poly,alpha=0.3)
         ax.add_patch(pp)
 
@@ -3368,16 +3384,21 @@ class Signatures(PyLayers,dict):
                             th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
-                        # reset ratio when diffraction encountered
-                        if len(tahe)<2:
+                        if (len(tahe)<2) or len(visited[-1])==1:
                             tha = th
                             ratio = 1.0
                         else:
-                            pta0 = tahe[0][0]   # tail first segment
+                            pta0 = tahe[0][0]   # tail first segment  (last difraction)
                             phe0 = tahe[0][1]   # head first segment
                             pta_ = tahe[-1][0]  # tail last segment
                             phe_ = tahe[-1][1]  # head last segment 
 
+                            #
+                            # Calculates the left and right vector of the cone 
+                            #
+                            #  vl left vector 
+                            #  vr right vector 
+                            #
                             #
                             # Detect situations of connected segments
                             #
@@ -3403,10 +3424,7 @@ class Signatures(PyLayers,dict):
                                 vl=(apex,phe0)
                                 vr=(apex,pta_)
                             #
-                            # Calculates the left and right vector of the cone 
-                            #
-                            #  vl left vector 
-                            #  vr right vector 
+                            # for non connected segments
                             #
                             if not connected:
                                 if not (geu.ccw(pta0,phe0,phe_) ^
@@ -3703,16 +3721,17 @@ class Signatures(PyLayers,dict):
                             lawp.pop()
 
                 else:
-                    #print '---',visited,cond1,cond2,cond3
                     if len(visited)>1:
                         if len(visited[-2])==2:
                             R.pop()
                     last = visited.pop()
+                    #
+                    # Poping tahe 
+                    #
                     try:
                         tahe.pop()
                     except:
                         pdb.set_trace()
-                    #R.pop()
                     try:
                         lawp.pop()
                     except:
