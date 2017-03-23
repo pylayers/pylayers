@@ -2884,7 +2884,7 @@ class Signatures(PyLayers,dict):
             #   + arrival cycle is equal to target cycle
             # then stack a new signature in self[len(typ)] 
             # 
-            # TODO : It concerns self[1] : only one intercation (i.e several single reflection or diffraction)
+            # TODO : It concerns self[1] : only one interaction (i.e several single reflection or diffraction)
             if (s in lit) or (s[-1]==self.target):
                 anstr = np.array(map(lambda x: x[0],visited))
                 typ  = np.array(map(lambda x: len(x),visited))
@@ -2925,7 +2925,7 @@ class Signatures(PyLayers,dict):
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
                 if animation :
-                    cpt=cpt+1
+                    cpt = cpt+1
                     edge=zip(visited[:-1],visited[1:])
                     N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,nodelist=visited,labels={},node_size=15,ax=ax,fig=fig)
                     E = nx.draw_networkx_edges(Gi,pos=Gi.pos,edgelist=edge,labels={},width=0.1,arrows=False,ax=ax,fig=fig)
@@ -2944,7 +2944,6 @@ class Signatures(PyLayers,dict):
                      if (cond2 and cond3):
                         visited.append(interaction)
 
-                        print(visited)
 
                         if interaction[0] in lair:
                             lawp.append(1)
@@ -2993,6 +2992,9 @@ class Signatures(PyLayers,dict):
                         #    print("th (avant mirror)",th)
                         ik = 1
                         r = R[-ik]
+                        #
+                        # for a diffraction it shoud be uncahnged
+                        # 
                         while np.any(r[0]!=np.eye(2)):     
                             th = np.einsum('ki,ij->kj',th,r[0])+r[1]
                             ik = ik + 1
@@ -3004,6 +3006,7 @@ class Signatures(PyLayers,dict):
                         if (len(tahe)<2) or len(visited[-1])==1:
                             tha = th
                             ratio = 1.0
+                            print(visited,"ratio =1")
                         else:
                             ilast = 0 
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
@@ -3104,8 +3107,10 @@ class Signatures(PyLayers,dict):
                             aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
                             aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
                             
-                            I=geu.angle_intersection2(al,ar,aseg0,aseg1)
+                            I = geu.angle_intersection2(al,ar,aseg0,aseg1)
                             ratio = I/angle_cone
+                            print(visited,"ratio =",str(ratio))
+                            pdb.set_trace()
                             #if (visited[0]==(167,40,53)):
                             #    print(visited,I,angle_cone,ratio)
                             #    if ratio<0.1:
