@@ -2922,6 +2922,8 @@ class Signatures(PyLayers,dict):
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
                 cond3 = not(len(visited) > (self.cutoff + sum(lawp)))
+                udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
+                cond4 = not(len(udiff)>2)
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
                 if animation :
@@ -2941,7 +2943,7 @@ class Signatures(PyLayers,dict):
                         pass
 
                 if (cond1):
-                     if (cond2 and cond3):
+                     if (cond2 and cond3 and cond4):
                         visited.append(interaction)
 
 
@@ -2953,6 +2955,9 @@ class Signatures(PyLayers,dict):
                         # update number of useful segments
                         # if there is airwall in visited
                         nstr = interaction[0]
+                        #
+                        #
+                        #
                         # Testing the type of interaction at rank -2 
                         # R is a list which contains a rotation matrix 
                         # and a translation vector for doing the mirroring 
@@ -2961,16 +2966,13 @@ class Signatures(PyLayers,dict):
                         # diffraction (retrieve a point)
                         if len(visited[-2]) == 1:
                             #th = self.L.Gs.pos[nstr]
-                            th = self.L.Gs.pos[visited[-2][0]]
-                            th = np.array([th,th])
                             R.append((np.eye(2),np.array([0,0])))
-                        # reflexion 
+                        # reflexion mirroring 
                         elif len(visited[-2])==2:
-
-                            pts = self.L.Gs[nstr].keys()
+                            #pts = self.L.Gs[nstr].keys()
                             #th (Npt x xy)
-                            th = np.array([self.L.Gs.pos[pts[0]],
-                                           self.L.Gs.pos[pts[1]]])
+                            #th = np.array([self.L.Gs.pos[pts[0]],
+                            #               self.L.Gs.pos[pts[1]]])
                             # reverse order (reflexion on visited[-2])
                             pts2 = self.L.Gs[visited[-2][0]].keys()
                             ta_seg = np.array(self.L.Gs.pos[pts2[0]])
@@ -2979,11 +2981,17 @@ class Signatures(PyLayers,dict):
                             R.append(geu.axmat(ta_seg,he_seg))
                             # direct order
                             #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
-                        # transmission
+                        # transmission do nothing 
                         else : 
+                            pass
+                        # current interaction is of segment type
+                        if (nstr>0):
                             pts = self.L.Gs[nstr].keys()
                             th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-
+                        # current interaction is of point type
+                        else:
+                            th = self.L.Gs.pos[nstr]
+                            th = np.array([th,th])
                         # apply current chain of symmetries
                         # th is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
@@ -3003,12 +3011,17 @@ class Signatures(PyLayers,dict):
                         # if at least 2 interactions
                         # or previous point is a diffrcation 
 
-                        if (len(tahe)<2) or len(visited[-1])==1:
+                        if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
                             tha = th
                             ratio = 1.0
-                            print(visited,"ratio =1")
+                            #print(visited,"ratio =1")
                         else:
-                            ilast = 0 
+                            udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
+                            if udiff==[]:
+                                ilast = 0
+                            else:
+                                ilast=udiff[-1]
+
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
                             phe0 = tahe[ilast][1]   # head first segment
                             pta_ = tahe[-1][0]  # tail last segment
@@ -3109,8 +3122,7 @@ class Signatures(PyLayers,dict):
                             
                             I = geu.angle_intersection2(al,ar,aseg0,aseg1)
                             ratio = I/angle_cone
-                            print(visited,"ratio =",str(ratio))
-                            pdb.set_trace()
+                            #print(visited,"ratio =",str(ratio))
                             #if (visited[0]==(167,40,53)):
                             #    print(visited,I,angle_cone,ratio)
                             #    if ratio<0.1:
