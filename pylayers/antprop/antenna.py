@@ -140,7 +140,6 @@ Miscellaneous  functions
 
 """
 #from __future__ import print_function
-#import mayavi.mlab as mlab
 import doctest
 import os
 import glob
@@ -149,6 +148,7 @@ import pdb
 import sys
 if sys.version_info.major==2:
     import Image
+    import mayavi.mlab as mlab
 else:
     import image
 import numpy as np
