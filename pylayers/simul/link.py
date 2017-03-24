@@ -1433,10 +1433,10 @@ class DLink(Link):
 
         for key, value in defaults.items():
             if key not in kwargs:
-                kwargs[key]=value
+                kwargs[key] = value
 
         if 'cutoff' not in kwargs:
-            kwargs['cutoff']=self.cutoff
+            kwargs['cutoff'] = self.cutoff
         else:
             self.cutoff=kwargs['cutoff']
 
@@ -1558,7 +1558,10 @@ class DLink(Link):
         else :
 
             if kwargs['ra_ceil_H'] == []:
-                ceilheight = self.L.maxheight
+                if self.L.indoor:
+                    ceilheight = self.L.maxheight
+                else:
+                    ceilheight = 0 
             else:
                 ceilheight = kwargs['ra_ceil_H']
 

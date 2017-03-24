@@ -1752,7 +1752,7 @@ class Antenna(Pattern):
     def load_atoll(self,directory="ant"):
         """ load antenna from Atoll file 
         
-        In Atoll format an Antenna gain is given for the horizontal and vertical plane 
+        Atoll format provides Antenna gain given for the horizontal and vertical plane 
         for different frequencies and different tilt values 
 
         """
