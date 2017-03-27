@@ -302,7 +302,7 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('struc','images')
         ,os.path.join('struc','ini')
         ,'ant',os.path.join('output','Tx001'),'output'
-        ,'geom',os.path.join('output','sig')
+        ,'geom'
         ,os.path.join('output','r2d')
         ,os.path.join('output','r3d'),'body'
         ,os.path.join('body','c3d')
