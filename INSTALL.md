@@ -21,13 +21,14 @@ Important : Say yes to add Anaconda to your path
 ## Windows Install
 
 1. Download and Install [Anaconda](https://store.continuum.io/cshop/anaconda/) 
-2. Download the Shapely package corresponding to your platform from 
+2. Download the **Shapely** package wheel corresponding to your platform from 
 [Unofficial Windows Binaries for Python Extension Packages #Shapely](http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely) *
-3. Download the Basemap package corresponding to your platform from [Unofficial Windows Binaries for Python Extension Packages #Basemap](http://www.lfd.uci.edu/~gohlke/pythonlibs/#basemap)
-4. Install Shapely and Basemap using the downloaded files
-5. 3. Clone PyLayers : **git clone https://github.com/pylayers/pylayers.git**
-6. Run installer.bat
-7. Done
+3. Download the **Basemap** package wheel corresponding to your platform from [Unofficial Windows Binaries for Python Extension Packages #Basemap](http://www.lfd.uci.edu/~gohlke/pythonlibs/#basemap)
+4. Download the **triangle** package wheel corresponding to your platform from [Unofficial Windows Binaries for Python Extension Packages #triangle](http://www.lfd.uci.edu/~gohlke/pythonlibs/#triangle)
+5. Install the 3 previously downloaded packages (Shapely, Basemap and triangle) whells using pip ( e.g. pip install triangle-date-pythonversion-plateform.whl
+6. Clone PyLayers : **git clone https://github.com/pylayers/pylayers.git**
+7. Run installer.bat
+8. Done
 
 
 * Despite shapely is part of the Anaconda distribution, the Windows distribution doesn't contains the libgeos dependencies.
