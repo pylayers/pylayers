@@ -291,13 +291,8 @@ for nm,nv in pstruc.items():
 
 if basename != os.path.join(pylayersdir,'data'):
     if not 'win' in sys.platform:
-<<<<<<< HEAD
-        dirlist=['ini','struc/furnitures'
-        ,'struc/osm','struc/wrl','struc/res'
-=======
         dirlist=['ini','struc','struc/furnitures'
         ,'struc/osm','struc/wrl','struc/res','struc/str'
->>>>>>> f3913afe4760ccfb71c481f61955aa54a6512a1e
         ,'struc/images','struc/ini'
         ,'ant','output/Tx001','output'
         ,'geom','output/r2d'
