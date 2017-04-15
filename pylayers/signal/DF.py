@@ -401,9 +401,8 @@ class DF(PyLayers):
 
         t = np.arange(0,2*np.pi+0.1,0.1)
         plt.plot(np.cos(t),np.sin(t),'k')
-
-        plt.plot(np.real(ra),np.imag(ra),'x',color='r')
-        plt.plot(np.real(rb),np.imag(rb),'o',color='b')
+        plt.plot(np.real(ra),np.imag(ra),'o',color='r')
+        plt.plot(np.real(rb),np.imag(rb),'o',color='g')
         M1 = -10000
         M2 = -10000
         if len(ra)>0:

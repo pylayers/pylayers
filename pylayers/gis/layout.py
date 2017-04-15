@@ -362,7 +362,6 @@ class Layout(pro.PyLayers):
             self._filename = 'newfile.ini'
             newfile = True
 
-        #pdb.set_trace()
         if not newfile:
             if loadini:
                 filename = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
@@ -383,9 +382,10 @@ class Layout(pro.PyLayers):
             else:  # load from address geocoding
                 self.importosm(address=string, dist_m=dist_m, cart=True,typ=self.typ)
                 self.loadosm = True
-
             
-            self.boundary()
+            # add boundary if it not exist
+            if not self.hasboundary:    
+                self.boundary()
             self.subseg()
             self.updateshseg()
             try:
@@ -6129,7 +6129,10 @@ class Layout(pro.PyLayers):
             self.Gt.node[cy]['indoor'] = False
             self.Gt.node[cy]['isopen'] = True
             self.Gt.add_edge(0, cy, segment=[seg])
-
+        
+        # 
+        #
+        #
         if check:
             # print("check len(ncycles) == 2",)
             nodes = [i for i in self.Gs.nodes() if i > 0]

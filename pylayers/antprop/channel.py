@@ -509,7 +509,7 @@ class TBchannel(bs.TBsignal):
         K = Pmax/(Ptot-Pmax)
         if dB:
             K=10*np.log10(K)
-        return(K[0])
+        return K[0]
 
     def tau_rms(self, alpha=0.1,threshold_dB=20, tau0=0):
         r""" calculate root mean square delay spread starting from delay tau_0
@@ -554,7 +554,7 @@ class TBchannel(bs.TBsignal):
         
         taurms = np.sqrt(num/den)
 
-        return(taurms)
+        return taurms
 
     def toFD(self,fGHz=np.linspace(2,5,256)):
         """ Transform to Frequency domain
@@ -1000,7 +1000,7 @@ class TUchannel(TBchannel,bs.TUsignal):
             P.y = P.y / (R * Tpns)
         else:
             P.y = P.y/ (R* (P.x[-1]-P.x[0]))
-        return(P)
+        return P
 
     def awgn(self,PSDdBmpHz=-174,snr=0,seed=1,typ='psd',R=50):
         """ add a white Gaussian noise
@@ -1334,7 +1334,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         if len(shy)>1:
            self.y = np.vstack((self.y,ynew))
         else:
-           self.y = ynew[np.newaxis,:]
+           self.y = ynew[None,:]
         self.y = np.delete(self.y,0,0)
 
     def readcir(self,filename,outdir=[]):
@@ -2304,11 +2304,11 @@ class Tchannel(bs.FUsignal):
         WGHz=kwargs['WGHz']
         Ntap=kwargs['Ntap']
         # yb : tau x f x 1
-        yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+        yb = self.y[:,:,None]*np.exp(-2 * 1j * np.pi *self.taud[:,None,None] * fcGHz )
         # l : 1 x 1 x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
+        l  = np.arange(Ntap)[None,None,:]
         # l : tau x 1 x 1
-        tau = self.tau0[:,np.newaxis,np.newaxis]
+        tau = self.tau0[:,None,None]
         # S : tau x f x tap
         S   = np.sinc(l-tau*WGHz)
         # htap : f x tap
@@ -3062,10 +3062,10 @@ class Tchannel(bs.FUsignal):
         vb0 =  phi_vb/(2*np.pi)
         # standard deviation of  velocity vector orientation is inversely
         # proportional to velocity magnitude
-        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,np.newaxis,np.newaxis]
-        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,np.newaxis,np.newaxis]
-        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,np.newaxis,np.newaxis]
-        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,np.newaxis,np.newaxis]
+        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,None,None]
+        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,None,None]
+        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,None,None]
+        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,None,None]
 
         # uniform sampling over the sphere
         tha = np.arccos(2*va-1)
@@ -3077,31 +3077,31 @@ class Tchannel(bs.FUsignal):
         vay = np.cos(tha)*np.sin(pha)
         vaz = np.sin(tha)*np.cos(pha*0)
 
-        vaxy = np.concatenate([vax[np.newaxis,np.newaxis,np.newaxis,...],vay[np.newaxis,np.newaxis,np.newaxis,...]])
-        va = np.concatenate([vaxy,vaz[np.newaxis,np.newaxis,np.newaxis,...]])
+        vaxy = np.concatenate([vax[None,None,None,...],vay[None,None,None,...]])
+        va = np.concatenate([vaxy,vaz[None,None,None,...]])
 
         vbx = np.cos(thb)*np.cos(phb)
         vby = np.cos(thb)*np.sin(phb)
         vbz = np.sin(thb)*np.cos(phb*0)
 
-        vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
+        vbxy = np.concatenate([vbx[None,None,None,...],vby[None,None,None,...]])
 
         # 3 x r x f x s x m x tap
-        vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
+        vb = np.concatenate([vbxy,vbz[None,None,None,...]])
 
         # beta : r x f x s x m x tap
-        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
-        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
+        betaa = np.sum(ska[:,:,None,None,None,None]*va,axis=0)
+        betab = np.sum(skb[:,:,None,None,None,None]*vb,axis=0)
 
 
         # m discrete time axis
         # r x f x s x m x tap
-        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
+        m = np.linspace(0,mmax,Nm)[None,None,None,:,None]
         # r x f x s x m x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
+        l  = np.arange(Ntap)[None,None,None,None,:]
         # l : r x f x s x m x tap
-        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]+ \
-              self.taue[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        tau = self.taud[:,None,None,None,None]+ \
+              self.taue[:,None,None,None,None]
 
         ba  = betaa*Va*m/(0.3*WMHz*1e6)
         bb  = betab*Vb*m/(0.3*WMHz*1e6)
@@ -3109,7 +3109,7 @@ class Tchannel(bs.FUsignal):
         # S : r x f x s x m x tap (form 2.34 [D. Tse])
         S   = np.sinc(l-tau2*WMHz/1000.)
         # sum over r :  f x s  x m x tap
-        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+        htap = np.sum(S*self.y[...,None,None,None]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
 
         # f x s  x m x tap
         htap  = htap.reshape(Nf,Ns,Nm,Ntap)
@@ -3139,8 +3139,8 @@ class Tchannel(bs.FUsignal):
     #     #     >>> from pylayers.signal.bsignal import *
     #     #     >>> import numpy as np
     #     #     >>> fGHz = np.arange(2,11,0.1)
-    #     #     >>> tau1 = np.array([1,2,3])[:,np.newaxis]
-    #     #     >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
+    #     #     >>> tau1 = np.array([1,2,3])[:,None]
+    #     #     >>> y = np.exp(-2*1j*np.pi*fGHz[None,:]*tau1)/fGHz[None,:]
     #     #     >>> H = Tchannel(x=fGHz,y=y,tau=np.array([15,17,18]))
     #     #     >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
     #     #     >>> t1 = plt.suptitle('Before minimal phase compensation')
@@ -4388,33 +4388,33 @@ class Ctilde(PyLayers):
         #
 
         #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:, np.newaxis]
+        r0 = Rr[0,0,:][:, None]
         #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:, np.newaxis]
+        r1 = Rr[0,1,:][:, None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:, np.newaxis]
+        r0 = Rr[1, 0,:][:, None]
         #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:, np.newaxis]
+        r1 = Rr[1, 1,:][:, None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0, 0, :][:, np.newaxis]
+        r0 = Rt[0, 0, :][:, None]
         #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1, 0, :][:, np.newaxis]
+        r1 = Rt[1, 0, :][:, None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
         #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0, 1, :][:, np.newaxis]
+        r0 = Rt[0, 1, :][:, None]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1, 1, :][:, np.newaxis]
+        r1 = Rt[1, 1, :][:, None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -4493,33 +4493,33 @@ class Ctilde(PyLayers):
         #
 
         #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:,np.newaxis]
+        r0 = Rr[0,0,:][:,None]
         #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:,np.newaxis]
+        r1 = Rr[0,1,:][:,None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:,np.newaxis]
+        r0 = Rr[1, 0,:][:,None]
         #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:,np.newaxis]
+        r1 = Rr[1, 1,:][:,None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0,0,:][:,np.newaxis]
+        r0 = Rt[0,0,:][:,None]
         #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1,0,:][:,np.newaxis]
+        r1 = Rt[1,0,:][:,None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
         #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0,1,:][:,np.newaxis]
+        r0 = Rt[0,1,:][:,None]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1,1,:][:,np.newaxis]
+        r1 = Rt[1,1,:][:,None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -4851,7 +4851,7 @@ class Ctilde(PyLayers):
             H.applyFriis()
 
 
-        return(H)
+        return H
 
 if __name__ == "__main__":
     plt.ion()
