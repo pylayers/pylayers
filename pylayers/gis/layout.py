@@ -10,6 +10,7 @@ except:
 import pdb
 import sys
 import os
+import logging
 import copy
 import glob
 import time
@@ -904,6 +905,7 @@ class Layout(pro.PyLayers):
         #
         # check if Gs points are unique
         # segments can be duplicated
+        #
         P = np.array([self.Gs.pos[k] for k in upnt])
         similar = geu.check_point_unicity(P)
         if len(similar) != 0:
@@ -1620,8 +1622,9 @@ class Layout(pro.PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
-        # lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
-        # lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
+        #
+        lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
+        lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
         # bd = [lon.min(), lat.min(), lon.max(), lat.max()]
         # lon_0 = (bd[0] + bd[2]) / 2.
         # lat_0 = (bd[1] + bd[3]) / 2.
@@ -1631,10 +1634,10 @@ class Layout(pro.PyLayers):
         #                  urcrnrlon=bd[2], urcrnrlat=bd[3],
         #                  resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
         self.m = m
-        # if kwargs['cart']:
-        #     x, y = self.m(lon, lat)
-        #     self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
-        #     self.coordinates = 'cart'
+        if kwargs['cart']:
+             x, y = self.m(lon, lat)
+             self.Gs.pos = {k: (x[i], y[i]) for i, k in enumerate(self.Gs.pos)}
+             self.coordinates = 'cart'
 
         # del coords
         # del nodes
@@ -1655,6 +1658,7 @@ class Layout(pro.PyLayers):
 
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
+
         #
         # add boundary
         #
@@ -1662,7 +1666,6 @@ class Layout(pro.PyLayers):
         self.boundary()
 
         # save ini file
-
         self.save()
 
         #
@@ -3571,7 +3574,7 @@ class Layout(pro.PyLayers):
         return ptlist, seglist
 
     def get_points(self, ax):
-        """ get point list and segment list in a rectangular zone
+        """ get points list and segments list in a rectangular zone
 
         Parameters
         ----------
@@ -3588,7 +3591,7 @@ class Layout(pro.PyLayers):
         """
 
 
-        if type(ax)==geu.Polygon:
+        if type(ax) == geu.Polygon:
             eax = ax.exterior.xy
             xmin = np.min(eax[0])
             xmax = np.max(eax[0])
@@ -5867,7 +5870,13 @@ class Layout(pro.PyLayers):
                         desc ='Update Polygons vnodes',
                         leave=True,
                         position=tqdmpos+1)
-        [p.setvnodes_new(self.get_points(p),self) for p in lTP]
+
+        # p is a polygon 
+        # get_points(p) : get points from polygon
+        # this is for limiting the search region for large Layout 
+
+        [ p.setvnodes_new(self.get_points(p),self) for p in lTP ]
+
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)

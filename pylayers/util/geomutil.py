@@ -181,12 +181,12 @@ COLOR = {
 }
 
 def ispoint(tpts, pt, tol=0.05):
-        """ check if pt is a point in a tuple of ponts
+        """ check if pt is a point in a tuple of points
 
         Parameters
         ----------
 
-        tpts : tuple (point (2xN) , index (1xN))
+        tpts : tuple (points (2xN) , index (1xN))
         pt  : point (2,1)
         tol : float
             default (0.05 meters)
@@ -203,10 +203,10 @@ def ispoint(tpts, pt, tol=0.05):
         -------
 
             >>> from pylayers.util.geomutil.util import *
-            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([1,2,3]))
+            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([-1,-2,-3]))
             >>> pt = np.array([[1],[5]])
             >>> ispoint(tpts,pt)
-            1
+            -1
 
         See Also
         --------
@@ -745,12 +745,13 @@ class Polygon(pro.PyLayers, shg.Polygon):
         self.vnodes = np.array(vnodes)
 
     
-    def setvnodes_new(self, tpts,L):
+    def setvnodes_new(self,tpts,L):
         """ update vnodes member from Layout
 
         Parameters
         ----------
 
+        tpts : list of points 
         L : pylayers.layout.Layout
 
         See Also
@@ -759,7 +760,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         pylayers.layout.Layout.ispoint
 
         vnodes is a list of point and segments of the polygon. 
-        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        If there are isosegments the sequence of iso segments 
+        is repeated between the termination points. 
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
@@ -769,7 +771,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
         #
-        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        # npts : list of points which are in the layout (with tolerance 1cm) 
+        #        0 means not in the layout 
         #
         npts = [ispoint(tpts,np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
         assert (0 not in npts), pdb.set_trace()
@@ -778,9 +781,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         vnodes = []
         for pseg in seg:
             vnodes = vnodes + [pseg[0]]
+            # get the list of associated segments
             nseg = L.numseg(pseg[0], pseg[1], first=False)
-            # if nseg==0:
-            #     pdb.set_trace()
             if type(nseg) == int:
                 nseg = [nseg]
             else:
