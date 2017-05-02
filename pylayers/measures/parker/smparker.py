@@ -352,10 +352,12 @@ class Axes(PyLayers):
 
         Examples
         --------
+
         >>> from pylayers.measures.parker.smparker import *
         >>> X = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> Y = Axes(2,'y',typ='t',scale=2280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+
         """
 
         self.status = [0,0,0,0,

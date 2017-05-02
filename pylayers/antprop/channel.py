@@ -20,8 +20,8 @@ TBchannel class
 TUchannel class
 ===============
 
-.. autosummary::
-    :toctree: generated/
+.. autosummar::::
+    :toctree:generated/
 
     TUchannel.psd
     TUchannel.awgn
@@ -2366,7 +2366,7 @@ class Tchannel(bs.FUsignal):
         direction of depature (rad) [theta_t,phi_t]  nray x 2
     doa  :
         direction of arrival (rad)  [theta_r,phi_r]  nray x 2
-    tauk :
+    tau  :
         delay ray k in ns
 
     Methods
@@ -2769,14 +2769,51 @@ class Tchannel(bs.FUsignal):
         ri = h.convolve(w)
         return(ri)
 
+    def baseband(self,**kwargs):
+        """ Channel transfer function in baseband
+
+        Parameters
+        ----------
+
+        fcGHz : center frequency 
+        WMHz  : bandwidth in MHz 
+        Nf    : Number of frequency points
+
+        """
+
+        defaults = {'fcGHz':4.5,
+                    'WMHz':20,
+                    'Nf':100}
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        fcGHz = kwargs['fcGHz']
+        WMHz  = kwargs['WMHz']
+        Nf = kwargs['Nf']
+
+        # self.y : Nray x Nr x Nt x Nf
+        # self.taud : (,Nray)
+
+        # complex amplitude in baseband
+        # Nray x Nr x Nt x Nf1 
+        abb  = self.y*np.exp(-2 * 1j * np.pi *self.taud[:,None,None,None] * fcGHz )
+        fMHz = np.linspace(-WMHz/2.,WMHz/2,Nf)
+        E = np.exp(-2*1j*fMHz[None,None,None,:]*1e-3*self.taud[:,None,None,None])
+        y = np.sum(abb*E,axis=0)
+        H = bs.FUsignal(x=fMHz,y=y)
+
+        return(H)
+
     def chantap(self,**kwargs):
         """ channel tap
 
         Parameters
         ----------
 
-        fcGHz :
-            WGHz  :
+        fcGHz : center frequency 
+        WGHz  : bandwidth 
         Ntap  : int
 
         """
@@ -2789,9 +2826,24 @@ class Tchannel(bs.FUsignal):
             if key not in kwargs:
                 kwargs[key] = value
 
-        h = bs.Tchannel(x=self.x, y=self.y, tau=self.taud)
-        htap = h.chantap(**kwargs)
-        return htap
+        fcGHz=kwargs['fcGHz']
+        WGHz=kwargs['WGHz']
+        Ntap=kwargs['Ntap']
+        # yb : tau x f x 1
+        yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+        # l : 1 x 1 x tap
+        l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
+        # l : tau x 1 x 1
+        tau = self.tau0[:,np.newaxis,np.newaxis]
+        # S : tau x f x tap
+        S   = np.sinc(l-tau*WGHz)
+        # htap : f x tap
+        htap  = np.sum(yb*S,axis=0)
+        htapi = np.sum(htap,axis=0)
+
+        return htapi
+
+
 
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
@@ -3986,7 +4038,7 @@ class Tchannel(bs.FUsignal):
             ----------
 
             Pt : Power transmitted
-            T : Temperrature Kelvin
+            T : Temperature (Kelvin)
             mode : string
 
             Returns
@@ -5248,7 +5300,6 @@ class Ctilde(PyLayers):
             a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
-
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)

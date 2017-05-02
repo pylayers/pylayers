@@ -131,7 +131,7 @@ class Rays(PyLayers, dict):
         self.pRx = pRx
         self.nray = 0
         self.raypt = 0
-        self.los = False
+        self.los = False  
         self.is3D = False
         self.isbased = False
         self.filled = False
@@ -309,16 +309,25 @@ class Rays(PyLayers, dict):
         try:
 
             fh5=h5py.File(filenameh5,'a')
-            if not grpname in fh5['ray'].keys():
-                fh5['ray'].create_group(grpname)
-            else :
-                print 'ray/'+grpname +'already exists in '+filenameh5
-            f = fh5['ray/'+grpname]
-            # keys not saved as attribute of h5py file
+            if self.is3D:
+                if not grpname in fh5['ray'].keys():
+                    fh5['ray'].create_group(grpname)
+                else :
+                    print 'ray/'+grpname +'already exists in '+filenameh5
+                f = fh5['ray/'+grpname]
+
+                
+            else:
+                if not grpname in fh5['ray2'].keys():
+                    fh5['ray2'].create_group(grpname)
+                else :
+                    print 'ray2/'+grpname +'already exists in '+filenameh5
+                f = fh5['ray2/'+grpname]
+             # keys not saved as attribute of h5py file
             notattr = ['I','B','B0','delays','dis']
             for a in self.__dict__.keys():
                 if a not in notattr:
-                    f.attrs[a]=getattr(self,a)
+                    f.attrs[a]=getattr(self,a)  
 
             for k in self.keys():
                 f.create_group(str(k))
@@ -361,7 +370,14 @@ class Rays(PyLayers, dict):
         # read/write error
         try:
             fh5=h5py.File(filename,'r')
-            f = fh5['ray/'+grpname]
+
+            if self.is3D:
+                argfile = 'ray/'+grpname
+            else:
+                argfile = 'ray2/'+grpname
+
+            f = fh5[argfile]
+
             for k in f.keys():
                 self.update({eval(k):{}})
                 for kk in f[k].keys():
@@ -369,6 +385,8 @@ class Rays(PyLayers, dict):
 
             for a,va in f.attrs.items():
                 setattr(self,a,va)
+            
+
             fh5.close()
 
         except:
@@ -384,8 +402,8 @@ class Rays(PyLayers, dict):
             L=Layout(self.Lfilename,build=True)
             self.fillinter(L)
 
-        if self.evaluated:
-            return self.eval(self.fGHz)
+        # if self.evaluated:
+        #     return self.eval(self.fGHz)
 
 
     def reciprocal(self):
@@ -621,24 +639,41 @@ class Rays(PyLayers, dict):
                         ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         else:
             rlist = kwargs['rlist']
-            nbi = self._ray2nbi[rlist]
-            nr = np.array((nbi,rlist))
-            unb = np.unique(nr[0,:])
-            unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
+            if self.is3D:
+                nbi = self._ray2nbi[rlist]
+                nr = np.array((nbi,rlist))
+                unb = np.unique(nr[0,:])
+                unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
 
-            for i in unb:
-                raynb = (nr[1,unr[i]]).astype(int)
-                nbr=len(raynb)
-                ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
-                for j in ptidx:
+                for i in unb:
+                    raynb = (nr[1,unr[i]]).astype(int)
+                    nbr=len(raynb)
+                    ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
+                    for j in ptidx:
 
-                    ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                                     np.hstack((self[i]['pt'][0:2, :, j],
-                                     self.pRx[0:2].reshape((2, 1))))
-                                     ))
-                    ax.plot(ray[0, :], ray[1, :],
-                            alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
-                    ax.axis('off')
+                        ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                                         np.hstack((self[i]['pt'][0:2, :, j],
+                                         self.pRx[0:2].reshape((2, 1))))
+                                         ))
+                        ax.plot(ray[0, :], ray[1, :],
+                                alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+                        ax.axis('off')
+            else:
+
+                for i in rlist:
+                    lray = range(len(self[i]['pt'][0, 0, :]))
+                    if self.filled :
+                        ax.set_title('rays index :'+ str(self[i]['rayidx']))
+                    for j in lray:
+                        ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                                         np.hstack((self[i]['pt'][0:2, :, j],
+                                         self.pRx[0:2].reshape((2, 1))))
+                                         ))
+                        ax.plot(ray[0, :], ray[1, :],
+                                alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+                        ax.axis('off')
+                        if self.filled :
+                            ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
 
 
 
@@ -772,7 +807,7 @@ class Rays(PyLayers, dict):
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
-        rmoutceilR ; bool
+        rmoutceilR : bool
             Remove Ceil reflexions in cycles (Gt nodes) 
             with indoor=False attribute 
 
@@ -810,13 +845,21 @@ class Rays(PyLayers, dict):
 
             pts = self[i]['pt'][0:2, :, :]
             sig = self[i]['sig']
-            # broadcasting of t and r
-            t = self.pTx[0:2].reshape((2, 1, 1)) * \
+            
+            if pts.shape[2]!=0:
+                # broadcasting of t and r
+                t = self.pTx[0:2].reshape((2, 1, 1)) * \
                 np.ones((1, 1, len(pts[0, 0, :])))
-            r = self.pRx[0:2].reshape((2, 1, 1)) * \
+                r = self.pRx[0:2].reshape((2, 1, 1)) * \
                 np.ones((1, 1, len(pts[0, 0, :])))
+                pts1 = np.hstack((t, np.hstack((pts, r))))
+            else:
+                t = self.pTx[0:2].reshape((2, 1, 1))
+                r = self.pRx[0:2].reshape((2, 1, 1))
+                pts1 = np.hstack((t,r))
             # append t and r to interaction points in 2D
-            pts1 = np.hstack((t, np.hstack((pts, r))))
+            
+            
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             # array of all ray segments distances
             si = np.sqrt(np.sum(si1 * si1, axis=0))
@@ -871,18 +914,25 @@ class Rays(PyLayers, dict):
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))
             # reshape signature in adding tx and rx
-            sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
+            
+            if sig.shape[0]!=0:
+                sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
                              sig,
                              np.zeros((2, 1, Nrayk), dtype=int)))  # add signature of Tx and Rx (0,0))
+            else:
+                sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
+                                 np.zeros((2, 1, Nrayk), dtype=int)))
             # broadcast tx and rx
             Tx = tx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
 
-            # pte is the sequence of point in 3D ndim =3   ( ndim x k x Nrayk)
-            pte = self[k]['pt']
-
-            # ndim x k+2 x Nrayk
-            pte = np.hstack((Tx, pte, Rx))
+            if k!=0:
+                # pte is the sequence of point in 3D ndim =3   ( ndim x k x Nrayk)
+                pte = self[k]['pt']
+                # ndim x k+2 x Nrayk
+                pte = np.hstack((Tx, pte, Rx))
+            else:
+                 pte = np.hstack((Tx, Rx))
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
@@ -1145,7 +1195,7 @@ class Rays(PyLayers, dict):
                     ptc = ptees[:,uc[0],uc[1]]
                     if len(uc[0]) !=0:
                         P = shg.MultiPoint(ptc[:2,:].T)
-                        # 2 determine the cycle where ceil reflexions append
+                        # to determine the cycle where ceil reflexions append
                         # uinter(nb pt x nb cycles)
                         mapnode=L.Gt.nodes()
                         uinter = np.array([[L.Gt.node[x]['polyg'].contains(p) for x in mapnode if x>0] for p in P])
@@ -1185,14 +1235,14 @@ class Rays(PyLayers, dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-
-        if (self.los) & (np.sqrt(np.sum((tx-rx)**2)) !=0) :
-            r3d[0] = {}
-            r3d[0]['sig'] = np.zeros((2,2,1))
-            r3d[0]['sig2d'] = np.zeros((2,2,1))
-            r3d[0]['pt'] = np.zeros((3,2,1))
-            r3d[0]['pt'][:,0,:] = tx[:,np.newaxis]
-            r3d[0]['pt'][:,1,:] = rx[:,np.newaxis]
+        #pdb.set_trace()
+        # if (self.los) & (np.sqrt(np.sum((tx-rx)**2)) !=0) :
+        #     r3d[0] = {}
+        #     r3d[0]['sig'] = np.zeros((2,2,1))
+        #     r3d[0]['sig2d'] = np.zeros((2,2,1))
+        #     r3d[0]['pt'] = np.zeros((3,2,1))
+        #     r3d[0]['pt'][:,0,:] = tx[:,np.newaxis]
+        #     r3d[0]['pt'][:,1,:] = rx[:,np.newaxis]
 
         # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint)
         # count total number of ray
@@ -1605,13 +1655,14 @@ class Rays(PyLayers, dict):
                 except:
                     self._ray2nbi=_ray2nbi
 
+               
                 self._ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
 
                 #################################
-                # Start of diffraction specific process
-                ##############################
+                # Start diffraction specific case
+                #################################
                 
                 if len(udiff[0]) != 0 :
                     Z=np.where(ityp.T==1)
@@ -1783,11 +1834,11 @@ class Rays(PyLayers, dict):
                     #update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
                 #################################
-                # End of diffraction specifc process
-                ##############################
+                # End of diffraction specific case
+                ##################################
 
 
-#
+                #
                 # pasting (Bo0,B,BiN)
                 #
 

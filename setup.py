@@ -1,5 +1,6 @@
+#-*- coding:Utf-8 -*-
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 """
 Setup script for pylayers 
 """
@@ -9,17 +10,13 @@ import os
 
 setup(name='pylayers' ,
       version='0.5',
-      description='Python LocAlization mobilitY Environement aware Radio Simulator',
+      description='Advanced Radio Channel Simulator',
       author='UGUEN Bernard, AMIOT Nicolas, LAARAIEDH Mohamed, MHEDHBI Meriem',
       author_email='bernard.uguen@univ-rennes1.fr, nicolas.amiot@univ-rennes1.fr, mohamed.laaraeidh@gmail.com',
       url='https://github.com/pylayers/pylayers',
       include_dirs = [numpy.get_include()],
       install_requires=[
         
-
-
-
-
                         ],
       packages=find_packages()
 )
@@ -30,7 +27,7 @@ setup(name='pylayers' ,
 # if so just update the source path
 
 
-# detect user's home
+# detect users home
 home = os.path.expanduser('~')
 # detect directory from which setup is launched
 source = os.getcwd()

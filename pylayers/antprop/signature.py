@@ -465,12 +465,21 @@ class Signatures(PyLayers,dict):
         ----------
 
         L : Layout
+        dump : int 
         source : int
             cycle number
         target : int
             cycle index
         cutoff : int
             limiting depth level in graph exploration (default 3)
+
+        A signature ia a dict of arrays
+
+        The array is an interleaving between nstr and type of interaction 
+        typeInt = 1,2,3 (extremity,diffraction,reflexion,transmission)
+
+        Si[1]
+        np.array([5,2,19,2,26,2,72,2]) 
 
         """
         self.L = L
@@ -576,6 +585,7 @@ class Signatures(PyLayers,dict):
 
     def check(self):
         """ check signature
+
         """
 
         OK = Signatures(self.L,self.target,self.source)
@@ -3046,7 +3056,6 @@ class Signatures(PyLayers,dict):
 
         # list of interactions visible from target
         litR,litT,litD = self.L.intercy(self.target,typ='target')
-
         if diffraction:
            lit  = litT + litR + litD
         else:
@@ -3126,7 +3135,7 @@ class Signatures(PyLayers,dict):
                 interaction = next(iter_on_interactions, None)
                 #if visited==[(4,2),(5,2)]:
                 #     print visited
-                #   print interaction
+                #print s,interaction
                 #     pdb.set_trace()
                 cond1 = interaction is None
                 # test whether the interaction has already been visited (reverberation)
@@ -3138,10 +3147,11 @@ class Signatures(PyLayers,dict):
                 if (not cond1):
                     if (not cond2) and (not cond3):
                         visited.append(interaction)
-                        # if visited==[(7, 2), (3, 2, 3), (10, 3, 4)]:
+                        #print visited
+                        # if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
                         #     pdb.set_trace()
                         
-                        #print visited,len(stack)
+                        
                         if interaction[0] in lair:
                             lawp.append(1)
                         else:
@@ -3157,11 +3167,12 @@ class Signatures(PyLayers,dict):
 
                         # diffraction (retrieve a point)
                         if len(visited[-2]) == 1:
-                            th = self.L.Gs.pos[nstr]
+                            #th = self.L.Gs.pos[nstr]
+                            th = self.L.Gs.pos[visited[-2][0]]
                             th = np.array([th,th])
                             R.append((np.eye(2),np.array([0,0])))
                         # reflexion 
-                        if len(visited[-2])==2:
+                        elif len(visited[-2])==2:
 
                             pts = self.L.Gs[nstr].keys()
                             #th (Npt x xy)
@@ -3285,6 +3296,10 @@ class Signatures(PyLayers,dict):
                                 ratio = I/angle_cone
                             else:
                                 ratio = 0
+                            # 
+                            # UNCOMMENT BELOW FOR DEBUG
+                            #
+                            #print visited,len(stack),ratio
                             # mina  = min(al,ar)
                             # maxa  = max(al,ar)
                             
@@ -3395,7 +3410,8 @@ class Signatures(PyLayers,dict):
                             #
                             # print nstr
                             # print visited
-                            # fig ,ax = self.L.showG('s',aw=1,labels=1)
+                            # #if visited==[(98,6,3), (-25531299,), (98, 3, 6)]:
+                            # fig ,ax = self.L.showG('s',aw=1,labels=0)
                             # ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
                             # ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
 
@@ -3404,7 +3420,7 @@ class Signatures(PyLayers,dict):
                             # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
                             # #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
                             # ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
-                            # plt.title(str(visited)+'  '+str(seg_ratio))
+                            # plt.title(str(visited)+'  '+str(ratio))
                             # ax.plot(apex[0],apex[1],'or')
                             # plt.axis('auto')
                             # plt.show()
@@ -3423,12 +3439,13 @@ class Signatures(PyLayers,dict):
                                 except:
                                     self[len(typ)] = np.vstack((anstr,typ))
                                 cptsig +=1
-                                #print visited,len(stack),cptsig  
-                                #print '    ',cptsig,zip(anstr,typ),ratio
+                                # print visited,len(stack),cptsig  
+                                # print '    ',cptsig,zip(anstr,typ),ratio
                             # move forward even when arrived in the target cycle
                             
                             outint = Gi[visited[-2]][interaction]['output'].keys()
-                            proint = Gi[visited[-2]][interaction]['output'].values()
+                            #outint = nx.neighbors(self.L.Gi,interaction)
+                            # proint = Gi[visited[-2]][interaction]['output'].values()
                             #nexti  = [it for k,it in enumerate(outint) if ((it[0]>0) and (proint[k]>threshold))]
                             nexti  = [it for k,it in enumerate(outint)]
                             stack.append(iter(nexti))
@@ -3814,6 +3831,9 @@ class Signatures(PyLayers,dict):
         polyctx = self.L.Gt.node[cyptx]['polyg']
         polycrx = self.L.Gt.node[cyprx]['polyg']
 
+        #
+        # Handling LOS ray
+        #
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
             if cyptx==cyprx:
@@ -3974,19 +3994,28 @@ class Signatures(PyLayers,dict):
         polyctx = self.L.Gt.node[cyptx]['polyg']
         polycrx = self.L.Gt.node[cyprx]['polyg']
 
+        # The Line of sight situation is detected here 
+        # dtxtx : distance between Tx and Rx 
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
             if polyctx.contains(los):
                 rays.los = True
+
             else:
                 rays.los = False
 
-
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
+        # 
+        # Add LOS ray in ray 2D 
+        #
+        if rays.los:
+            R[0]= {'sig':np.zeros(shape=(0,0,1)),'pt': np.zeros(shape=(2,1,0))}
+        
         rays.update(R)
         rays.nb_origin_sig = len(self)
         rays.origin_sig_name = self.filename
+        #pdb.set_trace()
         return rays
 
     def backtrace(self, tx, rx, M):
