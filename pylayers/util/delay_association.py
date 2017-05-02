@@ -5,15 +5,21 @@ from pylayers.util.pyutil import coldict
 from itertools import permutations
 import  matplotlib.pyplot as plt 
 import pdb
-#
-# This module adresses the problem of delay association 
-#
-Nsnap = 100
-u = np.arange(Nsnap)
-np.random.seed(12)
-#E1=st.expon(4)
-#E2=st.expon(0.2)
-#A1=st.norm(1,0.2)
+
+
+def delay_association(s):
+    """
+    """
+
+
+if __name__=="__main__":
+
+    Nsnap = 100
+    u = np.arange(Nsnap)
+    np.random.seed(12)
+    #E1=st.expon(4)
+    #E2=st.expon(0.2)
+    #A1=st.norm(1,0.2)
 
 #
 #
@@ -22,14 +28,14 @@ np.random.seed(12)
 # ta : array of amplitude 
 # tt : array of delays 
 #
-N = 6 
-ta = np.zeros((1,Nsnap))
-tt = np.zeros((1,Nsnap))
-for k in range(N):
-    tk = (4+10*np.random.rand(1))*np.cos(2*np.pi*4*np.random.rand(1)*u/100.+2*np.pi*np.random.rand(1))+0.0*np.random.rand(Nsnap)
-    ak = 10*(np.sin(2*np.pi*6*np.random.rand(1)*u/100.+2*np.pi*np.random.rand(1))**2+0.4)
-    ta= np.vstack((ta,ak))
-    tt= np.vstack((tt,tk))
+    N = 6 
+    ta = np.zeros((1,Nsnap))
+    tt = np.zeros((1,Nsnap))
+    for k in range(N):
+        tk = (4+10*np.random.rand(1))*np.cos(2*np.pi*4*np.random.rand(1)*u/100.+2*np.pi*np.random.rand(1))+0.0*np.random.rand(Nsnap)
+        ak = 10*(np.sin(2*np.pi*6*np.random.rand(1)*u/100.+2*np.pi*np.random.rand(1))**2+0.4)
+        ta= np.vstack((ta,ak))
+        tt= np.vstack((tt,tk))
 
 W = 4
 bpermut = np.arange(N)
