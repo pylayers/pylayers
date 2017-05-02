@@ -602,15 +602,20 @@ class TBchannel(bs.TBsignal):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        Lam = kwargs['Lam']
-        lam = kwargs['lam']
-        Gam = kwargs['Gam']
+        # rate of the cluster arrival times (Poisson law)
+        Lam = kwargs['Lam'] 
+        # rate of the subsequent rays  (Poisson law)
+        lam = kwargs['lam'] 
+        # power decay of the cluster (Exponential law)
+        Gam = kwargs['Gam'] 
+        # power decay of the rays (Exponential law)
         gam = kwargs['gam']
-        T   = kwargs['T']
-        Nr  = 1.2*T/Lam
-        Nc  = 1.2*T/lam
-        e1 = st.expon(1./Lam)
-        e2 = st.expon(1./lam)
+
+        T   = kwargs['T'] # arrival time
+        Nr  = 1.2*T/Lam # see Eq.31 of the paper
+        Nc  = 1.2*T/lam # see Eq.31 of the paper
+        e1 = st.expon(1./Lam) # exponential decay of clusters
+        e2 = st.expon(1./lam) # exponential decay of rays
 
         # cluster time of arrival
         tc   = np.cumsum(e1.rvs(Nr))
@@ -1797,32 +1802,73 @@ class Mchannel(bs.FUsignal):
 
         return(rho,Cwf,Q)
 
-    # def channel_normalization(self):
-    #     """Normilize the raw channel matrix that will 
-    #        be used in the computation of capacities.
-    #        Implemented from "Massive MIMO Performance Evaluation
-    #        Based on Measured Propagation Data", Gao et al.
-    #     """
+    def wf_dpc(self,Pt=np.array([1e-3]),norma=False):
+        """ calculates the sum rate capacity of the Dirty
+        paper coding. Implemented from 
+        "Dirty Paper Coding vs. TDMA for MIMO Broadcast Channels,
+        N. Jindal and A. Goldsmith"
+
+        Parameters
+        ----------
+
+        Pt :  the total power to be distributed over the different spatial
+            channels using water filling
+        Tp : Receiver Noise Temperature (K)
+
+        Returns
+        -------
+
+        Q : allocation power over users.
         
-    #     # H  : nm x K x nt x nf
-    #     H   = self.y
-    #     # H  : nm x nf x nt x K
-    #     H   = H.swapaxes(1,3)
+            max log2(det(It + sum_{k} Hk^{H}QkHk)
+            st : Qk >=0, sum_{k} tr(Qk) <= Pt
+
+        """
+
+        if norma:
+            # NORMALIZATION
+            # H  : K x nt x nf
+            Hb   = self.y[0]
+            # K x K x nf
+            HHdb = np.einsum('ijk,jlk->ilk',Hb,np.conj(Hb.swapaxes(0,1)))
+            beta = np.sqrt(1.0/np.trace(HHdb))
+            H  = beta * Hb
+            # Hd  : nt x K x nf
+            Hd  = np.conj(H.swapaxes(0,1))
+        else:
+            # H  : K x nt x nf
+            H   = self.y[0]
+            # Hd  : nt x K x nf
+            Hd  = np.conj(H.swapaxes(0,1))
+
+        # White Noise definition
+        fGHz  = self.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0] # Bandwidth
+        dfGHz = fGHz[1]-fGHz[0]  # Frequency step
+        kB    = 1.03806488e-23 # Boltzman constant
+        Tp    = 273
+        N0    = kB*Tp # N0 ~ J ~ W/Hz ~ W.s
+
+        # Parameters
+        K      = np.shape(H)[0] # number of users
+        Nt     = np.shape(H)[1]
+        Int    = np.eye(Nt)[:,:,None]
+        Ik     = np.eye(K)
+        sigma2 = N0*dfGHz*1e9 # Watts
+
+        # Construction of the variable Q (allocated power to users)
+        Q = np.ones((K,K,Nf))
         
-    #     # BE CAREFULL, HERE H SHOULD BE NORMALIZED!!!!!!!
+        # Construction of the function to maximize
+        HdQ  = np.einsum('ijk,jlk->ilk',Hd,Q)   # mt x K x nf
+        HdQH = np.einsum('ijk,jlk->ilk',HdQ,H)  # mt x mt x nf
 
-    #     # H  : nm x nf x K x nt
-    #     H   = H.swapaxes(2,3)
+        # pdb.set_trace()
+        func = la.slogdet((Int + HdQH).swapaxes(0,2))[1]/np.log(2) # (nf,)
 
-    #     K = np.shape(H)[2]  # number of users
-    #     Nt = np.shape(H)[3] # number of antennas
-
-    #     #pdb.set_trace()
-    #     cst = K*Nt/(la.norm(H)**2)
-    #     #cst = K*Nt/la.norm(H,ord='fro')
-    #     Hnorm = np.sqrt(cst)*H
-
-    #     return(Hnorm)
+        return(func)
+       
 
     def channel_normalization(self):
         """Normalize the raw channel matrix that will 
@@ -1851,21 +1897,16 @@ class Mchannel(bs.FUsignal):
         return(Hnorm)
 
 
-    def DPC_capacity(self,Pt=np.array([1e-3]),Tp=273):
-        """Non linear Dirty Paper Coding capacity
-
-        Parameters
-        ----------
-
-        K : number of user with single antenna.
-            in our case: K = 3
-        nt : number of antennas at the BS 
-            in our case: nt \in {8,16,24,32}
-        
+    def zf_sumrate(self,Pt=np.array([1])):
+        """linear zero forcing sum rate.
+           Implemented from "CAPACITY OF LINEAR MULTI-USER MIMO
+           PRECODING SCHEMES WITH MEASURED CHANNEL DATA",
+           Kaltenberg et al.        
         """
 
         # H  : K x nt x nf
         H   = self.y[0]
+        # Hd  : nt x K x nf
         Hd  = np.conj(H.swapaxes(0,1))
         
         # White Noise definition
@@ -1874,186 +1915,387 @@ class Mchannel(bs.FUsignal):
         BGHz  = fGHz[-1]-fGHz[0] # Bandwidth
         dfGHz = fGHz[1]-fGHz[0]  # Frequency step
         kB = 1.03806488e-23 # Boltzman constant
+        Tp = 273            # Kelvin temperature
         N0 = kB*Tp # N0 ~ J ~ W/Hz ~ W.s
 
         # Parameters
         Nf = np.shape(H)[2]
         K   = np.shape(H)[0] # number of users
         Nt  = np.shape(H)[1]
-        Int = np.eye(Nt)
+        pow_us = Pt/(K*1.0)
+        sigma2 = dfGHz*1e9*N0
+        rho = pow_us/sigma2
+
+        # K x K x nf
+        HHd1 = np.einsum('ijk,jlk->ilk',H,Hd) 
+        # nf x K x K
+        HHd = HHd1.swapaxes(0,2)                  
+        # nf x K x K
+        HHdinv1 = np.linalg.inv(HHd)              
+        # K x K x nf
+        HHdinv = HHdinv1.swapaxes(0,2)            
+        # mt x K x nf
+        Wzf = np.einsum('ijk,jlk->ilk',Hd,HHdinv) 
+    
+        # beta: scaling constante
+        Wzfh = np.conj(Wzf.swapaxes(0,1))
+        # WWh = np.einsum('ijk,jlk->ilk',Wzf,Wzfh) # nt x nt x nf
+        WWh = np.einsum('ijk,jlk->ilk',Wzfh,Wzf) # K x K x nf
+        beta = np.sqrt((Pt/(K*1.0))/np.trace(WWh))
+        # the precoding matrix is normalized such as tr(Wzfn*Wzf) = Pt/K
+        Wzfn = beta*Wzf 
+     
+        # K x K x nf
+        HWzf = np.einsum('ijk,jlk->ilk',H,Wzfn)    
+
+        # we are choosing only the interested user.
+        # we drop other users that are considered as interefences.
+        hwzf1 = np.abs(HWzf[0][0])**2        #  (nf,)
+        hwzf2 = np.abs(HWzf[1][1])**2        #  (nf,)
+        hwzf3 = np.abs(HWzf[2][2])**2        #  (nf,)
+        
+        Phwzf1 = hwzf1 # (nf,)
+        Phwzf2 = hwzf2 # (nf,)
+        Phwzf3 = hwzf3 # (nf,)
+
+        snr1 = rho*Phwzf1
+        snr2 = rho*Phwzf2
+        snr3 = rho*Phwzf3
+
+        czf1 = np.log(1 + snr1)/np.log(2)
+        czf2 = np.log(1 + snr2)/np.log(2)
+        czf3 = np.log(1 + snr3)/np.log(2)
+        czf  = czf1 + czf2 + czf3
+        Czf  = dfGHz*1e9*np.sum(czf,axis=0) # bit/s   
+        return(Wzf,Czf)
+
+    def mrc_sumrate(self,Pt = 1.0):
+        """linear mrc sum rate.
+           Implemented from "CAPACITY OF LINEAR MULTI-USER MIMO
+           PRECODING SCHEMES WITH MEASURED CHANNEL DATA",
+           Kaltenberg et al.        
+        """
+
+        # H  : K x nt x nf
+        H   = self.y[0]
+        # Hd  : nt x K x nf
+        Hd  = np.conj(H.swapaxes(0,1))
+        
+        # White Noise definition
+        fGHz  = self.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0] # Bandwidth
+        dfGHz = fGHz[1]-fGHz[0]  # Frequency step
+        kB = 1.03806488e-23 # Boltzman constant
+        Tp = 273            # Kelvin temperature
+        N0 = kB*Tp # N0 ~ J ~ W/Hz ~ W.s
+
+        # Parameters
+        Nf = np.shape(H)[2]
+        K   = np.shape(H)[0] # number of users
+        Nt  = np.shape(H)[1]
         Ik = np.eye(K)
+        pow_us = Pt/(K*1.0)
+        sigma2 = dfGHz*1e9*N0
+       
+        # mt x K x nf
+        Wmrc = Hd 
 
-        snr_at_tx = Pt/(Nt*kB*BGHz*1e9)
+        # beta: scaling constante
+        Wmrch = np.conj(Wmrc.swapaxes(0,1))
+        # WWh = np.einsum('ijk,jlk->ilk',Wmrc,Wmrch) # nt x nt x nf
+        WWh = np.einsum('ijk,jlk->ilk',Wmrch,Wmrc) # K x K x nf
+        beta = np.sqrt((Pt/(K*1.0))/np.trace(WWh)) 
+        # the precoding matrix is normalized such as tr(Wmrcn*Wmrc) = Pt/K
+        Wmrcn = beta*Wmrc
+        # K x K x nf
+        HWmrc = np.einsum('ijk,jlk->ilk',H,Wmrcn)
+
+        hwmrc00 = np.abs(HWmrc[0][0])**2        #  (nf,)
+        hwmrc11 = np.abs(HWmrc[1][1])**2        #  (nf,)
+        hwmrc22 = np.abs(HWmrc[2][2])**2        #  (nf,)
         
-        tS = np.ndarray(shape=(K,0))
-        tpower = np.ndarray(shape=(K,0))
+        Phwmrc00 = hwmrc00 # (nf,)
+        Phwmrc11 = hwmrc11 # (nf,)
+        Phwmrc22 = hwmrc22 # (nf,)
 
-        for ii in range(Nf):
-            # if ii%10==0:
-            #     print ii
-            
-            HHd = np.dot(H[:,:,ii],Hd[:,:,ii]) #  K x K
+        hwmrc01 = np.abs(HWmrc[0][1])**2        #  (nf,)
+        hwmrc02 = np.abs(HWmrc[0][2])**2        #  (nf,)
+        hwmrc10 = np.abs(HWmrc[1][0])**2        #  (nf,)
+        hwmrc12 = np.abs(HWmrc[1][2])**2        #  (nf,)
+        hwmrc20 = np.abs(HWmrc[2][0])**2        #  (nf,)
+        hwmrc21 = np.abs(HWmrc[2][1])**2        #  (nf,)
 
-            # Construct the convex optimization problem
-            ppp = cvx.Variable(K)
-            # diagonal matrix for power allocation (K x K)
-            P = cvx.diag(ppp)
-            
-            U,S,Vt = la.svd(HHd) # S : (K,)
-            Sd = cvx.diag(S)
-            HdPH = P*Sd
+        Phwmrc01 = hwmrc01 # (nf,)
+        Phwmrc02 = hwmrc02 # (nf,)
+        Phwmrc10 = hwmrc10 # (nf,)
+        Phwmrc12 = hwmrc12 # (nf,)
+        Phwmrc20 = hwmrc20 # (nf,)
+        Phwmrc21 = hwmrc21 # (nf,)
 
-            cdpc = cvx.log_det(Ik + (snr_at_tx*HdPH))
-            obj = cvx.Maximize(cdpc)
-            constraints = [ppp > 0, cvx.sum_entries(ppp) == Pt]
-                    
-            prob = cvx.Problem(obj, constraints)
-            opt_value = prob.solve(solver='CVXOPT')
-            
-            # K x 1 : here, we have 1 due to the for loop
-            valopt = np.array(ppp.value).reshape(K,1) # (K x 1)
-            tpower = np.hstack((tpower,valopt))       # (K x 1)
-            tS = np.hstack((tS,S.reshape(K,1)))       # (K x 1)
-            
-        return(H,Hd,tS,tpower)
-
-    # def DPC_capacity(self,Pt=np.array([1e-3]),Tp=273):
-    #     """Non linear Dirty Paper Coding capacity
-
-    #     Parameters
-    #     ----------
-
-    #     K : number of user with single antenna.
-    #         in our case: K = 3
-    #     nt : number of antennas at the BS 
-    #         in our case: nt \in {8,16,24,32}
-        
-    #     """
-
-    #     # H  : K x nt x nf
-    #     H   = self.y[0]
-    #     Hd  = np.conj(H.swapaxes(0,1))
-
-    #     # pdb.set_trace()
-    #     #HHd = np.einsum('ijk,ikl->ijl',H,Hd) # nf x K x K
-        
-    #     fGHz  = self.x
-    #     Nf    = len(fGHz)
-    #     # Bandwidth
-    #     BGHz  = fGHz[-1]-fGHz[0]
-    #     # Frequency step
-    #     dfGHz = fGHz[1]-fGHz[0]
-
-    #     # White Noise definition
-    #     #
-    #     # Boltzman constant
-
-    #     kB = 1.03806488e-23
-
-    #     # N0 ~ J ~ W/Hz ~ W.s
-    #     N0 = kB*Tp
+        poth  = Phwmrc01 + Phwmrc02 + Phwmrc10 + \
+                Phwmrc12 + Phwmrc20 + Phwmrc21
 
 
-    #     Nf = np.shape(H)[2]
-    #     K   = np.shape(H)[0] # number of users
-    #     Nt  = np.shape(H)[1]
-    #     Int = np.eye(Nt)
-    #     Ik = np.eye(K)
+        cmrc1 = np.log(1 + \
+            (Phwmrc00/(poth+((K*1.0*sigma2)/Pt))))/np.log(2)
+        cmrc2 = np.log(1 + \
+            (Phwmrc11/(poth+((K*1.0*sigma2)/Pt))))/np.log(2)
+        cmrc3 = np.log(1 + \
+            (Phwmrc22/(poth+((K*1.0*sigma2)/Pt))))/np.log(2)
 
-    #     snr_at_tx = Pt/(Nt*kB*BGHz*1e9)
-        
-    #     tS = np.ndarray(shape=(K,0))
-    #     tpower = np.ndarray(shape=(K,0))
-    #     for ii in range(Nf):
-    #         if ii%10==0:
-    #             print ii
-    #         # pdb.set_trace()
-    #         HHd = np.dot(H[:,:,ii],Hd[:,:,ii]) #  K x K
-    #         # HHd = HHd
+        cmrc  =  cmrc1 + cmrc2 + cmrc3
+        # Ccmrc = np.nan_to_num(cmrc)
+        # Cmrc  = dfGHz*1e9*np.sum(Ccmrc,axis=0)
+        Cmrc  = dfGHz*1e9*np.sum(cmrc,axis=0)
 
-    #         # Construct the convex optimization problem
-    #         ppp = cvx.Variable(K)
-    #         # diagonal matrix for power allocation (K x K)
-    #         P = cvx.diag(ppp)
-            
-    #         U,S,Vt = la.svd(HHd)
-    #         Sd = cvx.diag(S)
-    #         # pdb.set_trace()
-    #         HdPH = P*Sd
+        return(Wmrc,Cmrc)
 
-    #         # pdb.set_trace()
-    #         cdpc = cvx.log_det(Ik + (snr_at_tx*HdPH))
-    #         obj = cvx.Maximize(cdpc)
-    #         constraints = [ppp > 0, cvx.sum_entries(ppp) == Pt]
-                    
-    #         prob = cvx.Problem(obj, constraints)
-    #         opt_value = prob.solve(solver='CVXOPT')
-            
-    #         # K x nf
-    #         valopt = np.array(ppp.value).reshape(K,1)
-    #         tpower = np.hstack((tpower,valopt))
-    #         tS = np.hstack((tS,S.reshape(K,1)))
-            
-    #     return(H,Hd,tS,tpower)
-
-    def linear_MRC(self):
-        """linear maximum ratio combining for downlink case.
-        This is used to maximze the SNR at the user side.
-        We assume here nr = 1 i.e. the user have one antenna 
-        at the receiver.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        
+    def mmse_sumrate(self,Pt=np.array([1e-3])):
+        """linear mmse sum rate.
+           Implemented from "CAPACITY OF LINEAR MULTI-USER MIMO
+           PRECODING SCHEMES WITH MEASURED CHANNEL DATA",
+           Kaltenberg et al.        
         """
 
-        # H  : nm x nr x nt x nf
-        H   = self.y
-        # H  : nm x nf x nt x nr
-        H   = H.swapaxes(1,3)
-        # H  : nm x nf x nr x nt
-        H   = H.swapaxes(2,3)
+        # H  : K x nt x nf
+        H   = self.y[0]
+        # Hd  : nt x K x nf
+        Hd  = np.conj(H.swapaxes(0,1))
         
-        # Hd : nm x nf x nt x nr
-        Hd  = np.conj(H.swapaxes(2,3))
+        # White Noise definition
+        fGHz  = self.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0] # Bandwidth
+        dfGHz = fGHz[1]-fGHz[0]  # Frequency step
+        kB = 1.03806488e-23 # Boltzman constant
+        Tp = 273            # Kelvin temperature
+        N0 = kB*Tp # N0 ~ J ~ W/Hz ~ W.s
 
-        # number of users
-        Kr = np.shape(H)[2]
-        # Pre-allocation of MRC : nm x nf x nt x nr
-        Wmrc = np.zeros((np.shape(Hd)))
-        cst = la.norm(H)
+        # Parameters
+        Nf = np.shape(H)[2]
+        K   = np.shape(H)[0] # number of users
+        Nt  = np.shape(H)[1]
+        Ik = np.eye(K)
+        pow_us = Pt/(K*1.0)
+        # pow_us = Pt
+        sigma2 = dfGHz*1e9*N0
+        snr_at_tx = pow_us/sigma2
+        #icst = (Nt*sigma2)/Pt
+        icst = (Nt*sigma2)
+
+        # K x K x nf
+        HHd1 = np.einsum('ijk,jlk->ilk',H,Hd) 
+        # nf x K x K
+        HHd = HHd1.swapaxes(0,2)                  
+        # nf x K x K
+        HHdinv1 = la.inv(HHd + (icst*Ik))
+        # pdb.set_trace()             
+        # K x K x nf
+        HHdinv = HHdinv1.swapaxes(0,2)
+       
+        # mt x K x nf
+        Wmmse = np.einsum('ijk,jlk->ilk',Hd,HHdinv) 
+
+        # beta: scaling constante
+        Wmmseh = np.conj(Wmmse.swapaxes(0,1))
+        # WWh = np.einsum('ijk,jlk->ilk',Wmmse,Wmmseh) # nt x nt x nf
+        WWh = np.einsum('ijk,jlk->ilk',Wmmseh,Wmmse) # K x K x nf
+        beta = np.sqrt((Pt/(K*1.0))/np.trace(WWh)) 
+        # the precoding matrix Wmmse is normalized
+        # such as tr(Wmmsen*Wmmse) = Pt/K
+        Wmmsen = beta*Wmmse
+        # K x K x nf
+        HWmmse = np.einsum('ijk,jlk->ilk',H,Wmmsen)
+
+        hwmmse00 = np.abs(HWmmse[0][0])**2        #  (nf,)
+        hwmmse11 = np.abs(HWmmse[1][1])**2        #  (nf,)
+        hwmmse22 = np.abs(HWmmse[2][2])**2        #  (nf,)
         
+        Phwmmse00 = hwmmse00 # (nf,)
+        Phwmmse11 = hwmmse11 # (nf,)
+        Phwmmse22 = hwmmse22 # (nf,)
 
-        for k in range(Kr): # loop over users
-            # pdb.set_trace()
-            Wmrc[:,:,:,k] = Hd[:,:,:,k]/cst
-        
-        return(Wmrc)
+        hwmmse01 = np.abs(HWmmse[0][1])**2        #  (nf,)
+        hwmmse02 = np.abs(HWmmse[0][2])**2        #  (nf,)
+        hwmmse10 = np.abs(HWmmse[1][0])**2        #  (nf,)
+        hwmmse12 = np.abs(HWmmse[1][2])**2        #  (nf,)
+        hwmmse20 = np.abs(HWmmse[2][0])**2        #  (nf,)
+        hwmmse21 = np.abs(HWmmse[2][1])**2        #  (nf,)
+
+        Phwmmse01 = hwmmse01 # (nf,)
+        Phwmmse02 = hwmmse02 # (nf,)
+        Phwmmse10 = hwmmse10 # (nf,)
+        Phwmmse12 = hwmmse12 # (nf,)
+        Phwmmse20 = hwmmse20 # (nf,)
+        Phwmmse21 = hwmmse21 # (nf,)
+
+        poth  = Phwmmse01 + Phwmmse02 + Phwmmse10 + \
+                Phwmmse12 + Phwmmse20 + Phwmmse21
 
 
-    def linear_ZF(self,cmd='QPSK',
-        m = 4, snrdB = np.linspace(0,25,100)):
-        """linear Zero Forcing precoding
-        Parameters
-        ----------
-        
+        cmmse1 = np.log(1 + \
+            (Phwmmse00/(poth+((K*1.0*sigma2)/Pt))))/np.log(2)
+        cmmse2 = np.log(1 + \
+            (Phwmmse11/(poth+((K*1.0*sigma2)/Pt))))/np.log(2)
+        cmmse3 = np.log(1 + \
+            (Phwmmse22/(poth+((K*1.0*sigma2)/Pt))))/np.log(2)
+
+        cmmse  =  cmmse1 + cmmse2 + cmmse3
+        # Ccmmse = np.nan_to_num(cmmse)
+        # Cmmse  = dfGHz*1e9*np.sum(Ccmmse,axis=0)
+        Cmmse  = dfGHz*1e9*np.sum(cmmse,axis=0)
+
+        return(H,Hd,Wmmse,Cmmse)
+
+
+    def iterative_waterfill(self,Pt=1,iterations=10):
+        """ from Matlab code:
+            Sum Power Iterative Waterfilling Algorithm 
+            Authors: Nihar Jindal, Wonjong Rhee, Sriram Vishwanath, Syed Jafar, Andrea
+            Goldsmith
         """
 
-        # # H  : nm x nr x nt x nf
-        # H   = self.y
+        # H  : K x mr x nt x nf
+        H   = self.y[0]
+        # Hd  : nt x mr x K x nf
+        Hd  = np.conj(H.swapaxes(0,2))
+        
+        # Determine # of antennas, users
+        Nf = np.shape(H)[3]
+        K  = np.shape(H)[0] # number of users
+        M = np.shape(H)[2]
+        N  =  np.shape(H)[1]
 
-        # H  : nr x nt x nf
-        H = self.Hcal.y
-        # Hd : nt x nr x nf
-        Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
-        H_inv = np.linalg.inv(H)
-        H_inv_d = np.transpose(H_inv)
-        tr_mat = np.matrix.trace(H_inv*H_inv_d)
-        beta = sqrt(self.Nt/(tr_mat))
-        W_zf = np.dot(beta,H_inv)
+
+        #Initialize covariances to zero
+        Covariances = np.zeros(N,N,K) 
+
+        for wf_iterations in range(iterations):
+            sum_int = np.eye(M)
+            for k in range(K):
+                HCHd = np.dot(np.dot(H[:,:,k],Covariances[:,:,k]),\
+                    np.conj(H[:,:,k].swapaxes(0,1)))
+                sum_int = sum_int + HCHd
+            #Generate effective channels of each user 
+            #(using covariances from the previous step)
+            for k in range(K):
+                HCHdH = np.dot(np.dot(np.dot(H[:,:,k],Covariances[:,:,k]),\
+                    np.conj(H[:,:,k].swapaxes(0,1))**(-0.5)),H[:,:,k])
+                H_eff[:,:,k] = sum_int - HCHdH
+
+            # Perform waterfilling across effective channels
+            temp, Ex = self.waterfill_block(H_eff, P)
+
+            # Update covariances of all users
+            # Use original algorithm for first 5 iterations to speed up 
+            # convergence
+            if wf_iterations <= 5:
+                #Updated covariances set equal to new covariances
+                for k in range(K):
+                     Covariances[:,:,k] = Ex[:,:,k]
+
+            else:
+                # Update covariances with mixture of old and new covariances
+                for k in range(K):
+                    Covariances[:,:,k] = ((K-1)/K)*Covariances[:,:,k] + \
+                    (1/K) * Ex[:,:,k]
+
+        # Compute final sum rate
+        sum_int = Int
+        for k in range(K):
+            HCHd = np.dot(np.dot(H[:,:,k],Covariances[:,:,k]),\
+                    np.conj(H[:,:,k].swapaxes(0,1)))
+            sum_int = sum_int + HCHd
+
+        capacity = np.real(np.log(np.det(sum_int))/np.log(2))
+
+        return (capacity,covariance)
+
+    def waterfill_block(self, Pt):
+        """ from Matlab code:
+            Sum Power Iterative Waterfilling Algorithm 
+            Authors: Nihar Jindal, Wonjong Rhee, Sriram Vishwanath, Syed Jafar, Andrea
+            Goldsmith
+        """
+
+        # H  : K x mr x nt x nf
+        H   = self.y[0]
+        # Hd  : nt x mr x K x nf
+        Hd  = np.conj(H.swapaxes(0,2))
+        
+        # Determine # of antennas, users
+        Nf = np.shape(H)[3]
+        K  = np.shape(H)[0] # number of users
+        M = np.shape(H)[2]
+        N  =  np.shape(H)[1]
+        Int = np.eye(M)
+
+        for index in range(K):
+
+            #Perform SVD of channel
+            v = svd(np.dot(np.conj(H[:,:,index].swapaxes(0,1)),\
+                H[:,:,index]))
+
+            # Create vector with all singular values
+            if index == 1:
+                s = v
+            else:
+                #s = [s; v]
+                s = hstack((s,v))
+
+
+        #channels = length(s)
+        channels = len(s)
+
+        s = np.real(s)
+        
+        # Eliminate zeroes
+        s = np.max(s, 1e-10)
+
+        noise_vector = 1./s
+        unsortedN = noise_vector
+        #Put noise variances in increasing order
+        noise_vector = np.sort[noise_vector]
+
+        #index of worst channel allocated non-zero power
+        last = channels 
+        loop = True
+
+        #Find channels allocated non-zero power
+        while (loop):
+            water = noise_vector[last];    #water level
+            power = np.sum(np.max(water - noise_vector, 0))
+            if (power > P):
+                last = last - 1
+            else:
+                loop = 0
+
+        # Calculate optimal water level
+        water = 1/last * (P + sum(noise_vector[1:last]))
+
+        capacity = 0
+
+        Ex = np.zeros(N,N,K)
+        #Compute covariance matrix for each user
+        for index in range(K):
+            #Take svd of channel
+            [u,v,w] = svd(np.dot(np.conj(H[:,:,index].swapaxes(0,1)),\
+                H[:,:,index]))
+            s = svd(np.dot(np.conj(H[:,:,index].swapaxes(0,1)),\
+                H[:,:,index]))
+            s = np.real(s)
+            #eliminate zeroes
+            s = np.max(s, 1e-10)
+            noise_vector = 1./s
+
+            Ex[:,:,index] = u * np.diag(np.max((water- noise_vector),0)),\
+            np.conj(u.swapaxes(0,1))
+            capacity = capacity + np.real(np.log(det(Int +  H[:,:,index] *\
+                Ex[:,:,index]* np.conj(H[:,:,index].swapaxes(0,1))))/np.log(2));
+
+        return capacity,Ex
+    
 
     def plot2(self,fig=[],ax=[],mode='time'):
         
