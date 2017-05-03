@@ -1950,8 +1950,8 @@ class Layout(pro.PyLayers):
                 self.zceil = eval(di['floorplan']['zceil'])
                 self.zfloor = eval(di['floorplan']['zfloor'])
             if self.typ == 'outdoor':
-                self.zceil = 1000.
-                self.zfloor = 0.
+                self.zceil = eval(di['outdoor']['zceil'])
+                self.zfloor = eval(di['outdoor']['zfloor'])
         else:
             self.typ = 'floorplan'
             self.zfloor = 0
@@ -2036,22 +2036,23 @@ class Layout(pro.PyLayers):
                                    offset=offset,
                                    z=z)
 
-            # TODO : exploit iso for segment completion 
-            # #
-            # # Complement single segment which do not reach zceil or zfloor with
-            # # an iso segment with _AIR property
-            # #
-            # if z[1] < self.zceil:
-            #     num = self.add_segment(nta, nhe,
-            #                            name='AIR',
-            #                            offset=offset,
-            #                            z=(z[1], self.zceil))
+            # exploit iso for segment completion 
+            #
+            #  Complement single segment which do not reach zceil or zfloor with
+            #  an iso segment with AIR property
+            # 
+            if di['info']['type'] == 'outdoor':
+                if z[1] < self.zceil:
+                     num = self.add_segment(nta, nhe,
+                                            name='AIR',
+                                            offset=offset,
+                                            z=(z[1], self.zceil))
 
-            # if z[0] > self.zfloor:
-            #     num = self.add_segment(nta, nhe,
-            #                            name='AIR',
-            #                            offset=offset,
-            #                            z=(self.zfloor,z[0]))
+                if z[0] > self.zfloor:
+                     num = self.add_segment(nta, nhe,
+                                            name='AIR',
+                                            offset=offset,
+                                            z=(self.zfloor,z[0]))
 
        
         self.boundary()
@@ -5216,7 +5217,7 @@ class Layout(pro.PyLayers):
 
         return fig, ax
 
-    def build(self, graph='tvirw',verbose=False,diffraction=False,difftol=0.15,multi=False):
+    def build(self, graph='tvirw',verbose=False,difftol=0.15,multi=False):
         """ build graphs
 
         Parameters
@@ -5248,14 +5249,13 @@ class Layout(pro.PyLayers):
 
         # to save graoh Gs
         self.lbltg.extend('s')
-        self.diffarction = diffraction
 
         Buildpbar = pbar(verbose,total=5,desc='Build Layout',position=0)
 
         if verbose:
             Buildpbar.update(1)
         if 't' in graph:
-            self.buildGt(difftol=difftol,diffraction=diffraction,verbose=verbose,tqdmpos=1)
+            self.buildGt(difftol=difftol,verbose=verbose,tqdmpos=1)
             self.lbltg.extend('t')
         if verbose:
             Buildpbar.update(1)
@@ -5265,7 +5265,7 @@ class Layout(pro.PyLayers):
         if verbose:
             Buildpbar.update(1)
         if 'i' in graph:
-            self.buildGi(verbose=verbose,diffraction=diffraction,tqdmpos=1)
+            self.buildGi(verbose=verbose,tqdmpos=1)
             #pdb.set_trace()
             if not multi:
                 self.outputGi(verbose=verbose,tqdmpos=1)
@@ -5342,7 +5342,7 @@ class Layout(pro.PyLayers):
         if hasattr(self, 'm'):
             write_gpickle(getattr(self, 'm'), os.path.join(path, 'm.gpickle'))
 
-    def dumpr(self, graphs='stvirw',diffraction=False):
+    def dumpr(self, graphs='stvirw'):
         """ read of given graphs
 
         Notes
@@ -5391,7 +5391,7 @@ class Layout(pro.PyLayers):
             self.g2npy()
 
         if 't' in graphs:
-            if diffraction:
+            if self.diffraction:
                 filediff = os.path.join(path, 'ddiff.gpickle')
                 if os.path.isfile(filediff):
                     ddiff = read_gpickle(filediff)
@@ -5812,7 +5812,7 @@ class Layout(pro.PyLayers):
         # plt.show()
         return T, map_vertices
 
-    def buildGt(self, check=True,diffraction=False,difftol=0.01,verbose=False,tqdmpos=0):
+    def buildGt(self, check=True,difftol=0.01,verbose=False,tqdmpos=0):
         """ build graph of convex cycle 
 
         Parameters
@@ -6161,7 +6161,7 @@ class Layout(pro.PyLayers):
 
         self.g2npy()
         # find diffraction points : updating self.ddiff
-        if diffraction:
+        if self.diffraction:
             tqdmkwargs={'total':100.,'desc':'Find Diffractions','position':1}
             self._find_diffractions(difftol=difftol,verbose=verbose,tqdmkwargs=tqdmkwargs)
             if verbose:
@@ -7470,8 +7470,6 @@ class Layout(pro.PyLayers):
 
         show : boolean
             default False
-        diffraction : boolean
-            activate diffraction 
         verbose : boolean 
         tqdmpos : progressbar
 
@@ -7526,7 +7524,6 @@ class Layout(pro.PyLayers):
 
                     airwalls = filter(lambda x: x in lair, nseg_single)
 
-                    #if diffraction:
                     ndiff = [x for x in npt if x in self.ddiff.keys()]
                     #
                     # Create a graph
@@ -7624,7 +7621,7 @@ class Layout(pro.PyLayers):
                     self.Gv = nx.compose(self.Gv, Gv)
                     self.dGv[icycle] = Gv
 
-    def buildGi(self,verbose=False,diffraction=False,tqdmpos=0):
+    def buildGi(self,verbose=False,tqdmpos=0):
         """ build graph of interactions
 
         Notes
@@ -7730,7 +7727,7 @@ class Layout(pro.PyLayers):
             if cy > 0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
                 npt = []
-                if diffraction:
+                if self.diffraction:
                     #
                     # find all diffraction points involved in the cycle cy 
                     #
@@ -7742,7 +7739,7 @@ class Layout(pro.PyLayers):
                                         npt.append(x)
                     
                 nseg = [ k for k in vnodes if k>0 ]
-                if diffraction:
+                if self.diffraction:
                 # all segments and diffraction points of the cycle
                     vnodes = nseg + npt
                 else:

@@ -2456,6 +2456,8 @@ class Rays(PyLayers, dict):
 
         ir : index of interactions of r
 
+        Examples
+        --------
 
         """
         raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
