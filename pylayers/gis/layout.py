@@ -9739,13 +9739,21 @@ class Layout(pro.PyLayers):
             ----------
 
             lnpt : diffraction point numbers (node of Gs)
-            z   : array of candidate heights of the diffraction point 
+            lz   : array of candidate heights of the diffraction point 
 
             Info
             ---- 
             As a diffraction point may involve iso segments the nature 
             of the diffraction interaction depends on a height parameter
             This function extact the couple of slab from this information
+
+            Returns
+            -------
+            - a list of 2-segments list. the length of this list == length of lz
+            - a list of slab tuples.  the length of this list == length of lz
+
+            [[443, 529], [444, 530]]
+            [['WALL', 'WALL'], ['AIR', 'AIR']]
 
         """
         assert(npt in self.ddiff), logging.error('npt not a diffraction point')
@@ -9766,12 +9774,6 @@ class Layout(pro.PyLayers):
                 z    = zsup & zinf 
                 [dz_seg[lzz].append(x) for lzz in lz[z]]
                 [dz_sl[lzz].append(self.Gs.node[x]['name']) for lzz in lz[z]]
-
-            # if len(s)>1:
-            #     ls.append(s[0])
-            # else:    
-            #     ls.extend(s)
-        # assert(len(ls)==2), logging.error('Wrong diffraction point segments number')
 
         # using list comprehension for reading dictionnary to ensure order of seg and slab 
         # similay to lz list
