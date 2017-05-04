@@ -5390,19 +5390,20 @@ class Layout(pro.PyLayers):
 
             self.g2npy()
 
-        if 't' in graphs:
-            if self.diffraction:
-                filediff = os.path.join(path, 'ddiff.gpickle')
-                if os.path.isfile(filediff):
-                    ddiff = read_gpickle(filediff)
-                    setattr(self, 'ddiff', ddiff)
-                    self.diffraction = True
-                filelnss = os.path.join(path, 'lnss.gpickle')
-                if os.path.isfile(filelnss):
-                    lnss = read_gpickle(filelnss)
-                    setattr(self, 'lnss', lnss) 
-            else : 
+        
+            filediff = os.path.join(path, 'ddiff.gpickle')
+            if os.path.isfile(filediff):
+                ddiff = read_gpickle(filediff)
+                setattr(self, 'ddiff', ddiff)
+                self.diffraction = True
+            else:
                 self.ddiff={}
+                self.diffraction=False
+            filelnss = os.path.join(path, 'lnss.gpickle')
+            if os.path.isfile(filelnss):
+                lnss = read_gpickle(filelnss)
+                setattr(self, 'lnss', lnss) 
+            else : 
                 self.lnss=[]
 
         filedca = os.path.join(path, 'dca.gpickle')
@@ -6167,12 +6168,19 @@ class Layout(pro.PyLayers):
             if verbose:
             # print('find diffraction...Done 8/12')
                 Gtpbar.update(100./12.)
-        # list of diffraction point involving airwall
+        # 
+        # explanation of lnss
+        #
+        # list of diffraction point involving different segment 
+        # list of diffraction point involving subsegment ( = iso segments)
         # needs checking height in rays.to3D for constructing the 3D ray
+        #
             pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=tqdmpos+1)
 
             self.lnss = [x for x in self.ddiff if len(
             set(nx.neighbors(self.Gs, x)).intersection(set(self.lsss))) > 0]
+
+
         if verbose:
             pbartmp.update(100.)
             Gtpbar.update(100./12.)
@@ -8903,6 +8911,8 @@ class Layout(pro.PyLayers):
             2
         nodelist : list
             []
+        diffraction :boolean 
+            False
 
 
         defaults = {'show': False,
@@ -9334,11 +9344,12 @@ class Layout(pro.PyLayers):
                                     'overlay_axis'], alpha=self.display['alpha'], origin='lower')
 
         if kwargs['diffraction']:
-            pt = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
-            pta = np.array([self.Gs.pos[x] for x in self.lnss])
-            kwargs['ax'].scatter(pt[:, 0], pt[:, 1], c='r', s=75)
-            if len(self.lnss) > 0:
-                kwargs['ax'].scatter(pta[:, 0], pta[:, 1], c='b', s=20)
+            if len(self.ddiff.keys())>0:
+                pt = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
+                pta = np.array([self.Gs.pos[x] for x in self.lnss])
+                kwargs['ax'].scatter(pt[:, 0], pt[:, 1], c='r', s=75)
+                if len(self.lnss) > 0:
+                    kwargs['ax'].scatter(pta[:, 0], pta[:, 1], c='b', s=20)
         if kwargs['show']:
             plt.show()
 
@@ -9720,6 +9731,43 @@ class Layout(pro.PyLayers):
 
         return np.sort(nod.tolist())
 
+    def get_diffslab(self,npt,z):
+        """ get the 2 slabs associated to a diffraction point 
+
+            Parameters
+            ----------
+            npt : diffraction point number (node of Gs)
+            z   : height of the diffraction point 
+
+            Info
+            ---- 
+            As a diffraction point may involve iso segments the nature 
+            of the diffraction interaction depends on a height parameter
+            This function extact the couple of slab from this information
+
+        """
+        assert(npt in self.ddiff), logging.error('npt not a diffraction point')
+        lcy = self.ddiff[npt][0]
+        ls = []
+        for cy in lcy: 
+            vn = set(self.Gt.node[cy]['polyg'].vnodes)   
+            lneig_pt = set(nx.neighbors(self.Gs,npt))
+            lseg = lneig_pt.intersection(vn)
+        
+            s = [ x for x in lseg if ((z>self.Gs.node[x]['z'][0]) 
+                           and (z <=self.Gs.node[x]['z'][1])
+                           and (self.Gs.node[x]['name']!='_AIR')) ]
+            if len(s)>1:
+                ls.append(s[0])
+            else:    
+                ls.extend(s)
+        assert(len(ls)==2), logging.error('Wrong diffraction point segments number')
+        
+        
+        sl0 = self.Gs.node[ls[0]]['name']
+        sl1 = self.Gs.node[ls[1]]['name']
+
+        return tuple(ls),(sl0,sl1)
     def _find_diffractions(self, difftol=0.01,verbose = False,tqdmkwargs={}):
         """ find diffractions points of the Layout
 
@@ -9748,7 +9796,7 @@ class Layout(pro.PyLayers):
                    for cy in self.Gt.nodes() if cy != 0}
 
         #
-        # The canditate points for being diffraction points have degree 1 or 2
+        # The candidate points for being diffraction points have degree 1 or 2
         # A point diffracts toward one or several cycles
         #
         #ldiff = list(np.hstack((self.degree[1],self.degree[2])).astype('int'))
@@ -9773,7 +9821,9 @@ class Layout(pro.PyLayers):
                 except:
                     pdb.set_trace()
 
+                # list of segment neighbours
                 neigh = self.Gs[k].keys()
+                # sega : list of air segment in neighors
                 sega = [n for n in neigh if
                         (self.Gs.node[n]['name'] == 'AIR' or
                          self.Gs.node[n]['name'] == '_AIR')]

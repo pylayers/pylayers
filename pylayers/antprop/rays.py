@@ -803,7 +803,7 @@ class Rays(PyLayers, dict):
 
         H : float
             ceil height (default 3m)
-            if H=0 only floor reflection is calculated (outdoor case)
+            if H= 0 only floor reflection is calculated (outdoor case)
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
@@ -1122,7 +1122,7 @@ class Rays(PyLayers, dict):
                 if len(L.lsss)>0:
                     #
                     # lsss : list of sub segments ( iso segments siges)
-                    # lnss : list of diffaction point involving air walls
+                    # lnss : list of diffaction point involving 
 
                     lsss = np.array(L.lsss)
                     lnss = np.array(L.lnss)
@@ -1159,23 +1159,29 @@ class Rays(PyLayers, dict):
                                 # extended (floor/ceil) signature
                                 siges = np.delete(siges,u[1],axis=2)
                             
-                    # lns : list of diffraction pointx in the current signature 
-                    #
+                    # lns : list of diffraction points in the current signature 
+                    #       with involving multi segments (iso)
                     # scalability : avoid a loop over all the points in lnss
                     #
                     lns = [ x for x in lnss if x in nstr.ravel()]
                     #pdb.set_trace()
-                    for p in lns: 
-                        u  = np.where(nstr==p)
+                    # loop over multi diffraction points
+                    for npt in lns: 
+                        u  = np.where(nstr==npt)
                         if len(u)>0:
-                            try:
+                            try: 
+                            # height of the diffraction point 
                                 zp = ptees[2,u[0],u[1]][0]
                             except:
-                                pass
+                                pdb.set_trace()
+                            #
+                            # At which couple of segments belongs this height ? 
+                            # new function in layout get_diffslab
+                            tu_seg,tu_slab = L.get_diffslab(npt,zp)
                             #zinterval = L.Gs.node[s]['z']
                             # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                            if zp < 1.5:
-                                # print s , zs , zinterval
+                            if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
+                                #print(npt , zp)
                                 pass
                             else: # signature is not valid
                                 # nstr : structure number

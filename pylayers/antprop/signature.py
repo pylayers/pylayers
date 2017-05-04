@@ -2923,7 +2923,7 @@ class Signatures(PyLayers,dict):
                 # continue if True
                 cond3 = not(len(visited) > (self.cutoff + sum(lawp)))
                 udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
-                cond4 = not(len(udiff)>2)
+                cond4 = not(len(udiff)>1)
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
                 if animation :
