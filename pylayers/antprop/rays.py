@@ -1164,15 +1164,14 @@ class Rays(PyLayers, dict):
                     #pdb.set_trace()
                     # loop over multi diffraction points
                     for npt in lns: 
-                        if npt==-226:
-                            pdb.set_trace()
+
                         u  = np.where(anstr==npt)
                         if len(u)>0:
-                            try: 
-                            # height of the diffraction point 
-                                zp = ptees[2,u[0],u[1]]
-                            except:
-                                pdb.set_trace()
+                           # height of the diffraction point 
+                            zp = ptees[2,u[0],u[1]]
+                            if len(zp) > 1:
+                                import ipdb
+                                ipdb.set_trace()
                             #
                             # At which couple of segments belongs this height ? 
                             # new function in layout get_diffslab

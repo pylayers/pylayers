@@ -1950,6 +1950,7 @@ class Layout(pro.PyLayers):
                 self.zceil = eval(di['floorplan']['zceil'])
                 self.zfloor = eval(di['floorplan']['zfloor'])
             if self.typ == 'outdoor':
+
                 self.zceil = eval(di['outdoor']['zceil'])
                 self.zfloor = eval(di['outdoor']['zfloor'])
         else:
@@ -9750,6 +9751,9 @@ class Layout(pro.PyLayers):
         assert(npt in self.ddiff), logging.error('npt not a diffraction point')
         lcy = self.ddiff[npt][0]
         ls = []
+        dz_seg= {z:[] for z in lz}
+        dz_sl= {z:[] for z in lz}
+
         for cy in lcy: 
             vn = set(self.Gt.node[cy]['polyg'].vnodes)   
             lneig_pt = set(nx.neighbors(self.Gs,npt))
@@ -9760,18 +9764,18 @@ class Layout(pro.PyLayers):
                 zsup = lz >self.Gs.node[x]['z'][0]
                 zinf = lz <=self.Gs.node[x]['z'][1]
                 z    = zsup & zinf 
-                
-            if len(s)>1:
-                ls.append(s[0])
-            else:    
-                ls.extend(s)
-        assert(len(ls)==2), logging.error('Wrong diffraction point segments number')
-        
-        
-        sl0 = self.Gs.node[ls[0]]['name']
-        sl1 = self.Gs.node[ls[1]]['name']
+                [dz_seg[lzz].append(x) for lzz in lz[z]]
+                [dz_sl[lzz].append(self.Gs.node[x]['name']) for lzz in lz[z]]
 
-        return tuple(ls),(sl0,sl1)
+            # if len(s)>1:
+            #     ls.append(s[0])
+            # else:    
+            #     ls.extend(s)
+        # assert(len(ls)==2), logging.error('Wrong diffraction point segments number')
+
+        # using list comprehension for reading dictionnary to ensure order of seg and slab 
+        # similay to lz list
+        return [dz_seg[x] for x in lz],[dz_sl[x] for x in lz]
     def _find_diffractions(self, difftol=0.01,verbose = False,tqdmkwargs={}):
         """ find diffractions points of the Layout
 
