@@ -1115,7 +1115,9 @@ class Rays(PyLayers, dict):
                     #print siges
 
                 #---------------------------------
-                # handling subsegments (if any)
+                # handling multi segment (iso segments)
+                #    Height of reflexion interaction
+                #    Height of diffraction interaction
                 #---------------------------------
                 #
                 #   ptes (3 x i+2 x r )
@@ -1127,8 +1129,8 @@ class Rays(PyLayers, dict):
                     lsss = np.array(L.lsss)
                     lnss = np.array(L.lnss)
 
-                    # number of structure element 
-                    nstr = siges[0,:,:]
+                    # array of structure element (nstr) with TxRx extension  (nstr=0)
+                    anstr = siges[0,:,:]
                     # type of interaction
                     typi = siges[1,:,:]
 
@@ -1136,42 +1138,39 @@ class Rays(PyLayers, dict):
                     #
                     # scalability : avoid a loop over all the subsegments in lsss
                     #
-                    lss = [ x for x in lsss if x in nstr.ravel()]
+                    lss = [ x for x in lsss if x in anstr.ravel()]
                     
+                    ray_to_delete = []
                     for s in lss: 
-                        u  = np.where(nstr==s)
+                        u  = np.where(anstr==s)
                         if len(u)>0:
-                            try:
-                                zs = ptees[2,u[0],u[1]][0]
-                            except:
-                                pass
+                            ### BUG TO FIX 
+                            ### z is not vectorized
+                            zs = ptees[2,u[0],u[1]][0]
+                            
                             zinterval = L.Gs.node[s]['z']
                             if (zs<=zinterval[1]) & (zs>=zinterval[0]):
                                 # print s , zs , zinterval
                                 pass
                             else: # signature is not valid
-                                # nstr : structure number
-                                nstr  = np.delete(nstr,u[1],axis=1)
-                                # typi : type of interaction 
-                                typi  = np.delete(typi,u[1],axis=1)
-                                # 3d sequence of points
-                                ptees = np.delete(ptees,u[1],axis=2)
-                                # extended (floor/ceil) signature
-                                siges = np.delete(siges,u[1],axis=2)
+                                ray_to_delete.append(u[1][0])
                             
                     # lns : list of diffraction points in the current signature 
                     #       with involving multi segments (iso)
                     # scalability : avoid a loop over all the points in lnss
                     #
-                    lns = [ x for x in lnss if x in nstr.ravel()]
+                    lns = [ x for x in lnss if x in anstr.ravel()]
+                    
                     #pdb.set_trace()
                     # loop over multi diffraction points
                     for npt in lns: 
-                        u  = np.where(nstr==npt)
+                        if npt==-226:
+                            pdb.set_trace()
+                        u  = np.where(anstr==npt)
                         if len(u)>0:
                             try: 
                             # height of the diffraction point 
-                                zp = ptees[2,u[0],u[1]][0]
+                                zp = ptees[2,u[0],u[1]]
                             except:
                                 pdb.set_trace()
                             #
@@ -1183,16 +1182,18 @@ class Rays(PyLayers, dict):
                             if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
                                 #print(npt , zp)
                                 pass
-                            else: # signature is not valid
-                                # nstr : structure number
-                                nstr  = np.delete(nstr,u[1],axis=1)
-                                # typi : type of interaction 
-                                typi  = np.delete(typi,u[1],axis=1)
-                                # 3d sequence of points
-                                ptees = np.delete(ptees,u[1],axis=2)
-                                # extended (floor/ceil) signature
-                                siges = np.delete(siges,u[1],axis=2)
-                
+                            else: 
+                                ray_to_delete.append(u[1][0])
+                    
+                    #pdb.set_trace()
+                    # # nstr : structure number
+                    # nstr  = np.delete(nstr,ray_to_delete,axis=1)
+                    # typi : type of interaction 
+                    typi  = np.delete(typi,ray_to_delete,axis=1)
+                    # 3d sequence of points
+                    ptees = np.delete(ptees,ray_to_delete,axis=2)
+                    # extended (floor/ceil) signature
+                    siges = np.delete(siges,ray_to_delete,axis=2)
                     
                 if rmoutceilR:
                     # 1 determine Ceil reflexion index

@@ -9731,13 +9731,14 @@ class Layout(pro.PyLayers):
 
         return np.sort(nod.tolist())
 
-    def get_diffslab(self,npt,z):
+    def get_diffslab(self,npt,lz):
         """ get the 2 slabs associated to a diffraction point 
 
             Parameters
             ----------
-            npt : diffraction point number (node of Gs)
-            z   : height of the diffraction point 
+
+            lnpt : diffraction point numbers (node of Gs)
+            z   : array of candidate heights of the diffraction point 
 
             Info
             ---- 
@@ -9753,10 +9754,13 @@ class Layout(pro.PyLayers):
             vn = set(self.Gt.node[cy]['polyg'].vnodes)   
             lneig_pt = set(nx.neighbors(self.Gs,npt))
             lseg = lneig_pt.intersection(vn)
-        
-            s = [ x for x in lseg if ((z>self.Gs.node[x]['z'][0]) 
-                           and (z <=self.Gs.node[x]['z'][1])
-                           and (self.Gs.node[x]['name']!='_AIR')) ]
+            lseg_valid = [ x for x in lseg if self.Gs.node[x]['name']!='_AIR']
+
+            for x in lseg_valid:
+                zsup = lz >self.Gs.node[x]['z'][0]
+                zinf = lz <=self.Gs.node[x]['z'][1]
+                z    = zsup & zinf 
+                
             if len(s)>1:
                 ls.append(s[0])
             else:    
