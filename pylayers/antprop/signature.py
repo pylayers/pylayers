@@ -3293,8 +3293,14 @@ class Signatures(PyLayers,dict):
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
                             if (interaction in lit) or (interaction[-1]==self.target):
-                                anstr = np.array([x[0] for x in visited ] )
-                                typ  = np.array([len(x) for x in visited] )
+                                # idea here is to produce signature without any airwalls
+                                # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
+                                # anstr does not contains airwalls
+                                lawp_tmp = [0]+lawp
+                                anstr = np.array([x[0] for ix,x in enumerate(visited) 
+                                                                   if lawp_tmp[ix]!=1] )
+                                typ  = np.array([len(x) for ix,x in enumerate(visited) 
+                                                                   if lawp_tmp[ix]!=1] )
                                 #anstr = np.array(map(lambda x: x[0],visited))
                                 #typ  = np.array(map(lambda x: len(x),visited))
                                 try:
