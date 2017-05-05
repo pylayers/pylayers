@@ -1144,16 +1144,10 @@ class Rays(PyLayers, dict):
                     for s in lss: 
                         u  = np.where(anstr==s)
                         if len(u)>0:
-                            ### BUG TO FIX 
-                            ### z is not vectorized
-                            zs = ptees[2,u[0],u[1]][0]
-                            
+                            zs = ptees[2,u[0],u[1]]
                             zinterval = L.Gs.node[s]['z']
-                            if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                                # print s , zs , zinterval
-                                pass
-                            else: # signature is not valid
-                                ray_to_delete.append(u[1][0])
+                            unot_in_interval = ~((zs<=zinterval[1]) & (zs>=zinterval[0]))
+                            ray_to_delete.extend(u[1][unot_in_interval])
                             
                     # lns : list of diffraction points in the current signature 
                     #       with involving multi segments (iso)
@@ -1169,20 +1163,22 @@ class Rays(PyLayers, dict):
                         if len(u)>0:
                            # height of the diffraction point 
                             zp = ptees[2,u[0],u[1]]
-                            if len(zp) > 1:
-                                import ipdb
-                                ipdb.set_trace()
+
                             #
                             # At which couple of segments belongs this height ? 
                             # new function in layout get_diffslab
                             tu_seg,tu_slab = L.get_diffslab(npt,zp)
-                            #zinterval = L.Gs.node[s]['z']
-                            # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                            if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
-                                #print(npt , zp)
-                                pass
-                            else: 
-                                ray_to_delete.append(u[1][0])
+
+
+                            [ray_to_delete.append(u[1][i]) for i in range(len(zp)) 
+                            if ((tu_slab[i][0]=='AIR') & (tu_slab[i][1]=='AIR'))]
+                            # #zinterval = L.Gs.node[s]['z']
+                            # # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
+                            # if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
+                            #     #print(npt , zp)
+                            #     pass
+                            # else: 
+                            #     ray_to_delete.append(u[1][0])
                     
                     #pdb.set_trace()
                     # # nstr : structure number
