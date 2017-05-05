@@ -9759,8 +9759,9 @@ class Layout(pro.PyLayers):
         assert(npt in self.ddiff), logging.error('npt not a diffraction point')
         lcy = self.ddiff[npt][0]
         ls = []
-        dz_seg= {z:[] for z in lz}
-        dz_sl= {z:[] for z in lz}
+        llz = len(lz)
+        dz_seg= {z:[] for z in range(llz)}
+        dz_sl= {z:[] for z in range(llz)}
 
         for cy in lcy: 
             vn = set(self.Gt.node[cy]['polyg'].vnodes)   
@@ -9772,12 +9773,15 @@ class Layout(pro.PyLayers):
                 zsup = lz >self.Gs.node[x]['z'][0]
                 zinf = lz <=self.Gs.node[x]['z'][1]
                 z    = zsup & zinf 
-                [dz_seg[lzz].append(x) for lzz in lz[z]]
-                [dz_sl[lzz].append(self.Gs.node[x]['name']) for lzz in lz[z]]
+                uz = np.where(z)[0]
+                # fill dz_seg at the correct height with a lseg_valid 
+                # and simulnaneously 
+                # fill dz_sl at the correct height with correspondong slab
+                [(dz_seg[i].append(x),dz_sl[i].append(self.Gs.node[x]['name']))
+                                                                    for i in uz]
 
-        # using list comprehension for reading dictionnary to ensure order of seg and slab 
-        # similay to lz list
-        return [dz_seg[x] for x in lz],[dz_sl[x] for x in lz]
+        return dz_seg.values(),dz_sl.values()
+
     def _find_diffractions(self, difftol=0.01,verbose = False,tqdmkwargs={}):
         """ find diffractions points of the Layout
 
