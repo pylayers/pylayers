@@ -1175,14 +1175,18 @@ class Rays(PyLayers, dict):
                             #
                             # At which couple of segments belongs this height ? 
                             # new function in layout get_diffslab
-                            tu_seg,tu_slab = L.get_diffslab(npt,zp)
+                            ltu_seg,ltu_slab = L.get_diffslab(npt,zp)
+                            #import ipdb
+                            #ipdb.set_trace()
                             #zinterval = L.Gs.node[s]['z']
                             # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                            if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
-                                #print(npt , zp)
-                                pass
-                            else: 
-                                ray_to_delete.append(u[1][0])
+                            pdb.set_trace()
+                            for kk,tu_slab in enumerate(ltu_slab):
+                                if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
+                                    #print(npt , zp)
+                                    pass
+                                else: 
+                                    ray_to_delete.append(u[1][kk])
                     
                     #pdb.set_trace()
                     # # nstr : structure number
