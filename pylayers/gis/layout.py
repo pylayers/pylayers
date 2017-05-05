@@ -7895,19 +7895,23 @@ class Layout(pro.PyLayers):
         # if not indoor for all nodes of Gi 
         # if not diffraction 
         # if termination cycle is indoor 
-        # or if strtaing point is indoor 
+        # or if starting point is indoor 
         # then delte interaction 
         ldelete = []
         if not self.indoor:
-           for k in self.Gi.node.keys():
-               if len(k)>1:
-                   cyend = k[-1] 
-                   if self.Gt.node[cyend]['indoor']:
-                       ldelete.append(k)
-                   if len(k) == 3:
+            for k in self.Gi.node.keys():
+                if len(k)>1:
+                    cyend = k[-1] 
+                    if self.Gt.node[cyend]['indoor']:
+                        # if k[0]>0:
+                        #     if self.Gs.node[k[0]]['name']!='AIR':
+                        ldelete.append(k)
+                    if len(k) == 3:
                         cystart = k[1]
                         if self.Gt.node[cystart]['indoor']:
-                            ldelete.append(k)
+                            # if k[0]>0:
+                            #     if self.Gs.node[k[0]]['name']!='AIR':
+                            ldelete.append(k)       
 
         #print(ldelete)
         # pdb.set_trace()
