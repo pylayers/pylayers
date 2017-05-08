@@ -1246,7 +1246,7 @@ class Signatures(PyLayers,dict):
                 # continue if True
                 cond3 = not(len(visited) > (self.cutoff + sum(lawp)))
                 udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
-                cond4 = not(len(udiff)>1)
+                cond4 = not(len(udiff)>0)
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
                 if animation :
@@ -1268,8 +1268,8 @@ class Signatures(PyLayers,dict):
                 if (cond1):
                      if (cond2 and cond3 and cond4):
                         visited.append(interaction)
-
-
+                        if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101)]:
+                            pdb.set_trace()
                         if interaction[0] in lair:
                             lawp.append(1)
                         else:
@@ -1332,7 +1332,7 @@ class Signatures(PyLayers,dict):
                             r  = R[-ik]
 
                         # if at least 2 interactions
-                        # or previous point is a diffrcation 
+                        # or previous point is a diffraction 
 
                         if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
                             tha = th
@@ -1622,7 +1622,7 @@ class Signatures(PyLayers,dict):
                                 lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x]['name'] for x in lll])
-                                #print(visited)
+                                print(visited)
                                 anstr = np.array([x[0] for ix,x in enumerate(visited) 
                                                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
                                 typ  = np.array([len(x) for ix,x in enumerate(visited) 
