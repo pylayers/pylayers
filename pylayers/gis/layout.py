@@ -7418,58 +7418,6 @@ class Layout(pro.PyLayers):
     #         if len(d) > 1:
     #             self.Gw.add_edges_from(combinations(d, 2))
 
-    def buildGv_experimental(self):
-        """ build graph of visibility 
-
-
-        """
-
-        Gv = nx.Graph()
-
-        for c in self.Gt.nodes():
-            if c != 0:
-
-                ext = self.Gt.node[c]['polyg'].exterior
-                vn = self.Gt.node[c]['polyg'].vnodes
-                seg = list(vn[vn > 0])
-                # exclude segments from the boundary
-                segvalid = [
-                    x for x in seg if 0 not in self.Gs.node[x]['ncycles']]
-
-                ptdiff = [
-                    v for v in vn if v in self.ddiff and c in self.ddiff[v][0]]
-                entities = segvalid + ptdiff
-
-                combit = combinations(entities, 2)
-                comb = [(x[0], x[1]) for x in combit]
-
-                lines = [sh.LineString(
-                    [self.Gs.pos[x[0]], self.Gs.pos[x[1]]]) for x in comb]
-                within = np.array([l.within(ext) for l in lines])
-                contain = np.array([ext.contains(l) for l in lines])
-
-                # looking for lines not superimposed with polygon exterior
-                ut = np.where(~within)[0]
-
-                comb = np.array(comb)
-
-                [Gv.add_edge(v[0], v[1]) for v in comb[ut]]
-
-                # diff diff processing
-                dd = [(x[0], x[1]) for x in comb if x[0] < 0 and x[1] < 0]
-                lined = [sh.LineString(
-                    [self.Gs.pos[x[0]], self.Gs.pos[x[1]]]) for x in dd]
-                uair = [self.Gs.node[x]['name'] == 'AIR' for x in seg]
-                segair = [s for us, s in enumerate(seg) if uair[us]]
-                lineair = sh.MultiLineString([self._shseg[x] for x in segair])
-                ext2 = ext.difference(lineair)
-                withind = np.array([l.within(ext2) for l in lined])
-                if len(withind) != 0:
-                    utd = np.where(~withind)[0]
-                    dd = np.array(dd)
-                    [Gv.add_edge(v[0], v[1]) for v in dd[utd]]
-
-        self.Gv = Gv
 
     def buildGv(self, show=False,verbose=False,tqdmpos=0):
         """ build visibility graph
@@ -7503,7 +7451,7 @@ class Layout(pro.PyLayers):
 
         self.Gv = nx.Graph()
         #
-        # loop over cycles
+        # loop over convex cycles (nodes of Gt)
         #
         self.dGv = {}  # dict of Gv graph
 
@@ -7513,90 +7461,125 @@ class Layout(pro.PyLayers):
             if verbose:
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
-                if self.indoor or not self.Gt.node[icycle]['indoor']:
-                    polyg = self.Gt.node[icycle]['polyg']
-                    # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
-                    # take a single segment between 2 points 
-                    vnodes = polyg.vnodes
-                    unodes = np.where(vnodes<0)[0]
-                    useg = np.mod(unodes+1,len(vnodes))
-                    
-                    npt  = filter(lambda x: x < 0, vnodes)
+                #
+                #  If indoor or outdoor all visibility are calculated
+                #  If outdoor only visibility between iso = 'AIR' and '_AIR' are calculated 
+                # 
+                #if self.indoor or not self.Gt.node[icycle]['indoor']:
+                polyg = self.Gt.node[icycle]['polyg']
+
+                # plt.show(polyg.plot(fig=plt.gcf(),ax=plt.gca())
+                
+                # take a single segment between 2 points 
+                
+                vnodes = polyg.vnodes
+
+                # list of index of points in vodes
+                unodes = np.where(vnodes<0)[0]
+                
+                # list of position of an incomplete list of segments 
+                # used rule : after a point there is always a segment 
+                useg = np.mod(unodes+1,len(vnodes))
+                
+                # list of points 
+                #npt  = filter(lambda x: x < 0, vnodes)
+                npt = [ x for x in vnodes if x <0 ]
+                
+                nseg_full = [x for x in vnodes if x > 0]
+                # nseg : incomplete list of segments
+                #
+                # if mode outdoor and cycle is indoor only 
+                # the part above the building (AIR and _AIR) is considered
+                if ((not self.indoor) and (self.Gt.node[icycle]['indoor'])):
+                    nseg = [ x for x in nseg_full if ((self.Gs.node[x]['name']=='AIR') or (self.Gs.node[x]['name']=='_AIR') ) ]
+                else:
                     nseg = vnodes[useg]
-                    nseg_full = filter(lambda x: x > 0, vnodes)
-                    # keep only airwalls without iso single
-                    nseg_single = filter(lambda x: len(self.Gs.node[x]['iso'])==0, nseg)
-                    
-                    lair1 = self.name['AIR'] 
-                    lair2 = self.name['_AIR']
-                    lair  = lair1 + lair2
 
-                    airwalls = filter(lambda x: x in lair, nseg_single)
+                
+                # # nseg_full : full list of segments
+                # #nseg_full = filter(lambda x: x > 0, vnodes)
 
-                    ndiff = [x for x in npt if x in self.ddiff.keys()]
-                    #
-                    # Create a graph
-                    #
+                # # keep only airwalls without iso single (_AIR)
+                # nseg_single = filter(lambda x: len(self.Gs.node[x]['iso'])==0, nseg)
 
-                    Gv = nx.Graph()
-                    #
-                    # in convex case :
-                    #
-                    #    i)  every non aligned segments see each other
-                    #
-                    for nk in combinations(nseg, 2):
-                        nk0 = self.tgs[nk[0]]
-                        nk1 = self.tgs[nk[1]]
-                        tahe0 = self.tahe[:, nk0]
-                        tahe1 = self.tahe[:, nk1]
+                # lair1 = self.name['AIR'] 
+                # lair2 = self.name['_AIR']
+                # lair  = lair1 + lair2
 
-                        pta0 = self.pt[:, tahe0[0]]
-                        phe0 = self.pt[:, tahe0[1]]
-                        pta1 = self.pt[:, tahe1[0]]
-                        phe1 = self.pt[:, tahe1[1]]
+                # # list of airwalls in nseg_single
 
-                        aligned = geu.is_aligned4(pta0,phe0,pta1,phe1)
-                        # A0 = np.vstack((pta0, phe0, pta1))
-                        # A0 = np.hstack((A0, np.ones((3, 1))))
+                # airwalls = filter(lambda x: x in lair, nseg_single)
 
-                        # A1 = np.vstack((pta0, phe0, phe1))
-                        # A1 = np.hstack((A1, np.ones((3, 1))))
+                # diffraction points 
 
-                        # d0 = np.linalg.det(A0)
-                        # d1 = np.linalg.det(A1)
+                ndiff = [x for x in npt if x in self.ddiff.keys()]
+                #
+                # Create a graph
+                #
 
-                        #if not ((abs(d0) < 1e-1) & (abs(d1) < 1e-1)):
-                        if not aligned:
-                            if ((0 not in self.Gs.node[nk[0]]['ncycles']) and
-                                (0 not in self.Gs.node[nk[1]]['ncycles'])):
-                                # get the iso segments of both nk[0] and nk[1]
+                Gv = nx.Graph()
+                #
+                # in convex case :
+                #
+                #    i)  every non aligned segments see each other
+                #
+                for nk in combinations(nseg, 2):
+                    nk0 = self.tgs[nk[0]]
+                    nk1 = self.tgs[nk[1]]
+                    tahe0 = self.tahe[:, nk0]
+                    tahe1 = self.tahe[:, nk1]
+
+                    pta0 = self.pt[:, tahe0[0]]
+                    phe0 = self.pt[:, tahe0[1]]
+                    pta1 = self.pt[:, tahe1[0]]
+                    phe1 = self.pt[:, tahe1[1]]
+
+                    aligned = geu.is_aligned4(pta0,phe0,pta1,phe1)
+                    # A0 = np.vstack((pta0, phe0, pta1))
+                    # A0 = np.hstack((A0, np.ones((3, 1))))
+
+                    # A1 = np.vstack((pta0, phe0, phe1))
+                    # A1 = np.hstack((A1, np.ones((3, 1))))
+
+                    # d0 = np.linalg.det(A0)
+                    # d1 = np.linalg.det(A1)
+
+                    #if not ((abs(d0) < 1e-1) & (abs(d1) < 1e-1)):
+                    if not aligned:
+                        if ((0 not in self.Gs.node[nk[0]]['ncycles']) and
+                            (0 not in self.Gs.node[nk[1]]['ncycles'])):
+                            # get the iso segments of both nk[0] and nk[1]
+                            if ((self.indoor) or (not self.Gt.node[icycle]['indoor'])):
                                 l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
                                 l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
-                                for vlink in product(l0,l1):
-                                    #printicycle,vlink[0],vlink[1]
-                                    Gv.add_edge(vlink[0], vlink[1])
+                            else:
+                                l0 = [nk[0]]
+                                l1 = [nk[1]]
 
-                    #
-                    # Handle diffraction points
-                    #
-                    #    ii) all non adjascent valid diffraction points see each other
-                    #    iii) all valid diffraction points see segments non aligned
-                    #    with adjascent segments
-                    #if diffraction:
+                            for vlink in product(l0,l1):
+                                #printicycle,vlink[0],vlink[1]
+                                Gv.add_edge(vlink[0], vlink[1])
+
+                #
+                # Handle diffraction points
+                #
+                #    ii) all non adjascent valid diffraction points see each other
+                #    iii) all valid diffraction points see segments non aligned
+                #    with adjascent segments
+                #
+                #if diffraction:
+                #
+                # diffraction only if indoor or outdoor cycle if outdoor
+                # 
+                if ((self.indoor) or (not self.Gt.node[icycle]['indoor'])):
                     ndiffvalid = [ x for x in ndiff if icycle in self.ddiff[x][0]]
 
                         # non adjascent segment of vnodes see valid diffraction
                         # points
-
                     for idiff in ndiffvalid:
-
-                        #import ipdb
-                        # ipdb.set_trace()
-                        # if (icycle==2) & (idiff==-2399):
-                        #     ipdb.set_trace()
-
-                        # idiff segment neighbors
-                        #nsneigh = [ x for x in nx.neighbors(self.Gs,idiff) if x in nseg and x not in airwalls]
+                        #
+                        # segments voisins du point de diffraction valide
+                        #
                         nsneigh = [x for x in 
                                    nx.neighbors(self.Gs, idiff) 
                                    if x in nseg_full]
@@ -7623,12 +7606,12 @@ class Layout(pro.PyLayers):
                         for ns in seen_from_neighbors:
                             Gv.add_edge(idiff, ns)
 
-                    #
-                    # Graph Gv composition
-                    #
+                #
+                # Graph Gv composition
+                #
 
-                    self.Gv = nx.compose(self.Gv, Gv)
-                    self.dGv[icycle] = Gv
+                self.Gv = nx.compose(self.Gv, Gv)
+                self.dGv[icycle] = Gv
 
     def buildGi(self,verbose=False,tqdmpos=0):
         """ build graph of interactions
@@ -7668,6 +7651,9 @@ class Layout(pro.PyLayers):
         pbartmp = pbar(verbose,total=100., desc ='Create Gi nodes',position=tqdmpos+1)
 
         for n in self.Gv.node:
+            # espoo_journal debug
+            #if n == 530:
+            #    pdb.set_trace()
             if verbose:
                 pbartmp.update(cpt)
 
@@ -7901,17 +7887,19 @@ class Layout(pro.PyLayers):
         if not self.indoor:
             for k in self.Gi.node.keys():
                 if len(k)>1:
-                    cyend = k[-1] 
-                    if self.Gt.node[cyend]['indoor']:
-                        # if k[0]>0:
-                        #     if self.Gs.node[k[0]]['name']!='AIR':
-                        ldelete.append(k)
-                    if len(k) == 3:
-                        cystart = k[1]
-                        if self.Gt.node[cystart]['indoor']:
+                    segtype = self.Gs.node[k[0]]['name']
+                    if ((segtype!='AIR') and (segtype!='_AIR')):
+                        cyend = k[-1] 
+                        if self.Gt.node[cyend]['indoor']:
                             # if k[0]>0:
                             #     if self.Gs.node[k[0]]['name']!='AIR':
-                            ldelete.append(k)       
+                            ldelete.append(k)
+                        if len(k) == 3:
+                            cystart = k[1]
+                            if self.Gt.node[cystart]['indoor']:
+                                # if k[0]>0:
+                                #     if self.Gs.node[k[0]]['name']!='AIR':
+                                ldelete.append(k)       
 
         #print(ldelete)
         # pdb.set_trace()

@@ -62,10 +62,11 @@ import h5py
 
 
 class Rays(PyLayers, dict):
-
-    """ A set of rays
+    """ Class hendling a set of rays
 
     Attributes
+    ----------
+
     rays   :
     nbrays :
     rayidx :
@@ -101,7 +102,7 @@ class Rays(PyLayers, dict):
     and a target point defining a radio link.
 
     Once a Rays object has been obtained in 2D, it is transformed
-    in 3D via the **to3D** method. This method has two parameters :
+    in 3D via the **to3D** method. This method takes two parameters :
     the height from floor to ceil, and the number N of
     multiple reflections to account for.
 
@@ -123,7 +124,9 @@ class Rays(PyLayers, dict):
         ----------
 
         pTx : np.array
+            transmitter coordinates
         pRx : np.array
+            receiver coordinates
 
         """
 
@@ -141,7 +144,7 @@ class Rays(PyLayers, dict):
         Nray = 0
         for k in self.keys():
             sh = np.shape(self[k]['sig'])
-            Nray = Nray+sh[2]
+            Nray = Nray + sh[2]
         return Nray
 
 
@@ -411,7 +414,6 @@ class Rays(PyLayers, dict):
 
         """
 
-
         r = Rays(self.pRx,self.pTx)
         r.is3D = self.is3D
         r.nray = self.nray
@@ -496,8 +498,8 @@ class Rays(PyLayers, dict):
 
         Parameters
         ----------
-        ni : group of interactions
-        nr : ray index in group of interactions
+
+        nr : ray index 
         L  : Layout
 
         """
@@ -541,11 +543,11 @@ class Rays(PyLayers, dict):
                                 r[ni][k]=[]
                     
 
-        r[ni]['nrays']=1 # keep only one ray
+        r[ni]['nrays'] = 1 # keep only one ray
         r.nray = 1
         #r[ni]['rayidx']=np.array([self[ni]['rayidx'][nr]]) # ray index in the whole structure
-        r[ni]['rayidx']=np.array([0])
-        r[ni]['dis']=np.array([self[ni]['dis'][ur]])
+        r[ni]['rayidx'] = np.array([0])
+        r[ni]['dis'] = np.array([self[ni]['dis'][ur]])
         r.locbas(L)
         r.fillinter(L)
         return(r)
@@ -602,7 +604,7 @@ class Rays(PyLayers, dict):
         #    fig = plt.figure()
         #if kwargs['ax'] ==[]:
         #    ax = fig.add_subplot(111)
-        if kwargs['layout'] ==True:
+        if kwargs['layout'] == True:
             if kwargs['L'] != []:
                 fig,ax = kwargs['L'].showG(**kwargs)
             else : 
@@ -793,7 +795,7 @@ class Rays(PyLayers, dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1,rmoutceilR=True):
+    def to3D(self, L, H=3, N=1, rmoutceilR=True):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -808,15 +810,18 @@ class Rays(PyLayers, dict):
         N : int
             number of mirror reflexions
         rmoutceilR : bool
-            Remove Ceil reflexions in cycles (Gt nodes) 
+            Remove ceil reflexions in cycles (Gt nodes) 
             with indoor=False attribute 
 
-        returns
+        Returns
         -------
 
         r3d : Rays
 
-    
+        See Also
+        --------
+
+        mirror
 
         """
 
@@ -2441,8 +2446,6 @@ class Rays(PyLayers, dict):
 
 
 
-
-
     def ray(self, r):
         """ returns the index of interactions of r
 
@@ -2520,6 +2523,29 @@ class Rays(PyLayers, dict):
         raypos = np.nonzero(self[self._ray2nbi[ir]]['rayidx'] == ir)[0]
         return(self[self._ray2nbi[ir]]['sig'][0,1:-1,raypos[0]])
 
+    def vis(self,ir,L):
+        typ = ['Tx'] + self.typ(ir) + ['Rx'] 
+        slab_nb = self.slab_nb(ir)
+        slab_nb = np.insert(slab_nb,0,0)
+        slab_nb = np.insert(slab_nb,len(slab_nb),0)
+        nbi = self._ray2nbi[ir]
+        raypos = np.nonzero(self[nbi]['rayidx'] == ir)[0]
+        pt = self[nbi]['pt'][:,:,raypos]
+        tz  = pt[2].ravel()
+        slab = [ L.Gs.node[x]['name'] for x in slab_nb if x > 0]
+        st = ''
+        for t in typ:
+            st = st + t+'      ' 
+        print st
+        st = ''
+        for s in slab_nb:
+            st = st + str(s)+'     ' 
+        print st
+        st = ''
+        for z in tz:
+            st = st + str(z)+'     ' 
+        print st
+        print(slab)
 
     def typ(self, ir,fromR=True):
         """ returns interactions list type of a given ray
@@ -2535,7 +2561,7 @@ class Rays(PyLayers, dict):
 
         """
         #
-        # In this function we can see that teh ceil and floor 
+        # In this function we can see that the ceil and floor 
         # are hard coded as reflection. This is going to evolve 
         # for implementation of multi floor 
         #
@@ -2978,62 +3004,6 @@ class Rays(PyLayers, dict):
             os.system(chaine)
         else:
             return(filename)
-   # def show3(self,
-   #            bdis=True,
-   #            bstruc=True,
-   #            id=0,
-   #            strucname='defstr',
-   #            ilist=[],
-   #            raylist=[],pg=np.array([[0],[0],[0]])):
-   #      """ plot 3D rays within the simulated environment
-
-   #      Parameters
-   #      ----------
-
-   #      bdis : boolean
-   #          True
-   #      bstruc : boolean
-   #          True
-   #      id : int
-   #      strucname : string
-   #          'defstr'
-   #      ilist : list of group of interactions
-   #      raylist : list of index rays
-   #      pg : centroid of the structure
-        
-
-   #      """
-   #      if ilist == []:
-   #          ilist = self.keys()
-   #      pTx = self.pTx.reshape((3, 1))-pg
-   #      pRx = self.pRx.reshape((3, 1))-pg
-   #      filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
-   #      fo = open(filename, "w")
-   #      fo.write("LIST\n")
-   #      if bstruc:
-   #          fo.write("{<"+strucname+".off}\n")
-   #          # fo.write("{<strucTxRx.off}\n")
-   #          k = 0
-   #          for i in ilist:
-   #              if raylist == []:
-   #                  rlist = range(np.shape(self[i]['pt'])[2])
-   #              else:
-   #                  rlist = raylist
-   #              for j in rlist:
-   #                  ray = np.hstack((pTx,np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
-   #                  # ray = rays[i]['pt'][:,:,j]
-   #                  col = np.array([2, 0, 1])
-   #                  # print ray
-   #                  fileray = self.show3d(ray=ray, bdis=False,
-   #                                        bstruc=False, col=col, id=k)
-   #                  k += 1
-   #                  fo.write("{< " + fileray + " }\n")
-   #      fo.close()
-   #      if (bdis):
-   #          chaine = "geomview " + filename + " 2>/dev/null &"
-   #          os.system(chaine)
-   #      else:
-   #          return(filename)
 
 
 if __name__ == "__main__":
