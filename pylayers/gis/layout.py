@@ -7526,7 +7526,7 @@ class Layout(pro.PyLayers):
                     nseg_full = filter(lambda x: x > 0, vnodes)
                     # keep only airwalls without iso single
                     nseg_single = filter(lambda x: len(self.Gs.node[x]['iso'])==0, nseg)
-
+                    
                     lair1 = self.name['AIR'] 
                     lair2 = self.name['_AIR']
                     lair  = lair1 + lair2

@@ -3299,7 +3299,6 @@ class Signatures(PyLayers,dict):
                                 lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x]['name'] for x in lll])
-                                print(visited)
                                 anstr = np.array([x[0] for ix,x in enumerate(visited) 
                                                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
                                 typ  = np.array([len(x) for ix,x in enumerate(visited) 
