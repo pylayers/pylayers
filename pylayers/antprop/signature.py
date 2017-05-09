@@ -1098,6 +1098,9 @@ class Signatures(PyLayers,dict):
         defaults = {'cutoff' : 2, 
                     'threshold':0.1,
                     'threshold_prob':0.1,
+                    'nD':1,
+                    'nR':10,
+                    'nT':10,
                     'bt' : True,
                     'progress': False,
                     'diffraction' : True,
@@ -1111,6 +1114,9 @@ class Signatures(PyLayers,dict):
         self.cutoff = kwargs['cutoff']
         threshold = kwargs['threshold'] 
         threshold_prob = kwargs['threshold_prob']
+        nD = kwargs['nD']
+        nT = kwargs['nT']
+        nR = kwargs['nR']
         bt = kwargs['bt'] 
         progress = kwargs['progress'] 
         diffraction = kwargs['diffraction']
@@ -1146,7 +1152,6 @@ class Signatures(PyLayers,dict):
         #
         # remove diffractions from Gi
         #
-        #
         if not diffraction:
             Gi = gidl(Gi)
 
@@ -1167,14 +1172,11 @@ class Signatures(PyLayers,dict):
             fig,ax = self.L.showG('s',aw=1)
             ax.plot(self.L.Gt.pos[self.source][0],self.L.Gt.pos[self.source][1],'ob')
             ax.plot(self.L.Gt.pos[self.target][0],self.L.Gt.pos[self.target][1],'or')
-        # import ipdb
-        # ipdb.set_trace()
-    
         #
         # Loop over all interactions seen from the source
         #
         # us : loop counter
-        # s  : interaction 
+        # s  : interaction tuple
         # s[0] : point (<0) or segment (>0)
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
@@ -1222,9 +1224,19 @@ class Signatures(PyLayers,dict):
             #
             #
             stack = [iter(Gi[s])]
-            # air walls do not intervene in the nomber of transmission (cutoff criteria) 
+            # air walls do not intervene in the number of transmission (cutoff criteria) 
             # lawp is the list of airwall position in visited sequence
-            lawp = []
+            # handle the case of the first segment which can be an airwall
+            # 
+            if len(s)==3:
+                nseg = s[0]
+                if ((self.L.Gs.node[nseg]['name']=='_AIR') or 
+                   (self.L.Gs.node[nseg]['name']=='AIR')):
+                    lawp = [1]
+                else:
+                    lawp = []
+            else:
+                lawp = []
             # while the stack of iterators is not void
             cpt = 0
             while stack: #
@@ -1245,15 +1257,23 @@ class Signatures(PyLayers,dict):
                 # cond3 : test the cutoff condition not get to the limit
                 # continue if True
                 cond3 = not(len(visited) > (self.cutoff + sum(lawp)))
-                udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
-                cond4 = not(len(udiff)>0)
+                uD = [ k for k in range(len(visited)) if len(visited[k])==1 ]
+                uR = [ k for k in range(len(visited)) if len(visited[k])==2 ]
+                uT = [ k for k in range(len(visited)) if len(visited[k])==3 ]
+                condD = not(len(uD)>nD-1)
+                condR = not(len(uR)>nR-1)
+                condT = not(len(uT)>nT-1)
                 #print cond1,cond2,cond3
                 #print "vis :",visited,interaction
                 if animation :
                     cpt = cpt+1
                     edge=zip(visited[:-1],visited[1:])
-                    N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,nodelist=visited,labels={},node_size=15,ax=ax,fig=fig)
-                    E = nx.draw_networkx_edges(Gi,pos=Gi.pos,edgelist=edge,labels={},width=0.1,arrows=False,ax=ax,fig=fig)
+                    N = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
+                            nodelist=visited,labels={},
+                            node_size=15,ax=ax,fig=fig)
+                    E = nx.draw_networkx_edges(Gi,pos=Gi.pos,
+                            edgelist=edge,labels={},width=0.1,
+                            arrows=False,ax=ax,fig=fig)
 
                     plt.savefig('./figure/' +str(us) +'_' + str(cpt) +'.png')
                     try:
@@ -1266,9 +1286,9 @@ class Signatures(PyLayers,dict):
                         pass
 
                 if (cond1):
-                     if (cond2 and cond3 and cond4):
+                     if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
-                        if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101)]:
+                        if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(122, 101)]:
                             pdb.set_trace()
                         if interaction[0] in lair:
                             lawp.append(1)
@@ -1339,6 +1359,9 @@ class Signatures(PyLayers,dict):
                             ratio = 1.0
                             #print(visited,"ratio =1")
                         else:
+                            # Determine the apex of the cone 
+                            # either the transmitter (ilast =0) 
+                            # or the last diffraction point (ilast=udiff[-1] ) 
                             udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
                             if udiff==[]:
                                 ilast = 0
