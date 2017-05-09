@@ -1642,16 +1642,16 @@ class Signatures(PyLayers,dict):
                                 # idea here is to produce signature without any airwalls
                                 # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
                                 # anstr does not contains airwalls
-                                lawp_tmp = [0]+lawp
-                                # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
-                                # print([self.L.Gs.node[x]['name'] for x in lll])
-                                anstr = np.array([x[0] for ix,x in enumerate(visited) 
-                                                                  if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
-                                typ  = np.array([len(x) for ix,x in enumerate(visited) 
-                                                                  if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
+                                # lawp_tmp = [0]+lawp
+                                # # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
+                                # # print([self.L.Gs.node[x]['name'] for x in lll])
+                                # anstr = np.array([x[0] for ix,x in enumerate(visited) 
+                                #                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
+                                # typ  = np.array([len(x) for ix,x in enumerate(visited) 
+                                #                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
 
-                                # anstr = np.array([x[0] for x in visited ])
-                                # typ  = np.array([len(x) for x in visited])
+                                anstr = np.array([x[0] for x in visited ])
+                                typ  = np.array([len(x) for x in visited])
                                 #anstr = np.array(map(lambda x: x[0],visited))
                                 #typ  = np.array(map(lambda x: len(x),visited))
                                 try:
