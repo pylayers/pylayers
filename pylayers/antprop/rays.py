@@ -2445,6 +2445,23 @@ class Rays(PyLayers, dict):
         return(Cn)
 
 
+    def find_from_seg(self,ls):
+        """ returns the indexes of rays for a given interaction list
+        """
+
+        if not isinstance(ls,list):
+            ls = list(ls)
+
+        lur = []
+        for k in self:
+            aib = self[k]['sig'][0,...]
+            for i in ls :
+                # import ipdb
+                # ipdb.set_trace()
+                ui, ur = np.where(aib == i)
+                lur.append(self[k]['rayidx'][ur])
+        return lur
+
 
     def ray(self, r):
         """ returns the index of interactions of r

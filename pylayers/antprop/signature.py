@@ -1098,7 +1098,7 @@ class Signatures(PyLayers,dict):
         defaults = {'cutoff' : 2, 
                     'threshold':0.1,
                     'threshold_prob':0.1,
-                    'nD':2,
+                    'nD':1,
                     'nR':10,
                     'nT':10,
                     'bt' : True,
@@ -1165,6 +1165,7 @@ class Signatures(PyLayers,dict):
         tic0 = tic
         #for interaction source  in list of source interactions
 
+        bvisu = False
         # signature counter
         cptsig = 0
 
@@ -1177,7 +1178,7 @@ class Signatures(PyLayers,dict):
         #
         # us : loop counter
         # s  : interaction tuple
-        # s[0] : point (<0) or segment (>0)
+        # s[0] : point (<0) or segment (>0)a
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
 
@@ -1194,7 +1195,7 @@ class Signatures(PyLayers,dict):
                 tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
 
             # R is a list which contains reflexion matrices (Sn) and translation matrices(vn)
-            # for intercaction mirroring 
+            # for interaction mirroring 
             # R=[[S0,v0],[S1,v1],...]
 
             R = [(np.eye(2),np.array([0,0]))]
@@ -1288,8 +1289,14 @@ class Signatures(PyLayers,dict):
                 if (cond1):
                      if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
-                        if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(122, 101)]:
+                        #print(visited)
+                        if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(121, 101),(855, 101, 108),(876, 108, 104)]:
+                        #if visited ==[(862, 107, 106),(857, 106, 102),(858, 102, 70),(755, 70, 67),(527, 67),(460, 67, 66),(464, 66, 74),(-56,)]:
                             pdb.set_trace()
+                            #bvisu = True
+                            pass
+
+                        # update list of airwalls
                         if interaction[0] in lair:
                             lawp.append(1)
                         else:
@@ -1312,15 +1319,15 @@ class Signatures(PyLayers,dict):
                             R.append((np.eye(2),np.array([0,0])))
                         # reflexion mirroring 
                         elif len(visited[-2])==2:
-                            #pts = self.L.Gs[nstr].keys()
-                            #th (Npt x xy)
-                            #th = np.array([self.L.Gs.pos[pts[0]],
-                            #               self.L.Gs.pos[pts[1]]])
-                            # reverse order (reflexion on visited[-2])
-                            pts2 = self.L.Gs[visited[-2][0]].keys()
-                            ta_seg = np.array(self.L.Gs.pos[pts2[0]])
-                            he_seg = np.array(self.L.Gs.pos[pts2[1]])
+                            # 
+                            # Avant dernier poitnt est une reflection 
+                            #
+                            nseg_points = self.L.Gs[visited[-2][0]].keys()
+                            ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
+                            he_seg = np.array(self.L.Gs.pos[nseg_points[1]])
+                            #
                             # get reflection matrix from segment visited[-2]  
+                            #
                             R.append(geu.axmat(ta_seg,he_seg))
                             # direct order
                             #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
@@ -1329,25 +1336,30 @@ class Signatures(PyLayers,dict):
                             pass
                         # current interaction is of segment type
                         if (nstr>0):
-                            pts = self.L.Gs[nstr].keys()
-                            th = np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])
-                        # current interaction is of point type
+                            nseg_points = self.L.Gs[nstr].keys()
+                            th = np.array([self.L.Gs.pos[nseg_points[0]],
+                                           self.L.Gs.pos[nseg_points[1]]])
                         else:
                             th = self.L.Gs.pos[nstr]
                             th = np.array([th,th])
+
+                        # current interaction is of point type (diffraction)
                         # apply current chain of symmetries
-                        # th is the current segment tail-head coordinates
+                        #
+                        # th   is the current segment tail-head coordinates
                         # tahe is a list of well mirrored tail-head coordinates
                         
+                            #tahe.append(a)
                         #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
                         #    print("th (avant mirror)",th)
                         ik = 1
                         r = R[-ik]
                         #
-                        # for a diffraction it shoud be uncahnged
+                        # mirroring th until the previous point  
                         # 
+                        th_mirror = copy.copy(th)
                         while np.any(r[0]!=np.eye(2)):     
-                            th = np.einsum('ki,ij->kj',th,r[0])+r[1]
+                            th_mirror = np.einsum('ki,ij->kj',th_mirror,r[0])+r[1]
                             ik = ik + 1
                             r  = R[-ik]
 
@@ -1355,11 +1367,9 @@ class Signatures(PyLayers,dict):
                         # or previous point is a diffraction 
 
                         if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
-                            tha = th
-                            ratio = 1.0
-                            #print(visited,"ratio =1")
+                            ratio = 1.0 
                         else:
-                            # Determine the apex of the cone 
+                            # Determine the origin of the cone 
                             # either the transmitter (ilast =0) 
                             # or the last diffraction point (ilast=udiff[-1] ) 
                             udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
@@ -1370,6 +1380,7 @@ class Signatures(PyLayers,dict):
 
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
                             phe0 = tahe[ilast][1]   # head first segment
+
                             pta_ = tahe[-1][0]  # tail last segment
                             phe_ = tahe[-1][1]  # head last segment 
 
@@ -1382,6 +1393,7 @@ class Signatures(PyLayers,dict):
                             #
                             # Detect situations of connected segments
                             #
+
                             connected = False
                             if (pta0==pta_).all():
                                 apex = phe0
@@ -1430,7 +1442,7 @@ class Signatures(PyLayers,dict):
                                 linel = (vl[0],vl[1]-vl[0])
                                 liner = (vr[0],vr[1]-vr[0])
                                 # from origin mirrored segment to be tested 
-                                seg   = (th[0],th[1])
+                                seg   = (th_mirror[0],th_mirror[1])
 
                                 # apex calculation 
                                 a0u = np.dot(pta0,vr_n)
@@ -1440,6 +1452,7 @@ class Signatures(PyLayers,dict):
 
                                 kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
                                 apex = phe0 + kb*vl_n
+
                                 #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
                                 #    print(visited)
                                 #    print("th",th)
@@ -1459,156 +1472,50 @@ class Signatures(PyLayers,dict):
                             al = np.arctan2(vl_n[1],vl_n[0])
                             ar = np.arctan2(vr_n[1],vr_n[0])
 
-                            wseg0 = th[0]-apex
-                            wseg1 = th[1]-apex
-                            wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                            wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                            #
+                            # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
+                            #
+                            wseg0 = th_mirror[0] - apex
+                            wseg1 = th_mirror[1] - apex
+                            mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                            mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                            if np.isclose(mod_wseg0,0):
+                                #bvisu = True 
+                                #pdb.set_trace()#
+                                pass
+                            if np.isclose(mod_wseg1,0):
+                                #bvisu = True 
+                                pass
+                            wseg0_n = wseg0/mod_wseg0
+                            wseg1_n = wseg1/mod_wseg1
                             aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
                             aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
                             
                             I = geu.angle_intersection2(al,ar,aseg0,aseg1)
                             ratio = I/angle_cone
-                            #print(visited,"ratio =",str(ratio))
-                            #if (visited[0]==(167,40,53)):
-                            #    print(visited,I,angle_cone,ratio)
-                            #    if ratio<0.1:
-                            #        pdb.set_trace()
-                            # 
-                            # UNCOMMENT BELOW FOR DEBUG
-                            #
-                            #print visited,len(stack),ratio
-                            # mina  = min(al,ar)
-                            # maxa  = max(al,ar)
-                            
-                            # bseg0 = False
-                            # bseg1 = False
-                            # ratio = 0 
-                            # if (maxa-mina)>np.pi:
-                            #     I1 = (maxa,2*np.pi)
-                            #     I2 = (0,mina)
-                            #     if (((aseg0>I1[0]) & (aseg0<I1[1])) | ((aseg0>I2[0]) & (aseg0 <I2[1]))):
-                            #         # seg0 in cone
-                            #         bseg0 = True
-                            #     if (((aseg1>I1[0]) & (aseg1<I1[1])) | ((aseg1>I2[0]) & (aseg1 <I2[1]))):
-                            #         # seg1 in cone
-                            #         bseg1 = True    
-                            # else:
-                            #     I1 = (mina,maxa)
-                            #     if ((aseg0>I1[0]) & (aseg0<I1[1])):
-                            #         # seg0 in cone
-                            #         bseg0 = True
-                            #     if ((aseg1>I1[0]) & (aseg1<I1[1])):
-                            #         # seg1 in cone
-                            #         bseg1 = True
-                            # if ( bseg0 | bseg1 ):
-                            #     ratio = 1
-
-
-                            
-                            
-
-                            # lw0 = np.cross(vl_n,wseg0_n)
-                            # w0r = np.cross(wseg0_n,vr_n)
-                            # lw1 = np.cross(vl_n,wseg1_n)
-                            # w1r = np.cross(wseg1_n,vr_n)
-
-                            # s0 = np.sign(lw0*w0r)
-                            # s1 = np.sign(lw1*w1r)
-
-                            # if (s0>0) & (s1>0):
-                            #     ratio = 1 
-                            # if (s0>0) & (s1<0):
-                            #     ratio = 0.5
-
-                            # if (s1>0) & (s0<0):
-                            #     ratio = 0.5
-
-                            # if (s0<0) & (s1<0):
-                            #     ratio = 0         
-                            
-
-
-                            # kl,p_int_left  = geu.intersect_line_seg(linel,seg)
-                            # kr,p_int_right = geu.intersect_line_seg(liner,seg)
-                            
-                            # # signature is valid until proved non valid
-                            # # valid_bool = True
-
-                            # seg_ratio = 1.0
-                            
-                            # bkl = (kl<=1) & (kl>=0) 
-                            # bkr = (kr<=1) & (kr>=0)
-
-                            # if (not bkl) & (not bkr) & (kl*kr>0): # outside cone
-                            #     ratio = 0
-
-                            # elif (not bkl) & (not bkr) & (kl*kr<=0): # fully in cone
-                            #     tha = th
-                            #     wseg0 = th[0]-apex
-                            #     wseg1 = th[1]-apex
-                            #     wseg0_n = wseg0/np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                            #     wseg1_n = wseg1/np.sqrt(np.sum(wseg1*wseg1,axis=0))
-                            #     useg  = np.arccos(np.minimum(np.dot(wseg0_n,wseg1_n),1.0))
-                            #     ratio = useg/angle_cone
-
-                            # elif (bkl & bkr): # 2 intersection points 
-                            #     tha = np.vstack((p_int_left,p_int_right))
-                            #     ratio = 1.0
-
-                            # elif (bkl & (not bkr)): # left line intersects while right line don't
-                            #     if kr<kl: 
-                            #         wseg = th[0]-apex
-                            #         tha = np.vstack((th[0],p_int_left))
-                            #     else:
-                            #         wseg = th[1]-apex
-                            #         tha = np.vstack((p_int_left,th[1]))
-                                
-                            #     wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
-                            #     useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
-                            #     ratio = useg/angle_cone
-
-                            # elif (bkr & (not bkl)): # right line intersects while left line don't
-                            #     if kl<kr:
-                            #         wseg = th[0]-apex
-                            #         tha = np.vstack((th[0],p_int_right))
-                            #     else:
-                            #         wseg = th[1]-apex
-                            #         tha = np.vstack((p_int_right,th[1]))
-                                    
-                            #     wseg_n = wseg/np.sqrt(np.sum(wseg*wseg,axis=0))
-                            #     useg   = np.arccos(np.minimum(np.dot(vr_n,wseg_n),1.0))
-                            #     ratio = useg/angle_cone
-                            # else:
-                            #     ratio = 0
-                                #pdb.set_trace()
-
-                            #
-                            # visual debug
-                            #
-                            # print nstr
-                            # print visited
-                            #if visited==[(8,6,3), (-25531299,), (98, 3, 6)]:
-                            # if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
                             #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                            if (1==0):
-
+                            if (bvisu):
                                 fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                #
+                                # magenta : start of the cone
+                                # cyan    :
+                                # yellow  : last interaction
+                                #
                                 ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
                                 ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),
-                                                  np.array(self.L.Gs.pos[pts[1]]),
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),
+                                                  np.array(self.L.Gs.pos[nseg_points[1]]),
                                                   al=1,color='yellow',linewidth=4)
                                 ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
                                 ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color='green',linewidth=3)
                                 nx.draw_networkx_labels(self.L.Gi,
                                         self.L.Gi.pos,labels={x:str(x) for x in visited},
                                         ax=ax,fontsize=18)
                                 plt.title(str(visited)+'  '+str(ratio))
                                 ax.plot(apex[0],apex[1],'or')
                                 plt.axis('auto')
-                                plt.show()
                                 pdb.set_trace()
                             #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
                             # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
@@ -1626,15 +1533,17 @@ class Signatures(PyLayers,dict):
                                 ax.plot(apex[0],apex[1],'or')
                                 plt.axis('auto')
                                 plt.show()
-                                #import ipdb
-                                #ipdb.set_trace()
-                            # pdb.set_trace()
-                        #print '+++ ',visited,ratio
-                        #if s==(143, 40, 32):
-                        #    print (ratio,threshold)
+                    #else:
+                    #    th = self.L.Gs.pos[nstr]
+                    #    th = np.array([th,th])
+                    #    ratio = 1
                         if ratio > threshold:
-                            #tahe.append(tha)
-                            tahe.append(th)
+                            #
+                            # Update sequence of mirrored points
+                            if nstr<0:
+                                tahe.append(th)
+                            else:
+                                tahe.append(th_mirror)
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
@@ -1642,17 +1551,16 @@ class Signatures(PyLayers,dict):
                                 # idea here is to produce signature without any airwalls
                                 # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
                                 # anstr does not contains airwalls
-                                lawp_tmp = [0]+lawp
-                                # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
-                                # print([self.L.Gs.node[x]['name'] for x in lll])
-                                #print(visited)
-                                anstr = np.array([x[0] for ix,x in enumerate(visited) 
-                                                                  if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
-                                typ  = np.array([len(x) for ix,x in enumerate(visited) 
-                                                                  if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
+                                # lawp_tmp = [0]+lawp
+                                # # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
+                                # # print([self.L.Gs.node[x]['name'] for x in lll])
+                                # anstr = np.array([x[0] for ix,x in enumerate(visited) 
+                                #                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
+                                # typ  = np.array([len(x) for ix,x in enumerate(visited) 
+                                #                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
 
-                                # anstr = np.array([x[0] for x in visited ])
-                                # typ  = np.array([len(x) for x in visited])
+                                anstr = np.array([x[0] for x in visited ])
+                                typ  = np.array([len(x) for x in visited])
                                 #anstr = np.array(map(lambda x: x[0],visited))
                                 #typ  = np.array(map(lambda x: len(x),visited))
                                 try:
@@ -1683,25 +1591,11 @@ class Signatures(PyLayers,dict):
                                     except:
                                         pass
 
-                                # edge=zip(visited[:-1],visited[1:])
-                                # # dd={v:v for v in visited}
-                                # dd={}
-                                # self.L.showG('s',aw=1)
-                                # import ipdb
-                                # ipdb.set_trace()
-                                # nx.draw_networkx(Gi,pos=Gi.pos,nodelist=visited,edgelist=edge,labels=dd)
-                                # plt.savefig('./figure/' + str(cptsig) +'.png')
-                                # plt.close()
-                                # print visited,len(stack),cptsig  
-                                # print '    ',cptsig,zip(anstr,typ),ratio
-                            # move forward even when arrived in the target cycle
-                            #try: 
                             outint = Gi[visited[-2]][interaction]['output'].keys()
-                            #except:
-                            #pdb.set_trace()
-                            #outint = nx.neighbors(self.L.Gi,interaction)
+                            #
+                            # proint not used 
+                            #
                             proint = Gi[visited[-2]][interaction]['output'].values()
-                            #nexti  = [it for k,it in enumerate(outint) if (proint[k]>threshold_prob)]
                             nexti  = [it for it in outint ]
                             stack.append(iter(nexti))
                         else:

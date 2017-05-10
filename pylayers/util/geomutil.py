@@ -3515,14 +3515,14 @@ def intersect(a, b, c, d):
 
 
 def is_aligned4(a, b, c, d, tol=1e-2):
-    """ test aligment of 3 points 
+    """ test aligment of 4 points 
     Parameters
     ----------
 
     a : np.array
     b : np.array 
     c : np.array 
-
+    d : np.array 
     tol : float 
         default 1e-2
     """
