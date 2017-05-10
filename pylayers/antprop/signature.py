@@ -1306,12 +1306,11 @@ class Signatures(PyLayers,dict):
                         # if there is airwall in visited
                         nstr = interaction[0]
                         #
-                        #
-                        #
                         # Testing the type of interaction at rank -2 
                         # R is a list which contains a rotation matrix 
                         # and a translation vector for doing the mirroring 
                         # operation
+                        #
 
                         # diffraction (retrieve a point)
                         if len(visited[-2]) == 1:
