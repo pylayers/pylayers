@@ -1555,22 +1555,22 @@ class Signatures(PyLayers,dict):
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x]['name'] for x in lll])
                             
-                                anstr = np.array([x[0] for ix,x in enumerate(visited) 
-                                                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
-                                typ  = np.array([len(x) for ix,x in enumerate(visited) 
-                                                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
-                                sig = np.array([anstr,typ])
-                                sighash = hash(str(sig))
+                                #anstr = np.array([x[0] for ix,x in enumerate(visited) 
+                                #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
+                                #typ  = np.array([len(x) for ix,x in enumerate(visited) 
+                                #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
+                                #sig = np.array([anstr,typ])
+                                #sighash = hash(str(sig))
                                 
 
                                 # if len(anstr) == 2:
                                 #     if (anstr == np.array([323,351])).all():
                                 #         import ipdb
                                 #         ipdb.set_trace()
-                                # anstr = np.array([x[0] for x in visited ])
-                                # typ  = np.array([len(x) for x in visited])
-                                #anstr = np.array(map(lambda x: x[0],visited))
-                                #typ  = np.array(map(lambda x: len(x),visited))
+                                anstr = np.array([x[0] for x in visited ])
+                                typ  = np.array([len(x) for x in visited])
+                                sig = np.array([anstr,typ])
+                                sighash = hash(str(sig))
                                 if sighash not in lhash:
                                     lhash.append(sighash)
                                     try:

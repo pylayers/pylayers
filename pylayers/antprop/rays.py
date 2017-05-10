@@ -31,6 +31,12 @@ This modules contains Rays class
     Rays.reciprocal
     Rays.check_reciprocity
 
+    to3D 
+    simplify
+    locbas
+    fillinter
+    eval
+
 """
 try:
     from tvtk.api import tvtk
@@ -508,6 +514,8 @@ class Rays(PyLayers, dict):
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
         
+        r.nray2D = 1
+        r.nb_origin_sig = 1
         
         ni = self._ray2nbi[nr]
         ur = np.where(self[ni]['rayidx']==nr)[0][0]
@@ -1328,6 +1336,12 @@ class Rays(PyLayers, dict):
                 dk[k] = d2
         return(dk)
 
+    def simplify(self):
+        if not self.is3D:
+            return None
+
+        for ir in self:
+            print self[ik]['si']
 
     def locbas(self, L):
         """ calculate ray local basis
@@ -2240,10 +2254,13 @@ class Rays(PyLayers, dict):
         """
 
         #print 'Rays evaluation'
+
         self.fGHz=fGHz
+
         # evaluation of interaction
         
         self.I.eval(fGHz)
+
         # if np.isnan(self.I.I).any():
         #     pdb.set_trace()
         # evaluation of base B  (2x2)
@@ -2804,7 +2821,7 @@ class Rays(PyLayers, dict):
         else:
             return(filename)
 
-    def _show3(self,L=[],rlist=[],newfig=False,**kwargs):
+    def _show3(self,L=[],rlist=[],newfig=False,cmap='jet',**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters
@@ -2812,8 +2829,6 @@ class Rays(PyLayers, dict):
 
         L : Layout object
             Layout to be displayed
-
-
         rlist : list
             list of index rays
         newfig : boolean (default: False)
@@ -2860,23 +2875,17 @@ class Rays(PyLayers, dict):
                 l1 = l0+1
                 connection = np.vstack((l0,l1)).T
 
-                
-
                 if 'ER' in kwargs:
                     rc = np.repeat(colors[ridx],cnbi)
-                    # import ipdb
-                    # ipdb.set_trace()
-                    # T = np.repeat(np.linspace(-2 * np.pi, 2 * np.pi, nbr),cnbi)
                     rc[::cnbi]=0
-
-                    src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:],rc,colormap='hot')
-
+                    src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:],rc,colormap=cmap)
                 else: 
                     src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:])
+
                 src.mlab_source.dataset.lines=connection
                 src.update()
                 lines = mlab.pipeline.stripper(src)
-                mlab.pipeline.surface(lines,opacity=0.5,colormap='hot')
+                mlab.pipeline.surface(lines,opacity=0.5,colormap=cmap)
                 f.children[-1].name='Rays with ' + str(i) + 'interactions'
         else :
 
@@ -2884,8 +2893,6 @@ class Rays(PyLayers, dict):
             nr = np.array((nbi,rlist))
             unb = np.unique(nr[0,:])
             unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
-
-
 
             for i in unb:
                 raynb = (nr[1,unr[i]]).astype(int)
@@ -2895,7 +2902,6 @@ class Rays(PyLayers, dict):
                 cnbi = i + 2
   
                 pt = self[i]['pt'][:,:,ptidx].reshape(3,cnbi*nbr,order='F')
-
 
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
                 lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)

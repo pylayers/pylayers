@@ -407,14 +407,11 @@ class DLink(Link):
         # The link frequency range depends on the antenna 
         # self.fGHz = kwargs['fGHz']
 
-
-        
         if self.Aa==[]:
             self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
         if self.Ab==[]:
             self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
         
-
 
         if isinstance(self._L,str):
             self._Lname = self._L
@@ -1400,12 +1397,6 @@ class DLink(Link):
         pylayers.antprop.signature
         pylayers.antprop.rays
 
-        Experimental
-        ------------
-
-        alg = 2015 | 20152 (best)
-            vectorized signature research
-        si_reverb : number of reverb in source/target cycle if alg=2015
 
         """
 
@@ -1657,6 +1648,14 @@ class DLink(Link):
 
     def afp(self,phi,beta=0,gamma=np.pi/2.):
         """ Evaluate angular frequency profile 
+
+        Parameters
+        ----------
+
+        phi   : Euler angle phi
+        beta  : Euler angle beta 
+        gamma : Euler angle gamma
+
         """
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:

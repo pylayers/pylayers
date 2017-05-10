@@ -1041,7 +1041,7 @@ class Layout(pro.PyLayers):
 
         # degree of segment nodes
         degseg = map(lambda x: nx.degree(self.Gs, x), useg)
-
+        pdb.set_trace()
         assert(np.all(array(degseg) == 2))  # all segments must have degree 2
 
         #
@@ -1712,6 +1712,7 @@ class Layout(pro.PyLayers):
         fd.write("<?xml version='1.0' encoding='UTF-8'?>\n")
         fd.write("<osm version='0.6' upload='false' generator='PyLayers'>\n")
 
+        # creating points
         for n in self.Gs.pos:
             if n < 0:
                 if n not in self.lboundary:
@@ -1739,11 +1740,6 @@ class Layout(pro.PyLayers):
                     fd.write("<tag k='z' v=\"" + str(d['z']) + "\" />\n")
                     fd.write("<tag k='transition' v='" +
                              str(d['transition']) + "' />\n")
-                    if 'ss_name' in d:
-                        ch = str(d['ss_name'])
-                        fd.write("<tag k='ss_name' v=\"" + ch + "\" />\n")
-                        fd.write("<tag k='ss_z' v=\"" +
-                                 str(d['ss_z']) + "\" />\n")
                     fd.write("</way>\n")
 
         fd.write("</osm>\n")
@@ -2018,13 +2014,16 @@ class Layout(pro.PyLayers):
 
         self.name['AIR'] = []
         self.name['_AIR'] = []
-
+        #
+        # get the maximum index
+        #
+        maxnum = max([eval(x) for x in di['segments'].keys()])
         for k, key in enumerate(di['segments']):
 
             d = eval(di['segments'][key])
             nta = d['connect'][0]
             nhe = d['connect'][1]
-
+            #print(key,nta,nhe)
             if not d.has_key('offset'):
                 offset = 0
             else:
@@ -2032,7 +2031,9 @@ class Layout(pro.PyLayers):
             
             name = d['name']
             z = d['z']
+            print(eval(key))
             num = self.add_segment(nta, nhe,
+                                   num = eval(key), 
                                    name=name,
                                    offset=offset,
                                    z=z)
@@ -2046,12 +2047,14 @@ class Layout(pro.PyLayers):
                 if z[1] < self.zceil:
                      num = self.add_segment(nta, nhe,
                                             name='AIR',
+                                            maxnum = maxnum, 
                                             offset=offset,
                                             z=(z[1], self.zceil))
 
                 if z[0] > self.zfloor:
                      num = self.add_segment(nta, nhe,
                                             name='AIR',
+                                            maxnum = maxnum, 
                                             offset=offset,
                                             z=(self.zfloor,z[0]))
 
@@ -2191,8 +2194,10 @@ class Layout(pro.PyLayers):
                sub segment name as key and segment number as value
 
         """
+
         dico = {}
         listtransition = []
+
         for k in self.Gs.node.keys():
             dk = self.Gs.node[k]
             if 'transition' in dk:
@@ -2331,7 +2336,7 @@ class Layout(pro.PyLayers):
         self.add_segment(num, nop[1], name=namens, z=[
                          zminns, zmaxns], offset=0)
 
-    def add_segment(self, n1, n2, name='PARTITION', z=(0.0, 40000000), offset=0, verbose=True):
+    def add_segment(self, n1, n2,num=-1,maxnum=-1,name='PARTITION', z=(0.0, 40000000), offset=0, verbose=True):
         """  add segment between node n1 and node n2
 
         Parameters
@@ -2369,12 +2374,16 @@ class Layout(pro.PyLayers):
         """
 
         # if 2 points are selected
+
         if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
             nseg = [s for s in self.Gs.node if s > 0]
-            if len(nseg) > 0:
-                num = max(nseg) + 1
+            if num==-1:
+                if len(nseg) > 0:
+                    num = max(maxnum+1,max(nseg) + 1)   # index not given 
+                else: # first segment index not given
+                    num = 1
             else:
-                num = 1
+                pass # segment index given  
         else:
             if verbose:
                 print("add_segment : error not a node", n1, n2)
@@ -8690,7 +8699,7 @@ class Layout(pro.PyLayers):
         Parameters
         ----------
 
-        ncy : cycle number( Project -> save proejct)
+        ncy : cycle number( Project -> save project)
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
