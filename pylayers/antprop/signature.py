@@ -1181,7 +1181,7 @@ class Signatures(PyLayers,dict):
         # s[0] : point (<0) or segment (>0)a
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
-        lhash = []
+
         for us,s in tqdm(enumerate(lis)):
             
             #print s,cptsig
@@ -1200,7 +1200,7 @@ class Signatures(PyLayers,dict):
 
             R = [(np.eye(2),np.array([0,0]))]
             
-            # initialize visited list sequence with the first intercation s
+            # initialize visited list sequence with the first interaction s
 
             visited = [s]
            
@@ -1235,9 +1235,9 @@ class Signatures(PyLayers,dict):
                    (self.L.Gs.node[nseg]['name']=='AIR')):
                     lawp = [1]
                 else:
-                    lawp = [0]
+                    lawp = []
             else:
-                lawp = [0]
+                lawp = []
             # while the stack of iterators is not void
             cpt = 0
             while stack: #
@@ -1290,11 +1290,11 @@ class Signatures(PyLayers,dict):
                      if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
                         #print(visited)
-                        # if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(121, 101),(855, 101, 108),(876, 108, 104)]:
-                        # #if visited ==[(862, 107, 106),(857, 106, 102),(858, 102, 70),(755, 70, 67),(527, 67),(460, 67, 66),(464, 66, 74),(-56,)]:
-                        #     pdb.set_trace()
-                        #     #bvisu = True
-                        #     pass
+                        #if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(121, 101),(855, 101, 108),(876, 108, 104)]:
+                        #if visited ==[(862, 107, 106),(857, 106, 102),(858, 102, 70),(755, 70, 67),(527, 67),(460, 67, 66),(464, 66, 74),(-56,)]:
+                            #pdb.set_trace()
+                            #bvisu = True
+                            pass
 
                         # update list of airwalls
                         if interaction[0] in lair:
@@ -1480,7 +1480,7 @@ class Signatures(PyLayers,dict):
                             mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
                             if np.isclose(mod_wseg0,0):
                                 #bvisu = True 
-                                #pdb.set_trace()#
+                                pdb.set_trace()#
                                 pass
                             if np.isclose(mod_wseg1,0):
                                 #bvisu = True 
@@ -1551,33 +1551,23 @@ class Signatures(PyLayers,dict):
                                 # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
                                 # anstr does not contains airwalls
                                 # lawp_tmp = [0]+lawp
-                                # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
-                                # print([self.L.Gs.node[x]['name'] for x in lll])
-                            
-                                anstr = np.array([x[0] for ix,x in enumerate(visited) 
-                                                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
-                                typ  = np.array([len(x) for ix,x in enumerate(visited) 
-                                                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
-                                sig = np.array([anstr,typ])
-                                sighash = hash(str(sig))
-                                
+                                # # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
+                                # # print([self.L.Gs.node[x]['name'] for x in lll])
+                                # anstr = np.array([x[0] for ix,x in enumerate(visited) 
+                                #                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
+                                # typ  = np.array([len(x) for ix,x in enumerate(visited) 
+                                #                                   if ((lawp_tmp[ix]!=1) or (x[0] in self.L.lsss)) ] )
 
-                                # if len(anstr) == 2:
-                                #     if (anstr == np.array([323,351])).all():
-                                #         import ipdb
-                                #         ipdb.set_trace()
-                                # anstr = np.array([x[0] for x in visited ])
-                                # typ  = np.array([len(x) for x in visited])
+                                anstr = np.array([x[0] for x in visited ])
+                                typ  = np.array([len(x) for x in visited])
                                 #anstr = np.array(map(lambda x: x[0],visited))
                                 #typ  = np.array(map(lambda x: len(x),visited))
-                                if sighash not in lhash:
-                                    lhash.append(sighash)
-                                    try:
-                                        self[len(typ)] = np.vstack((self[len(typ)],sig))
-                                    except:
-                                        self[len(typ)] = np.vstack((sig))
+                                try:
+                                    self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
+                                except:
+                                    self[len(typ)] = np.vstack((anstr,typ))
                                 # print ('added',visited)
-                                    cptsig +=1
+                                cptsig +=1
 
                                 if animation:
                                     Nf = nx.draw_networkx_nodes(Gi,pos=Gi.pos,

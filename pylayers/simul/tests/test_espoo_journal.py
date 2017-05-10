@@ -4,8 +4,8 @@ from pylayers.antprop.antenna import *
 from pylayers.util.geomutil import *
 
 # parameters
-fmin  = 31.8 # GHz
-fmax  = 33.4         # GHz
+fmin  = 1.8 # GHz
+fmax  = 3.4         # GHz
 bw    = fmax - fmin  # bandwidth in GHz
 nf    = 10001           # sweep frequency points
 fc    = (fmin + fmax)/2.
@@ -40,7 +40,7 @@ ms   = np.vstack((ms1,ms2,ms3,ms4,ms5,ms6,ms7,ms8,ms9,ms10,ms11,ms12,ms13))
 bs   = np.array([220,185,hbs])
 
 # coordinates of the MS and the BS antennas
-DL.a  = ms1
+DL.a  = ms12
 DL.b  = bs
 
 # MS antenna
@@ -77,7 +77,7 @@ if plot_pos:
 # 	proche de 0 = il va chercher les trajets equivalents au NLOS  (ca va prendre plus de temps)
 
 # ra_ceil_H only the ground reflection
-DL.eval(force=1,cutoff=3,threshold=0.4,nD=2,ra_ceil_H=0)
+DL.eval(force=1,cutoff=4,threshold=0.4,nD=1,ra_ceil_H=0)
 #DL.C.cut(threshold_dB=90)
 
 # angular range
