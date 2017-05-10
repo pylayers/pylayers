@@ -77,8 +77,8 @@ if plot_pos:
 # 	proche de 0 = il va chercher les trajets equivalents au NLOS  (ca va prendre plus de temps)
 
 # ra_ceil_H only the ground reflection
-DL.eval(force=1,cutoff=3,threshold=0.40,ra_ceil_H=0)
-DL.C.cut(threshold_dB=90)
+DL.eval(force=1,cutoff=3,threshold=0.4,nD=1,ra_ceil_H=0)
+#DL.C.cut(threshold_dB=90)
 
 # angular range
 phimin  = np.pi/4.     # 45 deg

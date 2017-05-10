@@ -7995,6 +7995,8 @@ class Layout(pro.PyLayers):
             if nstr1 > 0:
                 # central interaction is a segment
                 pseg1 = self.seg2pts(nstr1).reshape(2, 2).T
+                # list all potential successors of interaction i1
+                i2 = nx.neighbors(self.Gi, i1)
                 # create a Cone object
                 cn = cone.Cone()
                 # if starting from segment
@@ -8011,10 +8013,13 @@ class Layout(pro.PyLayers):
                 else:
                     pt = np.array(self.Gs.pos[nstr0])
                     cn.fromptseg(pt, pseg1)
+                    #
 
-                # list all potential successors of interaction i1
-                i2 = nx.neighbors(self.Gi, i1)
-                ipoints = [x for x in i2 if len(x)==1 ]
+                ipoints = [x for x in i2 if len(x)==1 ]                               # i0      i1     i2[x]  
+                # Avoid to have the same diffaction point after reflection exemple :  (-10,),(245,12),(-10,) impossible 
+                #                                                                      nstr0  nstr1 
+                if nstr0<0: 
+                    ipoints = [x for x in ipoints if x[0]!=nstr0] 
                 #ipoints = filter(lambda x: len(x) == 1, i2)
                 pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
                 # filter tuple (R | T)
@@ -8037,8 +8042,8 @@ class Layout(pro.PyLayers):
                     p0 = np.array(self.Gs.pos[num0[0]])
                     p1 = np.array(self.Gs.pos[num1[0]])
                     pc = np.array(self.Gs.pos[common_point[0]])
-                    v0 = p0-pc 
-                    v1 = p1-pc 
+                    v0 = p0 - pc 
+                    v1 = p1 - pc 
                     v0n = v0/np.sqrt(np.sum(v0*v0))
                     v1n = v1/np.sqrt(np.sum(v1*v1))
                     if np.dot(v0n,v1n)<=0:

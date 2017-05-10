@@ -1422,6 +1422,9 @@ class DLink(Link):
                    'alg':1,
                    'si_reverb':4,
                    'threshold':0.1,
+                   'nD':2,
+                   'nR':10,
+                   'nT':10,
                    'debug':False,
                    'verbose':[],
                    'progressbar':None,
@@ -1483,11 +1486,14 @@ class DLink(Link):
         else :
             ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
-                Si.run(cutoff=kwargs['cutoff'],
-                        diffraction=kwargs['diffraction'],
-                        threshold=kwargs['threshold'],
-                        progress=kwargs['si_progress'],
-                        bt=kwargs['bt'])
+                Si.run(cutoff = kwargs['cutoff'],
+                        diffraction = kwargs['diffraction'],
+                        threshold = kwargs['threshold'],
+                        nD = kwargs['nD'],
+                        nR = kwargs['nR'],
+                        nT = kwargs['nT'],
+                        progress = kwargs['si_progress'],
+                        bt = kwargs['bt'])
 
                 if self.verbose:
                     print("default algorithm")
