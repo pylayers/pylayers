@@ -1041,7 +1041,7 @@ class Layout(pro.PyLayers):
 
         # degree of segment nodes
         degseg = map(lambda x: nx.degree(self.Gs, x), useg)
-        pdb.set_trace()
+        
         assert(np.all(array(degseg) == 2))  # all segments must have degree 2
 
         #
@@ -1209,7 +1209,6 @@ class Layout(pro.PyLayers):
             # sla is an array of string, index 0 is not used because there is
             # no such segment number.
             #
-
             self.lsss = [x for x in useg if len(self.Gs.node[x]['iso']) > 0]
 
             # self.isss = []
@@ -1268,10 +1267,12 @@ class Layout(pro.PyLayers):
         self.p2pc = self.p2pc.tocsr()
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
-
         # if problem here check file format 'z' should be a string
-        self.maxheight = np.max([v[1] for v in nx.get_node_attributes(
-            self.Gs, 'z').values() if v[1] != 40000000])
+        lheight = array([v[1] for v in 
+                    nx.get_node_attributes(self.Gs, 'z').values() 
+                    if v[1] < 2000 ])
+        assert(len(lheight)>0),logging.error("no valid heights for segments")
+        self.maxheight = np.max(lheight)
         # self.maxheight=3.
         # calculate extremum of segments
         self.extrseg()
@@ -1491,6 +1492,11 @@ class Layout(pro.PyLayers):
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
         cart = kwargs['cart']
+        #
+        # TODO : Not clean get zceil from actual data
+        #
+        if self.typ=='floorplan':
+            self.zceil = 3
         
         if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
             coords, nodes, ways, dpoly, m = osm.getosm(typ=typ,
@@ -1522,7 +1528,7 @@ class Layout(pro.PyLayers):
 
         # Reading points  (<0 index)
 
-        # Reorganize points coordinates for dedecting
+        # Reorganize points coordinates for detecting
         # duplicate nodes
         # duplicate nodes are saved in dict dup
 
@@ -1565,18 +1571,38 @@ class Layout(pro.PyLayers):
             for l in range(len(tahe) - 1):
                 nta = tahe[l]
                 nhe = tahe[l + 1]
-                # if duplicate recover original node
+                #
+                # if a node is duplicate recover the original node
+                #
                 if nta in dup:
                     nta = dup[nta]
                 if nhe in dup:
                     nhe = dup[nhe]
                 d = ways.way[nseg].tags
 
+                #
+                # Convert string to integer if possible
+                #
                 for key in d:
                     try:
                         d[key] = eval(d[key])
                     except:
                         pass
+
+
+                # getting segment information
+                if 'name' in d:
+                        slab = d['name']
+                else:  # the default slab name is WALL
+                        slab = "WALL"
+                if 'z' in d:
+                    z = d['z']
+                else:
+                    z = (0, 3)
+                if 'offset' in d:
+                    offset = d['offset']
+                else:
+                    offset = 0
                 #
                 # get the common neighbor of nta and nhe if it exists
                 #
@@ -1584,40 +1610,9 @@ class Layout(pro.PyLayers):
                 u2 = np.array(nx.neighbors(self.Gs, nhe))
                 inter_u1_u2 = np.intersect1d(u1, u2)
                 #
-                # The segment do not exist yet then create  a new segment
+                # Create  a new segment (iso segments are managed in add_segment)
                 #
-                if len(inter_u1_u2) == 0:
-                    #ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
-                    if 'name' in ways.way[nseg].tags:
-                        slab = ways.way[nseg].tags['name']
-                    else:  # the default slab name is WALL
-                        slab = "WALL"
-                    if 'z' in ways.way[nseg].tags:
-                        z = ways.way[nseg].tags['z']
-                    else:
-                        z = (0, 3)
-                    if 'offset' in ways.way[nseg].tags:
-                        offset = ways.way[nseg].tags['offset']
-                    else:
-                        offset = 0
-
-                    ns = self.add_segment(
-                        nta, nhe, name=slab, z=z, offset=offset)
-                #
-                # The segment do already exists the create a sub_segment
-                #
-                else:
-                    pass
-                    # ss_name = self.Gs.node[]
-                    #ns = self.chgmss(inter_u1_u2[0],name=d['name'],z=[eval(u) for u in d['z']],offset=0)
-
-                if 'ss_name' in d:
-                    nss += len(d['ss_name'])
-                    if type(d['ss_z'][0][0]) == 'str':
-                        ss_z = [[eval(u) for u in v] for v in d['ss_z']]
-                    else:
-                        ss_z = d['ss_z']
-                    self.chgmss(ns, ss_name=d['ss_name'], ss_z=ss_z)
+                ns = self.add_segment(nta, nhe, name=slab, z=z, offset=offset)
 
         self.Np = _np
         #self.Ns = _ns
@@ -1726,11 +1721,17 @@ class Layout(pro.PyLayers):
 
         for n in self.Gs.pos:
             if n > 0:
-                if self.Gs.node[n]['name'] != '_AIR':
+                #
+                # Conditions pour ajout segments
+                # 
+                cond1 = not ((not self.indoor)       and 
+                         (self.Gs.node[n]['name']=='AIR')  and
+                        (self.Gs.node[n][z][1]>2000)) 
+                cond2 = (self.Gs.node[n]['name'] != '_AIR')
+                if (cond1 and cond2):
                     neigh = nx.neighbors(self.Gs, n)
                     d = self.Gs.node[n]
                     #
-                    # TODO CHECK THIS
                     noden = -10000000 - n
                     fd.write("<way id='" + str(noden) +
                              "' action='modify' visible='true'>\n")
@@ -2031,7 +2032,7 @@ class Layout(pro.PyLayers):
             
             name = d['name']
             z = d['z']
-            print(eval(key))
+            
             num = self.add_segment(nta, nhe,
                                    num = eval(key), 
                                    name=name,
@@ -2336,7 +2337,15 @@ class Layout(pro.PyLayers):
         self.add_segment(num, nop[1], name=namens, z=[
                          zminns, zmaxns], offset=0)
 
-    def add_segment(self, n1, n2,num=-1,maxnum=-1,name='PARTITION', z=(0.0, 40000000), offset=0, verbose=True):
+    def add_segment(self, 
+                    n1,
+                    n2,
+                    num=-1,
+                    maxnum=-1,
+                    name='PARTITION', 
+                    z=(0.0, 40000000), 
+                    offset=0,
+                    verbose=True):
         """  add segment between node n1 and node n2
 
         Parameters
