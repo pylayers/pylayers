@@ -329,7 +329,11 @@ class Layout(pro.PyLayers):
     def __repr__(self):
         st = '\n'
         st = st + "----------------\n"
-        st = st + "Project : " + os.environ['BASENAME']+'\n'
+        home = os.path.expanduser('~')
+        with open(os.path.join(home,'.pylayers'),'r') as f:
+            paths = f.readlines()
+        uporj = paths.index('project\n')
+        project = paths[uporj+1]
         if hasattr(self,'_hash'):
             st = st + self._filename + ' : ' + self._hash + "\n"
         else:

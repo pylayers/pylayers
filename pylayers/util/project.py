@@ -164,6 +164,8 @@ pstruc['DIROSM'] =os.path.join('struc','osm')
 pstruc['DIRFUR'] = os.path.join('struc','furnitures')
 pstruc['DIRIMAGE'] = os.path.join('struc','images')
 pstruc['DIRPICKLE'] = os.path.join('struc','gpickle')
+pstruc['DIRRES'] = os.path.join('struc','res')
+pstruc['DIRSTR'] = os.path.join('struc','str')
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
 pstruc['DIRMAT'] = 'ini'
@@ -178,7 +180,7 @@ pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
 pstruc['DIRNETSAVE'] = 'netsave'
-pstruc['DIRSIG'] = os.path.join('output','sig')
+# pstruc['DIRSIG'] = os.path.join('output','sig')
 pstruc['DIRR2D'] = os.path.join('output','r2d')
 pstruc['DIRR3D'] = os.path.join('output','r3d')
 pstruc['DIRCT'] = os.path.join('output','Ct')
@@ -286,7 +288,7 @@ for nm,nv in pstruc.items():
 if basename != os.path.join(pylayersdir,'data'):
     if not 'win' in sys.platform:
         dirlist=['ini','struc','struc/furnitures'
-        ,'struc/osm','struc/wrl','struc/res'
+        ,'struc/osm','struc/wrl','struc/res','struc/str'
         ,'struc/images','struc/ini'
         ,'ant','output/Tx001','output'
         ,'geom','output/r2d'
@@ -296,10 +298,11 @@ if basename != os.path.join(pylayersdir,'data'):
         ,os.path.join('struc','osm')
         ,os.path.join('struc','wrl')
         ,os.path.join('struc','res')
+        ,os.path.join('struc','str')
         ,os.path.join('struc','images')
         ,os.path.join('struc','ini')
         ,'ant',os.path.join('output','Tx001'),'output'
-        ,'geom',os.path.join('output','sig')
+        ,'geom'
         ,os.path.join('output','r2d')
         ,os.path.join('output','r3d'),'body'
         ,os.path.join('body','c3d')
