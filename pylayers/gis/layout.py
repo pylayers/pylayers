@@ -1347,7 +1347,9 @@ class Layout(pro.PyLayers):
                         self.Gs.add_edge(ns, npt + 1)
                         self.Gs.pos[ns] = tuple(
                             (np.array(self.Gs.pos[npt + 1]) + np.array(self.Gs.pos[np0])) / 2.)
-
+        #
+        # TODO change lon_0 and lat_0 hard coded
+        #
         self.m = Basemap(llcrnrlon=kwargs['bd'][0], llcrnrlat=kwargs['bd'][1],
                          urcrnrlon=kwargs['bd'][2], urcrnrlat=kwargs['bd'][3],
                          resolution='i', projection='cass', lon_0=24.5, lat_0=60.5)
@@ -1638,6 +1640,8 @@ class Layout(pro.PyLayers):
         # self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
         #                  urcrnrlon=bd[2], urcrnrlat=bd[3],
         #                  resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+        
+
         self.m = m
         if kwargs['cart']:
              x, y = self.m(lon, lat)
@@ -1700,18 +1704,9 @@ class Layout(pro.PyLayers):
         _filename, ext = os.path.splitext(self._filename)
         filename = pyu.getlong(_filename + '.osm', 'struc/osm')
 
-        #
-        #
-        #
-        # lonmin = -2
-        # lonmax = -1
-        # latmin = 47
-        # latmax = 48
-        # lon_0 = -1.5
-        # lat_0 = 47.5
-        # m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
-        #    resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
-
+        if os.path.exists(filename): 
+            filename = pyu.getlong(_filename + '_.osm', 'struc/osm')
+            
         fd = open(filename, "w")
 
         fd.write("<?xml version='1.0' encoding='UTF-8'?>\n")
@@ -1785,6 +1780,17 @@ class Layout(pro.PyLayers):
 
         if self.typ == 'outdoor':
             config.add_section("outdoor")
+
+        #
+        # save bounding box in latlon for reconstruction of self.m
+        #
+        if hasattr(self,"m"):
+            config.add_section("latlon")
+            config.set("latlon","llcrnrlon",self.m.llcrnrlon)
+            config.set("latlon","llcrnrlat",self.m.llcrnrlat)
+            config.set("latlon","urcrnrlon",self.m.urcrnrlon)
+            config.set("latlon","urcrnrlat",self.m.urcrnrlat)
+
         # config.set("info",'Npoints',self.Np)
         # config.set("info",'Nsegments',self.Ns)
         # config.set("info",'Nsubsegments',self.Nss)
@@ -1904,12 +1910,7 @@ class Layout(pro.PyLayers):
     def load(self):
         """ load a structure file from an .ini file
 
-        Parameters
-        ----------
-
-        _fileini : string
-            file name extension .ini
-
+        The filename is self._filename
 
         """
 
@@ -2073,7 +2074,19 @@ class Layout(pro.PyLayers):
         self.boundary()
         
         # compliant with config file without  material/slab information
+        if config.has_section('latlon'):
+            llcrnrlon = eval(config.get('latlon', 'llcrnrlon'))
+            llcrnrlat = eval(config.get('latlon', 'llcrnrlat'))
+            urcrnrlon = eval(config.get('latlon', 'urcrnrlon'))
+            urcrnrlat = eval(config.get('latlon', 'urcrnrlat'))
+            lon_0 = (llcrnrlon+urcrnrlon)/2.
+            lat_0 = (llcrnrlat+urcrnrlat)/2.
 
+            # Construction of Basemap for coordinates transformation
+            self.m = Basemap(llcrnrlon=llcrnrlon, llcrnrlat=llcrnrlat,
+                    urcrnrlon=urcrnrlon, urcrnrlat=urcrnrlat,
+                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+            
 
         if config.has_section('files'):
             # self.filematini=config.get('files','materials')
