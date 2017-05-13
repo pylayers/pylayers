@@ -2480,6 +2480,29 @@ class Rays(PyLayers, dict):
         return lur
 
 
+    def get_rays_slabs(self,L,ir):
+        """ return the slabs for a given interaction index 
+
+
+            Parameters
+            ----------
+
+            L : Layout
+            ir : interaction block
+
+            Returns
+            -------
+
+            numpy array of slabs strings at the shape (ir,r)
+            ir : number of interactions ( of the interaction block)
+            r : number of rays
+
+        """
+
+        v=np.vectorize( lambda t: L.Gs.node[t]['name'] if (t!=0) and (t>0) else '_')
+        return v(self[ir]['sig'][0])
+
+
     def ray(self, r):
         """ returns the index of interactions of r
 
