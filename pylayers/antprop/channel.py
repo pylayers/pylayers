@@ -2097,7 +2097,7 @@ class Tchannel(bs.FUsignal):
             raise NameError('Channel Tchannel: issue when reading h5py file')
 
 
-    def apply(self, W):
+    def apply(self, W=[]):
         """ apply FUsignal W to the Tchannel
 
         Parameters
@@ -2124,14 +2124,16 @@ class Tchannel(bs.FUsignal):
             + W is a FUsignal whose shape doesn't need to be homogeneous with FUChannel H
 
         """
-
-        U = W * self 
+        if W!=[]:
+            U = W * self 
+        else:
+            U = self
         V = Tchannel(x= U.x, y = U.y, tau = self.taud, dod = self.dod, doa= self.doa)
 
         return(V)
 
 
-    def applywav(self, Wgam):
+    def applywav(self, Wgam=[]):
         """ apply waveform (time domain ) to obtain the
             rays impulses response
 
@@ -2175,7 +2177,7 @@ class Tchannel(bs.FUsignal):
         return rir
 
 
-    def get_cir(self,Wgam):
+    def get_cir(self,Wgam=[]):
         """ get Channel impulse response of the channel 
             for a given waveform
 
@@ -3295,8 +3297,7 @@ class Tchannel(bs.FUsignal):
 
         Returns
         -------
-
-
+        
         rir : TUsignal
 
 

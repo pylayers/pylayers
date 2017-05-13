@@ -183,8 +183,7 @@ class Waveform(dict):
 
 
     def fromfile(self):
-        """
-        get the measurement waveform from WHERE1 measurement campaign
+        """ get the measurement waveform from WHERE1 measurement campaign
 
         This function is not yet generic
 

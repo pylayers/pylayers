@@ -346,7 +346,6 @@ class Layout(pro.PyLayers):
         #   If no .ini extension provided it is added
         #
         arg, ext = os.path.splitext(string)
-    
         if arg != '':
             if ext == '.ini':
                 self._filename = string
@@ -1467,7 +1466,14 @@ class Layout(pro.PyLayers):
         Notes
         -----
 
-        In josm editor, nodes are numbered with negative indexes.
+        The best and recommended manner to edit a layout is to use the
+        josm editor n association with the piclayer plugin. 
+        This plugin allows to place a geoadusted image in the background 
+        which is very convenient 
+        for editing floorplan of buildings.. 
+
+        In josm editor, nodes are numbered with negative indexes, while in 
+        pylayers they have a positive index.
 
         See Also
         --------
@@ -1492,11 +1498,14 @@ class Layout(pro.PyLayers):
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
         cart = kwargs['cart']
+
         #
         # TODO : Not clean get zceil from actual data
         #
+
         if self.typ=='floorplan':
             self.zceil = 3
+            self.zfloor = 0
         
         if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
             coords, nodes, ways, dpoly, m = osm.getosm(typ=typ,
@@ -1617,6 +1626,7 @@ class Layout(pro.PyLayers):
         self.Np = _np
         #self.Ns = _ns
         self.Nss = nss
+        #
         #
         lon = array([self.Gs.pos[k][0] for k in self.Gs.pos])
         lat = array([self.Gs.pos[k][1] for k in self.Gs.pos])
@@ -1771,7 +1781,7 @@ class Layout(pro.PyLayers):
         if self.typ == 'floorplan':
             config.add_section("floorplan")
             config.set("floorplan", "zceil", self.zceil)
-            config.set("floorplan", "zfloor", self.zceil)
+            config.set("floorplan", "zfloor", self.zfloor)
 
         if self.typ == 'outdoor':
             config.add_section("outdoor")
