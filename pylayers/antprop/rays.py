@@ -2503,6 +2503,30 @@ class Rays(PyLayers, dict):
         return v(self[ir]['sig'][0])
 
 
+    def _del_AIR_int(self,L):
+        """ remove AIR interactions
+        """
+        for k in self:
+            lr = self[k].shape[1]
+            inter = self.get_rays_slabs(L,self[k])
+
+            ray_to_delete = []
+
+            for ur,r in enumerate(inter.T):
+                mask  = ~((r =='_AIR') | (r == 'AIR' ))
+                lmask = sum(mask)
+                if lmask != 0 :
+                    ray_to_delete.append(ur)
+                    sig = self[k]['sig'][:,mask,ur]
+                    pt = self[k]['rays'][:,mask,ur]
+
+                    # "sig2d','rayidx', 'si',, 'nbrays', 'vsi', 'dis'
+                    # pt
+                    # nb_rays
+                    # sig
+                    # sig2d
+                    # rays
+
     def ray(self, r):
         """ returns the index of interactions of r
 
