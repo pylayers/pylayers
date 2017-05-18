@@ -2506,26 +2506,66 @@ class Rays(PyLayers, dict):
     def _del_AIR_int(self,L):
         """ remove AIR interactions
         """
+        # def consecutive(data, stepsize=1):
+        #     return np.split(data, np.where(np.diff(data) != stepsize)[0]+1)
+
         for k in self:
-            lr = self[k].shape[1]
-            inter = self.get_rays_slabs(L,self[k])
+            lr = self[k]['sig'].shape[1]
+
+            inter = self.get_rays_slabs(L,k)
 
             ray_to_delete = []
 
             for ur,r in enumerate(inter.T):
-                mask  = ~((r =='_AIR') | (r == 'AIR' ))
-                lmask = sum(mask)
-                if lmask != 0 :
-                    ray_to_delete.append(ur)
-                    sig = self[k]['sig'][:,mask,ur]
-                    pt = self[k]['rays'][:,mask,ur]
+                try:
+                    not_air_mask  = ~((r =='_AIR') | (r == 'AIR' ))
+                    nb_air = sum(~not_air_mask)
+                    if nb_air != 0 :
+                        ray_to_delete.append(ur)
+                        new_bi = k-lmask
 
+                        si = np.zeros(new_bi)
+                        sig = self[k]['sig'][:,not_air_mask,ur]
+                        pt = self[k]['pt'][:,not_air_mask,ur]
+
+                        acc = self[k]['si']
+                        u = 0
+                        for b in not_air_mask:
+                            if b:
+                                acc += self[k]['si'][u]
+                            else:
+                                si[u]= acc
+                                acc = 0
+                                u += 1
+
+
+                except:
+                    import ipdb
+                    ipdb.set_trace()
                     # "sig2d','rayidx', 'si',, 'nbrays', 'vsi', 'dis'
                     # pt
                     # nb_rays
                     # sig
                     # sig2d
                     # rays
+                # X=range(10)
+                # X[0]=15
+                # acc = X[0]
+                # u = 0
+                # W=np.array([True,False,False,False,True,True,False,False])
+                # si=np.zeros(5)
+
+                # for ub,b in enumerate(W[1:]):
+                #     import ipdb
+                #     ipdb.set_trace()
+                #     if b:
+                #         acc += X[ub]
+                #     else:
+                #         si[u]= acc
+                #         acc = X[ub+1]
+                #         u += 1
+
+                    
 
     def ray(self, r):
         """ returns the index of interactions of r

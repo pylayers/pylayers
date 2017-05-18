@@ -1564,8 +1564,7 @@ class DLink(Link):
 
 
             R = self.r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
-            import ipdb
-            ipdb.set_trace()
+            self.R=R
             R.locbas(self.L)
             
 
