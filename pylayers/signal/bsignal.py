@@ -2487,10 +2487,22 @@ class TUsignal(TBsignal, Usignal):
         t1 = self.x[-1]
         self.x = np.hstack((self.x, aux - (aux[0] - t1 - te)))
 
+#    def window(self,**kwargs):
+#        """
+#        """
+#        defaults = {'kind':'rect',
+#                    'fGHz':[]}
+#
+#        for k in defaults:
+#            if k not in kwargs:
+#                kwargs[k]=defaults[k]
+#
+#        if kwargs['fGHz']!=[]:
 
+                    
     def EnImpulse(self,**kwargs):
         """
-        Create an Energy normalized Gaussian impulse (Usignal)
+        Create an energy normalized Gaussian impulse (Usignal)
 
         Parameters
         ----------
