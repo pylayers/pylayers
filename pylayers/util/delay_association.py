@@ -302,8 +302,10 @@ if __name__=="__main__":
         plt.subplot(N,1,k+1)
         plt.plot(tp_s[k,imin:imax,2],'o',label=str(k))
         plt.plot(y[k,imin:imax],'o',label=str(k))
-    plt.show()
-#bpermut = short_permutation()
+
+
+    plt.figure()
+        #bpermut = short_permutation()
 #bpermut = np.arange(N)
 #for k in permutations(np.arange(N)):
 #     bpermut=np.vstack((bpermut,np.array(k)))
@@ -324,9 +326,9 @@ if __name__=="__main__":
 #
 
 #plt.figure()
-for k in range(N):
+    for k in range(N):
     #plt.scatter(np.arange(Nsnap),np.arange(tp[k,:,1]),s=np.arange(tp[k,:,0]),c=color[k])
-    plt.scatter(np.arange(Nsnap),tp_gt[k,:,1],s=tp_gt[k,:,0]*3,c=np.random.rand(1,3))
+        plt.scatter(np.arange(Nsnap),tp_gt[k,:,1],s=tp_gt[k,:,0]*3,c=np.random.rand(1,3))
 #    plt.title('Ground Truth')
 #plt.figure()
 #for k in range(N):
@@ -353,10 +355,10 @@ for k in range(N):
 #plt.plot(np.arange(len(lpermut)),dhamm.values(),'k')
 
 #
-#plt.figure()
-#for k in range(N):
-#    #plt.scatter(np.arange(Nsnap),np.arange(tp[k,:,1]),s=np.arange(tp[k,:,0]),c=color[k])
-#    plt.scatter(np.arange(Nsnap),tp_r[k,:,1],s=tp_r[k,:,0]*3,c=np.random.rand(1,3),label=str(k))
+    plt.figure()
+    for k in range(N):
+    #plt.scatter(np.arange(Nsnap),np.arange(tp[k,:,1]),s=np.arange(tp[k,:,0]),c=color[k])
+        plt.scatter(np.arange(Nsnap),tp_r[k,:,1],s=tp_r[k,:,0]*3,c=np.random.rand(1,3),label=str(k))
 #    plt.title('Reconstructed paths')
 #plt.legend(loc='best')
 #for k in range(N): 
@@ -370,3 +372,4 @@ for k in range(N):
 #print np.sum(E)
 #plt.legend()
     
+    plt.show()
