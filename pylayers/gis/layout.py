@@ -1257,11 +1257,20 @@ class Layout(pro.PyLayers):
         self.s2pc = self.s2pc.tocsr()
         # for k in self.tsg:
         #     assert(np.array(self.s2pc[k,:].todense())==self.seg2pts(k).T).all(),pdb.set_trace()
-        pdb.set_trace()
-        mino = -min(self.Gs.nodes())+1
-        self.p2pc = sparse.lil_matrix((mino,2))
-        self.p2pc[-self.upnt,:]=self.pt.T
-        self.p2pc = self.p2pc.tocsr()
+        #pdb.set_trace()
+        #
+        # This is wrong and asume a continuous indexation of points 
+        # TODO FIX : This problem cleanly 
+        # 
+        # self.p2pc is only used in Gspos in outputGi_func only caled in case of 
+        # multiprocessing 
+        #
+        # The temporary fix is to comment the 5 next lines
+        #
+        # mino = -min(self.Gs.nodes())+1
+        # self.p2pc = sparse.lil_matrix((mino,2))
+        # self.p2pc[-self.upnt,:]=self.pt.T
+        # self.p2pc = self.p2pc.tocsr()
         # normal_ss = self.normal[:,self.tgs[self.lsss]]
         # self.normal = np.hstack((self.normal,normal_ss))
         # if problem here check file format 'z' should be a string
@@ -1667,7 +1676,7 @@ class Layout(pro.PyLayers):
                 self.name[k] = []
 
         # convert graph Gs to numpy arrays for speed up post processing
-        pdb.set_trace()
+        #pdb.set_trace()
         self.g2npy()
 
         #
@@ -1859,6 +1868,11 @@ class Layout(pro.PyLayers):
 
         for s in lslab:
             ds = {}
+            if s not in self.sl:
+                if s not in self.sl.mat:
+                    self.sl.mat.add(name=s,cval=6,sigma=0,typ='epsr')
+                self.sl.add(s,[s],[0.1])
+
             ds['index'] = self.sl[s]['index']
             ds['color'] = self.sl[s]['color']
             ds['lmatname'] = self.sl[s]['lmatname']
