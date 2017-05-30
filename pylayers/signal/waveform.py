@@ -59,7 +59,7 @@ class Waveform(dict):
 
         """
         defaults = {'typ':'generic',
-                'fGHz',[],
+                'fGHz':[],
                 'WGHz': 0.499,
                 'fcGHz': 4.493,
                 'feGHz': 100,
@@ -90,13 +90,13 @@ class Waveform(dict):
         elif self['typ'] == 'W1offset':
             [st,sf]=self.fromfile2()
         elif self['typ'] == 'blackmann':
-            sf = FUsignal(x=fGHz,y=np.blackman(len(fGHz))
+            sf = FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
             st = sf.ift()
         elif self['typ'] == 'hamming':
-            sf = FUsignal(x=fGHz,y=np.ones(len(fGHz))
+            sf = FUsignal(x=fGHz,y=np.ones(len(fGHz)))
             st = sf.ift()
         elif self['typ'] == 'hamming':
-            sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz))
+            sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
             st = sf.ift()
         else:
             logging.critical('waveform typ not recognized, check your config \
