@@ -1908,7 +1908,7 @@ class SlabDB(dict):
         ----------
 
         name       : string
-        lmat       : list of mat name
+        lmatname   : list of mat name
         lthick     : list ot float
            list of layer thickness in meters
 

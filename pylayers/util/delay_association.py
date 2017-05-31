@@ -6,15 +6,136 @@ from itertools import permutations
 import  matplotlib.pyplot as plt 
 import pdb
 
-
-def delay_association(tp_s):
+def short_permutation(N=6,W=4):
     """
     Parameters
     ----------
 
-    s : 
+    N : Number of paths 
+    W : Window length  
+
+    Returns
+    -------
+
+    bpermut : np.array
+        (Npermut,N)
+        short permutations array
+        Npermut is a function of W 
 
     """
+    bpermut = np.arange(N)
+    s = np.arange(N)
+    for w in range(2,W):
+        for k1 in range(N-(w-1)):
+            d = s[k1:k1+w]
+            for k2 in permutations(d):
+                p = np.hstack((s[0:k1],k2,s[k1+w:]))
+                diff = p[None,:]-bpermut
+                sdiff = np.sum(np.abs(diff),axis=1)
+                if sdiff.all()!=0:
+                    bpermut = np.vstack((bpermut,p))
+    return bpermut
+
+def dist_permut(v1,v2,p,debug=False):
+    """
+    Calulate distance between v1 and v2[p] 
+    p is a permutation 
+
+    Parameters
+    ----------
+    v1 : array N,
+    v2 : array N, 
+    p  : a N permutation 
+
+    """
+    #
+    # Apply permutation on vector v2 
+    #
+    v2p = v2[np.argsort(p),...]
+    #dist =  np.sum(tp2[0]-tp1[0])+np.sum(tp2[1]-tp2[1])
+    #dist =  np.sqrt(np.sum(np.abs(v2p[:,0]-p1[:,0])**2)+np.sum(np.abs(v2p[:,1]-v1[:,1])**2)+ha)
+    dist =  np.sqrt(np.sum(np.abs(v2p[:,0]-v1[:,0])**2)*np.sum(np.abs(v2p[:,1]-v1[:,1])**2))
+    if debug: 
+        #print v2p[:,0]
+        #print v1[:,0]
+        #print "----"
+        #if ((p==np.array([4,2,0,3,1])).all() | (p==np.array([0,1,2,3,4])).all()):
+        print "current[]",v2p[:,1]
+        print "expected", v1[:,1]
+
+    #dist =  np.prod(np.abs(v2p[:,0]-v1[:,0])**2)*np.prod(np.abs(v2p[:,1]-v1[:,1])**2)
+    #dist =  np.sqrt(np.sum(np.abs(v2p[:,1]-v1[:,1])**2))
+    return(dist) 
+
+def p_opt(v1,v2,bpermut,debug=False):
+    """ find the optimum permutation 
+    w.r.t the dist_permut function 
+
+    Parameters
+    ----------
+    v1 : array 1 (N, 
+    v2 : array 2 (N,
+    bpermut : array of permutations 
+
+    See Also
+    --------
+
+    dist_permut
+
+    """
+    d_min = 1e10
+    N = np.shape(v1)[0] 
+    popt = np.arange(N)
+    Npermut = bpermut.shape[0]
+    if debug:
+        #print bpermut
+        pass
+    for k in range(Npermut):
+        p = bpermut[k,:]
+        d = dist_permut(v1,v2,p,debug)
+        if d<d_min:
+            d_min = d
+            popt = p
+        if debug:
+            #if ((p==np.array([4,2,0,3,1])).all() | (p==np.array([0,1,2,3,4])).all()):
+            print p,d
+    return popt,d_min
+
+
+def delay_association(tp_s,W=4):
+    """
+
+    Parameters
+    ----------
+
+    tp_s : np.array 
+            N x Nsnap x 3     ( amplitude, delay , index )
+        sorted signal 
+
+    where N is the number of paths , Nsnap the number of snapshots
+
+    W : window length for permutations set exploration
+
+    Returns
+    -------
+
+    tp_r  :  np.array
+         N x Nsnap x 5   
+         (amplitude , delay , popt , delay_expected, pprev ) 
+        recovered signal 
+
+    """
+    # retrieve dimensions N and Nsnap
+
+    sh_tps = tp_s.shape
+    N = sh_tps[0]
+    Nsnap = sh_tps[1]
+    assert(sh_tps[2]==3)
+
+    # get bpermut short permutations array  from N and W 
+
+    bpermut = short_permutation(N=N,W=W)
+
     tp_r = np.zeros((N,Nsnap,5))
     popt = np.arange(N).astype(int)
     #
@@ -113,6 +234,8 @@ def delay_association(tp_s):
         if (pprev!=tp_s[:,k,2]).any():
             print "Erreur en ",k
         print "=================="
+    return(tp_r)
+
 
 
 if __name__=="__main__":
@@ -131,7 +254,7 @@ if __name__=="__main__":
 # ta : array of amplitude 
 # tt : array of delays 
 #
-    N = 6 
+    N = 20 
     ta = np.zeros((1,Nsnap))
     tt = np.zeros((1,Nsnap))
     for k in range(N):
@@ -140,11 +263,11 @@ if __name__=="__main__":
         ta= np.vstack((ta,ak))
         tt= np.vstack((tt,tk))
     
-    # ground truth 
+    # creating ground truth 
     tp_gt = np.dstack((ta[1:,:],tt[1:,:]))
-    ta_ = np.zeros((N,1))
-    tt_ = np.zeros((N,1))
-    tu_ = np.zeros((N,1))
+    ta_ = np.zeros((N,1)) # amplitude
+    tt_ = np.zeros((N,1)) # delay 
+    tu_ = np.zeros((N,1)) # index
     for k in range(Nsnap):
         uk  = np.argsort(tp_gt[:,k,1])
         tu_ = np.hstack((tu_,uk[:,None]))
@@ -156,34 +279,33 @@ if __name__=="__main__":
     #
     tp_s = np.dstack((ta_[:,1:],tt_[:,1:],tu_[:,1:]))
 
-def short_permutation(N=6,W=4):
-    """
-    Parameters
-    ----------
+    # call delay association algorithm 
 
-    N : 
-    W : 
+    tp_r = delay_association(tp_s) 
 
-    Returns
-    -------
+    # display results 
 
-    bperput : short permutations
+    plt.figure()
+    imin=0
+    #imax = 10
+    imax = Nsnap
+    for k in range(N):
+        plt.subplot(N,1,k+1)
+        plt.plot(tp_gt[k,imin:imax,1],'o',label='gt : '+str(k))
+        plt.plot(tp_r[k,imin:imax,1],'o',label='r : '+str(k))
+        plt.plot(tp_r[k,imin:imax,3],'or',label='e : '+str(k))
+    #    
+    plt.legend()
+    plt.figure()
+    y = np.argsort(tp_r[:,:,2],axis=0)
+    for k in range(N):
+        plt.subplot(N,1,k+1)
+        plt.plot(tp_s[k,imin:imax,2],'o',label=str(k))
+        plt.plot(y[k,imin:imax],'o',label=str(k))
 
-    """
-    bpermut = np.arange(N)
-    s = np.arange(N)
-    for w in range(2,W):
-        for k1 in range(N-(w-1)):
-            d = s[k1:k1+w]
-            for k2 in permutations(d):
-                p = np.hstack((s[0:k1],k2,s[k1+w:]))
-                diff = p[None,:]-bpermut
-                sdiff = np.sum(np.abs(diff),axis=1)
-                if sdiff.all()!=0:
-                    bpermut = np.vstack((bpermut,p))
-    return bpermut
 
-bpermut = short_permutation()
+    plt.figure()
+        #bpermut = short_permutation()
 #bpermut = np.arange(N)
 #for k in permutations(np.arange(N)):
 #     bpermut=np.vstack((bpermut,np.array(k)))
@@ -202,41 +324,11 @@ bpermut = short_permutation()
 #
 # Ground truth signal 
 #
-def distance(v1,v2,p,debug=False):
-    """
-    Calulate distance between v1 and v2[p] 
-    p is a permutation 
-
-    Parameters
-    ----------
-    v1 : array N,
-    v2 : array N, 
-    p  : a N permutation 
-
-    """
-    #
-    # Apply permutation on vector v2 
-    #
-    v2p = v2[np.argsort(p),...]
-    #dist =  np.sum(tp2[0]-tp1[0])+np.sum(tp2[1]-tp2[1])
-    #dist =  np.sqrt(np.sum(np.abs(v2p[:,0]-p1[:,0])**2)+np.sum(np.abs(v2p[:,1]-v1[:,1])**2)+ha)
-    dist =  np.sqrt(np.sum(np.abs(v2p[:,0]-v1[:,0])**2)*np.sum(np.abs(v2p[:,1]-v1[:,1])**2))
-    if debug: 
-        #print v2p[:,0]
-        #print v1[:,0]
-        #print "----"
-        #if ((p==np.array([4,2,0,3,1])).all() | (p==np.array([0,1,2,3,4])).all()):
-        print "current[]",v2p[:,1]
-        print "expected", v1[:,1]
-
-    #dist =  np.prod(np.abs(v2p[:,0]-v1[:,0])**2)*np.prod(np.abs(v2p[:,1]-v1[:,1])**2)
-    #dist =  np.sqrt(np.sum(np.abs(v2p[:,1]-v1[:,1])**2))
-    return(dist) 
 
 #plt.figure()
-#for k in range(N):
+    for k in range(N):
     #plt.scatter(np.arange(Nsnap),np.arange(tp[k,:,1]),s=np.arange(tp[k,:,0]),c=color[k])
-#    plt.scatter(np.arange(Nsnap),tp_gt[k,:,1],s=tp_gt[k,:,0]*3,c=np.random.rand(1,3))
+        plt.scatter(np.arange(Nsnap),tp_gt[k,:,1],s=tp_gt[k,:,0]*3,c=np.random.rand(1,3))
 #    plt.title('Ground Truth')
 #plt.figure()
 #for k in range(N):
@@ -252,34 +344,6 @@ def distance(v1,v2,p,debug=False):
 #    dhamm[tuple(p)] = np.max(np.abs(p-np.arange(N)))
 #    ddist[tuple(p)]=distance(p1,p2,p)
 
-def p_opt(v1,v2,bpermut,debug=False):
-    """ find the optimum permutation 
-    w.r.t the distance function 
-
-    Parameters
-    ----------
-    v1 : array 1 (N, 
-    v2 : array 2 (N,
-    bpermut : array of permutations 
-
-    """
-    d_min = 1e10
-    N = np.shape(v1)[0] 
-    popt = np.arange(N)
-    Npermut = bpermut.shape[0]
-    if debug:
-        #print bpermut
-        pass
-    for k in range(Npermut):
-        p = bpermut[k,:]
-        d = distance(v1,v2,p,debug)
-        if d<d_min:
-            d_min = d
-            popt = p
-        if debug:
-            #if ((p==np.array([4,2,0,3,1])).all() | (p==np.array([0,1,2,3,4])).all()):
-            print p,d
-    return popt,d_min
 
 #imin = np.where(ddist.values()==np.min(ddist.values()))
 #print("imin : ",imin)
@@ -291,10 +355,10 @@ def p_opt(v1,v2,bpermut,debug=False):
 #plt.plot(np.arange(len(lpermut)),dhamm.values(),'k')
 
 #
-#plt.figure()
-#for k in range(N):
-#    #plt.scatter(np.arange(Nsnap),np.arange(tp[k,:,1]),s=np.arange(tp[k,:,0]),c=color[k])
-#    plt.scatter(np.arange(Nsnap),tp_r[k,:,1],s=tp_r[k,:,0]*3,c=np.random.rand(1,3),label=str(k))
+    plt.figure()
+    for k in range(N):
+    #plt.scatter(np.arange(Nsnap),np.arange(tp[k,:,1]),s=np.arange(tp[k,:,0]),c=color[k])
+        plt.scatter(np.arange(Nsnap),tp_r[k,:,1],s=tp_r[k,:,0]*3,c=np.random.rand(1,3),label=str(k))
 #    plt.title('Reconstructed paths')
 #plt.legend(loc='best')
 #for k in range(N): 
@@ -307,21 +371,5 @@ def p_opt(v1,v2,bpermut,debug=False):
 #E = np.sqrt((tp_gt[:,:,1]-tp_r[:,:,1])**2)
 #print np.sum(E)
 #plt.legend()
-plt.figure()
-imin=0
-#imax = 10
-imax = Nsnap
-for k in range(N):
-    plt.subplot(N,1,k+1)
-    plt.plot(tp_gt[k,imin:imax,1],'o',label='gt : '+str(k))
-    plt.plot(tp_r[k,imin:imax,1],'o',label='r : '+str(k))
-    plt.plot(tp_r[k,imin:imax,3],'or',label='e : '+str(k))
-#    
-plt.legend()
-plt.figure()
-y = np.argsort(tp_r[:,:,2],axis=0)
-for k in range(N):
-    plt.subplot(N,1,k+1)
-    plt.plot(tp_s[k,imin:imax,2],'o',label=str(k))
-    plt.plot(y[k,imin:imax],'o',label=str(k))
-plt.show()
+    
+    plt.show()

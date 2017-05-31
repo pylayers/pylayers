@@ -3746,6 +3746,7 @@ def MRot3(a, axe):
     return(M3)
 
 
+
 def MEulerAngle(alpha, beta, gamma):
     """ Calculate a rotation matrix from 3 Euler angles
 
@@ -3788,7 +3789,6 @@ def MEulerAngle(alpha, beta, gamma):
     T = np.dot(np.dot(Ra, Rb), Rg)
     #T  = np.dot(np.dot(Rg,Rb),Ra)
     return(T)
-
 
 def SphericalBasis(a):
     """
