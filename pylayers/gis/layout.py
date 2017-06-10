@@ -3713,7 +3713,11 @@ class Layout(pro.PyLayers):
                (0, 65, 0.29145678877830505)],
               dtype=[('i', '<i8'), ('s', '<i8'), ('a', '<f4')])
 
+        See Also
+        --------
 
+        antprop.loss.Losst 
+        
         """
 
         sh1 = np.shape(p1)

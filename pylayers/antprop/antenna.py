@@ -213,6 +213,8 @@ class Pattern(PyLayers):
             []
         ph: list 
             []
+        pt : np.array (3,N)
+        pr : np.array (3,N)
         fGHz:list 
             []
         nth: int 
@@ -249,6 +251,8 @@ class Pattern(PyLayers):
         """
         defaults = {'th':[],
                     'ph':[],
+                    'pt':[],
+                    'pr':[],
                     'fGHz':[],
                     'nth':90,
                     'nph':181,
@@ -270,12 +274,30 @@ class Pattern(PyLayers):
             self.fGHz = kwargs['fGHz']
 
         self.nf = len(self.fGHz)
-
+        self.grid = kwargs['grid']
+        #
+        # if th and ph are empty 
+        #    if pt and pr are empty 
+        #          calculates from th0,th1,nth 
+        #                           ph0,phi,nph
+        #    else
+        #          calculates from points coordinates pt and pr
+        # else
+        #     take specified values
         if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
-            self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
-            self.grid = True
-            self.full_evaluated = True
+            if (kwargs['pt'] == []) and (kwargs['pr'] == []):
+                self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
+                self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
+                self.grid = True
+                self.full_evaluated = True
+            else:
+                si = kwargs['pr']-kwargs['pt']
+                ssi = np.sqrt(np.sum(si*si,axis=0))
+                sn = si/ssi[None,:]
+                self.theta = np.arccos(sn[2,:])
+                self.phi = np.arctan2(sn[1,:],sn[0,:])
+                self.grid = False
+                self.full_evaluated = True
         else :
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
@@ -288,7 +310,7 @@ class Pattern(PyLayers):
         self.nth = len(self.theta)
         self.nph = len(self.phi)
 
-        self.grid = kwargs['grid']
+        
 
         #
         # eval
