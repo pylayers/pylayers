@@ -2857,6 +2857,7 @@ class Rays(PyLayers, dict):
         newfig : boolean (default: False)
             if true create a new mayavi figure
             else : use the current
+        ER: Ray energy 
 
         """
 

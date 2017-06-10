@@ -1014,7 +1014,10 @@ class Pattern(PyLayers):
         sdotp  = np.dot(self.s,self.p)   # s . p
         
         for a in self.la:
-            a.eval()
+            if not self.grid:
+                a.eval(grid=self.grid,ph=self.phi,th=self.theta)
+            else:
+                a.eval(grid=self.grid)
             # aFt : Nt x Np x Nf  |Nd x Nf
             # aFp : Nt x Np x Nf  |Nd x Nf
             aFt = a.Ft
@@ -1075,6 +1078,7 @@ class Pattern(PyLayers):
         if self.grid:
         #
         # Integrate over the Np points (axis =1)
+        # only if self.grid
         # Fp  : Nd x Nf
         # Ft  : Nd x Nf
         #
@@ -1137,7 +1141,7 @@ class Pattern(PyLayers):
         """
         self.G = np.real( self.Fp * np.conj(self.Fp)
                          +  self.Ft * np.conj(self.Ft) )
-        if len(self.G.shape)==3:
+        if self.grid:
             dt = self.theta[1]-self.theta[0]
             dp = self.phi[1]-self.phi[0]
             Nt = len(self.theta)
@@ -1160,7 +1164,7 @@ class Pattern(PyLayers):
                 V  = U*np.sin(self.theta)[:,None]
                 self.hpster[k] = np.sum(V)*dt*dp/(4*np.pi)
                 self.ehpbw[k] = np.arccos(1-2*self.hpster[k])
-        if len(self.G.shape)==2:
+        else:
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
 

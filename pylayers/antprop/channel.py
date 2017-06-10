@@ -177,8 +177,31 @@ class AFPchannel(bs.FUsignal):
 
 class ADPchannel(bs.TUsignal):
     """ Angular Delay Profile channel
+
+    Members
+    -------
+
+    a : 
+    offset :
+    theta :  float 
+    phi : 
+    tau : 
+
     """
     def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename='',offset=0):
+        """
+        Parameters
+        ----------
+
+        x : 
+        y :
+        a : 
+        tx :
+        rx :
+        _filename :
+        offset  : 
+
+        """
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
         self.a = a
         self.offset = offset
@@ -225,6 +248,8 @@ class ADPchannel(bs.TUsignal):
 
 
         Na = self.y.shape[0]
+        # integration over frequency 
+        # adp (angle) 
         adp = np.real(np.sum(self.y*np.conj(self.y),axis=1))
         u  = np.where(adp==max(adp))[0]
         if fig==[]:
@@ -4776,6 +4801,7 @@ class Ctilde(PyLayers):
             a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
+
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
