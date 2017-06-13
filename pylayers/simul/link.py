@@ -359,7 +359,7 @@ class DLink(Link):
 
         Link.__init__(self)
 
-        defaults={ 'L':Layout('defstr.ini'),
+        defaults={ 'L':'',
                    'a':np.array(()),
                    'b':np.array(()),
                    'Aa':[],
@@ -368,7 +368,7 @@ class DLink(Link):
                    'Tb':np.eye(3),
                    'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
-                   'outdoor':False,
+                   'outdoor':True,
                    'cutoff':3,
                    'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
@@ -415,7 +415,8 @@ class DLink(Link):
 
         if isinstance(self._L,str):
             self._Lname = self._L
-            self._L = Layout(self._Lname)
+            indoor = not outdoor
+            self._L = Layout(self._Lname,indoor=indoor)
         else:
             self._Lname = self._L._filename
     
@@ -1849,8 +1850,9 @@ class DLink(Link):
         Parameters
         ----------
 
-        rays: Ray3d object :
-            display the rays of the simulation
+        rays: boolean 
+        lay : boolean 
+        ant : boolean 
         newfig : boolean (default : False)
         kwargs of Rays.show3()
 
@@ -1961,14 +1963,10 @@ class DLink(Link):
             #     kwargs['rlist']=urays
             #     import ipdb
             #     ipdb.set_trace()
-            try:
-
-                if self.H.y.ndim>2:
-                    ER = np.squeeze(self.H.energy())
-                    kwargs['ER']=ER
-                self.R._show3(**kwargs)
-            except:
-                print('Rays not computed yet')
+            #if self.H.y.ndim>2:
+            #    ER = np.squeeze(self.H.energy())
+            #    kwargs['ER']=ER
+            self.R._show3(L=self.L,**kwargs)
 
         fp = (self.a+self.b)/2.
         dab = np.sqrt(np.sum((self.a-self.b)**2))

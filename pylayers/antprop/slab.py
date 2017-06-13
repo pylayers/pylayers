@@ -750,7 +750,17 @@ class Mat(PyLayers,dict):
     (meter) 0
 
     """
-    def __init__(self, name="AIR", index=1, epr=1 + 0.0j, mur=1 + 0.0j, sigma=0.0, roughness=0.):
+    def __init__(self, 
+                 name="AIR", 
+                 index=1, 
+                 epr=1 + 0.0j, 
+                 mur=1 + 0.0j, 
+                 sigma=0.0,
+                 roughness=0.,
+                 a=None,
+                 b=None,
+                 c=None,
+                 d=None):
         """ class constructor
 
         Parameters
@@ -762,6 +772,10 @@ class Mat(PyLayers,dict):
         mur : complex
         sigma : float
         roughness : float
+        a : ITU parameter
+        b : ITU parameter
+        c : ITU parameter
+        d : ITU parameter
 
         Examples
         --------
@@ -776,6 +790,16 @@ class Mat(PyLayers,dict):
         self['mur'] = mur
         self['sigma'] = sigma
         self['roughness'] = roughness
+        # Parameters a,b,c,d 
+        # Table 3 Rec ITU-R P.2040.1
+        #
+        # epsrp  = a * fGHZ ** b 
+        # sigma  = c * fGHZ ** d 
+        #
+        self['a']=None
+        self['b']=None
+        self['c']=None
+        self['d']=None
 
     def eval(self, fGHz):
         """ evaluate Mat at given frequencies
@@ -796,13 +820,19 @@ class Mat(PyLayers,dict):
         100 MHz = 0.1 GHz
         10 MHz = 0.01 GHz
 
-        sigma/(w*eps0) = sigma/(2*pi*f*1e9*eps0)
-        sigma/(w*eps0) = sigma/(2*pi*f*1e9*8.854e-12)
-        sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)
+        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e9*eps0)
+        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e9*8.854e-12)
+        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e-3*8.854)
+        sigma/(w*eps0) = 18 * sigma/fGHz
         """
 
         self['fGHz'] = fGHz
-        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
+        if self['a'] == None:
+            epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
+        else:
+            epsr = self['a'] * self['fGHZ']**self['b']
+            sigma  = self['c'] * self['fGHZ']**self['d']
+            epsc = epsr - 1j * 18 * sigma /  self['fGHz']
 
         return(epsc)
 
@@ -976,7 +1006,7 @@ class MatDB(PyLayers,dict):
         mur : float
             relative permeability
         typ : string
-            {'epsr'|'ind'|,'reim',|'THz'}
+            {'epsr'|'ind'|,'reim',|'THz'|'itu'}
 
         Notes
         -----
@@ -1055,6 +1085,12 @@ class MatDB(PyLayers,dict):
             M['epr2'] = np.real(2 * M['kappa'] * M['n'])
             M['sigma'] = M['epr2'] * M['fGHz'] / 18.
             M['Z'] = 1.0 / np.sqrt(M['epr'] + 1j * M['epr2'])
+
+        if kwargs['typ']  == 'itu':
+            M['a'] = a
+            M['b'] = b
+            M['c'] = c
+            M['d'] = d
 
         M['mur'] = kwargs['mur']
         M['roughness'] = 0

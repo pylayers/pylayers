@@ -1659,6 +1659,12 @@ class TBsignal(Bsignal):
 
         used energy detector for IEEE 802.15.6 standard
 
+        Parameters
+        ----------
+
+        Tns : 
+        Tsns : 
+
 
         """
         u1 = np.where(self.x<(self.x[0]+Tns))[0]
@@ -1798,6 +1804,43 @@ class TBsignal(Bsignal):
         U = TUsignal(tns, ut)
 
         return U
+
+    def tap(self,fcGHz,WGHz,Ntap):
+        """ Back to baseband 
+
+        Parameters
+        ----------
+        fcGHz : float 
+            center frequency 
+        WGHz : float 
+            bandwidth 
+        Ntap : int 
+            Number of tap 
+        
+        Notes 
+        -----
+
+        Implement formula (2.52) from D.Tse book page 50
+            
+        """
+        # self.x : tauk   (,Nx)
+        # self.y : alphak (1,Nx)
+        # yb : 1 x delay x 1 
+        yb = self.y[...,None]*np.exp(-2 * 1j * np.pi *self.x[None,:,None] * fcGHz )
+        # create a tap axis index l 
+        # l : 1 x 1 x tap 
+        l   = np.arange(Ntap)[None,None,:]
+        # get delay 
+        # tau : 1 x delay x 1 
+        tau = self.x[None,:,None]
+        # S : 1 x delay x tap 
+        S   = np.sinc(l-tau*WGHz)
+        # htap : 1 x delay x tap 
+        htap  = np.sum(yb*S,axis=0)
+        # htapi : integrates over delays
+        # 1 x tap 
+        htapi = np.sum(htap,axis=1)
+        U = TUsignal(x=l,y=htapi)
 
 class TUsignal(TBsignal, Usignal):
     """ Uniform signal in time domain
@@ -2569,8 +2612,10 @@ class TUsignal(TBsignal, Usignal):
     def MaskImpulse(self,**kwargs):
         """
         MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
+        """
 
         def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
+            """
 
             Parameters
             ----------
@@ -2583,30 +2628,30 @@ class TUsignal(TBsignal, Usignal):
             thresh : definition of band at Pm - thresh (dB)
 
             """
-        self.fc = fc
-        self.band = band
-        self.thresh = thresh
-        self.Tp = Tp
-        self.Pm = Pm
-        self.R = R
-        self.fe = fe
+            self.fc = fc
+            self.band = band
+            self.thresh = thresh
+            self.Tp = Tp
+            self.Pm = Pm
+            self.R = R
+            self.fe = fe
 
-        Usignal.__init__(self)
-        #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
-        alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
-        tau = 1 / (alpha * band * np.pi * np.sqrt(2))
-        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
-        if len(x) == 0:
-            te = 1.0 / fe
-            Tw = 10. / band
-            Ni = round(Tw / (2 * te))
-            # Tww/2 multiple de te
-            Tww = 2 * te * Ni
-            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+            Usignal.__init__(self)
+            #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
+            alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
+            tau = 1 / (alpha * band * np.pi * np.sqrt(2))
+            A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
+            if len(x) == 0:
+                te = 1.0 / fe
+                Tw = 10. / band
+                Ni = round(Tw / (2 * te))
+                # Tww/2 multiple de te
+                Tww = 2 * te * Ni
+                x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
 
-        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
-        self.x = x
-        self.y = y
+            y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
+            self.x = x
+            self.y = y
 
     #    def show(self):
     #        plt.subplot(211)

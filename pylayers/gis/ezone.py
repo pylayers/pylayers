@@ -15,7 +15,7 @@ import os
 import pdb
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
-from osgeo import gdal
+#from osgeo import gdal
 from scipy.interpolate import interp2d
 #from imposm.parser import OSMParser
 #from geomutil import *
@@ -318,8 +318,10 @@ class DEM(PyLayers):
                             continue
                         path = os.path.join(path, word)
                     zf.extract(member, path)
-
-        f = gdal.Open(fileaster)
+        
+        # 
+        # Commented while gdal is broken in anaconda
+        #f = gdal.Open(fileaster)
         self.hgta = f.ReadAsArray()
 
     def show(self,**kwargs):

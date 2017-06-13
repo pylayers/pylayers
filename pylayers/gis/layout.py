@@ -206,7 +206,8 @@ class Layout(pro.PyLayers):
 
     boolean 
     -------
-    indoor
+
+    indoor : if True allow indoor penetration 
     isbuilt 
     diffraction 
 
@@ -223,11 +224,13 @@ class Layout(pro.PyLayers):
                  _filematini='matDB.ini',
                  _fileslabini='slabDB.ini',
                  _filefur='',
-                 check=True,
-                 build=True,
-                 diffraction=False,
-                 verbose=False,
-                 cartesian=True,
+                 bcheck=True,
+                 bbuild=False,
+                 bgraphs=True,
+                 bindoor=False,
+                 bdiffraction=False,
+                 bverbose=False,
+                 bcartesian=True,
                  dist_m=400,
                  typ='floorplan'):
         """ object constructor
@@ -262,14 +265,11 @@ class Layout(pro.PyLayers):
         # self.sl.mat = mat
         # self.sl.load(_fileslabini)
 
-        self.isbuilt = False
-        self.loadosm = False
         self.labels = {}
 
         self.Np = 0
         self.Ns = 0
         self.Nss = 0
-        self.diffraction = diffraction
 
         #
         # Initializing graphs
@@ -298,7 +298,15 @@ class Layout(pro.PyLayers):
         self.coordinates = 'cart'
         self.version = '1.1'
         self.typ = typ
-        
+        # boolean 
+
+        self.isbuilt = False
+        self.loadosm = False
+        # diffraction : activate diffraction 
+        self.diffraction = bdiffraction
+        # indoor : activate indoor propagation 
+        self.indoor = bindoor
+
         #
         # setting display option
         #
@@ -393,22 +401,20 @@ class Layout(pro.PyLayers):
             except:
                 print("problem to construct geomfile")
 
-            if check:
+            #
+            # check layout 
+            #
+            if bcheck:
                 self.check()
 
-            
             # check if the graph gpickle files have been built
-            if self.typ=='floorplan':
-                self.indoor = True
-            if self.typ=='outdoor':
-                self.indoor = False
-
             
-            if build:
+            if bgraphs:
+                dirname = self._filename.replace('.ini','')
                 path = os.path.join(pro.basename,
                                     'struc',
                                     'gpickle',
-                                    self._filename)
+                                    dirname)
                 if os.path.exists(path):
                     # load graph Gt
                     # and compare the self._hash from ini file
@@ -425,18 +431,19 @@ class Layout(pro.PyLayers):
                     else:  # reload
                         self.dumpr('stvirw')
                         self.isbuilt = True
-                        rebuild = False
+                        bbuild = False
 
                 else:
-                    rebuild = True
+                    print("graphs have not been saved")
+                    bbuild = True
 
-                # rebuild dump
-                if rebuild:
-                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                    # if ans.lower()=='y'
-                    self.build()
-                    self.lbltg.append('s')
-                    self.dumpw()
+            # build and save graphs 
+            if bbuild:
+                # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                # if ans.lower()=='y'
+                self.build()
+                self.lbltg.append('s')
+                self.dumpw()
 
     def __repr__(self):
         st = '\n'
@@ -3706,7 +3713,11 @@ class Layout(pro.PyLayers):
                (0, 65, 0.29145678877830505)],
               dtype=[('i', '<i8'), ('s', '<i8'), ('a', '<f4')])
 
+        See Also
+        --------
 
+        antprop.loss.Losst 
+        
         """
 
         sh1 = np.shape(p1)
@@ -5368,8 +5379,8 @@ class Layout(pro.PyLayers):
 
         """
         # create layout directory
-
-        path = os.path.join(pro.basename, 'struc', 'gpickle', self._filename)
+        dirname = self._filename.replace('.ini','')
+        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
 
         if not os.path.isdir(path):
             os.mkdir(path)
@@ -5418,8 +5429,8 @@ class Layout(pro.PyLayers):
         specified by the $BASENAME environment variable
 
         """
-
-        path = os.path.join(pro.basename, 'struc', 'gpickle', self._filename)
+        dirname = self._filename.replace('.ini','')
+        path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
         for g in graphs:
             try:
                 # if g in ['v','i']:
