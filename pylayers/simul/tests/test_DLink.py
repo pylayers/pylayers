@@ -10,7 +10,7 @@ fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 # set the layout
 #L=Layout('defstr.ini',build=False)
 #L=Layout('defstr.ini',diffraction=True)
-L=Layout('defstr.ini',build=False)
+L=Layout('defstr.ini',bbuild=False)
 #L=Layout('TC2_METIS.ini',build=False)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link

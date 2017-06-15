@@ -852,15 +852,19 @@ def Losst(L,fGHz,p1,p2,dB=True):
     #
     # As segment numbering is not necessarily contiguous 
     # there exist void string '' in slabs
-    cslab = np.unique(slabs)
+    cslab = list(np.unique(slabs))
     if '' in cslab:
         cslab.remove('')
+    if 'AIR' in cslab:
+        cslab.remove('AIR')
+    if '_AIR' in cslab:
+        cslab.remove('_AIR')
+
 
     LossWallo = np.zeros((len(fGHz),Nlink))
     LossWallp = np.zeros((len(fGHz),Nlink))
     EdWallo = np.zeros((len(fGHz),Nlink))
     EdWallp = np.zeros((len(fGHz),Nlink))
-
     
     for slname in cslab:
         # u index of slabs of name slname
