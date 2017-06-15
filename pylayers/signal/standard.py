@@ -47,6 +47,7 @@ import numpy as np
 import json
 import ConfigParser
 import pylayers.util.pyutil as pyu
+import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 
 class Band(dict):
@@ -444,6 +445,7 @@ class AP(dict):
             'PtdBm':0,
             'sensdBm': -94,
             'nant':1,
+            'ant':'Omni',
             'on':True
         }
 
@@ -458,9 +460,12 @@ class AP(dict):
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
         self['on'] = kwargs['on']
+        self['ant'] = kwargs['ant']
+        self['phideg'] = kwargs['phideg']
 
         standard = Wstandard(kwargs['wstd'])
         self.s = standard
+        self.A = ant.Antenna(self['ant'])
 
     def __repr__(self):
         """ specific representation
@@ -474,6 +479,8 @@ class AP(dict):
         for k in self['chan']:
            st = st + self.s.chan[k].__repr__()
         st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
+        st = st+ 'ant : '+str(self['ant'])+'\n'
+        st = st+ 'phi (deg) : '+str(self['phideg'])+'\n'
         st = st+ 'nant : '+str(self['nant'])+'\n'
         st = st+ 'On : '+str(self['on'])+'\n'
         return(st)

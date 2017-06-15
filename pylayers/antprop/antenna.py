@@ -215,6 +215,7 @@ class Pattern(PyLayers):
             []
         pt : np.array (3,N)
         pr : np.array (3,N)
+        azoffset : int (0) 
         fGHz:list 
             []
         nth: int 
@@ -260,7 +261,8 @@ class Pattern(PyLayers):
                     'th0':0,
                     'th1':np.pi,
                     'ph0':0,
-                    'ph1':2*np.pi
+                    'ph1':2*np.pi,
+                    'azoffset':0
                    }
         for k in defaults:
             if k not in kwargs:
@@ -295,7 +297,7 @@ class Pattern(PyLayers):
                 ssi = np.sqrt(np.sum(si*si,axis=0))
                 sn = si/ssi[None,:]
                 self.theta = np.arccos(sn[2,:])
-                self.phi = np.arctan2(sn[1,:],sn[0,:])
+                self.phi = np.mod(np.arctan2(sn[1,:],sn[0,:])+kwargs['azoffset'],2*np.pi)
                 self.grid = False
                 self.full_evaluated = True
         else :
@@ -356,6 +358,7 @@ class Pattern(PyLayers):
             # Nd x Nf
             self.sqG =  np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,:]
         self.radF()
+        self.gain()
 
 
     def __paperture(self,**kwargs):
@@ -637,6 +640,7 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(10**(GdB/10.))
         # radiating functions are deduced from square root of gain
         self.radF()
+        self.gain()
 
     def __pvsh3(self,**kwargs):
         """ calculate pattern for vsh3
@@ -1760,7 +1764,14 @@ class Antenna(Pattern):
 
 
     def photo(self,directory=''):
-        """ show a picture of the antenna """
+        """ show a picture of the antenna 
+
+        Parameters
+        ----------
+
+        directory : string
+
+        """
 
         if directory == '':
             directory = os.path.join('ant','UWBAN','PhotosVideos')
@@ -1780,6 +1791,13 @@ class Antenna(Pattern):
         
         Atoll format provides Antenna gain given for the horizontal and vertical plane 
         for different frequencies and different tilt values 
+
+        Parameters
+        ----------
+
+        directory : string 
+
+        The dictionnary attol is created 
 
         """
         _filemat = self._filename
