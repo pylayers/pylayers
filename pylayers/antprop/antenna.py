@@ -216,6 +216,13 @@ class Pattern(PyLayers):
         pt : np.array (3,N)
         pr : np.array (3,N)
         azoffset : int (0) 
+        Rfloor : bool
+            add floor reflection. corresponding Gain theta and phi of reclflected
+            contributions are appended at the end of corresponding arrays
+            e.g. G = [G_r0,G_r1,G_r0r,G_r1r] 
+            G_rX : gain ray X
+            G_rXr : gain ray X reflected on floor
+
         fGHz:list 
             []
         nth: int 
@@ -254,6 +261,7 @@ class Pattern(PyLayers):
                     'ph':[],
                     'pt':[],
                     'pr':[],
+                    'Rfloor':False,
                     'fGHz':[],
                     'nth':90,
                     'nph':181,
@@ -300,6 +308,11 @@ class Pattern(PyLayers):
                 self.phi = np.mod(np.arctan2(sn[1,:],sn[0,:])+kwargs['azoffset'],2*np.pi)
                 self.grid = False
                 self.full_evaluated = True
+                if kwargs['Rfloor']:
+                    dR = np.sqrt(ssi**2 + (kwargs['pr'][2,:] + kwargs['pt'][2,:])**2)  #  reflexion length
+                    thetaR = np.arccos((kwargs['pr'][2,:] + kwargs['pt'][2,:]) / dR)
+                    self.theta = np.hstack([self.theta,thetaR])
+                    self.phi = np.hstack([self.phi,self.phi])
         else :
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
