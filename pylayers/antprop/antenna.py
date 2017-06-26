@@ -315,7 +315,7 @@ class Pattern(PyLayers):
         
 
         #
-        # eval
+        # evaluation of the specific Pattern__p function 
         #
         eval('self._Pattern__p'+self.typ)(param=self.param)
 
