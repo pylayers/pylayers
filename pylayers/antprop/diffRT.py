@@ -354,7 +354,11 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
         #if np.max(Fkla) > 1:
         #    Warning('diffRT : Fkla tab probably wrong')
     # 4.56 Mac Namara
-    Di = -cste*Fkla/tan
+    try:
+        Di = -cste*Fkla/tan
+    except:
+        print('tan=0 : It can happen')
+        pdb.set_trace()
 
     c5 = np.where(np.abs(tan)<1e-9)
     BL = np.ones(Di.shape)*L

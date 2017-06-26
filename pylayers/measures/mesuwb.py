@@ -1695,29 +1695,29 @@ class UWBMeasure(PyLayers):
         return(st)
         
     def info(self):
-        print "Date_Time :", self.Date_Time
+        print( "Date_Time :", self.Date_Time)
         #print "Operators : ", self.Operators
-        print "Tx_height :", self.Tx_height
-        print "Tx_position :", self.Tx_position
-        print "Tx : ", self.tx
+        print( "Tx_height :", self.Tx_height)
+        print( "Tx_position :", self.Tx_position)
+        print( "Tx : ", self.tx)
         for i in range(4):
-            print "------Tx" + str(i + 1) + " ------"
-            print "delays     (ns):", self.de[i]
-            print "range  (meters):", self.de[i] * 0.3
-            print "visibility     :", self.type[i]
-            print "angular (degree)  :", self.ag[i]
+            print( "------Tx" + str(i + 1) + " ------")
+            print( "delays     (ns):", self.de[i])
+            print( "range  (meters):", self.de[i] * 0.3)
+            print( "visibility     :", self.type[i])
+            print( "angular (degree)  :", self.ag[i])
             if i == 0:
-                print "LQI Meth1", self.LQI['Method1_CH1'], " (dB)"
-                print "LQI Meth2", self.LQI['Method2_CH1'], " (dB)"
+                print( "LQI Meth1", self.LQI['Method1_CH1'], " (dB)")
+                print( "LQI Meth2", self.LQI['Method2_CH1'], " (dB)")
             if i == 1:
-                print "LQI Meth1", self.LQI['Method1_CH2'], " (dB)"
-                print "LQI Meth2", self.LQI['Method2_CH2'], " (dB)"
+                print( "LQI Meth1", self.LQI['Method1_CH2'], " (dB)")
+                print( "LQI Meth2", self.LQI['Method2_CH2'], " (dB)")
             if i == 2:
-                print "LQI Meth1", self.LQI['Method1_CH3'], " (dB)"
-                print "LQI Meth2", self.LQI['Method2_CH3'], " (dB)"
+                print( "LQI Meth1", self.LQI['Method1_CH3'], " (dB)")
+                print( "LQI Meth2", self.LQI['Method2_CH3'], " (dB)")
             if i == 3:
-                print "LQI Meth1", self.LQI['Method1_CH4'], " (dB)"
-                print "LQI Meth2", self.LQI['Method2_CH4'], " (dB)"
+                print( "LQI Meth1", self.LQI['Method1_CH4'], " (dB)")
+                print( "LQI Meth2", self.LQI['Method2_CH4'], " (dB)")
 
     def show(self,fig=[],delay=np.array([[0], [0], [0], [0]]),display=True,
             col=['k', 'b', 'g', 'c'],xmin=0, xmax=100, C=0, NC=1,typ='v'):

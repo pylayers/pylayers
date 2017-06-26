@@ -1173,7 +1173,7 @@ class Usignal(Bsignal):
         elif naxis2==naxis1+2: # w(2) x H (4)
             u1.y=u1.y[:,None,None,:]
         elif naxis2!=naxis1:
-            print "alignement not allowed"
+            print("alignement not allowed")
 
         #   Function to determine iuf 2 shape are compatible
         #    if naxis1>naxis2:
@@ -1217,7 +1217,7 @@ class Usignal(Bsignal):
 
         dx = min(dx1, dx2)
         if tstincl(u1.x, u2.x) == 0:
-            print 'Warning: impossible to align the 2 signals'
+            print('Warning: impossible to align the 2 signals')
 
         if (dx1 <= dx2):
 
@@ -1659,6 +1659,12 @@ class TBsignal(Bsignal):
 
         used energy detector for IEEE 802.15.6 standard
 
+        Parameters
+        ----------
+
+        Tns : 
+        Tsns : 
+
 
         """
         u1 = np.where(self.x<(self.x[0]+Tns))[0]
@@ -1799,6 +1805,43 @@ class TBsignal(Bsignal):
 
         return U
 
+    def tap(self,fcGHz,WGHz,Ntap):
+        """ Back to baseband 
+
+        Parameters
+        ----------
+        fcGHz : float 
+            center frequency 
+        WGHz : float 
+            bandwidth 
+        Ntap : int 
+            Number of tap 
+        
+        Notes 
+        -----
+
+        Implement formula (2.52) from D.Tse book page 50
+            
+        """
+        # self.x : tauk   (,Nx)
+        # self.y : alphak (1,Nx)
+        # yb : 1 x delay x 1 
+        yb = self.y[...,None]*np.exp(-2 * 1j * np.pi *self.x[None,:,None] * fcGHz )
+        # create a tap axis index l 
+        # l : 1 x 1 x tap 
+        l   = np.arange(Ntap)[None,None,:]
+        # get delay 
+        # tau : 1 x delay x 1 
+        tau = self.x[None,:,None]
+        # S : 1 x delay x tap 
+        S   = np.sinc(l-tau*WGHz)
+        # htap : 1 x delay x tap 
+        htap  = np.sum(yb*S,axis=0)
+        # htapi : integrates over delays
+        # 1 x tap 
+        htapi = np.sum(htap,axis=1)
+        U = TUsignal(x=l,y=htapi)
+
 class TUsignal(TBsignal, Usignal):
     """ Uniform signal in time domain
 
@@ -1888,15 +1931,15 @@ class TUsignal(TBsignal, Usignal):
         """ display information about TUsignal
 
         """
-        print 'TUsignal'
-        print '--------'
-        print 'shx : ', np.shape(self.x)
-        print 'shy : ', np.shape(self.y)
-        print 'dx :  ', self.dx()
-        print 'xmin :', self.x.min()
-        print 'xmax :', self.x.max()
-        print 'ymin :', self.y.min()
-        print 'ymax :', self.y.max()
+        print('TUsignal')
+        print('--------')
+        print('shx : ', np.shape(self.x))
+        print('shy : ', np.shape(self.y))
+        print('dx :  ', self.dx())
+        print('xmin :', self.x.min())
+        print('xmax :', self.x.max())
+        print('ymin :', self.y.min())
+        print('ymax :', self.y.max())
 
 
 
@@ -2150,8 +2193,8 @@ class TUsignal(TBsignal, Usignal):
         """
         O = TUsignal()
         #ba  = iirfilter(order,[wp,ws],ftype=ftype)
-        print "wp = ", wp
-        print "ws = ", ws
+        print("wp = ", wp)
+        print("ws = ", ws)
         #ba  = iirdesign(wp,ws,1,40,ftype=ftype)
         h = firwin(1001, [wp, ws])
         O.y = lfilter(h, 1, self.y)
@@ -2487,10 +2530,22 @@ class TUsignal(TBsignal, Usignal):
         t1 = self.x[-1]
         self.x = np.hstack((self.x, aux - (aux[0] - t1 - te)))
 
+#    def window(self,**kwargs):
+#        """
+#        """
+#        defaults = {'kind':'rect',
+#                    'fGHz':[]}
+#
+#        for k in defaults:
+#            if k not in kwargs:
+#                kwargs[k]=defaults[k]
+#
+#        if kwargs['fGHz']!=[]:
 
+                    
     def EnImpulse(self,**kwargs):
         """
-        Create an Energy normalized Gaussian impulse (Usignal)
+        Create an energy normalized Gaussian impulse (Usignal)
 
         Parameters
         ----------
@@ -2557,8 +2612,10 @@ class TUsignal(TBsignal, Usignal):
     def MaskImpulse(self,**kwargs):
         """
         MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
+        """
 
         def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
+            """
 
             Parameters
             ----------
@@ -2571,30 +2628,30 @@ class TUsignal(TBsignal, Usignal):
             thresh : definition of band at Pm - thresh (dB)
 
             """
-        self.fc = fc
-        self.band = band
-        self.thresh = thresh
-        self.Tp = Tp
-        self.Pm = Pm
-        self.R = R
-        self.fe = fe
+            self.fc = fc
+            self.band = band
+            self.thresh = thresh
+            self.Tp = Tp
+            self.Pm = Pm
+            self.R = R
+            self.fe = fe
 
-        Usignal.__init__(self)
-        #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
-        alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
-        tau = 1 / (alpha * band * np.pi * np.sqrt(2))
-        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
-        if len(x) == 0:
-            te = 1.0 / fe
-            Tw = 10. / band
-            Ni = round(Tw / (2 * te))
-            # Tww/2 multiple de te
-            Tww = 2 * te * Ni
-            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+            Usignal.__init__(self)
+            #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
+            alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
+            tau = 1 / (alpha * band * np.pi * np.sqrt(2))
+            A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
+            if len(x) == 0:
+                te = 1.0 / fe
+                Tw = 10. / band
+                Ni = round(Tw / (2 * te))
+                # Tww/2 multiple de te
+                Tww = 2 * te * Ni
+                x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
 
-        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
-        self.x = x
-        self.y = y
+            y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
+            self.x = x
+            self.y = y
 
     #    def show(self):
     #        plt.subplot(211)
@@ -2909,14 +2966,14 @@ class FUsignal(FBsignal,Usignal):
         fmax = self.x[-1]
         df = self.x[1] - self.x[0]
         T = 1.0 / df
-        print 'FUsignal'
-        print '--------'
-        print 'N Freq    ', N
-        print 'shape(y)  ', sh
-        print 'Fmin (GHz) : ', fmin
-        print 'Fmax (GHz) : ', fmax
+        print('FUsignal')
+        print('--------')
+        print('N Freq    ', N)
+        print('shape(y)  ', sh)
+        print('Fmin (GHz) : ', fmin)
+        print('Fmax (GHz) : ', fmax)
 
-        print 'Frequency sampling step : ', df
+        print('Frequency sampling step : ', df)
 
     def energy(self,axis=-1,Friis=False,mode='mean'):
         r""" calculate energy along a given axis of the FUsignal
@@ -3029,16 +3086,11 @@ class FUsignal(FBsignal,Usignal):
         MH2 = abs(H * np.conjugate(H))
         EMH2 = MH2.sum(axis=1)
         EMH2dB = 10 * np.log10(EMH2)
-        print EMH2dB
         EMH2dBmax = EMH2dB.max()
-
         ind1 = EMH2.argsort()
-        print ind1
-
         EMH2dBsorted = EMH2dB[ind1]
         ind2 = np.nonzero(EMH2dBsorted > (EMH2dBmax - threshdB))[0]
         indices = ind1[ind2]
-        print indices
         return indices
 
     def zp(self, N):
@@ -3363,10 +3415,12 @@ class FUsignal(FBsignal,Usignal):
         return(uh)
 
     def show(self,**kwargs):
-        """ pcolor visualization of Modulus and Phase
+        """ imshow visualization of Modulus and Phase
 
-        vmin 
-        vmax
+        vmin : 
+        vmax : 
+        cmap : colormap 
+
         """
 
         if 'fig' not in kwargs:
@@ -3385,24 +3439,6 @@ class FUsignal(FBsignal,Usignal):
         fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]
-#       def fig(self,N):
-#          """
-#          """
-#          x = self.x
-#          min   = abs(self.y).min()
-#          max   = abs(self.y).max()
-#          ec    = max-min
-#          ecmax = ec.max()
-#          sh = shape(self.y)
-#          Nmax    = sh[0]
-#          N1    = int(minimum(N,Nmax))
-#          y1    = abs(self.y)[0,:] + (N1-1)*ecmax
-#          yN1   = abs(self.y)[N1-1,:]
-#          r.par(yaxt="n")
-#          r.plot(x, yN1, main='Ray Transfer function', xlab='Freq (GHz)', ylab='', type='l', col='black' ,frame='False',  ylim=r.range(y1,yN1) )
-#          for i in range(N1-1):
-#              yi = abs(self.y)[i+1,:] + (N1-(i+1))*ecmax
-#              r.lines(x,yi,col='black')
 
     def decimate(self, N=2):
         """ decimate FUsignal by N

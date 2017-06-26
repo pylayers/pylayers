@@ -238,7 +238,7 @@ def index_vsh(L, M):
 
     """
     if M > L:
-        print "indexvsh error M>L"
+        print("indexvsh error M>L")
 
     Kmax1 = (M + 1) * (M + 2) / 2
     #k = np.arange(Kmax1)
@@ -747,7 +747,7 @@ class SCoeff(PyLayers):
                 L = self.L1
             if M == -1:
                 M = self.M1
-            Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
+            Mg, Ng = np.meshgrid(np.arange(M), np.arange(N))
             if anim:
                 fig = plt.gcf()
                 ax = fig.gca()
@@ -1201,7 +1201,7 @@ class VCoeff(object):
                 L = self.L1
             if M == -1:
                 M = self.M1
-            Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
+            Mg, Ng = np.meshgrid(np.arange(M), np.arange(N))
             if anim:
                 fig = plt.gcf()
                 ax = fig.gca()
@@ -1474,10 +1474,10 @@ class VSHCoeff(object):
 
         ib = np.argsort(E)[::-1]
 
-        print self.Br.ind2[ib[k-1]]
-        print self.Cr.ind2[ib[k-1]]
-        print self.Ci.ind2[ib[k-1]]
-        print self.Bi.ind2[ib[k-1]]
+        print(self.Br.ind2[ib[k-1]])
+        print(self.Cr.ind2[ib[k-1]])
+        print(self.Ci.ind2[ib[k-1]])
+        print(self.Bi.ind2[ib[k-1]])
         #ind = np.nonzero(E > (E.max() * threshold))[0]
         self.Br.ind3 = self.Br.ind2[ib[range(k)]]
         self.Br.s3 = self.Br.s2[:, ib[range(k)]]
@@ -2216,7 +2216,7 @@ def plotVW(l, m, theta, phi, sf=False):
         plt.show()
 
     else:
-        print "Error: m>n!!!"
+        print("Error: m>n!!!")
 
 
 if (__name__ == "__main__"):
