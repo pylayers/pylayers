@@ -147,7 +147,7 @@ import re
 import pdb
 import sys
 if sys.version_info.major==2:
-    import Image
+    import PIL.Image as Image
     import mayavi.mlab as mlab
 else:
     import image
