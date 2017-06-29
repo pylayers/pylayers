@@ -266,7 +266,7 @@ class Bsignal(PyLayers):
         self.N  = shx[0]
         ly  = shy[-1]
         # multi axes indexation
-        self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N]))
+        self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N])).astype('int')
         # last dimension of y should be equal to first dimension of x
         #if (ly != self.N) :
         #    print "Error in Bsignal : Dimension incompatibility "
