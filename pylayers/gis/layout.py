@@ -2078,20 +2078,20 @@ class Layout(pro.PyLayers):
             #  Complement single segment which do not reach zceil or zfloor with
             #  an iso segment with AIR property
             # 
-            if di['info']['type'] == 'outdoor':
-                if z[1] < self.zceil:
-                     num = self.add_segment(nta, nhe,
-                                            name='AIR',
-                                            maxnum = maxnum, 
-                                            offset=offset,
-                                            z=(z[1], self.zceil))
+            # if di['info']['type'] == 'outdoor':
+            if z[1] < self.zceil:
+                 num = self.add_segment(nta, nhe,
+                                        name='AIR',
+                                        maxnum = maxnum, 
+                                        offset=offset,
+                                        z=(z[1], self.zceil))
 
-                if z[0] > self.zfloor:
-                     num = self.add_segment(nta, nhe,
-                                            name='AIR',
-                                            maxnum = maxnum, 
-                                            offset=offset,
-                                            z=(self.zfloor,z[0]))
+            if z[0] > self.zfloor:
+                 num = self.add_segment(nta, nhe,
+                                        name='AIR',
+                                        maxnum = maxnum, 
+                                        offset=offset,
+                                        z=(self.zfloor,z[0]))
 
        
         self.boundary()
