@@ -14,7 +14,7 @@ L=Layout('defstr.ini',bbuild=False)
 #L=Layout('TC2_METIS.ini',build=False)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
-DL=DLink(L=L,fGHz=fGHz,outdoor=True,applywav=True)
+DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
 DL.L.indoor=True
 #DL.L.indoor=False
 DL.L.build()

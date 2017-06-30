@@ -5312,7 +5312,6 @@ class Layout(pro.PyLayers):
 
         """
         # list of built graphs
-
         if not self.hasboundary:
             self.boundary()
 
@@ -7530,7 +7529,8 @@ class Layout(pro.PyLayers):
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
                 if self.indoor or not self.Gt.node[icycle]['indoor']:
-                    print(icycle)
+                    #print(icycle)
+                    pass
                 #
                 #  If indoor or outdoor all visibility are calculated
                 #  If outdoor only visibility between iso = 'AIR' and '_AIR' are calculated 

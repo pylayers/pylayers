@@ -2153,6 +2153,7 @@ class Tchannel(bs.FUsignal):
             U = W * self 
         else:
             U = self
+
         V = Tchannel(x= U.x, y = U.y, tau = self.taud, dod = self.dod, doa= self.doa)
 
         return(V)
@@ -2201,6 +2202,23 @@ class Tchannel(bs.FUsignal):
         rir = Y.rir(Nz=500,ffts=1)
         return rir
 
+
+    def getcir(self,BWGHz,Nf,fftshift=False):
+        """
+        """
+        fGHz  = np.linspace(0,BWGHz,Nf)
+        dfGHz = fGHz[1]-fGHz[0]
+        tauns = np.linspace(0,1/dfGHz,Nf)
+        E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
+        H    = np.sum(E*self.y,axis=0)
+        cir  = np.fft.ifft(H,axis=2)
+        if fftshift:
+            cir = np.fft.fftshift(cir,axes=2)
+            tauns = np.linspace(-Nf/(2*BWGHz),Nf/(2*BWGHz)-1/BWGHz,Nf)
+
+        cir = bs.TUsignal(x=tauns,y=cir)
+
+        return(cir)
 
     def get_cir(self,Wgam=[]):
         """ get Channel impulse response of the channel 
