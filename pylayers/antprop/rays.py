@@ -2462,12 +2462,12 @@ class Rays(PyLayers, dict):
         return(Cn)
 
 
-    def find_from_seg(self,ls):
+    def rayfromseg(self,ls):
         """ returns the indexes of rays for a given interaction list
         """
 
         if not isinstance(ls,list):
-            ls = list(ls)
+            ls = [ls]
 
         lur = []
         for k in self:
@@ -2476,11 +2476,11 @@ class Rays(PyLayers, dict):
                 # import ipdb
                 # ipdb.set_trace()
                 ui, ur = np.where(aib == i)
-                lur.append(self[k]['rayidx'][ur])
-        return lur
+                lur.extend(self[k]['rayidx'][ur].tolist())
+        return np.sort(lur)
 
 
-    def get_rays_slabs(self,L,ir):
+    def ray2slab(self,L,ir):
         """ return the slabs for a given interaction index 
 
 
@@ -2559,6 +2559,14 @@ class Rays(PyLayers, dict):
         unbi = self.ray2nbi(ir)
         ur = np.where(self[unbi]['rayidx']==ir)[0]
         return self[unbi]['rays'][:,ur]
+
+
+    def ray2sig(self,ir):
+        """ get signature to corresponding ray
+        """
+        unbi = self.ray2nbi(ir)
+        ur = np.where(self[unbi]['rayidx']==ir)[0]
+        return self.R[unbi]['sig'][:,:,ur]
 
     def slab_nb(self, ir):
         """ returns the slab numbers of r
@@ -2663,7 +2671,7 @@ class Rays(PyLayers, dict):
                         .format('Index',
                                 'type',
                                 'slab', 
-                                'slab_id' ,
+                                'nstr' ,
                                 'th(rad)',
                                 'alpha',
                                 'gamma2',
@@ -2676,7 +2684,7 @@ class Rays(PyLayers, dict):
                      .format('Index',
                         'type',
                         'slab',
-                        'slab_id',
+                        'nstr',
                         'th(rad)',
                         'alpha',
                         'gamma2')
