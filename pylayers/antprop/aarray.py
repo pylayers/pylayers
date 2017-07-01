@@ -187,9 +187,12 @@ class UCArray(Array):
 class AntArray(Array, ant.Antenna):
     """ Class AntArray
 
-    inherits from Array and Antenna classes
+    This class inherits from Array and Antenna classes
 
-    An AntArray is the combination of an Array and an Antenna
+    An AntArray is the combination of an 
+        + an Array and an Antenna
+        + an Array and an AntArray
+
 
     """
 
@@ -203,12 +206,26 @@ class AntArray(Array, ant.Antenna):
             'array' | 'grid'
             'array' is for antenna array 
             'grid' for cloud of points (scanner).
+
         typant : string
             either a selected string among the implemented predefined patterns.
             ['Omni','Hertz','Huygens','3gpp','Array'] or a filename of an antenna
             file in one of the supported file format (.vsh3 or .sh3)
 
+        tarr : string 
+            type of array 
 
+        N    : array of int 
+            Number of points per axis
+
+        dm : array of float 
+            Inter element distance (meters)
+
+        min : array of float 
+
+        max : array of float 
+
+        S : coupling matrix
 
         Examples
         --------
@@ -226,12 +243,10 @@ class AntArray(Array, ant.Antenna):
                     'min'     : [0, 0, 0, 0],
                     'max'     : [0, 0, 0, 0],
                     'S'       : [],
-                    'pattern' : True,
-                    #'typant':'S1R1.vsh3',
-                    'typant'  :'Gauss',
+                    'typant'  :'Omni', #'S1R1.vsh3'
                     'mode'    :'array',
                     'array'   :[],
-                    'p'     :[]
+                    'p'       :[]
                     }
 
 
@@ -255,7 +270,7 @@ class AntArray(Array, ant.Antenna):
         # There are two modes : 'array' and 'grid'
         # If the grid mode is chosen, the spacing dm is determined
         # from max and min. In that mode max and min are prioritary w.r.t to the
-        # specified dm. This is a mode which is useful when using the
+        # specified dm. This is a mode which is used when using the
         # scanner for emulating a received array from a specified range of
         # disance on a given axis. The max and min are for fixing those limits.
 
@@ -271,7 +286,10 @@ class AntArray(Array, ant.Antenna):
             assert len(self.typant) == self.Na, "Wrong number of antennas"
         else:
             self.sameAnt = True
-
+       
+        # Uniform Array
+        # p is obtained from ULArray
+        #
         if self.tarr == 'UA':
             if kwargs['p'] == []:
                 UA = ULArray(N = self.N, dm = self.dm)
@@ -288,8 +306,6 @@ class AntArray(Array, ant.Antenna):
         # Add the antennas of the array, either 1 (same for all points), or Na
         # (array size)
         #
-
-        typ = 'Array'
         # init Antenna parent
         self.la = []
         if self.sameAnt:
@@ -299,6 +315,7 @@ class AntArray(Array, ant.Antenna):
                 self.la.append(ant.Antenna(typ=t))
 
         super(AntArray, self).__init__(p=p, fGHz=self.la[0].fGHz)
+        typ = 'Array'
         ant.Antenna.__init__(self,typ=typ,**kwargs)
 
 
