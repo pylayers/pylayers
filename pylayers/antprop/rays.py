@@ -139,6 +139,7 @@ class Rays(PyLayers, dict):
         self.pTx = pTx
         self.pRx = pRx
         self.nray = 0
+        self.nray2D = 0
         self.raypt = 0
         self.los = False  
         self.is3D = False
@@ -174,8 +175,9 @@ class Rays(PyLayers, dict):
             nray2D = len(self)
 
         s = s + 'N2Drays : '+ str(nray2D) + '\n'
-        s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
-        s = s + '#Rays/#Sig: '+ str(nray2D/(1.*self.nb_origin_sig) )
+        if hasattr(self,'nb_origin_sig'):
+            s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
+            s = s + '#Rays/#Sig: '+ str(nray2D/(1.*self.nb_origin_sig) )
 
         s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
 
@@ -333,7 +335,7 @@ class Rays(PyLayers, dict):
                     print 'ray2/'+grpname +'already exists in '+filenameh5
                 f = fh5['ray2/'+grpname]
              # keys not saved as attribute of h5py file
-            notattr = ['I','B','B0','delays','dis']
+            notattr = ['I','B','B0','dis']
             for a in self.__dict__.keys():
                 if a not in notattr:
                     f.attrs[a]=getattr(self,a)  
@@ -408,7 +410,7 @@ class Rays(PyLayers, dict):
         # creating save for Interactions classes
 
         if self.filled:
-            L=Layout(self.Lfilename,build=True)
+            L=Layout(self.Lfilename,bbuild=True)
             self.fillinter(L)
 
         # if self.evaluated:
@@ -1267,6 +1269,7 @@ class Rays(PyLayers, dict):
         # dis
         #
         val =0
+
         for k in r3d.keys():
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
@@ -1308,6 +1311,12 @@ class Rays(PyLayers, dict):
             # si : (i+1) x r
             r3d[k]['si']  = lsi[:,u]
             r3d[k]['dis'] = rlength[u]
+
+        r3d.delays = np.zeros((r3d.nray))
+        for k in r3d.keys():
+            ir = r3d[k]['rayidx']
+            r3d.delays[ir] = r3d[k]['dis']/0.3
+           
 
         r3d.origin_sig_name = self.origin_sig_name
         r3d.Lfilename = L._filename
@@ -2566,7 +2575,7 @@ class Rays(PyLayers, dict):
         """
         unbi = self.ray2nbi(ir)
         ur = np.where(self[unbi]['rayidx']==ir)[0]
-        return self.R[unbi]['sig'][:,:,ur]
+        return self[unbi]['sig'][:,:,ur]
 
     def slab_nb(self, ir):
         """ returns the slab numbers of r

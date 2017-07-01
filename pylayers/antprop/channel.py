@@ -2203,8 +2203,15 @@ class Tchannel(bs.FUsignal):
         return rir
 
 
-    def getcir(self,BWGHz,Nf,fftshift=False):
+    def getcir(self,BWGHz=1,Nf=40000,fftshift=False):
         """
+        Parameters
+        ----------
+
+        BWGHz : Bandwidth 
+        Nf    : Number of frequency point 
+        fftshift : boolean 
+
         """
         fGHz  = np.linspace(0,BWGHz,Nf)
         dfGHz = fGHz[1]-fGHz[0]
@@ -2804,7 +2811,7 @@ class Tchannel(bs.FUsignal):
         ----------
 
         mode : string
-            center | mean | integ    (different manner to get the value)
+            center | mean | integ  (different manner to get the value)
         Friis : boolean
             apply the Frris coeff(2/(4p pi f)
         sumray: boolean
@@ -2816,6 +2823,7 @@ class Tchannel(bs.FUsignal):
         #  axis 1 : ray
         #  axis 1 : frequency
         #
+
         if self.isFriis:
             Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=False)
         else:

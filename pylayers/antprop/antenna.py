@@ -1087,7 +1087,7 @@ class Pattern(PyLayers):
         # w    :  Np(k) x Nf(i)
         # Sc   :  Np(k) x Np(m) x Nf(i)
         # wp   :  Np(m) x Nf(i)
-
+       
         wp = np.einsum('ki,kmi->mi',self.w,self.Sc)
 
         # add direction axis (=0) in w
