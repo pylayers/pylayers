@@ -1011,13 +1011,6 @@ class Pattern(PyLayers):
             kwargs['param']=defaults['param']
 
         self.param = kwargs['param']
-        self.Sc = self.param['Sc']
-        Np =self.p.shape[1]
-        if self.Sc==[]:
-            # Sc : Np x Np x Nf
-            self.Sc = np.eye(self.p.shape[1])[...,None]
-            #Sc2 = np.random.rand(Np,Np)[...,None]
-            #pdb.set_trace()
 
         lamda = (0.3/self.fGHz)
         k     = 2*np.pi/lamda
@@ -1039,12 +1032,34 @@ class Pattern(PyLayers):
         # F = exp(+jk s.p)
         #
 
+        lshp = np.array(self.p.shape)
+        if len(lshp)>2:
+            Np = np.prod(lshp[1:])
+            p = self.p.reshape(3,Np)
+        else:
+            p = self.p
+        
+        Np = p.shape[1]
+        self.Sc = self.param['Sc']
+        if self.Sc==[]:
+            # Sc : Np x Np x Nf
+            self.Sc = np.eye(Np)[...,None]
+            #Sc2 = np.random.rand(Np,Np)[...,None]
+            #pdb.set_trace()
+
+        lshw = np.array(self.w.shape)
+        if len(lshw)>2:
+            Np2 = np.prod(lshw[0:-1])
+            assert(Np2==Np)
+            w = self.w.reshape(Np,lshw[-1])
+        else:
+            w = self.w
         # s : Nd x 3
         # p : 3 x Np
         #
         # sdotp : Nd x Np
 
-        sdotp  = np.dot(self.s,self.p)   # s . p
+        sdotp  = np.dot(self.s,p)   # s . p
         
         for a in self.la:
             if not self.grid:
@@ -1087,8 +1102,7 @@ class Pattern(PyLayers):
         # w    :  Np(k) x Nf(i)
         # Sc   :  Np(k) x Np(m) x Nf(i)
         # wp   :  Np(m) x Nf(i)
-       
-        wp = np.einsum('ki,kmi->mi',self.w,self.Sc)
+        wp = np.einsum('ki,kmi->mi',w,self.Sc)
 
         # add direction axis (=0) in w
 
@@ -2599,24 +2613,23 @@ class Antenna(Pattern):
             print("No vsh coefficient calculated yet")
 
     #@mlab.show
-    def _show3(self,newfig = True,
-                    colorbar =True,
+    def _show3(self,bnewfig = True,
+                    bcolorbar =True,
                     name=[],
-                    interact=False,
-                    title=True,
+                    binteract=False,
+                    btitle=True,
+                    bcircle=True,
                     **kwargs ):
         """ show3 mayavi
 
         Parameters
         ----------
 
-        fGHz : float
-            frequency
-        title : boolean
+        btitle : boolean
             display title
-        colorbar : boolean
+        bcolorbar : boolean
             display colorbar
-        interact : boolean 
+        binteract : boolean 
             enable interactive mode
         newfig: boolean
 
@@ -2628,16 +2641,18 @@ class Antenna(Pattern):
 
         """
 
-
-
-
         if not self.evaluated:
             self.eval(pattern=True)
 
-        # k is frequency index
+        # k is the frequency index
+        if hasattr(self,'p'):
+            lpshp = len(self.p.shape)
+            sum_index = tuple(np.arange(1,lpshp))
+            po = np.mean(self.p,axis=sum_index)
+            kwargs['po']=po
         x, y, z, k, scalar  = self._computemesh(**kwargs)
 
-        if newfig:
+        if bnewfig:
             mlab.clf()
             f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
@@ -2658,12 +2673,39 @@ class Antenna(Pattern):
         else :
             f.children[-1].name = name + self._filename
 
-        if colorbar :
+        if bcolorbar :
             mlab.colorbar()
-        if title:
+
+        if btitle:
             mlab.title(self._filename + ' @ ' + str(self.fGHz[k]) + ' GHz',height=1,size=0.5)
 
-        if interact:
+        def circle(typ='xy',a=1.2):
+            phi = np.linspace(0, 2*np.pi, 2000)
+            if typ=='xy':
+                return [ a*np.cos(phi) ,
+                         a*np.sin(phi) ,
+                         np.zeros(len(phi))
+                         ]
+            if typ=='yz':
+                return [ np.zeros(len(phi)),
+                         a*np.cos(phi) ,
+                         a*np.sin(phi) 
+                         ]
+            if typ=='xz':
+                return [ a*np.cos(phi),
+                         a*np.zeros(len(phi)),
+                         np.sin(phi) 
+                         ]
+        # draw 3D circle around pattern
+        if bcircle:
+            xc,yc,zc =circle('xy') # blue
+            mlab.plot3d(xc,yc,zc,color=(0,0,1))
+            xc,yc,zc =circle('yz') # red
+            mlab.plot3d(xc,yc,zc,color=(1,0,0))
+            xc,yc,zc =circle('xz') # green
+            mlab.plot3d(xc,yc,zc,color=(0,1,0))
+
+        if binteract:
             self._outline = mlab.outline(self._mayamesh, color=(.7, .7, .7))
             self._outline.visible=False
             def picker_callback(picker):
@@ -2673,6 +2715,8 @@ class Antenna(Pattern):
                     self._outline.visible = not self._outline.visible
                     self._is_selected=self._outline.visible
             picker = f.on_mouse_pick(picker_callback)
+
+        return(f)
 
 
 

@@ -4,6 +4,7 @@ import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
 import scipy.signal as si
 import doctest
+import pdb
 
 r"""
 
@@ -42,12 +43,14 @@ class TXRU(object):
 class Array(ant.Pattern):
     """ Array class
 
-    An array is defined as the association of a set of points and a set of
-    frequency dependent weights
+    An array is defined as the association of  :
+
+        + a set of points 
+        + a set of frequency dependent weights
 
     """
 
-    def __init__(self, p, w=[], fGHz=np.linspace(1.8, 2.2, 20)):
+    def __init__(self, p, w=[]) :
         """
 
         Parameters
@@ -57,9 +60,6 @@ class Array(ant.Pattern):
         w  : set of weight Np x Nf
                        or  Nx x Ny x Nz x Nf
 
-        fGhz : np.array
-            frequency in GHz
-
         """
         assert type(p) == np.ndarray, " Array not an array"
         assert p.shape[0] == 3, " Array not a 3D point"
@@ -67,7 +67,6 @@ class Array(ant.Pattern):
         self.p = p
         if len(p.shape)==2:
             self.Np = p.shape[1]
-        self.fGHz = fGHz
         shp = np.shape(p)
 
         # If no excitation choose uniform excitation
@@ -85,8 +84,7 @@ class Array(ant.Pattern):
     def __repr__(self):
         st = ''
         st = st + 'points :' + str(self.p) + '\n'
-        st = st + 'fmin :' + str(self.fGHz[0]) + '\n'
-        st = st + 'fmax :' + str(self.fGHz[1]) + '\n'
+        st = st + 'weights :' + str(self.w) + '\n'
         return(st)
 
     def show(self):
@@ -123,17 +121,19 @@ class ULArray(Array):
             [Nx,Ny,Nz,Na]  don't use 0 the total number of antennas is Nx*Ny*Nz*Na
         dm : list of floats
             [dxm,dym,dzm] distance are expressed in meters
+        w  : np.array
+            array weights
         T  : np.array
             basis of the ULA (by default the othonormal basis I3)
         mode : string
             'step' | 'point'
+        p : 
 
         """
         defaults = { 'N'    : [8, 1, 1],
                      'dm'   : [0.075, 0, 0],
                      'w'    : [],
                      'T'    : np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
-                     'fGHz' : np.linspace(1.8, 2.2, 10),
                      'mode' : 'step',
                      'p'    : []
                    }
@@ -227,6 +227,8 @@ class AntArray(Array, ant.Antenna):
 
         S : coupling matrix
 
+        array : if the antenna is a subarray
+
         Examples
         --------
 
@@ -246,7 +248,9 @@ class AntArray(Array, ant.Antenna):
                     'typant'  :'Omni', #'S1R1.vsh3'
                     'mode'    :'array',
                     'array'   :[],
-                    'p'       :[]
+                    'p'       :[],
+                    'w'       :[],
+                    'fGHz'   :np.array([60])
                     }
 
 
@@ -261,6 +265,7 @@ class AntArray(Array, ant.Antenna):
         self.Na     = np.prod(self.N)  # number of antennas
         self.dm     = np.array(kwargs.pop('dm'))
         self.array  = kwargs.pop('array')
+        self.w      = kwargs.pop('w')
 
         if self.array == []:
             self.typant = kwargs.pop('typant')
@@ -292,15 +297,17 @@ class AntArray(Array, ant.Antenna):
         #
         if self.tarr == 'UA':
             if kwargs['p'] == []:
-                UA = ULArray(N = self.N, dm = self.dm)
+                UA = ULArray(N = self.N, dm = self.dm , w = self.w)
                 p = UA.p
             else:
                 p = kwargs['p']
 
         if self.array != []:
+            lsh = tuple(list(self.array.p.shape)+[p.shape[1]])
             a = np.kron(self.array.p, np.ones(p.shape[1])) # 3 x N
             b = np.kron(np.ones(self.array.p.shape[1]), p) # 3 x M
             p = a + b  # 3 x NM
+            p = p.reshape(lsh)
 
         #
         # Add the antennas of the array, either 1 (same for all points), or Na
@@ -314,7 +321,7 @@ class AntArray(Array, ant.Antenna):
             for t in self.typant:
                 self.la.append(ant.Antenna(typ=t))
 
-        super(AntArray, self).__init__(p=p, fGHz=self.la[0].fGHz)
+        super(AntArray, self).__init__(p=p,w=self.w)
         typ = 'Array'
         ant.Antenna.__init__(self,typ=typ,**kwargs)
 
@@ -330,7 +337,7 @@ class AntArray(Array, ant.Antenna):
         st = st + "Ant Id         : x  ,    y   ,  z\n"
         for n in range(N):
             st = st + str(n) +  ' : ' + str(self.p[0, ix[n]]) + ' , ' + str(self.p[1, iy[n]])+' , '+str(self.p[2, iz[n]])+'\n'
-        st = st + "\nweight : Coupling matrix @ f = "+str(self.fGHz[0]) + ' fGHz'+'\n'
+        #st = st + "\nweight : Coupling matrix @ f = "+str(self.fGHz[0]) + ' fGHz'+'\n'
         for n in range(N):
             st = st + str(self.w[n]) + ' : ' + str(self.Sc[n,:, 0])+'\n'
         return(st)
