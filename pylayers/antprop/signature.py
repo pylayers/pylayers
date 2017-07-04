@@ -1245,6 +1245,9 @@ class Signatures(PyLayers,dict):
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
+                if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
+                    import ipdb
+                    ipdb.set_trace()
                 # cond1 : there is more interactions
                 # continue if True
                 cond1 = not(interaction is None)
@@ -1287,14 +1290,18 @@ class Signatures(PyLayers,dict):
                         pass
 
                 if (cond1):
-                     if (cond2 and cond3 and condD and condR and condT):
+                    # [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]
+
+                    
+
+                    if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
                         #print(visited)
-                        # if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(121, 101),(855, 101, 108),(876, 108, 104)]:
-                        # #if visited ==[(862, 107, 106),(857, 106, 102),(858, 102, 70),(755, 70, 67),(527, 67),(460, 67, 66),(464, 66, 74),(-56,)]:
-                        #     pdb.set_trace()
-                        #     #bvisu = True
-                        #     pass
+                        # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
+                        # if visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]:
+                        #     import ipdb
+                        #     ipdb.set_trace()
+
 
                         # update list of airwalls
                         if interaction[0] in lair:
@@ -1392,31 +1399,59 @@ class Signatures(PyLayers,dict):
                             #
                             # Detect situations of connected segments
                             #
+                            # [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]
+                            # if visited == [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]:
+                            #     print '\n',visited
+                            #     import ipdb
+                            #     ipdb.set_trace()
 
                             connected = False
                             if (pta0==pta_).all():
-                                apex = phe0
-                                connected = True
-                                vl=(apex,pta0)
-                                vr=(apex,phe_)
-                            elif (pta0==phe_).all():
-                                apex = phe0
-                                connected = True
-                                vl=(apex,pta0)
-                                vr=(apex,pta_)
-                            elif (phe0==pta_).all():
                                 apex = pta0
                                 connected = True
-                                vl=(apex,phe0)
-                                vr=(apex,phe_)
-                            elif (phe0==phe_).all():
-                                apex = pta0    
+                                v0=phe0-apex
+                                v_=phe_-apex
+                            elif (pta0==phe_).all():
+                                apex = pta0
                                 connected = True
-                                vl=(apex,phe0)
-                                vr=(apex,pta_)
+                                v0=phe0-apex
+                                v_=pta_-apex
+                            elif (phe0==pta_).all():
+                                apex = phe0
+                                connected = True
+                                v0=pta0-apex
+                                v_=phe_-apex
+                            elif (phe0==phe_).all():
+                                apex = phe0    
+                                connected = True
+                                v0=pta0-apex
+                                v_=pta_-apex
+
+                            #
+                            # if (pta0==pta_).all():
+                            #     apex = phe0
+                            #     connected = True
+                            #     vl=(apex,pta0)
+                            #     vr=(apex,phe_)
+                            # elif (pta0==phe_).all():
+                            #     apex = phe0
+                            #     connected = True
+                            #     vl=(apex,pta0)
+                            #     vr=(apex,pta_)
+                            # elif (phe0==pta_).all():
+                            #     apex = pta0
+                            #     connected = True
+                            #     vl=(apex,phe0)
+                            #     vr=(apex,phe_)
+                            # elif (phe0==phe_).all():
+                            #     apex = pta0    
+                            #     connected = True
+                            #     vl=(apex,phe0)
+                            #     vr=(apex,pta_)
                             #
                             # for non connected segments
                             #
+
                             if not connected:
                                 if not (geu.ccw(pta0,phe0,phe_) ^
                                         geu.ccw(phe0,phe_,pta_) ):
@@ -1462,11 +1497,25 @@ class Signatures(PyLayers,dict):
                                 #    print(apex)
 
                             else:
-                                vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
-                                vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+
+                                v0n  = (v0)/np.sqrt(np.sum((v0[1]-v0[0])*(v0[1]-v0[0])))
+                                v_n  = (v_)/np.sqrt(np.sum((v_[1]-v_[0])*(v_[1]-v_[0])))
+
+                                # import ipdb
+                                # ipdb.set_trace()
+                                sign = np.sign(np.cross(v_n,v0n))
+                                if sign<0:    
+                                    vr_n = -v0n
+                                    vl_n = v_n
+                                else:
+                                    vr_n = v_n
+                                    vl_n = -v0n
+                                # vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
+                                # vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
                                 vrdotvl = np.dot(vr_n,vl_n)
                                 # cone angle 
                                 angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+                                
 
                             al = np.arctan2(vl_n[1],vl_n[0])
                             ar = np.arctan2(vr_n[1],vr_n[0])
@@ -1474,24 +1523,38 @@ class Signatures(PyLayers,dict):
                             #
                             # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
                             #
-                            wseg0 = th_mirror[0] - apex
-                            wseg1 = th_mirror[1] - apex
-                            mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                            mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
-                            if np.isclose(mod_wseg0,0):
-                                #bvisu = True 
-                                #pdb.set_trace()#
-                                pass
-                            if np.isclose(mod_wseg1,0):
-                                #bvisu = True 
-                                pass
-                            wseg0_n = wseg0/mod_wseg0
-                            wseg1_n = wseg1/mod_wseg1
-                            aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
-                            aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
-                            
-                            I = geu.angle_intersection2(al,ar,aseg0,aseg1)
-                            ratio = I/angle_cone
+
+                            if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
+                                ratio = 1.
+                            else:
+                                wseg0 = th_mirror[0] - apex
+                                wseg1 = th_mirror[1] - apex
+                                mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                                mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+
+                                if np.isclose(mod_wseg0,0):
+                                    #bvisu = True 
+                                    #pdb.set_trace()#
+                                    pass
+                                if np.isclose(mod_wseg1,0):
+                                    #bvisu = True 
+                                    pass
+                                wseg0_n = wseg0/mod_wseg0
+                                wseg1_n = wseg1/mod_wseg1
+                                aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
+                                aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+                                
+                                # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
+                                #     ratio = 1
+                                    #print "toto"
+                                # else:
+                                I = geu.angle_intersection2(al,ar,aseg0,aseg1)
+                                ratio = I/angle_cone
+
+                            # if connected:
+                            #     print "ratio :",ratio
+                                
+
                             #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
                             if (bvisu):
                                 fig ,ax = self.L.showG('s',aw=1,labels=0)
@@ -1502,11 +1565,9 @@ class Signatures(PyLayers,dict):
                                 #
                                 ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
                                 ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),
-                                                  np.array(self.L.Gs.pos[nseg_points[1]]),
-                                                  al=1,color='yellow',linewidth=4)
-                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color='yellow',linewidth=4)
+                                # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
                                 ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
                                 ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color='green',linewidth=3)
                                 nx.draw_networkx_labels(self.L.Gi,
@@ -1543,6 +1604,7 @@ class Signatures(PyLayers,dict):
                                 tahe.append(th)
                             else:
                                 tahe.append(th_mirror)
+                            
                             # 
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
