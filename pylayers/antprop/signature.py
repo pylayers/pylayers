@@ -1287,7 +1287,14 @@ class Signatures(PyLayers,dict):
                         pass
 
                 if (cond1):
-                     if (cond2 and cond3 and condD and condR and condT):
+                    # [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]
+
+                    if visited == [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2)]:
+                        print '\n',visited
+                        import ipdb
+                        ipdb.set_trace()
+
+                    if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
                         #print(visited)
                         # if visited ==[(869, 107, 104), (876, 104, 108),(855, 108, 101),(121, 101),(855, 101, 108),(876, 108, 104)]:
