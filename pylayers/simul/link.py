@@ -1876,6 +1876,8 @@ class DLink(Link):
 
         if not newfig:
             self._maya_fig=mlab.gcf()
+        else:
+            self._maya_fig=mlab.figure(bgcolor=(1,1,1),fgcolor=(0,0,0))
 
         if 'centered' in kwargs:
             centered = kwargs['centered']
@@ -1944,7 +1946,7 @@ class DLink(Link):
                 opacity = 0.7
                 ceil_opacity = 0.7
 
-            self.L._show3(newfig=False,
+            self._maya_fig = self.L._show3(newfig=False,
                           opacity=opacity,
                           ceil_opacity=ceil_opacity,
                           show_ceil=show_ceil,
@@ -1972,6 +1974,7 @@ class DLink(Link):
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
+        #return(self._maya_fig)
 
 
     def _update_show3(self,ant='a',delrays=False):

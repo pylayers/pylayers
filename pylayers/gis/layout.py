@@ -11102,6 +11102,7 @@ class Layout(pro.PyLayers):
         #     [mlab.text3d(ppt[ik,0],ppt[ik,1],3.,str(k)) for ik,k in enumerate(pt)]
 
         f.scene.disable_render = False
+        return(f)
 
     def show3(self, bdis=True, centered=True):
         """ geomview display of the indoor structure
