@@ -333,7 +333,11 @@ class Coverage(PyLayers):
         except:
             pass
 
+    
         self.kB = 1.3806503e-23 # Boltzmann constant
+        #
+        # Loop opver access points
+        #
         for iap in self.dap:
             if self.dap[iap]['on']:
                 lactiveAP.append(iap)
@@ -361,6 +365,8 @@ class Coverage(PyLayers):
         self.ptdbm = self.ptdbm.T
         self.pndbm = self.pndbm.T
         # creating all links
+        # all grid to all ap 
+        #
         p = product(range(self.ng),lactiveAP)
         #
         # pa : access point
@@ -371,6 +377,11 @@ class Coverage(PyLayers):
         for k in p:
             pg = self.grid[k[0],:]
             pa = np.array(self.dap[k[1]]['p'][0:2])
+            # exemple with 3 AP 
+            # 321 0
+            # 321 1
+            # 321 2
+            # 322 0
             try:
                 self.pa = np.vstack((self.pa,pa))
             except:
@@ -394,6 +405,26 @@ class Coverage(PyLayers):
         self.na = na
         ng = self.ng
         nf = self.nf
+        
+        for iap in self.dap:
+            # select only one access point
+            u = na*np.arange(0,ng,1).astype('int')+iap
+            if self.dap[iap]['on']:
+                pt = self.pa[:,u]
+                pr = self.pg[:,u]
+                azoffset = self.dap[iap]['phideg']*np.pi/180.
+                self.dap[iap].A.eval(fGHz=self.fGHz,pt=pt,pr=pr,azoffset=azoffset)
+                
+                gain = (self.dap[iap].A.G).T
+                #pdb.set_trace()
+                # to handle omnidirectional antenna (nf,1,1)
+                if gain.shape[1]==1:
+                    gain = np.repeat(gain,ng,axis=1)
+                try:
+                    tgain = np.dstack((tgain,gain[:,:,None]))
+                except:
+                    tgain = gain[:,:,None]
+        
         #Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         
@@ -409,8 +440,8 @@ class Coverage(PyLayers):
         # f x g x a
 
         # CmW : Received Power coverage in mW
-        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
-        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
+        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace*tgain
+        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace*tgain
 
 
         if snr:

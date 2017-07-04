@@ -52,10 +52,15 @@ name        : string
 """
 
 import os
+import sys 
 import doctest
 import numpy as np
-import ConfigParser
-import pylayers.util.easygui as eg
+if sys.version_info.major==2:
+    import ConfigParser as cp 
+else:
+    import configparser as cp
+
+#import pylayers.util.easygui as eg
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geo
 from pylayers.mobility.trajectory import *
@@ -210,15 +215,15 @@ class RadioNode(PyLayers):
         """ display RadioNodes informations
 
         """
-        print "npos       : ", self.N
-        print "position   : ", self.position
-        print "name       : ", self.name
+        print("npos       : ", self.N)
+        print("position   : ", self.position)
+        print("name       : ", self.name)
         #print "orientation : ", self.orientation
-        print "type       : ", self.typ
-        print "fileini    : ", self.fileini
-        print "filespa    : ", self.filespa
-        print "filegeom   : ", self.filegeom
-        print "fileant    : ", self.fileant
+        print("type       : ", self.typ)
+        print("fileini    : ", self.fileini)
+        print("filespa    : ", self.filespa)
+        print("filegeom   : ", self.filegeom)
+        print("fileant    : ", self.fileant)
 
     def clear(self):
         """ clear positions
@@ -538,7 +543,7 @@ class RadioNode(PyLayers):
         """
         filespa = pyu.getlong(_filespa, rep)
         #print filespa+  "   loadini"
-        space = ConfigParser.ConfigParser()
+        space = cp.ConfigParser()
         space.read(filespa)
 
         points = space.items("coordinates")
@@ -574,7 +579,7 @@ class RadioNode(PyLayers):
         try:
             fid = open(filespa)
         except:
-            print "filespa does not exist"
+            print("filespa does not exist")
             return()
 
         lig = fid.readlines()
@@ -611,9 +616,9 @@ class RadioNode(PyLayers):
         try:
             fd = open(fileini, "w")
         except:
-            print fileini + ' does not exist'
+            print(fileini + ' does not exist')
 
-        space = ConfigParser.ConfigParser()
+        space = cp.ConfigParser()
         space.add_section("coordinates")
         npt = np.shape(self.position)[1]
 
@@ -653,7 +658,7 @@ class RadioNode(PyLayers):
             V = ant.SqG[ant.Nf/2,:,:]
  
             if not hasattr(self,'position'):
-                print "no position available"
+                print("no position available")
             T=self.orientation.reshape(3,3)
             gv.pattern(ant.theta,ant.phi,V,po=self.position,T=T,ilog=False,minr=0.01,maxr=1.)
             self.filegeom=filename + '.off'
@@ -664,7 +669,7 @@ class RadioNode(PyLayers):
             #    problem gv is not a geomvect    
             #    gv.points(self.position, colorname)
             else :
-                print " no position available "
+                print(" no position available ")
 
         if _filespa.split('.')[1] == 'spa':
             fi_spa = open(filespa, 'w')

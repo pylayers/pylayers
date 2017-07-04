@@ -2,7 +2,7 @@
 """
 Module OSMParser
 
-This module provides classes to handle open stree map objects
+This module provides classes to handle open street map (OSM) objects
 
 """
 from osmapi import OsmApi
@@ -90,7 +90,7 @@ class Way(object):
 
 class Coords(object):
     """
-    Coords is a point in OSM
+    Coords describes a set of points in OSM 
 
     Attributes
     ----------
@@ -186,8 +186,7 @@ class Coords(object):
 
         This method converts latlon coordinates into cartesian x,y coordinates in
         Cassini projection relatively to specified latlon boundary 
-        The basemap objet for back and forth coordinates.
-        conversion is returned.
+        The basemap objet for back and forth coordinates conversion is returned.
 
         The transformation is centered on the mean of latitude and longitude. 
         The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 

@@ -3,15 +3,14 @@ import doctest
 import os
 import logging
 import pdb
+import sys
 import numpy as np
 import scipy as sp
 import scipy.io as io
 import scipy.signal as si
 import scipy.linalg as la
-import ConfigParser
 import matplotlib.pylab as plt
 import pylayers.signal.bsignal as bs
-from pylayers.util     import easygui
 from pylayers.measures import mesuwb
 
 class Waveform(dict):
@@ -28,7 +27,7 @@ class Waveform(dict):
     -------
 
     eval
-    show2
+    showpsd
     ip_generic
     fromfile
     fromfile2
@@ -45,7 +44,7 @@ class Waveform(dict):
 
         'typ' : string
             'generic',
-         'bandGHz': float
+         'WGHz': float
             0.499
          'fcGHz': float
             4.493
@@ -60,7 +59,8 @@ class Waveform(dict):
 
         """
         defaults = {'typ':'generic',
-                'bandGHz': 0.499,
+                'fGHz':[],
+                'WGHz': 0.499,
                 'fcGHz': 4.493,
                 'feGHz': 100,
                 'threshdB': 3,
@@ -89,6 +89,15 @@ class Waveform(dict):
             [st,sf]=self.fromfile()
         elif self['typ'] == 'W1offset':
             [st,sf]=self.fromfile2()
+        elif self['typ'] == 'blackmann':
+            sf = FUsignal(x=fGHz,y=np.blackman(len(fGHz)))
+            st = sf.ift()
+        elif self['typ'] == 'hamming':
+            sf = FUsignal(x=fGHz,y=np.ones(len(fGHz)))
+            st = sf.ift()
+        elif self['typ'] == 'hamming':
+            sf = FUsignal(x=fGHz,y=np.hamming(len(fGHz)))
+            st = sf.ift()
         else:
             logging.critical('waveform typ not recognized, check your config \
                              file')
@@ -110,7 +119,7 @@ class Waveform(dict):
         -------
 
         >>> from pylayers.signal.waveform import *
-        >>> w = Waveform(typ='generic',bandGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
+        >>> w = Waveform(typ='generic',WGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
         >>> w.show()
         >>> plt.show()
 
@@ -118,28 +127,29 @@ class Waveform(dict):
         """
         if self['typ']=='generic':
             for k in self.keys():
-                print k , " : ",self[k]
+                print(k , " : ",self[k])
         else:
-            print "typ:",self['typ']
+            print("typ:",self['typ'])
 
-    def show2(self,Tpns=1000):
-        """ show2
+
+    def showpsd(self,Tpns=1000):
+        """ show psd
 
         Parameters
         ----------
 
         Tpns : float
-
+    
         """
         plt.subplot(211)
         self.st.plot()
         plt.subplot(212)
-        psd = self.st.psd(Tp,50)
-        plt.title('Tp = '+str(Tp))
+        psd = self.st.psd(Tpns,50)
+        plt.title('Tp = '+str(Tpns)+' ns')
         psd.plotdB(mask=True)
 
     def ip_generic(self):
-        """   Create an Energy normalized Gaussian impulse (Usignal)
+        """   Create an energy normalized Gaussian impulse (Usignal)
 
         ip_generic(self,parameters)
 
@@ -147,7 +157,7 @@ class Waveform(dict):
         """
         Tw = self['twns']
         fcGHz = self['fcGHz']
-        band = self['bandGHz']
+        WGHz = self['WGHz']
         thresh = self['threshdB']
         feGHz = self['feGHz']
         te = 1.0/feGHz
@@ -158,17 +168,22 @@ class Waveform(dict):
         #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
         w = bs.TUsignal()
-        w.EnImpulse(fcGHz=fcGHz,WGHz=band,threshdB=thresh,feGHz=feGHz)
+        w.EnImpulse(fcGHz=fcGHz,WGHz=WGHz,threshdB=thresh,feGHz=feGHz)
         #W = w.ft()
         W = w.ft()
         return (w,W)
 
     def ref156(self):
         """ reference pulse of IEEE 802.15.6 UWB standard
+        
+        Notes
+        -----
+
+
         """
         Tw     = self['twns']
         fc     = self['fcGHz']
-        band   = self['bandGHz']
+        WGHz   = self['WGHz']
         thresh = self['threshdB']
         fe     = self['feGHz']
         te     = 1./fe
@@ -183,8 +198,7 @@ class Waveform(dict):
 
 
     def fromfile(self):
-        """
-        get the measurement waveform from WHERE1 measurement campaign
+        """ get the measurement waveform from WHERE1 measurement campaign
 
         This function is not yet generic
 
@@ -287,18 +301,19 @@ class Waveform(dict):
         Parameters
         ----------
 
-            config : ConfigParser object
+        config : ConfigParser object
 
         Returns
         -------
-            w      : waveform
+        w      : waveform
+
         """
 
         par = config.items("waveform")
         for k in range(len(par)):
             key = par[k][0]
             val = par[k][1]
-            if key == "bandGHz":
+            if key == "WGHz":
                 self[key] = float(val)
             if key == "fcGHz":
                 self[key] = float(val)
@@ -319,8 +334,11 @@ class Waveform(dict):
         Parameters
         ----------
 
-        th_ratio : threshold ratio   threshold = max(abs())/th_ratio
+        th_ratio : float
+            threshold ratio 
+            threshold = max(abs())/th_ratio
         Npt : Number of points 
+
         """
         u=np.where(np.abs(self.sf.y)>np.max(np.abs(self.sf.y))/th_ratio)
         #fGHz = self.sf.x[u[1]]
@@ -339,19 +357,19 @@ class Waveform(dict):
             wavegui = multenterbox('','Waveform Parameter',
             ('Tw (ns) integer value',
              'fc (GHz)',
-             'band (GHz)',
+             'W (GHz)',
              'thresh (dB)',
              'fe (GHz) integer value'),
             ( self['twns'] ,
             self['fcGHz'] ,
-            self['bandGHz'] ,
+            self['WGHz'] ,
             self['threshdB'],
             self['feGHz']
             ))
 
             self.parameters['Twns']    = eval(wavegui[0])
             self.parameters['fcGHz']    = eval(wavegui[1])
-            self.parameters['bandGHz']  = eval(wavegui[2])
+            self.parameters['WGHz']  = eval(wavegui[2])
             self.parameters['threshdB'] = eval(wavegui[3])
             self.parameters['feGHz']    = eval(wavegui[4])
 
