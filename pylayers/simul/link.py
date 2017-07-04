@@ -378,6 +378,8 @@ class DLink(Link):
                    'graph':'tcvirw'
                 }
 
+
+
         # self._ca = -1
         # self._cb = -1
 
@@ -399,7 +401,9 @@ class DLink(Link):
                 else :
                     setattr(self,key,kwargs[key])
 
-        
+        # if self._L == '':
+        #     raise AttributeError('Please specify a Layout')
+
         force = self.force_create
         delattr(self,'force_create')
 
@@ -415,120 +419,123 @@ class DLink(Link):
 
         if isinstance(self._L,str):
             self._Lname = self._L
-            indoor = not outdoor
-            self._L = Layout(self._Lname,indoor=indoor)
+            indoor = not self.outdoor
+            self._L = Layout(self._Lname,bindoor=indoor,bgraphs=False,bcheck=False)
         else:
             self._Lname = self._L._filename
-    
+            self.outdoor = not self._L.indoor
 
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
-        filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
-        # check if save file alreasdy exists
-        if not os.path.exists(filenameh5) or force:
-            print('Links save file for ' + self.L._filename + ' does not exist.')
-            print('Creating file. You\'ll see this message only once per Layout')
-            self.save_init(filenameh5)
 
-        # dictionnary data exists
-        self.dexist={'sig':{'exist':False,'grpname':''},
-                     'ray':{'exist':False,'grpname':''},
-                     'ray2':{'exist':False,'grpname':''},
-                     'Ct':{'exist':False,'grpname':''},
-                     'H':{'exist':False,'grpname':''}
-                    }
-       
-        try:
-            print('Layout Graph loaded')
-            self.L.dumpr()
-        except:
-            print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
-            self.L.build(graph=self.graph)
-            self.L.dumpw()
-        
-        #
-        # In outdoor situation we delete all reference to transmission node in Gi 
-        #
-        cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
-        
-    
-        if self.outdoor:
-            u = self.L.Gi.node.keys()
+        if self._Lname != '':
+
+            self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
+            filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
+            # check if save file alreasdy exists
+            if not os.path.exists(filenameh5) or force:
+                print('Links save file for ' + self.L._filename + ' does not exist.')
+                print('Creating file. You\'ll see this message only once per Layout')
+                self.save_init(filenameh5)
+
+            # dictionnary data exists
+            self.dexist={'sig':{'exist':False,'grpname':''},
+                         'ray':{'exist':False,'grpname':''},
+                         'ray2':{'exist':False,'grpname':''},
+                         'Ct':{'exist':False,'grpname':''},
+                         'H':{'exist':False,'grpname':''}
+                        }
             
-            lT  =  [k for k in u if (len(k)==3)]
-            lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-            self.L.Gi.remove_nodes_from(lTi)
-            lE = self.L.Gi.edges()
-            for k in range(len(lE)):
-                e = lE[k]
-                try:
-                    output = self.L.Gi.edge[e[0]][e[1]]['output']
-                except:
-                    pdb.set_trace()
-                for l in output.keys():
-                    if l in lTi:
-                        del output[l]
-                self.L.Gi.edge[e[0]][e[1]]['output']=output
+            try:
+                self.L.dumpr()
+                print('Layout Graph loaded')
+            except:
+                print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
+                self.L.build(graph=self.graph)
+                self.L.dumpw()
             
-            #self.L.dumpw()
-        #self.L.build()
+            #
+            # In outdoor situation we delete all reference to transmission node in Gi 
+            #
+            cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
-        ###########
-        # init pos & cycles
-        #
-        # If a and b are not specified
-        #  they are chosen as center of gravity of cycle 0
-        #
-        ###########
-        nodes = self.L.Gt.nodes()
-        #
-        # pick the point outside building if Layout.indoor not activated 
-        #
-        if not self.L.indoor:
-            nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
-        else:
-            nodes = [n for n in nodes if n!=0 ]
         
-        # draw the link extremities randomly
+            if self.outdoor:
+                u = self.L.Gi.node.keys()
+                
+                lT  =  [k for k in u if (len(k)==3)]
+                lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
+                self.L.Gi.remove_nodes_from(lTi)
+                lE = self.L.Gi.edges()
+                for k in range(len(lE)):
+                    e = lE[k]
+                    try:
+                        output = self.L.Gi.edge[e[0]][e[1]]['output']
+                    except:
+                        pdb.set_trace()
+                    for l in output.keys():
+                        if l in lTi:
+                            del output[l]
+                    self.L.Gi.edge[e[0]][e[1]]['output']=output
+                
+                #self.L.dumpw()
+            #self.L.build()
 
-        np.random.seed(self.seed)
-        ia = np.random.randint(0,len(nodes))    
-        ib = np.random.randint(0,len(nodes))    
-
-        if len(self.a)==0:
-            self.ca = nodes[ia]
-        else:
-            if len(kwargs['a']) ==2:
-                a=np.r_[kwargs['a'],1.0]
+            ###########
+            # init pos & cycles
+            #
+            # If a and b are not specified
+            #  they are chosen as center of gravity of cycle 0
+            #
+            ###########
+            nodes = self.L.Gt.nodes()
+            #
+            # pick the point outside building if Layout.indoor not activated 
+            #
+            if not self.L.indoor:
+                nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
             else:
-                a=kwargs['a']
-            self.ca = self.L.pt2cy(a)
-            self.a = a
+                nodes = [n for n in nodes if n!=0 ]
+            
+            # draw the link extremities randomly
 
-        if len(self.b)==0:
-            self.cb = nodes[ib]
-        else:
-            if len(kwargs['b']) ==2:
-                b=np.r_[kwargs['b'],1.0]
+            np.random.seed(self.seed)
+            ia = np.random.randint(0,len(nodes))    
+            ib = np.random.randint(0,len(nodes))    
+
+            if len(self.a)==0:
+                self.ca = nodes[ia]
             else:
-                b=kwargs['b']
-            self.cb = self.L.pt2cy(b)
-            self.b = b
+                if len(kwargs['a']) ==2:
+                    a=np.r_[kwargs['a'],1.0]
+                else:
+                    a=kwargs['a']
+                self.ca = self.L.pt2cy(a)
+                self.a = a
+
+            if len(self.b)==0:
+                self.cb = nodes[ib]
+            else:
+                if len(kwargs['b']) ==2:
+                    b=np.r_[kwargs['b'],1.0]
+                else:
+                    b=kwargs['b']
+                self.cb = self.L.pt2cy(b)
+                self.b = b
 
 
-       
-        ###########
-        # init freq
-        # TODO Check where it is used redocdundant with fGHz
-        ###########
-        #self.fmin  = self.fGHz[0]
-        #self.fmax  = self.fGHz[-1]
-        #self.fstep = self.fGHz[1]-self.fGHz[0]
+           
+            ###########
+            # init freq
+            # TODO Check where it is used redocdundant with fGHz
+            ###########
+            #self.fmin  = self.fGHz[0]
+            #self.fmax  = self.fGHz[-1]
+            #self.fstep = self.fGHz[1]-self.fGHz[0]
 
 
-        self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
-        self.R = Rays(self.a,self.b)
-        self.C = Ctilde()
-        self.H = Tchannel()
+            self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+            self.R = Rays(self.a,self.b)
+            self.C = Ctilde()
+            self.H = Tchannel()
 
 
 
@@ -587,9 +594,8 @@ class DLink(Link):
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             mlab.clf()
             plotfig=True
-
         if isinstance(L,str):
-            self._L = Layout(L)
+            self._L = Layout(L,bgraphs=False,bcheck=False)
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L
@@ -772,40 +778,43 @@ class DLink(Link):
         """ __repr__
         """
 
-        s = 'filename: ' + self.filename +'\n'
+        if hasattr(self,'filename'):
+            s = 'filename: ' + self.filename +'\n'
 
-        s = s + 'Link Parameters :\n'
-        s = s + '------- --------\n'
-        s = s + 'Layout : ' + self.Lname + '\n\n'
-        s = s + 'Node a   \n'
-        s = s + '------  \n'
-        s = s + 'position : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
-        s = s + 'Antenna : ' + str (self.Aa.typ) + '\n'
-        s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
-        s = s + 'Node b   \n'
-        s = s + '------  \n'
-        s = s + 'position : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
-        s = s + 'Antenna : ' + str (self.Ab.typ) + '\n'
-        s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
-        s = s + 'Link evaluation information : \n'
-        s = s + '----------------------------- \n'
-        s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
-        s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
-        #s = s + 'Frequency range :  \n'
-        s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
-        s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
-        Nf = len(self.fGHz)
-        if Nf>1:
-            s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
+            s = s + 'Link Parameters :\n'
+            s = s + '------- --------\n'
+            s = s + 'Layout : ' + self.Lname + '\n\n'
+            s = s + 'Node a   \n'
+            s = s + '------  \n'
+            s = s + 'position : ' + str (self.a) + "  in cycle " + str(self.ca) + '\n'
+            s = s + 'Antenna : ' + str (self.Aa.typ) + '\n'
+            s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
+            s = s + 'Node b   \n'
+            s = s + '------  \n'
+            s = s + 'position : ' + str (self.b) + " in cycle " + str(self.cb) + '\n'
+            s = s + 'Antenna : ' + str (self.Ab.typ) + '\n'
+            s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
+            s = s + 'Link evaluation information : \n'
+            s = s + '----------------------------- \n'
+            s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
+            s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
+            #s = s + 'Frequency range :  \n'
+            s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
+            s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
+            Nf = len(self.fGHz)
+            if Nf>1:
+                s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
+            else:
+                s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
+            s = s + 'Nf : ' + str(Nf) +'\n '
+            d =  np.sqrt(np.sum((self.a-self.b)**2))
+            if Nf>1:
+                fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
+            else:
+                fcGHz = self.fGHz[0]
+            L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         else:
-            s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
-        s = s + 'Nf : ' + str(Nf) +'\n '
-        d =  np.sqrt(np.sum((self.a-self.b)**2))
-        if Nf>1:
-            fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
-        else:
-            fcGHz = self.fGHz[0]
-        L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
+            s = 'No Layout specified'
         return s
 
 
@@ -1910,20 +1919,20 @@ class DLink(Link):
                 Atx.eval()
             try:
                 Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,colorbar=False,newfig=False,interact=False)
+                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
             except:
                 Atx.eval()
                 Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,colorbar=False,newfig=False,interact=False)
+                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
             if not Arx.evaluated:
                 Arx.eval()
             try:
                 Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,colorbar=False,newfig=False,name = '',interact=False)
+                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
             except:
                 Arx.eval()
                 Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,colorbar=False,newfig=False,name = '',interact=False)
+                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
 
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
@@ -1968,7 +1977,8 @@ class DLink(Link):
             #if self.H.y.ndim>2:
             #    ER = np.squeeze(self.H.energy())
             #    kwargs['ER']=ER
-            self.R._show3(L=self.L,**kwargs)
+            if hasattr(self,'R'):
+                self.R._show3(L=self.L,**kwargs)
 
         fp = (self.a+self.b)/2.
         dab = np.sqrt(np.sum((self.a-self.b)**2))
@@ -1995,7 +2005,7 @@ class DLink(Link):
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
             antenna._show3(T=rot,po=pos,
-                title=False,colorbar=False,newfig=False,name = '',interact=False)
+                title=False,bcolorbar=False,newfig=False,name = '',interact=False)
 
         if delrays:
             import time
