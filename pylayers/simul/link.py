@@ -420,7 +420,7 @@ class DLink(Link):
         if isinstance(self._L,str):
             self._Lname = self._L
             indoor = not self.outdoor
-            self._L = Layout(self._Lname,bindoor=indoor)
+            self._L = Layout(self._Lname,bindoor=indoor,bgraphs=False,bcheck=False)
         else:
             self._Lname = self._L._filename
             self.outdoor = not self._L.indoor
@@ -445,8 +445,8 @@ class DLink(Link):
                         }
             
             try:
-                print('Layout Graph loaded')
                 self.L.dumpr()
+                print('Layout Graph loaded')
             except:
                 print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
                 self.L.build(graph=self.graph)
@@ -594,9 +594,8 @@ class DLink(Link):
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             mlab.clf()
             plotfig=True
-
         if isinstance(L,str):
-            self._L = Layout(L)
+            self._L = Layout(L,bgraphs=False,bcheck=False)
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L
