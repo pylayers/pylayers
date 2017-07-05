@@ -525,7 +525,7 @@ class DLink(Link):
            
             ###########
             # init freq
-            # TODO Check where it is used redocdundant with fGHz
+            # TODO Check where it is used redundant with fGHz
             ###########
             #self.fmin  = self.fGHz[0]
             #self.fmax  = self.fGHz[-1]
@@ -806,7 +806,7 @@ class DLink(Link):
                 s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
             else:
                 s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
-            s = s + 'Nf : ' + str(Nf) +'\n '
+            s = s + 'Nf : ' + str(Nf) +'\n'
             d =  np.sqrt(np.sum((self.a-self.b)**2))
             if Nf>1:
                 fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
@@ -815,6 +815,9 @@ class DLink(Link):
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         else:
             s = 'No Layout specified'
+
+        if hasattr(self,'H'):
+            s = s+ 'Link has been evaluated'
         return s
 
 
