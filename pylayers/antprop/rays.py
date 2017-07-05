@@ -2953,6 +2953,8 @@ class Rays(PyLayers, dict):
                                                      color=(0, 0, 0), )
                 f.children[-1].name='Rays with ' + str(int(i)) + 'interactions'
 
+        return(f)
+
     def show3(self,
               L=[],
               bdis=True,
