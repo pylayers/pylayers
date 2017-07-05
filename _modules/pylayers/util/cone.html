@@ -94,7 +94,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -166,9 +166,11 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">shapely</span> <span class="kn">as</span> <span class="nn">shp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">as</span> <span class="nn">plu</span> 
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">patches</span>
@@ -236,7 +238,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pcone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Cone.belong_seg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.belong_seg.html#pylayers.util.cone.Cone.belong_seg">[docs]</a>    <span class="k">def</span> <span class="nf">belong_seg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">,</span><span class="n">prob</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Cone.belong_seg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.cone.Cone.belong_seg.html#pylayers.util.cone.Cone.belong_seg">[docs]</a>    <span class="k">def</span> <span class="nf">belong_seg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">,</span><span class="n">prob</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">visu</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; test if segment belong to cone</span>
 
 
@@ -273,6 +275,11 @@
 <span class="sd">        outside_point</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">visu</span><span class="p">:</span> 
+            <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">plu</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
 
         <span class="n">vc</span>  <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
         <span class="c1">#vcn = vc/np.sqrt(np.dot(vc,vc))</span>
@@ -280,14 +287,14 @@
         <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1">#w  = np.array([vcn[1],-vcn[0]])</span>
 
-        <span class="n">ptama</span> <span class="o">=</span> <span class="n">pta</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">phema</span> <span class="o">=</span> <span class="n">phe</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ptama</span> <span class="o">=</span> <span class="n">pta</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">phema</span> <span class="o">=</span> <span class="n">phe</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">dtaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ptama</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">dhew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">phema</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">blta</span> <span class="o">=</span> <span class="p">(</span><span class="n">dtaw</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">blhe</span> <span class="o">=</span> <span class="p">(</span><span class="n">dhew</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">blta</span> <span class="o">=</span> <span class="p">(</span><span class="n">dtaw</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">blhe</span> <span class="o">=</span> <span class="p">(</span><span class="n">dhew</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span>
         <span class="c1">#if &#39;seg1&#39; in self.__dict__:</span>
         <span class="c1">#    pa =  self.seg1[:,0].reshape(2,1)</span>
         <span class="c1">#    pb = (self.seg1[:,0]+w).reshape(2,1)</span>
@@ -435,9 +442,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="c1"># b = a + self.u.reshape(2,1)</span>
+        <span class="c1"># c = a + self.v.reshape(2,1)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">p0a0</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
         <span class="n">p1a1</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
@@ -668,7 +677,15 @@
 <span class="sd">        -----</span>
 
 <span class="sd">        The only way for the cone to be degenerated is when the two segments are on the same line.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
 
+<span class="sd">            &gt;&gt;&gt; from pylayers.util.cone import *</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">            &gt;&gt;&gt; cn = Cone()</span>
+<span class="sd">            &gt;&gt;&gt; f,a = cn.show()</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># bv : (4,1)</span>
@@ -820,11 +837,11 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
                 <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
         <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-        <span class="k">print</span> <span class="n">theta1</span>
+        <span class="c1">#print theta1</span>
         <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-        <span class="k">print</span> <span class="n">theta2</span>
+        <span class="c1">#print theta2</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-        <span class="k">print</span> <span class="n">angle</span>
+        <span class="c1">#print angle</span>
         <span class="n">arc</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Arc</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">apex</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">],</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">arc</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;seg0&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
@@ -854,7 +871,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Feb 12, 2017.
+      Last updated on Jul 05, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

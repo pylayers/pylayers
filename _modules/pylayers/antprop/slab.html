@@ -94,7 +94,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -268,8 +268,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span> 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">import</span> <span class="nn">cPickle</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cPickle</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">_pickle</span> <span class="kn">as</span> <span class="nn">cPickle</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="c1">#import objxml</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -890,7 +894,17 @@
 <span class="sd">    (meter) 0</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Mat.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.__init__.html#pylayers.antprop.slab.Mat.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;AIR&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">epr</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> <span class="n">mur</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+<div class="viewcode-block" id="Mat.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.__init__.html#pylayers.antprop.slab.Mat.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;AIR&quot;</span><span class="p">,</span> 
+                 <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                 <span class="n">epr</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> 
+                 <span class="n">mur</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> 
+                 <span class="n">sigma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">roughness</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">a</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">b</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">d</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -902,6 +916,10 @@
 <span class="sd">        mur : complex</span>
 <span class="sd">        sigma : float</span>
 <span class="sd">        roughness : float</span>
+<span class="sd">        a : ITU parameter</span>
+<span class="sd">        b : ITU parameter</span>
+<span class="sd">        c : ITU parameter</span>
+<span class="sd">        d : ITU parameter</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -915,7 +933,17 @@
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epr</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mur</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roughness</span></div>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roughness</span>
+        <span class="c1"># Parameters a,b,c,d </span>
+        <span class="c1"># Table 3 Rec ITU-R P.2040.1</span>
+        <span class="c1">#</span>
+        <span class="c1"># epsrp  = a * fGHZ ** b </span>
+        <span class="c1"># sigma  = c * fGHZ ** d </span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span></div>
 
 <div class="viewcode-block" id="Mat.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.eval.html#pylayers.antprop.slab.Mat.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate Mat at given frequencies</span>
@@ -936,13 +964,19 @@
 <span class="sd">        100 MHz = 0.1 GHz</span>
 <span class="sd">        10 MHz = 0.01 GHz</span>
 
-<span class="sd">        sigma/(w*eps0) = sigma/(2*pi*f*1e9*eps0)</span>
-<span class="sd">        sigma/(w*eps0) = sigma/(2*pi*f*1e9*8.854e-12)</span>
-<span class="sd">        sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)</span>
+<span class="sd">        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e9*eps0)</span>
+<span class="sd">        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e9*8.854e-12)</span>
+<span class="sd">        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e-3*8.854)</span>
+<span class="sd">        sigma/(w*eps0) = 18 * sigma/fGHz</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fGHz</span>
-        <span class="n">epsc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">/</span>  <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">epsc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">/</span>  <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">epsr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHZ&#39;</span><span class="p">]</span><span class="o">**</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+            <span class="n">sigma</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHZ&#39;</span><span class="p">]</span><span class="o">**</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span>
+            <span class="n">epsc</span> <span class="o">=</span> <span class="n">epsr</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">/</span>  <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">epsc</span><span class="p">)</span></div>
 
@@ -1116,7 +1150,7 @@
 <span class="sd">        mur : float</span>
 <span class="sd">            relative permeability</span>
 <span class="sd">        typ : string</span>
-<span class="sd">            {&#39;epsr&#39;|&#39;ind&#39;|,&#39;reim&#39;,|&#39;THz&#39;}</span>
+<span class="sd">            {&#39;epsr&#39;|&#39;ind&#39;|,&#39;reim&#39;,|&#39;THz&#39;|&#39;itu&#39;}</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -1195,6 +1229,12 @@
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">18.</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s1">&#39;itu&#39;</span><span class="p">:</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
 
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2048,7 +2088,7 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        name       : string</span>
-<span class="sd">        lmat       : list of mat name</span>
+<span class="sd">        lmatname   : list of mat name</span>
 <span class="sd">        lthick     : list ot float</span>
 <span class="sd">           list of layer thickness in meters</span>
 
@@ -2383,7 +2423,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Feb 12, 2017.
+      Last updated on Jul 05, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

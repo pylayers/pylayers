@@ -94,7 +94,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -196,10 +196,15 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span> 
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">ConfigParser</span>
-<span class="kn">import</span> <span class="nn">pylayers.util.easygui</span> <span class="kn">as</span> <span class="nn">eg</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="kn">as</span> <span class="nn">cp</span> 
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">configparser</span> <span class="kn">as</span> <span class="nn">cp</span>
+
+<span class="c1">#import pylayers.util.easygui as eg</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geo</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
@@ -354,15 +359,15 @@
         <span class="sd">&quot;&quot;&quot; display RadioNodes informations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s2">&quot;npos       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span>
-        <span class="k">print</span> <span class="s2">&quot;position   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
-        <span class="k">print</span> <span class="s2">&quot;name       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;npos       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;position   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;name       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="c1">#print &quot;orientation : &quot;, self.orientation</span>
-        <span class="k">print</span> <span class="s2">&quot;type       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span>
-        <span class="k">print</span> <span class="s2">&quot;fileini    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span>
-        <span class="k">print</span> <span class="s2">&quot;filespa    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span>
-        <span class="k">print</span> <span class="s2">&quot;filegeom   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span>
-        <span class="k">print</span> <span class="s2">&quot;fileant    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span></div>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;type       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;fileini    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;filespa    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;filegeom   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;fileant    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.clear.html#pylayers.simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; clear positions</span>
@@ -682,7 +687,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
         <span class="c1">#print filespa+  &quot;   loadini&quot;</span>
-        <span class="n">space</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">space</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filespa</span><span class="p">)</span>
 
         <span class="n">points</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">)</span>
@@ -718,7 +723,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;filespa does not exist&quot;</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;filespa does not exist&quot;</span><span class="p">)</span>
             <span class="k">return</span><span class="p">()</span>
 
         <span class="n">lig</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
@@ -755,9 +760,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">fileini</span> <span class="o">+</span> <span class="s1">&#39; does not exist&#39;</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">fileini</span> <span class="o">+</span> <span class="s1">&#39; does not exist&#39;</span><span class="p">)</span>
 
-        <span class="n">space</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">space</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">)</span>
         <span class="n">npt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -797,7 +802,7 @@
             <span class="n">V</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ant</span><span class="o">.</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">,:,:]</span>
  
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;position&#39;</span><span class="p">):</span>
-                <span class="k">print</span> <span class="s2">&quot;no position available&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;no position available&quot;</span><span class="p">)</span>
             <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">gv</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">ant</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">ant</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">=</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.off&#39;</span>
@@ -808,7 +813,7 @@
             <span class="c1">#    problem gv is not a geomvect    </span>
             <span class="c1">#    gv.points(self.position, colorname)</span>
             <span class="k">else</span> <span class="p">:</span>
-                <span class="k">print</span> <span class="s2">&quot; no position available &quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot; no position available &quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">_filespa</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;spa&#39;</span><span class="p">:</span>
             <span class="n">fi_spa</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
@@ -1117,7 +1122,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Feb 12, 2017.
+      Last updated on Jul 05, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

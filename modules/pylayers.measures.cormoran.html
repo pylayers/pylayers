@@ -30,6 +30,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
+    <link rel="next" title="pylayers.mobility.agent" href="pylayers.mobility.agent.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -90,11 +91,28 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
+	<a href="pylayers.mobility.agent.html" title="pylayers.mobility.agent"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.mobi...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.mobility.agent
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -130,27 +148,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.measures.cormoran</a><ul>
-<li><a class="reference internal" href="#corser-class">CorSer Class</a><ul>
-<li><a class="reference internal" href="#corser-init-and-load-data">CorSer init and load data</a></li>
-<li><a class="reference internal" href="#corser-exploit-data">CorSer exploit data</a></li>
-<li><a class="reference internal" href="#corser-visualization-tools">CorSer visualization tools</a><ul>
-<li><a class="reference internal" href="#d-vizualization">2D  vizualization</a></li>
-<li><a class="reference internal" href="#id1">3D vizualization</a></li>
-<li><a class="reference internal" href="#video-vizualization">Video Vizualization</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#corser-internal-processing">CorSer Internal processing</a><ul>
-<li><a class="reference internal" href="#time-alignement">Time Alignement</a></li>
-<li><a class="reference internal" href="#data-frame-transformation">Data frame transformation</a></li>
-<li><a class="reference internal" href="#vizualizing-processing">Vizualizing processing</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#notes">Notes</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.measures.cormoran</a></li>
 </ul>
 
     
@@ -164,326 +162,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-pylayers.measures.cormoran">
-<span id="pylayers-measures-cormoran"></span><h1>pylayers.measures.cormoran<a class="headerlink" href="#module-pylayers.measures.cormoran" title="Permalink to this headline">¶</a></h1>
-<p>This module handles CORMORAN measurement data</p>
-<div class="section" id="corser-class">
-<h2>CorSer Class<a class="headerlink" href="#corser-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cor_log</span></code>([short])</td>
-<td>display cormoran measurement campaign logfile</td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="corser-init-and-load-data">
-<h3>CorSer init and load data<a class="headerlink" href="#corser-init-and-load-data" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.__init__</span></code>([serie,&nbsp;day,&nbsp;source,&nbsp;layout])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.__repr__</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadBS</span></code>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run])</td>
-<td>load BeSpoon data</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadTCR</span></code>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run])</td>
-<td>load TCR data</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._load_offset_dict</span></code>()</td>
-<td>load offset_dictionnary.bin</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadbody</span></code>([day,&nbsp;serie])</td>
-<td>load body from motion capture file</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadcam</span></code>()</td>
-<td>load camera position</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadhkb</span></code>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run,&nbsp;...])</td>
-<td>load hkb measurement data</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._loadinfranodes</span></code>()</td>
-<td>load infrastructure nodes</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.loadlog</span></code>()</td>
-<td>load in self.log the log of the current serie</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="corser-exploit-data">
-<h3>CorSer exploit data<a class="headerlink" href="#corser-exploit-data" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getdevp</span></code>(a[,&nbsp;techno,&nbsp;t,&nbsp;fId])</td>
-<td>get a  device position</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getlink</span></code>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
-<td>get a link value</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getlinkd</span></code>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
-<td>get the distance for a link between devices</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.getlinkp</span></code>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;t,&nbsp;fId])</td>
-<td>get a link devices positions</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.devmapper</span></code>(a[,&nbsp;techno])</td>
-<td>retrieve name of device if input is number</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.export_csv</span></code>(**kwargs)</td>
-<td>export to csv devices positions</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="corser-visualization-tools">
-<h3>CorSer visualization tools<a class="headerlink" href="#corser-visualization-tools" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="d-vizualization">
-<h4>2D  vizualization<a class="headerlink" href="#d-vizualization" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.plot</span></code>(a,&nbsp;b[,&nbsp;techno,&nbsp;t])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.pltmob</span></code>(**kwargs)</td>
-<td>plot mobility</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.plttcr</span></code>(a,&nbsp;b,&nbsp;**kwargs)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.pltvisi</span></code>(a,&nbsp;b[,&nbsp;techno])</td>
-<td>plot visibility between link a and b</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.animhkb</span></code>(a,&nbsp;b[,&nbsp;interval,&nbsp;save])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.animhkbAP</span></code>(a,&nbsp;AP_list[,&nbsp;interval,&nbsp;save])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.imshow</span></code>([time,&nbsp;kind])</td>
-<td>DEPRECATED</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Corser.showlink</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.pltgt</span></code>(a,&nbsp;b,&nbsp;**kwargs)</td>
-<td>plt ground truth</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="id1">
-<h4>3D vizualization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._show3</span></code>(**kwargs)</td>
-<td>mayavi 3d show of scenario</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._show3i</span></code>([t])</td>
-<td>show3 interactive</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.imshowvisibility</span></code>([techno,&nbsp;t])</td>
-<td>imshow visibility mda</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.imshowvisibility_i</span></code>([techno,&nbsp;t])</td>
-<td>imshow visibility mda interactive</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.anim</span></code>()</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="video-vizualization">
-<h4>Video Vizualization<a class="headerlink" href="#video-vizualization" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshot</span></code>([t0,&nbsp;offset,&nbsp;title,&nbsp;save,&nbsp;...])</td>
-<td>single snapshot plot</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshots</span></code>([t0,&nbsp;t1,&nbsp;offset])</td>
-<td>take snapshots</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.vlc</span></code>()</td>
-<td>play video of the associated serie</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="section" id="corser-internal-processing">
-<h3>CorSer Internal processing<a class="headerlink" href="#corser-internal-processing" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="time-alignement">
-<h4>Time Alignement<a class="headerlink" href="#time-alignement" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.align</span></code>(devdf,&nbsp;hkbdf)</td>
-<td>DEPRECATED align time of 2 data frames:</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.offset_setter</span></code>([a,&nbsp;b,&nbsp;techno])</td>
-<td>offset setter</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.offset_setter_video</span></code>([a,&nbsp;b])</td>
-<td>video offset setter</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._align_on_devdf</span></code>([typ])</td>
-<td>align hkb or bs time on device data frame (devdf) time index</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._align_devdf_on_hkb</span></code>(devdf,&nbsp;hkbdf)</td>
-<td>NOT USED Practically</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._apply_offset'</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._save_data_off_dict</span></code>(filename,&nbsp;typ,&nbsp;value)</td>
-<td>save</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._save_offset_dict</span></code>(d)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="data-frame-transformation">
-<h4>Data frame transformation<a class="headerlink" href="#data-frame-transformation" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.compute_visibility</span></code>([techno,&nbsp;...])</td>
-<td>determine visibility of links for a given techno</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._computedevpdf</span></code>()</td>
-<td>create a timestamped data frame</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._computedistdf</span></code>()</td>
-<td>Compute the distance dataframe from distance matrix</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._distancematrix</span></code>()</td>
-<td>Compute the ditance matrix between the nodes</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer._visiarray</span></code>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob])</td>
-<td>create entries for plu.rectplot</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="vizualizing-processing">
-<h4>Vizualizing processing<a class="headerlink" href="#vizualizing-processing" title="Permalink to this headline">¶</a></h4>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.visidev</span></code>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;dsf])</td>
-<td>get link visibility status</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.visidev2</span></code>(a,&nbsp;b[,&nbsp;technoa,&nbsp;technob,&nbsp;trange])</td>
-<td>get link visibility status</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">CorSer.__refreshshow3i</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="section" id="notes">
-<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
-<p>Useful members</p>
-<p>distdf : distance between radio nodes (122 columns)
-devdf  : device data frame</p>
-</div>
-</div>
+  <div class="section" id="pylayers-measures-cormoran">
+<h1>pylayers.measures.cormoran<a class="headerlink" href="#pylayers-measures-cormoran" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -497,7 +177,7 @@ devdf  : device data frame</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Feb 12, 2017.
+      Last updated on Jul 05, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.measures.cormoran.rst.txt"
@@ -507,8 +187,13 @@ devdf  : device data frame</p>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="../py-modindex.html">
+      <a href="pylayers.mobility.agent.html">
         Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="../py-modindex.html">
+        Next
       </a>  
     </div>
     

@@ -130,7 +130,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -185,7 +185,7 @@
 <dl class="function">
 <dt id="pylayers.util.geomutil.mirror">
 <code class="descclassname">pylayers.util.geomutil.</code><code class="descname">mirror</code><span class="sig-paren">(</span><em>p</em>, <em>pa</em>, <em>pb</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.mirror" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the image of p wrt the segment pa pb</p>
+<dd><p>compute the image of p wrt the segment (pa,pb)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -214,10 +214,14 @@
 &gt;&gt;&gt; from pylayers.util.plotutil import *
 &gt;&gt;&gt; import matplotlib.pyplot as plt
 &gt;&gt;&gt; import numpy as np
-&gt;&gt;&gt; p = np.random.randn(2,10)
+&gt;&gt;&gt; np.random.seed(0)
+&gt;&gt;&gt; p = np.random.randint(-2,2,(2,3))
 &gt;&gt;&gt; pa  = np.array([-0.5,1])
 &gt;&gt;&gt; pb  = np.array([0,0])
 &gt;&gt;&gt; M = mirror(p,pa,pb)
+&gt;&gt;&gt; print(M)
+[[ 2.8 -1.4 -0.2]
+ [ 0.4 -0.2  1.4]]
 &gt;&gt;&gt; plt.plot(p[0,:],p[1,:],&#39;or&#39;,alpha=0.2)
 &gt;&gt;&gt; plt.plot(M[0,:],M[1,:],&#39;ob&#39;,alpha=0.2)
 &gt;&gt;&gt; displot(p,M,alpha=0.2)
@@ -240,7 +244,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Feb 12, 2017.
+      Last updated on Jul 05, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.geomutil.mirror.rst.txt"

@@ -94,7 +94,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -226,6 +226,7 @@
 <span class="sd">    Tchannel.pdp</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -246,7 +247,7 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s1">&#39;h5py is not installed: Ctilde(object cannot be saved)&#39;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;h5py is not installed: Ctilde(object cannot be saved)&#39;</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">AFPchannel</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Angular Frequency Profile channel</span>
@@ -320,8 +321,31 @@
 
 <span class="k">class</span> <span class="nc">ADPchannel</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Angular Delay Profile channel</span>
+
+<span class="sd">    Members</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    a : </span>
+<span class="sd">    offset :</span>
+<span class="sd">    theta :  float </span>
+<span class="sd">    phi : </span>
+<span class="sd">    tau : </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">rx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">_filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        x : </span>
+<span class="sd">        y :</span>
+<span class="sd">        a : </span>
+<span class="sd">        tx :</span>
+<span class="sd">        rx :</span>
+<span class="sd">        _filename :</span>
+<span class="sd">        offset  : </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;ADP&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
@@ -368,6 +392,8 @@
 
 
         <span class="n">Na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># integration over frequency </span>
+        <span class="c1"># adp (angle) </span>
         <span class="n">adp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">adp</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">adp</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
@@ -652,7 +678,7 @@
         <span class="n">K</span> <span class="o">=</span> <span class="n">Pmax</span><span class="o">/</span><span class="p">(</span><span class="n">Ptot</span><span class="o">-</span><span class="n">Pmax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
             <span class="n">K</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="TBchannel.tau_rms"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TBchannel.tau_rms.html#pylayers.antprop.channel.TBchannel.tau_rms">[docs]</a>    <span class="k">def</span> <span class="nf">tau_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">threshold_dB</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">tau0</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; calculate root mean square delay spread starting from delay tau_0</span>
@@ -697,7 +723,7 @@
         
         <span class="n">taurms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">num</span><span class="o">/</span><span class="n">den</span><span class="p">)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">taurms</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">taurms</span></div>
 
     <span class="k">def</span> <span class="nf">toFD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">256</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; Transform to Frequency domain</span>
@@ -871,7 +897,7 @@
                 <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
-                <span class="c1">#print N</span>
+                <span class="c1">#print(N)</span>
 
             <span class="n">thre</span> <span class="o">=</span> <span class="n">thre</span> <span class="o">-</span> <span class="n">step</span>
             <span class="k">if</span> <span class="n">thre</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1043,7 +1069,7 @@
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
 
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Emax</span><span class="p">())</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Etot</span><span class="p">())</span>
-        <span class="k">print</span> <span class="n">alpha</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
         <span class="n">th</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">maxy2</span>
 
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">y2</span> <span class="o">&gt;=</span> <span class="n">th</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1060,7 +1086,7 @@
 
         <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span>
         <span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Emax</span><span class="p">()))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Etot</span><span class="p">())</span>
-        <span class="k">print</span> <span class="n">alpha</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
         <span class="n">th</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">maxy2</span>
 
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">y2</span> <span class="o">&gt;=</span> <span class="n">th</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1143,7 +1169,7 @@
             <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">Tpns</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span> <span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">P</span></div>
 
 <div class="viewcode-block" id="TUchannel.awgn"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.awgn.html#pylayers.antprop.channel.TUchannel.awgn">[docs]</a>    <span class="k">def</span> <span class="nf">awgn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PSDdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">,</span><span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a white Gaussian noise</span>
@@ -1477,7 +1503,7 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">ynew</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-           <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">ynew</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">ynew</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">readcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">outdir</span><span class="o">=</span><span class="p">[]):</span>
@@ -1491,7 +1517,7 @@
 <span class="sd">        outdir : string</span>
 <span class="sd">            output directory</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">outdir</span> <span class="o">&lt;&gt;</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="n">outdir</span> <span class="o">!=</span> <span class="p">[]:</span>
             <span class="n">outdir</span> <span class="o">=</span> <span class="s1">&#39;output/&#39;</span><span class="o">+</span><span class="n">outdir</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">outdir</span><span class="p">)</span>
 
@@ -1973,6 +1999,8 @@
 
 <span class="sd">    The transmission channel TChannel is obtained through combination of the propagation</span>
 <span class="sd">    channel and the antenna transfer functions from both transmitter and receiver.</span>
+<span class="sd">    This channel contains all the spatial information for each individual ray. </span>
+<span class="sd">    Warning : This is a frequency domain channel deriving from bs.FUsignal </span>
 
 <span class="sd">    Members</span>
 <span class="sd">    -------</span>
@@ -2131,9 +2159,9 @@
 
 <span class="sd">        with</span>
 <span class="sd">            a = np.ndarray</span>
-<span class="sd">                postion of point a (transmitter)</span>
+<span class="sd">                position of point a (transmitter)</span>
 <span class="sd">            b = np.ndarray</span>
-<span class="sd">                postion of point b (receiver)</span>
+<span class="sd">                position of point b (receiver)</span>
 <span class="sd">            Ta = np.ndarray</span>
 <span class="sd">                rotation matrice of antenna a</span>
 <span class="sd">            Tb = np.ndarray</span>
@@ -2192,11 +2220,11 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">grpname</span><span class="p">)</span>
             <span class="k">else</span> <span class="p">:</span>
-                <span class="k">print</span> <span class="s1">&#39;Warning : H/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s1">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Warning : H/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s1">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span><span class="p">)</span>
             <span class="n">f</span><span class="o">=</span><span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;H/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="c1">#print k,va</span>
+                <span class="c1">#print(k,va)</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">va</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">va</span><span class="p">)</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
@@ -2238,7 +2266,7 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel Tchannel: issue when reading h5py file&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Tchannel.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.apply.html#pylayers.antprop.channel.Tchannel.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W</span><span class="p">):</span>
+<div class="viewcode-block" id="Tchannel.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.apply.html#pylayers.antprop.channel.Tchannel.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; apply FUsignal W to the Tchannel</span>
 
 <span class="sd">        Parameters</span>
@@ -2252,7 +2280,6 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        mport ipdb</span>
 <span class="sd">        V : FUDAsignal</span>
 
 <span class="sd">        Notes</span>
@@ -2262,18 +2289,21 @@
 
 <span class="sd">            + W may have a more important number of points and a smaller frequency band.</span>
 <span class="sd">            + If the frequency band of the waveform exceeds the one of the</span>
-<span class="sd">            Transmission Channel, a warning is sent.</span>
+<span class="sd">            transmission channel, a warning is sent.</span>
 <span class="sd">            + W is a FUsignal whose shape doesn&#39;t need to be homogeneous with FUChannel H</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">W</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">W</span> <span class="o">*</span> <span class="bp">self</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span>
 
-        <span class="n">U</span> <span class="o">=</span> <span class="n">W</span> <span class="o">*</span> <span class="bp">self</span> 
         <span class="n">V</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span> <span class="n">dod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dod</span><span class="p">,</span> <span class="n">doa</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">V</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">applywav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">applywav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; apply waveform (time domain ) to obtain the</span>
 <span class="sd">            rays impulses response</span>
 
@@ -2317,7 +2347,31 @@
         <span class="k">return</span> <span class="n">rir</span>
 
 
-    <span class="k">def</span> <span class="nf">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Wgam</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">BWGHz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span><span class="n">fftshift</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        BWGHz : Bandwidth </span>
+<span class="sd">        Nf    : Number of frequency point </span>
+<span class="sd">        fftshift : boolean </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fGHz</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">BWGHz</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span>
+        <span class="n">dfGHz</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tauns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">dfGHz</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span>
+        <span class="n">E</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:])</span>
+        <span class="n">H</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cir</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fftshift</span><span class="p">:</span>
+            <span class="n">cir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">cir</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">tauns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">Nf</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">BWGHz</span><span class="p">),</span><span class="n">Nf</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">BWGHz</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">BWGHz</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span>
+
+        <span class="n">cir</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">tauns</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">cir</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">cir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Wgam</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; get Channel impulse response of the channel </span>
 <span class="sd">            for a given waveform</span>
 
@@ -2363,8 +2417,8 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="ne">DeprecationWarning</span><span class="p">(</span>
-            <span class="s1">&#39;WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="ne">DeprecationWarning</span><span class="p">(</span>
+            <span class="s1">&#39;WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav&#39;</span><span class="p">))</span>
         <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">ft1</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">dxh</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
@@ -2446,11 +2500,11 @@
         <span class="n">WGHz</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;WGHz&#39;</span><span class="p">]</span>
         <span class="n">Ntap</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Ntap&#39;</span><span class="p">]</span>
         <span class="c1"># yb : tau x f x 1</span>
-        <span class="n">yb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">fcGHz</span> <span class="p">)</span>
+        <span class="n">yb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">fcGHz</span> <span class="p">)</span>
         <span class="c1"># l : 1 x 1 x tap</span>
-        <span class="n">l</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ntap</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+        <span class="n">l</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ntap</span><span class="p">)[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
         <span class="c1"># l : tau x 1 x 1</span>
-        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
         <span class="c1"># S : tau x f x tap</span>
         <span class="n">S</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="n">tau</span><span class="o">*</span><span class="n">WGHz</span><span class="p">)</span>
         <span class="c1"># htap : f x tap</span>
@@ -2492,8 +2546,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">print</span> <span class="ne">DeprecationWarning</span><span class="p">(</span>
-            <span class="s1">&#39;WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="ne">DeprecationWarning</span><span class="p">(</span>
+            <span class="s1">&#39;WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav&#39;</span><span class="p">))</span>
 
         <span class="c1"># product in frequency domain between Channel (self) and waveform</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">Wgam</span><span class="p">)</span>
@@ -2521,8 +2575,8 @@
 <span class="sd">        pylayers.signal.bsignal</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="ne">DeprecationWarning</span><span class="p">(</span>
-            <span class="s1">&#39;WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="ne">DeprecationWarning</span><span class="p">(</span>
+            <span class="s1">&#39;WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav&#39;</span><span class="p">))</span>
         <span class="n">Hab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ft2</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
         <span class="n">HabW</span> <span class="o">=</span> <span class="n">Hab</span> <span class="o">*</span> <span class="n">Wgam</span>
         <span class="n">RI</span> <span class="o">=</span> <span class="n">HabW</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
@@ -2638,8 +2692,8 @@
         <span class="n">col</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">col</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">di</span><span class="p">):</span>
-            <span class="k">print</span> <span class="s2">&quot;len(col):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s2">&quot;len(di):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">di</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;len(col):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;len(di):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">di</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">polar</span><span class="o">=</span><span class="n">polar</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">reverse</span> <span class="p">:</span>
@@ -2786,8 +2840,8 @@
         <span class="n">cv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span> <span class="o">&gt;=</span> <span class="n">clipval</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">col</span><span class="p">[</span><span class="n">cv</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">di</span><span class="p">):</span>
-            <span class="k">print</span> <span class="s2">&quot;len(col):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s2">&quot;len(di):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;len(col):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;len(di):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">polar</span><span class="o">=</span><span class="n">polar</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s1">&#39;phi&#39;</span><span class="p">:</span>
@@ -2885,7 +2939,7 @@
 
     <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="n">tau</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tk</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">tau</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
         <span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
         <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">tau</span><span class="o">*</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">E</span>
@@ -2901,7 +2955,7 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        mode : string</span>
-<span class="sd">            center | mean | integ    (different manner to get the value)</span>
+<span class="sd">            center | mean | integ  (different manner to get the value)</span>
 <span class="sd">        Friis : boolean</span>
 <span class="sd">            apply the Frris coeff(2/(4p pi f)</span>
 <span class="sd">        sumray: boolean</span>
@@ -2913,6 +2967,7 @@
         <span class="c1">#  axis 1 : ray</span>
         <span class="c1">#  axis 1 : frequency</span>
         <span class="c1">#</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
             <span class="n">Etot</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2985,13 +3040,13 @@
         <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dxh</span> <span class="o">-</span> <span class="n">dxw</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-10</span><span class="p">):</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">dxh</span> <span class="o">&lt;</span> <span class="n">dxw</span><span class="p">):</span>
                 <span class="c1"># reinterpolate w</span>
-                <span class="k">print</span> <span class="s2">&quot; resampling w&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot; resampling w&quot;</span><span class="p">)</span>
                 <span class="n">x_new</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">W</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dxh</span><span class="p">,</span> <span class="n">dxh</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">Wk</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
                 <span class="n">dx</span> <span class="o">=</span> <span class="n">dxh</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># reinterpolate h</span>
-                <span class="k">print</span> <span class="s2">&quot; resampling h&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot; resampling h&quot;</span><span class="p">)</span>
                 <span class="n">x_new</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">Hk</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Hk</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dxw</span><span class="p">,</span> <span class="n">dxw</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">Hk</span> <span class="o">=</span> <span class="n">Hk</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
                 <span class="n">dx</span> <span class="o">=</span> <span class="n">dxw</span>
@@ -3021,10 +3076,12 @@
 <span class="sd">        This function will be deprecated by energy function</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">Ak</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="n">ufreq</span><span class="p">]</span>
-        <span class="n">Pr</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Ak</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Ak</span><span class="p">))</span>
-        <span class="n">akp</span>   <span class="o">=</span> <span class="n">Ak</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">ufreq</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tk</span><span class="p">)</span>
+        <span class="c1"># Amplitude</span>
+        <span class="n">Ak</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="n">ufreq</span><span class="p">]</span>
+        <span class="c1"># Power </span>
+        <span class="n">Pr</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Ak</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Ak</span><span class="p">))</span>
+        <span class="c1"># Complex amplitude</span>
+        <span class="n">akp</span>   <span class="o">=</span> <span class="n">Ak</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">ufreq</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">)</span>
         <span class="n">Prp</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">akp</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">PrdB</span>  <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Pr</span><span class="p">)</span>
         <span class="n">PrpdB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Prp</span><span class="p">)</span>
@@ -3202,10 +3259,10 @@
         <span class="n">vb0</span> <span class="o">=</span>  <span class="n">phi_vb</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="c1"># standard deviation of  velocity vector orientation is inversely</span>
         <span class="c1"># proportional to velocity magnitude</span>
-        <span class="n">ua</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">ua0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        <span class="n">va</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">va0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        <span class="n">ub</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Vb</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">ub0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        <span class="n">vb</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Vb</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">vb0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">ua</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">ua0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">va</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">va0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">ub</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Vb</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">ub0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="n">vb</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">Vb</span><span class="o">+</span><span class="mf">0.1</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">+</span><span class="n">vb0</span><span class="p">)</span><span class="o">%</span><span class="mi">1</span><span class="p">)[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="c1"># uniform sampling over the sphere</span>
         <span class="n">tha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">va</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -3217,31 +3274,31 @@
         <span class="n">vay</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">pha</span><span class="p">)</span>
         <span class="n">vaz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tha</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">pha</span><span class="o">*</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">vaxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vax</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">],</span><span class="n">vay</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
-        <span class="n">va</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vaxy</span><span class="p">,</span><span class="n">vaz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
+        <span class="n">vaxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vax</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">],</span><span class="n">vay</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
+        <span class="n">va</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vaxy</span><span class="p">,</span><span class="n">vaz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
 
         <span class="n">vbx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">thb</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phb</span><span class="p">)</span>
         <span class="n">vby</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">thb</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phb</span><span class="p">)</span>
         <span class="n">vbz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">thb</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phb</span><span class="o">*</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">vbxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vbx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">],</span><span class="n">vby</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
+        <span class="n">vbxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vbx</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">],</span><span class="n">vby</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
 
         <span class="c1"># 3 x r x f x s x m x tap</span>
-        <span class="n">vb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vbxy</span><span class="p">,</span><span class="n">vbz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
+        <span class="n">vb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vbxy</span><span class="p">,</span><span class="n">vbz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">...</span><span class="p">]])</span>
 
         <span class="c1"># beta : r x f x s x m x tap</span>
-        <span class="n">betaa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ska</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">va</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">betab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">skb</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">vb</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">betaa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ska</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">va</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">betab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">skb</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">vb</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 
         <span class="c1"># m discrete time axis</span>
         <span class="c1"># r x f x s x m x tap</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">mmax</span><span class="p">,</span><span class="n">Nm</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">mmax</span><span class="p">,</span><span class="n">Nm</span><span class="p">)[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span>
         <span class="c1"># r x f x s x m x tap</span>
-        <span class="n">l</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ntap</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+        <span class="n">l</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ntap</span><span class="p">)[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
         <span class="c1"># l : r x f x s x m x tap</span>
-        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span> \
-              <span class="bp">self</span><span class="o">.</span><span class="n">taue</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span> \
+              <span class="bp">self</span><span class="o">.</span><span class="n">taue</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">ba</span>  <span class="o">=</span> <span class="n">betaa</span><span class="o">*</span><span class="n">Va</span><span class="o">*</span><span class="n">m</span><span class="o">/</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
         <span class="n">bb</span>  <span class="o">=</span> <span class="n">betab</span><span class="o">*</span><span class="n">Vb</span><span class="o">*</span><span class="n">m</span><span class="o">/</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
@@ -3249,7 +3306,7 @@
         <span class="c1"># S : r x f x s x m x tap (form 2.34 [D. Tse])</span>
         <span class="n">S</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="n">tau2</span><span class="o">*</span><span class="n">WMHz</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span>
         <span class="c1"># sum over r :  f x s  x m x tap</span>
-        <span class="n">htap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="n">tau2</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">htap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="n">tau2</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># f x s  x m x tap</span>
         <span class="n">htap</span>  <span class="o">=</span> <span class="n">htap</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span><span class="n">Ns</span><span class="p">,</span><span class="n">Nm</span><span class="p">,</span><span class="n">Ntap</span><span class="p">)</span>
@@ -3279,8 +3336,8 @@
     <span class="c1">#     #     &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
     <span class="c1">#     #     &gt;&gt;&gt; import numpy as np</span>
     <span class="c1">#     #     &gt;&gt;&gt; fGHz = np.arange(2,11,0.1)</span>
-    <span class="c1">#     #     &gt;&gt;&gt; tau1 = np.array([1,2,3])[:,np.newaxis]</span>
-    <span class="c1">#     #     &gt;&gt;&gt; y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]</span>
+    <span class="c1">#     #     &gt;&gt;&gt; tau1 = np.array([1,2,3])[:,None]</span>
+    <span class="c1">#     #     &gt;&gt;&gt; y = np.exp(-2*1j*np.pi*fGHz[None,:]*tau1)/fGHz[None,:]</span>
     <span class="c1">#     #     &gt;&gt;&gt; H = Tchannel(x=fGHz,y=y,tau=np.array([15,17,18]))</span>
     <span class="c1">#     #     &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;],xlabels=[&#39;Frequency GHz&#39;])</span>
     <span class="c1">#     #     &gt;&gt;&gt; t1 = plt.suptitle(&#39;Before minimal phase compensation&#39;)</span>
@@ -3435,8 +3492,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-
-
+<span class="sd">        </span>
 <span class="sd">        rir : TUsignal</span>
 
 
@@ -3939,7 +3995,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;Ct&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;Ct&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">grpname</span><span class="p">)</span>
             <span class="k">else</span> <span class="p">:</span>
-                <span class="k">print</span> <span class="s1">&#39;Warning : Ct/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s1">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Warning : Ct/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s1">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span><span class="p">)</span>
             <span class="n">f</span><span class="o">=</span><span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;Ct/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
 
             <span class="c1"># save channel in global basis</span>
@@ -4317,8 +4373,8 @@
         <span class="n">col</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">col</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">di</span><span class="p">):</span>
-            <span class="k">print</span> <span class="s2">&quot;len(col):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s2">&quot;len(di):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;len(col):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;len(di):&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">polar</span><span class="o">=</span><span class="n">polar</span><span class="p">)</span>
 
@@ -4491,7 +4547,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">NameError</span> <span class="p">(</span><span class="s1">&#39;self.Tt and self.Tr should exist&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s2">&quot;nothing to do to return in global basis&quot;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;nothing to do to return in global basis&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span>
         <span class="c1"># if Tt and Tr == []</span>
         <span class="k">else</span><span class="p">:</span>
@@ -4528,33 +4584,33 @@
         <span class="c1">#</span>
 
         <span class="c1">#r0 = np.outer(Rr[0, 0,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span> <span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rr[0, 1,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span> <span class="bp">None</span><span class="p">]</span>
 
         <span class="n">t00</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span>
         <span class="n">t01</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span>
 
         <span class="c1">#r0 = np.outer(Rr[1, 0,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,:][:,</span> <span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rr[1, 1,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,:][:,</span> <span class="bp">None</span><span class="p">]</span>
 
         <span class="n">t10</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span>
         <span class="n">t11</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span>
 
         <span class="c1">#r0 = np.outer(Rt[0, 0,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:][:,</span> <span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rt[1, 0,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:][:,</span> <span class="bp">None</span><span class="p">]</span>
 
         <span class="n">Cttl</span> <span class="o">=</span> <span class="n">t00</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t01</span> <span class="o">*</span> <span class="n">r1</span>
         <span class="n">Cptl</span> <span class="o">=</span> <span class="n">t10</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t11</span> <span class="o">*</span> <span class="n">r1</span>
 
         <span class="c1">#r0 = np.outer(Rt[0, 1,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:][:,</span> <span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rt[1, 1,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:][:,</span> <span class="bp">None</span><span class="p">]</span>
 
         <span class="n">Ctpl</span> <span class="o">=</span> <span class="n">t00</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t01</span> <span class="o">*</span> <span class="n">r1</span>
         <span class="n">Cppl</span> <span class="o">=</span> <span class="n">t10</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t11</span> <span class="o">*</span> <span class="n">r1</span>
@@ -4633,33 +4689,33 @@
         <span class="c1">#</span>
 
         <span class="c1">#r0 = np.outer(Rr[0, 0,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rr[0, 1,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">t00</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span>
         <span class="n">t01</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span>
 
         <span class="c1">#r0 = np.outer(Rr[1, 0,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rr[1, 1,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">t10</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span>
         <span class="n">t11</span> <span class="o">=</span> <span class="n">r0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span>
 
         <span class="c1">#r0 = np.outer(Rt[0, 0,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rt[1, 0,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">Cttl</span> <span class="o">=</span> <span class="n">t00</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t01</span> <span class="o">*</span> <span class="n">r1</span>
         <span class="n">Cptl</span> <span class="o">=</span> <span class="n">t10</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t11</span> <span class="o">*</span> <span class="n">r1</span>
 
         <span class="c1">#r0 = np.outer(Rt[0, 1,:], uf)</span>
-        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
         <span class="c1">#r1 = np.outer(Rt[1, 1,:], uf)</span>
-        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Rt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,:][:,</span><span class="bp">None</span><span class="p">]</span>
 
         <span class="n">Ctpl</span> <span class="o">=</span> <span class="n">t00</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t01</span> <span class="o">*</span> <span class="n">r1</span>
         <span class="n">Cppl</span> <span class="o">=</span> <span class="n">t10</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t11</span> <span class="o">*</span> <span class="n">r1</span>
@@ -4744,11 +4800,11 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">r</span><span class="p">,:],</span> <span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">r</span><span class="p">,:]):</span>
                 <span class="n">issue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">issue</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s2">&quot;Channel is reciprocal&quot;</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Channel is reciprocal&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span> 
-            <span class="k">print</span> <span class="s2">&quot;WARNING Reciprocity issue WARNING&quot;</span>
-            <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">issue</span><span class="p">),</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">,</span> <span class="s1">&#39;rays are not reciprocal,&#39;</span>
-            <span class="k">print</span> <span class="s2">&quot;rays number with an issue :&quot;</span><span class="p">,</span><span class="n">issue</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;WARNING Reciprocity issue WARNING&quot;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">issue</span><span class="p">),</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">,</span> <span class="s1">&#39;rays are not reciprocal,&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;rays number with an issue :&quot;</span><span class="p">,</span><span class="n">issue</span><span class="p">)</span>
 
         <span class="c1"># assert np.allclose(self.tang,C.rang)</span>
         <span class="c1"># assert np.allclose(self.rang,C.tang)</span>
@@ -4878,7 +4934,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
 
-    <span class="k">def</span> <span class="nf">prop2tran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="p">[],</span><span class="n">b</span><span class="o">=</span><span class="p">[],</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">prop2tran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="p">[],</span><span class="n">b</span><span class="o">=</span><span class="p">[],</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; transform propagation channel into transmission channel</span>
 
 <span class="sd">        Parameters</span>
@@ -4991,12 +5047,8 @@
         <span class="k">if</span> <span class="n">Friis</span><span class="p">:</span>
             <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
 
-        <span class="c1"># # average w.r.t frequency</span>
-        <span class="c1"># Nf   = H.y.shape[-1]</span>
-        <span class="c1"># H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))</span>
-        <span class="c1"># H.tk = H.taud</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">H</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
@@ -5013,7 +5065,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Feb 12, 2017.
+      Last updated on Jul 05, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
