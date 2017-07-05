@@ -936,6 +936,11 @@ def gaspl(d,fGHz,T,PhPa,wvden):
     >>> L = gaspl(d,fGHz,T,PhPa,wvden)
     >>> plt.plot(fGHz,L)
 
+    Notes
+    -----
+
+    This function implements the recommandation UIT-P676-10
+
     """
 
     affO2=np.array([
@@ -1040,44 +1045,55 @@ def gaspl(d,fGHz,T,PhPa,wvden):
     b4 = affH2O[:,4]
     b5 = affH2O[:,5]
     b6 = affH2O[:,6]
-    SO2  = a1*1e-7*PhPa*(theta**3)*exp(a2*(1-T))  # 3
-    SH20 = b1*1e-1*e*(theta**(3.5))*exp(b2*(1-T)) # 3
     e = wvden*TK/216.7  # 4
+
+    SO2  = a1*1e-7*PhPa*(theta**3)*np.exp(a2*(1-theta))  # 3
     DO2  = a3*1e-4*(PhPa*(theta**(0.8-a4))+1.1*e*theta)  # 6a
+
+    SH2O = b1*1e-1*e*(theta**(3.5))*np.exp(b2*(1-theta)) # 3
     DH2O = b3*1e-4*(PhPa*theta**b4+b5*e*theta**b6)  # 6a
+
     DO2_m = np.sqrt(DO2**2+2.25e-6) # 6b
-    DH2O_m = 0.535*DH2O+np.sqrt(0.217*DH2O**2+(2.1316*1e-12*FO2**2)/theta)
+    DH2O_m = 0.535*DH2O+np.sqrt(0.217*DH2O**2+(2.1316*1e-12*fH2O**2)/theta)
     deltaO2 = (a5+a6*theta)*1e-4*(PhPa+e)*theta**(0.8)
     #
     #  O2
     #
     uO2 = fO2[:,None]-fGHz[None,:]
     vO2 = fO2[:,None]+fGHz[None,:]
-    n1O2 = DO2_m[:,None]-deltaO2*uO2
-    n2O2 = DO2_m[:,None]-deltaO2*vO2
+    n1O2 = DO2_m[:,None]-deltaO2[:,None]*uO2
+    n2O2 = DO2_m[:,None]-deltaO2[:,None]*vO2
     d1O2 = uO2**2 + DO2_m[:,None]**2
     d2O2 = vO2**2 + DO2_m[:,None]**2
     FO2 = (fGHz[None,:]/fO2[:,None])*(n1O2/d1O2+n2O2/d2O2)
-    UO2 = SO2*FO2
+    UO2 = SO2[:,None]*FO2
     #
     # H2O
     #
     uH2O = fH2O[:,None]-fGHz[None,:]
     vH2O = fH2O[:,None]+fGHz[None,:]
     nH2O = DH2O_m[:,None]
-    d1H2O = uH2O**2 + DO2_m[:,None]**2
-    d2H2O = vH2O**2 + DO2_m[:,None]**2
+    d1H2O = uH2O**2 + DH2O_m[:,None]**2
+    d2H2O = vH2O**2 + DH2O_m[:,None]**2
     FH2O = (fGHz[None,:]/fH2O[:,None])*(nH2O/d1H2O+nH2O/d2H2O)
-    UH2O = SH2O*FH2O
+    UH2O = SH2O[:,None]*FH2O
 
     # Nsec  (8)
     
     dD = 5.6e-4*(PhPa+e)*theta**(0.8)
-    t1 = 6.14e-5/(dD*(1+(fGHz/dD)**2))
-    t2 = 1.4e-12*p*(theta**(1.5))/(1+1.9e-5*fGHz**1.5)
+    t1 = 6.14e-5/(dD*(1.+(fGHz/dD)**2))
+    t2 = 1.4e-12*PhPa*(theta**(1.5))/(1+1.9e-5*fGHz**(1.5))
     Nsec = fGHz*PhPa*(theta**2)*(t1+t2)  # 9 
     
-    Npp  = np.sum(UO2,axis=0)+np.sum(UH2O,axis=0)+Nsec
+    ulow  = np.where(fGHz<118.750343)[0]
+    uhigh = np.where(fGHz>=118.750343)[0] 
+    UO2low = UO2[:,ulow]
+    UO2high = UO2[:,uhigh] 
+    SO2low  = np.sum(UO2low,axis=0)
+    SO2high = np.sum(UO2high[38:,:],axis=0)
+    sSO2 = np.hstack((SO2low,SO2high))
+    Npp = sSO2 + np.sum(UH2O,axis=0)+Nsec
+    Npp = np.sum(UO2,axis=0) + np.sum(UH2O,axis=0)+Nsec
     gamma = 0.1820*fGHz*Npp 
     #LgasdB = gamma*dkm 
 
