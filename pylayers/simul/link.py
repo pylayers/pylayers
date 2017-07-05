@@ -1413,7 +1413,7 @@ class DLink(Link):
 
 
         defaults={ 'applywav':False,
-                   'si_progress':False,
+                   'si_progress':True,
                    'diffraction':True,
                    'ra_vectorized':True,
                    'ra_ceil_H':[],
