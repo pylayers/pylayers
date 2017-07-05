@@ -36,6 +36,14 @@ def SSHFunc(L, theta,phi):
     theta: numpy array (1,nth)
     phi: numpy array (1,nph)
 
+    Returns
+    -------
+
+    Y : np.array
+        ((1+L)*(2+L)/2,nth*nph)
+    indx : np.array
+
+
     Notes
     -----
 
@@ -67,7 +75,7 @@ def SSHFunc(L, theta,phi):
     Yi = Yi.reshape(((1+L)**2,len(theta)*len(phi)))
     #~ Y = Yi
     nzero_rows = Yi.any(axis = 1)
-    Y = Yi[nzero_rows] # eliminating the non defined functions (Y01)
+    Y  = Yi[nzero_rows] # eliminating the undefined functions (Y01)
     ll = (l*np.ones((1+L,1))).reshape(((1+L)**2))
     mm = (m*np.ones((1,1+L))).reshape(((1+L)**2))
     # spherical harmonics index
@@ -87,7 +95,7 @@ def SSHFunc2(L, theta,phi):
 
     L : integer,
         spherical harmonics order
-    theta: numpy array(1, ndir)
+    theta: numpy array(1,ndir)
     phi: numpy array(1,ndir)
 
     Notes
@@ -167,8 +175,8 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
 
     return ec
 
-def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
-    """ Cartesian to spherical
+def CartToSphere (theta, phi,ex,ey,ez, bfreq=True, pattern = True):
+    """ Convert from Cartesian to Spherical
 
     Parameters
     ----------
@@ -193,11 +201,6 @@ def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
 
     es[0] = np.cos(theta)*np.cos(phi)*ex + np.cos(theta)*np.sin(phi)*ey -np.sin(theta)*ez
     es[1] = -np.sin(phi)*ex +np.cos(phi)*ey
-    #~ if pattern:
-        #~ if bfreq:
-            #~ es[0] =es[0].reshape(ex.shape[0],len(theta), len(phi))
-        #~ else:
-            #~ es[0] =es[0].reshape(len(theta), len(phi))
 
     return es[0],es[1]
 
@@ -230,6 +233,7 @@ def ssh(A,L= 20,dsf=1):
     nth = len(th)
     nph = len(ph)
     nf = A.nf
+    pdb.set_trace()
 
     if (nph % 2) == 1:
         mdab = min(nth, (nph + 1) / 2)
@@ -248,21 +252,20 @@ def ssh(A,L= 20,dsf=1):
     Ypinv = sp.linalg.pinv(Y)
 
     # convert the field from spherical to cartesian coordinates system
-    Ex, Ey,Ez = SphereToCart (th, ph, Etheta, Ephi, True)
+    Ex,Ey,Ez = SphereToCart (th, ph, Etheta, Ephi, True)
     #
     Ex = Ex.reshape((nf,nth*nph))
     Ey = Ey.reshape((nf,nth*nph))
     Ez = Ez.reshape((nf,nth*nph))
 
-    #pdb.set_trace()
     cx  =  np.dot(Ex,Ypinv)
     cy  =  np.dot(Ey,Ypinv)
     cz  =  np.dot(Ez,Ypinv)
     lmax = L
 
-    Cx = SCoeff(typ='s2', fmin=A.fGHz[0], fmax=A.fGHz[-1],lmax = lmax, data=cx,ind =ssh_index)
-    Cy = SCoeff(typ='s2', fmin=A.fGHz[0], fmax=A.fGHz[-1],lmax = lmax, data=cy,ind =ssh_index)
-    Cz = SCoeff(typ='s2', fmin=A.fGHz[0], fmax=A.fGHz[-1],lmax = lmax, data=cz,ind =ssh_index)
+    Cx = SCoeff(typ='s2',fmin=A.fGHz[0],fmax=A.fGHz[-1],lmax=lmax,data=cx,ind=ssh_index)
+    Cy = SCoeff(typ='s2',fmin=A.fGHz[0],fmax=A.fGHz[-1],lmax=lmax,data=cy,ind=ssh_index)
+    Cz = SCoeff(typ='s2',fmin=A.fGHz[0],fmax=A.fGHz[-1],lmax=lmax,data=cz,ind=ssh_index)
 
     A.S = SSHCoeff(Cx,Cy,Cz)
 

@@ -47,7 +47,7 @@ def relative_error(Eth_original, Eph_original,Eth_model, Eph_model,theta, phi, d
     #
     # Construct difference between reference and reconstructed
     #
-    if kf<>-1:
+    if kf!=-1:
         dTh = (Eth_model[kf, :, :] - Eth_original[kf, ::dsf, ::dsf])
         dPh = (Eph_model[kf, :, :] - Eph_original[kf, ::dsf, ::dsf])
         #

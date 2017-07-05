@@ -31,6 +31,12 @@ This modules contains Rays class
     Rays.reciprocal
     Rays.check_reciprocity
 
+    to3D 
+    simplify
+    locbas
+    fillinter
+    eval
+
 """
 try:
     from tvtk.api import tvtk
@@ -62,10 +68,11 @@ import h5py
 
 
 class Rays(PyLayers, dict):
-
-    """ A set of rays
+    """ Class hendling a set of rays
 
     Attributes
+    ----------
+
     rays   :
     nbrays :
     rayidx :
@@ -101,7 +108,7 @@ class Rays(PyLayers, dict):
     and a target point defining a radio link.
 
     Once a Rays object has been obtained in 2D, it is transformed
-    in 3D via the **to3D** method. This method has two parameters :
+    in 3D via the **to3D** method. This method takes two parameters :
     the height from floor to ceil, and the number N of
     multiple reflections to account for.
 
@@ -123,13 +130,16 @@ class Rays(PyLayers, dict):
         ----------
 
         pTx : np.array
+            transmitter coordinates
         pRx : np.array
+            receiver coordinates
 
         """
 
         self.pTx = pTx
         self.pRx = pRx
         self.nray = 0
+        self.nray2D = 0
         self.raypt = 0
         self.los = False  
         self.is3D = False
@@ -141,7 +151,7 @@ class Rays(PyLayers, dict):
         Nray = 0
         for k in self.keys():
             sh = np.shape(self[k]['sig'])
-            Nray = Nray+sh[2]
+            Nray = Nray + sh[2]
         return Nray
 
 
@@ -165,8 +175,9 @@ class Rays(PyLayers, dict):
             nray2D = len(self)
 
         s = s + 'N2Drays : '+ str(nray2D) + '\n'
-        s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
-        s = s + '#Rays/#Sig: '+ str(nray2D/(1.*self.nb_origin_sig) )
+        if hasattr(self,'nb_origin_sig'):
+            s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
+            s = s + '#Rays/#Sig: '+ str(nray2D/(1.*self.nb_origin_sig) )
 
         s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
 
@@ -324,7 +335,7 @@ class Rays(PyLayers, dict):
                     print 'ray2/'+grpname +'already exists in '+filenameh5
                 f = fh5['ray2/'+grpname]
              # keys not saved as attribute of h5py file
-            notattr = ['I','B','B0','delays','dis']
+            notattr = ['I','B','B0','dis']
             for a in self.__dict__.keys():
                 if a not in notattr:
                     f.attrs[a]=getattr(self,a)  
@@ -399,7 +410,7 @@ class Rays(PyLayers, dict):
         # creating save for Interactions classes
 
         if self.filled:
-            L=Layout(self.Lfilename,build=True)
+            L=Layout(self.Lfilename,bbuild=True)
             self.fillinter(L)
 
         # if self.evaluated:
@@ -410,7 +421,6 @@ class Rays(PyLayers, dict):
         """ switch tx and rx
 
         """
-
 
         r = Rays(self.pRx,self.pTx)
         r.is3D = self.is3D
@@ -496,8 +506,8 @@ class Rays(PyLayers, dict):
 
         Parameters
         ----------
-        ni : group of interactions
-        nr : ray index in group of interactions
+
+        nr : ray index 
         L  : Layout
 
         """
@@ -506,6 +516,8 @@ class Rays(PyLayers, dict):
         r = Rays(self.pTx,self.pRx)
         r.is3D = self.is3D
         
+        r.nray2D = 1
+        r.nb_origin_sig = 1
         
         ni = self._ray2nbi[nr]
         ur = np.where(self[ni]['rayidx']==nr)[0][0]
@@ -541,11 +553,11 @@ class Rays(PyLayers, dict):
                                 r[ni][k]=[]
                     
 
-        r[ni]['nrays']=1 # keep only one ray
+        r[ni]['nrays'] = 1 # keep only one ray
         r.nray = 1
         #r[ni]['rayidx']=np.array([self[ni]['rayidx'][nr]]) # ray index in the whole structure
-        r[ni]['rayidx']=np.array([0])
-        r[ni]['dis']=np.array([self[ni]['dis'][ur]])
+        r[ni]['rayidx'] = np.array([0])
+        r[ni]['dis'] = np.array([self[ni]['dis'][ur]])
         r.locbas(L)
         r.fillinter(L)
         return(r)
@@ -602,7 +614,7 @@ class Rays(PyLayers, dict):
         #    fig = plt.figure()
         #if kwargs['ax'] ==[]:
         #    ax = fig.add_subplot(111)
-        if kwargs['layout'] ==True:
+        if kwargs['layout'] == True:
             if kwargs['L'] != []:
                 fig,ax = kwargs['L'].showG(**kwargs)
             else : 
@@ -793,7 +805,7 @@ class Rays(PyLayers, dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1,rmoutceilR=True):
+    def to3D(self, L, H=3, N=1, rmoutceilR=True):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -803,20 +815,23 @@ class Rays(PyLayers, dict):
 
         H : float
             ceil height (default 3m)
-            if H=0 only floor reflection is calculated (outdoor case)
+            if H= 0 only floor reflection is calculated (outdoor case)
             if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
         rmoutceilR : bool
-            Remove Ceil reflexions in cycles (Gt nodes) 
+            Remove ceil reflexions in cycles (Gt nodes) 
             with indoor=False attribute 
 
-        returns
+        Returns
         -------
 
         r3d : Rays
 
-    
+        See Also
+        --------
+
+        mirror
 
         """
 
@@ -1115,20 +1130,22 @@ class Rays(PyLayers, dict):
                     #print siges
 
                 #---------------------------------
-                # handling subsegments (if any)
+                # handling multi segment (iso segments)
+                #    Height of reflexion interaction
+                #    Height of diffraction interaction
                 #---------------------------------
                 #
                 #   ptes (3 x i+2 x r )
                 if len(L.lsss)>0:
                     #
                     # lsss : list of sub segments ( iso segments siges)
-                    # lnss : list of diffaction point involving air walls
+                    # lnss : list of diffaction point involving 
 
                     lsss = np.array(L.lsss)
                     lnss = np.array(L.lnss)
 
-                    # number of structure element 
-                    nstr = siges[0,:,:]
+                    # array of structure element (nstr) with TxRx extension  (nstr=0)
+                    anstr = siges[0,:,:]
                     # type of interaction
                     typi = siges[1,:,:]
 
@@ -1136,57 +1153,56 @@ class Rays(PyLayers, dict):
                     #
                     # scalability : avoid a loop over all the subsegments in lsss
                     #
-                    lss = [ x for x in lsss if x in nstr.ravel()]
+                    lss = [ x for x in lsss if x in anstr.ravel()]
                     
+                    ray_to_delete = []
                     for s in lss: 
-                        u  = np.where(nstr==s)
+                        u  = np.where(anstr==s)
                         if len(u)>0:
-                            try:
-                                zs = ptees[2,u[0],u[1]][0]
-                            except:
-                                pass
+                            zs = ptees[2,u[0],u[1]]
                             zinterval = L.Gs.node[s]['z']
-                            if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                                # print s , zs , zinterval
-                                pass
-                            else: # signature is not valid
-                                # nstr : structure number
-                                nstr  = np.delete(nstr,u[1],axis=1)
-                                # typi : type of interaction 
-                                typi  = np.delete(typi,u[1],axis=1)
-                                # 3d sequence of points
-                                ptees = np.delete(ptees,u[1],axis=2)
-                                # extended (floor/ceil) signature
-                                siges = np.delete(siges,u[1],axis=2)
+                            unot_in_interval = ~((zs<=zinterval[1]) & (zs>=zinterval[0]))
+                            ray_to_delete.extend(u[1][unot_in_interval])
                             
-                    # lns : list of diffraction pointx in the current signature 
-                    #
+                    # lns : list of diffraction points in the current signature 
+                    #       with involving multi segments (iso)
                     # scalability : avoid a loop over all the points in lnss
                     #
-                    lns = [ x for x in lnss if x in nstr.ravel()]
+                    lns = [ x for x in lnss if x in anstr.ravel()]
+                    
                     #pdb.set_trace()
-                    for p in lns: 
-                        u  = np.where(nstr==p)
+                    # loop over multi diffraction points
+                    for npt in lns: 
+
+                        u  = np.where(anstr==npt)
                         if len(u)>0:
-                            try:
-                                zp = ptees[2,u[0],u[1]][0]
-                            except:
-                                pass
-                            #zinterval = L.Gs.node[s]['z']
-                            # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
-                            if zp < 1.5:
-                                # print s , zs , zinterval
-                                pass
-                            else: # signature is not valid
-                                # nstr : structure number
-                                nstr  = np.delete(nstr,u[1],axis=1)
-                                # typi : type of interaction 
-                                typi  = np.delete(typi,u[1],axis=1)
-                                # 3d sequence of points
-                                ptees = np.delete(ptees,u[1],axis=2)
-                                # extended (floor/ceil) signature
-                                siges = np.delete(siges,u[1],axis=2)
-                
+                           # height of the diffraction point 
+                            zp = ptees[2,u[0],u[1]]
+
+                            #
+                            # At which couple of segments belongs this height ? 
+                            # new function in layout get_diffslab
+                            ltu_seg,ltu_slab = L.get_diffslab(npt,zp)
+
+
+                            [ray_to_delete.append(u[1][i]) for i in range(len(zp)) 
+                            if ((ltu_slab[i][0]=='AIR') & (ltu_slab[i][1]=='AIR'))]
+                            # #zinterval = L.Gs.node[s]['z']
+                            # # if (zs<=zinterval[1]) & (zs>=zinterval[0]):
+                            # if ((tu_slab[0]!='AIR') & (tu_slab[1]!='AIR')):
+                            #     #print(npt , zp)
+                            #     pass
+                            # else: 
+                            #     ray_to_delete.append(u[1][0])
+                    
+                    # # nstr : structure number
+                    # nstr  = np.delete(nstr,ray_to_delete,axis=1)
+                    # typi : type of interaction 
+                    typi  = np.delete(typi,ray_to_delete,axis=1)
+                    # 3d sequence of points
+                    ptees = np.delete(ptees,ray_to_delete,axis=2)
+                    # extended (floor/ceil) signature
+                    siges = np.delete(siges,ray_to_delete,axis=2)
                     
                 if rmoutceilR:
                     # 1 determine Ceil reflexion index
@@ -1253,6 +1269,7 @@ class Rays(PyLayers, dict):
         # dis
         #
         val =0
+
         for k in r3d.keys():
             nrayk = np.shape(r3d[k]['sig'])[2]
             r3d[k]['nbrays'] = nrayk
@@ -1295,6 +1312,12 @@ class Rays(PyLayers, dict):
             r3d[k]['si']  = lsi[:,u]
             r3d[k]['dis'] = rlength[u]
 
+        r3d.delays = np.zeros((r3d.nray))
+        for k in r3d.keys():
+            ir = r3d[k]['rayidx']
+            r3d.delays[ir] = r3d[k]['dis']/0.3
+           
+
         r3d.origin_sig_name = self.origin_sig_name
         r3d.Lfilename = L._filename
         r3d.filename = L._filename.split('.')[0] + '_' + str(r3d.nray)
@@ -1322,6 +1345,12 @@ class Rays(PyLayers, dict):
                 dk[k] = d2
         return(dk)
 
+    def simplify(self):
+        if not self.is3D:
+            return None
+
+        for ir in self:
+            print self[ik]['si']
 
     def locbas(self, L):
         """ calculate ray local basis
@@ -2234,10 +2263,13 @@ class Rays(PyLayers, dict):
         """
 
         #print 'Rays evaluation'
+
         self.fGHz=fGHz
+
         # evaluation of interaction
         
         self.I.eval(fGHz)
+
         # if np.isnan(self.I.I).any():
         #     pdb.set_trace()
         # evaluation of base B  (2x2)
@@ -2439,7 +2471,60 @@ class Rays(PyLayers, dict):
         return(Cn)
 
 
+    def rayfromseg(self,ls):
+        ''' DEPRECATED 
+            use raysfromnstr instead
+        '''
+        DeprecationWarning('function name update: use raysfromnstr instead')
+        return self.rayfromnstr(ls)
 
+    def rayfromnstr(self,ls):
+        """ returns the indexes of rays for a given interaction list
+        """
+
+        if not isinstance(ls,list):
+            ls = [ls]
+
+        lur = []
+        for k in self:
+            aib = self[k]['sig'][0,...]
+            for i in ls :
+                # import ipdb
+                # ipdb.set_trace()
+                ui, ur = np.where(aib == i)
+                lur.extend(self[k]['rayidx'][ur].tolist())
+        return np.sort(lur)
+
+    def rayfromdelay(self,t0=0,t1=[]):
+        """ returns the indexes of rays between 2 timestamps t0 and t1
+        """
+        if t1 == []:
+            t1 = self.delays.max()
+        u = np.where((self.delays>t0) & (self.delays<t1))[0]
+        return u
+
+
+    def ray2slab(self,L,ir):
+        """ return the slabs for a given interaction index 
+
+
+            Parameters
+            ----------
+
+            L : Layout
+            ir : interaction block
+
+            Returns
+            -------
+
+            numpy array of slabs strings at the shape (ir,r)
+            ir : number of interactions ( of the interaction block)
+            r : number of rays
+
+        """
+
+        v=np.vectorize( lambda t: L.Gs.node[t]['name'] if (t!=0) and (t>0) else '_')
+        return v(self[ir]['sig'][0])
 
 
     def ray(self, r):
@@ -2456,6 +2541,8 @@ class Rays(PyLayers, dict):
 
         ir : index of interactions of r
 
+        Examples
+        --------
 
         """
         raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
@@ -2497,6 +2584,39 @@ class Rays(PyLayers, dict):
         ur = np.where(self[unbi]['rayidx']==ir)[0]
         return self[unbi]['rays'][:,ur]
 
+
+    def ray2sig(self,ir):
+        """ get signature to corresponding ray
+        """
+        unbi = self.ray2nbi(ir)
+        ur = np.where(self[unbi]['rayidx']==ir)[0]
+        return self[unbi]['sig'][:,:,ur].squeeze()
+
+    def ray2sig2d(self,ir):
+        """ get signature to corresponding ray
+        """
+        sig = self.ray2sig(ir)
+        sig = sig.squeeze()
+        sig = sig[:,1:-1] # remove extremal 0
+        unfc = np.where(sig[1,:]<4)[0]# index floor cell
+        sig2d = sig[:,unfc]
+        return sig2d
+
+    def ray2inter(self,ir,L,Si):
+        """ get interaction list (Gi style) from a ray
+
+        Parameters
+        ----------
+
+        ir : ray index
+        L : Layout
+        Si : Signatures object
+
+        """
+        sig = self.ray2sig2d(ir)
+        return Si.sig2inter(L,sig)
+
+
     def slab_nb(self, ir):
         """ returns the slab numbers of r
 
@@ -2517,6 +2637,29 @@ class Rays(PyLayers, dict):
         raypos = np.nonzero(self[self._ray2nbi[ir]]['rayidx'] == ir)[0]
         return(self[self._ray2nbi[ir]]['sig'][0,1:-1,raypos[0]])
 
+    def vis(self,ir,L):
+        typ = ['Tx'] + self.typ(ir) + ['Rx'] 
+        slab_nb = self.slab_nb(ir)
+        slab_nb = np.insert(slab_nb,0,0)
+        slab_nb = np.insert(slab_nb,len(slab_nb),0)
+        nbi = self._ray2nbi[ir]
+        raypos = np.nonzero(self[nbi]['rayidx'] == ir)[0]
+        pt = self[nbi]['pt'][:,:,raypos]
+        tz  = pt[2].ravel()
+        slab = [ L.Gs.node[x]['name'] for x in slab_nb if x > 0]
+        st = ''
+        for t in typ:
+            st = st + t+'      ' 
+        print st
+        st = ''
+        for s in slab_nb:
+            st = st + str(s)+'     ' 
+        print st
+        st = ''
+        for z in tz:
+            st = st + str(z)+'     ' 
+        print st
+        print(slab)
 
     def typ(self, ir,fromR=True):
         """ returns interactions list type of a given ray
@@ -2532,7 +2675,7 @@ class Rays(PyLayers, dict):
 
         """
         #
-        # In this function we can see that teh ceil and floor 
+        # In this function we can see that the ceil and floor 
         # are hard coded as reflection. This is going to evolve 
         # for implementation of multi floor 
         #
@@ -2577,7 +2720,7 @@ class Rays(PyLayers, dict):
                         .format('Index',
                                 'type',
                                 'slab', 
-                                'slab_id' ,
+                                'nstr' ,
                                 'th(rad)',
                                 'alpha',
                                 'gamma2',
@@ -2590,7 +2733,7 @@ class Rays(PyLayers, dict):
                      .format('Index',
                         'type',
                         'slab',
-                        'slab_id',
+                        'nstr',
                         'th(rad)',
                         'alpha',
                         'gamma2')
@@ -2758,7 +2901,7 @@ class Rays(PyLayers, dict):
         else:
             return(filename)
 
-    def _show3(self,L=[],rlist=[],newfig=False,**kwargs):
+    def _show3(self,L=[],rlist=[],newfig=False,cmap='jet',**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters
@@ -2766,13 +2909,12 @@ class Rays(PyLayers, dict):
 
         L : Layout object
             Layout to be displayed
-
-
         rlist : list
             list of index rays
         newfig : boolean (default: False)
             if true create a new mayavi figure
             else : use the current
+        ER: Ray energy 
 
         """
 
@@ -2814,23 +2956,17 @@ class Rays(PyLayers, dict):
                 l1 = l0+1
                 connection = np.vstack((l0,l1)).T
 
-                
-
                 if 'ER' in kwargs:
                     rc = np.repeat(colors[ridx],cnbi)
-                    # import ipdb
-                    # ipdb.set_trace()
-                    # T = np.repeat(np.linspace(-2 * np.pi, 2 * np.pi, nbr),cnbi)
                     rc[::cnbi]=0
-
-                    src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:],rc,colormap='hot')
-
+                    src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:],rc,colormap=cmap)
                 else: 
                     src = mlab.pipeline.scalar_scatter(pt[0,:], pt[1,:], pt[2,:])
+
                 src.mlab_source.dataset.lines=connection
                 src.update()
                 lines = mlab.pipeline.stripper(src)
-                mlab.pipeline.surface(lines,opacity=0.5,colormap='hot')
+                mlab.pipeline.surface(lines,opacity=0.5,colormap=cmap)
                 f.children[-1].name='Rays with ' + str(i) + 'interactions'
         else :
 
@@ -2838,8 +2974,6 @@ class Rays(PyLayers, dict):
             nr = np.array((nbi,rlist))
             unb = np.unique(nr[0,:])
             unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
-
-
 
             for i in unb:
                 raynb = (nr[1,unr[i]]).astype(int)
@@ -2850,7 +2984,6 @@ class Rays(PyLayers, dict):
   
                 pt = self[i]['pt'][:,:,ptidx].reshape(3,cnbi*nbr,order='F')
 
-
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
                 lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
 
@@ -2859,6 +2992,8 @@ class Rays(PyLayers, dict):
                 mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                      color=(0, 0, 0), )
                 f.children[-1].name='Rays with ' + str(int(i)) + 'interactions'
+
+        return(f)
 
     def show3(self,
               L=[],
@@ -2975,62 +3110,6 @@ class Rays(PyLayers, dict):
             os.system(chaine)
         else:
             return(filename)
-   # def show3(self,
-   #            bdis=True,
-   #            bstruc=True,
-   #            id=0,
-   #            strucname='defstr',
-   #            ilist=[],
-   #            raylist=[],pg=np.array([[0],[0],[0]])):
-   #      """ plot 3D rays within the simulated environment
-
-   #      Parameters
-   #      ----------
-
-   #      bdis : boolean
-   #          True
-   #      bstruc : boolean
-   #          True
-   #      id : int
-   #      strucname : string
-   #          'defstr'
-   #      ilist : list of group of interactions
-   #      raylist : list of index rays
-   #      pg : centroid of the structure
-        
-
-   #      """
-   #      if ilist == []:
-   #          ilist = self.keys()
-   #      pTx = self.pTx.reshape((3, 1))-pg
-   #      pRx = self.pRx.reshape((3, 1))-pg
-   #      filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
-   #      fo = open(filename, "w")
-   #      fo.write("LIST\n")
-   #      if bstruc:
-   #          fo.write("{<"+strucname+".off}\n")
-   #          # fo.write("{<strucTxRx.off}\n")
-   #          k = 0
-   #          for i in ilist:
-   #              if raylist == []:
-   #                  rlist = range(np.shape(self[i]['pt'])[2])
-   #              else:
-   #                  rlist = raylist
-   #              for j in rlist:
-   #                  ray = np.hstack((pTx,np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
-   #                  # ray = rays[i]['pt'][:,:,j]
-   #                  col = np.array([2, 0, 1])
-   #                  # print ray
-   #                  fileray = self.show3d(ray=ray, bdis=False,
-   #                                        bstruc=False, col=col, id=k)
-   #                  k += 1
-   #                  fo.write("{< " + fileray + " }\n")
-   #      fo.close()
-   #      if (bdis):
-   #          chaine = "geomview " + filename + " 2>/dev/null &"
-   #          os.system(chaine)
-   #      else:
-   #          return(filename)
 
 
 if __name__ == "__main__":

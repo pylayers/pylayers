@@ -139,16 +139,18 @@ Miscellaneous  functions
 
 
 """
-try:
-    import mayavi.mlab as mlab
-except:
-    pass
+#from __future__ import print_function
 import doctest
 import os
 import glob
 import re
 import pdb
-import Image
+import sys
+if sys.version_info.major==2:
+    import PIL.Image as Image
+    import mayavi.mlab as mlab
+else:
+    import image
 import numpy as np
 import scipy.linalg as la
 from scipy import io
@@ -211,6 +213,9 @@ class Pattern(PyLayers):
             []
         ph: list 
             []
+        pt : np.array (3,N)
+        pr : np.array (3,N)
+        azoffset : int (0) 
         fGHz:list 
             []
         nth: int 
@@ -247,6 +252,9 @@ class Pattern(PyLayers):
         """
         defaults = {'th':[],
                     'ph':[],
+                    'pt':[],
+                    'pr':[],
+                    'Rfloor':False,
                     'fGHz':[],
                     'nth':90,
                     'nph':181,
@@ -254,7 +262,8 @@ class Pattern(PyLayers):
                     'th0':0,
                     'th1':np.pi,
                     'ph0':0,
-                    'ph1':2*np.pi
+                    'ph1':2*np.pi,
+                    'azoffset':0
                    }
         for k in defaults:
             if k not in kwargs:
@@ -268,12 +277,36 @@ class Pattern(PyLayers):
             self.fGHz = kwargs['fGHz']
 
         self.nf = len(self.fGHz)
-
+        self.grid = kwargs['grid']
+        #
+        # if th and ph are empty 
+        #    if pt and pr are empty 
+        #          calculates from th0,th1,nth 
+        #                           ph0,phi,nph
+        #    else
+        #          calculates from points coordinates pt and pr
+        # else
+        #     take specified values
         if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
-            self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
-            self.grid = True
-            self.full_evaluated = True
+            if (kwargs['pt'] == []) and (kwargs['pr'] == []):
+                self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
+                self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
+                self.grid = True
+                self.full_evaluated = True
+            else:
+                si = kwargs['pr']-kwargs['pt']
+                ssi = np.sqrt(np.sum(si*si,axis=0))
+                sn = si/ssi[None,:]
+                self.theta = np.arccos(sn[2,:])
+                self.phi = np.mod(np.arctan2(sn[1,:],sn[0,:])+kwargs['azoffset'],2*np.pi)
+                self.grid = False
+                self.full_evaluated = True
+                if kwargs['Rfloor']:
+                    dR = np.sqrt(ssi**2 + (kwargs['pr'][2,:] + kwargs['pt'][2,:])**2)  #  reflexion length
+                    thetaR = np.arccos((kwargs['pr'][2,:] + kwargs['pt'][2,:]) / dR)
+                    self.theta = np.hstack([self.theta,thetaR])
+                    self.phi = np.hstack([self.phi,self.phi])
+                    
         else :
             assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
@@ -286,10 +319,10 @@ class Pattern(PyLayers):
         self.nth = len(self.theta)
         self.nph = len(self.phi)
 
-        self.grid = kwargs['grid']
+        
 
         #
-        # eval
+        # evaluation of the specific Pattern__p function 
         #
         eval('self._Pattern__p'+self.typ)(param=self.param)
 
@@ -332,6 +365,7 @@ class Pattern(PyLayers):
             # Nd x Nf
             self.sqG =  np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,:]
         self.radF()
+        self.gain()
 
 
     def __paperture(self,**kwargs):
@@ -613,6 +647,7 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(10**(GdB/10.))
         # radiating functions are deduced from square root of gain
         self.radF()
+        self.gain()
 
     def __pvsh3(self,**kwargs):
         """ calculate pattern for vsh3
@@ -674,6 +709,10 @@ class Pattern(PyLayers):
 
     def __psh3(self,**kwargs):
         """ calculate pattern for sh3
+        
+        Parameters
+        ----------
+
         """
 
         if self.grid:
@@ -683,7 +722,6 @@ class Pattern(PyLayers):
             theta = self.theta
             phi = self.phi
 
-        #pdb.set_trace()
         cx = self.S.Cx.s3
         cy = self.S.Cy.s3
         cz = self.S.Cz.s3
@@ -707,7 +745,7 @@ class Pattern(PyLayers):
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
             Ez = np.dot(cz,Y[k])
-            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
+            Fth,Fph = CartToSphere(theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
             self.Ft = Fth.transpose()
             self.Fp = Fph.transpose()
 
@@ -758,6 +796,65 @@ class Pattern(PyLayers):
             self.Ft = np.dot(Fat[:,None],np.ones(len(self.fGHz))[None,:])
             self.Fp = np.dot(Fap[:,None],np.ones(len(self.fGHz))[None,:])
 
+        self.gain()
+
+    def __pcst(self,**kwargs):
+       
+        defaults = {'param':{'p' : 2,
+                    'directory':'ant/FF_Results_txt_port_1_2/',
+                    'fGHz':np.arange(2,6.5,0.5)}}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            param=defaults['param']
+        else:
+            param=kwargs['param']
+       
+        self.fGHz = param['fGHz']
+        self.nf = len(self.fGHz)
+        
+        for f in param['fGHz']:
+            if ((int(f*10))%10)==0:
+               _filename1 = 'E_port'+str(param['p'])+'_f'+str(int(f))+'GHz.txt'
+               _filename2 = 'E_port'+str(param['p'])+'_f'+str(int(f))+'Ghz.txt'
+        #    print 'toto'
+            else:
+                _filename1 = 'E_port'+str(param['p'])+'_f'+str(f)+'GHz.txt'
+                _filename2 = 'E_port'+str(param['p'])+'_f'+str(f)+'Ghz.txt'
+        
+            
+            filename1 = pyu.getlong(_filename1, param['directory'])
+            filename2 = pyu.getlong(_filename2, param['directory'])
+            
+            try:
+                df = pd.read_csv(filename1,sep=';')
+            except:
+                df = pd.read_csv(filename2,sep=';')
+
+            columns = df.columns
+            theta = (df[columns[0]]*np.pi/180).values.reshape(72,37)
+            phi = (df[columns[1]]*np.pi/180).values.reshape(72,37)
+            modGrlzdB = df[columns[2]]
+            mFt = df[columns[3]]
+            pFt = df[columns[4]]
+            mFp = df[columns[5]]
+            pFp = df[columns[6]]
+            ratiodB = df[columns[7]]
+            Ft = (10**(mFt/20)*np.exp(1j*pFt*np.pi/180)).values.reshape(72,37)
+            Fp = (10**(mFp/20)*np.exp(1j*pFp*np.pi/180)).values.reshape(72,37)
+            Ft = Ft.swapaxes(0,1)
+            Fp = Fp.swapaxes(0,1)
+            try:
+                tFt=np.concatenate((tFt,Ft[...,None]),axis=2)
+                tFp=np.concatenate((tFp,Fp[...,None]),axis=2)
+            except:
+                tFt=Ft[...,None]
+                tFp=Fp[...,None]
+        self.phi = phi[:,0]
+        self.theta = theta[0,:]
+        self.nth = len(self.theta)
+        self.nph = len(self.phi)
+        self.Ft = tFt
+        self.Fp = tFp 
         self.gain()
 
     def __pHertz(self,**kwargs):
@@ -914,13 +1011,6 @@ class Pattern(PyLayers):
             kwargs['param']=defaults['param']
 
         self.param = kwargs['param']
-        self.Sc = self.param['Sc']
-        Np =self.p.shape[1]
-        if self.Sc==[]:
-            # Sc : Np x Np x Nf
-            self.Sc = np.eye(self.p.shape[1])[...,None]
-            #Sc2 = np.random.rand(Np,Np)[...,None]
-            #pdb.set_trace()
 
         lamda = (0.3/self.fGHz)
         k     = 2*np.pi/lamda
@@ -942,15 +1032,40 @@ class Pattern(PyLayers):
         # F = exp(+jk s.p)
         #
 
+        lshp = np.array(self.p.shape)
+        if len(lshp)>2:
+            Np = np.prod(lshp[1:])
+            p = self.p.reshape(3,Np)
+        else:
+            p = self.p
+        
+        Np = p.shape[1]
+        self.Sc = self.param['Sc']
+        if self.Sc==[]:
+            # Sc : Np x Np x Nf
+            self.Sc = np.eye(Np)[...,None]
+            #Sc2 = np.random.rand(Np,Np)[...,None]
+            #pdb.set_trace()
+
+        lshw = np.array(self.w.shape)
+        if len(lshw)>2:
+            Np2 = np.prod(lshw[0:-1])
+            assert(Np2==Np)
+            w = self.w.reshape(Np,lshw[-1])
+        else:
+            w = self.w
         # s : Nd x 3
         # p : 3 x Np
         #
         # sdotp : Nd x Np
 
-        sdotp  = np.dot(self.s,self.p)   # s . p
+        sdotp  = np.dot(self.s,p)   # s . p
         
         for a in self.la:
-            a.eval()
+            if not self.grid:
+                a.eval(grid=self.grid,ph=self.phi,th=self.theta)
+            else:
+                a.eval(grid=self.grid)
             # aFt : Nt x Np x Nf  |Nd x Nf
             # aFp : Nt x Np x Nf  |Nd x Nf
             aFt = a.Ft
@@ -987,8 +1102,7 @@ class Pattern(PyLayers):
         # w    :  Np(k) x Nf(i)
         # Sc   :  Np(k) x Np(m) x Nf(i)
         # wp   :  Np(m) x Nf(i)
-
-        wp = np.einsum('ki,kmi->mi',self.w,self.Sc)
+        wp = np.einsum('ki,kmi->mi',w,self.Sc)
 
         # add direction axis (=0) in w
 
@@ -1011,6 +1125,7 @@ class Pattern(PyLayers):
         if self.grid:
         #
         # Integrate over the Np points (axis =1)
+        # only if self.grid
         # Fp  : Nd x Nf
         # Ft  : Nd x Nf
         #
@@ -1073,7 +1188,7 @@ class Pattern(PyLayers):
         """
         self.G = np.real( self.Fp * np.conj(self.Fp)
                          +  self.Ft * np.conj(self.Ft) )
-        if len(self.G.shape)==3:
+        if self.grid:
             dt = self.theta[1]-self.theta[0]
             dp = self.phi[1]-self.phi[0]
             Nt = len(self.theta)
@@ -1096,7 +1211,7 @@ class Pattern(PyLayers):
                 V  = U*np.sin(self.theta)[:,None]
                 self.hpster[k] = np.sum(V)*dt*dp/(4*np.pi)
                 self.ehpbw[k] = np.arccos(1-2*self.hpster[k])
-        if len(self.G.shape)==2:
+        else:
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
 
@@ -1394,7 +1509,7 @@ class Antenna(Pattern):
         Parameters
         ----------
 
-        typ  : 'Omni','Gauss','WirePlate','3GPP'
+        typ  : 'Omni','Gauss','WirePlate','3GPP','atoll'
 
         _filename : string
                     antenna file name
@@ -1418,6 +1533,7 @@ class Antenna(Pattern):
         'mat': Matlab File
         'vsh2': unthresholded vector spherical coefficients
         'vsh3': thresholded vector spherical cpoefficients
+        'atoll': Atoll antenna file format
         'trx' : Satimo NFC raw data
         'trx1' : Satimo NFC raw data  (deprecated)
 
@@ -1491,6 +1607,11 @@ class Antenna(Pattern):
                 if self.ext == 'mat':
                     self.typ='mat'
                     self.loadmat(kwargs['directory'])
+                if self.ext == 'cst':
+                    self.typ='cst'
+                if self.ext == 'txt':
+                    self.typ='atoll'
+                    self.load_atoll(kwargs['directory'])
             elif isinstance(typ,list):
                 self._filename = typ
                 self.ext='hfss'
@@ -1511,6 +1632,11 @@ class Antenna(Pattern):
         if 'param' in self.__dict__:
             for k in self.param:
                 st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
+        if hasattr(self,'atoll'):
+            for k1 in self.atoll.keys():
+                st = st + str(k1)+'\n'
+                for k2 in self.atoll[k1]:
+                    st = st + ' '+ str(k2)+'\n'
         st = st+'------------------------\n'
         rtd = 180./np.pi
         if self.fromfile:
@@ -1530,6 +1656,7 @@ class Antenna(Pattern):
             st = st + "Nf : %d" % (len(self.fGHz)) +"\n"
 #
 #
+
         if self.evaluated:
             st = st + '-----------------------\n'
             st = st + '      evaluated        \n'
@@ -1658,16 +1785,142 @@ class Antenna(Pattern):
 
 
     def photo(self,directory=''):
-        """ show a picture of the antenna """
+        """ show a picture of the antenna 
+
+        Parameters
+        ----------
+
+        directory : string
+
+        """
 
         if directory == '':
             directory = os.path.join('ant','UWBAN','PhotosVideos')
 
         _filename = 'IMG_'+self.PhotoFile.split('-')[1]+'.JPG'
         filename = pyu.getlong(_filename,directory)
-        I = Image.open(filename)
+        if sys.version_info.major==2:
+            I = Image.open(filename)
+        else:
+            I = image.open(filename)
+
         I.show()
 
+
+    def load_atoll(self,directory="ant"):
+        """ load antenna from Atoll file 
+        
+        Atoll format provides Antenna gain given for the horizontal and vertical plane 
+        for different frequencies and different tilt values 
+
+        Parameters
+        ----------
+
+        directory : string 
+
+        The dictionnary attol is created 
+
+        """
+        _filemat = self._filename
+        fileatoll = pyu.getlong(_filemat, directory)
+        fd = open(fileatoll)
+        lis = fd.readlines()
+        tab = []
+        for li in lis:
+            lispl= li.split('\t')
+            if (lispl[0]!=''):
+                tab.append(lispl)
+
+        deg_to_rad = np.pi/180.
+        lbs_to_kg = 0.45359237
+        columns = tab[0]
+        #pdb.set_trace()
+        for k in np.arange(len(tab)-1):
+            df = pd.DataFrame([tab[k+1]],columns=columns)
+            try:
+                dff=dff.append(df)
+            except:
+                dff= df
+        self.raw = dff
+        dff = dff.iloc[:,[0,8,9,10,2,5,7,14,11,16,17,13,6,12]]
+        #dff = df['Name','Gain  (dBi)','FMin','FMax','FREQUENCY','Pattern','V_WIDTH','H_WIDTH','DIMENSIONS HxWxD   (INCHES)','WEIGHT (LBS)']
+        dff.columns = ['Name','Fmin','Fmax','F','Gmax','G','Hpbw','H_width','V_width','HxWxD','Weight','Tilt','Etilt','Ftob']
+        dff=dff.apply(lambda x :pd.to_numeric(x,errors='ignore'))
+        #
+        # Parse polarization in the field name
+        #
+        upolarp45 = ['(+45)' in x for x in dff['Name']]
+        upolarm45 = ['(-45)' in x for x in dff['Name']]  
+        if (sum(upolarp45)>0):
+            dff.loc[upolarp45,'Polar']=45
+        if (sum(upolarm45)>0):
+            dff.loc[upolarm45,'Polar']=-45
+
+        atoll = {}
+        dfband = dff.groupby(['Fmin'])
+        for b in dfband:
+            keyband = str(b[0])+'-'+str(b[1]['Fmax'].values[0])
+            atoll[keyband]={}  # band
+            dfpol = b[1].groupby(['Polar'])
+            for p in dfpol:
+                atoll[keyband][p[0]] = {} # polar
+                dftilt = p[1].groupby(['Tilt'])
+                Ghor = np.empty((360,1))  # angle , tilt , frequency
+                Gver = np.empty((360,1))  # angle , 
+                ct = 0
+                tilt = []
+                for t in dftilt:
+                    dffreq = t[1].groupby(['F'])
+                    ct+=1
+                    cf=0 
+                    tilt.append(t[0])
+                    freq = []
+                    for f in dffreq:
+                        freq.append(f[0])
+                        cf+=1
+                        if len(f[1])==1:
+                            df = f[1]
+                        else:
+                            df = f[1].iloc[0:1]
+                        Gmax = df['Gmax'].values
+                        str1 = df.loc[:,'G'].values[0].replace('  ',' ')
+                        lstr = str1.split(' ')
+                        Pattern = [ eval(x) for x in lstr[0:-1]]
+                        # 4 fist field / # of points
+                        Nd,db,dc,Np = Pattern[0:4]
+                        #print(Nd,b,c,Np)
+                        tmp = np.array(Pattern[4:4+2*Np]).reshape(Np,2)
+                        ah   = tmp[:,0]
+                        ghor = Gmax-tmp[:,1]
+                        # 4 fist field / # of points
+                        da,db,dc,dd = Pattern[4+2*Np:4+2*Np+4]
+                        #pdb.set_trace()
+                        #print a,b,c,d
+                        tmp = np.array(Pattern[4+2*Np+4:]).reshape(dc,2)
+                        gver = Gmax-tmp[:,0]
+                        av = tmp[:,1]
+                        try:
+                            Ghor = np.hstack((Ghor,ghor[:,None]))
+                            Gver = np.hstack((Gver,gver[:,None]))
+                        except:
+                            pdb.set_trace()
+                Ghor = np.delete(Ghor,0,1)
+                Gver = np.delete(Gver,0,1)
+                atoll[keyband][p[0]]['hor'] = Ghor.reshape(360,ct,cf)
+                atoll[keyband][p[0]]['ver'] = Gver.reshape(360,ct,cf)
+                atoll[keyband][p[0]]['tilt'] = np.array(tilt)
+                atoll[keyband][p[0]]['freq'] = np.array(freq)
+        self.atoll = atoll
+        # Gmax = eval(self.df['Gain  (dBi)'].values[0])
+        #fig = plt.figure()
+        #ax =plt.gca(projection='polar')
+        #ax =plt.gca()
+        #ax.plot(H2[:,1]*deg_to_rad,Gain-H2[:,0],'r',label='vertical',linewidth=2)
+        #ax.plot(H1[:,0]*deg_to_rad,Gain-H1[:,1],'b',label='horizontal',linewidth=2)
+        #ax.set_rmin(-30)
+        #plt.title(dir1+'/'+filename+' Gain : '+df['Gain  (dBi)'].values[0])
+        #BXD-634X638XCF-EDIN.txt
+        #BXD-636X638XCF-EDIN.txt        
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
@@ -2011,7 +2264,7 @@ class Antenna(Pattern):
         #
         # Construct difference between reference and reconstructed
         #
-        if kf<>-1:
+        if kf!=-1:
             dTh = (FTh[kf, :, :] - self.Ft[kf, ::dsf, ::dsf])
             dPh = (FPh[kf, :, :] - self.Fp[kf, ::dsf, ::dsf])
             #
@@ -2196,7 +2449,7 @@ class Antenna(Pattern):
 
         f = d[:, 0]
         if f[0] == 0:
-            print "error : frequency cannot be zero"
+            print("error : frequency cannot be zero")
         # detect frequency unit
         # if values are above 2000 its means frequency is not expressed
         # in GHz
@@ -2331,50 +2584,54 @@ class Antenna(Pattern):
 
 
         """
-        print self._filename
-        print "type : ", self.typ
+        print(self._filename)
+        print("type : ", self.typ)
         if self.typ == 'mat':
-            print self.DataFile
-            print self.AntennaName
-            print self.Date
-            print self.StartTime
-            print self.Notes
-            print self.Serie
-            print self.Run
-            print "Nb theta (lat) :", self.nth
-            print "Nb phi (lon) :", self.nph
+            print(self.DataFile)
+            print(self.AntennaName)
+            print(self.Date)
+            print(self.StartTime)
+            print(self.Notes)
+            print(self.Serie)
+            print(self.Run)
+            print("Nb theta (lat) :", self.nth)
+            print("Nb phi (lon) :", self.nph)
         if self.typ =='nfc':
-            print "--------------------------"
-            print "fmin (GHz) :", self.fGHz[0]
-            print "fmax (GHz) :", self.fGHz[-1]
-            print "Nf   :", self.nf
-            print "thmin (rad) :", self.theta[0]
-            print "thmax (rad) :", self.theta[-1]
-            print "Nth  :", self.nth
-            print "phmin (rad) :", self.phi[0]
-            print "phmax (rad) :", self.phi[-1]
-            print "Nph  :", self.nph
+            print( "--------------------------")
+            print( "fmin (GHz) :", self.fGHz[0])
+            print( "fmax (GHz) :", self.fGHz[-1])
+            print( "Nf   :", self.nf)
+            print( "thmin (rad) :", self.theta[0])
+            print( "thmax (rad) :", self.theta[-1])
+            print( "Nth  :", self.nth)
+            print( "phmin (rad) :", self.phi[0])
+            print( "phmax (rad) :", self.phi[-1])
+            print( "Nph  :", self.nph)
         try:
             self.C.info()
         except:
-            print "No vsh coefficient calculated yet"
+            print("No vsh coefficient calculated yet")
 
     #@mlab.show
-    def _show3(self,newfig = True,colorbar =True,
-                    name=[],interact=False,title=True,**kwargs ):
+    def _show3(self,bnewfig = True,
+                    bcolorbar =True,
+                    name=[],
+                    binteract=False,
+                    btitle=True,
+                    bcircle=True,
+                    **kwargs ):
         """ show3 mayavi
 
         Parameters
         ----------
 
-        fGHz : float
-            frequency
-        title : bool
+        btitle : boolean
             display title
-        colorbar :
+        bcolorbar : boolean
             display colorbar
-        interact :
+        binteract : boolean 
             enable interactive mode
+        newfig: boolean
 
 
         see also
@@ -2384,16 +2641,18 @@ class Antenna(Pattern):
 
         """
 
-
-
-
         if not self.evaluated:
             self.eval(pattern=True)
 
-
+        # k is the frequency index
+        if hasattr(self,'p'):
+            lpshp = len(self.p.shape)
+            sum_index = tuple(np.arange(1,lpshp))
+            po = np.mean(self.p,axis=sum_index)
+            kwargs['po']=po
         x, y, z, k, scalar  = self._computemesh(**kwargs)
 
-        if newfig:
+        if bnewfig:
             mlab.clf()
             f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
@@ -2414,12 +2673,39 @@ class Antenna(Pattern):
         else :
             f.children[-1].name = name + self._filename
 
-        if colorbar :
+        if bcolorbar :
             mlab.colorbar()
-        if title:
+
+        if btitle:
             mlab.title(self._filename + ' @ ' + str(self.fGHz[k]) + ' GHz',height=1,size=0.5)
 
-        if interact:
+        def circle(typ='xy',a=1.2):
+            phi = np.linspace(0, 2*np.pi, 2000)
+            if typ=='xy':
+                return [ a*np.cos(phi) ,
+                         a*np.sin(phi) ,
+                         np.zeros(len(phi))
+                         ]
+            if typ=='yz':
+                return [ np.zeros(len(phi)),
+                         a*np.cos(phi) ,
+                         a*np.sin(phi) 
+                         ]
+            if typ=='xz':
+                return [ a*np.cos(phi),
+                         a*np.zeros(len(phi)),
+                         np.sin(phi) 
+                         ]
+        # draw 3D circle around pattern
+        if bcircle:
+            xc,yc,zc =circle('xy') # blue
+            mlab.plot3d(xc,yc,zc,color=(0,0,1))
+            xc,yc,zc =circle('yz') # red
+            mlab.plot3d(xc,yc,zc,color=(1,0,0))
+            xc,yc,zc =circle('xz') # green
+            mlab.plot3d(xc,yc,zc,color=(0,1,0))
+
+        if binteract:
             self._outline = mlab.outline(self._mayamesh, color=(.7, .7, .7))
             self._outline.visible=False
             def picker_callback(picker):
@@ -2429,6 +2715,8 @@ class Antenna(Pattern):
                     self._outline.visible = not self._outline.visible
                     self._is_selected=self._outline.visible
             picker = f.on_mouse_pick(picker_callback)
+
+        return(f)
 
 
 
@@ -2494,7 +2782,7 @@ class Antenna(Pattern):
         if fGHz == []:
             k = len(self.fGHz)/2
         else :
-            k = np.where(fGHz>self.fGHz)[0]
+            k = np.where(self.fGHz>=fGHz)[0][0]
 
         if len(self.Ft.shape)==3:
             r = self.sqG[:,:,k]
@@ -3425,7 +3713,7 @@ class Antenna(Pattern):
         Cimin = abs(self.C.Ci[:, 0:20, 0:20]).min()
         Cimax = abs(self.C.Ci[:, 0:20, 0:20]).max()
 
-        print Brmin, Brmax, Bimin, Bimax, Crmin, Crmax, Cimin, Cimax
+        # print(Brmin, Brmax, Bimin, Bimax, Crmin, Crmax, Cimin, Cimax)
 
         for k in range(self.nf):
             plt.figure()
@@ -3538,9 +3826,9 @@ class Antenna(Pattern):
         #filevsh3 = pyu.getlong(self._filename,'ant')
 
         if os.path.isfile(filevsh3):
-            print filevsh3, ' already exist'
+            print( filevsh3, ' already exist')
         else:
-            print 'create ', filevsh3, ' file'
+            print( 'create ', filevsh3, ' file')
 
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
@@ -3565,15 +3853,15 @@ class Antenna(Pattern):
         """
 
         # create sh2 file
-        typ = self._filename.split('.')[1]
-        self.typ = typ
+        #typ = self._filename.split('.')[1]
+        #self.typ = typ
 
-        _filesh2 = self._filename.replace('.'+ typ, '.sh2')
+        _filesh2 = self._filename.replace('.'+ self.typ, '.sh2')
         filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
         if os.path.isfile(filesh2):
-            print filesh2, ' already exist'
+            print(filesh2, ' already exist')
         else:
-            print 'create ', filesh2, ' file'
+            print('create ', filesh2, ' file')
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
             coeff['fmax'] = self.fGHz[-1]
@@ -3594,21 +3882,20 @@ class Antenna(Pattern):
     def savesh3(self):
         """ save antenna in sh3 format
 
-        Create a .sh3 antenna file
-
+        create a .sh3 antenna file
 
         """
         # create sh3 file
-        typ = self._filename.split('.')[1]
-        self.typ = typ
-        _filesh3 = self._filename.replace('.'+ typ, '.sh3')
+        # if self._filename has an extension 
+        # it is replace by .sh3
+        #typ = self._filename.split('.')[1]
+        #self.typ = typ
+        _filesh3 = self._filename.replace('.'+ self.typ, '.sh3')
         filesh3 = pyu.getlong(_filesh3, pstruc['DIRANT'])
         if os.path.isfile(filesh3):
-            print filesh3, ' already exist'
-
-
+            print(filesh3, ' already exist')
         else:
-            print 'create ', filesh3, ' file'
+            print('create ', filesh3, ' file')
 
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
@@ -3636,7 +3923,7 @@ class Antenna(Pattern):
     def loadvsh3(self):
         """ Load antenna's vsh3 file
 
-            vsh3 file contains a thesholded version of vsh coefficients in shape 3
+            vsh3 file contains a thresholded version of vsh coefficients in shape 3
 
         """
 
@@ -3672,7 +3959,7 @@ class Antenna(Pattern):
             self.nf = np.shape(Br.s3)[0]
             self.fGHz = np.linspace(fmin, fmax, self.nf)
         else:
-            print _filevsh3, ' does not exist'
+            print(_filevsh3, ' does not exist')
 
     def loadsh3(self):
         """ Load antenna's sh3 file
@@ -3744,7 +4031,7 @@ class Antenna(Pattern):
             self.nf = np.shape(Cx.s3)[0]
             self.fGHz = np.linspace(fmin, fmax, self.nf)
         else:
-            print _filesh3, ' does not exist'
+            print(_filesh3, ' does not exist')
 
     def savevsh2(self, filename = ''):
         """ save coeff in  a .vsh2 antenna file
@@ -3764,9 +4051,9 @@ class Antenna(Pattern):
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
-            print filevsh2, ' already exist'
+            print(filevsh2, ' already exist')
         else:
-            print 'create ', filevsh2, ' file'
+            print('create ', filevsh2, ' file')
 
             coeff = {}
             coeff['fmin'] = self.fGHz[0]
@@ -3836,7 +4123,7 @@ class Antenna(Pattern):
             Nf = np.shape(Cx.s2)[0]
             self.fGHz = np.linspace(fmin, fmax, Nf)
         else:
-            print _filesh2, ' does not exist'
+            print( _filesh2, ' does not exist')
 
 
 
@@ -3876,7 +4163,7 @@ class Antenna(Pattern):
             Nf = np.shape(Br.s2)[0]
             self.fGHz = np.linspace(fmin, fmax, Nf)
         else:
-            print _filevsh2, ' does not exist'
+            print( _filevsh2, ' does not exist')
 
     def loadvsh3_old(self):
         """ Load antenna vsh coefficients in shape 3
@@ -3900,7 +4187,7 @@ class Antenna(Pattern):
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             self.fGHz = np.linspace(fmin, fmax, 121)
         else:
-            print _filevsh3, ' does not exist'
+            print(_filevsh3, ' does not exist')
 
     def pol2cart(self, ith):
         """ converts FTheta, FPhi to Fx,Fy,Fz for theta=ith
@@ -4180,7 +4467,7 @@ def forcesympol(A):
         plt.show()
 
     else:
-        print "Error: m>n!!!"
+        print("Error: m>n!!!")
 
 def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=18):
     """ makes comparison between original pattern and reconstructed pattern
@@ -4492,12 +4779,12 @@ def show3D(F, theta, phi, k, col=True):
     nph = len(phi)
 
     if k >= np.shape(F)[0]:
-        print 'Error: frequency index k not in F defined interval'
+        print('Error: frequency index k not in F defined interval')
     if nth != np.shape(F)[1]:
-        print 'Error: shape mistmatch between theta and F'
+        print('Error: shape mistmatch between theta and F')
 
     if nph != np.shape(F)[2]:
-        print 'Error: shape mistmatch between phi and F'
+        print('Error: shape mistmatch between phi and F')
 
     fig = plt.figure()
     ax = axes3d.Axes3D(fig)
@@ -4522,6 +4809,45 @@ def show3D(F, theta, phi, k, col=True):
     else:
         ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
 
+class AntPosRot(Antenna):
+    """ Antenna + position + Rotation
+    """
+    def __init__(self,name,p,T):
+        Antenna.__init__(self,name)
+        self.p = p 
+        self.T = T 
+    def _show3(self,**kwargs):
+        Antenna._show3(self,newfig=False,interact=False,T=self.T,po=self.p,**kwargs)
+
+    def field(self,p):
+        """
+        Parameters
+        ----------
+
+        p : np.array (N,3)
+
+        """
+        rad_to_deg = 180/np.pi
+        assert p.shape[-1]==3
+
+        if len(p.shape)==1:
+            r = p[None,:]-self.p[None,:]
+        else:
+            r = p-self.p[None,:]
+        dist = np.sqrt(np.sum(r*r,axis=-1))[:,None]
+        u = r/dist
+        th = np.arccos(u[:,2])
+        ph = np.arctan2(u[:,1],u[:,0])
+        tang = np.vstack((th,ph)).T
+        #print("global",tang*rad_to_deg)
+        Rt, tangl = geu.BTB_tx(tang, self.T)
+        #print("local",tangl*rad_to_deg)
+        self.eval(th=tangl[:,0],ph=tangl[:,1],grid=False)
+        E = (self.Ft[:,None,:]*self.T[:,2][None,:,None]+self.Fp[:,None,:]*self.T[:,0][None,:,None])
+        P = np.exp(-1j*2*np.pi*self.fGHz[None,None,:]*dist[...,None]/0.3)/dist[...,None]
+        EP = E*P
+        return(EP)
+        #Rr, rangl = geu.BTB_rx(rang, self.Tr)
 
 if (__name__ == "__main__"):
     doctest.testmod()

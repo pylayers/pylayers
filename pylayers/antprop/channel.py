@@ -82,6 +82,7 @@ Members
     Tchannel.pdp
 
 """
+from __future__ import print_function
 import doctest
 import pdb
 import numpy as np
@@ -102,7 +103,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 try:
     import h5py
 except:
-    print 'h5py is not installed: Ctilde(object cannot be saved)'
+    print('h5py is not installed: Ctilde(object cannot be saved)')
 
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
@@ -176,8 +177,31 @@ class AFPchannel(bs.FUsignal):
 
 class ADPchannel(bs.TUsignal):
     """ Angular Delay Profile channel
+
+    Members
+    -------
+
+    a : 
+    offset :
+    theta :  float 
+    phi : 
+    tau : 
+
     """
     def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename='',offset=0):
+        """
+        Parameters
+        ----------
+
+        x : 
+        y :
+        a : 
+        tx :
+        rx :
+        _filename :
+        offset  : 
+
+        """
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
         self.a = a
         self.offset = offset
@@ -224,6 +248,8 @@ class ADPchannel(bs.TUsignal):
 
 
         Na = self.y.shape[0]
+        # integration over frequency 
+        # adp (angle) 
         adp = np.real(np.sum(self.y*np.conj(self.y),axis=1))
         u  = np.where(adp==max(adp))[0]
         if fig==[]:
@@ -508,7 +534,7 @@ class TBchannel(bs.TBsignal):
         K = Pmax/(Ptot-Pmax)
         if dB:
             K=10*np.log10(K)
-        return(K[0])
+        return K[0]
 
     def tau_rms(self, alpha=0.1,threshold_dB=20, tau0=0):
         r""" calculate root mean square delay spread starting from delay tau_0
@@ -553,7 +579,7 @@ class TBchannel(bs.TBsignal):
         
         taurms = np.sqrt(num/den)
 
-        return(taurms)
+        return taurms
 
     def toFD(self,fGHz=np.linspace(2,5,256)):
         """ Transform to Frequency domain
@@ -727,7 +753,7 @@ class TUchannel(TBchannel,bs.TUsignal):
                 d = 0
                 n = u[0]
                 N = np.hstack((N, n))
-                #print N
+                #print(N)
 
             thre = thre - step
             if thre < 0:
@@ -899,7 +925,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         t = self.x
 
         alpha = np.sqrt(self.Emax()) / np.sqrt(self.Etot())
-        print alpha
+        print(alpha)
         th = alpha * maxy2
 
         v = np.nonzero(y2 >= th)[0]
@@ -916,7 +942,7 @@ class TUchannel(TBchannel,bs.TUsignal):
 
         alpha = (np.sqrt(self.Etot(
         )) - np.sqrt(self.Emax())) / np.sqrt(self.Etot())
-        print alpha
+        print(alpha)
         th = alpha * maxy2
 
         v = np.nonzero(y2 >= th)[0]
@@ -999,7 +1025,7 @@ class TUchannel(TBchannel,bs.TUsignal):
             P.y = P.y / (R * Tpns)
         else:
             P.y = P.y/ (R* (P.x[-1]-P.x[0]))
-        return(P)
+        return P
 
     def awgn(self,PSDdBmpHz=-174,snr=0,seed=1,typ='psd',R=50):
         """ add a white Gaussian noise
@@ -1333,7 +1359,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         if len(shy)>1:
            self.y = np.vstack((self.y,ynew))
         else:
-           self.y = ynew[np.newaxis,:]
+           self.y = ynew[None,:]
         self.y = np.delete(self.y,0,0)
 
     def readcir(self,filename,outdir=[]):
@@ -1347,7 +1373,7 @@ class TUchannel(TBchannel,bs.TUsignal):
         outdir : string
             output directory
         """
-        if outdir <> []:
+        if outdir != []:
             outdir = 'output/'+outdir
             filename = getlong(filename, outdir)
 
@@ -1829,6 +1855,8 @@ class Tchannel(bs.FUsignal):
 
     The transmission channel TChannel is obtained through combination of the propagation
     channel and the antenna transfer functions from both transmitter and receiver.
+    This channel contains all the spatial information for each individual ray. 
+    Warning : This is a frequency domain channel deriving from bs.FUsignal 
 
     Members
     -------
@@ -1987,9 +2015,9 @@ class Tchannel(bs.FUsignal):
 
         with
             a = np.ndarray
-                postion of point a (transmitter)
+                position of point a (transmitter)
             b = np.ndarray
-                postion of point b (receiver)
+                position of point b (receiver)
             Ta = np.ndarray
                 rotation matrice of antenna a
             Tb = np.ndarray
@@ -2048,11 +2076,11 @@ class Tchannel(bs.FUsignal):
             if not grpname in fh5['H'].keys():
                 fh5['H'].create_group(grpname)
             else :
-                print 'Warning : H/'+grpname +'already exists in '+filenameh5
+                print('Warning : H/'+grpname +'already exists in '+filenameh5)
             f=fh5['H/'+grpname]
 
             for k,va in self.__dict__.items():
-                #print k,va
+                #print(k,va)
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
         except:
@@ -2094,7 +2122,7 @@ class Tchannel(bs.FUsignal):
             raise NameError('Channel Tchannel: issue when reading h5py file')
 
 
-    def apply(self, W):
+    def apply(self, W=[]):
         """ apply FUsignal W to the Tchannel
 
         Parameters
@@ -2108,7 +2136,6 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
-        mport ipdb
         V : FUDAsignal
 
         Notes
@@ -2118,18 +2145,21 @@ class Tchannel(bs.FUsignal):
 
             + W may have a more important number of points and a smaller frequency band.
             + If the frequency band of the waveform exceeds the one of the
-            Transmission Channel, a warning is sent.
+            transmission channel, a warning is sent.
             + W is a FUsignal whose shape doesn't need to be homogeneous with FUChannel H
 
         """
+        if W!=[]:
+            U = W * self 
+        else:
+            U = self
 
-        U = W * self 
         V = Tchannel(x= U.x, y = U.y, tau = self.taud, dod = self.dod, doa= self.doa)
 
         return(V)
 
 
-    def applywav(self, Wgam):
+    def applywav(self, Wgam=[]):
         """ apply waveform (time domain ) to obtain the
             rays impulses response
 
@@ -2173,7 +2203,31 @@ class Tchannel(bs.FUsignal):
         return rir
 
 
-    def get_cir(self,Wgam):
+    def getcir(self,BWGHz=1,Nf=40000,fftshift=False):
+        """
+        Parameters
+        ----------
+
+        BWGHz : Bandwidth 
+        Nf    : Number of frequency point 
+        fftshift : boolean 
+
+        """
+        fGHz  = np.linspace(0,BWGHz,Nf)
+        dfGHz = fGHz[1]-fGHz[0]
+        tauns = np.linspace(0,1/dfGHz,Nf)
+        E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
+        H    = np.sum(E*self.y,axis=0)
+        cir  = np.fft.ifft(H,axis=2)
+        if fftshift:
+            cir = np.fft.fftshift(cir,axes=2)
+            tauns = np.linspace(-Nf/(2*BWGHz),Nf/(2*BWGHz)-1/BWGHz,Nf)
+
+        cir = bs.TUsignal(x=tauns,y=cir)
+
+        return(cir)
+
+    def get_cir(self,Wgam=[]):
         """ get Channel impulse response of the channel 
             for a given waveform
 
@@ -2219,8 +2273,8 @@ class Tchannel(bs.FUsignal):
 
 
         """
-        print DeprecationWarning(
-            'WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav')
+        print(DeprecationWarning(
+            'WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav'))
         H = self.H
         h = H.ft1(500, 1)
         dxh = h.dx()
@@ -2302,11 +2356,11 @@ class Tchannel(bs.FUsignal):
         WGHz=kwargs['WGHz']
         Ntap=kwargs['Ntap']
         # yb : tau x f x 1
-        yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+        yb = self.y[:,:,None]*np.exp(-2 * 1j * np.pi *self.taud[:,None,None] * fcGHz )
         # l : 1 x 1 x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
+        l  = np.arange(Ntap)[None,None,:]
         # l : tau x 1 x 1
-        tau = self.tau0[:,np.newaxis,np.newaxis]
+        tau = self.tau0[:,None,None]
         # S : tau x f x tap
         S   = np.sinc(l-tau*WGHz)
         # htap : f x tap
@@ -2348,8 +2402,8 @@ class Tchannel(bs.FUsignal):
 
         """
 
-        print DeprecationWarning(
-            'WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav')
+        print(DeprecationWarning(
+            'WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav'))
 
         # product in frequency domain between Channel (self) and waveform
         Y = self.apply(Wgam)
@@ -2377,8 +2431,8 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal
 
         """
-        print DeprecationWarning(
-            'WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav')
+        print(DeprecationWarning(
+            'WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav'))
         Hab = self.H.ft2(0.001)
         HabW = Hab * Wgam
         RI = HabW.symHz(10000)
@@ -2494,8 +2548,8 @@ class Tchannel(bs.FUsignal):
         col = 10 * np.log10(Etot)
         kwargs['c'] = col
         if len(col) != len(di):
-            print "len(col):", len(col)
-            print "len(di):", len(di)
+            print("len(col):", len(col))
+            print("len(di):", len(di))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
         if reverse :
@@ -2642,8 +2696,8 @@ class Tchannel(bs.FUsignal):
         cv = np.where(col >= clipval)[0]
         kwargs['c'] = col[cv]
         if len(col) != len(di):
-            print "len(col):", len(col)
-            print "len(di):", len(dir)
+            print("len(col):", len(col))
+            print("len(di):", len(dir))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
         if a == 'phi':
@@ -2741,7 +2795,7 @@ class Tchannel(bs.FUsignal):
 
     def field(self):
 
-        tau  = self.tk[:,None,None,None]
+        tau  = self.tau[:,None,None,None]
         fGHz = self.x[None,None,None,:]
         E = np.exp(-2*1j*tau*fGHz)
         F = self.y*E
@@ -2757,7 +2811,7 @@ class Tchannel(bs.FUsignal):
         ----------
 
         mode : string
-            center | mean | integ    (different manner to get the value)
+            center | mean | integ  (different manner to get the value)
         Friis : boolean
             apply the Frris coeff(2/(4p pi f)
         sumray: boolean
@@ -2769,6 +2823,7 @@ class Tchannel(bs.FUsignal):
         #  axis 1 : ray
         #  axis 1 : frequency
         #
+
         if self.isFriis:
             Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=False)
         else:
@@ -2841,13 +2896,13 @@ class Tchannel(bs.FUsignal):
         if (abs(dxh - dxw) > 1e-10):
             if (dxh < dxw):
                 # reinterpolate w
-                print " resampling w"
+                print(" resampling w")
                 x_new = arange(W.x[0], W.x[-1] + dxh, dxh)[0:-1]
                 Wk = W.resample(x_new)
                 dx = dxh
             else:
                 # reinterpolate h
-                print " resampling h"
+                print(" resampling h")
                 x_new = arange(Hk.x[0], Hk.x[-1] + dxw, dxw)[0:-1]
                 Hk = Hk.resample(x_new)
                 dx = dxw
@@ -2877,10 +2932,12 @@ class Tchannel(bs.FUsignal):
         This function will be deprecated by energy function
 
         """
-
-        Ak   = self.y[:, ufreq]
-        Pr   = np.sum(Ak*np.conj(Ak))
-        akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.tk)
+        # Amplitude
+        Ak    = self.y[:, ufreq]
+        # Power 
+        Pr    = np.sum(Ak*np.conj(Ak))
+        # Complex amplitude
+        akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.taud)
         Prp   = np.abs(np.sum(akp))**2
         PrdB  = 10*np.log10(Pr)
         PrpdB = 10*np.log10(Prp)
@@ -3058,10 +3115,10 @@ class Tchannel(bs.FUsignal):
         vb0 =  phi_vb/(2*np.pi)
         # standard deviation of  velocity vector orientation is inversely
         # proportional to velocity magnitude
-        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,np.newaxis,np.newaxis]
-        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,np.newaxis,np.newaxis]
-        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,np.newaxis,np.newaxis]
-        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,np.newaxis,np.newaxis]
+        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,None,None]
+        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,None,None]
+        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,None,None]
+        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,None,None]
 
         # uniform sampling over the sphere
         tha = np.arccos(2*va-1)
@@ -3073,31 +3130,31 @@ class Tchannel(bs.FUsignal):
         vay = np.cos(tha)*np.sin(pha)
         vaz = np.sin(tha)*np.cos(pha*0)
 
-        vaxy = np.concatenate([vax[np.newaxis,np.newaxis,np.newaxis,...],vay[np.newaxis,np.newaxis,np.newaxis,...]])
-        va = np.concatenate([vaxy,vaz[np.newaxis,np.newaxis,np.newaxis,...]])
+        vaxy = np.concatenate([vax[None,None,None,...],vay[None,None,None,...]])
+        va = np.concatenate([vaxy,vaz[None,None,None,...]])
 
         vbx = np.cos(thb)*np.cos(phb)
         vby = np.cos(thb)*np.sin(phb)
         vbz = np.sin(thb)*np.cos(phb*0)
 
-        vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
+        vbxy = np.concatenate([vbx[None,None,None,...],vby[None,None,None,...]])
 
         # 3 x r x f x s x m x tap
-        vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
+        vb = np.concatenate([vbxy,vbz[None,None,None,...]])
 
         # beta : r x f x s x m x tap
-        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
-        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
+        betaa = np.sum(ska[:,:,None,None,None,None]*va,axis=0)
+        betab = np.sum(skb[:,:,None,None,None,None]*vb,axis=0)
 
 
         # m discrete time axis
         # r x f x s x m x tap
-        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
+        m = np.linspace(0,mmax,Nm)[None,None,None,:,None]
         # r x f x s x m x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
+        l  = np.arange(Ntap)[None,None,None,None,:]
         # l : r x f x s x m x tap
-        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]+ \
-              self.taue[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        tau = self.taud[:,None,None,None,None]+ \
+              self.taue[:,None,None,None,None]
 
         ba  = betaa*Va*m/(0.3*WMHz*1e6)
         bb  = betab*Vb*m/(0.3*WMHz*1e6)
@@ -3105,7 +3162,7 @@ class Tchannel(bs.FUsignal):
         # S : r x f x s x m x tap (form 2.34 [D. Tse])
         S   = np.sinc(l-tau2*WMHz/1000.)
         # sum over r :  f x s  x m x tap
-        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+        htap = np.sum(S*self.y[...,None,None,None]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
 
         # f x s  x m x tap
         htap  = htap.reshape(Nf,Ns,Nm,Ntap)
@@ -3135,8 +3192,8 @@ class Tchannel(bs.FUsignal):
     #     #     >>> from pylayers.signal.bsignal import *
     #     #     >>> import numpy as np
     #     #     >>> fGHz = np.arange(2,11,0.1)
-    #     #     >>> tau1 = np.array([1,2,3])[:,np.newaxis]
-    #     #     >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
+    #     #     >>> tau1 = np.array([1,2,3])[:,None]
+    #     #     >>> y = np.exp(-2*1j*np.pi*fGHz[None,:]*tau1)/fGHz[None,:]
     #     #     >>> H = Tchannel(x=fGHz,y=y,tau=np.array([15,17,18]))
     #     #     >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
     #     #     >>> t1 = plt.suptitle('Before minimal phase compensation')
@@ -3291,8 +3348,7 @@ class Tchannel(bs.FUsignal):
 
         Returns
         -------
-
-
+        
         rir : TUsignal
 
 
@@ -3795,7 +3851,7 @@ class Ctilde(PyLayers):
             if not grpname in fh5['Ct'].keys():
                 fh5['Ct'].create_group(grpname)
             else :
-                print 'Warning : Ct/'+grpname +'already exists in '+filenameh5
+                print('Warning : Ct/'+grpname +'already exists in '+filenameh5)
             f=fh5['Ct/'+grpname]
 
             # save channel in global basis
@@ -4173,8 +4229,8 @@ class Ctilde(PyLayers):
         col = 10 * np.log10(Etot)
         kwargs['c'] = col
         if len(col) != len(di):
-            print "len(col):", len(col)
-            print "len(di):", len(dir)
+            print("len(col):", len(col))
+            print("len(di):", len(dir))
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
 
@@ -4347,7 +4403,7 @@ class Ctilde(PyLayers):
                 else:
                     raise NameError ('self.Tt and self.Tr should exist')
             else:
-                print "nothing to do to return in global basis"
+                print("nothing to do to return in global basis")
                 return self
         # if Tt and Tr == []
         else:
@@ -4384,33 +4440,33 @@ class Ctilde(PyLayers):
         #
 
         #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:, np.newaxis]
+        r0 = Rr[0,0,:][:, None]
         #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:, np.newaxis]
+        r1 = Rr[0,1,:][:, None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:, np.newaxis]
+        r0 = Rr[1, 0,:][:, None]
         #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:, np.newaxis]
+        r1 = Rr[1, 1,:][:, None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0, 0, :][:, np.newaxis]
+        r0 = Rt[0, 0, :][:, None]
         #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1, 0, :][:, np.newaxis]
+        r1 = Rt[1, 0, :][:, None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
         #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0, 1, :][:, np.newaxis]
+        r0 = Rt[0, 1, :][:, None]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1, 1, :][:, np.newaxis]
+        r1 = Rt[1, 1, :][:, None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -4489,33 +4545,33 @@ class Ctilde(PyLayers):
         #
 
         #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:,np.newaxis]
+        r0 = Rr[0,0,:][:,None]
         #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:,np.newaxis]
+        r1 = Rr[0,1,:][:,None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:,np.newaxis]
+        r0 = Rr[1, 0,:][:,None]
         #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:,np.newaxis]
+        r1 = Rr[1, 1,:][:,None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0,0,:][:,np.newaxis]
+        r0 = Rt[0,0,:][:,None]
         #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1,0,:][:,np.newaxis]
+        r1 = Rt[1,0,:][:,None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
         #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0,1,:][:,np.newaxis]
+        r0 = Rt[0,1,:][:,None]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1,1,:][:,np.newaxis]
+        r1 = Rt[1,1,:][:,None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -4600,11 +4656,11 @@ class Ctilde(PyLayers):
             if not np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
                 issue.append(r)
         if len(issue) == 0:
-            print "Channel is reciprocal"
+            print("Channel is reciprocal")
         else: 
-            print "WARNING Reciprocity issue WARNING"
-            print len(issue),'/',self.nray, 'rays are not reciprocal,'
-            print "rays number with an issue :",issue
+            print("WARNING Reciprocity issue WARNING")
+            print(len(issue),'/',self.nray, 'rays are not reciprocal,')
+            print("rays number with an issue :",issue)
 
         # assert np.allclose(self.tang,C.rang)
         # assert np.allclose(self.rang,C.tang)
@@ -4734,7 +4790,7 @@ class Ctilde(PyLayers):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a=[],b=[],Friis=True,debug=True):
+    def prop2tran(self,a=[],b=[],Friis=True,debug=False):
         r""" transform propagation channel into transmission channel
 
         Parameters
@@ -4771,6 +4827,7 @@ class Ctilde(PyLayers):
             a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
+
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
@@ -4846,12 +4903,8 @@ class Ctilde(PyLayers):
         if Friis:
             H.applyFriis()
 
-        # # average w.r.t frequency
-        # Nf   = H.y.shape[-1]
-        # H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))
-        # H.tk = H.taud
 
-        return(H)
+        return H
 
 if __name__ == "__main__":
     plt.ion()

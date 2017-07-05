@@ -181,12 +181,12 @@ COLOR = {
 }
 
 def ispoint(tpts, pt, tol=0.05):
-        """ check if pt is a point in a tuple of ponts
+        """ check if pt is a point in a tuple of points
 
         Parameters
         ----------
 
-        tpts : tuple (point (2xN) , index (1xN))
+        tpts : tuple (points (2xN) , index (1xN))
         pt  : point (2,1)
         tol : float
             default (0.05 meters)
@@ -203,10 +203,10 @@ def ispoint(tpts, pt, tol=0.05):
         -------
 
             >>> from pylayers.util.geomutil.util import *
-            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([1,2,3]))
+            >>> tpts= (np.array([[1,2,3],[5,6,7]]),np.array([-1,-2,-3]))
             >>> pt = np.array([[1],[5]])
             >>> ispoint(tpts,pt)
-            1
+            -1
 
         See Also
         --------
@@ -745,12 +745,13 @@ class Polygon(pro.PyLayers, shg.Polygon):
         self.vnodes = np.array(vnodes)
 
     
-    def setvnodes_new(self, tpts,L):
+    def setvnodes_new(self,tpts,L):
         """ update vnodes member from Layout
 
         Parameters
         ----------
 
+        tpts : list of points 
         L : pylayers.layout.Layout
 
         See Also
@@ -759,7 +760,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         pylayers.layout.Layout.ispoint
 
         vnodes is a list of point and segments of the polygon. 
-        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        If there are isosegments the sequence of iso segments 
+        is repeated between the termination points. 
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
@@ -769,7 +771,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         # npts = map(lambda x :
         #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
         #
-        # npts : list of point which are in the layout (with tolerance 1cm) 0 means not in the layout 
+        # npts : list of points which are in the layout (with tolerance 1cm) 
+        #        0 means not in the layout 
         #
         npts = [ispoint(tpts,np.array(xx), tol=0.01) for xx in zip(x[0:-1], y[0:-1])]
         assert (0 not in npts), pdb.set_trace()
@@ -778,9 +781,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
         vnodes = []
         for pseg in seg:
             vnodes = vnodes + [pseg[0]]
+            # get the list of associated segments
             nseg = L.numseg(pseg[0], pseg[1], first=False)
-            # if nseg==0:
-            #     pdb.set_trace()
             if type(nseg) == int:
                 nseg = [nseg]
             else:
@@ -2320,7 +2322,7 @@ class Geomoff(Geomview):
         fo = open(self.filename, 'r')
         lis = fo.readlines()
         typ, nv, nf, ne = lis[0].split(' ')
-        if typ <> 'OFF':
+        if typ != 'OFF':
             logging.critical('not an off file')
         nv = eval(nv)
         nf = eval(nf)
@@ -2340,7 +2342,7 @@ class Geomoff(Geomview):
         fo = open(self.filename, 'r')
         lis = fo.readlines()
         typ, nv, nf, ne = lis[0].split(' ')
-        if typ <> 'OFF':
+        if typ != 'OFF':
             logging.critical('not an off file')
         else:
             try:
@@ -2775,7 +2777,7 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
 
     """
     A = SignedArea(p)
-    assert(A <> 0)
+    assert(A != 0)
     T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - \
         p[1, :] * np.hstack((p[0, 1::], p[0, 0:1]))
     Cx = sum(T * (p[0, :] + np.hstack((p[0, 1::], p[0, 0:1])))) / (6 * A)
@@ -3192,8 +3194,8 @@ def ptonseg(pta, phe, pt):
     u = pt - pta
     Lv = np.sqrt(np.dot(v, v))
     Lu = np.sqrt(np.dot(u, u))
-    assert(Lv <> 0)
-    assert(Lu <> 0)
+    assert(Lv != 0)
+    assert(Lu != 0)
     vn = v / Lv
     un = u / Lu
     ctheta = np.dot(un, vn)
@@ -3513,14 +3515,14 @@ def intersect(a, b, c, d):
 
 
 def is_aligned4(a, b, c, d, tol=1e-2):
-    """ test aligment of 3 points 
+    """ test aligment of 4 points 
     Parameters
     ----------
 
     a : np.array
     b : np.array 
     c : np.array 
-
+    d : np.array 
     tol : float 
         default 1e-2
     """
@@ -3698,7 +3700,7 @@ def mul3(A, B):
                 C[:, :, i] = P
             return(C)
         else:
-            print "wrong shape", sa, sb
+            print("wrong shape", sa, sb)
     if ((la == 3) & (lb == 2)):
         if(sa[1] == sb[0]):
             C = np.zeros((sa[0], sb[1], sa[2]))
@@ -3708,7 +3710,7 @@ def mul3(A, B):
                 C[:, :, i] = P
             return(C)
         else:
-            print "wrong shape", sa, sb
+            print("wrong shape", sa, sb)
 
     if ((la == 2) & (lb == 3)):
         if(sa[1] == sb[0]):
@@ -3719,7 +3721,7 @@ def mul3(A, B):
                 C[:, :, i] = P
             return(C)
         else:
-            print "wrong shape", sa, sb
+            print("wrong shape", sa, sb)
 
 
 def MRot3(a, axe):
@@ -3742,6 +3744,7 @@ def MRot3(a, axe):
     if (axe == 2):
         M3[0:2, 0:2] = M2
     return(M3)
+
 
 
 def MEulerAngle(alpha, beta, gamma):
@@ -3787,7 +3790,6 @@ def MEulerAngle(alpha, beta, gamma):
     #T  = np.dot(np.dot(Rg,Rb),Ra)
     return(T)
 
-
 def SphericalBasis(a):
     """
     SphericalBasis(a):
@@ -3797,10 +3799,14 @@ def SphericalBasis(a):
 
     M = N x [th,ph,s]  : 3 x 3 x N
     """
+    assert(a.shape[1]==2)
 
-    tha = np.vstack((np.cos(a[:, 0]) * np.cos(
-        a[:, 1]), np.cos(a[:, 0]) * np.sin(a[:, 1]), -np.sin(a[:, 0]))).T
-    pha = np.vstack((-np.sin(a[:, 1]), np.cos(a[:, 1]), 0 * a[:, 0])).T
+    tha = np.vstack((np.cos(a[:, 0]) * \
+                     np.cos(a[:, 1]), np.cos(a[:, 0]) * \
+                     np.sin(a[:, 1]), -np.sin(a[:, 0]))).T
+    pha = np.vstack((-np.sin(a[:, 1]),
+                      np.cos(a[:, 1]),
+                      0 * a[:, 0])).T
     sa = np.vstack((np.sin(a[:, 0]) * np.cos(
         a[:, 1]), np.sin(a[:, 0]) * np.sin(a[:, 1]), np.cos(a[:, 0]))).T
 
@@ -3929,6 +3935,12 @@ def BTB_tx(a_g, T):
 
     a_g  : angle in global reference frame      2 x N  :  (theta,phi) x N
     T    : Tx rotation matrix     3 x 3
+
+    Returns
+    -------
+
+    R : 
+    al : angle in local frame
 
     """
     G = SphericalBasis(a_g)
@@ -4456,11 +4468,11 @@ def agwed_old(v, lwe):
     >>> sd = np.array([-1,1,0])
     >>> v  = np.vstack([u,v1,si,sd]).T
     >>> M = geu.agwed(v,lwe)
-    >>> print M*180/np.pi
+    >>> print(M*180/np.pi)
     [ 315.  135.  225.]
 
     """
-    print DeprecationWarning('Please use vectorized version : agwed')
+    print(DeprecationWarning('Please use vectorized version : agwed'))
     # lwe : (,3)
     lwe = lwe / np.sqrt(np.sum(lwe * lwe, axis=0))
     # v : (3,4)
@@ -4513,7 +4525,7 @@ def agwed(v, lwe):
     >>> sd = np.array([[-1,1,0],[1,-1,0]]).T
     >>> v  = np.hstack((u[:,None,:],v1[:,None,:],si[:,None,:],sd[:,None,:]))
     >>> M = geu.agwed(v,lwe)
-    >>> print M*180/np.pi
+    >>> print(M*180/np.pi)
     array([[ 315.,  315.],
        [ 135.,  225.],
        [ 225.,   45.]])
@@ -4681,8 +4693,58 @@ def angle_intersection(a1,a2,b1,b2):
     return bol
 
 def angle_intersection2(a1,a2,b1,b2):
-    
+    """ angle intersection2 
 
+    Parameters
+    ----------
+
+    a1 : angle in [0,2*pi] first angular sector
+    a2 : angle in [0,2*pi] first angular sector
+    b1 : angle in [0,2*pi] first angular sector
+    b2 : angle in [0,2*pi] first angular sector
+
+    Returns
+    -------
+
+    intersect_angle : float 
+
+    Notes
+    -----
+
+    Given 2 angular sectors (a1,a2) and (b1,b2), this function returns the intersection of the 2 
+    sector if it exists
+
+    See Also 
+    --------
+
+    Signature.run
+
+    Examples
+    --------
+
+    >>> from pylayers.util.geomutil import *
+    >>> a1 = 0. 
+    >>> a2 = np.pi/4.
+    >>> b1 = np.pi/3.
+    >>> b2 = np.pi/2.
+    >>> angle_intersection2(a1,a2,b1,b2)
+    0 
+    >>> a1 = 0. 
+    >>> a2 = np.pi/3.
+    >>> b1 = np.pi/4.
+    >>> b2 = np.pi/2.
+    >>> angle_intersection2(a1,a2,b1,b2)
+    0.26179938779914935
+    >>> a1 = 0. 
+    >>> a2 = np.pi-np.pi/3.
+    >>> b1 = np.pi/2.
+    >>> b2 = 3*np.pi/2.
+    >>> angle_intersection2(a1,a2,b1,b2)
+    0.5235987755982991
+
+
+    """
+    
     r1 = (max(a1,a2)-min(a1,a2))/2 
     if r1 > np.pi/2: 
         r1 = np.pi-r1 
@@ -4716,8 +4778,10 @@ def angle_intersection2(a1,a2,b1,b2):
     if dc > np.pi:
         dc = 2*np.pi-dc
 
-
-    return((r1+r2)-dc)
+    if ((r1+r2)-dc)>0:
+        return((r1+r2)-dc)
+    else:
+        return(0)
 
 def line_intersection(l1, l2):
     """ intersection between two 2D lines using shapely
@@ -4803,7 +4867,7 @@ def mirror(p, pa, pb):
     >>> pa  = np.array([-0.5,1])
     >>> pb  = np.array([0,0])
     >>> M = mirror(p,pa,pb)
-    >>> print M
+    >>> print(M)
     [[ 2.8 -1.4 -0.2]
      [ 0.4 -0.2  1.4]]
     >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
@@ -5297,6 +5361,35 @@ def get_pol_angles(poly, unit='rad', inside=True):
         return upt.astype(int), ang * 180 / np.pi
     elif unit == 'rad':
         return upt.astype(int), ang
+
+
+def reflection_matrix(U):
+    """ 
+    https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
+    u = np.ndarray (2,Nvec)
+
+    Returns
+    -------
+
+     M : nd array
+        (2,2,Nvec)
+
+
+    u = np.array([2,2])
+    U=np.vstack((u,u/2.,2*u)).T
+    
+
+    """
+
+    diag_term  = (U[0,:]**2)-(U[1,:]**2)
+    anti_diag = 2*U[0,:]*U[1,:]
+
+    scale = 1/np.linalg.norm(U,axis=0)**2
+
+
+    M = scale * np.array(([[diag_term, anti_diag],[anti_diag, -diag_term]]))
+
+    return M
 
 
 if __name__ == "__main__":

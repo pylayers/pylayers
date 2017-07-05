@@ -2,7 +2,7 @@
 """
 Module OSMParser
 
-This module provides classes to handle open stree map objects
+This module provides classes to handle open street map (OSM) objects
 
 """
 from osmapi import OsmApi
@@ -90,7 +90,7 @@ class Way(object):
 
 class Coords(object):
     """
-    Coords is a point in OSM
+    Coords describes a set of points in OSM 
 
     Attributes
     ----------
@@ -186,8 +186,7 @@ class Coords(object):
 
         This method converts latlon coordinates into cartesian x,y coordinates in
         Cassini projection relatively to specified latlon boundary 
-        The basemap objet for back and forth coordinates.
-        conversion is returned.
+        The basemap objet for back and forth coordinates conversion is returned.
 
         The transformation is centered on the mean of latitude and longitude. 
         The cartesian origin (0,0) correspond to the lower left corner (lonmin,latmin) 
@@ -486,13 +485,13 @@ class Ways(object):
         plt.axis('scaled')
         return(fig,ax)
 
-    def readmap(self,osmmap,coords,typ='building'):
+    def readmap(self,osmmap,coords,typ='outdoor'):
         """ read ways from a map 
         
         osmmap : OSM Map in json from OsmAPI
         coords : coords object previously parsed
         typ  : string 
-            building or floorplan
+            outdoor or floorplan
         """
         for item in osmmap:
             if item['type']=='way':
@@ -634,7 +633,7 @@ class FloorPlan(nx.DiGraph):
 #     getbdg
 #
 #
-def getosm(typ='building',address='Rennes',latlon=0,dist_m=400,cart=False):
+def getosm(typ='outdoor',address='Rennes',latlon=0,dist_m=400,cart=False):
     """ get osm region from osmapi
 
     Parameters
@@ -804,7 +803,7 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
     if w:
         ways = Ways()
         ways.clean()
-        if typ=='building':
+        if typ=='outdoor':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
         if typ=='floorplan':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
@@ -905,7 +904,7 @@ def getbdg(fileosm,verbose=False):
 
     """
 
-    coords,nodes,ways,relation,m = osmparse(fileosm,typ='building',verbose=verbose)
+    coords,nodes,ways,relation,m = osmparse(fileosm,typ='outdoor',verbose=verbose)
     zone = []
     for w in ways.way:
         zone.append(ways.way[w].shp)
@@ -923,7 +922,7 @@ def buildingsparse(filename):
     coords,nodes,ways,relations,m = osmparse(filename)
     for bid in relations.relation:
         tags = relations.relation[bid]['tags']
-        if tags['type']=='building':
+        if tags['type']=='outdoor':
             print "Constructing Indoor building ", bid
             bdg = FloorPlan(bid,coords,nodes,ways,relations)
             bdg.build(typ='relation',eid=bid)
