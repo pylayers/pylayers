@@ -1984,12 +1984,9 @@ class DLink(Link):
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
-<<<<<<< HEAD
         return self._maya_fig
-=======
         #return(self._maya_fig)
 
->>>>>>> 9d4e3d9676e742efc56765c26b4e9fcb04b990fe
 
     def _update_show3(self,ant='a',delrays=False):
         """
