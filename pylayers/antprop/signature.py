@@ -1102,7 +1102,7 @@ class Signatures(PyLayers,dict):
                     'nR':10,
                     'nT':10,
                     'bt' : True,
-                    'progress': False,
+                    'progress': True,
                     'diffraction' : True,
                     'animation' : False
                     }
@@ -1182,11 +1182,14 @@ class Signatures(PyLayers,dict):
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
         lhash = []
-        for us,s in tqdm(enumerate(lis)):
-            
-            #print s,cptsig
-            # if (us%20)==0:
-            #     print us,'/',len(lis)
+        
+        if progress :
+            pbar = tqdm(total=100,desc='Signatures')
+
+        for us,s in enumerate(lis):
+            if progress:
+                pbar.update(100./(1.*len(lis)))
+
 
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()

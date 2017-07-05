@@ -1416,7 +1416,7 @@ class DLink(Link):
 
 
         defaults={ 'applywav':False,
-                   'si_progress':False,
+                   'si_progress':True,
                    'diffraction':True,
                    'ra_vectorized':True,
                    'ra_ceil_H':[],
@@ -1987,6 +1987,7 @@ class DLink(Link):
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
+        return self._maya_fig
         #return(self._maya_fig)
 
 

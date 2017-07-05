@@ -2472,6 +2472,13 @@ class Rays(PyLayers, dict):
 
 
     def rayfromseg(self,ls):
+        ''' DEPRECATED 
+            use raysfromnstr instead
+        '''
+        DeprecationWarning('function name update: use raysfromnstr instead')
+        return self.rayfromnstr(ls)
+
+    def rayfromnstr(self,ls):
         """ returns the indexes of rays for a given interaction list
         """
 
@@ -2487,6 +2494,14 @@ class Rays(PyLayers, dict):
                 ui, ur = np.where(aib == i)
                 lur.extend(self[k]['rayidx'][ur].tolist())
         return np.sort(lur)
+
+    def rayfromdelay(self,t0=0,t1=[]):
+        """ returns the indexes of rays between 2 timestamps t0 and t1
+        """
+        if t1 == []:
+            t1 = self.delays.max()
+        u = np.where((self.delays>t0) & (self.delays<t1))[0]
+        return u
 
 
     def ray2slab(self,L,ir):
