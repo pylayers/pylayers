@@ -6,7 +6,8 @@ import pdb
 fcGHz=5
 WMHz = 3000
 Nf = 400 
-fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
+#fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
+fGHz = np.array([fcGHz])
 # set the layout
 #L=Layout('defstr.ini',build=False)
 #L=Layout('defstr.ini',diffraction=True)
@@ -47,3 +48,13 @@ print(toc-tic)
 # Point outside
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True,ra_ceil_H=0)
 #DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
+# Angular Spread 
+doa = DL.H.doa
+dod = DL.H.dod
+tau = DL.H.taud
+E   = DL.H.energy()[:,0,0]
+APSthd=np.sum(dod[:,0]*E)/np.sum(E)
+APSphd=np.sum(dod[:,1]*E)/np.sum(E)
+APStha=np.sum(doa[:,0]*E)/np.sum(E)
+APSpha=np.sum(doa[:,1]*E)/np.sum(E)
+

@@ -380,7 +380,7 @@ class Layout(pro.PyLayers):
                     newfile = True
                     print("new file - creating a void Layout", self._filename)
             elif loadosm:  # load .osm file
-                self.importosm(_fileosm=string, cart=True)
+                self.importosm(_fileosm=string, cart=True,typ=self.typ)
                 self.loadosm = True
             elif loadres:
                 self.importres(_fileres=string)
@@ -1499,7 +1499,7 @@ class Layout(pro.PyLayers):
         """
         defaults = {'_fileosm': '',
                     'address': 'Rennes',
-                    'type': 'floorplan',
+                    'typ': 'floorplan',
                     'latlon': '0',
                     'dist_m': 200,
                     'cart': False
@@ -1509,7 +1509,7 @@ class Layout(pro.PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        typ = kwargs['type']
+        typ = kwargs['typ']
         address = kwargs['address']
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
@@ -1543,8 +1543,9 @@ class Layout(pro.PyLayers):
         else:  # by reading an osm file
             fileosm = pyu.getlong(
                 kwargs['_fileosm'], os.path.join('struc', 'osm'))
+            pdb.set_trace()
             coords, nodes, ways, relations, m = osm.osmparse(
-                fileosm, typ=kwargs['type'])
+                fileosm, typ=typ)
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'ini')
         
