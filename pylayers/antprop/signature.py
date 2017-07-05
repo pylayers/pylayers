@@ -1102,7 +1102,7 @@ class Signatures(PyLayers,dict):
                     'nR':10,
                     'nT':10,
                     'bt' : True,
-                    'progress': False,
+                    'progress': True,
                     'diffraction' : True,
                     'animation' : False
                     }
@@ -1160,8 +1160,8 @@ class Signatures(PyLayers,dict):
 
         # progresss stuff...
         lmax = len(lis)*len(lit)
-        pe = 0
-        tic = time.time()
+        pe   = 0
+        tic  = time.time()
         tic0 = tic
         #for interaction source  in list of source interactions
 
@@ -1173,6 +1173,8 @@ class Signatures(PyLayers,dict):
             fig,ax = self.L.showG('s',aw=1)
             ax.plot(self.L.Gt.pos[self.source][0],self.L.Gt.pos[self.source][1],'ob')
             ax.plot(self.L.Gt.pos[self.target][0],self.L.Gt.pos[self.target][1],'or')
+        
+
         #
         # Loop over all interactions seen from the source
         #
@@ -1182,11 +1184,14 @@ class Signatures(PyLayers,dict):
         # pts : list of neighbour nodes from s[0]
         # tahe : segment extremities or point coordinates (repeated twice)
         lhash = []
-        for us,s in tqdm(enumerate(lis)):
-            
-            #print s,cptsig
-            # if (us%20)==0:
-            #     print us,'/',len(lis)
+        
+        if progress :
+            pbar = tqdm(total=100,desc='Signatures')
+
+        for us,s in enumerate(lis):
+            if progress:
+                pbar.update(100./(1.*len(lis)))
+
 
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
@@ -1245,7 +1250,9 @@ class Signatures(PyLayers,dict):
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
-
+                #if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
+                #    import ipdb
+                #    ipdb.set_trace()
                 # cond1 : there is more interactions
                 # continue if True
                 cond1 = not(interaction is None)
@@ -1294,6 +1301,12 @@ class Signatures(PyLayers,dict):
 
                     if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
+                        #print(visited)
+                        # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
+                        # if visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]:
+                        #     import ipdb
+                        #     ipdb.set_trace()
+
 
                         # update list of airwalls
                         if interaction[0] in lair:
@@ -1419,31 +1432,6 @@ class Signatures(PyLayers,dict):
                                 v0=pta0-apex
                                 v_=pta_-apex
 
-                            #
-                            # if (pta0==pta_).all():
-                            #     apex = phe0
-                            #     connected = True
-                            #     vl=(apex,pta0)
-                            #     vr=(apex,phe_)
-                            # elif (pta0==phe_).all():
-                            #     apex = phe0
-                            #     connected = True
-                            #     vl=(apex,pta0)
-                            #     vr=(apex,pta_)
-                            # elif (phe0==pta_).all():
-                            #     apex = pta0
-                            #     connected = True
-                            #     vl=(apex,phe0)
-                            #     vr=(apex,phe_)
-                            # elif (phe0==phe_).all():
-                            #     apex = pta0    
-                            #     connected = True
-                            #     vl=(apex,phe0)
-                            #     vr=(apex,pta_)
-                            #
-                            # for non connected segments
-                            #
-
                             if not connected:
                                 if not (geu.ccw(pta0,phe0,phe_) ^
                                         geu.ccw(phe0,phe_,pta_) ):
@@ -1456,28 +1444,33 @@ class Signatures(PyLayers,dict):
                                 # cone dot product 
                                 # print vr
                                 # print vl
-                                vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
-                                vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                                vr_n = (vr[1]-vr[0])/np.linalg.norm(vr[1]-vr[0])
+                                vl_n = (vl[1]-vl[0])/np.linalg.norm(vl[1]-vl[0])
                                 
                             
                                 vrdotvl = np.dot(vr_n,vl_n)
                                 # cone angle 
-                                angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+                                angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.0))
                                 #angle_cone = np.arccos(vrdotvl)
                                 # prepare lines and seg argument for intersection checking
-                                linel = (vl[0],vl[1]-vl[0])
-                                liner = (vr[0],vr[1]-vr[0])
-                                # from origin mirrored segment to be tested 
-                                seg   = (th_mirror[0],th_mirror[1])
+                                if angle_cone!=0:
+                                    linel = (vl[0],vl[1]-vl[0])
+                                    liner = (vr[0],vr[1]-vr[0])
+                                    # from origin mirrored segment to be tested 
+                                    seg   = (th_mirror[0],th_mirror[1])
 
-                                # apex calculation 
-                                a0u = np.dot(pta0,vr_n)
-                                a0v = np.dot(pta0,vl_n)
-                                b0u = np.dot(phe0,vr_n)
-                                b0v = np.dot(phe0,vl_n)
-
-                                kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
-                                apex = phe0 + kb*vl_n
+                                    # apex calculation 
+                                    a0u = np.dot(pta0,vr_n)
+                                    a0v = np.dot(pta0,vl_n)
+                                    b0u = np.dot(phe0,vr_n)
+                                    b0v = np.dot(phe0,vl_n)
+                                    #import warnings
+                                    #warnings.filterwarnings("error")
+                                    try:
+                                        kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
+                                    except:
+                                        pdb.set_trace()
+                                    apex = phe0 + kb*vl_n
 
                                 #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
                                 #    print(visited)
@@ -1490,13 +1483,13 @@ class Signatures(PyLayers,dict):
 
                             else:
 
-                                v0n  = (v0)/np.sqrt(np.sum((v0[1]-v0[0])*(v0[1]-v0[0])))
-                                v_n  = (v_)/np.sqrt(np.sum((v_[1]-v_[0])*(v_[1]-v_[0])))
+                                v0n  = v0/np.linalg.norm(v0)
+                                v_n  = v_/np.linalg.norm(v_)
 
                                 # import ipdb
                                 # ipdb.set_trace()
                                 sign = np.sign(np.cross(v_n,v0n))
-                                if sign<0:    
+                                if sign>0:    
                                     vr_n = -v0n
                                     vl_n = v_n
                                 else:
@@ -1506,7 +1499,7 @@ class Signatures(PyLayers,dict):
                                 # vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
                                 vrdotvl = np.dot(vr_n,vl_n)
                                 # cone angle 
-                                angle_cone = np.arccos(np.minimum(vrdotvl,1.0))
+                                angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.))
                                 
 
                             al = np.arctan2(vl_n[1],vl_n[0])
@@ -1515,36 +1508,48 @@ class Signatures(PyLayers,dict):
                             #
                             # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
                             #
+                            # Dans certaines circonstances par example un cone emanant d'un point colinéaire 
+                            # avec le segment d'arrivé" (-4) (6,4) le point -4 est aligné avec le segment 6
+                            # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
+                            # la visibilité (-4) (6,4) 
+                            # 
+                            if angle_cone ==0:
+                                ratio = 0
+                            else:    
+                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
+                                    ratio = 1.
+                                else:
+                                    wseg0 = th_mirror[0] - apex
+                                    wseg1 = th_mirror[1] - apex
+                                    mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                                    mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
 
-                            if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
-                                ratio = 1.
-                            else:
-                                wseg0 = th_mirror[0] - apex
-                                wseg1 = th_mirror[1] - apex
-                                mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                                mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                                    if np.isclose(mod_wseg0,0):
+                                        #bvisu = True 
+                                        #pdb.set_trace()#
+                                        pass
+                                    if np.isclose(mod_wseg1,0):
+                                        #bvisu = True 
+                                        #pdb.set_trace()#
+                                        pass
+                                    #wseg0_n = wseg0/mod_wseg0
+                                    #wseg1_n = wseg1/mod_wseg1
+                                    wseg0_n = wseg0/np.linalg.norm(wseg0)
+                                    wseg1_n = wseg1/np.linalg.norm(wseg1)
+                                    aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
+                                    aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+                                    
+                                    # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
+                                    #     ratio = 1
+                                        #print "toto"
+                                    # else:
+                                    I = geu.angle_intersection2(al,ar,aseg0,aseg1)
+                                    ratio = I/angle_cone
+                                    #if ratio>=1:
+                                    #    pdb.set_trace()
 
-                                if np.isclose(mod_wseg0,0):
-                                    #bvisu = True 
-                                    #pdb.set_trace()#
-                                    pass
-                                if np.isclose(mod_wseg1,0):
-                                    #bvisu = True 
-                                    pass
-                                wseg0_n = wseg0/mod_wseg0
-                                wseg1_n = wseg1/mod_wseg1
-                                aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
-                                aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
-                                
-                                # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
-                                #     ratio = 1
-                                    #print "toto"
-                                # else:
-                                I = geu.angle_intersection2(al,ar,aseg0,aseg1)
-                                ratio = I/angle_cone
-
-                            # if connected:
-                            #     print "ratio :",ratio
+                                # if connected:
+                                #     print "ratio :",ratio
                                 
 
                             #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
@@ -1601,9 +1606,9 @@ class Signatures(PyLayers,dict):
                             # Check if the target has been reached
                             # sequence is valid and last interaction is in the list of targets   
                             if (interaction in lit) or (interaction[-1]==self.target):
-                                # idea here is to produce signature without any airwalls
-                                # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
-                                # anstr does not contains airwalls
+                                # idea here is to produce signature without any airwalls
+                                # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
+                                # anstr does not contains airwalls
                                 # lawp_tmp = [0]+lawp
                                 # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
                                 # print([self.L.Gs.node[x]['name'] for x in lll])

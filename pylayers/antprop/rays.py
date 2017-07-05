@@ -2472,6 +2472,13 @@ class Rays(PyLayers, dict):
 
 
     def rayfromseg(self,ls):
+        ''' DEPRECATED 
+            use raysfromnstr instead
+        '''
+        DeprecationWarning('function name update: use raysfromnstr instead')
+        return self.rayfromnstr(ls)
+
+    def rayfromnstr(self,ls):
         """ returns the indexes of rays for a given interaction list
         """
 
@@ -2487,6 +2494,14 @@ class Rays(PyLayers, dict):
                 ui, ur = np.where(aib == i)
                 lur.extend(self[k]['rayidx'][ur].tolist())
         return np.sort(lur)
+
+    def rayfromdelay(self,t0=0,t1=[]):
+        """ returns the indexes of rays between 2 timestamps t0 and t1
+        """
+        if t1 == []:
+            t1 = self.delays.max()
+        u = np.where((self.delays>t0) & (self.delays<t1))[0]
+        return u
 
 
     def ray2slab(self,L,ir):
@@ -2575,7 +2590,32 @@ class Rays(PyLayers, dict):
         """
         unbi = self.ray2nbi(ir)
         ur = np.where(self[unbi]['rayidx']==ir)[0]
-        return self[unbi]['sig'][:,:,ur]
+        return self[unbi]['sig'][:,:,ur].squeeze()
+
+    def ray2sig2d(self,ir):
+        """ get signature to corresponding ray
+        """
+        sig = self.ray2sig(ir)
+        sig = sig.squeeze()
+        sig = sig[:,1:-1] # remove extremal 0
+        unfc = np.where(sig[1,:]<4)[0]# index floor cell
+        sig2d = sig[:,unfc]
+        return sig2d
+
+    def ray2inter(self,ir,L,Si):
+        """ get interaction list (Gi style) from a ray
+
+        Parameters
+        ----------
+
+        ir : ray index
+        L : Layout
+        Si : Signatures object
+
+        """
+        sig = self.ray2sig2d(ir)
+        return Si.sig2inter(L,sig)
+
 
     def slab_nb(self, ir):
         """ returns the slab numbers of r
@@ -2952,6 +2992,8 @@ class Rays(PyLayers, dict):
                 mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                      color=(0, 0, 0), )
                 f.children[-1].name='Rays with ' + str(int(i)) + 'interactions'
+
+        return(f)
 
     def show3(self,
               L=[],

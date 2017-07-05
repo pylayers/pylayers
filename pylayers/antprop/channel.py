@@ -337,13 +337,14 @@ class ADPchannel(bs.TUsignal):
             ax = kwargs['ax']
 
         if kwargs['raw']:
-            ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+            # ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+            ax.plot(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
 
         if kwargs['desembeded']:
-            ax.semilogx(self.x,10*np.log10(pdp)-Gmax,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax_r))
+            ax.plot(self.x,10*np.log10(pdp)-Gmax,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax_r))
 
         if kwargs['freespace']:
-            ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+            ax.plot(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
 
         if kwargs['losdelay']:
             ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
