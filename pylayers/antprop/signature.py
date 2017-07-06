@@ -1250,7 +1250,14 @@ class Signatures(PyLayers,dict):
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
-                #if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
+
+                #if visited ==[(44, 2, 7), (62, 7, 15), (21, 15), (62, 15, 7),(44, 7, 2), (16, 2), (44, 2, 7), (62, 7, 15), (21, 15), (62, 15, 7)]:
+                if ((visited ==[(44, 2, 7), (62, 7, 15), (21, 15), (62, 15, 7)]) and interaction==(44,7,2)):
+                    import ipdb 
+                    ipdb.set_trace()
+
+                # if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
+                # #if visited ==[(44, 2, 7), (62, 7, 15), (21, 15), (62, 15, 7),(44, 7, 2), (16, 2), (44, 2, 7), (62, 7, 15), (21, 15), (62, 15, 7)]:
                 #    import ipdb
                 #    ipdb.set_trace()
                 # cond1 : there is more interactions
@@ -1295,9 +1302,7 @@ class Signatures(PyLayers,dict):
                         pass
 
                 if (cond1):
-                    # [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]
-
-                    
+                   
 
                     if (cond2 and cond3 and condD and condR and condT):
                         visited.append(interaction)
@@ -1410,6 +1415,8 @@ class Signatures(PyLayers,dict):
                             #     import ipdb
                             #     ipdb.set_trace()
 
+
+
                             connected = False
                             if (pta0==pta_).all():
                                 apex = pta0
@@ -1482,6 +1489,8 @@ class Signatures(PyLayers,dict):
                                 #    print(apex)
 
                             else:
+
+                                
 
                                 v0n  = v0/np.linalg.norm(v0)
                                 v_n  = v_/np.linalg.norm(v_)
