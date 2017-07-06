@@ -178,7 +178,42 @@
             
   <div class="section" id="indoor-radio-coverage-with-motley-keenan">
 <span id="sphx-glr-auto-examples-plot-coverage-py"></span><h1>Indoor Radio Coverage with Motley Keenan<a class="headerlink" href="#indoor-radio-coverage-with-motley-keenan" title="Permalink to this headline">¶</a></h1>
+<p>This is an example of Motley-Keenan coverage</p>
+<p>The default configuration file coverage.ini.
+Antenna assoaciated to each Access Point are handled in the module
+pylayers/antprop/antenna.py</p>
+<p>[grid]
+nx = 80
+ny = 40
+boundary = [20,0,30,20]
+mode = full ; file, zone , full
+file = &#8216;points.ini&#8217;</p>
+<p>[layout]
+filename = TA-Office.ini ; 0 40 0 15
+;filename = W2PTIN.ini
+;filename = Lstruc.str</p>
+<p>[ap]
+0 = {&#8216;name&#8217;:&#8217;room1&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(1,12,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:90}
+1 = {&#8216;name&#8217;:&#8217;room2&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(10,2,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Omni&#8217;,&#8217;phideg&#8217;:0}
+2 = {&#8216;name&#8217;:&#8217;room3&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(20,1,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:75}
+3 = {&#8216;name&#8217;:&#8217;room4&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(36.5,1.5,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:120}
+4 = {&#8216;name&#8217;:&#8217;room5&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(25,12,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:180}</p>
+<p>[rx]
+temperaturek = 300
+noisefactordb = 0</p>
+<p>[show]
+show = True</p>
 <img alt="../_images/sphx_glr_plot_coverage_001.png" class="align-center" src="../_images/sphx_glr_plot_coverage_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -195,7 +230,7 @@
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 6.268 seconds)</p>
+(0 minutes 9.181 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_coverage.py" download=""><code class="xref download docutils literal"><span class="pre">plot_coverage.py</span></code></a></div>
 <div class="sphx-glr-download container">
