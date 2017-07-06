@@ -425,6 +425,13 @@ class DLink(Link):
             self._Lname = self._L._filename
             self.outdoor = not self._L.indoor
 
+        # dictionnary data exists
+        self.dexist={'sig':{'exist':False,'grpname':''},
+                     'ray':{'exist':False,'grpname':''},
+                     'ray2':{'exist':False,'grpname':''},
+                     'Ct':{'exist':False,'grpname':''},
+                     'H':{'exist':False,'grpname':''}
+                    }
 
         if self._Lname != '':
 
@@ -436,13 +443,7 @@ class DLink(Link):
                 print('Creating file. You\'ll see this message only once per Layout')
                 self.save_init(filenameh5)
 
-            # dictionnary data exists
-            self.dexist={'sig':{'exist':False,'grpname':''},
-                         'ray':{'exist':False,'grpname':''},
-                         'ray2':{'exist':False,'grpname':''},
-                         'Ct':{'exist':False,'grpname':''},
-                         'H':{'exist':False,'grpname':''}
-                        }
+            
             
             try:
                 self.L.dumpr()
@@ -479,53 +480,13 @@ class DLink(Link):
                 #self.L.dumpw()
             #self.L.build()
 
-            ###########
-            # init pos & cycles
-            #
-            # If a and b are not specified
-            #  they are chosen as center of gravity of cycle 0
-            #
-            ###########
-            nodes = self.L.Gt.nodes()
-            #
-            # pick the point outside building if Layout.indoor not activated 
-            #
-            if not self.L.indoor:
-                nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
-            else:
-                nodes = [n for n in nodes if n!=0 ]
-            
-            # draw the link extremities randomly
-
-            np.random.seed(self.seed)
-            ia = np.random.randint(0,len(nodes))    
-            ib = np.random.randint(0,len(nodes))    
-
-            if len(self.a)==0:
-                self.ca = nodes[ia]
-            else:
-                if len(kwargs['a']) ==2:
-                    a=np.r_[kwargs['a'],1.0]
-                else:
-                    a=kwargs['a']
-                self.ca = self.L.pt2cy(a)
-                self.a = a
-
-            if len(self.b)==0:
-                self.cb = nodes[ib]
-            else:
-                if len(kwargs['b']) ==2:
-                    b=np.r_[kwargs['b'],1.0]
-                else:
-                    b=kwargs['b']
-                self.cb = self.L.pt2cy(b)
-                self.b = b
+            self.init_positions()
 
 
            
             ###########
             # init freq
-            # TODO Check where it is used redundant with fGHz
+            # TODO Check where it is used redocdundant with fGHz
             ###########
             #self.fmin  = self.fGHz[0]
             #self.fmax  = self.fGHz[-1]
@@ -595,7 +556,7 @@ class DLink(Link):
             mlab.clf()
             plotfig=True
         if isinstance(L,str):
-            self._L = Layout(L,bgraphs=False,bcheck=False)
+            self._L = Layout(L,bgraphs=False,bcheck=False,bindoor=not self.outdoor)
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L
@@ -611,8 +572,6 @@ class DLink(Link):
         # change layout and build/load
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             mlab.clf()
-        import ipdb
-        ipdb.set_trace()
         self._L = Layout(Lname)
         self._Lname = Lname
         self.reset_config()
@@ -806,7 +765,7 @@ class DLink(Link):
                 s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
             else:
                 s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
-            s = s + 'Nf : ' + str(Nf) +'\n'
+            s = s + 'Nf : ' + str(Nf) +'\n '
             d =  np.sqrt(np.sum((self.a-self.b)**2))
             if Nf>1:
                 fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
@@ -815,9 +774,6 @@ class DLink(Link):
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         else:
             s = 'No Layout specified'
-
-        if hasattr(self,'H'):
-            s = s+ 'Link has been evaluated'
         return s
 
 
@@ -875,6 +831,48 @@ class DLink(Link):
     #         self.fGHz = np.array([2.3,2.4,2.5])
 
 
+    def init_positions(self,force=False):
+                    ###########
+            # init pos & cycles
+            #
+            # If a and b are not specified
+            #  they are chosen as center of gravity of cycle 0
+            #
+            ###########
+            nodes = self.L.Gt.nodes()
+            #
+            # pick the point outside building if Layout.indoor not activated 
+            #
+            if not self.L.indoor:
+                nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+            else:
+                nodes = [n for n in nodes if n!=0 ]
+            
+            # draw the link extremities randomly
+
+            np.random.seed(self.seed)
+            ia = np.random.randint(0,len(nodes))    
+            ib = np.random.randint(0,len(nodes))    
+            if len(self.a)==0 or force:
+                self.ca = nodes[ia]
+            else:
+                if len(self.a) ==2:
+                    a=np.r_[self.a,1.0]
+                else:
+                    a=self.a
+                self.ca = self.L.pt2cy(a)
+                self.a = a
+
+            if len(self.b)==0 or force:
+                self.cb = nodes[ib]
+            else:
+                if len(self.b) ==2:
+                    b=np.r_[self.b,1.0]
+                else:
+                    b=self.b
+                self.cb = self.L.pt2cy(b)
+                self.b = b
+
     def reset_config(self):
         """ reset configuration when a new layout is loaded
         """
@@ -887,6 +885,7 @@ class DLink(Link):
 
         self.ca = 1
         self.cb = 1
+        self.init_positions(force=True)
         # self.a = self.L.cy2pt(self.ca)
         # self.b = self.L.cy2pt(self.cb)
 
@@ -1939,24 +1938,33 @@ class DLink(Link):
 
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
-            a_in = self.L.Gt.node[self.ca]['indoor']
-            b_in = self.L.Gt.node[self.cb]['indoor']
+            # a_in = self.L.Gt.node[self.ca]['indoor']
+            # b_in = self.L.Gt.node[self.cb]['indoor']
 
-            if (a_in) & (b_in):
-                # indoor
-                show_ceil=False
-                opacity = 0.7
-                ceil_opacity = 0.
-            elif ((not a_in) & (not b_in)):
-                # outdoor
+            # if (a_in) & (b_in):
+            #     # indoor
+            #     show_ceil=False
+            #     opacity = 0.7
+            #     ceil_opacity = 0.
+            # elif ((not a_in) & (not b_in)):
+            #     # outdoor
+            #     show_ceil=True
+            #     opacity = 1.
+            #     ceil_opacity = 1.
+            # else:
+            #     # indoor/outdoor
+            #     show_ceil=True
+            #     opacity = 0.7
+            #     ceil_opacity = 0.7
+
+            if self.outdoor:
                 show_ceil=True
                 opacity = 1.
                 ceil_opacity = 1.
             else:
-                # indoor/outdoor
-                show_ceil=True
+                show_ceil=False
                 opacity = 0.7
-                ceil_opacity = 0.7
+                ceil_opacity = 0.
 
             self._maya_fig = self.L._show3(newfig=False,
                           opacity=opacity,
@@ -1984,8 +1992,9 @@ class DLink(Link):
                 self.R._show3(L=self.L,**kwargs)
 
         fp = (self.a+self.b)/2.
+
         dab = np.sqrt(np.sum((self.a-self.b)**2))
-        mlab.view(focalpoint=fp,distance=15*dab-55)
+        mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
         return self._maya_fig
         #return(self._maya_fig)
@@ -2009,7 +2018,12 @@ class DLink(Link):
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
             antenna._show3(T=rot,po=pos,
-                title=False,bcolorbar=False,newfig=False,name = '',interact=False)
+                title=False,
+                bcolorbar=False,
+                bcircle = False,
+                bnewfig=False,
+                name = '',
+                interact=False)
 
         if delrays:
             import time
