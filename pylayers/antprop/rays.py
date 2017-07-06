@@ -2113,7 +2113,10 @@ class Rays(PyLayers, dict):
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                try:
+                    b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                except:
+                    pdb.set_trace()
 
 
                 ## find used slab
