@@ -35,6 +35,7 @@ import doctest
 import logging
 import numpy as np
 from scipy import io
+import mayavi.mlab as mlab
 import matplotlib.pylab as plt
 import pylayers.simul.simulem
 import pylayers.measures.mesuwb

@@ -146,6 +146,7 @@ import glob
 import re
 import pdb
 import sys
+
 if sys.version_info.major==2:
     import PIL.Image as Image
     import mayavi.mlab as mlab
@@ -1197,6 +1198,7 @@ class Pattern(PyLayers):
             self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
 
             self.sqG = np.sqrt(self.G)
+            # pdb.set_trace()
             self.GdB = 10*np.log10(self.G)
             # GdBmax (,Nf)
             self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
