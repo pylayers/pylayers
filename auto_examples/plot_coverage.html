@@ -180,9 +180,10 @@
 <span id="sphx-glr-auto-examples-plot-coverage-py"></span><h1>Indoor Radio Coverage with Motley Keenan<a class="headerlink" href="#indoor-radio-coverage-with-motley-keenan" title="Permalink to this headline">¶</a></h1>
 <p>This is an example of Motley-Keenan coverage</p>
 <p>The default configuration file coverage.ini.
-Antenna assoaciated to each Access Point are handled in the module
+The antenna assoaciated to each Access Point are handled in the module
 pylayers/antprop/antenna.py</p>
-<p>[grid]
+<blockquote>
+<div><p>[grid]
 nx = 80
 ny = 40
 boundary = [20,0,30,20]
@@ -203,6 +204,7 @@ temperaturek = 300
 noisefactordb = 0</p>
 <p>[show]
 show = True</p>
+</div></blockquote>
 <img alt="../_images/sphx_glr_plot_coverage_001.png" class="align-center" src="../_images/sphx_glr_plot_coverage_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
@@ -223,14 +225,14 @@ Warning Unable to read graph Gw
 <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 <span class="n">finish</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
 <span class="c1">#print &#39;Tx position: &#39;,C.tx</span>
 <span class="c1">#print &#39;Coverage in %1.2f seconds&#39; % (finish-start)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 9.181 seconds)</p>
+(0 minutes 9.112 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_coverage.py" download=""><code class="xref download docutils literal"><span class="pre">plot_coverage.py</span></code></a></div>
 <div class="sphx-glr-download container">
