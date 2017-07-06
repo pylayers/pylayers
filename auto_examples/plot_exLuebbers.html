@@ -30,8 +30,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="&lt;no title&gt;" href="index.html" />
-    <link rel="next" title="Evaluation of a radio link DLink" href="plot_exDLink.html" />
-    <link rel="prev" title="Indoor Radio Coverage with Motley Keenan" href="plot_coverage.html" />
+    <link rel="prev" title="Indoor Radio Coverage" href="plot_w1.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,31 +91,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="plot_coverage.html" title="Indoor Radio Coverage with Motley Keenan"
+	<a href="plot_w1.html" title="Indoor Radio Coverage"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    Indoor Radio ...
+	    Indoor Radio Coverage
 	    </span>
 	    <span class="hiddenrellink">
-	    Indoor Radio Coverage with Motley Keenan
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="plot_exDLink.html" title="Evaluation of a radio link DLink"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    Evaluation of...
-	    </span>
-	    <span class="hiddenrellink">
-	    Evaluation of a radio link DLink
+	    Indoor Radio Coverage
 	    </span>
 	    
 	    </a>
@@ -178,28 +160,35 @@
             
   <div class="section" id="uwb-ray-tracing-simulation-in-outdoor-scenario">
 <span id="sphx-glr-auto-examples-plot-exluebbers-py"></span><h1>UWB Ray tracing simulation  in outdoor scenario<a class="headerlink" href="#uwb-ray-tracing-simulation-in-outdoor-scenario" title="Permalink to this headline">¶</a></h1>
-<p>Example taken from</p>
-<p>Joseph W. Schuster, R.J Luebbers
-[Techniques for Evaluating the Accuracy of Ray-Tracing Propagation Models for Microcells](<a class="reference external" href="http://tinyurl.com/z2plo2v">http://tinyurl.com/z2plo2v</a>)</p>
+<p>Example taken from Joseph W. Schuster, R.J Luebbers [Techniques for Evaluating the Accuracy of Ray-Tracing Propagation Models for Microcells](<a class="reference external" href="http://tinyurl.com/z2plo2v">http://tinyurl.com/z2plo2v</a>)</p>
 <ul class="sphx-glr-horizontal">
 <li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_001.png"><img alt="../_images/sphx_glr_plot_exLuebbers_001.png" src="../_images/sphx_glr_plot_exLuebbers_001.png" style="width: 376.0px; height: 258.5px;" /></a>
 </li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_002.png"><img alt="../_images/sphx_glr_plot_exLuebbers_002.png" src="../_images/sphx_glr_plot_exLuebbers_002.png" style="width: 940.0px; height: 470.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_003.png"><img alt="../_images/sphx_glr_plot_exLuebbers_003.png" src="../_images/sphx_glr_plot_exLuebbers_003.png" style="width: 235.0px; height: 235.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_004.png"><img alt="../_images/sphx_glr_plot_exLuebbers_004.png" src="../_images/sphx_glr_plot_exLuebbers_004.png" style="width: 376.0px; height: 188.0px;" /></a>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_exLuebbers_002.png"><img alt="../_images/sphx_glr_plot_exLuebbers_002.png" src="../_images/sphx_glr_plot_exLuebbers_002.png" style="width: 235.0px; height: 235.0px;" /></a>
 </li>
 </ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout Graph loaded
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cm</span>
-<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;Luebbers.ini&#39;</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">_visual_check</span><span class="p">()</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;Luebbers.ini&#39;</span><span class="p">,</span><span class="n">bdiffraction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#ax = fig.add_subplot(2,2,1)</span>
+<span class="c1">#fig,ax = L._visual_check(fig=fig,ax=ax)</span>
+<span class="c1">#L.build()</span>
 
 <span class="c1"># Creating a Link</span>
 
 <span class="n">DL</span><span class="o">=</span><span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">])</span>
 <span class="c1">#DL.a = np.array(([25,21.67,2.]))</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mf">37.5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">2.</span><span class="p">]))</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mf">12.5</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]))</span>
@@ -210,24 +199,34 @@
 <span class="n">DL</span><span class="o">.</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">)</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">)</span>
 
-<span class="n">DL</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1">#DL.show()</span>
 
 <span class="c1">#</span>
 <span class="c1"># Link evaluation</span>
 <span class="c1">#</span>
 
-<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">DL</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">DL</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-
-<span class="n">DL</span><span class="o">.</span><span class="n">ir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;l20&#39;</span><span class="p">],</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">DL</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">rlist</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">cir</span> <span class="o">=</span> <span class="n">DL</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">getcir</span><span class="p">(</span><span class="n">BWGHz</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:])))</span>
+<span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ax2</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
+    <span class="n">tick</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="o">=</span><span class="mi">26</span>
+<span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ax2</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
+    <span class="n">tick</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="o">=</span><span class="mi">26</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Delay (ns)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;level (dB)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="c1">#plt.ylim(-200,-50)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 4.451 seconds)</p>
+(0 minutes 1.678 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_exLuebbers.py" download=""><code class="xref download docutils literal"><span class="pre">plot_exLuebbers.py</span></code></a></div>
 <div class="sphx-glr-download container">
@@ -246,7 +245,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 05, 2017.
+      Last updated on Jul 06, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/auto_examples/plot_exLuebbers.rst.txt"
@@ -256,18 +255,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="plot_coverage.html">
+      <a href="plot_w1.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="plot_exDLink.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

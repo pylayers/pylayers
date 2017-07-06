@@ -17,7 +17,8 @@ L=Layout('defstr.ini')
 # set the link
 DL=DLink(L=L,fGHz=fGHz)
 # set the b point position 
-DL.b=np.array([755,1110,1.2])
+DL.a=np.array([2,3,1.2])
+DL.b=np.array([8,3.5,2.])
 # evaluate the link in forcing re-calculation of 
 #
 #   + signatures
@@ -28,7 +29,7 @@ DL.b=np.array([755,1110,1.2])
 # Diffraction : enabled
 # Vectorization : enabled
 #
-DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
+DL.eval(cutoff=4,ra_vectorized=True,diffraction=True)
 DL.H.show()
 plt.title('Ray transfer funtion w.r.t frequency Modulus and Phase')
 plt.show()
