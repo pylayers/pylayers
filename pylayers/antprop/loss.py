@@ -1095,9 +1095,9 @@ def gaspl(d,fGHz,T,PhPa,wvden):
     Npp = sSO2 + np.sum(UH2O,axis=0)+Nsec
     Npp = np.sum(UO2,axis=0) + np.sum(UH2O,axis=0)+Nsec
     gamma = 0.1820*fGHz*Npp 
-    #LgasdB = gamma*dkm 
+    LgasdB = gamma*dkm 
 
-    return(gamma)
+    return(LgasdB)
 
 
 def Loss0(S,rx,ry,f,p):

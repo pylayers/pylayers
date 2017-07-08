@@ -356,7 +356,7 @@ class Rays(PyLayers, dict):
             fh5.close()
             raise NameError('Rays: issue when writting h5py file')
 
-    def _loadh5(self,filenameh5,grpname):
+    def _loadh5(self,filenameh5,grpname,**kwargs):
         """ load rays  h5py format compliant with Links Class
 
         Parameters
@@ -366,7 +366,10 @@ class Rays(PyLayers, dict):
             filename of the h5py file (from Links Class)
         grpname : string
             groupname of the h5py file (from Links Class)
-
+        kwargs may contain a L: layout object
+            if L =  [] the layout is loaded from the layout name stored
+            into the h5 file
+            if L = Layout the layout passed in arg is used
 
         See Also
         --------
@@ -408,10 +411,19 @@ class Rays(PyLayers, dict):
         # fill if save was filled
         # temporary solution in order to avoid
         # creating save for Interactions classes
-
+        
         if self.filled:
-            L=Layout(self.Lfilename,bbuild=True)
-            self.fillinter(L)
+            if kwargs.has_key('L'):
+                self.L=kwargs['L']
+            else: 
+                self.L=Layout(self.Lfilename,bbuild=True)
+                try:
+                    self.L.dumpr()
+                except:
+                    self.L.build()
+                    self.L.dumpw()
+            # L=Layout(self.Lfilename,bbuild=True)
+            self.fillinter(self.L)
 
         # if self.evaluated:
         #     return self.eval(self.fGHz)
@@ -2113,7 +2125,10 @@ class Rays(PyLayers, dict):
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
-                b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                try:
+                    b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                except:
+                    pdb.set_trace()
 
 
                 ## find used slab

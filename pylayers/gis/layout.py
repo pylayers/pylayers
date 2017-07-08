@@ -344,6 +344,7 @@ class Layout(pro.PyLayers):
         self.name = {}
         self.ax = self.display['box']
         self.zmin = 0
+        self.maxheight = 3
 
         newfile = False
         loadini = False
