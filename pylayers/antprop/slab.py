@@ -829,7 +829,7 @@ class Mat(PyLayers,dict):
         self['fGHz'] = fGHz
         if self['a'] == None:
             epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
-        else:
+        else: # from P.2040
             epsr = self['a'] * self['fGHZ']**self['b']
             sigma  = self['c'] * self['fGHZ']**self['d']
             epsc = epsr - 1j * 18 * sigma /  self['fGHz']
