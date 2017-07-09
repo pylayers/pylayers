@@ -796,10 +796,10 @@ class Mat(PyLayers,dict):
         # epsrp  = a * fGHZ ** b 
         # sigma  = c * fGHZ ** d 
         #
-        self['a'] = None
-        self['b'] = None
-        self['c'] = None
-        self['d'] = None
+        self['a'] = a
+        self['b'] = b
+        self['c'] = c
+        self['d'] = d
 
     def eval(self, fGHz):
         """ evaluate Mat at given frequencies
