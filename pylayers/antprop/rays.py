@@ -294,7 +294,7 @@ class Rays(PyLayers, dict):
             self.fillinter(L)
 
         if self.evaluated:
-            return self.eval(self.fGHz)
+            return self.val(self.fGHz)
 
     def _saveh5(self,filenameh5,grpname):
         """ Save rays h5py format compliant with Links Class

@@ -6,8 +6,8 @@ import pdb
 fcGHz=5
 WMHz = 3000
 Nf = 400 
-#fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
-fGHz = np.array([fcGHz])
+fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
+#fGHz = np.array([fcGHz])
 # set the layout
 #L=Layout('defstr.ini',build=False)
 #L=Layout('defstr.ini',diffraction=True)

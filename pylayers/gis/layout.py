@@ -1542,11 +1542,8 @@ class Layout(pro.PyLayers):
                     str(lat).replace('.', '_') + '_lon_' + \
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
-            fileosm = pyu.getlong(
-                kwargs['_fileosm'], os.path.join('struc', 'osm'))
-            pdb.set_trace()
-            coords, nodes, ways, relations, m = osm.osmparse(
-                fileosm, typ=typ)
+            fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
+            coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=typ)
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'ini')
         
@@ -1674,13 +1671,23 @@ class Layout(pro.PyLayers):
         # del relations
 
         #
-        # get slab and materials
+        # get slab and materials DataBase
         #
+        # 1) create material database
+        # 2) load materials database
+        # 3) create slabs database
+        # 4) add materials database to slab database
+        # 5) load slabs database
+
         mat = sb.MatDB()
         mat.load(self.filematini)
         self.sl = sb.SlabDB()
         self.sl.mat = mat
         self.sl.load(self.fileslabini)
+
+        #
+        # update self.name with existing slabs database entries
+        #
         for k in self.sl.keys():
             if k not in self.name:
                 self.name[k] = []
@@ -2119,16 +2126,18 @@ class Layout(pro.PyLayers):
             self.filefur = config.get('files', 'furniture')
 
         if config.has_section('slabs'):
-            filemat = self._filename.replace('ini', 'mate')
-            fileslab = self._filename.replace('ini', 'slab')
+            #filemat = self._filename.replace('ini', 'mat')
+            #fileslab = self._filename.replace('ini', 'slab')
+
             ds = di['slabs']
             dm = di['materials']
+
             for k in ds:
                 ds[k] = eval(ds[k])
             for k in dm:
                 dm[k] = eval(dm[k])
-            self.sl = sb.SlabDB(
-                filemat=filemat, fileslab=fileslab, ds=ds, dm=dm)
+
+            self.sl = sb.SlabDB(ds=ds, dm=dm)
 
         # In this section we handle the ini file format evolution
 

@@ -719,7 +719,7 @@ class IntR(Inter):
                     # find the index of angles which satisfied the data
                     #if m not in self.slab:
                     #    m = m.lower()
-                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='R')
+                    self.slab[m].eval(fGHz=fGHz, theta=ut, RT='R')
                     try:
                         R = np.concatenate((R, self.slab[m].R), axis=1)
                         mapp.extend(self.dusl[m])
@@ -844,7 +844,7 @@ class IntT(Inter):
                         gamma = g
 
                     # find the index of angles which satisfied the data
-                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='T', compensate=True)
+                    self.slab[m].eval(fGHz=fGHz, theta=ut, RT='T', compensate=True)
 
                     try:
                         T = np.concatenate((T, self.slab[m].T), axis=1)
