@@ -2616,7 +2616,7 @@ class Tchannel(bs.FUsignal):
             fh5.close()
             raise NameError('Channel Tchannel: issue when writting h5py file')
 
-    def _loadh5(self,filenameh5,grpname):
+    def _loadh5(self,filenameh5,grpname,**kwargs):
         """ Load H object in hdf5 format compliant with Link Class
 
         Parameters
@@ -4437,7 +4437,7 @@ class Ctilde(PyLayers):
         self.Cpt = bs.FUsignal(self.fGHz, Z)
         self.Cpp = bs.FUsignal(self.fGHz, U)
 
-    def _loadh5(self,filenameh5,grpname):
+    def _loadh5(self,filenameh5,grpname,**kwargs):
         """ load Ctilde object in hdf5 format
 
         Parameters

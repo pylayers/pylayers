@@ -820,7 +820,7 @@ class Signatures(PyLayers,dict):
             raise NameError('Signature: issue when writting h5py file')
 
 
-    def _loadh5(self,filenameh5,grpname):
+    def _loadh5(self,filenameh5,grpname,**kwargs):
         """ load signatures in hdf5 format compliant with class Links
 
         Parameters
@@ -831,6 +831,11 @@ class Signatures(PyLayers,dict):
         grpname : string
             groupname of the h5py file (from Links Class)
 
+        kwargs 
+            may contain a L: layout object
+            if L =  [] the layout is loaded from the layout name stored
+            into the h5 file
+            if L = Layout the layout passed in arg is used
 
         See Also
         --------
@@ -855,12 +860,16 @@ class Signatures(PyLayers,dict):
         except:
             fh5.close()
             raise NameError('Signature: issue when reading h5py file')
-        self.L=layout.Layout(Lname)
-        try:
-            self.L.dumpr()
-        except:
-            self.L.build()
-            self.L.dumpw()
+
+        if kwargs.has_key('L'):
+            self.L=kwargs['L']
+        else:
+            self.L=layout.Layout(Lname)
+            try:
+                self.L.dumpr()
+            except:
+                self.L.build()
+                self.L.dumpw()
 
 
     def save(self):
