@@ -1,7 +1,9 @@
 from pylayers.simul.link import *
 import pylayers.signal.waveform as wvf
 import pdb
+import warnings 
 
+warnings.filterwarnings("error")
 # set the frequency range
 fcGHz=5
 WMHz = 3000

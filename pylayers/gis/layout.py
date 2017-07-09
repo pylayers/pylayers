@@ -1780,7 +1780,7 @@ class Layout(pro.PyLayers):
         fd.close()
 
     def save(self):
-        """ save structure in an ini file
+        """ save Layout structure in a .ini file
 
         """
         print(self._filename)
@@ -1874,12 +1874,15 @@ class Layout(pro.PyLayers):
                         pass
                     config.set("segments", str(n), d)
 
-        # list of used slab
+        # get the list of used slabs
+
         lslab = [x for x in self.name if len(self.name[x]) > 0]
         lmat = []
         #
         # In case an osm file has been read; there is no .sl
-        # By default all the available slab and materials are provided
+        # By default all the available slabs and materials are provided
+        #
+
         if not hasattr(self, 'sl'):
             self.sl = sb.SlabDB(filemat='matDB.ini', fileslab='slabDB.ini')
 
@@ -1890,7 +1893,7 @@ class Layout(pro.PyLayers):
                     self.sl.mat.add(name=s,cval=6,sigma=0,typ='epsr')
                 self.sl.add(s,[s],[0.1])
 
-            ds['index'] = self.sl[s]['index']
+            #ds['index'] = self.sl[s]['index']
             ds['color'] = self.sl[s]['color']
             ds['lmatname'] = self.sl[s]['lmatname']
             for m in ds['lmatname']:

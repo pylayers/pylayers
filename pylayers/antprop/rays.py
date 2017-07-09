@@ -1056,7 +1056,7 @@ class Rays(PyLayers, dict):
                     # des floors et tous les points suivants qui ne sont pas
                     # des points de rflexion ceil ou floor
                     #
-                    # Afin de tenir compte du rayon et du groupe d'interaction
+                    # Afin de tenir compte du rayon et du groupe d'interactions
                     # concerne, il faut passer un tuple qui concatene la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
                     # rayons du groupe associe (d'ou le zip)
@@ -1182,8 +1182,9 @@ class Rays(PyLayers, dict):
                     #
                     lns = [ x for x in lnss if x in anstr.ravel()]
                     
-                    #pdb.set_trace()
+                    #
                     # loop over multi diffraction points
+                    #
                     for npt in lns: 
 
                         u  = np.where(anstr==npt)
@@ -1234,7 +1235,7 @@ class Rays(PyLayers, dict):
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
                         uout = np.where([not L.Gt.node[mapnode[u+1]]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
-                        # 3 remove ceil reflexion of outdoor cycles
+                        # 3 remove ceil reflexions of outdoor cycles
                         if len(uout)>0:
                         
                             ptees = np.delete(ptees,uc[1][uout],axis=2)
@@ -2150,16 +2151,16 @@ class Rays(PyLayers, dict):
                 # assign floor and ceil slab
                 ############################
 
-                slT=[ L.Gs.node[x]['name'] for x in nstrf[uT] ]
-                slR=[ L.Gs.node[x]['name'] for x in nstrf[uR] ]
+                slT = [ L.Gs.node[x]['name'] for x in nstrf[uT] ]
+                slR = [ L.Gs.node[x]['name'] for x in nstrf[uR] ]
 
                 # WARNING
                 # in future versions floor and ceil could be different for each cycle.
                 # this information would be directly obtained from L.Gs
                 # then the two following lines would have to be modified
 
-                slRf=np.array(['FLOOR']*len(uRf))
-                slRc=np.array(['CEIL']*len(uRc))
+                slRf = np.array(['FLOOR']*len(uRf))
+                slRc = np.array(['CEIL']*len(uRc))
 
 
                 # Fill the used slab
@@ -2272,7 +2273,7 @@ class Rays(PyLayers, dict):
         ----------
 
         fGHz : array
-            frequency in GHz array
+            frequency in GHz 
         ib : list of interactions block
 
         """
@@ -2281,7 +2282,10 @@ class Rays(PyLayers, dict):
 
         self.fGHz=fGHz
 
-        # evaluation of interaction
+        # evaluation of all interactions
+        #
+        # core calculation of all interactions is done here
+        #
         
         self.I.eval(fGHz)
 
@@ -2434,9 +2438,9 @@ class Rays(PyLayers, dict):
                 # and the sum of all outgoing segments
                 #self[l]['dis'] = self.I.si0[self[l]['rays'][0,:]] \
                 #        + np.sum(self.I.sout[self[l]['rays']], axis=0)
-
                 # attenuation due to distance
                 # will be removed once the divergence factor will be implemented
+                #
                 Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
                 self.delays[ir] = self[l]['dis']/0.3
                 self.dis[ir] = self[l]['dis']
@@ -2462,7 +2466,7 @@ class Rays(PyLayers, dict):
 
 
         #
-        # Construction of the Ctilde channel
+        # Construction of the Ctilde propagation channel structure
         #
         Cn = Ctilde()
         Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
