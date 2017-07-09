@@ -1904,22 +1904,22 @@ class Layout(pro.PyLayers):
             config.set("slabs", s, ds)
 
         if "_AIR" not in lslab:
-            air = {'color': 'white', 'index': 1, 'linewidth': 1,
+            air = {'color': 'white', 'linewidth': 1,
                    'lthick': [0.1], 'lmatname': ['AIR']}
             config.set("slabs", "_AIR", air)
 
         if "AIR" not in lslab:
-            air = {'color': 'white', 'index': 1, 'linewidth': 1,
+            air = {'color': 'white', 'linewidth': 1,
                    'lthick': [0.1], 'lmatname': ['AIR']}
             config.set("slabs", "AIR", air)
 
         if "CEIL" not in lslab:
-            ceil = {'color': 'grey20', 'index': 6, 'linewidth': 1,
+            ceil = {'color': 'grey20', 'linewidth': 1,
                     'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs", "CEIL", ceil)
 
         if "FLOOR" not in lslab:
-            floor = {'color': 'grey40', 'index': 7, 'linewidth': 1,
+            floor = {'color': 'grey40', 'linewidth': 1,
                      'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs", "FLOOR", floor)
 

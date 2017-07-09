@@ -63,7 +63,6 @@ MatDB Class
     MatDB.__init__
     MatDB.info
     MatDB.dass
-    MatDB.maxindex
     MatDB.delete
     MatDB.edit
     MatDB.add
@@ -102,7 +101,6 @@ SlabDB Class
     SlabDB.showall
     SlabDB.info
     SlabDB.dass
-    SlabDB.maxindex
     SlabDB.delete
     SlabDB.edit
     SlabDB.show
@@ -780,8 +778,7 @@ class Mat(PyLayers,dict):
 
         """
 
-        defaults = {'index':1, 
-                 'epr':1 + 0.0j, 
+        defaults = {'epr':1 + 0.0j, 
                  'mur':1 + 0.0j, 
                  'sigma':0.0,
                  'roughness':0.,
@@ -957,7 +954,7 @@ class MatDB(PyLayers,dict):
         for k in self:
             epsr  = "%.2f" % abs(self[k]['epr'])
             sigma = "%.2f" % abs(self[k]['sigma'])
-            st = st+k+' ('+str(self[k]['index'])+')    |epsr|='+ epsr +' sigma (S/m)='+sigma+'\n'
+            st = st+k+'|epsr|='+ epsr +' sigma (S/m)='+sigma+'\n'
         return(st)
 
 
@@ -969,32 +966,6 @@ class MatDB(PyLayers,dict):
         for i in self:
             S = self[i]
             S.info()
-
-    def dass(self):
-        """ create a dictionnary to associate index | name
-
-        This dictionnary helps for quick access to a given slab
-
-        """
-        di = {}
-        for name in self.keys():
-            # get the integer
-            index = self[name]['index']
-            # associate the integer to name
-            di[index] = name
-        # update Class variable key association dictionnary
-        self.di = di
-
-    def maxindex(self):
-        """ find the max value of the index in DB
-        """
-
-        maxi = 0
-        for i in self.keys():
-            v = self[i]['index']
-            if (v > maxi):
-                maxi = v
-        return(maxi)
 
     def delete(self, name):
         """ Delete a material in the DB
@@ -1014,22 +985,17 @@ class MatDB(PyLayers,dict):
 
         name : vstring
 
-        See Also
-        --------
-
-        pylayers.antprop.slab.dass
 
         """
-        data = multenterbox('Material', 'Enter', ('name', 'index', 'epr', 'mur', 'sigma', 'roughness'),
-                            (name, M.index, str(M.epr), str(M.mur), M.sigma, M.roughness))
+        data = multenterbox('Material', 'Enter', ('name', 'epr', 'mur', 'sigma', 'roughness'),
+                            (name, str(M.epr), str(M.mur), M.sigma, M.roughness))
         self['name'] = data[0]
-        self['index'] = eval(data[1])
         self['epr'] = eval(data[2])
         self['mur'] = eval(data[3])
         self['sigma'] = eval(data[4])
         self['roughness'] = eval(data[5])
         # update keys association dictionnary
-        self.dass()
+        #self.dass()
 
     def add(self,**kwargs):
         """ add a material in the DB
@@ -1096,7 +1062,6 @@ class MatDB(PyLayers,dict):
         # get the next available index
         maxid = self.maxindex()
         M = Mat(kwargs['name'])
-        M['index'] = maxid + 1
         M['fGHz'] = kwargs['fGHz']
         if kwargs['typ'] == 'epsr':
             M['epr'] = kwargs['cval']
@@ -1139,7 +1104,7 @@ class MatDB(PyLayers,dict):
 
         self[kwargs['name']] = M
         # updating dictionnary
-        self.dass()
+        #self.dass()
 
     def addgui(self, name='MAT'):
         """ Add a material in the DB
@@ -1151,17 +1116,16 @@ class MatDB(PyLayers,dict):
         default 'MAT'
 
         """
-        max = self.maxindex()
-        data = multenterbox('Material', 'Enter', ('name', 'index', 'epr', 'mur', 'sigma', 'roughness'),
-                            (name, max + 1, '(1+0j)', '(1+0j)', 0, 0))
+        #max = self.maxindex()
+        data = multenterbox('Material', 'Enter', ('name', 'epr', 'mur', 'sigma', 'roughness'),
+                            (name, '(1+0j)', '(1+0j)', 0, 0))
         M = Mat(data[0])
-        M['index'] = eval(data[1])
         M['epr'] = eval(data[2])
         M['mur'] = eval(data[3])
         M['sigma'] = eval(data[4])
         M['roughness'] = eval(data[5])
         self[name] = M
-        self.dass()
+        #self.dass()
 
 
     def choose(self):
@@ -1187,18 +1151,20 @@ class MatDB(PyLayers,dict):
         _fileini : string
             name of the matDB file (usually matDB.ini)
 
+        TODO
+        ----
+
+        add ITU format (abcd)
+
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
         materials = ConfigParser.ConfigParser()
         materials.read(fileini)
-        self.di = {}
         for k,matname in enumerate(materials.sections()):
             M = Mat(name=matname)
             M['sigma'] = eval(materials.get(matname,'sigma'))
             M['roughness'] = eval(materials.get(matname,'roughness'))
             M['epr'] = eval(materials.get(matname,'epr'))
-            M['index'] = k
-            self.di[k]=matname
             M['mur'] = eval(materials.get(matname,'mur'))
             self[matname] = M
 
@@ -1210,8 +1176,8 @@ class MatDB(PyLayers,dict):
         [name1]
         epsr =
         mur =
+        sigma = 
         roughness =
-        index =
 
 
         """
@@ -1223,11 +1189,7 @@ class MatDB(PyLayers,dict):
         #
         config.add_section("dict")
 
-        for vid in self.di.keys():
-            config.set("dict", str(vid), self.di[vid])
-
-        for vid in self.di.keys():
-            name = self.di[vid]
+        for name in self:
             config.add_section(name)
             try:
                 config.set(name, "epr", str(self[name]['epr']))
@@ -1245,7 +1207,6 @@ class MatDB(PyLayers,dict):
                 config.set(name, "roughness", str(self[name]['roughness']))
             except:
                 config.set(name, "roughness", '0')
-            config.set(name, "index", str(self[name]['index']))
 
         config.write(fd)
         fd.close()
@@ -1305,14 +1266,12 @@ class Slab(Interface,dict):
         #    self.mat = mat
         self['name'] = name
         if ds=={}:
-            self['index'] = 0
             # lmatname has to be set before lthick
             self['lmatname'] = ['AIR']
             self['lthick'] = [0.1]
             self['color'] = 'black'
             self['linewidth'] = 1.0
         else:
-            self['index'] = ds['index']
             # lmatname has to be set before lthick
             self['lmatname'] = ds['lmatname']
             self['lthick'] = ds['lthick']
@@ -1418,7 +1377,6 @@ class Slab(Interface,dict):
                 print("epsrc : ", epsrc)
             chaine = chaine + name + ' '
             chaine = chaine + ']'
-            print("index : ", self['index'])
             print("color : ", self['color'])
             print("linewidth :", self['linewidth'])
             if self['evaluated']:
@@ -1772,48 +1730,6 @@ class Slab(Interface,dict):
         Lo, Lp = Interface.losst(self, fGHz)
         return(Lo, Lp)
 
-#    def editgui(self):
-#        """ edit a Slab in the DB
-#
-#        """
-#        chaine1 = ""
-#        chaine2 = ""
-#        for i in range(self.nbmat):
-#            index_mat = self.imat[i]
-#            name_mat = self.mat.di[index_mat]
-#            thick = str(self.thickness[i])
-#            chaine1 = chaine1 + name_mat + ' '
-#            chaine2 = chaine2 + thick + ' '
-#
-#        data = multenterbox('Slab', 'Enter',
-#                            ('name', 'index', 'nbmat', 'imat',
-#                             'thickness (cm)', 'color', 'linewidth'),
-#                            (self.name, self.index, self.nbmat, chaine1,
-#                             chaine2, self.color, str(self.linewidth)))
-#
-#        self.index = eval(data[1])
-#        self.nbmat = eval(data[2])
-#        chaine1 = data[3].split()
-#        chaine2 = data[4].split()
-#
-#        tt = [0, 0, 0, 0, 0, 0, 0, 0]
-#        th = [0, 0, 0, 0, 0, 0, 0, 0]
-#        if (len(chaine1) != len(chaine2)):
-#            print ('erreur edit slab')
-#            return(-1)
-#        for i in range(len(chaine1)):
-#            nom = chaine1[i]
-#            thick = chaine2[i]
-#            index = self.mat[nom].index
-#            tt[i] = index
-#            th[i] = eval(thick)
-#
-#        self.imat = tt
-#        self.charindex = str(tt)
-#        self.thickness = th
-#        self.color = data[5]
-#        self.linewidth = eval(data[6])
-#        self.dass()
 
     def show(self, fGHz=2.4, theta=np.arange(0, np.pi / 2., 0.01), dtype=np.float64, dB=False):
         """ show slab Reflection and Transmission coefficient
@@ -1892,7 +1808,7 @@ class SlabDB(dict):
                 # add slab to SlabDB
                 self[slabname]=S
 
-        self.dass()
+        #self.dass()
 
     def __repr__(self):
         st = 'List of Slabs\n'
@@ -1918,30 +1834,6 @@ class SlabDB(dict):
 
         plt.show()
 
-
-
-    def dass(self):
-        """ update conversion dictionnary
-
-        code <--> name
-
-        """
-        di = {}
-        for name in self.keys():
-            index = self[name]['index']
-            di[index] = name
-        self.di = di
-
-    def maxindex(self):
-        """ find the max value of the index in DB
-        """
-
-        maxi = 0
-        for i in self.keys():
-            v = self[i]['index']
-            if (v > maxi):
-                maxi = v
-        return(maxi)
 
     def delete(self, name):
         """ delete an element from the database
@@ -2068,7 +1960,6 @@ class SlabDB(dict):
         maxi = self.maxindex()
         U['lmatname'] = lmatname
         U['lthick'] = lthick
-        U['index'] = maxi + 1
         U['color'] = color
         U['linewidth'] = 1
         U['evaluated'] = False
@@ -2104,22 +1995,19 @@ class SlabDB(dict):
         config = ConfigParser.ConfigParser()
         config.read(fileini)
 
-        self.di={}
         for k,slabname in enumerate(config.sections()):
             # warning the Slab takes the whole Material Database
             S = Slab(slabname,self.mat)
             S['lmatname']=eval(config.get(slabname,'lmatname'))
             S['nbmat']=len(S['lmatname'])
             S['color']=config.get(slabname,'color')
-            S['index']= k 
-            self.di[k] = slabname
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
             S.conv(self.mat)
             self[slabname] = S
 
     def save(self,_fileini='slabDB.ini'):
-        """ save SlabDB in an ini file
+        """ save SlabDB in a .ini file
 
         Parameters
         ----------
@@ -2135,15 +2023,11 @@ class SlabDB(dict):
         # config names
         #
         config.add_section("dict")
-        for vid in self.di.keys():
-            config.set("dict", str(vid), self.di[vid])
-        for vid in self.di.keys():
-            name = self.di[vid]
+        for name in self:
             config.add_section(name)
             config.set(name, 'color', str(self[name]['color']))
             config.set(name, 'linewidth', self[name]['linewidth'])
             config.set(name, 'lthick', self[name]['lthick'])
-            config.set(name, 'index', self[name]['index'])
             config.set(name, 'lmatname', self[name]['lmatname'])
 
         config.write(fd)
