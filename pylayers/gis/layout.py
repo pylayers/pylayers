@@ -224,11 +224,11 @@ class Layout(pro.PyLayers):
                  _filematini='matDB.ini',
                  _fileslabini='slabDB.ini',
                  _filefur='',
-                 bcheck=True,
-                 bbuild=False,
-                 bgraphs=True,
-                 bindoor=False,
-                 bdiffraction=False,
+                 bcheck=True,          # to check Gs
+                 bbuild=False,         # to build graphs
+                 bgraphs=True,         # to load graph 
+                 bindoor=False,        # to allow indoor penetration for outdoor situations
+                 bdiffraction=False,   # to include diffarction in Gi 
                  bverbose=False,
                  bcartesian=True,
                  dist_m=400,
@@ -305,8 +305,10 @@ class Layout(pro.PyLayers):
         # diffraction : activate diffraction 
         self.diffraction = bdiffraction
         # indoor : activate indoor propagation 
-        self.indoor = bindoor
-
+        if self.typ=='outdoor':
+            self.indoor = bindoor
+        else:
+            self.indoor = 1
         #
         # setting display option
         #
@@ -406,46 +408,48 @@ class Layout(pro.PyLayers):
             #
             # check layout 
             #
+            bconsistent = True
             if bcheck:
-                self.check()
-
-            # check if the graph gpickle files have been built
+                bconsistent = self.check()
             
-            if bgraphs:
-                dirname = self._filename.replace('.ini','')
-                path = os.path.join(pro.basename,
-                                    'struc',
-                                    'gpickle',
-                                    dirname)
-                if os.path.exists(path):
-                    # load graph Gt
-                    # and compare the self._hash from ini file
-                    # with the hash store in node 0 of Gt at time of the last build
-                    # If they are different a rebuild is needeed
-                    # Otherwise all the stored graphs are loaded
-                    #
-                    self.dumpr('t')
-                    # If node 0 exists : the layout has been built
+            # if Layout is correctly described
+            # check if the graph gpickle files have been built
+            if bconsistent: 
+                #
+                # load graphs from file 
+                #
+                if bgraphs:
+                    dirname = self._filename.replace('.ini','')
+                    path = os.path.join(pro.basename,
+                                        'struc',
+                                        'gpickle',
+                                        dirname)
+                    if os.path.exists(path):
+                        # load graph Gt
+                        # and compare the self._hash from ini file
+                        # with the hash store in node 0 of Gt at time of the last build
+                        # If they are different a rebuild is needeed
+                        # Otherwise all the stored graphs are loaded
+                        #
+                        self.dumpr('t')
+                        # If node 0 exists : the layout has been built
 
-                    # If .ini file has changed rebuild
-                    if self._hash != self.Gt.node[0]['hash']:
-                        rebuild = True
-                    else:  # reload
-                        self.dumpr('stvirw')
-                        self.isbuilt = True
-                        bbuild = False
-
-                else:
-                    print("graphs have not been saved")
-                    bbuild = True
-
-            # build and save graphs 
-            if bbuild:
-                # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                # if ans.lower()=='y'
-                self.build()
-                self.lbltg.append('s')
-                self.dumpw()
+                        # If .ini file has changed rebuild
+                        if self._hash != self.Gt.node[0]['hash']:
+                            rebuild = True
+                        else:  # reload
+                            self.dumpr('stvirw')
+                            self.isbuilt = True
+                            bbuild = False
+                #
+                # build and save graphs 
+                # 
+                if bbuild:
+                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                    # if ans.lower()=='y'
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
 
     def __repr__(self):
         st = '\n'
@@ -804,7 +808,7 @@ class Layout(pro.PyLayers):
         In red point with degree == 1 , In black points with degree == 0
 
         """
-        consistent = True
+        bconsistent = True
 
         nodes = self.Gs.nodes()
         if len(nodes) > 0:
@@ -841,11 +845,13 @@ class Layout(pro.PyLayers):
                 deg1 = filter(lambda x: nx.degree(self.Gs, x) == 1, upnt)
 
                 if len(deg0) > 0:
-                    print("It exists degree 0 points :  %r" % deg0)
+                    logging.critical( "It exists degree 0 points :  %r", deg0 )
                     f, a = self.pltvnodes(deg0, fig=f, ax=a)
+                    bconsistent = False
                 if len(deg1) > 0:
-                    print("It exists degree 1 points : %r" % deg1)
+                    logging.critical( "It exists degree 0 points :  %r", deg1 )
                     f, a = self.pltvnodes(deg1, fig=f, ax=a)
+                    bconsistent = False
 
             # self.deg = {}
             # for deg in range(degmax + 1):
@@ -917,11 +923,10 @@ class Layout(pro.PyLayers):
         P = np.array([self.Gs.pos[k] for k in upnt])
         similar = geu.check_point_unicity(P)
         if len(similar) != 0:
-            logging.critical(
-                "points at index(es) %s in self.Gs.pos are similar", str(similar))
-            consistent = False
+            logging.critical("points at index(es) %s in self.Gs.pos are similar", str(similar))
+            bconsistent = False
 
-        return(consistent)
+        return(bconsistent)
 
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
@@ -1784,7 +1789,10 @@ class Layout(pro.PyLayers):
 
         """
         print(self._filename)
-        current_version = 1.2
+        current_version = 1.3
+        #
+        # version 1.3 : suppression of index in slab and materials
+        #
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
         config.add_section("info")
@@ -1794,10 +1802,12 @@ class Layout(pro.PyLayers):
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
+
         if self.coordinates == 'latlon':
             config.set("info", "format", "latlon")
         else:
             config.set("info", "format", "cart")
+
         config.set("info", "version", current_version)
         config.set("info", "type", self.typ)
 
@@ -1806,8 +1816,8 @@ class Layout(pro.PyLayers):
             config.set("floorplan", "zceil", self.zceil)
             config.set("floorplan", "zfloor", self.zfloor)
 
-        if self.typ == 'outdoor':
-            config.add_section("outdoor")
+        #if self.typ == 'outdoor':
+        #    config.add_section("outdoor")
 
         #
         # save bounding box in latlon for reconstruction of self.m
@@ -1874,6 +1884,9 @@ class Layout(pro.PyLayers):
                         pass
                     config.set("segments", str(n), d)
 
+        #
+        # [ slabs ] 
+        #
         # get the list of used slabs
 
         lslab = [x for x in self.name if len(self.name[x]) > 0]
@@ -1923,8 +1936,12 @@ class Layout(pro.PyLayers):
                      'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
             config.set("slabs", "FLOOR", floor)
 
+        #
+        # [ materials ] 
+        #
         for m in lmat:
             dm = self.sl.mat[m]
+            dm.pop('name')
             config.set("materials", m, dm)
 
         if "REINFORCED_CONCRETE" not in lmat:
@@ -1933,6 +1950,9 @@ class Layout(pro.PyLayers):
             config.set("materials", "REINFORCED_CONCRETE", reic)
         # config.set("files",'materials',self.filematini)
         # config.set("files",'slab',self.fileslabini)
+        #
+        # [ furniture ] 
+        #
         config.set("files", 'furniture', self.filefur)
         fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
         fd = open(fileini, "w")
@@ -1956,6 +1976,8 @@ class Layout(pro.PyLayers):
         config.optionxform = str
         fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
         config.read(fileini)
+
+
         sections = config.sections()
         for section in sections:
             di[section] = {}
@@ -1973,12 +1995,15 @@ class Layout(pro.PyLayers):
         self.labels = {}
 
         #
-        # Check file version
-        #
+        # [info] 
+        #    format     {cart,latlon}   
+        #    version    int 
+        #    type       {'floorplan','outdoor'}
         if 'version' in di['info']:
             self.version = di['info']['version']
             self.name = {}
         else:
+            # In version 0.9 there is no materials and slab section
             self.version = 0.9
             mat = sb.MatDB()
             mat.load(self.filematini)
@@ -1990,13 +2015,21 @@ class Layout(pro.PyLayers):
 
         if di['info'].has_key('type'):
             self.typ = di['info']['type']
+        #
+        # [floorplan]
+        #   zceil 
+        #   zfloor
+        #
             if self.typ == 'floorplan':
                 self.zceil = eval(di['floorplan']['zceil'])
                 self.zfloor = eval(di['floorplan']['zfloor'])
+        #
+        # [outdoor]
+        #   TODO add a DEM file 
+        #
             if self.typ == 'outdoor':
-
-                self.zceil = eval(di['outdoor']['zceil'])
-                self.zfloor = eval(di['outdoor']['zfloor'])
+                self.zceil  =  3000    # upper limit for AIR walls
+                self.zfloor = 0 
         else:
             self.typ = 'floorplan'
             self.zfloor = 0
@@ -2034,7 +2067,7 @@ class Layout(pro.PyLayers):
         self.ax = self.display['box']
 
         #
-        # POINTS
+        # [points] 
         #
         # update points section
         for nn in di['points']:
@@ -2056,7 +2089,7 @@ class Layout(pro.PyLayers):
             self.labels[nodeindex] = nn
 
         #
-        # SEGMENTS
+        # [segments]
         #
         # update segments section
 
@@ -2109,6 +2142,10 @@ class Layout(pro.PyLayers):
         self.boundary()
         
         # compliant with config file without  material/slab information
+
+        #
+        # {latlon] 
+        #
         if config.has_section('latlon'):
             llcrnrlon = eval(config.get('latlon', 'llcrnrlon'))
             llcrnrlat = eval(config.get('latlon', 'llcrnrlat'))
@@ -3672,7 +3709,7 @@ class Layout(pro.PyLayers):
 
 
         if type(ax) == geu.Polygon:
-            eax = ax.exterior.xy
+            eax  = ax.exterior.xy
             xmin = np.min(eax[0])
             xmax = np.max(eax[0])
             ymin = np.min(eax[1])
@@ -3685,10 +3722,12 @@ class Layout(pro.PyLayers):
 
         x = self.pt[0,:]
         y = self.pt[1,:]
+
         uxmin = (x>=xmin)
         uymin = (y>=ymin)
         uxmax = (x<=xmax)
         uymax = (y<=ymax)
+
         k  = np.where(uxmin*uymin*uxmax*uymax==1)[0]
         pt = np.array(zip(x[k],y[k])).T
         ke = self.upnt[k]
@@ -5920,11 +5959,10 @@ class Layout(pro.PyLayers):
         # segment which is tagged as _AIR
         ###
 
-
-
         # if verbose :
         #     Gtpbar = tqdm.tqdm(total=100., desc='BuildGt',position=0)
         #     pbar_awloop =  tqdm.tqdm(total=100., desc ='airwalls loop',leave=False,position=1)
+
         Gtpbar = pbar(verbose,total=100., desc ='BuildGt',position=tqdmpos)
         pbartmp = pbar(verbose,total=100., desc ='Triangulation',leave=True,position=tqdmpos+1)
 
@@ -8204,7 +8242,7 @@ class Layout(pro.PyLayers):
                     # keep all segment below nstr1 and in Cone if R
 
             else:
-                # central interaction is a point
+                # central interaction is a point (nstr1 <0) 
 
                 # 1) Simple approach
                 #       output interaction are all visible interactions
@@ -8224,7 +8262,6 @@ class Layout(pro.PyLayers):
                 nout = len(output)
                 probint = np.ones(nout)  # temporarybns
                 dintprob = {k: v for k, v in zip(output, probint)}
-
             self.Gi.add_edge(i0, i1, output=dintprob)
 
 

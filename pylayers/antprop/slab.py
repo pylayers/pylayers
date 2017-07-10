@@ -935,6 +935,8 @@ class MatDB(PyLayers,dict):
             self.load(_fileini)
         else:
             for matname in dm.keys():
+                if 'name' in dm[matname].keys():
+                    dm[matname].pop('name')
                 M = Mat(matname,**dm[matname])
                 #ddm = dm[matname]
                 # fill each field of the dict 
@@ -1060,7 +1062,6 @@ class MatDB(PyLayers,dict):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
         # get the next available index
-        maxid = self.maxindex()
         M = Mat(kwargs['name'])
         M['fGHz'] = kwargs['fGHz']
         if kwargs['typ'] == 'epsr':
