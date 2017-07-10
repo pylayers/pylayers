@@ -1942,7 +1942,7 @@ class Layout(pro.PyLayers):
             config.set("materials", m, dm)
 
         if "REINFORCED_CONCRETE" not in lmat:
-            reic = {'index': 6, 'name': 'REINFORCED_CONCRETE', 'mur': (
+            reic = {'mur': (
                 1 + 0j), 'epr': (8.69999980927 + 0j), 'roughness': 0.0, 'sigma': 3.0}
             config.set("materials", "REINFORCED_CONCRETE", reic)
         # config.set("files",'materials',self.filematini)
@@ -1998,6 +1998,8 @@ class Layout(pro.PyLayers):
         #    type       {'indoor','outdoor'}
         if 'version' in di['info']:
             self.version = di['info']['version']
+            pdb.set_trace()
+            self.typ = di['info']['type']
             self.name = {}
         else:
             # In version 0.9 there is no materials and slab section
