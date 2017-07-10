@@ -1613,7 +1613,7 @@ class DLink(Link):
         else :
 
             if kwargs['ra_ceil_H'] == []:
-                if self.L.typ=='floorplan':
+                if self.L.typ=='indoor':
                     ceilheight = self.L.maxheight
                 else:
                     ceilheight = 0 

@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 try:
     from imposm.parser import OSMParser
 except:
-    print "Warning : imposm seems to be not installed"
+    print "Warning : imposm seems not to be installed"
 import networkx as nx
 import numpy as np
 import pdb
@@ -491,7 +491,7 @@ class Ways(object):
         osmmap : OSM Map in json from OsmAPI
         coords : coords object previously parsed
         typ  : string 
-            outdoor or floorplan
+            outdoor or indoor
         """
         for item in osmmap:
             if item['type']=='way':
@@ -726,14 +726,14 @@ def getosm(typ='outdoor',address='Rennes',latlon=0,dist_m=400,cart=False):
     return coords,nodes,ways,dpoly,m
 
 
-def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True,cart=False):
+def osmparse(_filename,typ='indoor',verbose=False,c=True,n=True,w=True,r=True,cart=False):
     """ parse osm files
 
     Parameters
     ----------
 
     typ : string
-        floorplan | building
+        indoor | outdoor 
     verbose : boolean
         default : False
     c : boolean
@@ -805,7 +805,7 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
         ways.clean()
         if typ=='outdoor':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
-        if typ=='floorplan':
+        if typ=='indoor':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
         if verbose:
             print "parsing ways"
