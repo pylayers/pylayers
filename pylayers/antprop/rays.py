@@ -1731,8 +1731,10 @@ class Rays(PyLayers, dict):
                     #pdb.set_trace()
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
                     
-                    self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']]['index'])+'_'
-                                        + str(L.sl[L.Gs.node[x[1]]['name']]['index']) for x in aseg]
+                    #self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']])+'_'
+                    #                    + str(L.sl[L.Gs.node[x[1]]['name']]]) for x in aseg]
+                    self[k]['diffslabs']=[ L.Gs.node[x[0]]['name']+'_'
+                                        +  L.Gs.node[x[1]]['name'] for x in aseg]
 
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)

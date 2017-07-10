@@ -902,8 +902,12 @@ class IntD(Inter):
             for m in self.dusl.keys():
                 idx = self.dusl[m]
                 mats = m.split('_')
-                mat0name = self.slab.di[eval(mats[0])]
-                matNname = self.slab.di[eval(mats[1])]
+                mat0name = mats[0]
+                matNname = mats[1]
+                # 
+                # mat0 first material of slab 0 
+                # matN first material of slab N 
+                #
                 mat0 = self.slab[mat0name]['lmat'][0]
                 matN = self.slab[matNname]['lmat'][0]
                 # from IPython.core.debugger import Tracer

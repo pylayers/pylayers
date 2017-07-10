@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 #
 #
+#   LAYOUT  Module
+#
+#
+#
 from __future__ import print_function
 try:
     from tvtk.api import tvtk
@@ -186,7 +190,7 @@ class Layout(pro.PyLayers):
 
     String
     ------
-    typ  : 'floorplan' | 'outdoor'
+    typ  : 'indoor' | 'outdoor'
     coordinates : 'cart','lonlat'
     version
     _filename 
@@ -224,15 +228,15 @@ class Layout(pro.PyLayers):
                  _filematini='matDB.ini',
                  _fileslabini='slabDB.ini',
                  _filefur='',
-                 bcheck=True,          # to check Gs
-                 bbuild=False,         # to build graphs
-                 bgraphs=True,         # to load graph 
-                 bindoor=False,        # to allow indoor penetration for outdoor situations
-                 bdiffraction=False,   # to include diffarction in Gi 
+                 bcheck  = True,          # to check Gs
+                 bbuild  = False,         # to build graphs
+                 bgraphs = True,         # to load graph 
+                 #bindoor=False,        # to allow indoor penetration for outdoor situations
+                 #bdiffraction=False,   # to include diffraction in Gi 
                  bverbose=False,
                  bcartesian=True,
                  dist_m=400,
-                 typ='floorplan'):
+                 typ='indoor'):
         """ object constructor
 
         Parameters
@@ -253,7 +257,7 @@ class Layout(pro.PyLayers):
         cartesian : boolean 
         dist_m : int 
         typ : string 
-            'floorplan' | 'outdoor'
+            'indoor' | 'outdoor'
 
 
         """
@@ -302,13 +306,7 @@ class Layout(pro.PyLayers):
 
         self.isbuilt = False
         self.loadosm = False
-        # diffraction : activate diffraction 
-        self.diffraction = bdiffraction
-        # indoor : activate indoor propagation 
-        if self.typ=='outdoor':
-            self.indoor = bindoor
-        else:
-            self.indoor = 1
+
         #
         # setting display option
         #
@@ -416,9 +414,18 @@ class Layout(pro.PyLayers):
             # check if the graph gpickle files have been built
             if bconsistent: 
                 #
+                # build and save graphs 
+                # 
+                if bbuild:
+                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
+                    # if ans.lower()=='y'
+                    self.build()
+                    self.lbltg.append('s')
+                    self.dumpw()
+                #
                 # load graphs from file 
                 #
-                if bgraphs:
+                elif bgraphs:
                     dirname = self._filename.replace('.ini','')
                     path = os.path.join(pro.basename,
                                         'struc',
@@ -435,21 +442,12 @@ class Layout(pro.PyLayers):
                         # If node 0 exists : the layout has been built
 
                         # If .ini file has changed rebuild
-                        if self._hash != self.Gt.node[0]['hash']:
-                            rebuild = True
-                        else:  # reload
+                        if self._hash == self.Gt.node[0]['hash']:
                             self.dumpr('stvirw')
                             self.isbuilt = True
                             bbuild = False
-                #
-                # build and save graphs 
-                # 
-                if bbuild:
-                    # ans = raw_input('Do you want to build the layout (y/N) ? ')
-                    # if ans.lower()=='y'
-                    self.build()
-                    self.lbltg.append('s')
-                    self.dumpw()
+                        else:
+                            print(".ini file has changed you must rebuild the grahs")
 
     def __repr__(self):
         st = '\n'
@@ -468,15 +466,7 @@ class Layout(pro.PyLayers):
         if self.isbuilt:
             st = st + 'Built with : ' + self.Gt.node[0]['hash'] + "\n"
         st = st + 'Type : '+ self.typ+'\n'
-        if self.indoor:
-            st = st + 'Indoor : Activated'+'\n'
-        else:
-            st = st + 'Indoor : Not activated'+'\n'
 
-        if self.diffraction:
-            st = st + 'Diffraction : Activated'+'\n'
-        else:
-            st = st + 'Diffraction : Not Activated'+'\n'
         if self.display['overlay_file'] != '':
             filename = pyu.getlong(
                 self.display['overlay_file'], os.path.join('struc', 'images'))
@@ -1505,7 +1495,7 @@ class Layout(pro.PyLayers):
         """
         defaults = {'_fileosm': '',
                     'address': 'Rennes',
-                    'typ': 'floorplan',
+                    'typ': 'indoor',
                     'latlon': '0',
                     'dist_m': 200,
                     'cart': False
@@ -1525,7 +1515,7 @@ class Layout(pro.PyLayers):
         # TODO : Not clean get zceil from actual data
         #
 
-        if self.typ=='floorplan':
+        if self.typ=='indoor':
             self.zceil = 3
             self.zfloor = 0
         
@@ -1552,7 +1542,7 @@ class Layout(pro.PyLayers):
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'ini')
         
-        # 2 valid typ : 'floorplan' and 'building'
+        # 2 valid typ : 'indoor' and 'building'
 
         _np = 0  # _ to avoid name conflict with numpy alias
         _ns = 0
@@ -1762,9 +1752,13 @@ class Layout(pro.PyLayers):
                 #
                 # Conditions pour ajout segments
                 # 
-                cond1 = not ((not self.indoor)       and 
-                         (self.Gs.node[n]['name']=='AIR')  and
-                        (self.Gs.node[n][z][1]>2000)) 
+                # _AIR are not added 
+                # 
+
+                cond1 = not ((not (self.typ=='indoor')) and 
+                        (self.Gs.node[n]['name']=='AIR')  and
+                        (self.Gs.node[n][z][1]>2000)   ) 
+
                 cond2 = (self.Gs.node[n]['name'] != '_AIR')
                 if (cond1 and cond2):
                     neigh = nx.neighbors(self.Gs, n)
@@ -1811,10 +1805,10 @@ class Layout(pro.PyLayers):
         config.set("info", "version", current_version)
         config.set("info", "type", self.typ)
 
-        if self.typ == 'floorplan':
-            config.add_section("floorplan")
-            config.set("floorplan", "zceil", self.zceil)
-            config.set("floorplan", "zfloor", self.zfloor)
+        if self.typ == 'indoor':
+            config.add_section("indoor")
+            config.set("indoor", "zceil", self.zceil)
+            config.set("indoor", "zfloor", self.zfloor)
 
         #if self.typ == 'outdoor':
         #    config.add_section("outdoor")
@@ -2001,7 +1995,7 @@ class Layout(pro.PyLayers):
         # [info] 
         #    format     {cart,latlon}   
         #    version    int 
-        #    type       {'floorplan','outdoor'}
+        #    type       {'indoor','outdoor'}
         if 'version' in di['info']:
             self.version = di['info']['version']
             self.name = {}
@@ -2019,13 +2013,13 @@ class Layout(pro.PyLayers):
         if di['info'].has_key('type'):
             self.typ = di['info']['type']
         #
-        # [floorplan]
+        # [indoor]
         #   zceil 
         #   zfloor
         #
-            if self.typ == 'floorplan':
-                self.zceil = eval(di['floorplan']['zceil'])
-                self.zfloor = eval(di['floorplan']['zfloor'])
+            if self.typ == 'indoor':
+                self.zceil = eval(di['indoor']['zceil'])
+                self.zfloor = eval(di['indoor']['zfloor'])
         #
         # [outdoor]
         #   TODO add a DEM file 
@@ -2034,7 +2028,7 @@ class Layout(pro.PyLayers):
                 self.zceil  =  3000    # upper limit for AIR walls
                 self.zfloor = 0 
         else:
-            self.typ = 'floorplan'
+            self.typ = 'indoor'
             self.zfloor = 0
             self.zceil = 3
         # manage ini file with latlon coordinates
@@ -5519,10 +5513,9 @@ class Layout(pro.PyLayers):
             if os.path.isfile(filediff):
                 ddiff = read_gpickle(filediff)
                 setattr(self, 'ddiff', ddiff)
-                self.diffraction = True
             else:
                 self.ddiff={}
-                self.diffraction=False
+
             filelnss = os.path.join(path, 'lnss.gpickle')
             if os.path.isfile(filelnss):
                 lnss = read_gpickle(filelnss)
@@ -6285,12 +6278,11 @@ class Layout(pro.PyLayers):
 
         self.g2npy()
         # find diffraction points : updating self.ddiff
-        if self.diffraction:
-            tqdmkwargs={'total':100.,'desc':'Find Diffractions','position':1}
-            self._find_diffractions(difftol=difftol,verbose=verbose,tqdmkwargs=tqdmkwargs)
-            if verbose:
+        tqdmkwargs={'total':100.,'desc':'Find Diffractions','position':1}
+        self._find_diffractions(difftol=difftol,verbose=verbose,tqdmkwargs=tqdmkwargs)
+        if verbose:
+            Gtpbar.update(100./12.)
             # print('find diffraction...Done 8/12')
-                Gtpbar.update(100./12.)
         # 
         # explanation of lnss
         #
@@ -7148,7 +7140,7 @@ class Layout(pro.PyLayers):
             if verbose:
                 pbar.update(100.*cpt)
             if k != 0:
-                if self.indoor or not self.Gt.node[k]['indoor']:
+                if self.typ=='indoor' or not self.Gt.node[k]['indoor']:
                     #vnodes = self.Gt.node[k]['vnodes']
                     vnodes = self.Gt.node[k]['polyg'].vnodes
                     ListInteractions = []
@@ -7168,7 +7160,7 @@ class Layout(pro.PyLayers):
                             #
                             # (segment number, cycle in , cycle out )
                             if len(cy) == 2:
-                                if (name != 'METAL') & (name != 'ABSORBENT'):
+                                if ('METAL' not in name) & ('ABSORBENT' not in name):
                                     ncy = list(cy.difference({k}))[0]
                                     ListInteractions.append((inode, k, ncy))
                                     ListInteractions.append((inode, ncy, k))
@@ -7583,9 +7575,9 @@ class Layout(pro.PyLayers):
             if verbose:
                 Gvpbar.update(100.*cpt)
             if icycle != 0:
-                if self.indoor or not self.Gt.node[icycle]['indoor']:
+                #if self.indoor or not self.Gt.node[icycle]['indoor']:
                     #print(icycle)
-                    pass
+                #    pass
                 #
                 #  If indoor or outdoor all visibility are calculated
                 #  If outdoor only visibility between iso = 'AIR' and '_AIR' are calculated 
@@ -7615,7 +7607,7 @@ class Layout(pro.PyLayers):
                 #
                 # if mode outdoor and cycle is indoor only 
                 # the part above the building (AIR and _AIR) is considered
-                if ((not self.indoor) and (self.Gt.node[icycle]['indoor'])):
+                if ((self.typ=='outdoor') and (self.Gt.node[icycle]['indoor'])):
                     nseg = [ x for x in nseg_full if ((self.Gs.node[x]['name']=='AIR') or (self.Gs.node[x]['name']=='_AIR') ) ]
                 else:
                     nseg = vnodes[useg]
@@ -7674,7 +7666,7 @@ class Layout(pro.PyLayers):
                         if ((0 not in self.Gs.node[nk[0]]['ncycles']) and
                             (0 not in self.Gs.node[nk[1]]['ncycles'])):
                             # get the iso segments of both nk[0] and nk[1]
-                            if ((self.indoor) or (not self.Gt.node[icycle]['indoor'])):
+                            if ((self.typ=='indoor') or (not self.Gt.node[icycle]['indoor'])):
                                 l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
                                 l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
                             else:
@@ -7696,7 +7688,7 @@ class Layout(pro.PyLayers):
                 #
                 # diffraction only if indoor or outdoor cycle if outdoor
                 # 
-                if ((self.indoor) or (not self.Gt.node[icycle]['indoor'])):
+                if ((self.typ=='indoor') or (not self.Gt.node[icycle]['indoor'])):
                     ndiffvalid = [ x for x in ndiff if icycle in self.ddiff[x][0]]
 
                         # non adjascent segment of vnodes see valid diffraction
@@ -7847,24 +7839,19 @@ class Layout(pro.PyLayers):
             if cy > 0:
                 vnodes = self.Gt.node[cy]['polyg'].vnodes
                 npt = []
-                if self.diffraction:
-                    #
-                    # find all diffraction points involved in the cycle cy 
-                    #
-                    for x in vnodes:
-                        if x < 0:
-                            if self.ddiff.has_key(x):
-                                for y in self.ddiff[x][0]:
-                                    if y == cy:
-                                        npt.append(x)
-                    
+                #
+                # find all diffraction points involved in the cycle cy 
+                #
+                for x in vnodes:
+                    if x < 0:
+                        if self.ddiff.has_key(x):
+                            for y in self.ddiff[x][0]:
+                                if y == cy:
+                                    npt.append(x)
+                
                 nseg = [ k for k in vnodes if k>0 ]
-                if self.diffraction:
                 # all segments and diffraction points of the cycle
-                    vnodes = nseg + npt
-                else:
-                # only segments
-                    vnodes = nseg
+                vnodes = nseg + npt
 
                 for nstr in vnodes:
 
@@ -8009,7 +7996,7 @@ class Layout(pro.PyLayers):
         # or if starting point is indoor 
         # then delte interaction 
         ldelete = []
-        if not self.indoor:
+        if self.typ=='outdoor':
             for k in self.Gi.node.keys():
                 if len(k)>1:
                     segtype = self.Gs.node[k[0]]['name']
