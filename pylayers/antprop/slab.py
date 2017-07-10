@@ -1958,7 +1958,6 @@ class SlabDB(dict):
         """
 
         U = Slab(name,self.mat)
-        maxi = self.maxindex()
         U['lmatname'] = lmatname
         U['lthick'] = lthick
         U['color'] = color
