@@ -1941,7 +1941,10 @@ class Layout(pro.PyLayers):
         #
         for m in lmat:
             dm = self.sl.mat[m]
-            dm.pop('name')
+            try:
+                dm.pop('name')
+            except:
+                pass
             config.set("materials", m, dm)
 
         if "REINFORCED_CONCRETE" not in lmat:

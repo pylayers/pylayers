@@ -1257,6 +1257,7 @@ class Signatures(PyLayers,dict):
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
+                #print visited
                 #if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
                 #    import ipdb
                 #    ipdb.set_trace()
