@@ -997,7 +997,6 @@ class MatDB(PyLayers,dict):
         self['sigma'] = eval(data[4])
         self['roughness'] = eval(data[5])
         # update keys association dictionnary
-        #self.dass()
 
     def add(self,**kwargs):
         """ add a material in the DB
@@ -1105,7 +1104,6 @@ class MatDB(PyLayers,dict):
 
         self[kwargs['name']] = M
         # updating dictionnary
-        #self.dass()
 
     def addgui(self, name='MAT'):
         """ Add a material in the DB
@@ -1126,7 +1124,6 @@ class MatDB(PyLayers,dict):
         M['sigma'] = eval(data[4])
         M['roughness'] = eval(data[5])
         self[name] = M
-        #self.dass()
 
 
     def choose(self):
@@ -1809,7 +1806,6 @@ class SlabDB(dict):
                 # add slab to SlabDB
                 self[slabname]=S
 
-        #self.dass()
 
     def __repr__(self):
         st = 'List of Slabs\n'
@@ -1846,7 +1842,6 @@ class SlabDB(dict):
 
         """
         self.__delitem__(name)
-        self.dass()
 
     def edit(self, name):
         """ edit a Slab in the DB
@@ -1965,7 +1960,6 @@ class SlabDB(dict):
         U['evaluated'] = False
         U.conv(self.mat)
         self[name] = U
-        self.dass()
 
     def addgui(self, name):
         """ add a slab in the DB
@@ -1979,7 +1973,6 @@ class SlabDB(dict):
         U = Slab(name,self.mat)
         U.edit()
         self[U.name] = U
-        self.dass()
 
 
     def load(self,_fileini='slabDB.ini'):
