@@ -1,7 +1,10 @@
 from pylayers.gis.layout import Layout
+from pylayers.util.project import * 
+import pylayers.util.pyutil as pyu
 import networkx as nx
 import matplotlib.pyplot as plt
 import warnings
+import shutil
 
 warnings.filterwarnings("error")
 
@@ -12,10 +15,13 @@ lL = L.ls()
 for tL in lL:
     print  'Layout :     ',tL
     print  '--------------------------'
-    L=Layout(tL,bbuild=1,bgraphs=0,bdiffraction=1,bindoor=0)
-    L.save()
-
-#f = plt.figure(figsize=(20,10))
+    L = Layout(tL,bbuild=0)
+    if L.check():
+        L.save()
+        filein = pyu.getlong(L._filename, pstruc['DIRINI'])
+        fileout = '/home/uguen/Documents/rch/devel/pylayers/data/struc/ini/'+L._filename
+        shutil.copy2(filein,fileout)
+#figure(figsize=(20,10))
 #plt.axis('off')
 #f,a = L.showG('s',nodes=False,fig=f)
 #plt.show()

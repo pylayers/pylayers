@@ -1998,7 +1998,6 @@ class Layout(pro.PyLayers):
         #    type       {'indoor','outdoor'}
         if 'version' in di['info']:
             self.version = di['info']['version']
-            pdb.set_trace()
             self.typ = di['info']['type']
             self.name = {}
         else:
