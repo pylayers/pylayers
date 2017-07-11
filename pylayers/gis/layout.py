@@ -1795,7 +1795,7 @@ class Layout(pro.PyLayers):
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
-        config.add_section("display")
+        #config.add_section("display")
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
