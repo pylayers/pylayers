@@ -304,8 +304,14 @@ def tstincl(ar1,ar2):
         return(2)
 
 def ininter(ar,val1,val2):
-    """
-    ininter(ar,val1,val2):
+    """ in interval 
+
+    Parameters
+    ----------
+
+    ar 
+    val1 
+    val2 
 
     This function return the set of samples from array ar 
     which are included in the interval [val1 val2] 
@@ -315,6 +321,46 @@ def ininter(ar,val1,val2):
     """
     criterium= (ar>=val1)&(ar<=val2)
     return(ar[criterium])
+
+def compint(linterval,zmin,zmax,tol=1e-6):
+    """ get complementary intervals 
+
+    Parameters
+    ----------
+
+    linterval : tuple or list of tuple 
+    zmin : min value
+    zmax : max value 
+    
+    This function is used for filling the gap with air walls in layout
+    
+    Example
+    -------
+        >>> linterval = [(0.2,1),(1.5,2),(2.5,2.7)]
+        >>> zmin =0. 
+        >>> zmax =3.
+        >>> compint(linterval,zmin,zmax)
+        [(0.0, 0.2), (1, 1.5), (2, 2.5), (2.7, 3.0)]
+        >>> linterval = [(0,1),(1,3)]
+        >>> compint(linterval,zmin,zmax)
+        []
+        >>> compint(linterval,-2.,4.)
+        [(-2.0, 0), (3, 4.0)]
+
+    """
+    compint = []
+    N = len(linterval)
+    for k,it in enumerate(linterval):
+        if k==0: # first interval
+            if (it[0]-zmin)>tol:
+                compint.append((zmin,it[0]))
+        elif (it[0]-ip[1])>tol:
+                compint.append((ip[1],it[0]))
+        ip = it 
+    if it[1]<zmax:
+        compint.append((it[1],zmax))
+
+    return compint 
 
 def cshift(l, offset):
     """ ndarray circular shift     

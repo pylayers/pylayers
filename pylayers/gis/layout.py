@@ -398,6 +398,7 @@ class Layout(pro.PyLayers):
                 self.boundary()
             self.subseg()
             self.updateshseg()
+
             try:
                 self.geomfile()
             except:
@@ -1845,7 +1846,12 @@ class Layout(pro.PyLayers):
         for n in self.Gs.pos:
             if n > 0:
                 cond1 = (self.Gs.node[n]['name'] != '_AIR')
-                if cond1: 
+                cond2 = (self.Gs.node[n]['name'] == AIR)
+                cond3 = (self.Gs.node[n][z][1] == self.zceil)
+                cond4 = (self.Gs.node[n][z][0] == self.zfloor)
+                cond5 = (cond2 and cond3)
+                cond6 = (cond2 and cond4)
+                if cond1 and (not cond5) and (not cond6): 
                     d = self.Gs.node[n]
                     d['connect'] = nx.neighbors(self.Gs, n)
                     try:
@@ -2056,13 +2062,13 @@ class Layout(pro.PyLayers):
         #
         # update display section
         #
-        for k in di['display']:
-            try:
-                self.display[k] = eval(di['display'][k])
-            except:
-                self.display[k] = di['display'][k]
+        #for k in di['display']:
+        #    try:
+        #        self.display[k] = eval(di['display'][k])
+        #    except:
+        #        self.display[k] = di['display'][k]
 
-        self.ax = self.display['box']
+        # self.ax = self.display['box']
 
         #
         # [points] 
@@ -2097,48 +2103,69 @@ class Layout(pro.PyLayers):
         # get the maximum index
         #
         maxnum = max([eval(x) for x in di['segments'].keys()])
-        for k, key in enumerate(di['segments']):
+        for key in di['segments']:
 
             d = eval(di['segments'][key])
             nta = d['connect'][0]
             nhe = d['connect'][1]
             #print(key,nta,nhe)
-            if not d.has_key('offset'):
-                offset = 0
-            else:
-                offset = d['offset']
+
             
             name = d['name']
             z = d['z']
+            if not d.has_key('offset'):
+                if type(z)==list:
+                    offset = list(np.zeros(len(z)))
+                else:
+                    offset = 0 
+            else:
+                offset = d['offset']
+            
+
+            # iso segments
+            #if ((type(name)==list) 
+            # & (type(z)==list) 
+            # & (type(offset)==list)):
+            #    assert (len(name)==len(z))
+            #    assert (len(offset)==len(z))
+            #    for n_,z_,o_ in zip(name,z,offset):
+            #        num = self.add_segment(nta, nhe,
+            #                       num = eval(key),
+            #                       name = n_,
+            #                       offset = o_,
+            #                       z = z_)
+            # mono segment
             num = self.add_segment(nta, nhe,
-                                   num = eval(key), 
+                                   num = eval(key),
                                    name = name,
                                    offset = offset,
-                                   z=z)
+                                   z = z)
 
-            # exploit iso for segment completion 
-            #
-            #  Complement single segment which do not reach zceil or zfloor with
-            #  an iso segment with AIR property
-            # 
-            # if di['info']['type'] == 'outdoor':
-            if self.typ=='outdoor':
-                if name!='AIR':
-                    if z[1] < self.zceil:
-                        num = self.add_segment(nta, nhe,
-                                            name='_AIR',
-                                            maxnum = maxnum, 
-                                            offset=offset,
-                                            z=(z[1], self.zceil))
+        # exploit iso for segment completion 
+        #
+        #  Complement single segment which do not reach zceil or zfloor with
+        #  an iso segment with AIR property
+        # 
+        # if di['info']['type'] == 'outdoor':
+        
+        #zair = pyu.compint(z,self.zfloor,self.zceil)
+        #print(key,zair)
 
-                    if z[0] > self.zfloor:
-                        num = self.add_segment(nta, nhe,
-                                            name='_AIR',
-                                            maxnum = maxnum, 
-                                            offset=offset,
-                                            z=(self.zfloor,z[0]))
-            if self.typ=='indoor':
-                pass
+
+        #for za in zair: 
+        #    num = self.add_segment(nta, nhe,
+        #                        name='AIR',
+        #                        offset=0,
+        #                        z=(za[0], za[1]))
+        #    pdb.set_trace()
+
+            #if z[0] > self.zfloor:
+            #    num = self.add_segment(nta, nhe,
+            #                        name='AIR',
+            #                        maxnum = maxnum, 
+            #                        offset=offset,
+            #                        z=(self.zfloor,z[0]))
+            #    pdb.set_trace()
 
        
         self.boundary()
@@ -2452,9 +2479,11 @@ class Layout(pro.PyLayers):
 
         n1  : integer < 0
         n2  : integer < 0
+        num : segment index (-1 default not given)
+        maxnum : maximum number (-1 default not given) 
         name : string
             layer name 'PARTITION'
-        z : list of float
+        z : tuple of 2 floats
             default = (0,40000000)
         offset : float
             [-1,1] default (0)
@@ -2520,37 +2549,48 @@ class Layout(pro.PyLayers):
 
         nbnta = self.Gs.neighbors(n1)
         nbnhe = self.Gs.neighbors(n2)
+
         same_seg = list(set(nbnta).intersection(nbnhe))
 
         #
         # Impossible to have duplicated _AIR
         #
-        if (name == '_AIR'):
-            if len(same_seg) > 0:
-                return None
+        # not True anymore
 
+        #if (name == '_AIR'):
+        #    if len(same_seg) > 0:
+        #        return None
+
+        #
+        # add a segment node to Gs
+        #
         self.Gs.add_node(num, name=name,
-                         z=z,
-                         norm=norm,
-                         transition=transition,
-                         offset=offset,
-                         connect=[n1, n2],
-                         iso=[],
-                         ncycles=[]
+                         z = z,
+                         norm = norm,
+                         transition = transition,
+                         offset = offset,
+                         connect = [n1, n2],
+                         iso = [],
+                         ncycles = []
                          )
 
+        #
+        # update iso of the 2 segments 
+        #
         for k in same_seg:
             self.Gs.node[k]['iso'].append(num)
             self.Gs.node[num]['iso'].append(k)
 
         #
-        # Segment position in the middle
+        # Segment punctual position is in the middle of segment
         #
+
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
 
         #
-        # Connectivity
+        # Connectivity between segment node num and points nodes n1 and n2
         #
+
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
 
@@ -2852,7 +2892,6 @@ class Layout(pro.PyLayers):
 
         for e in le:
             assert(e > 0)
-            self.del_subseg(e, verbose=verbose)
             name = self.Gs.node[e]['name']
             del self.Gs.pos[e]  # delete edge position
             self.Gs.remove_node(e)
@@ -3307,153 +3346,6 @@ class Layout(pro.PyLayers):
             return True
         else:
             return False
-
-    def del_subseg(self, e1, verbose=False):
-        """ delete sub subsegent
-
-        Parameters
-        ----------
-        e1 : integer
-             segment number
-        """
-        assert (e1 > 0)
-        if self.have_subseg(e1):
-            self.Gs.node[e1].pop('ss_name')
-            self.Gs.node[e1].pop('ss_z')
-            self.Gs.node[e1].pop('ss_offset')
-            try:
-                self.Gs.node[e1].pop('ss_ce')
-            except:
-                pass
-            self.Gs.node[e1].pop('transition')
-            self.Nss -= 1
-        elif verbose:
-            print("no subseg to delete")
-
-    def add_subseg(self, s1, name='DOOR', zmin=0, zmax=2.24, offset=0, transition=True):
-        """ add a subsegment on a segment WITH EasyGUI
-
-        Parameters
-        ----------
-
-        s1 : integer
-            edge number > 0
-        name : string
-            slab name
-        zmin : float
-            default 0
-        zmax : float
-            default 2.24 m
-
-        """
-        self.info_segment(s1)
-        message = str(self.sl.keys())
-        title = 'Add a subsegment'
-        data = eag.multenterbox(message, title, ('name', 'zmin', 'zmax', 'offset'),
-                            (name, zmin, zmax, offset))
-        try:
-            self.Gs.node[s1]['ss_name'] = [data[0]]
-            self.Nss += 1
-            self.chgmss(s1, ss_name=[data[0]], ss_offset=[
-                        eval(data[3])], ss_z=[(eval(data[1]), eval(data[2]))])
-            # self.Gs.node[s1]['ss_z'] =
-            # ce is for Pulsray compatibility
-            #self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
-            self.Gs.node[s1]['transition'] = transition
-            return True
-        except:
-            return False
-
-    def update_sseg(self, s1, data={}, g2npy=True):
-        """ update subsegment(s) on a segment
-
-        Parameters
-        ----------
-
-        s1 : integer
-            edge number > 0
-        data = dict
-            dictionnary of data
-
-        """
-
-        assert len(data['ss_name']) == len(
-            data['ss_z']), 'Error incompatible size in chgmss'
-        assert len(data['ss_z']) == len(data['ss_offset']
-                                        ), 'Error incompatible size in chgmss'
-        if s1 < 0:
-            return False
-
-        new_nbss = len(data['ss_name'])
-
-        try:
-            old_nbss = len(self.Gs.node[s1]['ss_name'])
-        except:
-            old_nbss = 0
-        # update the number of subsegments for self.Nss
-        deltaNss = new_nbss - old_nbss
-        # printdeltaNss
-        if new_nbss != 0:
-            self.Gs.node[s1]['ss_name'] = [data['ss_name']]
-            self.Nss += deltaNss
-            self.chgmss(s1, ss_name=data['ss_name'],
-                        ss_offset=data['ss_offset'],
-                        ss_z=data['ss_z'], g2npy=g2npy)
-            return True
-        else:
-            if self.Gs.node[s1].has_key('ss_name'):
-                self.Gs.node[s1].pop('ss_name')
-                self.Gs.node[s1].pop('ss_z')
-                self.Gs.node[s1].pop('ss_offset')
-                self.Nss += deltaNss
-                if g2npy:
-                    self.g2npy()
-                return True
-            else:
-                return True
-
-    def add_window(self, s1, z):
-        """ add a window on segment
-
-        Parameters
-        ----------
-
-        s1 : integer
-            segment number
-        z : tuple of float
-            (zmin,zmax)
-
-        """
-        if (zmin > self.Gs.node[e1]['z'][0]) & (zmax < self.Gs.node[e1]['z'][1]):
-            self.info_edge(s1)
-            self.Gs.node[s1]['ss_name'].append('WINDOW')
-            self.Gs.node[s1]['ss_z'].append((zmin, zmax))
-            self.Gs.node[s1]['ss_ce'].append((0, 0))
-            self.Gs.node[s1]['transition'] = False
-            self.Nss += 1
-        else:
-            logging.warning('windows range is wrong')
-
-    def add_door(self, s1, zmin, zmax):
-        """ add a door on segment
-
-        Parameters
-        ----------
-
-        s1 : integer
-            segment number
-        zmin : float
-        zmax : float
-
-
-        """
-        if (zmin > self.Gs.node[s1]['z'][0]) & (zmax < self.Gs.node[s1]['z'][1]):
-            self.info_segment(s1)
-            self.Gs.node[s1]['ss_name'].append('DOOR')
-            self.Gs.node[s1]['ss_zmin'].append((zmin, zmax))
-            self.Gs.node[s1]['ss_ce'].append((0, 0))
-            self.Gs.node[s1]['transition'] = True
-            self.Nss += 1
 
     def find_edgelist(self, edgelist, nodelist):
         """
@@ -6153,6 +6045,7 @@ class Layout(pro.PyLayers):
         Nairseg = len(_airseg)
         cpt = 1./(Nairseg+1)
         pbartmp = pbar(verbose,total=100., desc ='Mikado',leave=True,position=tqdmpos+1)
+        pdb.set_trace()
         for a in _airseg:
             if verbose:
                 pbartmp.update(100.*cpt)
@@ -9037,7 +8930,7 @@ class Layout(pro.PyLayers):
                     'sllist':[],
                     'airwalls': False,
                     'subseg': False,
-                    'slab': False,
+                    'slab': True,
                     'labels': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
@@ -9100,7 +8993,7 @@ class Layout(pro.PyLayers):
                     'airwalls': False,
                     'aw': [],
                     'subseg': False,
-                    'slab': False,
+                    'slab': True,
                     'labels': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
@@ -11582,10 +11475,12 @@ class Layout(pro.PyLayers):
             self.lboundary = [n1, n2, n3, n4]
 
             self.segboundary = []
+
             ns1 = self.add_segment(n1, n2, name='_AIR')
             ns2 = self.add_segment(n2, n3, name='_AIR')
             ns3 = self.add_segment(n3, n4, name='_AIR')
             ns4 = self.add_segment(n4, n1, name='_AIR')
+
             self.segboundary.append(ns1)
             self.segboundary.append(ns2)
             self.segboundary.append(ns3)
