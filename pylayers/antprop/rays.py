@@ -509,6 +509,9 @@ class Rays(PyLayers, dict):
 
     def sort(self):
         """ sort rays
+        
+        TODO : not finished 
+
         """
         u = np.argsort(self.dis)
 
@@ -1194,9 +1197,15 @@ class Rays(PyLayers, dict):
 
                             #
                             # At which couple of segments belongs this height ? 
-                            # new function in layout get_diffslab
+                            # get_diffslab function answers that question
+                            #
+
                             ltu_seg,ltu_slab = L.get_diffslab(npt,zp)
 
+                            #
+                            # delete rays where diffraction point is connected to  
+                            # 2 AIR segments
+                            # 
 
                             [ray_to_delete.append(u[1][i]) for i in range(len(zp)) 
                             if ((ltu_slab[i][0]=='AIR') & (ltu_slab[i][1]=='AIR'))]
@@ -1707,7 +1716,7 @@ class Rays(PyLayers, dict):
                 #################################
                 
                 if len(udiff[0]) != 0 :
-                    Z=np.where(ityp.T==1)
+                    Z = np.where(ityp.T==1)
                     udiff=Z[1],Z[0]
 
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
@@ -1721,7 +1730,7 @@ class Rays(PyLayers, dict):
 
                     self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
-                    lair = L.name['AIR']+L.name['_AIR']
+                    lair = L.name['AIR'] + L.name['_AIR']
                     aseg = map(lambda x : filter(lambda y : y not in lair,
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)

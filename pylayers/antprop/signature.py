@@ -1132,6 +1132,10 @@ class Signatures(PyLayers,dict):
         animation = kwargs['animation'] 
 
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        #
+        # AIR : editable AIR separation 
+        # _AIR : constructed AIR separation 
+        #
         lair = self.L.name['AIR']+self.L.name['_AIR']
 
         # list of interactions visible from source

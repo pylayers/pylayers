@@ -230,7 +230,7 @@ class Layout(pro.PyLayers):
                  _filefur='',
                  bcheck  = True,          # to check Gs
                  bbuild  = False,         # to build graphs
-                 bgraphs = True,         # to load graph 
+                 bgraphs = False,         # to load graph 
                  #bindoor=False,        # to allow indoor penetration for outdoor situations
                  #bdiffraction=False,   # to include diffraction in Gi 
                  bverbose=False,
@@ -1754,12 +1754,15 @@ class Layout(pro.PyLayers):
                 # 
                 # _AIR are not added 
                 # 
+                # outdoor AIR wall above buildings are not added
+                # cond1 is wrong
 
                 cond1 = not ((not (self.typ=='indoor')) and 
                         (self.Gs.node[n]['name']=='AIR')  and
                         (self.Gs.node[n][z][1]>2000)   ) 
 
                 cond2 = (self.Gs.node[n]['name'] != '_AIR')
+
                 if (cond1 and cond2):
                     neigh = nx.neighbors(self.Gs, n)
                     d = self.Gs.node[n]
@@ -1827,8 +1830,8 @@ class Layout(pro.PyLayers):
         # config.set("info",'Nsegments',self.Ns)
         # config.set("info",'Nsubsegments',self.Nss)
 
-        for k in self.display:
-            config.set("display", k, self.display[k])
+        #for k in self.display:
+        #    config.set("display", k, self.display[k])
 
         # iterate on points
         # boundary nodes and air walls are not saved
@@ -1841,25 +1844,9 @@ class Layout(pro.PyLayers):
         # iterate on segments
         for n in self.Gs.pos:
             if n > 0:
-                if self.Gs.node[n]['name'] != '_AIR':
+                cond1 = (self.Gs.node[n]['name'] != '_AIR')
+                if cond1: 
                     d = self.Gs.node[n]
-                    # old format conversion
-                    if 'ncycles' in d:
-                        del d['ncycles']
-                    if 'ss_ce1' in d:
-                        del d['ss_ce1']
-                    if 'ss_ce2' in d:
-                        del d['ss_ce2']
-                    if 'zmin' in d:
-                        d['z'] = [d['zmin'], d['zmax']]
-                        del(d['zmin'])
-                        del(d['zmax'])
-                    if 'ss_zmin' in d:
-                        d['ss_z'] = [[d['ss_zmin'], d['ss_zmax']]]
-                        d['ss_name'] = [d['ss_name']]
-                        del(d['ss_zmin'])
-                        del(d['ss_zmax'])
-
                     d['connect'] = nx.neighbors(self.Gs, n)
                     try:
                         if d['transition']:
@@ -1876,6 +1863,17 @@ class Layout(pro.PyLayers):
                         d.pop('norm')
                     except:
                         pass
+                    # remove iso information from the strucure
+                    try:
+                        d.pop('iso')
+                    except:
+                        pass
+                    # remove ncycles information from the strucure
+                    try:
+                        d.pop('ncycles')
+                    except:
+                        pass
+
                     config.set("segments", str(n), d)
 
         #
@@ -2030,8 +2028,10 @@ class Layout(pro.PyLayers):
                 self.zfloor = 0 
         else:
             self.typ = 'indoor'
-            self.zfloor = 0
-            self.zceil = 3
+            self.zceil = 3.
+            self.zfloor = 0.
+        #
+        #
         # manage ini file with latlon coordinates
         #
         # if the format is latlon, coordinates are converted into
@@ -2112,8 +2112,8 @@ class Layout(pro.PyLayers):
             z = d['z']
             num = self.add_segment(nta, nhe,
                                    num = eval(key), 
-                                   name=name,
-                                   offset=offset,
+                                   name = name,
+                                   offset = offset,
                                    z=z)
 
             # exploit iso for segment completion 
@@ -2122,19 +2122,23 @@ class Layout(pro.PyLayers):
             #  an iso segment with AIR property
             # 
             # if di['info']['type'] == 'outdoor':
-            if z[1] < self.zceil:
-                 num = self.add_segment(nta, nhe,
-                                        name='AIR',
-                                        maxnum = maxnum, 
-                                        offset=offset,
-                                        z=(z[1], self.zceil))
+            if self.typ=='outdoor':
+                if name!='AIR':
+                    if z[1] < self.zceil:
+                        num = self.add_segment(nta, nhe,
+                                            name='_AIR',
+                                            maxnum = maxnum, 
+                                            offset=offset,
+                                            z=(z[1], self.zceil))
 
-            if z[0] > self.zfloor:
-                 num = self.add_segment(nta, nhe,
-                                        name='AIR',
-                                        maxnum = maxnum, 
-                                        offset=offset,
-                                        z=(self.zfloor,z[0]))
+                    if z[0] > self.zfloor:
+                        num = self.add_segment(nta, nhe,
+                                            name='_AIR',
+                                            maxnum = maxnum, 
+                                            offset=offset,
+                                            z=(self.zfloor,z[0]))
+            if self.typ=='indoor':
+                pass
 
        
         self.boundary()
@@ -9854,7 +9858,7 @@ class Layout(pro.PyLayers):
             ---- 
             As a diffraction point may involve iso segments the nature 
             of the diffraction interaction depends on a height parameter
-            This function extact the couple of slab from this information
+            This function extacts the couple of slab from this information
 
             Returns
             -------
