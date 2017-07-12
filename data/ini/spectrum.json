@@ -1,0 +1,19 @@
+{"80211ah": 
+    {"fstart": 0.863, 
+    "fstop": 0.868, 
+    "fstep": 1, 
+    "zone": "Europe",
+    "bmhz": 1},
+"U-NII-2A": {
+    "fstart": 5.250,
+    "fstop": 5.350,
+    "fstep": 20,
+    "zone": "Europe", 
+    "bmhz": 20}, 
+"ISM24-1": {"fstart": 2.405, "fstop": 2.484, "fstep": "1", "zone": "Europe", "bmhz": 1},
+"U-NII-2B": {"fstart": 5.350, "fstop": 5.470, "fstep": "20", "zone": "Europe", "bmhz": 20},
+"U-NII-3": {"fstart": 5.725, "fstop": 5.825, "fstep": "20", "zone": "Europe", "bmhz": 20},
+"U-NII-1": {"fstart": 5.150, "fstop": 5.250, "fstep": "20", "zone": "Europe", "bmhz": 20},
+"ISM24-20": {"fstart": 2.412, "fstop": 2.477, "fstep": "5", "zone": "Europe", "bmhz": 20},
+"U-NII-4": {"fstart": 5.850, "fstop": 5.925, "fstep": "20", "zone": "Europe", "bmhz": 20},
+"U-NII-2C": {"fstart": 5.470, "fstop": 5.725, "fstep": "20", "zone": "Europe", "bmhz": 20}}
