@@ -4,8 +4,8 @@ from pylayers.antprop.antenna import *
 from pylayers.util.geomutil import *
 
 # parameters
-fmin  = 1.8 # GHz
-fmax  = 3.4         # GHz
+fmin  = 31.8 # GHz
+fmax  = 33.4         # GHz
 bw    = fmax - fmin  # bandwidth in GHz
 nf    = 10001           # sweep frequency points
 fc    = (fmin + fmax)/2.
@@ -46,7 +46,7 @@ DL.b  = bs
 # MS antenna
 DL.Aa = Antenna('Omni')
 # BS antenna
-DL.Ab = Antenna('aperture')
+DL.Ab = Antenna('aperture',fGHz=fGHz)
 
 # orientation of the Horn antenna
 # alpha = 0.37 rads (z axis) 

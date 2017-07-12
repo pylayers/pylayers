@@ -1188,7 +1188,11 @@ class Rays(PyLayers, dict):
                     #
                     # loop over multi diffraction points
                     #
+                
                     for npt in lns: 
+                        if npt==-225:
+                            import ipdb 
+                            ipdb.set_trace()
 
                         u  = np.where(anstr==npt)
                         if len(u)>0:
