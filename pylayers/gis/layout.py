@@ -1965,9 +1965,37 @@ class Layout(pro.PyLayers):
         self._hash = hashlib.md5(open(fileini, 'rb').read()).hexdigest()
 
     def load(self):
-        """ load a structure file from an .ini file
+        """ load a layout  from a .lay file
 
-        The filename is self._filename
+        The filename is in self._filename
+
+        Format version 1.3
+        ------------------
+
+        [info]
+        format = {cart | latlon} 
+        version = 
+        type = {indoor | outdoor}
+
+        [points]
+        -1 = (x,y)
+
+        [segments]
+        1 = {'slab':'',transition:boolean,'connect:[-1,-2],'z':(0,3)}
+
+        [slabs]
+        WALL = {'lthick':[,],'lmat':[,],'color:'','linewidth':float}
+        
+        [materials]
+        BRICK = {'mur':complex,'epsr':complex,'sigma':float,'roughness':}
+
+        [indoor]
+        zceil =
+        zfloor =
+        
+        [outdoor]
+        zceil =
+        zfloor =
 
         """
 
@@ -2121,53 +2149,52 @@ class Layout(pro.PyLayers):
             else:
                 offset = d['offset']
             
-
-            # iso segments
-            #if ((type(name)==list) 
-            # & (type(z)==list) 
-            # & (type(offset)==list)):
-            #    assert (len(name)==len(z))
-            #    assert (len(offset)==len(z))
-            #    for n_,z_,o_ in zip(name,z,offset):
-            #        num = self.add_segment(nta, nhe,
-            #                       num = eval(key),
-            #                       name = n_,
-            #                       offset = o_,
-            #                       z = z_)
-            # mono segment
+            # add new segment
+            #
+            # The segment number is the same as in the .lay file
+            # 
+            #   Very useful feature 
+            #
             num = self.add_segment(nta, nhe,
                                    num = eval(key),
                                    name = name,
                                    offset = offset,
                                    z = z)
 
-        # exploit iso for segment completion 
+        # exploit iso for segment completion (AIR type) 
         #
         #  Complement single segment which do not reach zceil or zfloor with
         #  an iso segment with AIR property
         # 
-        # if di['info']['type'] == 'outdoor':
-        
-        #zair = pyu.compint(z,self.zfloor,self.zceil)
-        #print(key,zair)
+        segdone = []
+        for key in di['segments']:
+            iseg = eval(key)
+            d = eval(di['segments'][key])
+            nta = d['connect'][0]
+            nhe = d['connect'][1]
+            # if not already done
+            if iseg not in segdone:
+                # get all the iso from the segment key
+                iso = self.Gs.node[iseg]['iso'] 
+                # append key to iso  
+                iso.append(iseg)
+                # stack all the intervals in increasing order 
+                ziso = []
+                for ns in iso:
+                    ziso.append(self.Gs.node[ns]['z'])
+                # get the complementary intervals
+                zair = pyu.compint(ziso,self.zfloor,self.zceil)
+                # add AIR wall in the intervals
+                for za in zair: 
+                    num = self.add_segment(nta, nhe,
+                            name='AIR',
+                            offset=0,
+                            z=(za[0], za[1]))
+                segdone = segdone + iso
 
-
-        #for za in zair: 
-        #    num = self.add_segment(nta, nhe,
-        #                        name='AIR',
-        #                        offset=0,
-        #                        z=(za[0], za[1]))
-        #    pdb.set_trace()
-
-            #if z[0] > self.zfloor:
-            #    num = self.add_segment(nta, nhe,
-            #                        name='AIR',
-            #                        maxnum = maxnum, 
-            #                        offset=offset,
-            #                        z=(self.zfloor,z[0]))
-            #    pdb.set_trace()
-
-       
+        #
+        # add _AIR wall around the layout
+        #
         self.boundary()
         
         # compliant with config file without  material/slab information
@@ -2555,11 +2582,14 @@ class Layout(pro.PyLayers):
         #
         # Impossible to have duplicated _AIR
         #
-        # not True anymore
+        # Warning : The 3 following lines are very important 
+        # it breaks buildGt if commented
+        # Please do not comment them. 
+        #
 
-        #if (name == '_AIR'):
-        #    if len(same_seg) > 0:
-        #        return None
+        if (name == '_AIR'):
+            if len(same_seg) > 0:
+                return None
 
         #
         # add a segment node to Gs

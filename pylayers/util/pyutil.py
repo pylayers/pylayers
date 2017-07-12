@@ -341,6 +341,9 @@ def compint(linterval,zmin,zmax,tol=1e-6):
         >>> zmax =3.
         >>> compint(linterval,zmin,zmax)
         [(0.0, 0.2), (1, 1.5), (2, 2.5), (2.7, 3.0)]
+        >>> linterval = [(1.5,2),(0.2,1),(2.5,2.7)]
+        >>> compint(linterval,zmin,zmax)
+        [(0.0, 0.2), (1, 1.5), (2, 2.5), (2.7, 3.0)]
         >>> linterval = [(0,1),(1,3)]
         >>> compint(linterval,zmin,zmax)
         []
@@ -348,9 +351,23 @@ def compint(linterval,zmin,zmax,tol=1e-6):
         [(-2.0, 0), (3, 4.0)]
 
     """
-    compint = []
     N = len(linterval)
-    for k,it in enumerate(linterval):
+    vmin = np.array([])
+    vmax = np.array([])
+    for it in linterval: 
+        vmin = np.append(vmin,it[0])
+        vmax = np.append(vmax,it[1])
+    u = np.argsort(vmin)
+    v = np.argsort(vmax)
+    # check there is no overlap
+    assert(u==v).all(),logging.critical("compint : interval overlap")
+    # sort interval in increasing order 
+    lint = []
+    for k in range(len(u)):
+        lint.append(linterval[u[k]])
+
+    compint = []
+    for k,it in enumerate(lint):
         if k==0: # first interval
             if (it[0]-zmin)>tol:
                 compint.append((zmin,it[0]))
