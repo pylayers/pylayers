@@ -359,7 +359,10 @@ class Layout(pro.PyLayers):
         if arg != '':
             if ext == '.ini':
                 self._filename = string
-                loadini = True
+                loadlay = True
+            if ext == '.lay':
+                self._filename = string
+                loadlay = True
             elif ext == '.osm':
                 self._filename = arg + '.ini'
                 loadosm = True
@@ -373,7 +376,7 @@ class Layout(pro.PyLayers):
             newfile = True
 
         if not newfile:
-            if loadini:
+            if loadlay:
                 filename = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
                 if os.path.exists(filename):  # which exists
                     self.load()
@@ -427,7 +430,10 @@ class Layout(pro.PyLayers):
                 # load graphs from file 
                 #
                 elif bgraphs:
-                    dirname = self._filename.replace('.ini','')
+                    if os.path.splitext[1](self._filename)=='.ini':
+                        dirname = self._filename.replace('.ini','')
+                    if os.path.splitext[1](self._filename)=='.lay':
+                        dirname = self._filename.replace('.lay','')
                     path = os.path.join(pro.basename,
                                         'struc',
                                         'gpickle',
@@ -448,7 +454,7 @@ class Layout(pro.PyLayers):
                             self.isbuilt = True
                             bbuild = False
                         else:
-                            print(".ini file has changed you must rebuild the grahs")
+                            print(".lay file has changed you must rebuild the grahs")
 
     def __repr__(self):
         st = '\n'
@@ -1531,7 +1537,7 @@ class Layout(pro.PyLayers):
             else:
                 self.coordinates='latlon'
             if kwargs['latlon'] == '0':
-                self._filename = kwargs['address'].replace(' ', '_') + '.ini'
+                self._filename = kwargs['address'].replace(' ', '_') + '.lay'
             else:
                 lat, lon = eval(kwargs['latlon'])
                 self._filename = 'lat_' + \
@@ -1541,7 +1547,7 @@ class Layout(pro.PyLayers):
             fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
             coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=typ)
             self.coordinates = 'latlon'
-            self._filename = kwargs['_fileosm'].replace('osm', 'ini')
+            self._filename = kwargs['_fileosm'].replace('osm', 'lay')
         
         # 2 valid typ : 'indoor' and 'building'
 
@@ -1783,7 +1789,7 @@ class Layout(pro.PyLayers):
         fd.close()
 
     def save(self):
-        """ save Layout structure in a .ini file
+        """ save Layout structure in a .lay file
 
         """
         print(self._filename)
@@ -1796,7 +1802,6 @@ class Layout(pro.PyLayers):
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
-        #config.add_section("display")
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
@@ -1814,8 +1819,8 @@ class Layout(pro.PyLayers):
             config.set("indoor", "zceil", self.zceil)
             config.set("indoor", "zfloor", self.zfloor)
 
-        #if self.typ == 'outdoor':
-        #    config.add_section("outdoor")
+        if self.typ == 'outdoor':
+            config.add_section("outdoor")
 
         #
         # save bounding box in latlon for reconstruction of self.m
@@ -1846,11 +1851,16 @@ class Layout(pro.PyLayers):
         for n in self.Gs.pos:
             if n > 0:
                 cond1 = (self.Gs.node[n]['name'] != '_AIR')
-                cond2 = (self.Gs.node[n]['name'] == AIR)
-                cond3 = (self.Gs.node[n][z][1] == self.zceil)
-                cond4 = (self.Gs.node[n][z][0] == self.zfloor)
+                cond2 = (self.Gs.node[n]['name'] == 'AIR')
+                cond3 = (self.Gs.node[n]['z'][1] == self.zceil)
+                cond4 = (self.Gs.node[n]['z'][0] == self.zfloor)
                 cond5 = (cond2 and cond3)
                 cond6 = (cond2 and cond4)
+                #
+                # _AIR are not stored  (cond1) 
+                # AIR segment reaching zceil are not stored  (cond4) 
+                # AIR segment reaching zfloor are not stored (cond5) 
+                #
                 if cond1 and (not cond5) and (not cond6): 
                     d = self.Gs.node[n]
                     d['connect'] = nx.neighbors(self.Gs, n)
@@ -1889,12 +1899,13 @@ class Layout(pro.PyLayers):
 
         lslab = [x for x in self.name if len(self.name[x]) > 0]
         lmat = []
+
         #
         # In case an osm file has been read; there is no .sl
         # By default all the available slabs and materials are provided
         #
 
-        if not hasattr(self, 'sl'):
+        if not hasattr(self,'sl'):
             self.sl = sb.SlabDB(filemat='matDB.ini', fileslab='slabDB.ini')
 
         for s in lslab:
@@ -1943,6 +1954,12 @@ class Layout(pro.PyLayers):
                 dm.pop('name')
             except:
                 pass
+            # store UIT format only if it is used
+            if dm['a'] ==None:
+                dm.pop('a')
+                dm.pop('b')
+                dm.pop('c')
+                dm.pop('d')
             config.set("materials", m, dm)
 
         if "REINFORCED_CONCRETE" not in lmat:
@@ -1955,14 +1972,22 @@ class Layout(pro.PyLayers):
         # [ furniture ] 
         #
         config.set("files", 'furniture', self.filefur)
-        fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
-        fd = open(fileini, "w")
+        #
+        # handling olf format ( to be removed later) 
+        #
+        if os.path.splitext(self._filename)[1]=='.ini':
+            fileout = self._filename.replace('.ini','.lay')
+        else:
+            fileout = self._filename
+
+        filelay = pyu.getlong(fileout, pro.pstruc['DIRINI'])
+        fd = open(filelay, "w")
         config.write(fd)
         fd.close()
         # convert graph Gs to numpy arrays for speed up post processing
         # ideally an edited Layout should be locked while not saved.
         # self.g2npy()
-        self._hash = hashlib.md5(open(fileini, 'rb').read()).hexdigest()
+        self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
 
     def load(self):
         """ load a layout  from a .lay file
@@ -2003,8 +2028,8 @@ class Layout(pro.PyLayers):
         di = {}
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
-        fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
-        config.read(fileini)
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
+        config.read(filelay)
 
 
         sections = config.sections()
@@ -2249,7 +2274,7 @@ class Layout(pro.PyLayers):
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
         #
-        self._hash = hashlib.md5(open(fileini, 'rb').read()).hexdigest()
+        self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
         
 
     def loadfur(self, _filefur):
@@ -5330,8 +5355,8 @@ class Layout(pro.PyLayers):
 
         # add hash to node 0 of Gs
 
-        fileini = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
-        _hash = hashlib.md5(open(fileini, 'rb').read()).hexdigest()
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
+        _hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
         self.Gt.add_node(0, hash=_hash)
 
         # There is a dumpw after each build
