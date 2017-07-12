@@ -1190,9 +1190,10 @@ class Rays(PyLayers, dict):
                     #
                 
                     for npt in lns: 
-                        if npt==-225:
-                            import ipdb 
-                            ipdb.set_trace()
+                        # diffraction cornet in espoo.lay
+                        #if npt==-225:
+                        #    import ipdb 
+                        #    ipdb.set_trace()
 
                         u  = np.where(anstr==npt)
                         if len(u)>0:
