@@ -6287,6 +6287,8 @@ class Layout(pro.PyLayers):
         if verbose:
             Gtpbar.update(100./12.)
             # print('find diffraction...Done 8/12')
+            pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=tqdmpos+1)
+
         # 
         # explanation of lnss
         #
@@ -6294,10 +6296,9 @@ class Layout(pro.PyLayers):
         # list of diffraction point involving subsegment ( = iso segments)
         # needs checking height in rays.to3D for constructing the 3D ray
         #
-            pbartmp = pbar(verbose,total=100., desc ='Diffraction on airwalls',leave=True,position=tqdmpos+1)
 
-            self.lnss = [x for x in self.ddiff if len(
-            set(nx.neighbors(self.Gs, x)).intersection(set(self.lsss))) > 0]
+        self.lnss = [x for x in self.ddiff if len(
+        set(nx.neighbors(self.Gs, x)).intersection(set(self.lsss))) > 0]
 
 
         if verbose:
