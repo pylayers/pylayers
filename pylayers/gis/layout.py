@@ -1857,12 +1857,13 @@ class Layout(pro.PyLayers):
                 cond4 = (self.Gs.node[n]['z'][0] == self.zfloor)
                 cond5 = (cond2 and cond3)
                 cond6 = (cond2 and cond4)
+                cond7 = (cond2 and cond3 and cond4) 
                 #
                 # _AIR are not stored  (cond1) 
                 # AIR segment reaching zceil are not stored  (cond4) 
                 # AIR segment reaching zfloor are not stored (cond5) 
                 #
-                if cond1 and (not cond5) and (not cond6): 
+                if (cond1 and (not cond5) and (not cond6)) or cond7: 
                     d = self.Gs.node[n]
                     d['connect'] = nx.neighbors(self.Gs, n)
                     try:
@@ -1890,6 +1891,15 @@ class Layout(pro.PyLayers):
                         d.pop('ncycles')
                     except:
                         pass
+                    
+                    # transition are saved only if True
+                    if not d['transition']:
+                        d.pop('transition')
+                    
+                    # offset are saved only if not zero 
+                    if d['offset']==0:
+                        d.pop('offset')
+
 
                     config.set("segments", str(n), d)
 
@@ -1956,11 +1966,12 @@ class Layout(pro.PyLayers):
             except:
                 pass
             # store UIT format only if it is used
-            if dm['a'] ==None:
-                dm.pop('a')
-                dm.pop('b')
-                dm.pop('c')
-                dm.pop('d')
+            if 'a' in dm:
+                if dm['a'] ==None:
+                    dm.pop('a')
+                    dm.pop('b')
+                    dm.pop('c')
+                    dm.pop('d')
             config.set("materials", m, dm)
 
         if "REINFORCED_CONCRETE" not in lmat:
@@ -2181,11 +2192,14 @@ class Layout(pro.PyLayers):
             
             name = d['name']
             z = d['z']
+
+            if not d.has_key('transition'):
+                transition = False
+            else:
+                transition = d['transition']
+
             if not d.has_key('offset'):
-                if type(z)==list:
-                    offset = list(np.zeros(len(z)))
-                else:
-                    offset = 0 
+                offset = 0 
             else:
                 offset = d['offset']
             
@@ -2198,6 +2212,7 @@ class Layout(pro.PyLayers):
             num = self.add_segment(nta, nhe,
                                    num = eval(key),
                                    name = name,
+                                   transition = transition, 
                                    offset = offset,
                                    z = z)
 
@@ -2535,6 +2550,7 @@ class Layout(pro.PyLayers):
                     n2,
                     num=-1,
                     maxnum=-1,
+                    transition = False,
                     name='PARTITION', 
                     z=(0.0, 40000000), 
                     offset=0,
