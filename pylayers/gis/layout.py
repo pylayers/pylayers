@@ -347,7 +347,7 @@ class Layout(pro.PyLayers):
         self.maxheight = 3
 
         newfile = False
-        loadini = False
+        loadlay = False
         loadosm = False
         loadres = False
        
@@ -1512,26 +1512,28 @@ class Layout(pro.PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        typ = kwargs['typ']
+        self.typ = kwargs['typ']
         address = kwargs['address']
         latlon = eval(kwargs['latlon'])
         dist_m = kwargs['dist_m']
         cart = kwargs['cart']
         
         #
-        # TODO : Not clean get zceil from actual data
+        #  zceil ansd zfloor are obtained from actual data
         #
+        #  indoor default (0,3)
+        #  outdoor default (0,3000)
 
-        if self.typ=='indoor':
-            self.zceil = 3
-            self.zfloor = 0
+        #if self.typ=='indoor':
+        self.zceil = -1e10
+        self.zfloor = 1e10
         
         if kwargs['_fileosm'] == '':  # by using osmapi address or latlon
-            coords, nodes, ways, dpoly, m = osm.getosm(typ=typ,
-                                                       address=address,
-                                                       latlon=latlon,
-                                                       dist_m=dist_m,
-                                                       cart=cart)
+            coords, nodes, ways, dpoly, m = osm.getosm(address = address,
+                                                       latlon = latlon,
+                                                       dist_m = dist_m,
+                                                       cart = cart)
+            self.typ = 'outdoor'
             if cart:
                 self.coordinates='cart'
             else:
@@ -1545,7 +1547,7 @@ class Layout(pro.PyLayers):
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
             fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=typ)
+            coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'lay')
         
@@ -1608,11 +1610,13 @@ class Layout(pro.PyLayers):
                     nta = dup[nta]
                 if nhe in dup:
                     nhe = dup[nhe]
+
                 d = ways.way[nseg].tags
 
                 #
                 # Convert string to integer if possible
                 #
+
                 for key in d:
                     try:
                         d[key] = eval(d[key])
@@ -1625,10 +1629,23 @@ class Layout(pro.PyLayers):
                         slab = d['name']
                 else:  # the default slab name is WALL
                         slab = "WALL"
+
+
                 if 'z' in d:
                     z = d['z']
                 else:
-                    z = (0, 3)
+                    if self.typ=='indoor':
+                        z = (0, 3)
+                    if self.typ=='outdoor':
+                        z = (0, 3000)
+
+                zmin = z[0]
+                zmax = z[1]
+                if zmin<self.zfloor:
+                    self.zfloor = zmin 
+                if zmax>self.zceil:
+                    self.zceil = zmax
+
                 if 'offset' in d:
                     offset = d['offset']
                 else:
@@ -1764,13 +1781,16 @@ class Layout(pro.PyLayers):
                 # outdoor AIR wall above buildings are not added
                 # cond1 is wrong
 
-                cond1 = not ((not (self.typ=='indoor')) and 
-                        (self.Gs.node[n]['name']=='AIR')  and
-                        (self.Gs.node[n][z][1]>2000)   ) 
+                cond1 = (self.Gs.node[n]['name'] != '_AIR')
+                cond2 = (self.Gs.node[n]['name'] == 'AIR')
+                cond3 = (self.Gs.node[n]['z'][1] == self.zceil)
+                cond4 = (self.Gs.node[n]['z'][0] == self.zfloor)
+                cond5 = (cond2 and cond3)
+                cond6 = (cond2 and cond4)
+                cond7 = (cond2 and cond3 and cond4) 
 
-                cond2 = (self.Gs.node[n]['name'] != '_AIR')
 
-                if (cond1 and cond2):
+                if (cond1 and (not cond5) and (not cond6)) or cond7: 
                     neigh = nx.neighbors(self.Gs, n)
                     d = self.Gs.node[n]
                     #
@@ -1897,8 +1917,9 @@ class Layout(pro.PyLayers):
                         d.pop('transition')
                     
                     # offset are saved only if not zero 
-                    if d['offset']==0:
-                        d.pop('offset')
+                    if 'offset' in d:
+                        if d['offset']==0:
+                            d.pop('offset')
 
 
                     config.set("segments", str(n), d)

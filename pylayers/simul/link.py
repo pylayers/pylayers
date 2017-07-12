@@ -421,7 +421,7 @@ class DLink(Link):
         if isinstance(self._L,str):
             self._Lname = self._L
             indoor = not self.outdoor
-            self._L = Layout(self._Lname,bindoor=indoor,bgraphs=False,bcheck=False)
+            self._L = Layout(self._Lname,bgraphs=False,bcheck=False)
         else:
             self._Lname = self._L._filename
             self.outdoor = self._L.typ=='outdoor'
@@ -561,7 +561,7 @@ class DLink(Link):
             mlab.clf()
             plotfig=True
         if isinstance(L,str):
-            self._L = Layout(L,bgraphs=False,bcheck=False,bindoor=not self.outdoor)
+            self._L = Layout(L,bgraphs=False,bcheck=False)
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L

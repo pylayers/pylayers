@@ -633,13 +633,12 @@ class FloorPlan(nx.DiGraph):
 #     getbdg
 #
 #
-def getosm(typ='outdoor',address='Rennes',latlon=0,dist_m=400,cart=False):
+def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     """ get osm region from osmapi
 
     Parameters
     ----------
 
-    typ : string 
     address : string 
     latlon : tuple
     dist_m : float 
@@ -649,6 +648,7 @@ def getosm(typ='outdoor',address='Rennes',latlon=0,dist_m=400,cart=False):
     level_height = 3.45
     rad_to_deg = (180/np.pi)
     deg_to_rad = (np.pi/180)
+
     if latlon==0:
         place = geo.google(address)
         lat,lon = place.latlng

@@ -18,7 +18,7 @@ fonts = 20 # fontsize
 DL      = DLink()
 DL.fGHz = fGHz
 
-L       = Layout('espoo_journal.ini',bdiffraction=True)
+L       = Layout('espoo_journal.lay',bdiffraction=True)
 DL.L    = L
 
 # coordinates of the MS and the BS in the scene.

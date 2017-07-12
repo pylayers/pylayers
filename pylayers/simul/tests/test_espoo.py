@@ -4,7 +4,7 @@ from pylayers.antprop.antenna import *
 fGHz = np.linspace(32.6-1.6/2,32.6+1.6/2,2000)
 DL=DLink()
 DL.fGHz=fGHz
-L=Layout('espoo.ini')
+L=Layout('espoo.lay')
 DL.L=L
 DL.a=np.array([150,150,1.75])
 DL.b=np.array([220,185,6])
