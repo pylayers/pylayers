@@ -1,0 +1,112 @@
+[info]
+format = cart
+version = 1.3
+type = outdoor
+
+[points]
+-490 = (-0.94, -10.522)
+-488 = (1.523, -10.57)
+-486 = (-1.873, -10.491)
+-484 = (-3.19, -10.46)
+-482 = (-5.037, -10.428)
+-480 = (-5.041, -10.359)
+-478 = (-5.036, -9.754)
+-476 = (-5.029, -3.598)
+-472 = (-5.013, -1.076)
+-470 = (-5.013, -0.579)
+-468 = (-5.01, 0.478)
+-466 = (-5.009, 0.992)
+-464 = (-5.008, 1.51)
+-460 = (2.756, -10.603)
+-454 = (5.06, 4.847)
+-450 = (6.205, 9.482)
+-442 = (3.936, 4.867)
+-440 = (3.138, 4.87)
+-438 = (-3.126, 5.033)
+-436 = (-3.848, 5.045)
+-434 = (-4.077, 5.055)
+-432 = (-4.079, 3.419)
+-430 = (-4.781, 5.072)
+-428 = (-4.999, 5.085)
+-426 = (-5.005, 3.437)
+-400 = (-4.401, 9.683)
+-348 = (2.686, 9.548)
+-298 = (-6.073, 5.101)
+-296 = (-6.044, 9.714)
+-290 = (-6.064, 6.561)
+-278 = (-5.823, 5.096)
+-250 = (-5.016, -2.17)
+-236 = (-5.013, -1.372)
+-188 = (-5.014, -0.328)
+-456 = (5.034, -10.644)
+-164 = (-5.001, 2.968)
+-162 = (-4.596, 3.435)
+-160 = (-6.056, 7.856)
+-156 = (-6.052, 8.4)
+-452 = (6.192, 4.825)
+-184 = (-5.013, 0.098)
+-64 = (3.163, 9.539)
+
+[segments]
+54 = {'name': 'WALL', 'connect': [-488, -490], 'z': array([ 0.,  5.])}
+55 = {'name': 'WALL', 'connect': [-486, -490], 'z': array([ 0.,  5.])}
+56 = {'name': 'WALL', 'connect': [-484, -482], 'z': array([ 0.,  5.])}
+57 = {'name': 'WALL', 'connect': [-480, -482], 'z': array([ 0.,  5.])}
+59 = {'name': 'WALL', 'connect': [-464, -466], 'z': array([ 0.,  5.])}
+60 = {'name': 'WALL', 'connect': [-456, -454], 'z': array([ 0.,  5.])}
+61 = {'name': 'WALL', 'connect': [-454, -452], 'z': array([ 0.,  5.])}
+63 = {'name': 'WALL', 'connect': [-454, -442], 'z': array([ 0.,  5.])}
+64 = {'name': 'WALL', 'connect': [-440, -438], 'z': array([ 0.,  5.])}
+65 = {'name': 'WALL', 'connect': [-436, -434], 'z': array([ 0.,  5.])}
+66 = {'name': 'WALL', 'connect': [-432, -434], 'z': array([ 0.,  5.])}
+67 = {'name': 'WALL', 'connect': [-430, -428], 'z': array([ 0.,  5.])}
+68 = {'name': 'WALL', 'connect': [-428, -426], 'z': array([ 0.,  5.])}
+96 = {'name': 'WALL', 'connect': [-400, -348], 'z': array([ 0.,  5.])}
+105 = {'name': 'WALL', 'connect': [-400, -296], 'z': array([ 0.,  5.])}
+106 = {'name': 'WALL', 'connect': [-290, -298], 'z': array([ 0.,  5.])}
+110 = {'name': 'WALL', 'connect': [-278, -428], 'z': array([ 0.,  5.])}
+111 = {'name': 'WALL', 'connect': [-278, -298], 'z': array([ 0.,  5.])}
+130 = {'name': 'WALL', 'connect': [-236, -250], 'z': array([ 0.,  5.])}
+131 = {'name': 'WALL', 'connect': [-472, -236], 'z': array([ 0.,  5.])}
+160 = {'name': 'WALL', 'connect': [-470, -188], 'z': array([ 0.,  5.])}
+162 = {'name': 'WALL', 'connect': [-184, -188], 'z': array([ 0.,  5.])}
+163 = {'name': 'WALL', 'connect': [-184, -468], 'z': array([ 0.,  5.])}
+179 = {'name': 'WALL', 'connect': [-164, -426], 'z': array([ 0.,  5.])}
+180 = {'name': 'WALL', 'connect': [-162, -426], 'z': array([ 0.,  5.])}
+181 = {'name': 'WALL', 'connect': [-160, -290], 'z': array([ 0.,  5.])}
+184 = {'name': 'WALL', 'connect': [-160, -156], 'z': array([ 0.,  5.])}
+185 = {'name': 'WALL', 'connect': [-296, -156], 'z': array([ 0.,  5.])}
+235 = {'name': 'WALL', 'connect': [-64, -450], 'z': array([ 0.,  5.])}
+236 = {'name': 'WALL', 'connect': [-64, -348], 'z': array([ 0.,  5.])}
+257 = {'name': 'WALL', 'connect': [-480, -478], 'z': array([ 0.,  5.])}
+316 = {'name': 'WALL', 'connect': [-438, -436], 'z': array([ 0.,  5.])}
+317 = {'name': 'WALL', 'connect': [-430, -434], 'z': array([ 0.,  5.])}
+318 = {'name': 'WALL', 'connect': [-432, -162], 'z': array([ 0.,  5.])}
+320 = {'name': 'WALL', 'connect': [-468, -466], 'z': array([ 0.,  5.])}
+321 = {'name': 'WALL', 'connect': [-472, -470], 'z': array([ 0.,  5.])}
+328 = {'name': 'WALL', 'connect': [-476, -250], 'z': array([ 0.,  5.])}
+333 = {'name': 'WALL', 'connect': [-486, -484], 'z': array([ 0.,  5.])}
+334 = {'name': 'WALL', 'connect': [-488, -460], 'z': array([ 0.,  5.])}
+335 = {'name': 'WALL', 'connect': [-440, -442], 'z': array([ 0.,  5.])}
+58 = {'name': 'WALL', 'connect': [-478, -476], 'z': array([ 0.,  5.])}
+62 = {'name': 'WALL', 'connect': [-452, -450], 'z': array([ 0.,  5.])}
+374 = {'name': 'WALL', 'connect': [-464, -164], 'z': array([ 0.,  5.])}
+375 = {'name': 'WALL', 'connect': [-456, -460], 'z': array([ 0.,  5.])}
+
+[files]
+furniture = 
+
+[slabs]
+WALL = {'color': 'grey20', 'linewidth': 3, 'lthick': [0.07], 'lmatname': ['BRICK']}
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+BRICK = {'mur': (1+0j), 'epr': (4.09999990463+0j), 'roughness': 0.0, 'sigma': 0.300000011921}
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[outdoor]
+

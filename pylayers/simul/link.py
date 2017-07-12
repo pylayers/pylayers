@@ -421,10 +421,10 @@ class DLink(Link):
         if isinstance(self._L,str):
             self._Lname = self._L
             indoor = not self.outdoor
-            self._L = Layout(self._Lname,bindoor=indoor,bgraphs=False,bcheck=False)
+            self._L = Layout(self._Lname,bgraphs=False,bcheck=False)
         else:
             self._Lname = self._L._filename
-            self.outdoor = not self._L.indoor
+            self.outdoor = self._L.typ=='outdoor'
 
         # dictionnary data exists
         self.dexist={'sig':{'exist':False,'grpname':''},
@@ -478,7 +478,7 @@ class DLink(Link):
                             del output[l]
                     self.L.Gi.edge[e[0]][e[1]]['output']=output
                 
-                #self.L.dumpw()
+            #self.L.dumpw()
             #self.L.build()
 
             self.init_positions()
@@ -561,7 +561,7 @@ class DLink(Link):
             mlab.clf()
             plotfig=True
         if isinstance(L,str):
-            self._L = Layout(L,bgraphs=False,bcheck=False,bindoor=not self.outdoor)
+            self._L = Layout(L,bgraphs=False,bcheck=False)
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L
@@ -870,46 +870,48 @@ class DLink(Link):
 
 
     def init_positions(self,force=False):
-                    ###########
-            # init pos & cycles
-            #
-            # If a and b are not specified
-            #  they are chosen as center of gravity of cycle 0
-            #
-            ###########
-            nodes = self.L.Gt.nodes()
-            #
-            # pick the point outside building if Layout.indoor not activated 
-            #
-            if not self.L.indoor:
-                nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
-            else:
-                nodes = [n for n in nodes if n!=0 ]
-            
-            # draw the link extremities randomly
+        """ 
+        """
+        ###########
+        # init pos & cycles
+        #
+        # If a and b are not specified
+        #  they are chosen as center of gravity of cycle 0
+        #
+        ###########
+        nodes = self.L.Gt.nodes()
+        #
+        # pick the point outside building if Layout.indoor not activated 
+        #
+        if self.L.typ=='outdoor':
+            nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+        else:
+            nodes = [n for n in nodes if n!=0 ]
+        
+        # draw the link extremities randomly
 
-            np.random.seed(self.seed)
-            ia = np.random.randint(0,len(nodes))    
-            ib = np.random.randint(0,len(nodes))    
-            if len(self.a)==0 or force:
-                self.ca = nodes[ia]
+        np.random.seed(self.seed)
+        ia = np.random.randint(0,len(nodes))    
+        ib = np.random.randint(0,len(nodes))    
+        if len(self.a)==0 or force:
+            self.ca = nodes[ia]
+        else:
+            if len(self.a) ==2:
+                a=np.r_[self.a,1.0]
             else:
-                if len(self.a) ==2:
-                    a=np.r_[self.a,1.0]
-                else:
-                    a=self.a
-                self.ca = self.L.pt2cy(a)
-                self.a = a
+                a=self.a
+            self.ca = self.L.pt2cy(a)
+            self.a = a
 
-            if len(self.b)==0 or force:
-                self.cb = nodes[ib]
+        if len(self.b)==0 or force:
+            self.cb = nodes[ib]
+        else:
+            if len(self.b) ==2:
+                b=np.r_[self.b,1.0]
             else:
-                if len(self.b) ==2:
-                    b=np.r_[self.b,1.0]
-                else:
-                    b=self.b
-                self.cb = self.L.pt2cy(b)
-                self.b = b
+                b=self.b
+            self.cb = self.L.pt2cy(b)
+            self.b = b
 
     def reset_config(self):
         """ reset configuration when a new layout is loaded
@@ -1611,7 +1613,7 @@ class DLink(Link):
         else :
 
             if kwargs['ra_ceil_H'] == []:
-                if self.L.indoor:
+                if self.L.typ=='indoor':
                     ceilheight = self.L.maxheight
                 else:
                     ceilheight = 0 

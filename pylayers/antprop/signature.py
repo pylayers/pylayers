@@ -1132,6 +1132,10 @@ class Signatures(PyLayers,dict):
         animation = kwargs['animation'] 
 
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        #
+        # AIR : editable AIR separation 
+        # _AIR : constructed AIR separation 
+        #
         lair = self.L.name['AIR']+self.L.name['_AIR']
 
         # list of interactions visible from source
@@ -1257,6 +1261,7 @@ class Signatures(PyLayers,dict):
                 iter_on_interactions = stack[-1]
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
+                #print visited
                 #if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
                 #    import ipdb
                 #    ipdb.set_trace()

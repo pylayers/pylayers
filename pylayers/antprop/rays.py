@@ -294,7 +294,7 @@ class Rays(PyLayers, dict):
             self.fillinter(L)
 
         if self.evaluated:
-            return self.eval(self.fGHz)
+            return self.val(self.fGHz)
 
     def _saveh5(self,filenameh5,grpname):
         """ Save rays h5py format compliant with Links Class
@@ -509,6 +509,9 @@ class Rays(PyLayers, dict):
 
     def sort(self):
         """ sort rays
+        
+        TODO : not finished 
+
         """
         u = np.argsort(self.dis)
 
@@ -1056,7 +1059,7 @@ class Rays(PyLayers, dict):
                     # des floors et tous les points suivants qui ne sont pas
                     # des points de rflexion ceil ou floor
                     #
-                    # Afin de tenir compte du rayon et du groupe d'interaction
+                    # Afin de tenir compte du rayon et du groupe d'interactions
                     # concerne, il faut passer un tuple qui concatene la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
                     # rayons du groupe associe (d'ou le zip)
@@ -1182,9 +1185,15 @@ class Rays(PyLayers, dict):
                     #
                     lns = [ x for x in lnss if x in anstr.ravel()]
                     
-                    #pdb.set_trace()
+                    #
                     # loop over multi diffraction points
+                    #
+                
                     for npt in lns: 
+                        # diffraction cornet in espoo.lay
+                        #if npt==-225:
+                        #    import ipdb 
+                        #    ipdb.set_trace()
 
                         u  = np.where(anstr==npt)
                         if len(u)>0:
@@ -1193,9 +1202,15 @@ class Rays(PyLayers, dict):
 
                             #
                             # At which couple of segments belongs this height ? 
-                            # new function in layout get_diffslab
+                            # get_diffslab function answers that question
+                            #
+
                             ltu_seg,ltu_slab = L.get_diffslab(npt,zp)
 
+                            #
+                            # delete rays where diffraction point is connected to  
+                            # 2 AIR segments
+                            # 
 
                             [ray_to_delete.append(u[1][i]) for i in range(len(zp)) 
                             if ((ltu_slab[i][0]=='AIR') & (ltu_slab[i][1]=='AIR'))]
@@ -1234,7 +1249,7 @@ class Rays(PyLayers, dict):
                         # find points are indoor/outdoor cycles
                         upt,ucy = np.where(uinter)
                         uout = np.where([not L.Gt.node[mapnode[u+1]]['indoor'] for u in ucy])[0] #ucy+1 is to manage cycle 0
-                        # 3 remove ceil reflexion of outdoor cycles
+                        # 3 remove ceil reflexions of outdoor cycles
                         if len(uout)>0:
                         
                             ptees = np.delete(ptees,uc[1][uout],axis=2)
@@ -1706,7 +1721,7 @@ class Rays(PyLayers, dict):
                 #################################
                 
                 if len(udiff[0]) != 0 :
-                    Z=np.where(ityp.T==1)
+                    Z = np.where(ityp.T==1)
                     udiff=Z[1],Z[0]
 
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
@@ -1720,7 +1735,7 @@ class Rays(PyLayers, dict):
 
                     self[k]['diffidx'] = idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
-                    lair = L.name['AIR']+L.name['_AIR']
+                    lair = L.name['AIR'] + L.name['_AIR']
                     aseg = map(lambda x : filter(lambda y : y not in lair,
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)
@@ -1730,8 +1745,10 @@ class Rays(PyLayers, dict):
                     #pdb.set_trace()
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
                     
-                    self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']]['index'])+'_'
-                                        + str(L.sl[L.Gs.node[x[1]]['name']]['index']) for x in aseg]
+                    #self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']])+'_'
+                    #                    + str(L.sl[L.Gs.node[x[1]]['name']]]) for x in aseg]
+                    self[k]['diffslabs']=[ L.Gs.node[x[0]]['name']+'_'
+                                        +  L.Gs.node[x[1]]['name'] for x in aseg]
 
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)
@@ -2150,16 +2167,16 @@ class Rays(PyLayers, dict):
                 # assign floor and ceil slab
                 ############################
 
-                slT=[ L.Gs.node[x]['name'] for x in nstrf[uT] ]
-                slR=[ L.Gs.node[x]['name'] for x in nstrf[uR] ]
+                slT = [ L.Gs.node[x]['name'] for x in nstrf[uT] ]
+                slR = [ L.Gs.node[x]['name'] for x in nstrf[uR] ]
 
                 # WARNING
                 # in future versions floor and ceil could be different for each cycle.
                 # this information would be directly obtained from L.Gs
                 # then the two following lines would have to be modified
 
-                slRf=np.array(['FLOOR']*len(uRf))
-                slRc=np.array(['CEIL']*len(uRc))
+                slRf = np.array(['FLOOR']*len(uRf))
+                slRc = np.array(['CEIL']*len(uRc))
 
 
                 # Fill the used slab
@@ -2272,7 +2289,7 @@ class Rays(PyLayers, dict):
         ----------
 
         fGHz : array
-            frequency in GHz array
+            frequency in GHz 
         ib : list of interactions block
 
         """
@@ -2281,7 +2298,10 @@ class Rays(PyLayers, dict):
 
         self.fGHz=fGHz
 
-        # evaluation of interaction
+        # evaluation of all interactions
+        #
+        # core calculation of all interactions is done here
+        #
         
         self.I.eval(fGHz)
 
@@ -2434,9 +2454,9 @@ class Rays(PyLayers, dict):
                 # and the sum of all outgoing segments
                 #self[l]['dis'] = self.I.si0[self[l]['rays'][0,:]] \
                 #        + np.sum(self.I.sout[self[l]['rays']], axis=0)
-
                 # attenuation due to distance
                 # will be removed once the divergence factor will be implemented
+                #
                 Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
                 self.delays[ir] = self[l]['dis']/0.3
                 self.dis[ir] = self[l]['dis']
@@ -2462,7 +2482,7 @@ class Rays(PyLayers, dict):
 
 
         #
-        # Construction of the Ctilde channel
+        # Construction of the Ctilde propagation channel structure
         #
         Cn = Ctilde()
         Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
