@@ -1270,7 +1270,8 @@ class Slab(Interface,dict):
             self['color'] = 'black'
             self['linewidth'] = 1.0
         else:
-            self['index'] = ds['index']
+            #self['index'] = ds['index']
+            self['index'] = 0
             # lmatname has to be set before lthick
             self['lmatname'] = ds['lmatname']
             self['lthick'] = ds['lthick']

@@ -2015,11 +2015,12 @@ class Layout(pro.PyLayers):
         #
         # update display section
         #
-        for k in di['display']:
-            try:
-                self.display[k] = eval(di['display'][k])
-            except:
-                self.display[k] = di['display'][k]
+        if 'display' in di:
+            for k in di['display']:
+                try:
+                    self.display[k] = eval(di['display'][k])
+                except:
+                    self.display[k] = di['display'][k]
 
         self.ax = self.display['box']
 
@@ -2081,20 +2082,20 @@ class Layout(pro.PyLayers):
             #  an iso segment with AIR property
             # 
             # if di['info']['type'] == 'outdoor':
-            if z[1] < self.zceil:
-                 num = self.add_segment(nta, nhe,
-                                        name='AIR',
-                                        maxnum = maxnum, 
-                                        offset=offset,
-                                        z=(z[1], self.zceil))
-
-            if z[0] > self.zfloor:
-                 num = self.add_segment(nta, nhe,
-                                        name='AIR',
-                                        maxnum = maxnum, 
-                                        offset=offset,
-                                        z=(self.zfloor,z[0]))
-
+#            if z[1] < self.zceil:
+#                 num = self.add_segment(nta, nhe,
+#                                        name='AIR',
+#                                        maxnum = maxnum, 
+#                                        offset=offset,
+#                                        z=(z[1], self.zceil))
+#
+#            if z[0] > self.zfloor:
+#                 num = self.add_segment(nta, nhe,
+#                                        name='AIR',
+#                                        maxnum = maxnum, 
+#                                        offset=offset,
+#                                        z=(self.zfloor,z[0]))
+#
        
         self.boundary()
         
