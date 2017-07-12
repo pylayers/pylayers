@@ -377,7 +377,7 @@ class Layout(pro.PyLayers):
 
         if not newfile:
             if loadlay:
-                filename = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
+                filename = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
                 if os.path.exists(filename):  # which exists
                     self.load()
                 else:  # which do not exist
@@ -713,7 +713,7 @@ class Layout(pro.PyLayers):
         """
 
         if typ == 'ini':
-            pathname = os.path.join(pro.pstruc['DIRINI'], '*.' + typ)
+            pathname = os.path.join(pro.pstruc['DIRLAY'], '*.' + typ)
         if typ == 'osm':
             pathname = os.path.join(pro.pstruc['DIROSM'], '*.' + typ)
         if typ == 'wrl':
@@ -1980,7 +1980,7 @@ class Layout(pro.PyLayers):
         else:
             fileout = self._filename
 
-        filelay = pyu.getlong(fileout, pro.pstruc['DIRINI'])
+        filelay = pyu.getlong(fileout, pro.pstruc['DIRLAY'])
         fd = open(filelay, "w")
         config.write(fd)
         fd.close()
@@ -2028,7 +2028,7 @@ class Layout(pro.PyLayers):
         di = {}
         config = ConfigParser.RawConfigParser()
         config.optionxform = str
-        filelay = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
         config.read(filelay)
 
 
@@ -2339,13 +2339,13 @@ class Layout(pro.PyLayers):
 
         Notes
         -----
-        +  .ini   : ini file format (natural one) DIRINI
+        +  .lay   : ini file format (natural one) DIRLAY
 
 
         """
 
         newfile = False
-        filename = pyu.getlong(_filename, pro.pstruc['DIRINI'])
+        filename = pyu.getlong(_filename, pro.pstruc['DIRLAY'])
         if os.path.exists(filename):  # which exists
             self.loadini(arg)
         else:  # which do not exist
@@ -5360,7 +5360,7 @@ class Layout(pro.PyLayers):
 
         # add hash to node 0 of Gs
 
-        filelay = pyu.getlong(self._filename, pro.pstruc['DIRINI'])
+        filelay = pyu.getlong(self._filename, pro.pstruc['DIRLAY'])
         _hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
         self.Gt.add_node(0, hash=_hash)
 
