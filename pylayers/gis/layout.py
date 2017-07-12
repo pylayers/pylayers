@@ -6075,7 +6075,6 @@ class Layout(pro.PyLayers):
         Nairseg = len(_airseg)
         cpt = 1./(Nairseg+1)
         pbartmp = pbar(verbose,total=100., desc ='Mikado',leave=True,position=tqdmpos+1)
-        pdb.set_trace()
         for a in _airseg:
             if verbose:
                 pbartmp.update(100.*cpt)
