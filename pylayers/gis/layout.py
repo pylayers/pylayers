@@ -2078,6 +2078,11 @@ class Layout(pro.PyLayers):
             if self.typ == 'indoor':
                 self.zceil = eval(di['indoor']['zceil'])
                 self.zfloor = eval(di['indoor']['zfloor'])
+
+            # old format 
+            if self.typ == 'floorplan':
+                self.zceil = eval(di['floorplan']['zceil'])
+                self.zfloor = eval(di['floorplan']['zfloor'])
         #
         # [outdoor]
         #   TODO add a DEM file 
