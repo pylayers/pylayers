@@ -1792,8 +1792,9 @@ class Layout(pro.PyLayers):
         """ save Layout structure in a .lay file
 
         """
-        print(self._filename)
         current_version = 1.3
+        if os.path.splitext(self._filename)[1]=='.ini':
+            self._filename = self._filename.replace('.ini','.lay')
         #
         # version 1.3 : suppression of index in slab and materials
         #
@@ -1981,6 +1982,7 @@ class Layout(pro.PyLayers):
             fileout = self._filename
 
         filelay = pyu.getlong(fileout, pro.pstruc['DIRLAY'])
+        print(filelay)
         fd = open(filelay, "w")
         config.write(fd)
         fd.close()
@@ -2055,45 +2057,54 @@ class Layout(pro.PyLayers):
         #    type       {'indoor','outdoor'}
         if 'version' in di['info']:
             self.version = di['info']['version']
-            self.typ = di['info']['type']
-            self.name = {}
-        else:
-            # In version 0.9 there is no materials and slab section
-            self.version = 0.9
-            mat = sb.MatDB()
-            mat.load(self.filematini)
-            self.sl = sb.SlabDB()
-            self.sl.mat = mat
-            self.sl.load(self.fileslabini)
-            for k in self.sl.keys():
-                self.name[k] = []
 
-        if di['info'].has_key('type'):
+        if 'type' in di['info']:
             self.typ = di['info']['type']
+
+        self.name = {}
+        if ((self.typ!='indoor') & 
+            (self.typ!='outdoor') & 
+            (self.typ!='floorplan')):
+            print("invalid file type in ",self._filename)
+            return(None)
+
         #
         # [indoor]
         #   zceil 
         #   zfloor
         #
-            if self.typ == 'indoor':
-                self.zceil = eval(di['indoor']['zceil'])
-                self.zfloor = eval(di['indoor']['zfloor'])
+        if self.typ == 'indoor':
+            self.zceil = eval(di['indoor']['zceil'])
+            self.zfloor = eval(di['indoor']['zfloor'])
 
-            # old format 
-            if self.typ == 'floorplan':
-                self.zceil = eval(di['floorplan']['zceil'])
-                self.zfloor = eval(di['floorplan']['zfloor'])
+        # old format 
+        if self.typ == 'floorplan':
+            self.zceil = eval(di['floorplan']['zceil'])
+            self.zfloor = eval(di['floorplan']['zfloor'])
+        
+        # from format 1.3 floorplan is call indoor
+        if self.typ=='floorplan':
+            self.typ = 'indoor'
         #
         # [outdoor]
         #   TODO add a DEM file 
         #
-            if self.typ == 'outdoor':
+        if self.typ == 'outdoor':
+            if 'outdoor' in di: 
+                if 'zceil' in di['outdoor']:
+                    self.zceil = eval(di['outdoor']['zceil'])
+                else:
+                    self.zceil  =  3000    # upper limit for AIR walls
+            else:
                 self.zceil  =  3000    # upper limit for AIR walls
+
+            if 'outdoor' in di: 
+                if 'zfloor' in di['outdoor']:
+                    self.zfloor = eval(di['outdoor']['zfloor'])
+                else:
+                    self.zfloor = 0 
+            else:
                 self.zfloor = 0 
-        else:
-            self.typ = 'indoor'
-            self.zceil = 3.
-            self.zfloor = 0.
         #
         #
         # manage ini file with latlon coordinates

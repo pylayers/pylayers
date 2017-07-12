@@ -15,11 +15,12 @@ lL = L.ls()
 for tL in lL:
     print  'Layout :     ',tL
     print  '--------------------------'
-    L = Layout(tL,bbuild=0)
+    L = Layout(tL,bbuild=0,bgraphs=0)
     if L.check():
         L.save()
-        filein = pyu.getlong(L._filename, pstruc['DIRINI'])
-        fileout = '/home/uguen/Documents/rch/devel/pylayers/data/struc/ini/'+L._filename
+        filein = pyu.getlong(L._filename, pstruc['DIRLAY'])
+        fileout = '/home/uguen/Documents/rch/devel/pylayers/data/struc/lay/'+L._filename
+        print fileout
         shutil.copy2(filein,fileout)
 #figure(figsize=(20,10))
 #plt.axis('off')
