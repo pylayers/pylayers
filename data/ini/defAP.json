@@ -1,9 +1,0 @@
-{"ap": 
-    {"wstd": "ieee80211b", 
-    "ptdbm": 0, 
-    "chan": [11], 
-    "pos": (1,1,1.2),
-    "snsdbm": -94,
-    "typ": "LinksysWRT54g", 
-    "nant": 1}
-}
