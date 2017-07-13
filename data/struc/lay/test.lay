@@ -1,0 +1,78 @@
+[info]
+format = cart
+version = 1.3
+type = outdoor
+
+[points]
+-26 = (-28.805, -20.441)
+-25 = (-29.168, -27.664)
+-24 = (-29.924, -42.708)
+-23 = (-28.414, -12.646)
+-22 = (6.903, -0.652)
+-21 = (6.599, 4.658)
+-20 = (7.216, -6.138)
+-19 = (13.734, -3.558)
+-18 = (9.796, 5.132)
+-17 = (7.011, -42.708)
+-16 = (-16.216, -42.708)
+-15 = (4.284, 43.547)
+-14 = (-19.489, 43.788)
+-13 = (-41.406, -12.24)
+-12 = (-16.406, -13.021)
+-11 = (-18.229, 11.719)
+-10 = (-40.625, 12.24)
+-9 = (-41.406, 44.01)
+-8 = (35.677, 43.229)
+-7 = (36.198, 14.062)
+-6 = (6.25, 13.802)
+-5 = (7.292, -11.719)
+-4 = (34.375, -11.979)
+-3 = (35.677, -42.708)
+-1 = (-43.49, -42.708)
+
+[segments]
+1 = {'name': 'CONCRETE_20CM3D', 'connect': [-4, -3], 'z': (0.0, 3.0)}
+2 = {'name': 'CONCRETE_20CM3D', 'connect': [-5, -4], 'z': (0.0, 3.0)}
+3 = {'name': 'CONCRETE_20CM3D', 'connect': [-6, -21], 'z': (0.0, 3.0)}
+4 = {'name': 'CONCRETE_20CM3D', 'connect': [-7, -6], 'z': (0.0, 3.0)}
+5 = {'name': 'CONCRETE_20CM3D', 'connect': [-8, -7], 'z': (0.0, 3.0)}
+6 = {'name': 'CONCRETE_20CM3D', 'connect': [-8, -15], 'z': (0.0, 3.0)}
+7 = {'name': 'CONCRETE_20CM3D', 'connect': [-10, -9], 'z': (0.0, 3.0)}
+8 = {'name': 'CONCRETE_20CM3D', 'connect': [-11, -10], 'z': (0.0, 3.0)}
+9 = {'name': 'CONCRETE_20CM3D', 'connect': [-12, -11], 'z': (0.0, 3.0)}
+10 = {'name': 'CONCRETE_20CM3D', 'connect': [-23, -13], 'z': (0.0, 3.0)}
+11 = {'name': 'CONCRETE_20CM3D', 'connect': [-13, -1], 'z': (0.0, 3.0)}
+12 = {'name': 'CONCRETE_20CM3D', 'connect': [-16, -17], 'z': (0.0, 3.0)}
+13 = {'name': 'CONCRETE_20CM3D', 'connect': [-14, -9], 'z': (0.0, 3.0)}
+14 = {'name': 'CONCRETE_20CM3D', 'connect': [-21, -18], 'z': (0.0, 3.0)}
+15 = {'name': 'CONCRETE_20CM3D', 'connect': [-15, -14], 'z': (0.0, 3.0)}
+16 = {'name': 'CONCRETE_20CM3D', 'connect': [-19, -18], 'z': (0.0, 3.0)}
+17 = {'name': 'CONCRETE_20CM3D', 'connect': [-16, -24], 'z': (0.0, 3.0)}
+18 = {'name': 'CONCRETE_20CM3D', 'connect': [-20, -19], 'z': (0.0, 3.0)}
+19 = {'name': 'CONCRETE_20CM3D', 'connect': [-3, -17], 'z': (0.0, 3.0)}
+20 = {'name': 'CONCRETE_20CM3D', 'connect': [-5, -20], 'z': (0.0, 3.0)}
+21 = {'name': 'CONCRETE_20CM3D', 'connect': [-22, -21], 'z': (0.0, 3.0)}
+22 = {'name': 'CONCRETE_20CM3D', 'connect': [-22, -20], 'z': (0.0, 3.0)}
+23 = {'name': 'CONCRETE_20CM3D', 'connect': [-23, -12], 'z': (0.0, 3.0)}
+24 = {'name': 'CONCRETE_20CM3D', 'connect': [-24, -1], 'z': (0.0, 3.0)}
+25 = {'name': 'CONCRETE_20CM3D', 'connect': [-24, -25], 'z': (0.0, 3.0)}
+26 = {'name': 'CONCRETE_20CM3D', 'connect': [-23, -26], 'z': (0.0, 3.0)}
+27 = {'name': 'CONCRETE_20CM3D', 'connect': [-26, -25], 'z': (0.0, 3.0)}
+
+[files]
+furniture = 
+
+[slabs]
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+CONCRETE_20CM3D = {'color': 'grey80', 'linewidth': 7, 'lthick': [0.2], 'lmatname': ['CONCRETE']}
+AIR = {'color': 'black', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+CONCRETE = {'mur': (1+0j), 'epr': (5.5+0j), 'roughness': 0.0, 'sigma': 0.048699988079}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[outdoor]
+

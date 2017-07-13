@@ -4884,7 +4884,7 @@ class Ctilde(PyLayers):
         return fig,[ax1,ax2]
 
 
-    def locbas(self, Tt=[], Tr=[],b2g=False):
+    def locbas(self,b2g=False,**kwargs):
         """ global reference frame to local reference frame
 
         If Tt and Tr are [] the global channel is  retrieved
@@ -4909,19 +4909,20 @@ class Ctilde(PyLayers):
         --------
 
         """
+        
         # get Ctilde frequency axes
 
         fGHz = self.fGHz
         # if rot matrices are passed
-        if (Tt != []) & (Tr != []):
+        if ('Tt' in kwargs) & ('Tr' in kwargs):
             if self.islocal:
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
                     # run locbas to return to global basis
                     self.locbas(b2g=True)
                 else:
                     raise NameError('Channel has no self.Tt or self.Tr')
-            self.Tt = Tt
-            self.Tr = Tr
+            self.Tt = kwargs['Tt']
+            self.Tr = kwargs['Tr']
             self.islocal = True
         # if a return to global is requested
         elif b2g:

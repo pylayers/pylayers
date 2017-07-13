@@ -1003,7 +1003,7 @@ class AppForm(QMainWindow):
         self.overset.show()
 
     def open(self):
-        filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
+        filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRLAY']),'(*.lay);;(*.ini)')
 
         if filename != '':
             _filename = pyu.getshort(str(filename))

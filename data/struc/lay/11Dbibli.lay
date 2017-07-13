@@ -1,0 +1,60 @@
+[info]
+format = cart
+version = 1.3
+type = outdoor
+
+[points]
+-117 = (5.254, -3.954)
+-101 = (5.254, -0.054)
+-216 = (-0.013, -3.925)
+-215 = (-0.013, 4.439)
+-214 = (-0.013, -0.054)
+-80 = (-0.013, 1.096)
+-79 = (-0.013, 7.846)
+-56 = (6.954, 7.846)
+-48 = (5.254, 7.846)
+-47 = (5.154, 7.846)
+-46 = (7.004, -3.594)
+-45 = (7.004, -2.654)
+-168 = (7.004, 7.846)
+-166 = (6.204, 7.846)
+-158 = (7.004, -1.844)
+-157 = (5.254, -2.654)
+
+[segments]
+1 = {'name': 'WALL', 'connect': [-214, -101], 'z': (3.48, 6.78)}
+2 = {'name': 'WALL', 'connect': [-80, -214], 'z': (0.0, 3.0)}
+3 = {'name': 'WALL', 'connect': [-80, -214], 'z': (0.0, 3.0)}
+4 = {'name': 'WALL', 'connect': [-48, -166], 'z': (0.0, 3.0)}
+5 = {'name': 'WALL', 'connect': [-48, -47], 'z': (0.0, 3.0)}
+6 = {'name': 'WALL', 'connect': [-168, -56], 'z': (0.0, 3.0)}
+7 = {'name': 'WALL', 'connect': [-80, -215], 'z': (3.48, 6.78)}
+8 = {'name': 'WALL', 'connect': [-215, -79], 'z': (3.48, 6.78)}
+9 = {'name': 'WALL', 'connect': [-216, -117], 'z': (0.0, 3.0)}
+10 = {'name': 'WALL', 'connect': [-216, -214], 'z': (0.0, 3.0)}
+26 = {'name': 'WALL', 'connect': [-46, -45], 'z': (3.48, 6.78)}
+155 = {'name': 'WALL', 'connect': [-157, -117], 'z': (3.48, 6.78)}
+176 = {'name': 'WALL', 'connect': [-79, -47], 'z': (3.48, 6.78)}
+174 = {'name': 'WALL', 'connect': [-168, -158], 'z': (3.48, 6.78)}
+196 = {'name': 'WALL', 'connect': [-101, -157], 'z': (3.48, 6.78)}
+108 = {'name': 'WALL', 'connect': [-157, -45], 'z': (3.48, 6.78)}
+109 = {'name': 'WALL', 'connect': [-158, -45], 'z': (3.48, 6.78)}
+117 = {'name': 'WALL', 'connect': [-56, -166], 'z': (3.48, 6.78)}
+
+[files]
+furniture = 
+
+[slabs]
+WALL = {'color': 'grey20', 'linewidth': 3, 'lthick': [0.07], 'lmatname': ['BRICK']}
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+BRICK = {'mur': (1+0j), 'epr': (4.09999990463+0j), 'roughness': 0.0, 'sigma': 0.300000011921}
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[outdoor]
+

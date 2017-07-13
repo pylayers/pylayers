@@ -251,12 +251,7 @@ class Pattern(PyLayers):
         >>> #A3.eval()
 
         """
-        defaults = {'th':[],
-                    'ph':[],
-                    'pt':[],
-                    'pr':[],
-                    'Rfloor':False,
-                    'fGHz':[],
+        defaults = {'Rfloor':False,
                     'nth':90,
                     'nph':181,
                     'grid':True,
@@ -266,14 +261,15 @@ class Pattern(PyLayers):
                     'ph1':2*np.pi,
                     'azoffset':0
                    }
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
 
-        if kwargs['fGHz']==[]:
+        if 'fGHz' not in kwargs:
             if 'fGHz' not in self.__dict__:
-                self.fGHz=np.array([2.4])
+                self.fGHz = np.array([2.4])
         else:
             self.fGHz = kwargs['fGHz']
 
@@ -288,8 +284,8 @@ class Pattern(PyLayers):
         #          calculates from points coordinates pt and pr
         # else
         #     take specified values
-        if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            if (kwargs['pt'] == []) and (kwargs['pr'] == []):
+        if ('th' not in kwargs) and ('ph' not in kwargs):
+            if ('pt' not in kwargs) and ('pr' not in kwargs):
                 self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
                 self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
                 self.grid = True

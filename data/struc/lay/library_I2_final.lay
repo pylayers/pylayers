@@ -1,0 +1,177 @@
+[info]
+format = cart
+version = 1.3
+type = indoor
+
+[points]
+-122 = (6.746, 6.335)
+-120 = (6.748, 6.822)
+-118 = (10.241, 6.84)
+-116 = (10.242, 6.384)
+-114 = (6.774, 4.646)
+-112 = (6.774, 5.126)
+-110 = (10.243, 5.126)
+-108 = (10.243, 4.676)
+-106 = (0.005, 2.909)
+-104 = (3.832, 2.909)
+-102 = (3.832, 3.401)
+-100 = (0.005, 3.372)
+-98 = (0.007, 4.601)
+-96 = (3.818, 4.601)
+-94 = (3.818, 5.122)
+-92 = (0.008, 5.122)
+-90 = (0.01, 6.33)
+-88 = (3.769, 6.344)
+-86 = (3.769, 6.807)
+-84 = (0.01, 6.807)
+-82 = (0.012, 8.036)
+-80 = (3.855, 8.021)
+-78 = (3.855, 8.484)
+-76 = (0.012, 8.47)
+-74 = (0.014, 9.689)
+-72 = (3.797, 9.699)
+-70 = (3.797, 10.201)
+-68 = (0.015, 10.211)
+-66 = (0.017, 11.443)
+-64 = (3.784, 11.433)
+-62 = (3.784, 11.934)
+-60 = (0.018, 11.934)
+-58 = (0.019, 13.123)
+-56 = (3.826, 13.133)
+-54 = (3.815, 13.665)
+-52 = (0.02, 13.665)
+-50 = (0.022, 14.839)
+-48 = (3.824, 14.837)
+-46 = (3.824, 15.379)
+-44 = (0.023, 15.379)
+-42 = (0.026, 16.576)
+-40 = (3.847, 16.576)
+-38 = (3.843, 17.097)
+-36 = (0.027, 17.101)
+-34 = (0.029, 18.254)
+-32 = (0.029, 18.721)
+-30 = (3.838, 18.723)
+-28 = (3.837, 18.242)
+-26 = (3.541, 24.102)
+-24 = (0.069, 24.102)
+-22 = (0.034, 22.589)
+-20 = (-0.0, 0.0)
+-18 = (6.292, -0.0)
+-16 = (7.805, -0.0)
+-14 = (7.839, 2.615)
+-12 = (10.246, 2.615)
+-10 = (10.212, 38.938)
+-8 = (3.541, 38.938)
+
+[segments]
+1 = {'name': 'BOOKSHELVES', 'connect': [-38, -36], 'z': (0, 2)}
+2 = {'name': 'BOOKSHELVES', 'connect': [-40, -38], 'z': (0, 2)}
+3 = {'name': 'BOOKSHELVES', 'connect': [-40, -42], 'z': (0, 2)}
+4 = {'name': 'BOOKSHELVES', 'connect': [-36, -42], 'z': (0, 2)}
+5 = {'name': 'BOOKSHELVES', 'connect': [-30, -28], 'z': (0, 2)}
+6 = {'name': 'BOOKSHELVES', 'connect': [-32, -30], 'z': (0, 2)}
+7 = {'name': 'BOOKSHELVES', 'connect': [-32, -34], 'z': (0, 2)}
+8 = {'name': 'BOOKSHELVES', 'connect': [-28, -34], 'z': (0, 2)}
+9 = {'name': '3D_WINDOW_GLASS', 'connect': [-8, -10], 'z': (0, 10)}
+10 = {'name': '3D_WINDOW_GLASS', 'connect': [-118, -10], 'z': (0, 10)}
+11 = {'name': '3D_WINDOW_GLASS', 'connect': [-118, -116], 'z': (2, 10)}
+12 = {'name': '3D_WINDOW_GLASS', 'connect': [-110, -116], 'z': (0, 10)}
+13 = {'name': '3D_WINDOW_GLASS', 'connect': [-110, -108], 'z': (2, 10)}
+14 = {'name': '3D_WINDOW_GLASS', 'connect': [-108, -12], 'z': (0, 10)}
+15 = {'name': 'REINFORCED_CONCRETE', 'connect': [-14, -12], 'z': (0, 10)}
+16 = {'name': 'REINFORCED_CONCRETE', 'connect': [-16, -14], 'z': (0, 10)}
+17 = {'name': 'AIR', 'connect': [-16, -18], 'z': (0, 10)}
+18 = {'name': '3D_WINDOW_GLASS', 'connect': [-20, -18], 'z': (0, 10)}
+19 = {'name': '3D_WINDOW_GLASS', 'connect': [-20, -106], 'z': (0, 10)}
+20 = {'name': '3D_WINDOW_GLASS', 'connect': [-100, -106], 'z': (2, 10)}
+21 = {'name': '3D_WINDOW_GLASS', 'connect': [-100, -98], 'z': (0, 10)}
+22 = {'name': '3D_WINDOW_GLASS', 'connect': [-92, -98], 'z': (2, 10)}
+23 = {'name': '3D_WINDOW_GLASS', 'connect': [-92, -90], 'z': (0, 10)}
+24 = {'name': '3D_WINDOW_GLASS', 'connect': [-84, -90], 'z': (2, 10)}
+25 = {'name': '3D_WINDOW_GLASS', 'connect': [-84, -82], 'z': (0, 10)}
+26 = {'name': '3D_WINDOW_GLASS', 'connect': [-76, -82], 'z': (2, 10)}
+27 = {'name': '3D_WINDOW_GLASS', 'connect': [-76, -74], 'z': (0, 10)}
+28 = {'name': '3D_WINDOW_GLASS', 'connect': [-68, -74], 'z': (2, 10)}
+29 = {'name': '3D_WINDOW_GLASS', 'connect': [-68, -66], 'z': (0, 10)}
+30 = {'name': 'BOOKSHELVES', 'connect': [-60, -66], 'z': (0, 2)}
+31 = {'name': '3D_WINDOW_GLASS', 'connect': [-60, -58], 'z': (0, 10)}
+32 = {'name': 'BOOKSHELVES', 'connect': [-52, -58], 'z': (0, 2)}
+33 = {'name': '3D_WINDOW_GLASS', 'connect': [-52, -50], 'z': (0, 10)}
+34 = {'name': '3D_WINDOW_GLASS', 'connect': [-44, -50], 'z': (2, 10)}
+35 = {'name': '3D_WINDOW_GLASS', 'connect': [-44, -42], 'z': (0, 10)}
+36 = {'name': '3D_WINDOW_GLASS', 'connect': [-36, -42], 'z': (2, 10)}
+37 = {'name': '3D_WINDOW_GLASS', 'connect': [-36, -34], 'z': (0, 10)}
+38 = {'name': '3D_WINDOW_GLASS', 'connect': [-32, -34], 'z': (2, 10)}
+39 = {'name': '3D_WINDOW_GLASS', 'connect': [-32, -22], 'z': (0, 10)}
+40 = {'name': 'AIR', 'connect': [-24, -22], 'z': (0, 10)}
+41 = {'name': '3D_WINDOW_GLASS', 'connect': [-24, -26], 'z': (0, 10)}
+42 = {'name': '3D_WINDOW_GLASS', 'connect': [-8, -26], 'z': (0, 10)}
+43 = {'name': 'BOOKSHELVES', 'connect': [-118, -116], 'z': (0, 2)}
+44 = {'name': 'BOOKSHELVES', 'connect': [-120, -118], 'z': (0, 2)}
+45 = {'name': 'BOOKSHELVES', 'connect': [-120, -122], 'z': (0, 2)}
+46 = {'name': 'BOOKSHELVES', 'connect': [-116, -122], 'z': (0, 2)}
+47 = {'name': 'BOOKSHELVES', 'connect': [-110, -108], 'z': (0, 2)}
+48 = {'name': 'BOOKSHELVES', 'connect': [-112, -110], 'z': (0, 2)}
+49 = {'name': 'BOOKSHELVES', 'connect': [-112, -114], 'z': (0, 2)}
+50 = {'name': 'BOOKSHELVES', 'connect': [-108, -114], 'z': (0, 2)}
+51 = {'name': 'BOOKSHELVES', 'connect': [-102, -100], 'z': (0, 2)}
+52 = {'name': 'BOOKSHELVES', 'connect': [-104, -102], 'z': (0, 2)}
+53 = {'name': 'BOOKSHELVES', 'connect': [-104, -106], 'z': (0, 2)}
+54 = {'name': 'BOOKSHELVES', 'connect': [-100, -106], 'z': (0, 2)}
+55 = {'name': 'BOOKSHELVES', 'connect': [-94, -92], 'z': (0, 2)}
+56 = {'name': 'BOOKSHELVES', 'connect': [-96, -94], 'z': (0, 2)}
+57 = {'name': 'BOOKSHELVES', 'connect': [-96, -98], 'z': (0, 2)}
+58 = {'name': 'BOOKSHELVES', 'connect': [-92, -98], 'z': (0, 2)}
+59 = {'name': 'BOOKSHELVES', 'connect': [-86, -84], 'z': (0, 2)}
+60 = {'name': 'BOOKSHELVES', 'connect': [-88, -86], 'z': (0, 2)}
+61 = {'name': 'BOOKSHELVES', 'connect': [-88, -90], 'z': (0, 2)}
+62 = {'name': 'BOOKSHELVES', 'connect': [-84, -90], 'z': (0, 2)}
+63 = {'name': 'BOOKSHELVES', 'connect': [-78, -76], 'z': (0, 2)}
+64 = {'name': 'BOOKSHELVES', 'connect': [-80, -78], 'z': (0, 2)}
+65 = {'name': 'BOOKSHELVES', 'connect': [-80, -82], 'z': (0, 2)}
+66 = {'name': 'BOOKSHELVES', 'connect': [-76, -82], 'z': (0, 2)}
+67 = {'name': 'BOOKSHELVES', 'connect': [-70, -68], 'z': (0, 2)}
+68 = {'name': 'BOOKSHELVES', 'connect': [-72, -70], 'z': (0, 2)}
+69 = {'name': 'BOOKSHELVES', 'connect': [-72, -74], 'z': (0, 2)}
+70 = {'name': 'BOOKSHELVES', 'connect': [-68, -74], 'z': (0, 2)}
+71 = {'name': 'BOOKSHELVES', 'connect': [-62, -60], 'z': (0, 2)}
+72 = {'name': 'BOOKSHELVES', 'connect': [-64, -62], 'z': (0, 2)}
+73 = {'name': 'BOOKSHELVES', 'connect': [-64, -66], 'z': (0, 2)}
+74 = {'name': '3D_WINDOW_GLASS', 'connect': [-60, -66], 'z': (2, 10)}
+75 = {'name': 'BOOKSHELVES', 'connect': [-54, -52], 'z': (0, 2)}
+76 = {'name': 'BOOKSHELVES', 'connect': [-56, -54], 'z': (0, 2)}
+77 = {'name': 'BOOKSHELVES', 'connect': [-56, -58], 'z': (0, 2)}
+78 = {'name': '3D_WINDOW_GLASS', 'connect': [-52, -58], 'z': (2, 10)}
+79 = {'name': 'BOOKSHELVES', 'connect': [-46, -44], 'z': (0, 2)}
+80 = {'name': 'BOOKSHELVES', 'connect': [-48, -46], 'z': (0, 2)}
+81 = {'name': 'BOOKSHELVES', 'connect': [-48, -50], 'z': (0, 2)}
+82 = {'name': 'BOOKSHELVES', 'connect': [-44, -50], 'z': (0, 2)}
+
+[files]
+furniture = 
+
+[slabs]
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+BOOKSHELVES = {'color': 'red2', 'linewidth': 1, 'lthick': [0.01], 'lmatname': ['BOOKSHELVES']}
+REINFORCED_CONCRETE = {'color': 'grey60', 'linewidth': 3, 'lthick': [0.05], 'lmatname': ['REINFORCED_CONCRETE']}
+3D_WINDOW_GLASS = {'color': 'blue3', 'linewidth': 1, 'lthick': [0.05, 0.05, 0.05], 'lmatname': ['GLASS', 'AIR', 'GLASS']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+BOOKSHELVES = {'mur': 1, 'epr': 6, 'roughness': 0, 'sigma': 0}
+REINFORCED_CONCRETE = {'mur': (1+0j), 'epr': (8.69999980927+0j), 'roughness': 0.0, 'sigma': 3.0}
+GLASS = {'mur': (1+0j), 'epr': (3.79999995232+0j), 'roughness': 0.0, 'sigma': 0.0}
+
+[indoor]
+zceil = 10
+zfloor = 0
+
+[latlon]
+llcrnrlon = 24.6580186471
+llcrnrlat = 60.2040485164
+urcrnrlon = 24.6582040801
+urcrnrlat = 60.2043986927
+

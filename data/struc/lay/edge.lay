@@ -1,0 +1,42 @@
+[info]
+format = cart
+version = 1.3
+type = outdoor
+
+[points]
+-1 = (-1.0, 0.0)
+-7 = (-1.0, 10.0)
+-6 = (11.0, 10.0)
+-5 = (11.0, 0.0)
+-4 = (7.0, 0.0)
+-3 = (5.0, 3.0)
+-2 = (3.0, 0.0)
+
+[segments]
+1 = {'name': 'ABSORBENT', 'connect': [-2, -1], 'z': [0.0, 3.0]}
+2 = {'name': 'METALIC', 'connect': [-3, -2], 'z': [0.0, 3.0]}
+3 = {'name': 'METALIC', 'connect': [-4, -3], 'z': [0.0, 3.0]}
+4 = {'name': 'ABSORBENT', 'connect': [-5, -4], 'z': [0.0, 3.0]}
+5 = {'name': 'ABSORBENT', 'connect': [-6, -5], 'z': [0.0, 3.0]}
+6 = {'name': 'ABSORBENT', 'connect': [-7, -6], 'z': [0.0, 3.0]}
+7 = {'name': 'ABSORBENT', 'connect': [-7, -1], 'z': [0.0, 3.0]}
+
+[files]
+furniture = 
+
+[slabs]
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+METALIC = {'color': 'black', 'linewidth': 4, 'lthick': [0.1], 'lmatname': ['METAL']}
+ABSORBENT = {'color': 'honeydew2', 'linewidth': 4, 'lthick': [0.1], 'lmatname': ['ABSORBENT']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+METAL = {'mur': (1+1j), 'epr': (-1-1j), 'roughness': 0.0, 'sigma': 1000.0}
+ABSORBENT = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[outdoor]
+

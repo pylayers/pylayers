@@ -1132,6 +1132,10 @@ class Signatures(PyLayers,dict):
         animation = kwargs['animation'] 
 
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+        #
+        # AIR : editable AIR separation 
+        # _AIR : constructed AIR separation 
+        #
         lair = self.L.name['AIR']+self.L.name['_AIR']
 
         # list of interactions visible from source
@@ -1195,9 +1199,6 @@ class Signatures(PyLayers,dict):
         if progress :
             pbar = tqdm(total=100,desc='Signatures')
 
-        # import ipdb
-        # ipdb.set_trace()
-
         for us,s in enumerate(lis):
             if progress:
                 pbar.update(100./(1.*len(lis)))
@@ -1255,19 +1256,15 @@ class Signatures(PyLayers,dict):
                 lawp = [0]
             # while the stack of iterators is not void
             cpt = 0
-
-            # import ipdb
-            # ipdb.set_trace
-
             while stack: #
                 # iter_on_interactions is the last iterator in the stack
                 iter_on_interactions = stack[-1]
-                # next  istinteraction child
+                # next interaction child
                 interaction = next(iter_on_interactions, None)
-                
-                # if visited == [(2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7), (2060, 7, 9), (20, 9), (2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7)]:
-                #     import ipdb
-                #     ipdb.set_trace()
+                #print visited
+                #if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
+                #    import ipdb
+                #    ipdb.set_trace()
                 # cond1 : there is more interactions
                 # continue if True
                 cond1 = not(interaction is None)
@@ -1309,10 +1306,6 @@ class Signatures(PyLayers,dict):
                     except:
                         pass
 
-                if visited == [(2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7), (2060, 7, 9), (20, 9), (2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7)]:
-                    import ipdb
-                    ipdb.set_trace()
-
                 if (cond1 and cond2 and cond3 and condD and condR and condT):
                     visited.append(interaction)
                     #print(visited)
@@ -1320,6 +1313,7 @@ class Signatures(PyLayers,dict):
                     # if visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]:
                     #     import ipdb
                     #     ipdb.set_trace()
+
 
                     # update list of airwalls
                     if interaction[0] in lair:
@@ -1389,11 +1383,6 @@ class Signatures(PyLayers,dict):
 
                     # if at least 2 interactions
                     # or previous point is a diffraction 
-
-                    if visited == [(2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7), (2060, 7, 9), (20, 9), (2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7)]:
-                        print "SEN MAUVAIS!!!"
-                        import ipdb
-                        ipdb.set_trace()
 
                     if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
                         ratio = 1.0 
@@ -1499,7 +1488,7 @@ class Signatures(PyLayers,dict):
                             #    print('angle cone',angle_cone)
                             #    print(apex)
 
-                        else: # <==> if connected
+                        else:
 
                             v0n  = v0/np.linalg.norm(v0)
                             v_n  = v_/np.linalg.norm(v_)
@@ -1563,17 +1552,14 @@ class Signatures(PyLayers,dict):
                                 # else:
                                 I = geu.angle_intersection2(al,ar,aseg0,aseg1)
                                 ratio = I/angle_cone
-                                
-                                if ratio==0:
-                                    if visited == [(2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7), (2060, 7, 9), (20, 9), (2060, 9, 7), (2064, 7, 16), (11, 16), (2064, 16, 7)]:
-                                        print "SENS MAUVAIS :-P !!!"
-                                        import ipdb
-                                        ipdb.set_trace()
+                                #if ratio>=1:
+                                #    pdb.set_trace()
 
                             # if connected:
-                            #     print "ratio :",ratio        
+                            #     print "ratio :",ratio
+                            
 
-                        
+                        #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
                         if (bvisu):
                             fig ,ax = self.L.showG('s',aw=1,labels=0)
                             #
