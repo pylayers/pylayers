@@ -5995,7 +5995,6 @@ class Layout(pro.PyLayers):
         # p is a polygon 
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout 
-
         [ p.setvnodes_new(self.get_points(p),self) for p in lTP ]
 
         if verbose:
