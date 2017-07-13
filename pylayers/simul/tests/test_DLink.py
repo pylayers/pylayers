@@ -1,18 +1,20 @@
 from pylayers.simul.link import *
 import pylayers.signal.waveform as wvf
 import pdb
+import warnings 
 
+# warnings.filterwarnings("error")
 # set the frequency range
 fcGHz=5
 WMHz = 3000
 Nf = 400 
-#fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
-fGHz = np.array([fcGHz])
+fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
+#fGHz = np.array([fcGHz])
 # set the layout
-#L=Layout('defstr.ini',build=False)
-#L=Layout('defstr.ini',diffraction=True)
-L=Layout('defstr.ini',bbuild=False)
-#L=Layout('TC2_METIS.ini',build=False)
+L=Layout('defstr.lay',bbuild=1)
+#L=Layout('defstr.ini',bdiffraction=True)
+#L=Layout('defstr.ini',bbuild=True)
+#L=Layout('TC2_METIS.ini',bbuild=1)
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
 DL=DLink(L=L,fGHz=fGHz,outdoor=False,applywav=True)
@@ -30,7 +32,7 @@ DL.Ab=Antenna(typ='Omni')
 #DL.b=np.array([766,1115,1.8])
 tic = time.time()
 #DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=False)
-DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=True)
+DL.eval(verbose=True,force=True,bt=False,cutoff=4,threshold=0.1,ra_vectorized=True,nD=1)
 toc = time.time()
 print(toc-tic)
 #DL.b=np.array([755,1110,1.5])

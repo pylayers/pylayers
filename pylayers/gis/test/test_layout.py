@@ -1,20 +1,28 @@
 from pylayers.gis.layout import Layout
+from pylayers.util.project import * 
+import pylayers.util.pyutil as pyu
 import networkx as nx
 import matplotlib.pyplot as plt
+import warnings
+import shutil
+
+warnings.filterwarnings("error")
 
 #doctest.testmod(layout)
 #L = Layout('TA-Office.ini')
 L =  Layout()
 lL = L.ls()
 for tL in lL:
-    print  'Layout :',tL
-    try:
-        L=Layout(tL)
+    print  'Layout :     ',tL
+    print  '--------------------------'
+    L = Layout(tL,bbuild=0,bgraphs=0)
+    if L.check():
         L.save()
-    except:
-        print 'Layout :',tL ,' problem'
-
-#f = plt.figure(figsize=(20,10))
+        filein = pyu.getlong(L._filename, pstruc['DIRLAY'])
+        fileout = '/home/uguen/Documents/rch/devel/pylayers/data/struc/lay/'+L._filename
+        print fileout
+        shutil.copy2(filein,fileout)
+#figure(figsize=(20,10))
 #plt.axis('off')
 #f,a = L.showG('s',nodes=False,fig=f)
 #plt.show()

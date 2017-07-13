@@ -1,0 +1,84 @@
+[info]
+format = cart
+version = 1.3
+type = indoor
+
+[points]
+-48 = (0.001, 0.082)
+-46 = (0.011, 3.538)
+-44 = (0.011, 7.486)
+-42 = (0.011, 8.994)
+-40 = (4.48, 8.967)
+-38 = (4.498, 7.484)
+-36 = (4.489, 3.46)
+-34 = (4.489, -0.0)
+-32 = (0.32, 0.004)
+-30 = (0.0, 0.004)
+-28 = (3.982, 7.491)
+-26 = (3.004, 7.491)
+-24 = (2.071, 7.491)
+-22 = (4.452, 3.968)
+-20 = (4.452, 3.5)
+-18 = (2.957, 3.497)
+-16 = (2.957, 3.966)
+-14 = (0.059, 3.997)
+-12 = (0.064, 3.517)
+-10 = (1.605, 3.517)
+-8 = (1.601, 3.987)
+
+[segments]
+7 = {'name': 'WALL', 'connect': [-32, -34], 'z': (0, 1.5)}
+14 = {'name': 'WALL', 'connect': [-24, -26], 'z': (0, 1.5)}
+15 = {'name': 'WALL', 'connect': [-24, -44], 'z': (0, 3)}
+16 = {'name': '3D_WINDOW_GLASS', 'connect': [-24, -26], 'z': (1.5, 3)}
+17 = {'name': 'DOOR', 'connect': [-28, -26], 'z': (0, 3)}
+18 = {'name': 'WALL', 'connect': [-38, -28], 'z': (0, 3)}
+19 = {'name': 'WALL', 'connect': [-48, -30], 'z': (0, 3)}
+20 = {'name': 'WALL', 'connect': [-32, -30], 'z': (0, 3)}
+21 = {'name': '3D_WINDOW_GLASS', 'connect': [-32, -34], 'z': (1.5, 3)}
+22 = {'name': 'WALL', 'connect': [-36, -34], 'z': (0, 3)}
+23 = {'name': 'WALL', 'connect': [-38, -36], 'z': (0, 3)}
+24 = {'name': 'AIR', 'connect': [-40, -38], 'z': (0, 3)}
+25 = {'name': 'WALL', 'connect': [-40, -42], 'z': (0, 3)}
+26 = {'name': 'AIR', 'connect': [-44, -42], 'z': (0, 3)}
+27 = {'name': 'WALL', 'connect': [-46, -44], 'z': (0, 3)}
+28 = {'name': 'WALL', 'connect': [-48, -46], 'z': (0, 3)}
+29 = {'name': 'BOOKSHELVES', 'connect': [-16, -22], 'z': (0, 1.65)}
+30 = {'name': 'BOOKSHELVES', 'connect': [-16, -18], 'z': (0, 1.65)}
+31 = {'name': 'BOOKSHELVES', 'connect': [-20, -18], 'z': (0, 1.65)}
+32 = {'name': 'BOOKSHELVES', 'connect': [-22, -20], 'z': (0, 1.65)}
+33 = {'name': 'BOOKSHELVES', 'connect': [-8, -14], 'z': (0, 1.65)}
+34 = {'name': 'BOOKSHELVES', 'connect': [-8, -10], 'z': (0, 1.65)}
+35 = {'name': 'BOOKSHELVES', 'connect': [-12, -10], 'z': (0, 1.65)}
+36 = {'name': 'BOOKSHELVES', 'connect': [-14, -12], 'z': (0, 1.65)}
+
+[files]
+furniture = 
+
+[slabs]
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+DOOR = {'color': 'red1', 'linewidth': 1, 'lthick': [0.03], 'lmatname': ['WOOD']}
+WALL = {'color': 'grey20', 'linewidth': 3, 'lthick': [0.07], 'lmatname': ['BRICK']}
+3D_WINDOW_GLASS = {'color': 'blue3', 'linewidth': 1, 'lthick': [0.05, 0.05, 0.05], 'lmatname': ['GLASS', 'AIR', 'GLASS']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+BOOKSHELVES = {'color': 'red2', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['WOOD']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+WOOD = {'mur': (1+0j), 'epr': (2.83999991417-0.019999999553j), 'roughness': 0.0, 'sigma': 0.0}
+BRICK = {'mur': (1+0j), 'epr': (4.09999990463+0j), 'roughness': 0.0, 'sigma': 0.300000011921}
+GLASS = {'mur': (1+0j), 'epr': (3.79999995232+0j), 'roughness': 0.0, 'sigma': 0.0}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[indoor]
+zceil = 3
+zfloor = 0
+
+[latlon]
+llcrnrlon = 24.6332735386
+llcrnrlat = 60.2114326091
+urcrnrlon = 24.6333549605
+urcrnrlat = 60.2115134902
+

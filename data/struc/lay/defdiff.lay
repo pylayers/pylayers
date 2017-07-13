@@ -1,0 +1,50 @@
+[info]
+format = cart
+version = 1.3
+type = outdoor
+
+[points]
+-1 = (758.516, 1111.9)
+-10 = (762.289, 1112.894)
+-9 = (764.776, 1112.894)
+-8 = (764.776, 1114.883)
+-7 = (762.272, 1114.883)
+-6 = (758.49, 1115.9)
+-5 = (763.49, 1115.931)
+-4 = (768.49, 1115.963)
+-3 = (768.516, 1111.964)
+-2 = (763.516, 1111.932)
+
+[segments]
+1 = {'name': 'METAL', 'connect': [-8, -7], 'z': [0.0, 3.0]}
+2 = {'name': 'WOOD', 'connect': [-8, -9], 'z': [0.0, 3.0]}
+3 = {'name': 'METAL', 'connect': [-10, -9], 'z': [0.0, 3.0]}
+4 = {'name': 'WALL', 'connect': [-6, -1], 'z': (0.0, 3.0)}
+5 = {'name': 'WALL', 'connect': [-6, -5], 'z': (0.0, 3.0)}
+6 = {'name': 'WALL', 'connect': [-5, -4], 'z': (0.0, 3.0)}
+7 = {'name': 'WALL', 'connect': [-4, -3], 'z': (0.0, 3.0)}
+8 = {'name': 'WALL', 'connect': [-3, -2], 'z': (0.0, 3.0)}
+9 = {'name': 'WALL', 'connect': [-2, -1], 'z': (0.0, 3.0)}
+10 = {'name': 'METAL', 'connect': [-7, -10], 'z': [0.0, 3.0]}
+
+[files]
+furniture = 
+
+[slabs]
+WALL = {'color': 'grey20', 'linewidth': 3, 'lthick': [0.07], 'lmatname': ['BRICK']}
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+WOOD = {'color': 'maroon', 'linewidth': 2, 'lthick': [0.04], 'lmatname': ['WOOD']}
+METAL = {'color': 'black', 'linewidth': 4, 'lthick': [0.1], 'lmatname': ['METAL']}
+AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+BRICK = {'mur': (1+0j), 'epr': (4.09999990463+0j), 'roughness': 0.0, 'sigma': 0.300000011921}
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+WOOD = {'mur': (1+0j), 'epr': (2.83999991417-0.019999999553j), 'roughness': 0.0, 'sigma': 0.0}
+METAL = {'mur': (1+1j), 'epr': (-1-1j), 'roughness': 0.0, 'sigma': 1000.0}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[outdoor]
+
