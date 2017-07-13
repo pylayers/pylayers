@@ -796,10 +796,10 @@ class Mat(PyLayers,dict):
         # epsrp  = a * fGHZ ** b 
         # sigma  = c * fGHZ ** d 
         #
-        self['a'] = a
-        self['b'] = b
-        self['c'] = c
-        self['d'] = d
+        # self['a'] = None
+        # self['b'] = None
+        # self['c'] = None
+        # self['d'] = None
 
     def eval(self, fGHz):
         """ evaluate Mat at given frequencies
@@ -827,15 +827,16 @@ class Mat(PyLayers,dict):
         """
 
         self['fGHz'] = fGHz
-        if self['a'] == None:
-            print ("YES 1")
-            epsc = self['epr'] - 1j * 17.98 * abs(self['sigma']) /  self['fGHz']
-        else:
-            print ("YES 2")
-            epsr = self['a'] * self['fGHz']**self['b']  # relative permittivity  Eq.28
-            sigma  = self['c'] * self['fGHz']**self['d'] # conductivity Eq.29
-            epsc = epsr - 1j * 17.98 * sigma /  self['fGHz'] # complex refractive index Eq.19
-
+        # if self['a'] == None:
+        #     print ("YES 1")
+        #     epsc = self['epr'] - 1j * 17.98 * abs(self['sigma']) /  self['fGHz']
+        # else:
+        #     print ("YES 2")
+        #     epsr = self['a'] * self['fGHz']**self['b']  # relative permittivity  Eq.28
+        #     sigma  = self['c'] * self['fGHz']**self['d'] # conductivity Eq.29
+        #     epsc = epsr - 1j * 17.98 * sigma /  self['fGHz'] # complex refractive index Eq.19
+        epsc = self['epr'] - 1j * 17.98 * abs(self['sigma']) /  self['fGHz']
+        
         return(epsc)
 
     def info(self):
