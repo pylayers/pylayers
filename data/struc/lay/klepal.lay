@@ -1,0 +1,142 @@
+[info]
+format = cart
+version = 1.3
+type = outdoor
+
+[points]
+-83 = (40.163, 9.119)
+-82 = (40.163, 5.953)
+-81 = (40.163, 8.437)
+-80 = (40.163, 0.145)
+-78 = (7.55, 0.145)
+-77 = (5.465, 5.603)
+-76 = (4.863, 5.607)
+-75 = (2.561, 5.619)
+-74 = (0.044, 5.632)
+-73 = (5.379, 8.887)
+-72 = (5.416, 14.205)
+-71 = (5.376, 8.437)
+-70 = (7.66, 5.592)
+-69 = (15.134, 5.955)
+-68 = (15.147, 8.419)
+-67 = (35.109, 6.01)
+-66 = (35.074, 8.525)
+-65 = (30.455, 5.903)
+-64 = (30.433, 8.487)
+-63 = (34.993, 14.205)
+-62 = (35.193, 0.145)
+-61 = (30.504, 0.145)
+-60 = (0.044, 3.748)
+-59 = (0.044, 4.991)
+-58 = (0.044, 5.872)
+-57 = (0.044, 8.518)
+-56 = (0.044, 9.199)
+-55 = (0.044, 10.401)
+-54 = (48.915, 3.027)
+-53 = (48.915, 5.472)
+-52 = (48.915, 6.033)
+-51 = (48.915, 8.277)
+-50 = (48.915, 8.878)
+-49 = (48.915, 11.163)
+-48 = (43.248, 14.205)
+-47 = (40.163, 14.205)
+-46 = (30.384, 14.205)
+-45 = (25.334, 14.205)
+-44 = (20.324, 14.205)
+-43 = (10.149, 5.913)
+-42 = (10.157, 8.478)
+-37 = (15.101, 0.145)
+-36 = (15.18, 14.205)
+-35 = (10.133, 0.145)
+-34 = (10.173, 14.205)
+-33 = (0.044, 0.145)
+-17 = (48.915, 0.145)
+-16 = (48.915, 14.205)
+-6 = (0.044, 14.205)
+
+[segments]
+1 = {'name': 'WINDOW_GLASS', 'connect': [-55, -6], 'z': (0.0, 3.0)}
+2 = {'name': 'WINDOW_GLASS', 'connect': [-16, -48], 'z': (0.0, 3.0)}
+3 = {'name': 'WINDOW_GLASS', 'connect': [-16, -49], 'z': (0.0, 3.0)}
+4 = {'name': 'WINDOW_GLASS', 'connect': [-78, -35], 'z': (0.0, 3.0)}
+5 = {'name': 'WINDOW_GLASS', 'connect': [-72, -6], 'z': (0.0, 3.0)}
+6 = {'name': 'WINDOW_GLASS', 'connect': [-37, -35], 'z': (0.0, 3.0)}
+7 = {'name': 'WINDOW_GLASS', 'connect': [-36, -34], 'z': (0.0, 3.0)}
+8 = {'name': 'WINDOW_GLASS', 'connect': [-37, -61], 'z': (0.0, 3.0)}
+9 = {'name': 'PARTITION', 'connect': [-35, -43], 'z': (0.0, 3.0)}
+10 = {'name': 'PARTITION', 'connect': [-37, -69], 'z': (0.0, 3.0)}
+11 = {'name': 'PARTITION', 'connect': [-34, -42], 'z': (0.0, 3.0)}
+12 = {'name': 'PARTITION', 'connect': [-43, -42], 'z': (0.0, 3.0)}
+13 = {'name': 'WINDOW_GLASS', 'connect': [-36, -44], 'z': (0.0, 3.0)}
+14 = {'name': 'WINDOW_GLASS', 'connect': [-45, -44], 'z': (0.0, 3.0)}
+15 = {'name': 'WINDOW_GLASS', 'connect': [-46, -45], 'z': (0.0, 3.0)}
+16 = {'name': 'WINDOW_GLASS', 'connect': [-47, -63], 'z': (0.0, 3.0)}
+17 = {'name': 'WINDOW_GLASS', 'connect': [-48, -47], 'z': (0.0, 3.0)}
+18 = {'name': 'WINDOW_GLASS', 'connect': [-51, -50], 'z': (0.0, 3.0)}
+19 = {'name': 'WINDOW_GLASS', 'connect': [-50, -49], 'z': (0.0, 3.0)}
+20 = {'name': 'WINDOW_GLASS', 'connect': [-52, -51], 'z': (0.0, 3.0)}
+21 = {'name': 'WINDOW_GLASS', 'connect': [-53, -52], 'z': (0.0, 3.0)}
+22 = {'name': 'WINDOW_GLASS', 'connect': [-54, -53], 'z': (0.0, 3.0)}
+23 = {'name': 'WINDOW_GLASS', 'connect': [-54, -17], 'z': (0.0, 3.0)}
+24 = {'name': 'WINDOW_GLASS', 'connect': [-56, -55], 'z': (0.0, 3.0)}
+25 = {'name': 'WINDOW_GLASS', 'connect': [-56, -57], 'z': (0.0, 3.0)}
+26 = {'name': 'WINDOW_GLASS', 'connect': [-59, -74], 'z': (0.0, 3.0)}
+27 = {'name': 'WINDOW_GLASS', 'connect': [-58, -57], 'z': (0.0, 3.0)}
+28 = {'name': 'WINDOW_GLASS', 'connect': [-60, -59], 'z': (0.0, 3.0)}
+29 = {'name': 'WINDOW_GLASS', 'connect': [-60, -33], 'z': (0.0, 3.0)}
+30 = {'name': 'WINDOW_GLASS', 'connect': [-62, -61], 'z': (0.0, 3.0)}
+31 = {'name': 'WINDOW_GLASS', 'connect': [-64, -46], 'z': (0.0, 3.0)}
+32 = {'name': 'WINDOW_GLASS', 'connect': [-80, -62], 'z': (0.0, 3.0)}
+33 = {'name': 'WINDOW_GLASS', 'connect': [-63, -46], 'z': (0.0, 3.0)}
+34 = {'name': 'WINDOW_GLASS', 'connect': [-63, -66], 'z': (0.0, 3.0)}
+35 = {'name': 'WINDOW_GLASS', 'connect': [-64, -65], 'z': (0.0, 3.0)}
+36 = {'name': 'WINDOW_GLASS', 'connect': [-61, -65], 'z': (0.0, 3.0)}
+37 = {'name': 'WINDOW_GLASS', 'connect': [-62, -67], 'z': (0.0, 3.0)}
+38 = {'name': 'WINDOW_GLASS', 'connect': [-67, -66], 'z': (0.0, 3.0)}
+39 = {'name': 'WINDOW_GLASS', 'connect': [-67, -65], 'z': (0.0, 3.0)}
+40 = {'name': 'WINDOW_GLASS', 'connect': [-64, -66], 'z': (0.0, 3.0)}
+41 = {'name': 'PARTITION', 'connect': [-36, -68], 'z': (0.0, 3.0)}
+42 = {'name': 'PARTITION', 'connect': [-69, -68], 'z': (0.0, 3.0)}
+43 = {'name': 'PARTITION', 'connect': [-69, -43], 'z': (0.0, 3.0)}
+44 = {'name': 'PARTITION', 'connect': [-68, -42], 'z': (0.0, 3.0)}
+45 = {'name': 'PARTITION', 'connect': [-69, -65], 'z': (0.0, 3.0)}
+46 = {'name': 'PARTITION', 'connect': [-64, -68], 'z': (0.0, 3.0)}
+47 = {'name': 'WINDOW_GLASS', 'connect': [-72, -34], 'z': (0.0, 3.0)}
+48 = {'name': 'WINDOW_GLASS', 'connect': [-72, -73], 'z': (0.0, 3.0)}
+49 = {'name': 'WINDOW_GLASS', 'connect': [-71, -73], 'z': (0.0, 3.0)}
+50 = {'name': 'WINDOW_GLASS', 'connect': [-71, -57], 'z': (0.0, 3.0)}
+51 = {'name': 'WINDOW_GLASS', 'connect': [-71, -42], 'z': (0.0, 3.0)}
+52 = {'name': 'WINDOW_GLASS', 'connect': [-58, -74], 'z': (0.0, 3.0)}
+53 = {'name': 'WINDOW_GLASS', 'connect': [-70, -77], 'z': (0.0, 3.0)}
+54 = {'name': 'WINDOW_GLASS', 'connect': [-75, -74], 'z': (0.0, 3.0)}
+55 = {'name': 'WINDOW_GLASS', 'connect': [-76, -75], 'z': (0.0, 3.0)}
+56 = {'name': 'WINDOW_GLASS', 'connect': [-77, -76], 'z': (0.0, 3.0)}
+57 = {'name': 'WINDOW_GLASS', 'connect': [-78, -33], 'z': (0.0, 3.0)}
+58 = {'name': 'WINDOW_GLASS', 'connect': [-78, -70], 'z': (0.0, 3.0)}
+59 = {'name': 'WINDOW_GLASS', 'connect': [-80, -17], 'z': (0.0, 3.0)}
+60 = {'name': 'WINDOW_GLASS', 'connect': [-80, -82], 'z': (0.0, 3.0)}
+61 = {'name': 'WINDOW_GLASS', 'connect': [-47, -83], 'z': (0.0, 3.0)}
+62 = {'name': 'WINDOW_GLASS', 'connect': [-66, -81], 'z': (0.0, 3.0)}
+63 = {'name': 'WINDOW_GLASS', 'connect': [-82, -81], 'z': (0.0, 3.0)}
+64 = {'name': 'WINDOW_GLASS', 'connect': [-67, -82], 'z': (0.0, 3.0)}
+65 = {'name': 'WINDOW_GLASS', 'connect': [-83, -81], 'z': (0.0, 3.0)}
+
+[files]
+furniture = 
+
+[slabs]
+_AIR = {'color': 'white', 'linewidth': 1, 'lthick': [0.02], 'lmatname': ['AIR']}
+PARTITION = {'color': 'grey80', 'linewidth': 4, 'lthick': [0.1], 'lmatname': ['PLASTER']}
+WINDOW_GLASS = {'color': 'blue2', 'linewidth': 1, 'lthick': [0.003], 'lmatname': ['GLASS']}
+AIR = {'color': 'black', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['AIR']}
+CEIL = {'color': 'grey20', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+FLOOR = {'color': 'grey40', 'linewidth': 1, 'lthick': [0.1], 'lmatname': ['REINFORCED_CONCRETE']}
+
+[materials]
+AIR = {'mur': (1+0j), 'epr': (1+0j), 'roughness': 0.0, 'sigma': 0.0}
+PLASTER = {'mur': (1+0j), 'epr': (8+0j), 'roughness': 0.0, 'sigma': 0.038}
+GLASS = {'mur': (1+0j), 'epr': (3.79999995232+0j), 'roughness': 0.0, 'sigma': 0.0}
+REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
+
+[outdoor]
+

@@ -19,7 +19,7 @@ import pylayers.signal.waveform as wvf
 # Set the frequency range
 fGHz = np.arange(2,6,0.01)
 # Define the Layout
-L = Layout('DLR2.ini')
+L = Layout('DLR2.lay')
 # Create a link for the Layout
 S = DLink(L=L,fGHz=fGHz)
 ak,tauk=S.eval(force=['Ct','H'])

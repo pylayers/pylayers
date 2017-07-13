@@ -421,10 +421,10 @@ class DLink(Link):
         if isinstance(self._L,str):
             self._Lname = self._L
             indoor = not self.outdoor
-            self._L = Layout(self._Lname,bindoor=indoor,bgraphs=False,bcheck=False)
+            self._L = Layout(self._Lname,bgraphs=False,bcheck=False)
         else:
             self._Lname = self._L._filename
-            self.outdoor = not self._L.indoor
+            self.outdoor = self._L.typ=='outdoor'
 
         # dictionnary data exists
         self.dexist={'sig':{'exist':False,'grpname':''},
@@ -478,7 +478,7 @@ class DLink(Link):
                             del output[l]
                     self.L.Gi.edge[e[0]][e[1]]['output']=output
                 
-                #self.L.dumpw()
+            #self.L.dumpw()
             #self.L.build()
 
             self.init_positions()
@@ -561,7 +561,7 @@ class DLink(Link):
             mlab.clf()
             plotfig=True
         if isinstance(L,str):
-            self._L = Layout(L,bgraphs=False,bcheck=False,bindoor=not self.outdoor)
+            self._L = Layout(L,bgraphs=False,bcheck=False)
             self._Lname = L
         elif isinstance(L,Layout):
             self._L = L
@@ -870,46 +870,48 @@ class DLink(Link):
 
 
     def init_positions(self,force=False):
-                    ###########
-            # init pos & cycles
-            #
-            # If a and b are not specified
-            #  they are chosen as center of gravity of cycle 0
-            #
-            ###########
-            nodes = self.L.Gt.nodes()
-            #
-            # pick the point outside building if Layout.indoor not activated 
-            #
-            if not self.L.indoor:
-                nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
-            else:
-                nodes = [n for n in nodes if n!=0 ]
-            
-            # draw the link extremities randomly
+        """ 
+        """
+        ###########
+        # init pos & cycles
+        #
+        # If a and b are not specified
+        #  they are chosen as center of gravity of cycle 0
+        #
+        ###########
+        nodes = self.L.Gt.nodes()
+        #
+        # pick the point outside building if Layout.indoor not activated 
+        #
+        if self.L.typ=='outdoor':
+            nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
+        else:
+            nodes = [n for n in nodes if n!=0 ]
+        
+        # draw the link extremities randomly
 
-            np.random.seed(self.seed)
-            ia = np.random.randint(0,len(nodes))    
-            ib = np.random.randint(0,len(nodes))    
-            if len(self.a)==0 or force:
-                self.ca = nodes[ia]
+        np.random.seed(self.seed)
+        ia = np.random.randint(0,len(nodes))    
+        ib = np.random.randint(0,len(nodes))    
+        if len(self.a)==0 or force:
+            self.ca = nodes[ia]
+        else:
+            if len(self.a) ==2:
+                a=np.r_[self.a,1.0]
             else:
-                if len(self.a) ==2:
-                    a=np.r_[self.a,1.0]
-                else:
-                    a=self.a
-                self.ca = self.L.pt2cy(a)
-                self.a = a
+                a=self.a
+            self.ca = self.L.pt2cy(a)
+            self.a = a
 
-            if len(self.b)==0 or force:
-                self.cb = nodes[ib]
+        if len(self.b)==0 or force:
+            self.cb = nodes[ib]
+        else:
+            if len(self.b) ==2:
+                b=np.r_[self.b,1.0]
             else:
-                if len(self.b) ==2:
-                    b=np.r_[self.b,1.0]
-                else:
-                    b=self.b
-                self.cb = self.L.pt2cy(b)
-                self.b = b
+                b=self.b
+            self.cb = self.L.pt2cy(b)
+            self.b = b
 
     def reset_config(self):
         """ reset configuration when a new layout is loaded
@@ -1611,7 +1613,7 @@ class DLink(Link):
         else :
 
             if kwargs['ra_ceil_H'] == []:
-                if self.L.indoor:
+                if self.L.typ=='indoor':
                     ceilheight = self.L.maxheight
                 else:
                     ceilheight = 0 
@@ -1979,7 +1981,6 @@ class DLink(Link):
                 Arx.eval()
                 Arx._show3(T=Trx.reshape(3,3),po=prx,
                 title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
-
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']
@@ -2001,11 +2002,11 @@ class DLink(Link):
             #     opacity = 0.7
             #     ceil_opacity = 0.7
 
-            if self.outdoor:
+            if self.L.typ == 'outdoor':
                 show_ceil=True
                 opacity = 1.
                 ceil_opacity = 1.
-            else:
+            elif self.L.typ == 'indoor':
                 show_ceil=False
                 opacity = 0.7
                 ceil_opacity = 0.
@@ -2033,7 +2034,7 @@ class DLink(Link):
             #    ER = np.squeeze(self.H.energy())
             #    kwargs['ER']=ER
             if hasattr(self,'R'):
-                self.R._show3(L=self.L,**kwargs)
+                self.R._show3(L=[],**kwargs)
 
         fp = (self.a+self.b)/2.
 
@@ -2047,7 +2048,6 @@ class DLink(Link):
     def _update_show3(self,ant='a',delrays=False):
         """
         """
-
         antenna = eval('self.A'+ant)
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
@@ -2075,6 +2075,43 @@ class DLink(Link):
                 if 'Rays' in x.name:
                     x.remove()
              # [x.remove() for x in self._maya_fig.children ]
+
+        # # update wall opaccity
+        
+        
+        # ds  =[i for i in self._maya_fig.children if self.L._filename in i.name][0]
+        # a_in = self.L.Gt.node[self.ca]['indoor']
+        # b_in = self.L.Gt.node[self.cb]['indoor']
+
+        # if 
+        # if a_in or b_in:
+        #     # indoor situation
+        #     ds.children[0].children[0].actor.property.opacity=0.5
+        # else:
+        #     ds.children[0].children[0].actor.property.opacity=1.
+
+
+    def plt_doa(self,**kwargs):
+
+        # for key, value in defaults.items():
+        #     if key not in kwargs:
+        #         kwargs[key] = value
+
+        # if kwargs.has_key('fig'):
+        #     fig = kwargs.pop('fig')
+        # else:
+        #     fig = plt.figure()
+        # if kwargs.has_key('ax'):
+        #     ax = kwargs.pop('ax')
+        # else:
+        #     if kwargs.has_key('polar'):
+        #         if kwargs['polar']==True:
+        #             ax = fig.add_subplot(111,polar=True)
+        #         else:
+        #             ax = fig.add_subplot(111)
+        # DL.L.showG('s',ax=ax,fig=self.figure)
+        return self.H.plotd(**kwargs)
+        
 
 
 
