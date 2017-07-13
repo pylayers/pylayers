@@ -430,9 +430,9 @@ class Layout(pro.PyLayers):
                 # load graphs from file 
                 #
                 elif bgraphs:
-                    if os.path.splitext[1](self._filename)=='.ini':
+                    if os.path.splitext(self._filename)[1]=='.ini':
                         dirname = self._filename.replace('.ini','')
-                    if os.path.splitext[1](self._filename)=='.lay':
+                    if os.path.splitext(self._filename)[1]=='.lay':
                         dirname = self._filename.replace('.lay','')
                     path = os.path.join(pro.basename,
                                         'struc',
@@ -455,6 +455,12 @@ class Layout(pro.PyLayers):
                             bbuild = False
                         else:
                             print(".lay file has changed you must rebuild the grahs")
+                    else:
+                        # if graph are requested and it not exists a pickle of a graph
+                        # they are built
+                        self.build()
+                        self.lbltg.append('s')
+                        self.dumpw()
 
     def __repr__(self):
         st = '\n'
@@ -5432,7 +5438,10 @@ class Layout(pro.PyLayers):
 
         """
         # create layout directory
-        dirname = self._filename.replace('.ini','')
+        if os.path.splitext(self._filename)[1]=='.ini':
+            dirname = self._filename.replace('.ini','')
+        if os.path.splitext(self._filename)[1]=='.lay':
+            dirname = self._filename.replace('.lay','')
         path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
 
         if not os.path.isdir(path):
@@ -5482,7 +5491,10 @@ class Layout(pro.PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        dirname = self._filename.replace('.ini','')
+        if os.path.splitext(self._filename)[1]=='.ini':
+            dirname = self._filename.replace('.ini','')
+        if os.path.splitext(self._filename)[1]=='.lay':
+            dirname = self._filename.replace('.lay','')
         path = os.path.join(pro.basename, 'struc', 'gpickle', dirname)
         for g in graphs:
             try:

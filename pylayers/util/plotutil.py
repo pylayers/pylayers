@@ -319,7 +319,6 @@ def mulcplot(x,y,**kwargs):
 
     assert((nfigy==ncol*nlin) | (nfigy==1))
     assert((nlabels==nfigy) | (nlabels==1))
-    pdb.set_trace()
     assert((ntitles==ncol*nlin) | (ntitles==1))
     assert((nxlabels==nfigy) | (nxlabels==1))
     assert((nylabels==nfigy) | (nxlabels==1))

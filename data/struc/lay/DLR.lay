@@ -1,7 +1,7 @@
 [info]
 format = cart
 version = 1.3
-type = outdoor
+type = indoor
 
 [points]
 -2 = (23.43, -5.12)
@@ -253,5 +253,7 @@ GLASS = {'mur': (1+0j), 'epr': (3.79999995232+0j), 'roughness': 0.0, 'sigma': 0.
 PLASTER = {'mur': (1+0j), 'epr': (8+0j), 'roughness': 0.0, 'sigma': 0.038}
 REINFORCED_CONCRETE = {'sigma': 3.0, 'roughness': 0.0, 'epr': (8.69999980927+0j), 'mur': (1+0j)}
 
-[outdoor]
+[indoor]
+zfloor = 0
+zceil=3
 
