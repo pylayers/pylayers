@@ -23,7 +23,7 @@ tauns_meas = np.linspace(0,1/(fGHzm[1]-fGHzm[0]),Nf)
 fGHz  = np.array([32.6])
 thres  = 0.1 # for the RT
 cutoff = 3   # for the RT
-numsnap = 10
+numsnap = 1
 d = {}
 
 
