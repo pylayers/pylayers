@@ -156,6 +156,7 @@
     },
     "ieee80211g": {
         "channels": {
+            "ism24": {
             "bmhz": 20,
             "fstart": 2.412,
             "fstep": "5",
@@ -164,6 +165,7 @@
             "pmaxmw": 50,
             "smhz": 5,
             "zone": "Europe"
+            }
         },
         "crate": [
             0.5,
