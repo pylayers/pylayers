@@ -1716,12 +1716,16 @@ class DLink(Link):
         gamma : Euler angle gamma
 
         """
+        
+
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:
             # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
+            
             self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
             # self._update_show3(ant='b')
-            # pdb.set_trace()
+            # import ipdb
+            # ipdb.set_trace()
             self.evalH()
             S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             try:
