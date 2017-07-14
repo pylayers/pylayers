@@ -228,7 +228,7 @@ class Layout(pro.PyLayers):
                  _filematini='matDB.ini',
                  _fileslabini='slabDB.ini',
                  _filefur='',
-                 bcheck  = True,          # to check Gs
+                 bcheck  = False,          # to check Gs
                  bbuild  = False,         # to build graphs
                  bgraphs = False,         # to load graph 
                  #bindoor=False,        # to allow indoor penetration for outdoor situations
@@ -364,15 +364,15 @@ class Layout(pro.PyLayers):
                 self._filename = string
                 loadlay = True
             elif ext == '.osm':
-                self._filename = arg + '.ini'
+                self._filename = arg + '.lay'
                 loadosm = True
             elif ext == '.res':
-                self._filename = arg + '.ini'
+                self._filename = arg + '.lay'
                 loadres = True
             else:
                 self.typ = 'outdoor'
         else:  # No argument
-            self._filename = 'newfile.ini'
+            self._filename = 'newfile.lay'
             newfile = True
 
         if not newfile:
@@ -895,30 +895,31 @@ class Layout(pro.PyLayers):
             # Is there a point different from (n1-n2) in betweeen of an existing segment s ?
             #
             # Not very much scalable. Double for loop
-            for s in useg:
-                n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
-                p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
-                p2 = np.array(self.Gs.pos[n2])  # s
-                #
-                # iterate on upnt : list of points
-                for n in upnt:
-                    if (n1 != n) & (n2 != n):
-                        p = np.array(self.Gs.pos[n])
-                        if geu.isBetween(p1, p2, p):
-                            print(n1, p1)
-                            print(n2, p2)
-                            print(n, p)
+            if self.typ == 'indoor':
+                for s in useg:
+                    n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
+                    p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
+                    p2 = np.array(self.Gs.pos[n2])  # s
+                    #
+                    # iterate on upnt : list of points
+                    for n in upnt:
+                        if (n1 != n) & (n2 != n):
+                            p = np.array(self.Gs.pos[n])
+                            if geu.isBetween(p1, p2, p):
+                                print(n1, p1)
+                                print(n2, p2)
+                                print(n, p)
 
+                                logging.critical(
+                                    "segment %d contains point %d", s, n)
+                                consistent = False
+                    if level > 0:
+                        cycle = self.Gs.node[s]['ncycles']
+                        if len(cycle) == 0:
+                            logging.critical("segment %d has no cycle", s)
+                        if len(cycle) == 3:
                             logging.critical(
-                                "segment %d contains point %d", s, n)
-                            consistent = False
-                if level > 0:
-                    cycle = self.Gs.node[s]['ncycles']
-                    if len(cycle) == 0:
-                        logging.critical("segment %d has no cycle", s)
-                    if len(cycle) == 3:
-                        logging.critical(
-                            "segment %d has cycle %s", s, str(cycle))
+                                "segment %d has cycle %s", s, str(cycle))
         #
         # check if Gs points are unique
         # segments can be duplicated
@@ -1406,6 +1407,7 @@ class Layout(pro.PyLayers):
         """
         fileres = pyu.getlong(_fileres, os.path.join('struc', 'res'))
         D  = np.fromfile(fileres,dtype='int',sep=' ')
+        self.typ = 'outdoor'
         # number of integer
         N1 = len(D)
         # number of lines
@@ -1425,7 +1427,9 @@ class Layout(pro.PyLayers):
             # p2 point coordinate
             p2 = ([D[e,2],D[e,3]])
             # (ground height,building height) 
-            z  = (D[e,7]-500,D[e,4])
+            #z  = (D[e,7]-500,D[e,4])
+            # (ground height,building height+ground_height) 
+            z  = (D[e,7],D[e,4]+D[e,7])
             # building number
             bdg =  D[e,5] 
             # building class 
@@ -1455,6 +1459,9 @@ class Layout(pro.PyLayers):
                 kpos = self.Gs.pos.keys()
                 vpos = self.Gs.pos.values()
                 if new_pt not in vpos:
+                    #
+                    # add node point nde <0 and position
+                    #
                     current_node_index = -npt
                     self.Gs.add_node(current_node_index)
                     self.Gs.pos[-npt] = new_pt
@@ -2265,6 +2272,13 @@ class Layout(pro.PyLayers):
                 for ns in iso:
                     ziso.append(self.Gs.node[ns]['z'])
                 # get the complementary intervals
+                if self.typ=='outdoor':
+                    zmin = 1e6
+                    zmax = -1e6
+                    for iz in ziso:
+                        zmin = np.minimum(zmin,min(iz))
+                        zmax = np.maximum(zmax,max(iz))
+                    ziso = [(zmin,zmax)]
                 zair = pyu.compint(ziso,self.zfloor,self.zceil)
                 # add AIR wall in the intervals
                 for za in zair: 
@@ -3698,7 +3712,7 @@ class Layout(pro.PyLayers):
         return ptlist, seglist
 
     def get_points(self, ax):
-        """ get points list and segments list in a rectangular zone
+        """ get points list and segments list in a polygonal zone
 
         Parameters
         ----------
@@ -3710,12 +3724,17 @@ class Layout(pro.PyLayers):
         Returns
         -------
 
-        (pt,ke)
+        (pt,ke) : points coordinates and index 
+
+        Notes
+        -----
+
+        This methods returns all the 
 
         """
 
-
         if type(ax) == geu.Polygon:
+            N = len(ax.vnodes)/2
             eax  = ax.exterior.xy
             xmin = np.min(eax[0])
             xmax = np.max(eax[0])
@@ -3726,6 +3745,10 @@ class Layout(pro.PyLayers):
             xmax = ax[1]
             ymin = ax[2]
             ymax = ax[3]
+        
+        #
+        # layout points 
+        #
 
         x = self.pt[0,:]
         y = self.pt[1,:]
@@ -3734,10 +3757,19 @@ class Layout(pro.PyLayers):
         uymin = (y>=ymin)
         uxmax = (x<=xmax)
         uymax = (y<=ymax)
-
+        
+        #
+        # k True when all conditons are True simultaneously
+        # 
         k  = np.where(uxmin*uymin*uxmax*uymax==1)[0]
         pt = np.array(zip(x[k],y[k])).T
         ke = self.upnt[k]
+        if(pt.shape[1]<N):
+            plt.ion()
+            fig,a=self.showG('s')
+            a.plot(pt[0,:],pt[1,:],'or')
+            a.plot(eax[0],eax[1],'or')
+            plt.show()
         # ux = ((x>=xmin).all() and (x<=xmax).all())
         # uy = ((y>=ymin).all() and (y<=ymax).all())
         return((pt,ke))
@@ -6003,10 +6035,11 @@ class Layout(pro.PyLayers):
                         desc ='Update Polygons vnodes',
                         leave=True,
                         position=tqdmpos+1)
-
+        #
         # p is a polygon 
         # get_points(p) : get points from polygon
         # this is for limiting the search region for large Layout 
+        #
         [ p.setvnodes_new(self.get_points(p),self) for p in lTP ]
 
         if verbose:
