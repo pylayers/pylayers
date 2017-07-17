@@ -360,6 +360,10 @@ def compint(linterval,zmin,zmax,tol=1e-6):
     u = np.argsort(vmin)
     v = np.argsort(vmax)
     # check there is no overlap
+    #if (u==v).all():
+    #    pass
+    #else:
+    #    pdb.set_trace()
     assert(u==v).all(),logging.critical("compint : interval overlap")
     # sort interval in increasing order 
     lint = []
