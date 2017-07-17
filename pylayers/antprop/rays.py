@@ -2936,7 +2936,7 @@ class Rays(PyLayers, dict):
         else:
             return(filename)
 
-    def _show3(self,L=[],rlist=[],newfig=False,cmap='jet',**kwargs):
+    def _show3(self,L=[],rlist=[],newfig=False,cmap='hot',**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters
@@ -2970,7 +2970,7 @@ class Rays(PyLayers, dict):
 
         if 'ER' in kwargs:
             ER = kwargs['ER']
-            color_range = np.linspace( 0, np.pi, len(ER))
+            color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
 

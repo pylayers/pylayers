@@ -2039,7 +2039,7 @@ class DLink(Link):
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
-        mlab.orientation_axes(color=(0,0,0))
+        mlab.orientation_axes()
         return self._maya_fig
         #return(self._maya_fig)
 
