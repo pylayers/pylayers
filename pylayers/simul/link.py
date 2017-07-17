@@ -2039,6 +2039,7 @@ class DLink(Link):
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
+        mlab.orientation_axes(color=(0,0,0))
         return self._maya_fig
         #return(self._maya_fig)
 
@@ -2088,30 +2089,174 @@ class DLink(Link):
         # else:
         #     ds.children[0].children[0].actor.property.opacity=1.
 
+    def plt_cir(self,**kwargs):
+        """ plot  CIR
+
+        Parameters
+        ----------
+
+        BWGHz : Bandwidth 
+        Nf    : Number of frequency point 
+        fftshift : boolean 
+        rays : boolean
+            display rays contributors
+        
+        See Also
+        --------
+
+        pylayers.antprop.channel.Tchannel.getcir
+
+        """
+
+        defaults = {'fig':[],
+                    'ax': [],
+                     'BWGHz':5,
+                    'Nf':1000,
+                    'rays':True
+                    }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        if kwargs['fig'] == []:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = plt.gca()
+        else:
+            ax = kwargs['ax']
+
+
+        ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
+        ir.plot(fig=fig,ax=ax)
+        if kwargs['rays'] : 
+            ax.plot(self.H.taud,20*np.log10(self.H.y[:,0,0,0]),'or')
+        return fig,ax
+
 
     def plt_doa(self,**kwargs):
+        """plot direction of arrival and departure
 
-        # for key, value in defaults.items():
-        #     if key not in kwargs:
-        #         kwargs[key] = value
+        Parameters
+        ----------
 
-        # if kwargs.has_key('fig'):
-        #     fig = kwargs.pop('fig')
-        # else:
-        #     fig = plt.figure()
-        # if kwargs.has_key('ax'):
-        #     ax = kwargs.pop('ax')
-        # else:
-        #     if kwargs.has_key('polar'):
-        #         if kwargs['polar']==True:
-        #             ax = fig.add_subplot(111,polar=True)
-        #         else:
-        #             ax = fig.add_subplot(111)
-        # DL.L.showG('s',ax=ax,fig=self.figure)
+        fig : plt.figure
+        ax : plt.axis
+        phi: tuple (-180, 180)
+            phi angle
+        normalize: bool
+            energy normalized
+        reverse : bool
+            inverse theta and phi represenation
+        polar : bool
+            polar representation
+        cmap: matplotlib.cmap
+        mode: 'center' | 'mean' | 'in'
+            see bsignal.energy
+        s : float
+            scatter dot size
+        fontsize: float
+        edgecolors: bool
+        colorbar: bool
+        title : bool
+
+        See Also
+        --------
+
+        pylayers.antprop.channel.Tchannel.plotd
+
+        """
+        kwargs['d']='doa'
         return self.H.plotd(**kwargs)
         
+    def plt_dod(self,**kwargs):
+        """plot direction of arrival and departure
+
+        Parameters
+        ----------
+
+        fig : plt.figure
+        ax : plt.axis
+        phi: tuple (-180, 180)
+            phi angle
+        normalize: bool
+            energy normalized
+        reverse : bool
+            inverse theta and phi represenation
+        polar : bool
+            polar representation
+        cmap: matplotlib.cmap
+        mode: 'center' | 'mean' | 'in'
+            see bsignal.energy
+        s : float
+            scatter dot size
+        fontsize: float
+        edgecolors: bool
+        colorbar: bool
+        title : bool
+
+        See Also
+        --------
+
+        pylayers.antprop.channel.Tchannel.plotd
+
+        """
+        kwargs['d']='dod'
+        return self.H.plotd(**kwargs)
+
+    def plt_dspread(self,**kwargs):
+        """ plot delay spread
+        """
+        defaults = { 'fig':[],
+                     'ax':[]
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
 
 
+        if kwargs['fig'] == []:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = plt.gca()
+        else:
+            ax = kwargs['ax']
+
+        ax.hist(self.H.taud,bins=len(self.H.taud)/2)
+        ax.set_xlim([0,max(self.H.taud)])
+        return fig,ax
+
+    def plt_aspread(self,**kwargs):
+        """ plot angular spread
+        """
+        defaults = { 'fig':[],
+                     'ax':[]
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+
+        if kwargs['fig'] == []:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = plt.gca()
+        else:
+            ax = kwargs['ax']
+
+        ax.hist(self.H.doa[:,0],bins=len(self.H.doa[:,0])/2)
+        ax.set_xlim([-np.pi,np.pi])
+        return fig,ax
+
+        
 
 if (__name__ == "__main__"):
     #plt.ion()
