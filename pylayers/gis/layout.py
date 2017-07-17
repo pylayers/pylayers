@@ -686,7 +686,7 @@ class Layout(pro.PyLayers):
             "s -> u = self.tgs[s] -> v = self.tahe[:,u] -> s_ab = self.pt[:,v]\n\n"
         print(st)
 
-    def ls(self, typ='ini'):
+    def ls(self, typ='lay'):
         """ list the available file in dirstruc
 
         Parameters
@@ -718,7 +718,7 @@ class Layout(pro.PyLayers):
 
         """
 
-        if typ == 'ini':
+        if typ == 'lay':
             pathname = os.path.join(pro.pstruc['DIRLAY'], '*.' + typ)
         if typ == 'osm':
             pathname = os.path.join(pro.pstruc['DIROSM'], '*.' + typ)

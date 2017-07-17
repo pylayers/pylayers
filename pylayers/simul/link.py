@@ -497,7 +497,6 @@ class DLink(Link):
             self.H = Tchannel()
 
 
-
     @property
     def Lname(self):
         return self._Lname
@@ -2138,7 +2137,14 @@ class DLink(Link):
         ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
         ir.plot(fig=fig,ax=ax)
         if kwargs['rays'] : 
-            ax.plot(self.H.taud,20*np.log10(self.H.y[:,0,0,0]),'or')
+            ER = np.squeeze(self.H.energy())
+            color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
+            uER = ER.argsort()[::-1]
+            colors= color_range[uER]
+            ax.scatter(self.H.taud[uER],20*np.log10(self.H.y[uER,0,0,0]),c=colors,cmap='hot')
+            ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+
+
         return fig,ax
 
 
