@@ -3764,12 +3764,12 @@ class Layout(pro.PyLayers):
         k  = np.where(uxmin*uymin*uxmax*uymax==1)[0]
         pt = np.array(zip(x[k],y[k])).T
         ke = self.upnt[k]
-        if(pt.shape[1]<N):
-            plt.ion()
-            fig,a=self.showG('s')
-            a.plot(pt[0,:],pt[1,:],'or')
-            a.plot(eax[0],eax[1],'or')
-            plt.show()
+        # if(pt.shape[1]<N):
+        #     plt.ion()
+        #     fig,a=self.showG('s')
+        #     a.plot(pt[0,:],pt[1,:],'or')
+        #     a.plot(eax[0],eax[1],'or')
+        #     plt.show()
         # ux = ((x>=xmin).all() and (x<=xmax).all())
         # uy = ((y>=ymin).all() and (y<=ymax).all())
         return((pt,ke))
