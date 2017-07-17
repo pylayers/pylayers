@@ -901,7 +901,7 @@ class IntD(Inter):
             mapp=[]
             for m in self.dusl.keys():
                 idx = self.dusl[m]
-                mats = m.split('_')
+                mats = m.split('@') # cf Rays.locbas =>Start diffraction specific case
                 mat0name = mats[0]
                 matNname = mats[1]
                 # 

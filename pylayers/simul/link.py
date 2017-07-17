@@ -368,7 +368,6 @@ class DLink(Link):
                    'Tb':np.eye(3),
                    'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
-                   'outdoor':True,
                    'cutoff':3,
                    'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
@@ -420,11 +419,9 @@ class DLink(Link):
 
         if isinstance(self._L,str):
             self._Lname = self._L
-            indoor = not self.outdoor
-            self._L = Layout(self._Lname,bgraphs=False,bcheck=False)
+            self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
         else:
             self._Lname = self._L._filename
-            self.outdoor = self._L.typ=='outdoor'
 
         # dictionnary data exists
         self.dexist={'sig':{'exist':False,'grpname':''},
@@ -460,7 +457,7 @@ class DLink(Link):
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
         
-            if self.outdoor:
+            if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
                 
                 lT  =  [k for k in u if (len(k)==3)]
@@ -887,7 +884,7 @@ class DLink(Link):
             nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
         else:
             nodes = [n for n in nodes if n!=0 ]
-        
+
         # draw the link extremities randomly
 
         np.random.seed(self.seed)
@@ -2030,10 +2027,11 @@ class DLink(Link):
             #     kwargs['rlist']=urays
             #     import ipdb
             #     ipdb.set_trace()
-            #if self.H.y.ndim>2:
-            #    ER = np.squeeze(self.H.energy())
-            #    kwargs['ER']=ER
+
             if hasattr(self,'R'):
+                if self.H.y.ndim>2:
+                    ER = np.squeeze(self.H.energy())
+                    kwargs['ER']=ER
                 self.R._show3(L=[],**kwargs)
 
         fp = (self.a+self.b)/2.
