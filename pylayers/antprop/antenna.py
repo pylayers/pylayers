@@ -2776,10 +2776,16 @@ class Antenna(Pattern):
         # T is an unitary matrix
         T  = kwargs['T']
         if fGHz == []:
-            k = len(self.fGHz)/2
+            # self.ext == '' <=> mathematically generated => nf = 1
+            if self.ext != '':
+                k = len(self.fGHz)/2
+            else: 
+                k = 0
         else :
-            k = np.where(self.fGHz>=fGHz)[0][0]
-
+            if self.ext != '':
+                k = np.where(self.fGHz>=fGHz)[0][0]
+            else: 
+                k = 0
         if len(self.Ft.shape)==3:
             r = self.sqG[:,:,k]
         else:

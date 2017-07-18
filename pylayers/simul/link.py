@@ -408,6 +408,14 @@ class DLink(Link):
         delattr(self,'force_create')
 
        
+        # dictionnary data exists
+        self.dexist={'sig':{'exist':False,'grpname':''},
+                     'ray':{'exist':False,'grpname':''},
+                     'ray2':{'exist':False,'grpname':''},
+                     'Ct':{'exist':False,'grpname':''},
+                     'H':{'exist':False,'grpname':''}
+                    }
+
         # The link frequency range depends on the antenna 
         # self.fGHz = kwargs['fGHz']
 
@@ -423,13 +431,7 @@ class DLink(Link):
         else:
             self._Lname = self._L._filename
 
-        # dictionnary data exists
-        self.dexist={'sig':{'exist':False,'grpname':''},
-                     'ray':{'exist':False,'grpname':''},
-                     'ray2':{'exist':False,'grpname':''},
-                     'Ct':{'exist':False,'grpname':''},
-                     'H':{'exist':False,'grpname':''}
-                    }
+
 
         if self._Lname != '':
 
@@ -698,6 +700,8 @@ class DLink(Link):
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
+
+
     @Tb.setter
     def Tb(self,orientation):
         self._Tb = orientation
@@ -706,6 +710,12 @@ class DLink(Link):
         
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
+
+        # if self.dexist['Ct']['exist']:
+        #     self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        #     #T channel
+        #     self.H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
+
 
     @cutoff.setter
     def cutoff(self,cutoff):
@@ -1097,7 +1107,6 @@ class DLink(Link):
         force : boolean or list 
         """
 
-        
         if not force :
             obj._saveh5(self.filename,grpname)
         # if save is forced, previous existing data are removed and
@@ -1350,22 +1359,34 @@ class DLink(Link):
             ua = np.where(da<tol)[0]
 
         elif key == 'f_map':
-            # fmin_h5 < fmin_rqst
-            ufmi = np.where(fa[:,0]<=array[0])[0]
-            lufmi = len(ufmi)
-            # fmax_h5 > fmax_rqst
-            ufma = np.where(fa[:,1]>=array[1])[0]
-            lufma = len(ufma)
-            # fstep_h5 < fstep_rqst
-            ufst = np.where(fa[:,2]<=array[2])[0]
-            lufst = len(ufst)
+            # import ipdb
+            # ipdb.set_trace()
+            #### fmin_h5 < fmin_rqst
+            ufmi = fa[:,0]<=array[0]
+            # old version
+                # ufmi = np.where(fa[:,0]<=array[0])[0]
+                # lufmi = len(ufmi)
+
+            #### fmax_h5 > fmax_rqst
+            ufma = fa[:,1]>=array[1]
+            # old version
+                # ufma = np.where(fa[:,1]>=array[1])[0]
+                # lufma = len(ufma)
+
+            ### fstep_h5 < fstep_rqst
+            ufst = fa[:,2]<=array[2]
+            # old version
+                # ufst = np.where(fa[:,2]<=array[2])[0]
+                # lufst = len(ufst)
+
             # if fmin, fmax or fstep
             #if (lufmi==0) and (lufma==0) and (lufst==0):
-            if (lufmi==0) and (lufma==0):
+            if (not ufmi.any()) and (not ufma.any()):
                 ua = np.array([])
             else:
                 # find common lines of fmin and fmax and fstep
-                ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
+                ua = np.where(ufmi & ufma & ufst)[0]
+                # ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
                 # # find common lines of fmin and fmax
                 # ufmima = np.where(np.in1d(ufmi,ufma))[0]
                 # # find common lines of fmin, fmax and fstep
