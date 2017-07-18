@@ -598,8 +598,10 @@ class DLink(Link):
         self._a = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a',delrays=True)
-        
+
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
+            self._autocufoff()
             self.checkh5()
 
     @b.setter
@@ -619,7 +621,9 @@ class DLink(Link):
         self._b = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b',delrays=True)
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
+            self._autocufoff()
             self.checkh5()
 
     @ca.setter
@@ -2283,7 +2287,30 @@ class DLink(Link):
         ax.set_xlim([-np.pi,np.pi])
         return fig,ax
 
-        
+    def _autocufoff(self):
+        """ automatically determine minimum cutoof
+
+
+        See Also
+        --------
+
+        pylayers.antprop.loss.losst
+        pylayers.gis.layout.angleonlink3
+        """
+
+        v=np.vectorize( lambda t:self.L.Gs.node[t]['name'])
+        # determine incidence angles on segment crossing p1-p2 segment
+        #data = L.angleonlink(p1,p2)
+        data = self.L.angleonlink3(self.a,self.b)
+        # as many slabs as segments and subsegments
+        us    = data['s'] 
+        if len(us) >0:
+            sl = v(us)
+            uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
+            self.cutoff = len(uus)
+        else:
+            self.cutoff = 1
+        return self.cutoff
 
 if (__name__ == "__main__"):
     #plt.ion()
