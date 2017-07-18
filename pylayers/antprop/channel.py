@@ -2729,8 +2729,7 @@ class Tchannel(bs.FUsignal):
         Y = self.apply(Wgam)
         # back in time domain
         rir = Y.rir(Nz=500,ffts=1)
-        return rir
-
+        return rir    
 
     def getcir(self,BWGHz=1,Nf=40000,fftshift=False):
         """
@@ -2746,8 +2745,10 @@ class Tchannel(bs.FUsignal):
         dfGHz = fGHz[1]-fGHz[0]
         tauns = np.linspace(0,1/dfGHz,Nf)
         E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
-        H    = np.sum(E*self.y,axis=0)
-        cir  = np.fft.ifft(H,axis=2)
+        # import ipdb
+        # ipdb.set_trace()
+        H    = np.sum(E*self.y,axis=0) # sum over rays
+        cir  = np.fft.ifft(H,axis=2) # ifft over frequency
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)
             tauns = np.linspace(-Nf/(2*BWGHz),Nf/(2*BWGHz)-1/BWGHz,Nf)
