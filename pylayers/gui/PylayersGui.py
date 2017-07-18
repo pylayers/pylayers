@@ -181,7 +181,7 @@ class PylayersGUI(HasTraits):
     # slider/dropdown widgets etc
 
     # Layout
-    laynames = ['','DLR.lay','defstr.lay','TC2_METIS.lay']#,os.listdir(basename +'/struc/lay/')#
+    laynames = [''] + np.sort(os.listdir(basename +'/struc/lay/')).tolist()#['','DLR.lay','defstr.lay','TC2_METIS.lay']#,
     Lay_Enum = Enum(laynames)
 
 
@@ -287,15 +287,17 @@ class PylayersGUI(HasTraits):
 
             DL.a= np.array([self.aX,self.aY,self.aZ])
             DL.b= np.array([self.bX,self.bY,self.bZ])
-
+            self.cutoff = DL.cutoff
             if not hasattr(DL,'_maya_fig'):
                 DL._show3()
+
     @on_trait_change('aX,aY,aZ')
     def update_a(self):
         """ update position ant a
         """
         self.clear_fig()
         DL.a= np.array([self.aX,self.aY,self.aZ])
+        self.cutoff = DL.cutoff
 
 
     @on_trait_change('bX,bY,bZ')
@@ -304,6 +306,7 @@ class PylayersGUI(HasTraits):
         """
         self.clear_fig()
         DL.b= np.array([self.bX,self.bY,self.bZ])
+        self.cutoff = DL.cutoff
 
     @on_trait_change('aalpha,abeta,agamma')
     def update_Ta(self):
@@ -664,7 +667,9 @@ class PylayersGUI(HasTraits):
     diffraction = Bool
     applywav = Bool
     applywav = Bool
-    cutoff = Range(2,10)
+    low_cutoff = 1
+    high_cutoff = 30
+    cutoff = Range(low='low_cutoff',high='high_cutoff',value=DL.cutoff)
     threshold = Range(0,1.,0.8)
     nD=2
     nR=10
@@ -677,6 +682,10 @@ class PylayersGUI(HasTraits):
                             style='simple'),
                        Item('cutoff',
                             label='cutoff',
+                            editor=RangeEditor(low_name='low_cutoff',
+                                    high_name='high_cutoff',
+                                    label_width=28,
+                                    mode='auto'),
                             width=0.2,
                             style='simple'),
                        Item('threshold',
@@ -719,9 +728,6 @@ class PylayersGUI(HasTraits):
                   GWstd, 
                   G_advanced
                   )
-
-    BEV=Button('TEST')
-
 
     # Antenna GRoup 
     GAnt_ab = HGroup(spring,G_a,spring,G_b,spring)

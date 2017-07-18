@@ -2071,6 +2071,9 @@ class DLink(Link):
     def _update_show3(self,ant='a',delrays=False):
         """
         """
+
+
+        view=mlab.view()
         antenna = eval('self.A'+ant)
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
@@ -2097,6 +2100,7 @@ class DLink(Link):
             for x in self._maya_fig.children[::-1]:
                 if 'Rays' in x.name:
                     x.remove()
+        mlab.view(view[0],view[1],view[2],view[3])
              # [x.remove() for x in self._maya_fig.children ]
 
         # # update wall opaccity
