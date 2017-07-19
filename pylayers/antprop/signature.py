@@ -1258,7 +1258,7 @@ class Signatures(PyLayers,dict):
                 assert(len(typ)==1)
                 try:
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
-                    self.ratio[len(typ)] = np.vstack((self.ratio[len(typ)],np.array([1.])))
+                    self.ratio[len(typ)] = np.append(self.ratio[len(typ)],1.)
                 except:
                     self[len(typ)] = np.vstack((anstr,typ))
                     self.ratio[len(typ)] = np.array([1.])
@@ -1667,7 +1667,7 @@ class Signatures(PyLayers,dict):
                                 lhash.append(sighash)
                                 try:
                                     self[len(typ)] = np.vstack((self[len(typ)],sig))
-                                    self.ratio[len(typ)] = np.vstack((self.ratio[len(typ)],np.array([ratio])))
+                                    self.ratio[len(typ)] = np.append(self.ratio[len(typ)],ratio)
                                 except:
                                     self[len(typ)] = np.vstack((sig))
                                     self.ratio[len(typ)] = np.array([ratio])
