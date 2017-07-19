@@ -291,6 +291,15 @@ class PylayersGUI(HasTraits):
             if not hasattr(DL,'_maya_fig'):
                 DL._show3()
 
+
+    @on_trait_change('cutoff,threshold')
+    def update_cutoff_threshold(self):
+        """ update position ant a
+        """
+        DL.cutoff = self.cutoff
+
+        DL.threshold = self.threshold/100.
+
     @on_trait_change('aX,aY,aZ')
     def update_a(self):
         """ update position ant a
@@ -379,11 +388,11 @@ class PylayersGUI(HasTraits):
 
     @on_trait_change('Beval')
     def DLeval(self):
-    #     clear_output()
+
         DL.eval(verbose=False,
                 force=self.force,
                 cutoff=self.cutoff,
-                threshold=self.threshold,
+                threshold=self.threshold/100.,
                 diffraction = self.diffraction,
                 nD=self.nD,
                 nT=self.nT,
@@ -669,7 +678,7 @@ class PylayersGUI(HasTraits):
     low_cutoff = 1
     high_cutoff = 30
     cutoff = Range(low='low_cutoff',high='high_cutoff',value=DL.cutoff)
-    threshold = Range(0,1.,0.8)
+    threshold = Range(0,100,80)
     nD=2
     nR=10
     nT=10
@@ -689,7 +698,6 @@ class PylayersGUI(HasTraits):
                             style='simple'),
                        Item('threshold',
                             label='threshold',
-                            editor = RangeEditor(format='%.1f'),
                             width=0.2,
                             style='simple'),
                        Item('diffraction',
@@ -797,6 +805,7 @@ class PylayersGUI(HasTraits):
 
 
 if __name__ == '__main__':
+
     gui = PylayersGUI()
     gui.configure_traits()
 
