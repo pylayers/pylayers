@@ -368,7 +368,6 @@ class DLink(Link):
                    'Tb':np.eye(3),
                    'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
-                   'outdoor':True,
                    'cutoff':3,
                    'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
@@ -409,6 +408,14 @@ class DLink(Link):
         delattr(self,'force_create')
 
        
+        # dictionnary data exists
+        self.dexist={'sig':{'exist':False,'grpname':''},
+                     'ray':{'exist':False,'grpname':''},
+                     'ray2':{'exist':False,'grpname':''},
+                     'Ct':{'exist':False,'grpname':''},
+                     'H':{'exist':False,'grpname':''}
+                    }
+
         # The link frequency range depends on the antenna 
         # self.fGHz = kwargs['fGHz']
 
@@ -420,19 +427,11 @@ class DLink(Link):
 
         if isinstance(self._L,str):
             self._Lname = self._L
-            indoor = not self.outdoor
-            self._L = Layout(self._Lname,bgraphs=False,bcheck=False)
+            self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
         else:
             self._Lname = self._L._filename
-            self.outdoor = self._L.typ=='outdoor'
 
-        # dictionnary data exists
-        self.dexist={'sig':{'exist':False,'grpname':''},
-                     'ray':{'exist':False,'grpname':''},
-                     'ray2':{'exist':False,'grpname':''},
-                     'Ct':{'exist':False,'grpname':''},
-                     'H':{'exist':False,'grpname':''}
-                    }
+
 
         if self._Lname != '':
 
@@ -460,7 +459,7 @@ class DLink(Link):
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
         
-            if self.outdoor:
+            if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
                 
                 lT  =  [k for k in u if (len(k)==3)]
@@ -498,7 +497,6 @@ class DLink(Link):
             self.R = Rays(self.a,self.b)
             self.C = Ctilde()
             self.H = Tchannel()
-
 
 
     @property
@@ -600,8 +598,10 @@ class DLink(Link):
         self._a = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a',delrays=True)
-        
+
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
+            self._autocufoff()
             self.checkh5()
 
     @b.setter
@@ -621,7 +621,9 @@ class DLink(Link):
         self._b = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b',delrays=True)
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
+            self._autocufoff()
             self.checkh5()
 
     @ca.setter
@@ -702,6 +704,8 @@ class DLink(Link):
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
+
+
     @Tb.setter
     def Tb(self,orientation):
         self._Tb = orientation
@@ -710,6 +714,12 @@ class DLink(Link):
         
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
+
+        # if self.dexist['Ct']['exist']:
+        #     self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        #     #T channel
+        #     self.H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
+
 
     @cutoff.setter
     def cutoff(self,cutoff):
@@ -887,7 +897,7 @@ class DLink(Link):
             nodes = [n for n in nodes if n!=0 and not self.L.Gt.node[n]['indoor']]
         else:
             nodes = [n for n in nodes if n!=0 ]
-        
+
         # draw the link extremities randomly
 
         np.random.seed(self.seed)
@@ -1101,7 +1111,6 @@ class DLink(Link):
         force : boolean or list 
         """
 
-        
         if not force :
             obj._saveh5(self.filename,grpname)
         # if save is forced, previous existing data are removed and
@@ -1354,22 +1363,34 @@ class DLink(Link):
             ua = np.where(da<tol)[0]
 
         elif key == 'f_map':
-            # fmin_h5 < fmin_rqst
-            ufmi = np.where(fa[:,0]<=array[0])[0]
-            lufmi = len(ufmi)
-            # fmax_h5 > fmax_rqst
-            ufma = np.where(fa[:,1]>=array[1])[0]
-            lufma = len(ufma)
-            # fstep_h5 < fstep_rqst
-            ufst = np.where(fa[:,2]<=array[2])[0]
-            lufst = len(ufst)
+            # import ipdb
+            # ipdb.set_trace()
+            #### fmin_h5 < fmin_rqst
+            ufmi = fa[:,0]<=array[0]
+            # old version
+                # ufmi = np.where(fa[:,0]<=array[0])[0]
+                # lufmi = len(ufmi)
+
+            #### fmax_h5 > fmax_rqst
+            ufma = fa[:,1]>=array[1]
+            # old version
+                # ufma = np.where(fa[:,1]>=array[1])[0]
+                # lufma = len(ufma)
+
+            ### fstep_h5 < fstep_rqst
+            ufst = fa[:,2]<=array[2]
+            # old version
+                # ufst = np.where(fa[:,2]<=array[2])[0]
+                # lufst = len(ufst)
+
             # if fmin, fmax or fstep
             #if (lufmi==0) and (lufma==0) and (lufst==0):
-            if (lufmi==0) and (lufma==0):
+            if (not ufmi.any()) and (not ufma.any()):
                 ua = np.array([])
             else:
                 # find common lines of fmin and fmax and fstep
-                ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
+                ua = np.where(ufmi & ufma & ufst)[0]
+                # ua = np.where(np.in1d(ufmi,ufma,ufst))[0]
                 # # find common lines of fmin and fmax
                 # ufmima = np.where(np.in1d(ufmi,ufma))[0]
                 # # find common lines of fmin, fmax and fstep
@@ -1966,21 +1987,49 @@ class DLink(Link):
             if not Atx.evaluated:
                 Atx.eval()
             try:
-                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
+                Atx._show3(T=Ttx.reshape(3,3),
+                           po=ptx,
+                           title=False,
+                           bcolorbar=False,
+                           bnewfig=False,
+                           bcircle = False,
+                           name = Atx._filename,
+                           scale= 0.5,
+                           binteract=False)
             except:
                 Atx.eval()
-                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
+                Atx._show3(T=Ttx.reshape(3,3),
+                            po=ptx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Atx._filename,
+                            scale= 0.5,
+                            binteract=False)
             if not Arx.evaluated:
                 Arx.eval()
             try:
-                Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
+                Arx._show3(T=Trx.reshape(3,3),
+                            po=prx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Arx._filename,
+                            scale= 0.5,
+                            binteract=False)
             except:
                 Arx.eval()
-                Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
+                Arx._show3(T=Trx.reshape(3,3),
+                            po=prx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Arx._filename,
+                            scale= 0.5,
+                            binteract=False)
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']
@@ -2030,10 +2079,11 @@ class DLink(Link):
             #     kwargs['rlist']=urays
             #     import ipdb
             #     ipdb.set_trace()
-            #if self.H.y.ndim>2:
-            #    ER = np.squeeze(self.H.energy())
-            #    kwargs['ER']=ER
+
             if hasattr(self,'R'):
+                if self.H.y.ndim>2:
+                    ER = np.squeeze(self.H.energy())
+                    kwargs['ER']=ER
                 self.R._show3(L=[],**kwargs)
 
         fp = (self.a+self.b)/2.
@@ -2041,6 +2091,7 @@ class DLink(Link):
         dab = np.sqrt(np.sum((self.a-self.b)**2))
         mlab.view(focalpoint=fp)#,distance=15*dab-55)
         self._maya_fig.scene.disable_render = False
+        mlab.orientation_axes()
         return self._maya_fig
         #return(self._maya_fig)
 
@@ -2048,6 +2099,11 @@ class DLink(Link):
     def _update_show3(self,ant='a',delrays=False):
         """
         """
+
+
+        view=mlab.view()
+
+
         antenna = eval('self.A'+ant)
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
@@ -2058,7 +2114,7 @@ class DLink(Link):
 
         if hasattr(antenna,'_mayamesh'):
             # antenna.eval()
-            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
+            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos,scale= 0.5)
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
             antenna._show3(T=rot,po=pos,
@@ -2066,14 +2122,16 @@ class DLink(Link):
                 bcolorbar=False,
                 bcircle = False,
                 bnewfig=False,
-                name = '',
-                interact=False)
+                scale= 0.5,
+                name = antenna._filename,
+                binteract=False)
 
         if delrays:
             import time
             for x in self._maya_fig.children[::-1]:
                 if 'Rays' in x.name:
                     x.remove()
+        mlab.view(view[0],view[1],view[2],view[3])
              # [x.remove() for x in self._maya_fig.children ]
 
         # # update wall opaccity
@@ -2090,30 +2148,204 @@ class DLink(Link):
         # else:
         #     ds.children[0].children[0].actor.property.opacity=1.
 
+    def plt_cir(self,**kwargs):
+        """ plot  CIR
+
+        Parameters
+        ----------
+
+        BWGHz : Bandwidth 
+        Nf    : Number of frequency point 
+        fftshift : boolean 
+        rays : boolean
+            display rays contributors
+        
+        See Also
+        --------
+
+        pylayers.antprop.channel.Tchannel.getcir
+
+        """
+
+        defaults = {'fig':[],
+                    'ax': [],
+                     'BWGHz':5,
+                    'Nf':1000,
+                    'rays':True
+                    }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        if kwargs['fig'] == []:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = plt.gca()
+        else:
+            ax = kwargs['ax']
+
+
+        ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
+        ir.plot(fig=fig,ax=ax)
+        if kwargs['rays'] : 
+            ER = np.squeeze(self.H.energy())
+            color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
+            uER = ER.argsort()[::-1]
+            colors= color_range[uER]
+            ax.scatter(self.H.taud[uER],20*np.log10(self.H.y[uER,0,0,0]),c=colors,cmap='hot')
+            ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+
+
+        return fig,ax
+
 
     def plt_doa(self,**kwargs):
+        """plot direction of arrival and departure
 
-        # for key, value in defaults.items():
-        #     if key not in kwargs:
-        #         kwargs[key] = value
+        Parameters
+        ----------
 
-        # if kwargs.has_key('fig'):
-        #     fig = kwargs.pop('fig')
-        # else:
-        #     fig = plt.figure()
-        # if kwargs.has_key('ax'):
-        #     ax = kwargs.pop('ax')
-        # else:
-        #     if kwargs.has_key('polar'):
-        #         if kwargs['polar']==True:
-        #             ax = fig.add_subplot(111,polar=True)
-        #         else:
-        #             ax = fig.add_subplot(111)
-        # DL.L.showG('s',ax=ax,fig=self.figure)
+        fig : plt.figure
+        ax : plt.axis
+        phi: tuple (-180, 180)
+            phi angle
+        normalize: bool
+            energy normalized
+        reverse : bool
+            inverse theta and phi represenation
+        polar : bool
+            polar representation
+        cmap: matplotlib.cmap
+        mode: 'center' | 'mean' | 'in'
+            see bsignal.energy
+        s : float
+            scatter dot size
+        fontsize: float
+        edgecolors: bool
+        colorbar: bool
+        title : bool
+
+        See Also
+        --------
+
+        pylayers.antprop.channel.Tchannel.plotd
+
+        """
+        kwargs['d']='doa'
         return self.H.plotd(**kwargs)
         
+    def plt_dod(self,**kwargs):
+        """plot direction of arrival and departure
+
+        Parameters
+        ----------
+
+        fig : plt.figure
+        ax : plt.axis
+        phi: tuple (-180, 180)
+            phi angle
+        normalize: bool
+            energy normalized
+        reverse : bool
+            inverse theta and phi represenation
+        polar : bool
+            polar representation
+        cmap: matplotlib.cmap
+        mode: 'center' | 'mean' | 'in'
+            see bsignal.energy
+        s : float
+            scatter dot size
+        fontsize: float
+        edgecolors: bool
+        colorbar: bool
+        title : bool
+
+        See Also
+        --------
+
+        pylayers.antprop.channel.Tchannel.plotd
+
+        """
+        kwargs['d']='dod'
+        return self.H.plotd(**kwargs)
+
+    def plt_dspread(self,**kwargs):
+        """ plot delay spread
+        """
+        defaults = { 'fig':[],
+                     'ax':[]
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
 
 
+        if kwargs['fig'] == []:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = plt.gca()
+        else:
+            ax = kwargs['ax']
+
+        ax.hist(self.H.taud,bins=len(self.H.taud)/2)
+        ax.set_xlim([0,max(self.H.taud)])
+        return fig,ax
+
+    def plt_aspread(self,**kwargs):
+        """ plot angular spread
+        """
+        defaults = { 'fig':[],
+                     'ax':[]
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+
+        if kwargs['fig'] == []:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax'] == []:
+            ax = plt.gca()
+        else:
+            ax = kwargs['ax']
+
+        ax.hist(self.H.doa[:,0],bins=len(self.H.doa[:,0])/2)
+        ax.set_xlim([-np.pi,np.pi])
+        return fig,ax
+
+    def _autocufoff(self):
+        """ automatically determine minimum cutoof
+
+
+        See Also
+        --------
+
+        pylayers.antprop.loss.losst
+        pylayers.gis.layout.angleonlink3
+        """
+
+        v=np.vectorize( lambda t:self.L.Gs.node[t]['name'])
+        # determine incidence angles on segment crossing p1-p2 segment
+        #data = L.angleonlink(p1,p2)
+        data = self.L.angleonlink3(self.a,self.b)
+        # as many slabs as segments and subsegments
+        us    = data['s'] 
+        if len(us) >0:
+            sl = v(us)
+            uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
+            self.cutoff = len(uus)
+        else:
+            self.cutoff = 1
+        return self.cutoff
 
 if (__name__ == "__main__"):
     #plt.ion()

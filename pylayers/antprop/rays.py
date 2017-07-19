@@ -1747,7 +1747,7 @@ class Rays(PyLayers, dict):
                     
                     #self[k]['diffslabs']=[str(L.sl[L.Gs.node[x[0]]['name']])+'_'
                     #                    + str(L.sl[L.Gs.node[x[1]]['name']]]) for x in aseg]
-                    self[k]['diffslabs']=[ L.Gs.node[x[0]]['name']+'_'
+                    self[k]['diffslabs']=[ L.Gs.node[x[0]]['name']+'@'
                                         +  L.Gs.node[x[1]]['name'] for x in aseg]
 
                     uwl = np.unique(self[k]['diffslabs']).tolist()
@@ -2936,7 +2936,7 @@ class Rays(PyLayers, dict):
         else:
             return(filename)
 
-    def _show3(self,L=[],rlist=[],newfig=False,cmap='jet',**kwargs):
+    def _show3(self,L=[],rlist=[],newfig=False,cmap='hot',**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters
@@ -2970,7 +2970,7 @@ class Rays(PyLayers, dict):
 
         if 'ER' in kwargs:
             ER = kwargs['ER']
-            color_range = np.linspace( 0,2 * np.pi, len(ER))
+            color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
 
@@ -2990,7 +2990,6 @@ class Rays(PyLayers, dict):
                 l0 = np.array([np.arange(0,cnbi-1)+k*cnbi for k in range(nbr)]).ravel()
                 l1 = l0+1
                 connection = np.vstack((l0,l1)).T
-
                 if 'ER' in kwargs:
                     rc = np.repeat(colors[ridx],cnbi)
                     rc[::cnbi]=0
