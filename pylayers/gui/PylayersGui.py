@@ -298,7 +298,7 @@ class PylayersGUI(HasTraits):
         self.clear_fig()
         DL.a= np.array([self.aX,self.aY,self.aZ])
         self.cutoff = DL.cutoff
-
+        
     @on_trait_change('bX,bY,bZ')
     def update_b(self):
         """ update position ant b

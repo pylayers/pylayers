@@ -1987,21 +1987,49 @@ class DLink(Link):
             if not Atx.evaluated:
                 Atx.eval()
             try:
-                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
+                Atx._show3(T=Ttx.reshape(3,3),
+                           po=ptx,
+                           title=False,
+                           bcolorbar=False,
+                           bnewfig=False,
+                           bcircle = False,
+                           name = Atx._filename,
+                           scale= 0.5,
+                           binteract=False)
             except:
                 Atx.eval()
-                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
+                Atx._show3(T=Ttx.reshape(3,3),
+                            po=ptx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Atx._filename,
+                            scale= 0.5,
+                            binteract=False)
             if not Arx.evaluated:
                 Arx.eval()
             try:
-                Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
+                Arx._show3(T=Trx.reshape(3,3),
+                            po=prx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Arx._filename,
+                            scale= 0.5,
+                            binteract=False)
             except:
                 Arx.eval()
-                Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
+                Arx._show3(T=Trx.reshape(3,3),
+                            po=prx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Arx._filename,
+                            scale= 0.5,
+                            binteract=False)
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']
@@ -2074,6 +2102,8 @@ class DLink(Link):
 
 
         view=mlab.view()
+
+
         antenna = eval('self.A'+ant)
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
@@ -2084,7 +2114,7 @@ class DLink(Link):
 
         if hasattr(antenna,'_mayamesh'):
             # antenna.eval()
-            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
+            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos,scale= 0.5)
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
             antenna._show3(T=rot,po=pos,
@@ -2092,8 +2122,9 @@ class DLink(Link):
                 bcolorbar=False,
                 bcircle = False,
                 bnewfig=False,
-                name = '',
-                interact=False)
+                scale= 0.5,
+                name = antenna._filename,
+                binteract=False)
 
         if delrays:
             import time
