@@ -321,7 +321,7 @@ class DLink(Link):
 
 
             Signature identifier (si_ID#N):
-                ca_cb_cutoff
+                ca_cb_cutoff_th
 
             Ray identifier (ray_ID#N):
                 cutoff_th_ua_ub
@@ -336,7 +336,7 @@ class DLink(Link):
             ca : cycle number of a
             cb : cycle number of b
             cutoff : signature.run cutoff
-            th : signature.run threshold*100
+            th : signature.run threshold * 100
             ua : indice of a position in 'p_map' position dataset
             ub : indice of a position in 'p_map' position dataset
             uf : indice of freq position in 'f_map' frequency dataset
@@ -730,7 +730,9 @@ class DLink(Link):
     @cutoff.setter
     def cutoff(self,cutoff):
 
-        self._cutoff=cutoff
+        co = max(cutoff,1)
+
+        self._cutoff=co
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -738,7 +740,10 @@ class DLink(Link):
     @threshold.setter
     def threshold(self,threshold):
 
-        self._threshold=threshold
+        th = min(threshold,1.)
+        th = max(threshold,0.)
+        self._threshold= th
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -1183,8 +1188,10 @@ class DLink(Link):
 
         array = np.array(([self.ca,self.cb,self.cutoff]))
         ua_opt, ua = self.get_idx('c_map',array)
+        th = str(int(np.round(self.threshold,decimals=2)*100))
 
-        grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
+
+        grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff) + '_' + th
         self.dexist['sig']['grpname']=grpname
 
 
@@ -1200,7 +1207,7 @@ class DLink(Link):
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
 
-        grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
+        grpname = str(self.cutoff) + '_' + th + '_' + str(ua) + '_' +str(ub)
         self.dexist['ray2']['grpname']=grpname
         self.dexist['ray']['grpname']=grpname
         
@@ -1536,12 +1543,15 @@ class DLink(Link):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray2','ray','Ct','H']
                 else :
-                    kwargs['force'] = []
+                    # Ct and H are not yet saved/load 
+                    # compliantly with the given configutain
+                    # their are disabled here
+                    kwargs['force'] = ['Ct','H']
 
         if kwargs['verbose'] != []:
             self.verbose=kwargs['verbose']
 
-
+        print kwargs['force']
         
         # must be placed after all the init !!!!
         # if self.verbose :
@@ -1565,7 +1575,11 @@ class DLink(Link):
         if self.verbose :
             print("Start Signatures")
         tic = time.time()
-        Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
+        Si = Signatures(self.L,
+                        self.ca,
+                        self.cb,
+                        cutoff=kwargs['cutoff'],
+                        threshold = kwargs['threshold'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'],L=self.L)
@@ -1730,6 +1744,8 @@ class DLink(Link):
             pbar.update(20)
         except: 
             pass
+
+
 
         if kwargs['applywav']:
             if self.H.isFriis:
