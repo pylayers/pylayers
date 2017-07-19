@@ -1531,8 +1531,6 @@ class DLink(Link):
         else:
             self.threshold=kwargs['threshold']
 
-        import ipdb
-        ipdb.set_trace()
         if 'force' in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :

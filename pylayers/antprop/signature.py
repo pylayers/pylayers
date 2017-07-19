@@ -813,8 +813,12 @@ class Signatures(PyLayers,dict):
             f.attrs['source']=self.source
             f.attrs['target']=self.target
             f.attrs['cutoff']=self.cutoff
+            # f.attrs['threshold']=self.threshold
+            f.create_group('ratio')
+            f.create_group('sig')
             for k in self.keys():
-                f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+                f['sig'].create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+                f['ratio'].create_dataset(str(k),shape=np.shape(self.ratio[k]),data=self.ratio[k])
             fh5.close()
         except:
             fh5.close()
@@ -854,8 +858,16 @@ class Signatures(PyLayers,dict):
         try:
             fh5=h5py.File(filename,'r')
             f=fh5['sig/'+grpname]
-            for k in f.keys():
-                self.update({eval(k):f[k][:]})
+
+            # compliant with new h5 format:
+            if 'sig' in f.keys():
+                for k in f['sig'].keys():
+                    self.update({eval(k):f['sig'][k][:]})
+                    self.ratio.update({eval(k):f['ratio'][k][:]})
+            # old h5 format
+            else:
+                for k in f.keys():
+                    self.update({eval(k):f[k][:]})
             Lname=f.attrs['L']
             fh5.close()
         except:
