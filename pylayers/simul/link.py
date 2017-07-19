@@ -1551,7 +1551,6 @@ class DLink(Link):
         if kwargs['verbose'] != []:
             self.verbose=kwargs['verbose']
 
-        print kwargs['force']
         
         # must be placed after all the init !!!!
         # if self.verbose :
