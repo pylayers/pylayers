@@ -324,7 +324,7 @@ class DLink(Link):
                 ca_cb_cutoff
 
             Ray identifier (ray_ID#N):
-                cutoff_ua_ub
+                cutoff_th_ua_ub
 
             Ctilde identifier (Ct_ID#N):
                 ua_ub_uf
@@ -336,6 +336,7 @@ class DLink(Link):
             ca : cycle number of a
             cb : cycle number of b
             cutoff : signature.run cutoff
+            th : signature.run threshold*100
             ua : indice of a position in 'p_map' position dataset
             ub : indice of a position in 'p_map' position dataset
             uf : indice of freq position in 'f_map' frequency dataset
@@ -369,6 +370,7 @@ class DLink(Link):
                    'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
                    'cutoff':3,
+                   'threshold':0.8,
                    'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
@@ -548,6 +550,10 @@ class DLink(Link):
         return self._cutoff
 
     @property
+    def threshold(self):
+        return self._threshold
+
+    @property
     def wav(self):
         return self._wav
 
@@ -725,6 +731,14 @@ class DLink(Link):
     def cutoff(self,cutoff):
 
         self._cutoff=cutoff
+        if hasattr(self,'ca') and hasattr(self,'cb'):
+            self.checkh5()
+
+
+    @threshold.setter
+    def threshold(self,threshold):
+
+        self._threshold=threshold
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -1492,7 +1506,6 @@ class DLink(Link):
                    'bt':True,
                    'alg':1,
                    'si_reverb':4,
-                   'threshold':0.1,
                    'nD':2,
                    'nR':10,
                    'nT':10,
@@ -1513,6 +1526,13 @@ class DLink(Link):
         else:
             self.cutoff=kwargs['cutoff']
 
+        if 'threshold' not in kwargs:
+            kwargs['threshold'] = self.threshold
+        else:
+            self.threshold=kwargs['threshold']
+
+        import ipdb
+        ipdb.set_trace()
         if 'force' in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
