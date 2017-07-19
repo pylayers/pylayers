@@ -321,10 +321,10 @@ class DLink(Link):
 
 
             Signature identifier (si_ID#N):
-                ca_cb_cutoff
+                ca_cb_cutoff_th
 
             Ray identifier (ray_ID#N):
-                cutoff_ua_ub
+                cutoff_th_ua_ub
 
             Ctilde identifier (Ct_ID#N):
                 ua_ub_uf
@@ -336,6 +336,7 @@ class DLink(Link):
             ca : cycle number of a
             cb : cycle number of b
             cutoff : signature.run cutoff
+            th : signature.run threshold * 100
             ua : indice of a position in 'p_map' position dataset
             ub : indice of a position in 'p_map' position dataset
             uf : indice of freq position in 'f_map' frequency dataset
@@ -369,6 +370,7 @@ class DLink(Link):
                    'fGHz':np.array([2.4]),
                    'wav':wvf.Waveform(),
                    'cutoff':3,
+                   'threshold':0.8,
                    'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
@@ -548,6 +550,10 @@ class DLink(Link):
         return self._cutoff
 
     @property
+    def threshold(self):
+        return self._threshold
+
+    @property
     def wav(self):
         return self._wav
 
@@ -598,8 +604,10 @@ class DLink(Link):
         self._a = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='a',delrays=True)
-        
+
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
+            self._autocufoff()
             self.checkh5()
 
     @b.setter
@@ -619,7 +627,9 @@ class DLink(Link):
         self._b = position
         if hasattr(self,'_maya_fig') and self._maya_fig._is_running:
             self._update_show3(ant='b',delrays=True)
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
+            self._autocufoff()
             self.checkh5()
 
     @ca.setter
@@ -720,7 +730,20 @@ class DLink(Link):
     @cutoff.setter
     def cutoff(self,cutoff):
 
-        self._cutoff=cutoff
+        co = max(cutoff,1)
+
+        self._cutoff=co
+        if hasattr(self,'ca') and hasattr(self,'cb'):
+            self.checkh5()
+
+
+    @threshold.setter
+    def threshold(self,threshold):
+
+        th = min(threshold,1.)
+        th = max(threshold,0.)
+        self._threshold= th
+
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
@@ -1165,8 +1188,10 @@ class DLink(Link):
 
         array = np.array(([self.ca,self.cb,self.cutoff]))
         ua_opt, ua = self.get_idx('c_map',array)
+        th = str(int(np.round(self.threshold,decimals=2)*100))
 
-        grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
+
+        grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff) + '_' + th
         self.dexist['sig']['grpname']=grpname
 
 
@@ -1182,7 +1207,7 @@ class DLink(Link):
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
 
-        grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
+        grpname = str(self.cutoff) + '_' + th + '_' + str(ua) + '_' +str(ub)
         self.dexist['ray2']['grpname']=grpname
         self.dexist['ray']['grpname']=grpname
         
@@ -1488,7 +1513,6 @@ class DLink(Link):
                    'bt':True,
                    'alg':1,
                    'si_reverb':4,
-                   'threshold':0.1,
                    'nD':2,
                    'nR':10,
                    'nT':10,
@@ -1509,16 +1533,23 @@ class DLink(Link):
         else:
             self.cutoff=kwargs['cutoff']
 
+        if 'threshold' not in kwargs:
+            kwargs['threshold'] = self.threshold
+        else:
+            self.threshold=kwargs['threshold']
+
         if 'force' in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray2','ray','Ct','H']
                 else :
-                    kwargs['force'] = []
+                    # Ct and H are not yet saved/load 
+                    # compliantly with the given configutain
+                    # their are disabled here
+                    kwargs['force'] = ['Ct','H']
 
         if kwargs['verbose'] != []:
             self.verbose=kwargs['verbose']
-
 
         
         # must be placed after all the init !!!!
@@ -1543,7 +1574,11 @@ class DLink(Link):
         if self.verbose :
             print("Start Signatures")
         tic = time.time()
-        Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
+        Si = Signatures(self.L,
+                        self.ca,
+                        self.cb,
+                        cutoff=kwargs['cutoff'],
+                        threshold = kwargs['threshold'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'],L=self.L)
@@ -1708,6 +1743,8 @@ class DLink(Link):
             pbar.update(20)
         except: 
             pass
+
+
 
         if kwargs['applywav']:
             if self.H.isFriis:
@@ -1989,21 +2026,49 @@ class DLink(Link):
             if not Atx.evaluated:
                 Atx.eval()
             try:
-                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
+                Atx._show3(T=Ttx.reshape(3,3),
+                           po=ptx,
+                           title=False,
+                           bcolorbar=False,
+                           bnewfig=False,
+                           bcircle = False,
+                           name = Atx._filename,
+                           scale= 0.5,
+                           binteract=False)
             except:
                 Atx.eval()
-                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,interact=False)
+                Atx._show3(T=Ttx.reshape(3,3),
+                            po=ptx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Atx._filename,
+                            scale= 0.5,
+                            binteract=False)
             if not Arx.evaluated:
                 Arx.eval()
             try:
-                Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
+                Arx._show3(T=Trx.reshape(3,3),
+                            po=prx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Arx._filename,
+                            scale= 0.5,
+                            binteract=False)
             except:
                 Arx.eval()
-                Arx._show3(T=Trx.reshape(3,3),po=prx,
-                title=False,bcolorbar=False,bnewfig=False,bcircle = False,name = '',interact=False)
+                Arx._show3(T=Trx.reshape(3,3),
+                            po=prx,
+                            title=False,
+                            bcolorbar=False,
+                            bnewfig=False,
+                            bcircle = False,
+                            name = Arx._filename,
+                            scale= 0.5,
+                            binteract=False)
         if lay:
             # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']
@@ -2073,6 +2138,11 @@ class DLink(Link):
     def _update_show3(self,ant='a',delrays=False):
         """
         """
+
+
+        view=mlab.view()
+
+
         antenna = eval('self.A'+ant)
         rot = eval('self.T'+ant).reshape(3,3)
         pos = eval('self.'+ant)
@@ -2083,7 +2153,7 @@ class DLink(Link):
 
         if hasattr(antenna,'_mayamesh'):
             # antenna.eval()
-            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos)
+            x, y, z, k, scalar = antenna._computemesh(T=rot,po=pos,scale= 0.5)
             antenna._mayamesh.mlab_source.set(x=x,y=y,z=z,scalars=scalar)
         else:
             antenna._show3(T=rot,po=pos,
@@ -2091,14 +2161,16 @@ class DLink(Link):
                 bcolorbar=False,
                 bcircle = False,
                 bnewfig=False,
-                name = '',
-                interact=False)
+                scale= 0.5,
+                name = antenna._filename,
+                binteract=False)
 
         if delrays:
             import time
             for x in self._maya_fig.children[::-1]:
                 if 'Rays' in x.name:
                     x.remove()
+        mlab.view(view[0],view[1],view[2],view[3])
              # [x.remove() for x in self._maya_fig.children ]
 
         # # update wall opaccity
@@ -2289,7 +2361,30 @@ class DLink(Link):
         ax.set_xlim([-np.pi,np.pi])
         return fig,ax
 
-        
+    def _autocufoff(self):
+        """ automatically determine minimum cutoof
+
+
+        See Also
+        --------
+
+        pylayers.antprop.loss.losst
+        pylayers.gis.layout.angleonlink3
+        """
+
+        v=np.vectorize( lambda t:self.L.Gs.node[t]['name'])
+        # determine incidence angles on segment crossing p1-p2 segment
+        #data = L.angleonlink(p1,p2)
+        data = self.L.angleonlink3(self.a,self.b)
+        # as many slabs as segments and subsegments
+        us    = data['s'] 
+        if len(us) >0:
+            sl = v(us)
+            uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
+            self.cutoff = len(uus)
+        else:
+            self.cutoff = 1
+        return self.cutoff
 
 if (__name__ == "__main__"):
     #plt.ion()
