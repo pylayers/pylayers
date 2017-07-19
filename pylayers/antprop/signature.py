@@ -491,6 +491,7 @@ class Signatures(PyLayers,dict):
         self.source = source
         self.target = target
         self.cutoff = cutoff
+        self.ratio = {}
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
     def __repr__(self):
@@ -1233,8 +1234,10 @@ class Signatures(PyLayers,dict):
                 assert(len(typ)==1)
                 try:
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
+                    self.ratio[len(typ)] = np.vstack((self.ratio[len(typ)],np.array([1.])))
                 except:
                     self[len(typ)] = np.vstack((anstr,typ))
+                    self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
             # stack is a list of iterators
@@ -1640,8 +1643,10 @@ class Signatures(PyLayers,dict):
                                 lhash.append(sighash)
                                 try:
                                     self[len(typ)] = np.vstack((self[len(typ)],sig))
+                                    self.ratio[len(typ)] = np.vstack((self.ratio[len(typ)],np.array([ratio])))
                                 except:
                                     self[len(typ)] = np.vstack((sig))
+                                    self.ratio[len(typ)] = np.array([ratio])
                             # print ('added',visited)
                                 cptsig +=1
 
