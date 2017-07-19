@@ -462,7 +462,7 @@ class Signatures(PyLayers,dict):
 
     """
 
-    def __init__(self,L,source,target,cutoff=3):
+    def __init__(self,L,source,target,cutoff=3,threshold = 0.6):
         """ object constructor
 
         Parameters
@@ -491,6 +491,7 @@ class Signatures(PyLayers,dict):
         self.source = source
         self.target = target
         self.cutoff = cutoff
+        self.threshold = threshold
         self.ratio = {}
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
@@ -813,7 +814,7 @@ class Signatures(PyLayers,dict):
             f.attrs['source']=self.source
             f.attrs['target']=self.target
             f.attrs['cutoff']=self.cutoff
-            # f.attrs['threshold']=self.threshold
+            f.attrs['threshold']=self.threshold
             f.create_group('ratio')
             f.create_group('sig')
             for k in self.keys():
@@ -869,6 +870,16 @@ class Signatures(PyLayers,dict):
                 for k in f.keys():
                     self.update({eval(k):f[k][:]})
             Lname=f.attrs['L']
+            self.cutoff = f.attrs['cutoff']
+
+            if 'threshold' in f.attrs.keys():
+                self.threshold = f.attrs['threshold']
+            # ensure backward compatibility
+            else:
+                # find threshold
+                th = np.min([np.min(self.ratio[x]) 
+                                 for x in self.ratio])
+                self.threshold = th.round(decimals=2)
             fh5.close()
         except:
             fh5.close()
@@ -1101,8 +1112,7 @@ class Signatures(PyLayers,dict):
             activate diffraction 
         threshold : float 
             for reducing calculation time
-        threshold_prob : float 
-            threshold on output probability
+
 
         Returns
         -------
@@ -1119,7 +1129,6 @@ class Signatures(PyLayers,dict):
         """
         defaults = {'cutoff' : 2, 
                     'threshold':0.1,
-                    'threshold_prob':0.1,
                     'nD':1,
                     'nR':10,
                     'nT':10,
@@ -1134,8 +1143,11 @@ class Signatures(PyLayers,dict):
                 kwargs[k] = defaults[k] 
         
         self.cutoff = kwargs['cutoff']
-        threshold = kwargs['threshold'] 
-        threshold_prob = kwargs['threshold_prob']
+        if 'threshold' not in kwargs:
+            kwargs['threshold'] = self.threshold
+        else:
+            self.threshold=kwargs['threshold']
+
         nD = kwargs['nD']
         nT = kwargs['nT']
         nR = kwargs['nR']
@@ -1616,7 +1628,7 @@ class Signatures(PyLayers,dict):
                 #    th = self.L.Gs.pos[nstr]
                 #    th = np.array([th,th])
                 #    ratio = 1
-                    if ratio > threshold:
+                    if ratio > self.threshold:
                         #
                         # Update sequence of mirrored points
                         if nstr<0:
