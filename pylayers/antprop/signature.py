@@ -462,7 +462,7 @@ class Signatures(PyLayers,dict):
 
     """
 
-    def __init__(self,L,source,target,cutoff=3):
+    def __init__(self,L,source,target,cutoff=3,threshold = 0.6):
         """ object constructor
 
         Parameters
@@ -491,6 +491,8 @@ class Signatures(PyLayers,dict):
         self.source = source
         self.target = target
         self.cutoff = cutoff
+        self.threshold = threshold
+        self.ratio = {}
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
     def __repr__(self):
@@ -812,8 +814,12 @@ class Signatures(PyLayers,dict):
             f.attrs['source']=self.source
             f.attrs['target']=self.target
             f.attrs['cutoff']=self.cutoff
+            f.attrs['threshold']=self.threshold
+            f.create_group('ratio')
+            f.create_group('sig')
             for k in self.keys():
-                f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+                f['sig'].create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+                f['ratio'].create_dataset(str(k),shape=np.shape(self.ratio[k]),data=self.ratio[k])
             fh5.close()
         except:
             fh5.close()
@@ -853,9 +859,27 @@ class Signatures(PyLayers,dict):
         try:
             fh5=h5py.File(filename,'r')
             f=fh5['sig/'+grpname]
-            for k in f.keys():
-                self.update({eval(k):f[k][:]})
+
+            # compliant with new h5 format:
+            if 'sig' in f.keys():
+                for k in f['sig'].keys():
+                    self.update({eval(k):f['sig'][k][:]})
+                    self.ratio.update({eval(k):f['ratio'][k][:]})
+            # old h5 format
+            else:
+                for k in f.keys():
+                    self.update({eval(k):f[k][:]})
             Lname=f.attrs['L']
+            self.cutoff = f.attrs['cutoff']
+
+            if 'threshold' in f.attrs.keys():
+                self.threshold = f.attrs['threshold']
+            # ensure backward compatibility
+            else:
+                # find threshold
+                th = np.min([np.min(self.ratio[x]) 
+                                 for x in self.ratio])
+                self.threshold = th.round(decimals=2)
             fh5.close()
         except:
             fh5.close()
@@ -1088,8 +1112,7 @@ class Signatures(PyLayers,dict):
             activate diffraction 
         threshold : float 
             for reducing calculation time
-        threshold_prob : float 
-            threshold on output probability
+
 
         Returns
         -------
@@ -1106,7 +1129,6 @@ class Signatures(PyLayers,dict):
         """
         defaults = {'cutoff' : 2, 
                     'threshold':0.1,
-                    'threshold_prob':0.1,
                     'nD':1,
                     'nR':10,
                     'nT':10,
@@ -1121,8 +1143,11 @@ class Signatures(PyLayers,dict):
                 kwargs[k] = defaults[k] 
         
         self.cutoff = kwargs['cutoff']
-        threshold = kwargs['threshold'] 
-        threshold_prob = kwargs['threshold_prob']
+        if 'threshold' not in kwargs:
+            kwargs['threshold'] = self.threshold
+        else:
+            self.threshold=kwargs['threshold']
+
         nD = kwargs['nD']
         nT = kwargs['nT']
         nR = kwargs['nR']
@@ -1233,8 +1258,10 @@ class Signatures(PyLayers,dict):
                 assert(len(typ)==1)
                 try:
                     self[len(typ)] = np.vstack((self[len(typ)],anstr,typ))
+                    self.ratio[len(typ)] = np.append(self.ratio[len(typ)],1.)
                 except:
                     self[len(typ)] = np.vstack((anstr,typ))
+                    self.ratio[len(typ)] = np.array([1.])
                 # update signature counter
                 cptsig +=1
             # stack is a list of iterators
@@ -1601,7 +1628,7 @@ class Signatures(PyLayers,dict):
                 #    th = self.L.Gs.pos[nstr]
                 #    th = np.array([th,th])
                 #    ratio = 1
-                    if ratio > threshold:
+                    if ratio > self.threshold:
                         #
                         # Update sequence of mirrored points
                         if nstr<0:
@@ -1640,8 +1667,10 @@ class Signatures(PyLayers,dict):
                                 lhash.append(sighash)
                                 try:
                                     self[len(typ)] = np.vstack((self[len(typ)],sig))
+                                    self.ratio[len(typ)] = np.append(self.ratio[len(typ)],ratio)
                                 except:
                                     self[len(typ)] = np.vstack((sig))
+                                    self.ratio[len(typ)] = np.array([ratio])
                             # print ('added',visited)
                                 cptsig +=1
 
