@@ -3791,13 +3791,25 @@ def MEulerAngle(alpha, beta, gamma):
     return(T)
 
 def SphericalBasis(a):
-    """
-    SphericalBasis(a):
+    """ construct a spherical basis from a direction theta,phi
 
-    a[:,0] : N x theta   theta angle
-    a[:,1] : N x phi     phi angle
+    Parameters
+    ----------
+    a : N x 2 
+        a[:,0] : N theta angle
+        a[:,1] : N phi angle
 
-    M = N x [th,ph,s]  : 3 x 3 x N
+    Returns
+    -------
+    M : np.array
+        N x [th,ph,s]  : 3 x 3 x N
+
+    Examples
+    --------
+
+    >>> a = np.array([0,0])
+    >>> SphericalBasis(a)
+
     """
     assert(a.shape[1]==2)
 
@@ -3807,8 +3819,9 @@ def SphericalBasis(a):
     pha = np.vstack((-np.sin(a[:, 1]),
                       np.cos(a[:, 1]),
                       0 * a[:, 0])).T
-    sa = np.vstack((np.sin(a[:, 0]) * np.cos(
-        a[:, 1]), np.sin(a[:, 0]) * np.sin(a[:, 1]), np.cos(a[:, 0]))).T
+    sa = np.vstack((np.sin(a[:, 0]) * np.cos(a[:, 1]), 
+                    np.sin(a[:, 0]) * np.sin(a[:, 1]), 
+                    np.cos(a[:, 0]))).T
 
     M = np.dstack((tha, pha, sa)).T
     return M
@@ -3933,7 +3946,7 @@ def BTB_tx(a_g, T):
     Parameters
     ----------
 
-    a_g  : angle in global reference frame      2 x N  :  (theta,phi) x N
+    a_g  : angle in global reference frame  2 x N  :  (theta,phi) x N
     T    : Tx rotation matrix     3 x 3
 
     Returns

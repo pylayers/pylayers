@@ -1431,6 +1431,15 @@ class DLink(Link):
 
     def evalH(self,**kwargs):
         """ evaluate channel transfer function
+
+        Notes
+        -----
+
+        This function modifies the orientation of the antenna at both sides
+        via Ta and Tb 3x3 matrices and recalculates the channel transfer function 
+        for those new orientations. 
+        The self.H variable is updated
+
         """
         # Antenna Rotation
         self.C.locbas(Tt=self.Ta, Tr=self.Tb)

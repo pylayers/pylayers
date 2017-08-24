@@ -405,7 +405,7 @@ class Pattern(PyLayers):
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
         Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
-        F  = np.sqrt(Gmax[...,:])*F_nor
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
 
         # Handling repatition on both vector components
         # enforce E.y = 0 
