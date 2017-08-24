@@ -3691,8 +3691,8 @@ class Ctilde(PyLayers):
         """
         self.fail = False
         self.islocal = False
-        self.Tt = np.eye(3)
-        self.Tr = np.eye(3)
+        self.Ta = np.eye(3)
+        self.Tb = np.eye(3)
         self.fGHz = np.array([2.4])
         self.Ctt = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
         self.Ctp = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
@@ -3746,8 +3746,8 @@ class Ctilde(PyLayers):
         # read/write error
         try:
             f=h5py.File(filename,'w')
-            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('Ta',shape=np.shape(self.Ta),data=self.Ta)
+            f.create_dataset('Tb',shape=np.shape(self.Tb),data=self.Tb)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
             f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
             f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
@@ -3803,8 +3803,8 @@ class Ctilde(PyLayers):
             self.rang = f['rang'][:]
             self.tauk = f['tauk'][:]
 
-            self.Tt = f['Tt'][:]
-            self.Tr = f['Tr'][:]
+            self.Ta = f['Ta'][:]
+            self.Tb = f['Tb'][:]
 
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
@@ -3862,8 +3862,8 @@ class Ctilde(PyLayers):
             f=fh5['Ct/'+grpname]
 
             # save channel in global basis
-            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('Ta',shape=np.shape(self.Ta),data=self.Ta)
+            f.create_dataset('Tb',shape=np.shape(self.Tb),data=self.Tb)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
             f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
             f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
@@ -3938,8 +3938,8 @@ class Ctilde(PyLayers):
             self.rang = f['rang'][:]
             self.tauk = f['tauk'][:]
 
-            self.Tt = f['Tt'][:]
-            self.Tr = f['Tr'][:]
+            self.Ta = f['Ta'][:]
+            self.Tb = f['Tb'][:]
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
             Ctp = f['Ctp_y'][:]
@@ -4391,25 +4391,25 @@ class Ctilde(PyLayers):
 
         fGHz = self.fGHz
         # if rot matrices are passed
-        if ('Tt' in kwargs) & ('Tr' in kwargs):
+        if ('Ta' in kwargs) & ('Tb' in kwargs):
             if self.islocal:
-                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+                if (hasattr(self,'Ta')) & (hasattr(self,'Tb')):
                     # run locbas to return to global basis
                     self.locbas(b2g=True)
                 else:
-                    raise NameError('Channel has no self.Tt or self.Tr')
-            self.Tt = kwargs['Tt']
-            self.Tr = kwargs['Tr']
+                    raise NameError('Channel has no self.Ta or self.Tb')
+            self.Ta = kwargs['Ta']
+            self.Tb = kwargs['Tb']
             self.islocal = True
         # if a return to global is requested
         elif b2g:
             if self.islocal :
-                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                    self.Tt = self.Tt.transpose()
-                    self.Tr = self.Tr.transpose()
+                if (hasattr(self,'Ta')) & (hasattr(self,'Tb')):
+                    self.Ta = self.Ta.transpose()
+                    self.Tb = self.Tb.transpose()
                     self.islocal = False
                 else:
-                    raise NameError ('self.Tt and self.Tr should exist')
+                    raise NameError ('self.Ta and self.Tb should exist')
             else:
                 print("nothing to do to return in global basis")
                 return self
@@ -4432,8 +4432,8 @@ class Ctilde(PyLayers):
         #
 
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
+        Rt, tangl = geu.BTB_tx(self.tang, self.Ta)
+        Rr, rangl = geu.BTB_rx(self.rang, self.Tb)
         #
         # update direction of departure and arrival
         #
@@ -4513,12 +4513,12 @@ class Ctilde(PyLayers):
         fGHz = self.fGHz
 
         if (Tt !=[]) & (Tr!=[]):
-            self.Tt = Tt
-            self.Tr = Tr
+            self.Ta = Tt
+            self.Tb = Tr
         else:
-            if (hasattr(self,'Tt')) & (hasattr(self, 'Tr')):
-                self.Tt = self.Tt.transpose()
-                self.Tr = self.Tr.transpose()
+            if (hasattr(self,'Ta')) & (hasattr(self, 'Tb')):
+                self.Ta = self.Ta.transpose()
+                self.Tb = self.Tb.transpose()
             else:
                 return
 
@@ -4536,8 +4536,8 @@ class Ctilde(PyLayers):
         # rangl : r x 2
         #
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
+        Rt, tangl = geu.BTB_tx(self.tang, self.Ta)
+        Rr, rangl = geu.BTB_rx(self.rang, self.Tb)
 
         #
         # update direction of departure and arrival
