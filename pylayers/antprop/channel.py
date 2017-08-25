@@ -4432,8 +4432,8 @@ class Ctilde(PyLayers):
         #
 
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Ta)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tb)
+        tangl,Ra = geu.BTB_tx(self.tang, self.Ta)
+        rangl,Rb = geu.BTB_rx(self.rang, self.Tb)
         #
         # update direction of departure and arrival
         #
@@ -4447,34 +4447,34 @@ class Ctilde(PyLayers):
         # r0 : r x 1(f)
         #
 
-        #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:, None]
-        #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:, None]
+        #r0 = rb00
+        r0 = Rb[0,0,:][:, None]
+        #r1 = rb01
+        r1 = Rb[0,1,:][:, None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:, None]
-        #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:, None]
+        #r0 = rb10 
+        r0 = Rb[1, 0,:][:, None]
+        #r1 = rb11 
+        r1 = Rb[1, 1,:][:, None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0, 0, :][:, None]
-        #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1, 0, :][:, None]
+        #r0 = ra00 
+        r0 = Ra[0, 0, :][:, None]
+        #r1 = ra10 
+        r1 = Ra[1, 0, :][:, None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
-        #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0, 1, :][:, None]
-        #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1, 1, :][:, None]
+        #r0 = ra01
+        r0 = Ra[0, 1, :][:, None]
+        #r1 = ra11
+        r1 = Ra[1, 1, :][:, None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -4536,8 +4536,8 @@ class Ctilde(PyLayers):
         # rangl : r x 2
         #
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Ta)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tb)
+        tangl , Ra = geu.BTB_tx(self.tang, self.Ta)
+        rangl , Rb = geu.BTB_rx(self.rang, self.Tb)
 
         #
         # update direction of departure and arrival
