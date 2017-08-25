@@ -4424,16 +4424,19 @@ class Ctilde(PyLayers):
         # tang : r x 2
         # rang : r x 2
         #
-        # Rt : 2 x 2 x r
-        # Rr : 2 x 2 x r
+        # Ra : 2 x 2 x r
+        # Rb : 2 x 2 x r
         #
         # tangl : r x 2
         # rangl : r x 2
         #
 
 
-        tangl,Ra = geu.BTB_tx(self.tang, self.Ta)
-        rangl,Rb = geu.BTB_rx(self.rang, self.Tb)
+        tangl,Ra = geu.BTB(self.tang, self.Ta)
+        rangl,Rb = geu.BTB(self.rang, self.Tb)
+
+        Rb = Rb.transpose((1,0,2))
+
         #
         # update direction of departure and arrival
         #
@@ -4536,9 +4539,9 @@ class Ctilde(PyLayers):
         # rangl : r x 2
         #
 
-        tangl , Ra = geu.BTB_tx(self.tang, self.Ta)
-        rangl , Rb = geu.BTB_rx(self.rang, self.Tb)
-
+        tangl , Ra = geu.BTB(self.tang, self.Ta)
+        rangl , Rb = geu.BTB(self.rang, self.Tb)
+        Rb = Rb.transpose((1,0,2))
         #
         # update direction of departure and arrival
         #
