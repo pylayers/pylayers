@@ -855,6 +855,14 @@ class Mat(PyLayers,dict):
         else: # from P.2040
             epsr = self['a'] * fGHz**self['b']
             sigma  = self['c'] * fGHz**self['d']
+
+            # print ("a :",self['a'])
+            # print ("b :",self['b'])
+            # print ("c :",self['c'])
+            # print ("d :",self['d']) 
+            # print ("epsr :",epsr)
+            # print ("sigma :",sigma)
+
             epsc = epsr - 1j * 17.98 * sigma /  fGHz
 
         return(epsc)

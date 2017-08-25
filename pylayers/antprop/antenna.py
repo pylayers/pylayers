@@ -1324,7 +1324,7 @@ class Pattern(PyLayers):
             ik0 = np.where(df==min(df))
             ik = ik0[0][0]
             #ik=0
-            chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
+            chaine = 'fc = %3.2f GHz' %(self.fGHz[ik])
             # all theta
             if kwargs['plan']=='theta':
                 itheta = np.arange(self.nth)
@@ -1417,7 +1417,7 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)')
+                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)',fontsize=20)
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -1441,9 +1441,11 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
-                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
+                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)', fontsize=20)
             # actual plotting
-            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            #ax.plot(angle, r, color=col[cpt], lw=2, label=chaine, linewidth=3, fontsize=20)
+            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine, linewidth=3)
+            ax.set_rlabel_position(270)
             cpt = cpt + 1
 
         if kwargs['polar']:
@@ -1451,7 +1453,7 @@ class Pattern(PyLayers):
             #ax.set_rmax(t1[-1])
             #ax.set_rmin(t1[0])
         if kwargs['legend']:
-            ax.legend()
+            ax.legend(loc='best',fontsize=16)
         if kwargs['show']:
             plt.ion()
             plt.show()

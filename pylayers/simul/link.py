@@ -1774,14 +1774,10 @@ class DLink(Link):
 
         afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
         for ph in phi:
-            # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
-            # import ipdb
-            # ipdb.set_trace()
-            self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
-            #print self.Tb
-            # self._update_show3(ant='b')
-           
+            self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)          
             self.evalH()
+            
+            # self.H.y: nray, 1, 1, Nf
             S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             try:
                 afp.y = np.vstack((afp.y,np.squeeze(S)))

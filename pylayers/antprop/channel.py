@@ -2749,13 +2749,14 @@ class Tchannel(bs.FUsignal):
         # ipdb.set_trace()
         H    = np.sum(E*self.y,axis=0) # sum over rays
         cir  = np.fft.ifft(H,axis=2) # ifft over frequency
+        cir1 = cir
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)
             tauns = np.linspace(-Nf/(2*BWGHz),Nf/(2*BWGHz)-1/BWGHz,Nf)
 
         cir = bs.TUsignal(x=tauns,y=cir)
 
-        return(cir)
+        return(cir1,cir)
 
     def get_cir(self,Wgam=[]):
         """ get Channel impulse response of the channel 
@@ -5363,7 +5364,11 @@ class Ctilde(PyLayers):
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
-        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
+        
+        # import ipdb
+        # ipdb.set_trace()
+
+        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)        
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
