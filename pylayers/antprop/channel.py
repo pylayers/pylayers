@@ -3704,6 +3704,9 @@ class Ctilde(PyLayers):
         #
         self.tang = np.array([[np.pi/2,np.pi/2]])
         self.rang = np.array([[np.pi/2,3*np.pi/2]])
+        #
+        self.tangl = np.array([[np.pi/2,np.pi/2]])
+        self.rangl = np.array([[np.pi/2,3*np.pi/2]])
 
     def __repr__(self):
         s = 'Ctilde : Ray Propagation Channel Tensor (2x2xrxf)'+'\n---------\n'
@@ -3720,6 +3723,12 @@ class Ctilde(PyLayers):
         else:
             s = s + 'fGHz : ' + str(self.Cpp.x[0])+'\n'
         s = s + '---1st ray 1st freq ---\n'
+        s = s + 'global angles (th,ph) degrees : \n'
+        s = s + str(np.round(self.tang[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + str(np.round(self.rang[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + 'local angles (th,ph) degrees : \n'
+        s = s + str(np.round(self.tangl[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + str(np.round(self.rangl[0,:]*1800/np.pi)/10.)+'\n'
         s = s + '    | '+ str(self.Ctt.y[0,0])+'   '+str(self.Ctp.y[0,0])+' |\n'
         s = s + '    | '+ str(self.Cpt.y[0,0])+'   '+str(self.Cpp.y[0,0])+' |\n'
         return(s)
@@ -3894,7 +3903,7 @@ class Ctilde(PyLayers):
             fh5.close()
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
-    def los(self,pa=np.r_[0,0,0],pb=np.r_[3,0,0],fGHz=np.r_[2.4],tang=np.r_[[1.57,3.14]],rang=np.r_[[1.57,0]]):
+    def los(self,**kwargs):
         """ Line of site channel
 
         Parameters
@@ -3906,26 +3915,49 @@ class Ctilde(PyLayers):
         rang (1x2)
 
         """
-        self.pa = pa
-        self.pb = pb
-        self.fGHz = fGHz
-        self.nfreq = len(fGHz)
+        defaults = {'pa':np.r_[197,189.8,1.65]
+                   ,'pb': np.r_[220,185,6]
+                   ,'fGHz':np.r_[32.6] 
+                   ,'Ta':np.eye(3)
+                   ,'Tb':np.array([[0.28378894, -0.8972627,  -0.33820628],
+                        [-0.57674955, -0.44149706,  0.68734293],
+                         [-0.76604425,  0.,         -0.64278784]])
+                   }
+
+        for k in defaults: 
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+        self.pa = kwargs['pa']
+        self.pb = kwargs['pb'] 
+        self.fGHz = kwargs['fGHz']
+        self.Ta = kwargs['Ta']
+        self.Tb = kwargs['Tb']
         self.nray = 1
-        si = pb-pa
+
+        si = self.pb-self.pa
+
         d = np.r_[np.sqrt(np.sum(si*si))]
+        si = si/d
         self.tauk = d/0.3
-        tht =  np.arccos(si[2])
-        pht =  np.arctan2(si[1],si[0])
-        thr =  np.arccos(-si[2])
-        phr =  np.arctan2(-si[1],-si[0])
-        self.tang = np.array([tht,pht]).reshape((1,2))
-        self.rang = np.array([thr,phr]).reshape((1,2))
+        #
+        # ka = - kb for LOS 
+        #
+        tha =  np.arccos(si[2])
+        pha =  np.arctan2(si[1],si[0])
+        thb =  np.arccos(-si[2])
+        phb =  np.arctan2(-si[1],-si[0])
+
+        self.tang = np.array([tha,pha]).reshape((1,2))
+        self.rang = np.array([thb,phb]).reshape((1,2))
+
         U = np.ones(len(self.fGHz),dtype=complex)/d[0]
         Z = np.zeros(len(self.fGHz),dtype=complex)
+         
         self.Ctt = bs.FUsignal(self.fGHz, U)
         self.Ctp = bs.FUsignal(self.fGHz, Z)
         self.Cpt = bs.FUsignal(self.fGHz, Z)
         self.Cpp = bs.FUsignal(self.fGHz, U)
+        self.locbas()
 
     def _loadh5(self,filenameh5,grpname,**kwargs):
         """ load Ctilde object in hdf5 format
