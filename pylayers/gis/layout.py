@@ -1725,7 +1725,7 @@ class Layout(pro.PyLayers):
                 self.name[k] = []
 
         # convert graph Gs to numpy arrays for speed up post processing
-        #pdb.set_trace()
+        pdb.set_trace()
         self.g2npy()
 
         #

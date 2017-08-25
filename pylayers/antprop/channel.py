@@ -281,7 +281,7 @@ class ADPchannel(bs.TUsignal):
 
 
     def pdp(self,**kwargs):
-        """ Calculate Power Delay Profile
+        """ Calculate and plot Power Delay Profile
 
         Parameters
         ----------
@@ -4225,6 +4225,13 @@ class Ctilde(PyLayers):
         self.islocal = False
         self.Tt = np.eye(3)
         self.Tr = np.eye(3)
+        self.fGHz = np.array([2.4])
+        self.Ctt = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
+        self.Ctp = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
+        self.Cpt = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
+        self.Cpp = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
+        self.tang = np.array([[np.pi/2,np.pi/2]])
+        self.rang = np.array([[np.pi/2,3*np.pi/2]])
 
     def __repr__(self):
         s = 'Ctilde : Ray Propagation Channel Matrices'+'\n---------\n'
@@ -4895,7 +4902,7 @@ class Ctilde(PyLayers):
         ----------
 
         Tt  : Tx rotation matrix 3x3
-            default []
+        Ta    default []
         Tr  : Rx rotation matrix 3x3
             default []
         b2g: bool
@@ -5372,20 +5379,36 @@ class Ctilde(PyLayers):
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
-        # Cg2cl should be applied here
         #
-
+        #  C  :  2 x 2 x r x f
         #
-        #  C  = 2 x 2 x r x f
-        #  Ctt : r x f
-        #  Fa = 2 x r x f
-        #  Fb = 2 x r x f
+        #  Ctt : r x f     (complex FUsignal)
+        #  Cpp : r x f     (complex FUsignal)
+        #  Ctp : r x f     (complex FUsignal)
+        #  Cpt : r x f     (complex FUsignal)
+        #
+        #  a.Ft = r x (Na) x f  (complex ndarray)
+        #  a.Fp = r x (Na) x f  (complex ndarray)
+        #  b.Ft = r x (Nb) x f  (complex ndarray)
+        #  b.Fp = r x (Nb) x f  (complex ndarray)
         #
         #  (r x f ) (r x Nt x f )
+        #
+        # This exploit * overloading in FUsignal 
+
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 
-        # depending on siso or mimo case
+        # depending on SISO or MIMO case
+        # the shape of the received fields T1 and T2 
+        # 
+        # In MIMO case
+        #   a.Ft.y.shape == (r x Na x f) 
+        #   a.Fp.y.shape == (r x Na x f)
+        # In SISO case 
+        #   a.Ft.y.shape == (r x f) 
+        #   a.Fp.y.shape == (r x f)
+        #
         if len(t1.y.shape)==3:
             T1 = t1.y[:,None,:,:]
             T2 = t2.y[:,None,:,:]

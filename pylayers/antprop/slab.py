@@ -1768,7 +1768,7 @@ class SlabDB(dict):
     DB : slab dictionnary
 
     """
-    def __init__(self, filemat='', fileslab='',ds={},dm={}):
+    def __init__(self,fileslab='', filemat='',ds={},dm={}):
         """ class constructor
 
         Parameters
@@ -1789,11 +1789,13 @@ class SlabDB(dict):
         """
         
         # Load from file
-        if ((fileslab != '') and (filemat!='')):
+        if (fileslab != ''):
             self.fileslab = fileslab
-            self.filemat = filemat
-            self.mat = MatDB()
-            self.mat.load(filemat)
+            if filemat!='':
+                self.filemat = filemat
+                self.mat = MatDB(filemat)
+            else:
+                self.mat = MatDB('matDB.ini')
             self.load(fileslab)
         # Load from dict 
         else :
@@ -1995,11 +1997,19 @@ class SlabDB(dict):
         config = ConfigParser.ConfigParser()
         config.read(fileini)
 
+        if hasattr(self,'mat'):
+            if len(self.mat)==0:
+                mat = MatDB('matDB.ini')
+                self.mat = mat 
+        else:    
+            mat = MatDB('matDB.ini')
+            self.mat = mat 
+        
         for k,slabname in enumerate(config.sections()):
             # warning the Slab takes the whole Material Database
             S = Slab(slabname,self.mat)
             S['lmatname']=eval(config.get(slabname,'lmatname'))
-            S['nbmat']=len(S['lmatname'])
+            #S['nbmat']=len(S['lmatname'])
             S['color']=config.get(slabname,'color')
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
