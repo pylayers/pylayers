@@ -2756,7 +2756,7 @@ class Tchannel(bs.FUsignal):
 
         cir = bs.TUsignal(x=tauns,y=cir)
 
-        return(cir1,cir)
+        return(cir)
 
     def get_cir(self,Wgam=[]):
         """ get Channel impulse response of the channel 
@@ -4221,27 +4221,39 @@ class Ctilde(PyLayers):
             + generated from a statistical model of the propagation channel
 
         """
-        self.fail = False
+        # by default C is expressed between the global frames
         self.islocal = False
-        self.Tt = np.eye(3)
-        self.Tr = np.eye(3)
+        # by default antenna rotation matrices are identity 
+        self.Ta = np.eye(3)
+        self.Tb = np.eye(3)
         self.fGHz = np.array([2.4])
+        # a single ray
+        self.nray = 1
         self.Ctt = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
         self.Ctp = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
         self.Cpt = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
         self.Cpp = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
+        #
         self.tang = np.array([[np.pi/2,np.pi/2]])
         self.rang = np.array([[np.pi/2,3*np.pi/2]])
 
     def __repr__(self):
-        s = 'Ctilde : Ray Propagation Channel Matrices'+'\n---------\n'
-        if hasattr(self, 'Cpp'):
-            s = s + str(np.shape(self.Cpp.y))+'\n'
-        if hasattr(self, 'nray'):
-            s = s + 'Nray : ' + str(self.nray)+'\n'
+        s = 'Ctilde : Ray Propagation Channel Tensor (2x2xrxf)'+'\n---------\n'
+        if self.islocal:
+            s = s + 'between antennas local frames\n'
+        else:
+            s = s + 'between termination global frames\n'
+
+        s = s + 'Nray : ' + str(self.nray)+'\n'
+        if self.Cpp.x[0]!=self.Cpp.x[-1]:
+            s = s + 'Nfreq : ' + str(len(self.Cpp.x))+'\n'
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
-            s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
+        else:
+            s = s + 'fGHz : ' + str(self.Cpp.x[0])+'\n'
+        s = s + '---1st ray 1st freq ---\n'
+        s = s + '    | '+ str(self.Ctt.y[0,0])+'   '+str(self.Ctp.y[0,0])+' |\n'
+        s = s + '    | '+ str(self.Cpt.y[0,0])+'   '+str(self.Cpp.y[0,0])+' |\n'
         return(s)
 
     
@@ -4271,15 +4283,16 @@ class Ctilde(PyLayers):
         filename=pyu.getlong(_filename,pstruc['DIRCT'])
 
         # save channel in global basis
+        # new call to locbas
         if self.islocal:
-            self.locbas(b2g=True)
+            self.locbas()
 
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filename,'w')
-            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('Ta',shape=np.shape(self.Ta),data=self.Ta)
+            f.create_dataset('Tb',shape=np.shape(self.Tb),data=self.Tb)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
             f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
             f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
@@ -4335,8 +4348,8 @@ class Ctilde(PyLayers):
             self.rang = f['rang'][:]
             self.tauk = f['tauk'][:]
 
-            self.Tt = f['Tt'][:]
-            self.Tr = f['Tr'][:]
+            self.Ta = f['Ta'][:]
+            self.Tb = f['Tb'][:]
 
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
@@ -4376,9 +4389,9 @@ class Ctilde(PyLayers):
 
 
         """
-
+        # back to global frame
         if self.islocal:
-            self.locbas(b2g=True)
+            self.locbas()
 
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
@@ -4394,8 +4407,8 @@ class Ctilde(PyLayers):
             f=fh5['Ct/'+grpname]
 
             # save channel in global basis
-            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('Ta',shape=np.shape(self.Ta),data=self.Ta)
+            f.create_dataset('Tb',shape=np.shape(self.Tb),data=self.Tb)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
             f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
             f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
@@ -4470,8 +4483,9 @@ class Ctilde(PyLayers):
             self.rang = f['rang'][:]
             self.tauk = f['tauk'][:]
 
-            self.Tt = f['Tt'][:]
-            self.Tr = f['Tr'][:]
+            self.Ta = f['Ta'][:]
+            self.Tb = f['Tb'][:]
+
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
             Ctp = f['Ctp_y'][:]
@@ -4491,123 +4505,6 @@ class Ctilde(PyLayers):
             fh5.close()
             raise NameError('Channel.Ctilde: issue when reading h5py file')
 
-#     def load(self, filefield, transpose=False):
-#         """ load a Ctilde from a .field file
-
-#         Load the three files .tauk .tang .rang which contain respectively
-#         delay , angle of departure , angle of arrival.
-# maicher
-#         Parameters
-#         ----------
-
-#         filefield  : string
-#         transpose  : boolean
-#             default False
-
-#         Examples
-#         --------
-
-#         >>> from pylayers.antprop.channel import *
-#         >>> from pylayers.simul.simulem import *
-#         >>> S = Simul()
-#         >>> S.load('default.ini')
-#         >>> C = Ctilde()
-#         >>> out = C.load(pyu.getlong(S.dtud[1][1],'output'))
-
-#         """
-#         filetauk = filefield.replace('.field', '.tauk')
-#         filetang = filefield.replace('.field', '.tang')
-#         filerang = filefield.replace('.field', '.rang')
-#         try:
-#             fo = open(filefield, "rb")
-#         except:
-#             raise NameError( "file " + filefield + " is unreachable")
-
-#         # decode filename (*.field file obtained from evalfield simulation)
-#         nray = stru.unpack('i', fo.read(4))[0]
-#         nfreq = stru.unpack('i', fo.read(4))[0]
-#         if nfreq == 0:
-#             print " Error : incorrect number of frequency points in .field"
-#             self.fail = True
-#             return
-
-#         n = nray * nfreq
-#         buf = fo.read()
-#         fo.close()
-
-#         CMat = np.ndarray(shape=(n, 8), buffer=buf)
-#         c11 = CMat[:, 0] + CMat[:, 1]*1j
-#         c12 = CMat[:, 2] + CMat[:, 3]*1j
-#         c21 = CMat[:, 4] + CMat[:, 5]*1j
-#         c22 = CMat[:, 6] + CMat[:, 7]*1j
-
-#         c11 = c11.reshape(nray, nfreq)
-#         c12 = c12.reshape(nray, nfreq)
-#         c21 = c21.reshape(nray, nfreq)
-#         c22 = c22.reshape(nray, nfreq)
-
-#         if transpose:
-#             c11 = c11.transpose()
-#             c12 = c12.transpose()
-#             c21 = c21.transpose()
-#             c22 = c22.transpose()
-
-#         #
-#         # Temporary freq --> read filefreq
-#         #
-#         fGHz = np.linspace(2, 11, nfreq)
-
-#         self.Ctt = bs.FUsignal(fGHz, c11)
-#         self.Ctp = bs.FUsignal(fGHz, c12)
-#         self.Cpt = bs.FUsignal(fGHz, c21)
-#         self.Cpp = bs.FUsignal(fGHz, c22)
-#         self.nfreq = nfreq
-#         self.nray = nray
-
-#         try:
-#             fo = open(filetauk, "rb")
-#         except:
-#             self.fail = True
-#             print "file ", filetauk, " is unreachable"
-#         # decode filetauk
-#         if not self.fail:
-#             nray_tauk = stru.unpack('i', fo.read(4))[0]
-#             #print "nb rays in .tauk file: ", nray_tauk
-#             buf = fo.read()
-#             fo.close()
-#             nray = len(buf) / 8
-#             #print "nb rays 2: ", nray
-#             self.tauk = np.ndarray(shape=nray, buffer=buf)
-#             #if nray_tauk != nray:
-#             #    print nray_tauk - nray
-#         self.tauk = self.tauk
-
-#         # decode the angular files (.tang and .rang)
-#         try:
-#             fo = open(filetang, "rb")
-#         except:
-#             self.fail = True
-#             print "file ", filetang, " is unreachable"
-#         if not self.fail:
-#             nray_tang = stru.unpack('i', fo.read(4))[0]
-#             buf = fo.read()
-#             fo.close()
-#             # coorectif Bug evalfield
-#             tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
-#             self.tang = tmp[0:nray,:]
-#         try:
-#             fo = open(filerang, "rb")
-#         except:
-#             self.fail = True
-#             print "file ", filerang, " is unreachable"
-
-#         if not self.fail:
-#             nray_rang = stru.unpack('i', fo.read(4))[0]
-#             buf = fo.read()
-#             fo.close()
-#             # corectif Bug evalfield
-#             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
-#             self.rang = tmp[0:nray,:]
 
     def mobility(self, v, dt):
         """ modify channel for uniform mobility
@@ -4893,7 +4790,7 @@ class Ctilde(PyLayers):
         return fig,[ax1,ax2]
 
 
-    def locbas(self,b2g=False,**kwargs):
+    def locbas(self,**kwargs):
         """ global reference frame to local reference frame
 
         If Tt and Tr are [] the global channel is  retrieved
@@ -4901,71 +4798,64 @@ class Ctilde(PyLayers):
         Parameters
         ----------
 
-        Tt  : Tx rotation matrix 3x3
-        Ta    default []
-        Tr  : Rx rotation matrix 3x3
+        Ta  : rotation matrix 3x3  side a 
             default []
-        b2g: bool
-            back to global reference frame
+        Tb  : rotation matrix 3x3  side b
+            default []
 
         Returns
         -------
+        
+        This method affects the boolean islocal 
+        This method update the ray propagation channel in either local or global frame
+        self.Ta and self.Tb are updated with input parameters Ta an Tb 
 
-        Cl : Ctilde local/global
-            depends on self.islocal boolean value
+        C : ray propagtion channel (2x2xrxf) complex 
+            either local or global depends on self.islocal boolean value
 
         Examples
         --------
+
+        >>> C = Ctilde()
+        >>> Ta = MEulerAngle(np.pi/2,np.pi/2,np.pi/2.)
+        >>> Tb = MEulerAngle(np.pi/3,np.pi/3,np.pi/3.)
+        >>> C.locbas(Ta=Ta,Tb=Tb)
 
         """
         
         # get Ctilde frequency axes
 
         fGHz = self.fGHz
-        # if rot matrices are passed
-        if ('Tt' in kwargs) & ('Tr' in kwargs):
+#       if rotation matrices are passed in argument 
+#       back to global if local 
+        if ('Ta' in kwargs) & ('Tb' in kwargs):
             if self.islocal:
-                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                    # run locbas to return to global basis
-                    self.locbas(b2g=True)
-                else:
-                    raise NameError('Channel has no self.Tt or self.Tr')
-            self.Tt = kwargs['Tt']
-            self.Tr = kwargs['Tr']
-            self.islocal = True
-        # if a return to global is requested
-        elif b2g:
-            if self.islocal :
-                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                    self.Tt = self.Tt.transpose()
-                    self.Tr = self.Tr.transpose()
-                    self.islocal = False
-                else:
-                    raise NameError ('self.Tt and self.Tr should exist')
-            else:
-                print("nothing to do to return in global basis")
-                return self
-        # if Tt and Tr == []
-        else:
-            return self
-
-        # get angular axes
-        # Rt (2x2)
-        # Rr (2x2)
+                self.locbas()
+                self.islocal=False
+            self.Tb = kwargs['Tb']
+            self.Ta = kwargs['Ta']
+        # angular axes
         #
         # tang : r x 2
         # rang : r x 2
         #
-        # Rt : 2 x 2 x r
-        # Rr : 2 x 2 x r
+        # Ra : 2 x 2 x r
+        # Rb : 2 x 2 x r
         #
         # tangl : r x 2
         # rangl : r x 2
         #
 
+        tangl,Ra = geu.BTB(self.tang, self.Ta)
+        rangl,Rb = geu.BTB(self.rang, self.Tb)
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
+        if self.islocal:
+            Ra = Ra.transpose((1,0,2))
+            self.islocal=False
+        else:
+            Rb = Rb.transpose((1,0,2))
+            self.islocal=True
+
         #
         # update direction of departure and arrival
         #
@@ -4979,34 +4869,34 @@ class Ctilde(PyLayers):
         # r0 : r x 1(f)
         #
 
-        #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:, None]
-        #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:, None]
+        #r0 = rb00
+        r0 = Rb[0,0,:][:, None]
+        #r1 = rb01
+        r1 = Rb[0,1,:][:, None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:, None]
-        #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:, None]
+        #r0 = rb10 
+        r0 = Rb[1, 0,:][:, None]
+        #r1 = rb11 
+        r1 = Rb[1, 1,:][:, None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0, 0, :][:, None]
-        #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1, 0, :][:, None]
+        #r0 = ra00 
+        r0 = Ra[0, 0, :][:, None]
+        #r1 = ra10 
+        r1 = Ra[1, 0, :][:, None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
-        #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0, 1, :][:, None]
-        #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1, 1, :][:, None]
+        #r0 = ra01
+        r0 = Ra[0, 1, :][:, None]
+        #r1 = ra11
+        r1 = Ra[1, 1, :][:, None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -5045,12 +4935,12 @@ class Ctilde(PyLayers):
         fGHz = self.fGHz
 
         if (Tt !=[]) & (Tr!=[]):
-            self.Tt = Tt
-            self.Tr = Tr
+            self.Ta = Tt
+            self.Tb = Tr
         else:
-            if (hasattr(self,'Tt')) & (hasattr(self, 'Tr')):
-                self.Tt = self.Tt.transpose()
-                self.Tr = self.Tr.transpose()
+            if (hasattr(self,'Ta')) & (hasattr(self, 'Tb')):
+                self.Ta = self.Ta.transpose()
+                self.Tb = self.Tb.transpose()
             else:
                 return
 
@@ -5068,9 +4958,9 @@ class Ctilde(PyLayers):
         # rangl : r x 2
         #
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
-
+        tangl , Ra = geu.BTB(self.tang, self.Ta)
+        rangl , Rb = geu.BTB(self.rang, self.Tb)
+        Rb = Rb.transpose((1,0,2))
         #
         # update direction of departure and arrival
         #

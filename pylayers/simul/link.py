@@ -722,7 +722,7 @@ class DLink(Link):
             self.checkh5()
 
         # if self.dexist['Ct']['exist']:
-        #     self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        #     self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         #     #T channel
         #     self.H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
 
@@ -1442,7 +1442,7 @@ class DLink(Link):
 
         """
         # Antenna Rotation
-        self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         # Transmission channel calculation
         H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
         self.H = H
@@ -1743,7 +1743,7 @@ class DLink(Link):
             self.load(H,self.dexist['H']['grpname'])
         else :
             # Ctilde antenna
-            C.locbas(Tt=self.Ta, Tr=self.Tb)
+            C.locbas(Ta=self.Ta, Tb=self.Tb)
             #T channel
             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=kwargs['debug'])
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])

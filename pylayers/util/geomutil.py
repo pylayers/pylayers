@@ -119,13 +119,11 @@ Utility Functions
      isleftorequal
      affine
      cylmap
-     mul3
      MRot3
      MEulerAngle
      SphericalBasis
      angledir
-     BTB_rx
-     BTB_tx
+     BTB
 
      plot_coords
      plot_bounds
@@ -3672,59 +3670,6 @@ def cylmap(Y, r=0.0625, l=0.5):
     return(A, B)
 
 
-def mul3(A, B):
-    """  matrix multiplication
-
-    Parameters
-    ----------
-
-    A :
-    B :
-
-    Returns
-    -------
-
-    C :  A*B
-
-    """
-    sa = np.shape(A)
-    sb = np.shape(B)
-    la = len(sa)
-    lb = len(sb)
-    if ((la == 3) & (lb == 3)):
-        if((sa[1] == sb[0]) & (sa[2] == sb[2])):
-            C = np.zeros((sa[0], sb[1], sb[2]))
-            for i in range(sa[2]):
-                MA = A[:, :, i]
-                MB = B[:, :, i]
-                P = np.dot(MA, MB)
-                C[:, :, i] = P
-            return(C)
-        else:
-            print("wrong shape", sa, sb)
-    if ((la == 3) & (lb == 2)):
-        if(sa[1] == sb[0]):
-            C = np.zeros((sa[0], sb[1], sa[2]))
-            for i in range(sa[2]):
-                MA = A[:, :, i]
-                P = np.dot(MA, B)
-                C[:, :, i] = P
-            return(C)
-        else:
-            print("wrong shape", sa, sb)
-
-    if ((la == 2) & (lb == 3)):
-        if(sa[1] == sb[0]):
-            C = np.zeros((sa[0], sb[1], sb[2]))
-            for i in range(sb[2]):
-                MB = B[:, :, i]
-                P = np.dot(A, MB)
-                C[:, :, i] = P
-            return(C)
-        else:
-            print("wrong shape", sa, sb)
-
-
 def MRot3(a, axe):
     """
     Return a 3D rotation matrix along axe 0|1|2
@@ -3805,10 +3750,20 @@ def SphericalBasis(a):
     M : np.array
         N x [th,ph,s]  : 3 x 3 x N
 
+    Notes
+    -----
+    The unit vector uth,uph,us are places along the lines of the 
+    3 x 3 matrices
+
+    uth
+    uph
+    us 
+
+
     Examples
     --------
 
-    >>> a = np.array([0,0])
+    >>> a = np.array([[0,0]])
     >>> SphericalBasis(a)
 
     """
@@ -3869,8 +3824,7 @@ def angledir(s):
     See Also
     --------
 
-    BTB_Rx
-    BTB_Tx
+    BTB (Base to base)
 
     """
     s = normalize(s)
@@ -3894,87 +3848,113 @@ def angledir(s):
     return(a_new)
 
 
-def BTB_rx(a_g, T):
-    """ Produce a set of rotation matrices for passage between global and
-    local frames
+#def BTB_rx(a_g, T):
+#    """ Produce a set of rotation matrices for passage between global and
+#    local frames
+#
+#    Parameters
+#    ----------
+#
+#    a_g  :
+#        angle in global reference frame   2 x N  :  (theta,phi) x N
+#    T    :
+#        Rx rotation matrix     3 x 3
+#
+#    Returns
+#    -------
+#
+#    R  :  ndarray (3x3)
+#    al :  ndarray (r x 2)
+#        angle expressed in local basis
+#
+#    See Also
+#    --------
+#
+#    angledir
+#    SphericalBasis
+#
+#
+#    Notes
+#    -----
+#
+#    N is the number or rays
+#
+#    """
+#    G = SphericalBasis(a_g)
+#    th_g = G[0, :, :]
+#    ph_g = G[1, :, :]
+#    B_g = np.dstack((th_g, ph_g)).transpose((0, 2, 1))
+#    s_l = np.dot(T.T, G[2, :, :]).T
+#    a_l = angledir(s_l)
+#    L = SphericalBasis(a_l)
+#    th_l = L[0, :, :]
+#    ph_l = L[1, :, :]
+#    B_lT = np.dstack((th_l, ph_l)).transpose((2, 0, 1))
+#    U = np.einsum('ijk,jlk->ilk',B_lT,T.T[:,:,None])
+#    R = np.einsum('ijk,jlk->ilk',U,B_g)
+#
+#    return a_l,R
 
-    Parameters
-    ----------
 
-    a_g  :
-        angle in global reference frame   2 x N  :  (theta,phi) x N
-    T    :
-        Rx rotation matrix     3 x 3
-
-    Returns
-    -------
-
-    R  :  ndarray (3x3)
-    al :  ndarray (r x 2)
-        angle expressed in local basis
-
-    See Also
-    --------
-
-    angledir
-    SphericalBasis
-
-
-    Notes
-    -----
-
-    N is the number or rays
-
-    """
-    G = SphericalBasis(a_g)
-    th_g = G[0, :, :]
-    ph_g = G[1, :, :]
-    B_g = np.dstack((th_g, ph_g)).transpose((0, 2, 1))
-    s_l = np.dot(T.T, G[2, :, :]).T
-    al = angledir(s_l)
-    L = SphericalBasis(al)
-    th_l = L[0, :, :]
-    ph_l = L[1, :, :]
-    B_lT = np.dstack((th_l, ph_l)).transpose((2, 0, 1))
-    R = mul3(B_lT, mul3(T.T, B_g))
-
-    return R, al
-
-
-def BTB_tx(a_g, T):
+def BTB(a_g, T):
     """ Produce a set of rotation matrices for passage between global and local frame
 
     Parameters
     ----------
 
-    a_g  : angle in global reference frame  2 x N  :  (theta,phi) x N
+    a_g  : angle in global reference frame  Nx2  :  (theta,phi) in columns
     T    : Tx rotation matrix     3 x 3
 
     Returns
     -------
 
-    R : 
-    al : angle in local frame
+    R : np.array (2x2xN) 
+        Rotation matrix in the wave plane   
+    a_l : np.array (Nx2) 
+        angle in local frame
+
 
     """
+
+    # 3 x 3 x r 
     G = SphericalBasis(a_g)
 
     th_g = G[0, :, :]
     ph_g = G[1, :, :]
-
+    
+    #
+    # 2 x 3 x r 
+    # 
     B_gT = np.dstack((th_g, ph_g)).transpose((2, 0, 1))
-
+    
+    # express s in the local frame (after rotation T) 
+    # s = G[2,:,:]   3 x N 
+    # s_l : N x 3 
+    #
     s_l = np.dot(T.T, G[2, :, :]).T
+    
+    # get the N couples of angles in local frame 
 
-    al = angledir(s_l)
+    # a_l : r x 2 
+    a_l = angledir(s_l)
 
-    L = SphericalBasis(al)
+    L = SphericalBasis(a_l)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]
+    #
+    # B_l : 3 x 2 x r 
+    #
     B_l = np.dstack((th_l, ph_l)).transpose((0, 2, 1))
-    R = mul3(B_gT, mul3(T, B_l))
 
-    return R, al
+    #
+    #  R : (2 x 3 x r ) (3 x 3 x r ) ( 3 x 2 x r ) 
+    #  R : 2 x 2 x r 
+    #
+    # U : 2 x 3 x r 
+    U = np.einsum('ijk,jlk->ilk',B_gT,T[:,:,None])
+    R = np.einsum('ijk,jlk->ilk',U,B_l)
+
+    return a_l,R
 
 
 def plot_coords(ax, ob, color='#999999'):
