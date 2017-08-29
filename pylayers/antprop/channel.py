@@ -3733,7 +3733,34 @@ class Ctilde(PyLayers):
         s = s + '    | '+ str(self.Cpt.y[0,0])+'   '+str(self.Cpp.y[0,0])+' |\n'
         return(s)
 
-    
+    def inforay(self,iray,ifreq=0):
+        """ provide information about a specific ray 
+        
+        """
+        dray   = self.tauk[iray]*0.3
+        draydB = 20*np.log10(1./dray)
+
+        Ctt = self.Ctt.y[iray,ifreq]
+        Ctp = self.Ctp.y[iray,ifreq]
+        Cpt = self.Cpt.y[iray,ifreq]
+        Cpp = self.Cpp.y[iray,ifreq]
+
+        
+        Cttc = Ctt*dray
+        Ctpc = Ctp*dray
+        Cppc = Cpp*dray
+        Cptc = Cpt*dray
+        if self.islocal:
+            print("between local frames")
+        else:
+            print("between global frames")
+        print('distance losses',draydB)
+        print('Without distance losses')
+        print('co-pol (tt,pp) dB :',20*np.log10(np.abs(Cttc)),20*np.log10(np.abs(Cppc)))
+        print('cross-pol (tp,pt) dB :',20*np.log10(np.abs(Ctpc)),20*np.log10(np.abs(Cptc)))
+        print('With distance losses')
+        print('co-pol (tt,pp) dB :',20*np.log10(np.abs(Ctt)),20*np.log10(np.abs(Cpp)))
+        print('cross-pol (tp,pt) dB :',20*np.log10(np.abs(Ctp)),20*np.log10(np.abs(Cpt)))
 
 
     def saveh5(self,Lfilename,idx,a,b):

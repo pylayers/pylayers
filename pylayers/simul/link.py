@@ -843,6 +843,20 @@ class DLink(Link):
             s = 'No Layout specified'
         return s
 
+    def inforay(self,iray):
+        """ provide full information abaout a specified
+
+        Parameters
+        ----------
+
+        iray : int 
+            ray index
+
+        """
+        print "Ray :"
+        self.R.info(iray,matrix=1)
+        print "C:"
+        self.C.inforay(iray)
 
     # def initfreq(self):
     #     """ Automatic freq determination from
@@ -899,7 +913,7 @@ class DLink(Link):
 
 
     def init_positions(self,force=False):
-        """ 
+        """ initialize random positions for a link
         """
         ###########
         # init pos & cycles
@@ -1333,8 +1347,7 @@ class DLink(Link):
 
 
     def array_exist(self,key,array,tol=1e-3) :
-        """ check if an array of a given key (h5py group)
-            has already been stored into the h5py file
+        """ check an array key has already been stored in h5py file
 
 
         Parameters
@@ -1767,7 +1780,7 @@ class DLink(Link):
         self.checkh5()
 
 
-    def afp(self,phi,beta=0,gamma=np.pi/2.):
+    def afp(self,fGHz,phi=0,beta=0,gamma=np.pi/2.):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1791,13 +1804,20 @@ class DLink(Link):
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
-            S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            if self.H.y.shape[3]!=1:
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            else:
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*fGHz*self.H.taud[:,None,None,None]),axis=0)
+
             try:
                 afp.y = np.vstack((afp.y,np.squeeze(S)))
             except:
                 afp.y = np.squeeze(S)
+        if self.H.y.shape[3]!=1:
+            afp.x = self.H.x
+        else:
+            afp.x = fGHz
 
-        afp.x = self.H.x
         return(afp)
 
 
