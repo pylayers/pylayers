@@ -1768,7 +1768,7 @@ class DLink(Link):
 
     #def padp(self,phi):
         #""" calculates the channel impulse response (cir) which is a function of angles.
-    def afp(self,phi,beta=0,gamma=np.pi/2.):
+    def afp(self,phi,fGHz,beta=0,gamma=np.pi/2.):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1785,21 +1785,29 @@ class DLink(Link):
         for ph in phi:     
             # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
             #self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
-            zb = np.array([np.cos(ph)*np.cos(beta),np.sin(ph)*np.cos(beta),-np.sin(beta)])
-            y = np.cross(zb,np.array([0,0,1]))
-            yb = y/np.linalg.norm(y)
-            xb = np.cross(yb,zb)
-            self.Tb = np.vstack((xb,yb,zb)).T
+            self.Tb = geu.MEulerAngle(ph,beta=beta,gamma=gamma)
+            # zb = np.array([np.cos(ph)*np.cos(beta),np.sin(ph)*np.cos(beta),-np.sin(beta)])
+            # y = np.cross(zb,np.array([0,0,1]))
+            # yb = y/np.linalg.norm(y)
+            # xb = np.cross(yb,zb)
+            # self.Tb = np.vstack((xb,yb,zb)).T
             self.evalH()
             
+
             # self.H.y: nray, 1, 1, Nf
-            S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            if self.H.y.shape[3]!=1:
+                afp.x = self.H.x
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            else:
+                afp.x = fGHz
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*fGHz[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             try:
                 afp.y = np.vstack((afp.y,np.squeeze(S)))
             except:
                 afp.y = np.squeeze(S)
 
-        afp.x = self.H.x
+        
+
         return(afp)
 
 
