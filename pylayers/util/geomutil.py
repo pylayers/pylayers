@@ -3726,9 +3726,9 @@ def MAzTiltPol(vl,pl,phi,tilt,pol):
     pH = np.cross(vg,z)
     pH = pH/np.linalg.norm(pH)
     pV = np.cross(pH,vg)
-    if pol=='H':
-        Tg = np.vstack([vg,pV,pH]).T
     if pol=='V':
+        Tg = np.vstack([vg,pV,pH]).T
+    if pol=='H':
         Tg = np.vstack([vg,-pH,pV]).T
         
     # Tg = R Tl 

@@ -1797,18 +1797,30 @@ class DLink(Link):
         self.checkh5()
 
 
-    def afp(self,fGHz,phi=0,beta=0,gamma=np.pi/2.):
+    def afp(self,fGHz,vl,pl,az=0,tilt=0,polar='V'):
         """ Evaluate angular frequency profile 
 
         Parameters
         ----------
 
-        phi   : Euler angle phi
-        beta  : Euler angle beta 
-        gamma : Euler angle gamma
+        fGHz  : np.array 
+            frequency range 
+        vl : np.array (,3)
+            main beam direction in local frame
+        pl : np.array (,3)
+            polarisation vector in a plane perpendicular to vl 
+        az : azimuth angle (radian)  
+        tilt : tilt angle (-pi/2<tilt<pi/2) 
+        polar : string
 
         """
-        afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
+
+        # create an empty AFP 
+        # tx = a
+        # rx = b 
+        # angular range (a) : phi 
+        #
+        afp = AFPchannel(tx=self.a,rx=self.b,az=az)
         for ph in phi:
             # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
             #self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
