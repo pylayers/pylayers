@@ -3722,10 +3722,12 @@ def MAzTiltPol(vl,pl,phi,tilt,pol):
     #   (vg,-pH,pV) direct  H case 
     #
     z = np.array([0,0,1.0])
-    vg = np.array([np.cos(phi)*np.sin(tilt),np.sin(phi)*np.cos(tilt),-np.sin(tilt)])
+    vg = np.array([np.cos(phi)*np.cos(tilt),np.sin(phi)*np.cos(tilt),-np.sin(tilt)])
     pH = np.cross(vg,z)
     pH = pH/np.linalg.norm(pH)
+    assert np.isclose(np.dot(pH,pH),1)
     pV = np.cross(pH,vg)
+    assert np.isclose(np.dot(pV,pV),1)
     if pol=='V':
         Tg = np.vstack([vg,pV,pH]).T
     if pol=='H':

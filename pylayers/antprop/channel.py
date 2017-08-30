@@ -151,6 +151,7 @@ class AFPchannel(bs.FUsignal):
             
     def __repr__(self):
         s = 'Angular Frequency Profile object \n'
+        
         return(s)
 
     def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
@@ -258,7 +259,7 @@ class ADPchannel(bs.TUsignal):
     def __init__(self,
             x=np.array([]),
             y=np.array([]),
-            a=np.array([]),
+            az=np.array([]),
             tx=np.array([]),
             rx=np.array([]),
             _filename='',

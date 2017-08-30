@@ -824,6 +824,17 @@ class DLink(Link):
             s = s + '----------------------------- \n'
             s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
             s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
+            rd2deg = 180/np.pi
+            if not np.allclose(self.a,self.b):
+                vsba = self.b-self.a
+                a1 = geu.angledir(vsba[None,:])
+                a2 = geu.angledir(-vsba[None,:])
+                s = s + 'azimuth (from a) : '+str(a1[:,1]*rd2deg)+' deg\n'
+                s = s + 'elevation (from a) : '+str(a1[:,0]*rd2deg)+ 'deg\n'
+                s = s + 'tilt (from a) : '+str((a1[:,0]-np.pi/2)*rd2deg)+ 'deg\n'
+                s = s + 'azimuth (from b) : '+str(a2[:,1]*rd2deg)+' deg\n'
+                s = s + 'elevation (from b) : '+str(a2[:,0]*rd2deg)+ 'deg\n'
+                s = s + 'tilt (from b) : '+str((a2[:,0]-np.pi/2)*rd2deg)+ 'deg\n'
             #s = s + 'Frequency range :  \n'
             s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
             s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
@@ -1821,15 +1832,8 @@ class DLink(Link):
         # angular range (a) : phi 
         #
         afp = AFPchannel(tx=self.a,rx=self.b,az=az)
-        for ph in phi:
-            # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
-            #self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
-            zb = np.array([np.cos(ph)*np.cos(beta),np.sin(ph)*np.cos(beta),-np.sin(beta)])
-            y = np.cross(zb,np.array([0,0,1]))
-            yb = y/np.linalg.norm(y)
-            xb = np.cross(yb,zb)
-            self.Tb = np.vstack((xb,yb,zb)).T
-
+        for ph in az:
+            self.Tb = geu.MAzTiltPol(vl,pl,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
@@ -2268,7 +2272,8 @@ class DLink(Link):
                     'ax': [],
                      'BWGHz':5,
                     'Nf':1000,
-                    'rays':True
+                    'rays':True,
+                    'fspl':True,
                     }
 
         for key, value in defaults.items():
@@ -2286,8 +2291,14 @@ class DLink(Link):
 
         # getcir is a Tchannel method 
         ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
-
         ir.plot(fig=fig,ax=ax)
+        delay = ir.x 
+        dist = delay*0.3
+        FSPL = -32.4- 20*np.log10(self.fGHz)-20*np.log10(dist) + 19 + 2
+        if kwargs['fspl']:
+            ax.plot(delay,FSPL,linewidth=2,color='b')
+
+
         if kwargs['rays'] : 
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
