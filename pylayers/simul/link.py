@@ -843,6 +843,20 @@ class DLink(Link):
             s = 'No Layout specified'
         return s
 
+    def inforay(self,iray):
+        """ provide full information abaout a specified
+
+        Parameters
+        ----------
+
+        iray : int 
+            ray index
+
+        """
+        print "Ray :"
+        self.R.info(iray,matrix=1)
+        print "C:"
+        self.C.inforay(iray)
 
     # def initfreq(self):
     #     """ Automatic freq determination from
@@ -899,7 +913,7 @@ class DLink(Link):
 
 
     def init_positions(self,force=False):
-        """ 
+        """ initialize random positions for a link
         """
         ###########
         # init pos & cycles
@@ -1333,8 +1347,7 @@ class DLink(Link):
 
 
     def array_exist(self,key,array,tol=1e-3) :
-        """ check if an array of a given key (h5py group)
-            has already been stored into the h5py file
+        """ check an array key has already been stored in h5py file
 
 
         Parameters
@@ -1388,7 +1401,7 @@ class DLink(Link):
             # ipdb.set_trace()
             #### fmin_h5 < fmin_rqst
             ufmi = fa[:,0]<=array[0]
-            # old version
+            # old version
                 # ufmi = np.where(fa[:,0]<=array[0])[0]
                 # lufmi = len(ufmi)
 
@@ -1400,7 +1413,7 @@ class DLink(Link):
 
             ### fstep_h5 < fstep_rqst
             ufst = fa[:,2]<=array[2]
-            # old version
+            # old version
                 # ufst = np.where(fa[:,2]<=array[2])[0]
                 # lufst = len(ufst)
 
@@ -1552,9 +1565,9 @@ class DLink(Link):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray2','ray','Ct','H']
                 else :
-                    # Ct and H are not yet saved/load 
-                    # compliantly with the given configutain
-                    # their are disabled here
+                    # Ct and H are not yet saved/load 
+                    # compliantly with the given configutain
+                    # their are disabled here
                     kwargs['force'] = ['Ct','H']
 
         if kwargs['verbose'] != []:
@@ -1766,9 +1779,8 @@ class DLink(Link):
             pass
         self.checkh5()
 
-    #def padp(self,phi):
-        #""" calculates the channel impulse response (cir) which is a function of angles.
-    def afp(self,phi,fGHz,beta=0,gamma=np.pi/2.):
+
+    def afp(self,fGHz,phi=0,beta=0,gamma=np.pi/2.):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1779,34 +1791,39 @@ class DLink(Link):
         gamma : Euler angle gamma
 
         """
-        
-
-        afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
-        for ph in phi:     
+        afp = AFPchannel(tx=self.a,rx=self.b,a=phi) # (Nf x angle)
+        for ph in phi:
             # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
-            #self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
-            self.Tb = geu.MEulerAngle(ph,beta=beta,gamma=gamma)
-            # zb = np.array([np.cos(ph)*np.cos(beta),np.sin(ph)*np.cos(beta),-np.sin(beta)])
-            # y = np.cross(zb,np.array([0,0,1]))
-            # yb = y/np.linalg.norm(y)
-            # xb = np.cross(yb,zb)
-            # self.Tb = np.vstack((xb,yb,zb)).T
-            self.evalH()
-            
+            self.Tb = geu.MEulerAngle(ph,beta,gamma)
 
-            # self.H.y: nray, 1, 1, Nf
+            #self.Tb = geu.MEulerAngle(ph,beta=beta,gamma=gamma)
+            # zb      = np.array([np.cos(ph)*np.cos(beta),np.sin(ph)*np.cos(beta),-np.sin(beta)])
+            # y       = np.cross(zb,np.array([0,0,1]))
+            # yb      = y/np.linalg.norm(y)
+            # xb      = np.cross(yb,zb)
+            # self.Tb = np.vstack((xb,yb,zb)).T
+
+            # self._update_show3(ant='b')
+            # pdb.set_trace()
+            self.evalH()
+
+
             if self.H.y.shape[3]!=1:
-                afp.x = self.H.x
                 S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             else:
-                afp.x = fGHz
-                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*fGHz[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*fGHz*self.H.taud[:,None,None,None]),axis=0)
+
             try:
                 afp.y = np.vstack((afp.y,np.squeeze(S)))
             except:
                 afp.y = np.squeeze(S)
 
-        
+        if self.H.y.shape[3]!=1:
+            afp.x = self.H.x
+        else:
+            afp.x = fGHz
+
+
 
         return(afp)
 
@@ -2089,7 +2106,7 @@ class DLink(Link):
                             scale= 0.5,
                             binteract=False)
         if lay:
-            # check if indoor/outdoor, outdoor or indoor situations
+            # check if indoor/outdoor, outdoor or indoor situations
             # a_in = self.L.Gt.node[self.ca]['indoor']
             # b_in = self.L.Gt.node[self.cb]['indoor']
 
@@ -2104,7 +2121,7 @@ class DLink(Link):
             #     opacity = 1.
             #     ceil_opacity = 1.
             # else:
-            #     # indoor/outdoor
+            #     # indoor/outdoor
             #     show_ceil=True
             #     opacity = 0.7
             #     ceil_opacity = 0.7
@@ -2192,7 +2209,7 @@ class DLink(Link):
         mlab.view(view[0],view[1],view[2],view[3])
              # [x.remove() for x in self._maya_fig.children ]
 
-        # # update wall opaccity
+        # # update wall opaccity
         
         
         # ds  =[i for i in self._maya_fig.children if self.L._filename in i.name][0]
@@ -2201,7 +2218,7 @@ class DLink(Link):
 
         # if 
         # if a_in or b_in:
-        #     # indoor situation
+        #     # indoor situation
         #     ds.children[0].children[0].actor.property.opacity=0.5
         # else:
         #     ds.children[0].children[0].actor.property.opacity=1.

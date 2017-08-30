@@ -1380,7 +1380,7 @@ class Rays(PyLayers, dict):
             print self[ik]['si']
 
     def locbas(self, L):
-        """ calculate ray local basis
+        """ calculate ray local bas
 
         Parameters
         ----------
@@ -1482,8 +1482,7 @@ class Rays(PyLayers, dict):
 
                 # norm : 3 x i x r
                 #
-                # norm name is improper norm is in fact the vector associated to the
-                # interaction
+                # norm is the vector associated to the interaction
                 # For the diffraction case the normal is replaced by the unit
                 # vector along the wedge directed upward.
                 #
@@ -1634,6 +1633,7 @@ class Rays(PyLayers, dict):
                 #  self[k]['Bi'] 3 x 3 x i x r
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
                 ################################
+
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
 
                 w, nw = fix_colinear()
@@ -2334,7 +2334,8 @@ class Rays(PyLayers, dict):
         # loop on interaction blocks
         if ib==[]:
             ib=self.keys()
-
+        
+        # loop over group of interactions
         for l in ib:
             # ir : ray index
 
@@ -2357,7 +2358,7 @@ class Rays(PyLayers, dict):
                 # 1 , r , l , 2 , 2
                 #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
                 Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
-                # get the first uitary matrix B0l
+                # get the first unitary matrix B0l
                 B0l = B0[:,ir,:, :]
                 # get alpha
                 # alpha = self.I.alpha[rrl].reshape(r, l,order='F')
@@ -2485,10 +2486,16 @@ class Rays(PyLayers, dict):
         # Construction of the Ctilde propagation channel structure
         #
         Cn = Ctilde()
-        Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
-        Cn.Cpt = bs.FUsignal(self.I.fGHz, c12)
-        Cn.Ctp = bs.FUsignal(self.I.fGHz, c21)
-        Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
+
+        # Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
+        # Cn.Cpt = bs.FUsignal(self.I.fGHz, c12)
+        # Cn.Ctp = bs.FUsignal(self.I.fGHz, c21)
+        # Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
+        Cn.Ctt = bs.FUsignal(self.I.fGHz, c11)
+        Cn.Ctp = bs.FUsignal(self.I.fGHz, c12)
+        Cn.Cpt = bs.FUsignal(self.I.fGHz, c21)
+        Cn.Cpp = bs.FUsignal(self.I.fGHz, c22)
+
         Cn.nfreq = self.I.nf
         Cn.nray = self.nray
         Cn.tauk = self.delays
@@ -2817,16 +2824,33 @@ class Rays(PyLayers, dict):
                 print '\n----------------------------------------'
                 print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
                 print '----------------------------------------'
+                lmat = []
                 if B:
                     print 'rotation matrix#', 'type: B0'
-                    print self.B0.data[ir,:,:]
+                    
+                    B0 = self.B0.data[ir,:,:]
+                    lmat.append(B0)
+                    print(B0)
                 for iidx, i in enumerate(typ):
                     print 'interaction #', ray[iidx], 'type:', i
                     # f x l x 2 x 2
-                    print self.I.I[ifGHz, ray[iidx], :, :]
+                    I = self.I.I[ifGHz, ray[iidx], :, :]
+                    print(I)
+                    lmat.append(I)
+                     
                     if B:
                         print 'rotation matrix#',[ray[iidx]], 'type: B'
-                        print self.B.data[ray[iidx], :, :]
+                        B = self.B.data[ray[iidx], :, :]
+                        print(B) 
+                        lmat.append(B)
+                # evaluate matrix product
+                PM=np.eye(2)
+                for m in lmat[::-1]:
+                    PM=np.dot(PM,m)
+                print("matrix product (dB)")
+                print(20*np.log10(np.abs(PM[0,0])),'  ',20*np.log10(np.abs(PM[0,1])))
+                print(20*np.log10(np.abs(PM[1,0])),'  ',20*np.log10(np.abs(PM[1,1])))
+
             else:
                 print '\nto display matrix, use matrix=True on call'
         else:
