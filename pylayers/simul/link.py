@@ -859,7 +859,7 @@ class DLink(Link):
         return s
 
     def inforay(self,iray):
-        """ provide full information abaout a specified
+        """ provide full information about a specified ray
 
         Parameters
         ----------
@@ -877,7 +877,6 @@ class DLink(Link):
             dist = self.C.tauk[iray]*0.3
             C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
                         [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
-            pdb.set_trace()
             b = np.allclose(PM,C)
             self.C.locbas()
 
