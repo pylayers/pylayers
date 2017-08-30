@@ -2209,15 +2209,29 @@ class Tchannel(bs.FUsignal):
         ----------
 
         BWGHz : Bandwidth 
-        Nf    : Number of frequency point 
+        Nf    : Number of frequency points
         fftshift : boolean 
+
+        See Also
+        --------
+
+        pylayers.simul.link.DLink.plt_cir
 
         """
         fGHz  = np.linspace(0,BWGHz,Nf)
         dfGHz = fGHz[1]-fGHz[0]
         tauns = np.linspace(0,1/dfGHz,Nf)
+        # E : r x nr x nt x f 
         E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
-        H    = np.sum(E*self.y,axis=0)
+        # self.y : r x nr x nt x f 
+        if self.y.shape[3]==E.shape[3]:
+            H    = np.sum(E*self.y,axis=0)
+        else:
+            if self.y.shape[3]==1:
+                H    = np.sum(E*self.y,axis=0)
+            else:
+                H    = np.sum(E*self.y[:,:,:,0][:,:,:,None],axis=0)
+        # back in time - last axis is frequency (axis=2) 
         cir  = np.fft.ifft(H,axis=2)
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)

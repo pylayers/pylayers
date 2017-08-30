@@ -2581,7 +2581,8 @@ class Rays(PyLayers, dict):
         Returns
         -------
 
-        ir : index of interactions of r
+        ir : nd.array
+            index of interactions of r
 
         Examples
         --------
@@ -2850,6 +2851,7 @@ class Rays(PyLayers, dict):
                 print("matrix product (dB)")
                 print(20*np.log10(np.abs(PM[0,0])),'  ',20*np.log10(np.abs(PM[0,1])))
                 print(20*np.log10(np.abs(PM[1,0])),'  ',20*np.log10(np.abs(PM[1,1])))
+                return(PM)
 
             else:
                 print '\nto display matrix, use matrix=True on call'
