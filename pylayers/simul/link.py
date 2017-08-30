@@ -824,6 +824,17 @@ class DLink(Link):
             s = s + '----------------------------- \n'
             s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
             s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
+            rd2deg = 180/np.pi
+            if not np.allclose(self.a,self.b):
+                vsba = self.b-self.a
+                a1 = geu.angledir(vsba[None,:])
+                a2 = geu.angledir(-vsba[None,:])
+                s = s + 'azimuth (from a) : '+str(a1[:,1]*rd2deg)+' deg\n'
+                s = s + 'elevation (from a) : '+str(a1[:,0]*rd2deg)+ 'deg\n'
+                s = s + 'tilt (from a) : '+str((a1[:,0]-np.pi/2)*rd2deg)+ 'deg\n'
+                s = s + 'azimuth (from b) : '+str(a2[:,1]*rd2deg)+' deg\n'
+                s = s + 'elevation (from b) : '+str(a2[:,0]*rd2deg)+ 'deg\n'
+                s = s + 'tilt (from b) : '+str((a2[:,0]-np.pi/2)*rd2deg)+ 'deg\n'
             #s = s + 'Frequency range :  \n'
             s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
             s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
@@ -839,6 +850,10 @@ class DLink(Link):
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
+            s = s + 'Algorithm information : \n'
+            s = s + '----------------------------- \n'
+            s = s + 'cutoff : '+ str(self.cutoff)+'\n'
+            s = s + 'threshold :'+ str(self.threshold)+'\n'
         else:
             s = 'No Layout specified'
         return s
@@ -853,10 +868,18 @@ class DLink(Link):
             ray index
 
         """
-        print "Ray :"
-        self.R.info(iray,matrix=1)
+        print "Ray : "+str(iray)
+        PM = self.R.info(iray,ifGHz=0,matrix=1)
         print "C:"
         self.C.inforay(iray)
+        if self.C.islocal:
+            self.C.locbas()
+            dist = self.C.tauk[iray]*0.3
+            C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
+                        [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
+            pdb.set_trace()
+            b = np.allclose(PM,C)
+            self.C.locbas()
 
     # def initfreq(self):
     #     """ Automatic freq determination from
@@ -914,6 +937,11 @@ class DLink(Link):
 
     def init_positions(self,force=False):
         """ initialize random positions for a link
+
+        Parameters
+        ----------
+        force : boolean 
+
         """
         ###########
         # init pos & cycles
@@ -1729,7 +1757,7 @@ class DLink(Link):
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C = Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
-
+            self.R.evaluated=True
         else :
             #if not hasattr(R,'I'):
             # Ctilde...
@@ -1780,29 +1808,32 @@ class DLink(Link):
         self.checkh5()
 
 
-    def afp(self,fGHz,phi=0,beta=0,gamma=np.pi/2.):
+    def afp(self,fGHz,vl,pl,az=0,tilt=0,polar='V'):
         """ Evaluate angular frequency profile 
 
         Parameters
         ----------
 
-        phi   : Euler angle phi
-        beta  : Euler angle beta 
-        gamma : Euler angle gamma
+        fGHz  : np.array 
+            frequency range 
+        vl : np.array (,3)
+            main beam direction in local frame
+        pl : np.array (,3)
+            polarisation vector in a plane perpendicular to vl 
+        az : azimuth angle (radian)  
+        tilt : tilt angle (-pi/2<tilt<pi/2) 
+        polar : string
 
         """
-        afp = AFPchannel(tx=self.a,rx=self.b,a=phi) # (Nf x angle)
-        for ph in phi:
-            # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
-            self.Tb = geu.MEulerAngle(ph,beta,gamma)
 
-            #self.Tb = geu.MEulerAngle(ph,beta=beta,gamma=gamma)
-            # zb      = np.array([np.cos(ph)*np.cos(beta),np.sin(ph)*np.cos(beta),-np.sin(beta)])
-            # y       = np.cross(zb,np.array([0,0,1]))
-            # yb      = y/np.linalg.norm(y)
-            # xb      = np.cross(yb,zb)
-            # self.Tb = np.vstack((xb,yb,zb)).T
-
+        # create an empty AFP 
+        # tx = a
+        # rx = b 
+        # angular range (a) : phi 
+        #
+        afp = AFPchannel(tx=self.a,rx=self.b,az=az)
+        for ph in az:
+            self.Tb = geu.MAzTiltPol(vl,pl,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
@@ -2224,13 +2255,13 @@ class DLink(Link):
         #     ds.children[0].children[0].actor.property.opacity=1.
 
     def plt_cir(self,**kwargs):
-        """ plot  CIR
+        """ plot link channel impulse response
 
         Parameters
         ----------
 
         BWGHz : Bandwidth 
-        Nf    : Number of frequency point 
+        Nf    : Number of frequency points
         fftshift : boolean 
         rays : boolean
             display rays contributors
@@ -2246,7 +2277,8 @@ class DLink(Link):
                     'ax': [],
                      'BWGHz':5,
                     'Nf':1000,
-                    'rays':True
+                    'rays':True,
+                    'fspl':True,
                     }
 
         for key, value in defaults.items():
@@ -2262,9 +2294,16 @@ class DLink(Link):
         else:
             ax = kwargs['ax']
 
-
+        # getcir is a Tchannel method 
         ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
         ir.plot(fig=fig,ax=ax)
+        delay = ir.x 
+        dist = delay*0.3
+        FSPL = -32.4- 20*np.log10(self.fGHz)-20*np.log10(dist) + 19 + 2
+        if kwargs['fspl']:
+            ax.plot(delay,FSPL,linewidth=2,color='b')
+
+
         if kwargs['rays'] : 
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
@@ -2398,8 +2437,7 @@ class DLink(Link):
         return fig,ax
 
     def _autocufoff(self):
-        """ automatically determine minimum cutoof
-
+        """ automatically determine minimum cutoff
 
         See Also
         --------
@@ -2408,18 +2446,21 @@ class DLink(Link):
         pylayers.gis.layout.angleonlink3
         """
 
-        v=np.vectorize( lambda t:self.L.Gs.node[t]['name'])
+        v = np.vectorize( lambda t:self.L.Gs.node[t]['name'])
         # determine incidence angles on segment crossing p1-p2 segment
         #data = L.angleonlink(p1,p2)
-        data = self.L.angleonlink3(self.a,self.b)
-        # as many slabs as segments and subsegments
-        us    = data['s'] 
-        if len(us) >0:
-            sl = v(us)
-            uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
-            self.cutoff = len(uus)
+        if np.allclose(self.a,self.b):
+            self.cutoff = 2
         else:
-            self.cutoff = 1
+            data = self.L.angleonlink3(self.a,self.b)
+            # as many slabs as segments and subsegments
+            us    = data['s'] 
+            if len(us) >0:
+                sl = v(us)
+                uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
+                self.cutoff = len(uus)
+            else:
+                self.cutoff = 2
         return self.cutoff
 
 if (__name__ == "__main__"):

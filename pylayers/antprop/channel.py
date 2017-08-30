@@ -108,12 +108,38 @@ except:
 
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
+
+    Members
+    -------
+
+    x : np.array
+        frequency ,Nf
+    y : np.array
+        Amplitude Na,Nf
+    tx : np.array
+        tx coordinate (,3)
+    rx : np.array
+        rx coordinates (,3)
+    az : np.array (,Na)
+        AFP azimutal range in radians
+    theta : link elevation angle 
+    phi : link (txrx) azimuth angle (with offset)
+    tau : link delay (ns) 
+        
+    offset : float angle in radians
+        azimuth offset w.r.t global frame
+
     """
-    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([]),a=np.array([]),offset=21.128*np.pi/180):
+    def __init__(self,x=np.array([]),
+                      y=np.array([]),
+                      tx=np.array([]),
+                      rx=np.array([]),
+                      az=np.array([]),
+                      offset=21.128*np.pi/180):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         self.tx = tx 
         self.rx = rx
-        self.a = a
+        self.az = az
         self.offset=offset
         self._filename = ''
         if len(tx)>0:
@@ -121,17 +147,44 @@ class AFPchannel(bs.FUsignal):
             self.dist = np.sqrt(np.sum(txrx*txrx))
             txrx_n = txrx/self.dist
             self.theta = np.arccos(txrx_n[2])
-            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])-self.offset
-            self.tau  = self.dist/0.3
+            self.phi   = np.arctan2(txrx_n[1],txrx_n[0])-self.offset
+            self.tau   = self.dist/0.3
             
+    def __repr__(self):
+        s = 'Angular Frequency Profile object \n'
+        
+        return(s)
 
-
-    
     def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
         """ Load measurement file 
 
         Measurement files and the associated back to back calibration files 
         are placed in the mes directory of the project.
+
+        Parameters
+        ----------
+
+        _filename : string
+            data matfile name
+        _filecal : string 
+            calibration matfile name
+        fcGHz : float 
+            center frequency 
+        BW : float 
+            measurement bandwidth 
+        win : string 
+            window type in ['rect','hamming','blackman']
+
+        Notes 
+        -----
+        This function updates : 
+        + self.x (frequency GHz)
+        + self.y 
+        + self.az azimuth radians 
+
+        SEE ALSO 
+        --------
+        pylayers.util.pyutil.getlong 
 
         """
         self._filename = _filename
@@ -139,6 +192,7 @@ class AFPchannel(bs.FUsignal):
         self.fcGHz = fcGHz
         self.fmin = fcGHz-BW/2.
         self.fmax = fcGHz+BW/2.
+        self.win = win
         # load Back 2 Back calibration file
         filecal = pyu.getlong(_filecal,'meas')
         filename = pyu.getlong(_filename,'meas')
@@ -151,6 +205,7 @@ class AFPchannel(bs.FUsignal):
         #
         amp = D[:,2::2]
         ang = D[:,3::2]
+
         self.Na  = amp.shape[0]
         self.Nf  = amp.shape[1]
         #
@@ -167,16 +222,22 @@ class AFPchannel(bs.FUsignal):
         #
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
-        self.a = rot = (360-D[:,0])*np.pi/180.
+        self.az = (360-D[:,0])*np.pi/180.
 
     def toadp(self):
-
-        # self.y: (Nf x angle)
-
+        """ convert afp into adp (frequency->delay) 
+        """
+        # x : delay (starting at 0 ns) 
+        # y : ifft axis 1 (frequency) 
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
-        adp = ADPchannel(x=x,y=y,a=self.a,tx=self.tx,rx=self.rx,_filename=self._filename,offset=self.offset)
-
+        adp = ADPchannel(x=x,
+                         y=y,
+                         az=self.az,
+                         tx=self.tx,
+                         rx=self.rx,
+                         _filename=self._filename,
+                         offset=self.offset)
         return adp 
 
 class ADPchannel(bs.TUsignal):
@@ -190,16 +251,26 @@ class ADPchannel(bs.TUsignal):
     theta :  float 
     phi : 
     tau : 
+    _filename : string
+        short filename for saving     
+
 
     """
-    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename='',offset=0):
+    def __init__(self,
+            x=np.array([]),
+            y=np.array([]),
+            az=np.array([]),
+            tx=np.array([]),
+            rx=np.array([]),
+            _filename='',
+            offset=0):
         """
         Parameters
         ----------
 
         x : 
         y :
-        a : 
+        az : 
         tx :
         rx :
         _filename :
@@ -207,7 +278,7 @@ class ADPchannel(bs.TUsignal):
 
         """
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
-        self.a = a
+        self.az = az
         self.offset = offset
         if len(tx)>0:
             txrx = tx-rx
@@ -218,6 +289,10 @@ class ADPchannel(bs.TUsignal):
             self.tau  = self.dist/0.3
 
         self._filename = _filename
+    
+    def __repr__(self):
+        s = 'Angular Delay Profile object \n'
+        return(s)
 
     def clean(self,threshold_dB=20):
         """  clean ADP 
@@ -264,7 +339,7 @@ class ADPchannel(bs.TUsignal):
             ax  = fig.add_subplot(111)
         else:
             ax = ax
-        ax.plot(self.a*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
+        ax.plot(self.az*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
         #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
         ax.set_ylim(-80,-60)
         if xlabel:
@@ -416,7 +491,7 @@ class ADPchannel(bs.TUsignal):
         cmap = kwargs.pop('cmap')
         title = kwargs.pop('title')
 
-        rho,theta = np.meshgrid(self.x*cvel,self.a)
+        rho,theta = np.meshgrid(self.x*cvel,self.az)
         # convert y data in desired format
         dt,ylabels = self.cformat(**kwargs)
         val = dt[:,0::Ndec][:,0:imax/Ndec]
@@ -2740,19 +2815,38 @@ class Tchannel(bs.FUsignal):
         ----------
 
         BWGHz : Bandwidth 
-        Nf    : Number of frequency point 
+        Nf    : Number of frequency points
         fftshift : boolean 
+
+        See Also
+        --------
+
+        pylayers.simul.link.DLink.plt_cir
 
         """
         fGHz  = np.linspace(0,BWGHz,Nf)
         dfGHz = fGHz[1]-fGHz[0]
         tauns = np.linspace(0,1/dfGHz,Nf)
+        # E : r x nr x nt x f 
         E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
+<<<<<<< HEAD
         # import ipdb
         # ipdb.set_trace()
         H    = np.sum(E*self.y,axis=0) # sum over rays
         cir  = np.fft.ifft(H,axis=2) # ifft over frequency
         cir1 = cir
+=======
+        # self.y : r x nr x nt x f 
+        if self.y.shape[3]==E.shape[3]:
+            H    = np.sum(E*self.y,axis=0)
+        else:
+            if self.y.shape[3]==1:
+                H    = np.sum(E*self.y,axis=0)
+            else:
+                H    = np.sum(E*self.y[:,:,:,0][:,:,:,None],axis=0)
+        # back in time - last axis is frequency (axis=2) 
+        cir  = np.fft.ifft(H,axis=2)
+>>>>>>> 7dc6362a0e5a60ac200a58e90d6b1d7c04ca1edb
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)
             tauns = np.linspace(-Nf/(2*BWGHz),Nf/(2*BWGHz)-1/BWGHz,Nf)

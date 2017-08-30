@@ -3692,6 +3692,52 @@ def MRot3(a, axe):
     return(M3)
 
 
+def MAzTiltPol(vl,pl,phi,tilt,pol):
+    """ Calculate a rotation matrix for antenna pointing and orientation control
+
+    Parameters
+    ----------
+
+    vl : np.array (,3) unitary 
+        main radiation direction in antenna local frame
+    pl : np.array(,3) unitary 
+        main direction in the wave plane 
+    phi : float 0<phi<2*pi
+    tilt : float -pi/2<tilt<pi/2
+    pol : string 'H' or 'V'
+
+    """
+    assert np.isclose(np.dot(vl,vl),1)
+    assert np.isclose(np.dot(pl,pl),1)
+    assert np.isclose(np.dot(pl,vl),0)
+    
+    #
+    # local frame completion (vl,pl,ql) direct frame 
+    #
+    ql = np.cross(vl,pl)
+    Tl = np.vstack((vl,pl,ql)).T
+
+    # global frame construction
+    #
+    #   (vg,pV,pH) direct   V case
+    #   (vg,-pH,pV) direct  H case 
+    #
+    z = np.array([0,0,1.0])
+    vg = np.array([np.cos(phi)*np.cos(tilt),np.sin(phi)*np.cos(tilt),-np.sin(tilt)])
+    pH = np.cross(vg,z)
+    pH = pH/np.linalg.norm(pH)
+    assert np.isclose(np.dot(pH,pH),1)
+    pV = np.cross(pH,vg)
+    assert np.isclose(np.dot(pV,pV),1)
+    if pol=='V':
+        Tg = np.vstack([vg,pV,pH]).T
+    if pol=='H':
+        Tg = np.vstack([vg,-pH,pV]).T
+        
+    # Tg = R Tl 
+    # R = Tg.Tl.T
+    M = np.dot(Tg,Tl.T)
+    return(M)
 
 def MEulerAngle(alpha, beta, gamma):
     """ Calculate a rotation matrix from 3 Euler angles
