@@ -2732,7 +2732,7 @@ class Rays(PyLayers, dict):
             a = self.ray(r)
             return(self.I.typ[a])
 
-    def info(self,ir,ifGHz=0,B=True,matrix=False):
+    def info(self,ir,ifGHz=0,bB=True,matrix=False):
         """ provides information for a given ray r
 
         Parameters
@@ -2742,7 +2742,7 @@ class Rays(PyLayers, dict):
             ray index
         ifGHz : int
             frequency index
-        B: boolean
+        bB: boolean
             display Basis
         matrix :
             display matrix 
@@ -2817,7 +2817,7 @@ class Rays(PyLayers, dict):
                                     print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
                                     .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
                     else:
-                        if B:
+                        if bB:
                             print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
@@ -2826,7 +2826,7 @@ class Rays(PyLayers, dict):
                 print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
                 print '----------------------------------------'
                 lmat = []
-                if B:
+                if bB:
                     print 'rotation matrix#', 'type: B0'
                     
                     B0 = self.B0.data[ir,:,:]
@@ -2838,8 +2838,7 @@ class Rays(PyLayers, dict):
                     I = self.I.I[ifGHz, ray[iidx], :, :]
                     print(I)
                     lmat.append(I)
-                     
-                    if B:
+                    if bB:
                         print 'rotation matrix#',[ray[iidx]], 'type: B'
                         B = self.B.data[ray[iidx], :, :]
                         print(B) 
