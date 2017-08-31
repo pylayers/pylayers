@@ -1577,6 +1577,7 @@ class Rays(PyLayers, dict):
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     u = np.where(nw==0)
                     if len(u[0])!=0:
+                        print('colinear situation detected')
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
 
@@ -2731,6 +2732,75 @@ class Rays(PyLayers, dict):
         else:
             a = self.ray(r)
             return(self.I.typ[a])
+
+    def dump(self,ir,L,ifGHz=0,filename='dumpray.ray'):
+        """ dump the full information of a ray in a file 
+        """
+        nbi = self._ray2nbi[ir]  
+        ur = np.where(self[nbi]['rayidx']==ir)[0][0]
+        fd=open(filename,'w')
+        fd.write('ray #'+str(ir)+'\n')
+        fd.write(str(ur)+ ' th ray from the group of ' + str(nbi)+' Interactions' +'\n')
+        cy_a = L.pt2cy(self.pTx)
+        cy_b = L.pt2cy(self.pRx)
+
+        #fd.write('Tx #'+str(self.pTx)+'\n')
+        #fd.write('Rx #'+str(self.pRx)+'\n')
+        if self.evaluated:
+            ray = self.ray(ir)
+            typ = self.typ(ir)
+            slabnb = self.slab_nb(ir)
+            fd.write('   ray #'+str(ray)+'\n')
+            #fd.write('   typ #'+str(typ)+'\n')
+            fd.write('   slab #'+str(slabnb)+'\n')
+        for k in range(nbi+2):
+            if k==0:
+                fd.write('Tx  :        ')
+            elif k==(nbi+1):
+                fd.write('Rx  :        ')
+            else:
+                six = slabnb[k-1]
+                if six==0:
+                    slabname='FLOOR'
+                    cyc =[-2,-3]
+                else:
+                    slabname = L.Gs.node[six]['name']
+                    cyc = L.Gs.node[six]['ncycles']
+                if typ[k-1]=='T':
+                    fd.write('T '+slabname +'       ('+str(six)+','+str(cyc[0])+','+str(cyc[1])+')')
+                if typ[k-1]=='R':
+                    fd.write('R '+slabname +'       ('+str(six)+',)')
+                if typ[k-1]=='D':
+                    fd.write('D ('+str(six)+') :')
+
+            fd.write(str(self[nbi]['pt'][:,k,ur])+'\n' )
+            if k==0:
+                fd.write('  '+str(cy_a)+'\n')
+            elif k==(nbi+1):
+                fd.write('  '+str(cy_b)+'\n')
+            if k==0:
+                for l in range(3):
+                    if l<2:
+                        fd.write('\t'+str(self[nbi]['Bo0'][l,:,ur])
+                     +'\t'+str(self[nbi]['B'][l,:,0,ur])+'\n')
+                    else:
+                        fd.write('\t'+str(self[nbi]['Bo0'][l,:,ur]) +'\n')
+            elif k==(nbi+1):
+                for l in range(3):
+                    fd.write('\t'+str(self[nbi]['BiN'][l,:,ur])+'\n')
+            else:
+                for l in range(3):
+                    if l<2:
+                        fd.write('\t'+str(self[nbi]['Bi'][l,:,k-1,ur])+'\t'+
+                              str(self[nbi]['Bo'][l,:,k-1,ur])
+                         +'\t'+str(self[nbi]['B'][l,:,k-1,ur])+'\n')
+                    else:
+                        fd.write('\t'+str(self[nbi]['Bi'][l,:,k-1,ur])+'\t'+
+                              str(self[nbi]['Bo'][l,:,k-1,ur])+'\n')
+
+
+        fd.close()
+
 
     def info(self,ir,ifGHz=0,bB=True,matrix=False):
         """ provides information for a given ray r

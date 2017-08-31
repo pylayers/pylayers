@@ -1136,7 +1136,7 @@ class Pattern(PyLayers):
     def radF(self):
         """ evaluate radiation fonction w.r.t polarization
 
-        self.pol : 't' : theta , 'p' : phi n, 'c' : circular
+        self.pol : 't' : theta , 'p' : phi n, 'c' : circular 
 
         """
         assert self.pol in ['t','p','c']
@@ -1154,8 +1154,8 @@ class Pattern(PyLayers):
                 self.Fp = np.array([0])*np.ones(len(self.fGHz))[None,:]
             self.Ft = self.sqG
         if self.pol=='c':
-            self.Fp = (1./sqrt(2))*self.sqG
-            self.Ft = (1j/sqrt(2))*self.sqG
+            self.Fp = (1./np.sqrt(2))*self.sqG
+            self.Ft = (1j/np.sqrt(2))*self.sqG
 
     def gain(self):
         """  calculates antenna gain
