@@ -1613,19 +1613,20 @@ class Rays(PyLayers, dict):
                 #
                 # Handling channel reciprocity s_in --> -s_in
                 #
-                #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
-
-                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+                #w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+                w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 # nw : i x r
                 w, nw = fix_colinear()
 
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in
-                #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
-                v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
+                v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                #v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
 
-                es_in = np.expand_dims(-s_in, axis=1)
+                #es_in = np.expand_dims(-s_in, axis=1)
+                es_in = np.expand_dims(s_in, axis=1)
+
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
