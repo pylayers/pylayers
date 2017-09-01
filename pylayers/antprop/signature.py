@@ -3322,13 +3322,42 @@ class Signature(object):
 
         return M
 
-    def show(self,L,tx,rx):
+    def show(self,L,tx,rx,**kwargs):
         """
         Parameters
         ----------
+        L : Layout 
+        tx : 
+        rx : 
+        aw
+
         """
+        defaults  = {'aw':True,
+                     'axes':True,
+                     'labels':False,
+                     'fig':[],
+                     'ax':[]
+                     }
+        
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        if kwargs['fig']==[]:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax']==[]:
+            fig = plt.gcf()  
+        else:
+            ax = fig.gca()   
+
         self.ev(L)
-        fig,ax = L.showG('s',labels=0,aw=1,axes=0)
+        fig,ax = L.showG('s',labels=kwargs['labels'],
+                             aw=kwargs['aw'],
+                             axes=kwargs['axes']
+                             ,fig=fig,ax=ax)
         M = self.image(tx)
         isvalid,Y,tup = self.backtrace(tx,rx,M)
         l1 = ax.plot(tx[0],tx[1],'or')
@@ -3336,11 +3365,14 @@ class Signature(object):
         l3 = ax.plot(M[0,:],M[1,:],'ob')
         l4 = ax.plot(Y[0,:],Y[1,:],'ok')
         ray = np.hstack((np.hstack((rx.reshape(2,1),Y)),tx.reshape(2,1)))
+        for k in self.seq:
+            ax.annotate(str(k),xy=(L.Gs.pos[k]),xytext=(L.Gs.pos[k]))
         if isvalid:
             l5 = ax.plot(ray[0,:],ray[1,:],color='green',alpha=0.6,linewidth=0.6)
         else:
             l5 = ax.plot(ray[0,:],ray[1,:],color='red',alpha=0.6,linewidth=0.6)
 
+        return fig,ax    
 
     def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx

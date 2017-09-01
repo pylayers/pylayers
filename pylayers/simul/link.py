@@ -125,7 +125,7 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.antenna import Antenna
 
 # Handle Signature
-from pylayers.antprop.signature import Signatures
+from pylayers.antprop.signature import Signatures,Signature
 # Handle Rays
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
@@ -1913,8 +1913,8 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L=Link()
-        >>> L.show(rays=True,dB=True)
+        >>> DL=Link()
+        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap=plt.cm.jet)
 
         """
         defaults ={'s':80,   # size points
@@ -1922,10 +1922,13 @@ class DLink(Link):
                    'cb':'r', # color b 
                    'alpha':1,
                    'axis':True,
-                   'di':-1,
+                   'lr':-1,
+                   'ls':-1,
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':False,
+                   'bsig':True,
+                   'laddr':[(1,0)],
                    'cmap':plt.cm.hot,
                    'pol':'tot',
                    'col':'k',
@@ -1960,7 +1963,7 @@ class DLink(Link):
                    alpha=kwargs['alpha'])
         ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
         #
-        # Rays
+        # Plot Rays
         #
         if kwargs['rays']:
             ECtt,ECpp,ECtp,ECpt = self.C.energy()
@@ -1984,38 +1987,51 @@ class DLink(Link):
             # Select group of interactions
             #
             if kwargs['lr']==-1:
-                li  = self.R.keys()
+                lr  = np.arange(self.R.nray)
             else:
-                li = kwargs['di'].keys()
+                lr = kwargs['lr']
+            
+            vmin = val.min()
+            vmax = val.max() 
+            if kwargs['dB']:
+                vmin = 20*np.log10(vmin)
+                vmax = 20*np.log10(vmax)
 
-            for i  in li:
-                lr = self.R[i]['rayidx']
-                for r in range(len(lr)):
-                    ir = lr[r]
-                    try:
-                        if kwargs['dB']:
-                            RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
-                        else:
-                            RayEnergy=val[ir]/val.max()
-                    except:
-                        pass
-                    if kwargs['col']=='cmap':
-                        col = clm(RayEnergy)
-                        width = RayEnergy
-                        alpha = 1
-                    else:
-                        col = kwargs['col']
-                        width = kwargs['width']
-                        alpha = kwargs['alpha']
-                    
-                    # plot ray (i,r) 
-                    fig,ax = self.R.show(i=i,r=r,
-                                   colray=col,
-                                   widthray=width,
-                                   alpharay=alpha,
-                                   fig=fig,ax=ax,
-                                   layout=False,
-                                   points=False)
+            for ir  in lr:
+                if kwargs['dB']:
+                    RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                else:
+                    RayEnergy=val[ir]/val.max()
+
+                if kwargs['col']=='cmap':
+                    col = clm(RayEnergy)
+                    width = 3*RayEnergy
+                    alpha = 1
+                else:
+                    col = kwargs['col']
+                    width = kwargs['width']
+                    alpha = kwargs['alpha']
+                
+                # plot ray (i,r) 
+                fig,ax = self.R.show(rlist=[ir],
+                               colray=col,
+                               widthray=width,
+                               alpharay=alpha,
+                               fig=fig,ax=ax,
+                               layout=False,
+                               points=False)
+            if kwargs['col']=='cmap':
+                sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
+                sm._A = []
+                plt.colorbar(sm)
+        #
+        # Plot Rays
+        #
+        if kwargs['bsig']:
+            for addr in kwargs['laddr']: 
+                seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]
+                Si = Signature(seq)
+                fig,ax = Si.show(self.L,self.a[0:2],self.b[0:2],fig=fig,ax=ax)
 
         return fig,ax
 
