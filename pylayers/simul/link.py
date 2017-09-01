@@ -829,12 +829,9 @@ class DLink(Link):
                 vsba = self.b-self.a
                 a1 = geu.angledir(vsba[None,:])
                 a2 = geu.angledir(-vsba[None,:])
-                s = s + 'azimuth (from a) : '+str(a1[:,1]*rd2deg)+' deg\n'
-                s = s + 'elevation (from a) : '+str(a1[:,0]*rd2deg)+ 'deg\n'
-                s = s + 'tilt (from a) : '+str((a1[:,0]-np.pi/2)*rd2deg)+ 'deg\n'
-                s = s + 'azimuth (from b) : '+str(a2[:,1]*rd2deg)+' deg\n'
-                s = s + 'elevation (from b) : '+str(a2[:,0]*rd2deg)+ 'deg\n'
-                s = s + 'tilt (from b) : '+str((a2[:,0]-np.pi/2)*rd2deg)+ 'deg\n'
+                s = s + 'azimuth (a | b ) : '+str(a1[0,1]*rd2deg)+' deg  | '+str(a2[0,1]*rd2deg)+ ' deg\n'
+                s = s + 'elevation (a | b ) : '+str(a1[0,0]*rd2deg)+ ' deg |  '+str(a2[0,0]*rd2deg)+ ' deg\n'
+                s = s + 'tilt (a |  b ) : '+str((a1[0,0]-np.pi/2)*rd2deg)+ ' deg  | '+ str((a2[0,0]-np.pi/2)*rd2deg)+ ' deg\n'
             #s = s + 'Frequency range :  \n'
             s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
             s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
@@ -859,7 +856,7 @@ class DLink(Link):
         return s
 
     def inforay(self,iray):
-        """ provide full information abaout a specified
+        """ provide full information about a specified ray
 
         Parameters
         ----------
@@ -869,15 +866,16 @@ class DLink(Link):
 
         """
         print "Ray : "+str(iray)
+        if not self.R.evaluated:
+            self.R.eval()
         PM = self.R.info(iray,ifGHz=0,matrix=1)
-        print "C:"
+        print "Propagation Channel 2x2 (C):"
         self.C.inforay(iray)
         if self.C.islocal:
             self.C.locbas()
             dist = self.C.tauk[iray]*0.3
             C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
                         [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
-            pdb.set_trace()
             b = np.allclose(PM,C)
             self.C.locbas()
 
@@ -1757,7 +1755,6 @@ class DLink(Link):
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C = Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
-            self.R.evaluated=True
         else :
             #if not hasattr(R,'I'):
             # Ctilde...
@@ -2299,7 +2296,7 @@ class DLink(Link):
         ir.plot(fig=fig,ax=ax)
         delay = ir.x 
         dist = delay*0.3
-        FSPL = -32.4- 20*np.log10(self.fGHz)-20*np.log10(dist) + 19 + 2
+        FSPL = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) + 19 + 2
         if kwargs['fspl']:
             ax.plot(delay,FSPL,linewidth=2,color='b')
 

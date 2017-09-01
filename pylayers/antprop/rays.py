@@ -1577,6 +1577,7 @@ class Rays(PyLayers, dict):
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     u = np.where(nw==0)
                     if len(u[0])!=0:
+                        print('colinear situation detected')
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
 
@@ -1612,19 +1613,20 @@ class Rays(PyLayers, dict):
                 #
                 # Handling channel reciprocity s_in --> -s_in
                 #
-                #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
-
-                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+                #w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+                w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 # nw : i x r
                 w, nw = fix_colinear()
 
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in
-                #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
-                v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
+                v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                #v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
 
-                es_in = np.expand_dims(-s_in, axis=1)
+                #es_in = np.expand_dims(-s_in, axis=1)
+                es_in = np.expand_dims(s_in, axis=1)
+
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
@@ -2732,7 +2734,76 @@ class Rays(PyLayers, dict):
             a = self.ray(r)
             return(self.I.typ[a])
 
-    def info(self,ir,ifGHz=0,B=True,matrix=False):
+    def dump(self,ir,L,ifGHz=0,filename='dumpray.ray'):
+        """ dump the full information of a ray in a file 
+        """
+        nbi = self._ray2nbi[ir]  
+        ur = np.where(self[nbi]['rayidx']==ir)[0][0]
+        fd=open(filename,'w')
+        fd.write('ray #'+str(ir)+'\n')
+        fd.write(str(ur)+ ' th ray from the group of ' + str(nbi)+' Interactions' +'\n')
+        cy_a = L.pt2cy(self.pTx)
+        cy_b = L.pt2cy(self.pRx)
+
+        #fd.write('Tx #'+str(self.pTx)+'\n')
+        #fd.write('Rx #'+str(self.pRx)+'\n')
+        if self.evaluated:
+            ray = self.ray(ir)
+            typ = self.typ(ir)
+            slabnb = self.slab_nb(ir)
+            fd.write('   ray #'+str(ray)+'\n')
+            #fd.write('   typ #'+str(typ)+'\n')
+            fd.write('   slab #'+str(slabnb)+'\n')
+        for k in range(nbi+2):
+            if k==0:
+                fd.write('Tx  :        ')
+            elif k==(nbi+1):
+                fd.write('Rx  :        ')
+            else:
+                six = slabnb[k-1]
+                if six==0:
+                    slabname='FLOOR'
+                    cyc =[-2,-3]
+                else:
+                    slabname = L.Gs.node[six]['name']
+                    cyc = L.Gs.node[six]['ncycles']
+                if typ[k-1]=='T':
+                    fd.write('T '+slabname +'       ('+str(six)+','+str(cyc[0])+','+str(cyc[1])+')')
+                if typ[k-1]=='R':
+                    fd.write('R '+slabname +'       ('+str(six)+',)')
+                if typ[k-1]=='D':
+                    fd.write('D ('+str(six)+') :')
+
+            fd.write(str(self[nbi]['pt'][:,k,ur])+'\n' )
+            if k==0:
+                fd.write('  '+str(cy_a)+'\n')
+            elif k==(nbi+1):
+                fd.write('  '+str(cy_b)+'\n')
+            if k==0:
+                for l in range(3):
+                    if l<2:
+                        fd.write('\t'+str(self[nbi]['Bo0'][l,:,ur])
+                     +'\t'+str(self[nbi]['B'][l,:,0,ur])+'\n')
+                    else:
+                        fd.write('\t'+str(self[nbi]['Bo0'][l,:,ur]) +'\n')
+            elif k==(nbi+1):
+                for l in range(3):
+                    fd.write('\t'+str(self[nbi]['BiN'][l,:,ur])+'\n')
+            else:
+                for l in range(3):
+                    if l<2:
+                        fd.write('\t'+str(self[nbi]['Bi'][l,:,k-1,ur])+'\t'+
+                              str(self[nbi]['Bo'][l,:,k-1,ur])
+                         +'\t'+str(self[nbi]['B'][l,:,k-1,ur])+'\n')
+                    else:
+                        fd.write('\t'+str(self[nbi]['Bi'][l,:,k-1,ur])+'\t'+
+                              str(self[nbi]['Bo'][l,:,k-1,ur])+'\n')
+
+
+        fd.close()
+
+
+    def info(self,ir,ifGHz=0,bB=True,matrix=False):
         """ provides information for a given ray r
 
         Parameters
@@ -2742,7 +2813,7 @@ class Rays(PyLayers, dict):
             ray index
         ifGHz : int
             frequency index
-        B: boolean
+        bB: boolean
             display Basis
         matrix :
             display matrix 
@@ -2817,7 +2888,7 @@ class Rays(PyLayers, dict):
                                     print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
                                     .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
                     else:
-                        if B:
+                        if bB:
                             print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
@@ -2826,7 +2897,7 @@ class Rays(PyLayers, dict):
                 print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
                 print '----------------------------------------'
                 lmat = []
-                if B:
+                if bB:
                     print 'rotation matrix#', 'type: B0'
                     
                     B0 = self.B0.data[ir,:,:]
@@ -2838,8 +2909,7 @@ class Rays(PyLayers, dict):
                     I = self.I.I[ifGHz, ray[iidx], :, :]
                     print(I)
                     lmat.append(I)
-                     
-                    if B:
+                    if bB:
                         print 'rotation matrix#',[ray[iidx]], 'type: B'
                         B = self.B.data[ray[iidx], :, :]
                         print(B) 

@@ -4369,15 +4369,44 @@ class Ctilde(PyLayers):
         Cptc = Cpt*dray
         if self.islocal:
             print("between local frames")
+            print("--------------------")
         else:
             print("between global frames")
+            print("--------------------")
         print('distance losses',draydB)
-        print('Without distance losses')
-        print('co-pol (tt,pp) dB :',20*np.log10(np.abs(Cttc)),20*np.log10(np.abs(Cppc)))
-        print('cross-pol (tp,pt) dB :',20*np.log10(np.abs(Ctpc)),20*np.log10(np.abs(Cptc)))
-        print('With distance losses')
-        print('co-pol (tt,pp) dB :',20*np.log10(np.abs(Ctt)),20*np.log10(np.abs(Cpp)))
-        print('cross-pol (tp,pt) dB :',20*np.log10(np.abs(Ctp)),20*np.log10(np.abs(Cpt)))
+        if (np.abs(Cttc)!=0):
+            CttdB = 20*np.log10(np.abs(Ctt))
+            CttcdB = 20*np.log10(np.abs(Cttc))
+        else:
+            CttdB = -np.inf
+            CttcdB = -np.inf
+        if (np.abs(Cppc)!=0):
+            CppdB = 20*np.log10(np.abs(Cpp))
+            CppcdB = 20*np.log10(np.abs(Cppc))
+        else:
+            CppdB = -np.inf
+            CppcdB = -np.inf
+        if (np.abs(Ctpc)!=0):
+            CtpdB = 20*np.log10(np.abs(Ctp))
+            CtpcdB =20*np.log10(np.abs(Ctpc))
+        else:
+            CtpdB = -np.inf
+            CtpcdB = -np.inf
+        if (np.abs(Cptc)!=0):
+            CptdB = 20*np.log10(np.abs(Cpt))
+            CptcdB = 20*np.log10(np.abs(Cptc))
+        else:
+            CptdB = -np.inf
+            CptcdB = -np.inf
+        print('Without distance losses (Interactions only)')
+        print("-----------------------------------------------")
+        print('co-pol (tt,pp)    dB :',CttcdB,CppcdB)
+        print('cross-pol (tt,pp) dB :',CtpcdB,CptcdB)
+        
+        print('With distance losses (Interactions + distance)')
+        print("-----------------------------------------------")
+        print('co-pol (tt,pp)    dB :',CttdB,CppdB)
+        print('cross-pol (tp,pt) dB :',CtpdB,CptdB)
 
 
     def saveh5(self,Lfilename,idx,a,b):
