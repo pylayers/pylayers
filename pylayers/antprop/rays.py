@@ -1611,20 +1611,14 @@ class Rays(PyLayers, dict):
                 #
                 # w : 3 x i x r
                 #
-                # Handling channel reciprocity s_in --> -s_in
-                #
-                #w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
                 w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 # nw : i x r
                 w, nw = fix_colinear()
 
                 wn = w/nw
-                # Handling channel reciprocity s_in --> -s_in
                 v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
-                #v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
 
-                #es_in = np.expand_dims(-s_in, axis=1)
                 es_in = np.expand_dims(s_in, axis=1)
 
                 ew = np.expand_dims(wn, axis=1)
@@ -2593,6 +2587,41 @@ class Rays(PyLayers, dict):
         raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
         return(self[self._ray2nbi[r]]['rays'][:,raypos][:,0])
 
+    def ir2a(self,ir):
+        """ index ray 2 address ray
+
+        Parameters
+        ----------
+        ir : integer
+        
+        Returns
+        -------
+        (ni,ux) : tuple address (group of interactions, index)
+
+        """
+        assert ir < self.nray, "wrong ray index"
+        ni = self._ray2nbi[ir]
+        ur = np.where(self[ni]['rayidx']==ir)[0][0]
+        return(ni,ur)
+
+    def a2ir(self,t):
+        """  address ray 2 index ray
+        
+        Parameters
+        ----------
+        t = (ni,ux) : tuple address (group of interactions, index)
+            address ray 
+        
+        Returns
+        -------
+        ir : integer
+            index ray 
+
+        """
+        assert t[0] in self.keys(), "wrong number of interactions"
+        ir = self[t[0]]['rayidx'][t[1]]
+        return(ir)
+
     def ray2nbi(self,r):
         """ Get interaction block/number of interactions of a given ray
 
@@ -2608,7 +2637,8 @@ class Rays(PyLayers, dict):
         nbi : int
             interaction block number
         """
-        return self._ray2nbi[r]
+        i = self._ray2nbi[r]
+        return 
 
     def ray2iidx(self,ir):
         """ Get interactions index of a given ray
@@ -2897,11 +2927,13 @@ class Rays(PyLayers, dict):
                 print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
                 print '----------------------------------------'
                 lmat = []
+                ltran = []
                 if bB:
                     print 'rotation matrix#', 'type: B0'
                     
                     B0 = self.B0.data[ir,:,:]
                     lmat.append(B0)
+                    ltran.append(B0)
                     print(B0)
                 for iidx, i in enumerate(typ):
                     print 'interaction #', ray[iidx], 'type:', i
@@ -2909,19 +2941,27 @@ class Rays(PyLayers, dict):
                     I = self.I.I[ifGHz, ray[iidx], :, :]
                     print(I)
                     lmat.append(I)
+                   
                     if bB:
                         print 'rotation matrix#',[ray[iidx]], 'type: B'
                         B = self.B.data[ray[iidx], :, :]
                         print(B) 
                         lmat.append(B)
+                        ltran.append(B)
                 # evaluate matrix product
-                PM=np.eye(2)
+                PM0=np.eye(2)
+                PM1=np.eye(2)
                 for m in lmat[::-1]:
-                    PM=np.dot(PM,m)
-                print("matrix product (dB)")
-                print(20*np.log10(np.abs(PM[0,0])),'  ',20*np.log10(np.abs(PM[0,1])))
-                print(20*np.log10(np.abs(PM[1,0])),'  ',20*np.log10(np.abs(PM[1,1])))
-                return(PM)
+                    PM0=np.dot(PM0,m)
+                for m in ltran[::-1]:
+                    PM1=np.dot(PM1,m)
+                print("matrix product with interactions (dB)")
+                print(20*np.log10(np.abs(PM0[0,0])),'  ',20*np.log10(np.abs(PM0[0,1])))
+                print(20*np.log10(np.abs(PM0[1,0])),'  ',20*np.log10(np.abs(PM0[1,1])))
+                print("matrix product without interactions (dB)")
+                print(20*np.log10(np.abs(PM1[0,0])),'  ',20*np.log10(np.abs(PM1[0,1])))
+                print(20*np.log10(np.abs(PM1[1,0])),'  ',20*np.log10(np.abs(PM1[1,1])))
+                return(PM0)
 
             else:
                 print '\nto display matrix, use matrix=True on call'

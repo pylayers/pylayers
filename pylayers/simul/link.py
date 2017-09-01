@@ -124,7 +124,7 @@ from pylayers.gis.layout import Layout
 # Handle Antenna
 from pylayers.antprop.antenna import Antenna
 
-# Handle Signauture
+# Handle Signature
 from pylayers.antprop.signature import Signatures
 # Handle Rays
 from pylayers.antprop.rays import Rays
@@ -488,7 +488,7 @@ class DLink(Link):
            
             ###########
             # init freq
-            # TODO Check where it is used redocdundant with fGHz
+            # TODO Check where it is used redundant with fGHz
             ###########
             #self.fmin  = self.fGHz[0]
             #self.fmax  = self.fGHz[-1]
@@ -1893,6 +1893,8 @@ class DLink(Link):
             20
         rays : boolean
             False
+        bsig : boolean 
+            False    
         cmap : colormap
         labels : boolean
             enabling edge label (useful for signature identification)
@@ -1920,7 +1922,7 @@ class DLink(Link):
                    'cb':'r', # color b 
                    'alpha':1,
                    'axis':True,
-                   'i':-1,
+                   'di':-1,
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':False,
@@ -1981,10 +1983,10 @@ class DLink(Link):
             #
             # Select group of interactions
             #
-            if kwargs['i']==-1:
+            if kwargs['lr']==-1:
                 li  = self.R.keys()
             else:
-                li = kwargs['i']
+                li = kwargs['di'].keys()
 
             for i  in li:
                 lr = self.R[i]['rayidx']
@@ -2001,13 +2003,12 @@ class DLink(Link):
                         col = clm(RayEnergy)
                         width = RayEnergy
                         alpha = 1
-                        #alpha = RayEnergy
                     else:
                         col = kwargs['col']
-
                         width = kwargs['width']
                         alpha = kwargs['alpha']
-
+                    
+                    # plot ray (i,r) 
                     fig,ax = self.R.show(i=i,r=r,
                                    colray=col,
                                    widthray=width,

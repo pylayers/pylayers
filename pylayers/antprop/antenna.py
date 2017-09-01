@@ -376,7 +376,8 @@ class Pattern(PyLayers):
                               'HPBW_y_deg':10,
                               'Gfactor':27000,
                               'fcGHz': 27.5,
-                              'polar':'x'
+                              'polar':'x',
+                              'window':'rect'
                              }}
         
         if 'param' not in kwargs or kwargs['param']=={}:
@@ -421,6 +422,27 @@ class Pattern(PyLayers):
             nan_bool = np.isnan(self.Fp)
             self.Fp[nan_bool] = F[nan_bool] 
         # enforce E.x = 0 
+        #
+        # This is experimeintal 
+        # How to apply the 2D windowing properly ?
+        #
+#        if self.param['window']!='rect':
+#            Nt = self.Fp.shape[0] 
+#            Np = self.Fp.shape[1] 
+#            Wp = np.fft.ifftshift(np.hamming(Nt)[:,None]*np.ones(Np)[None,:])[:,:,None]
+#            Wt = np.fft.ifftshift(np.ones(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            Wu = np.fft.ifftshift(np.ones(Nt)[:,None]*np.ones(Np)[None,:])[:,:,None] 
+#            Wi = np.fft.ifftshift(np.hamming(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            W = np.fft.fftshift(np.hamming(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            # Fp : t x p x f   ou r x f 
+#            # Ft : t x p x f   ou r x f 
+#
+#            Kp = np.fft.ifft2(self.Fp,axes=(0,1))
+#            Kt = np.fft.ifft2(self.Ft,axes=(0,1))
+#            
+#            self.Fp = np.fft.fft2(Kp*Wt,axes=(0,1))
+#            self.Ft = np.fft.fft2(Kt*Wp,axes=(0,1))
+
         self.evaluated = True
         self.gain()
 
@@ -1259,6 +1281,7 @@ class Pattern(PyLayers):
                     'source':'satimo',
                     'show':True,
                     'mode':'index',
+                    'color':'black',
                     'u':0,
                     }
 
@@ -1441,7 +1464,10 @@ class Pattern(PyLayers):
 
                 plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
             # actual plotting
-            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            if len(lfreq)>1: 
+                ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            else:
+                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
             cpt = cpt + 1
 
         if kwargs['polar']:
