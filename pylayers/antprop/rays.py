@@ -1658,7 +1658,7 @@ class Rays(PyLayers, dict):
 
                 # th : ,r
                 #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
-                pha = np.arctan2(-si[1, -1, :], si[0, -1, :])
+                pha = np.arctan2(-si[1, -1, :], -si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
                 self[k]['aoa'] = np.vstack((tha, pha))
