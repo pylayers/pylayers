@@ -1833,7 +1833,7 @@ class DLink(Link):
         #
         afp = AFPchannel(tx=self.a,rx=self.b,az=az)
         for ph in az:
-            self.Tb = geu.MAzTiltPol(vl,pl,ph,tilt,polar)
+            self.Tb = geu.MATP(vl,pl,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
