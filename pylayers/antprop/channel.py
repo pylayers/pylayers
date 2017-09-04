@@ -2575,6 +2575,7 @@ class Tchannel(bs.FUsignal):
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
+                    'b3d':False,
                     'polar':False,
                     'colorbar':False,
                     'title':False,
@@ -2865,6 +2866,7 @@ class Tchannel(bs.FUsignal):
                     'edgecolors':'none',
                     'polar':False,
                     'mode':'mean',
+                    'b3d':False,
                     'xa':0,
                     'xb':0
                     }
@@ -4245,6 +4247,7 @@ class Ctilde(PyLayers):
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
+                    'b3d':False,
                     'polar':False,
                     'colorbar':False,
                     'title' : False
@@ -4267,6 +4270,7 @@ class Ctilde(PyLayers):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+        b3d = kwargs.pop('b3d')
         the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
@@ -4319,7 +4323,7 @@ class Ctilde(PyLayers):
         if len(col) != len(di):
             print("len(col):", len(col))
             print("len(di):", len(dir))
-        if kwargs['3d']:
+        if b3d:
             ax = fig.add_subplot(111,projection='3d')
             ax.scatter(1.05*array(xa),1.05*array(ya),1.05*array(za),'b')
             ax.scatter(1.05*array(xb),1.05*array(yb),1.05*array(zb),'r')
@@ -4413,6 +4417,7 @@ class Ctilde(PyLayers):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
+                    'b3d':False,
                     'mode':'mean',
                     'colorbar':False,
                     'xa':0,
