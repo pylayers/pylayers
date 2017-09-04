@@ -2198,7 +2198,7 @@ class Signatures(PyLayers,dict):
 
 
     def raysv(self,ptx=0,prx=1):
-        """ transfrom dict of signatures into 2D rays - default vectorized version
+        """ transform dict of signatures into 2D rays - default vectorized version
 
         Parameters
         ----------
@@ -2252,9 +2252,9 @@ class Signatures(PyLayers,dict):
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
 
-
         if len(ptx) == 2:
             ptx= np.r_[ptx,0.5]
+
         if len(ptx) == 2:
             prx= np.r_[prx,0.5]
 
@@ -2478,7 +2478,7 @@ class Signatures(PyLayers,dict):
             ptr = pt
             Mr = copy.deepcopy(M)
 
-            epsilon = 1e-2
+            epsilon = 1e-12
             rayp_i = np.zeros((3,nsig,ninter))
             # rayp_i[:2,:,-1]=rx[:,None]
             #backtrace process
