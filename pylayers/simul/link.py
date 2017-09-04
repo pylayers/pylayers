@@ -426,7 +426,6 @@ class DLink(Link):
         if self.Ab==[]:
             self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
         
-
         if isinstance(self._L,str):
             self._Lname = self._L
             self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
@@ -456,17 +455,21 @@ class DLink(Link):
                 self.L.dumpw()
             
             #
-            # In outdoor situation we delete all reference to transmission node in Gi 
+            # In outdoor situation we delete transmission node involving  
+            # an indoor cycle at the exception of AIR 
             #
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
-        
             if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
-                
+                # lT : list of transmission interactions 
                 lT  =  [k for k in u if (len(k)==3)]
+                # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                self.L.Gi.remove_nodes_from(lTi)
+                # lTiw : those which are wall (not those above buildings) 
+                lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
+
+                self.L.Gi.remove_nodes_from(lTiw)
                 lE = self.L.Gi.edges()
                 for k in range(len(lE)):
                     e = lE[k]
@@ -475,7 +478,7 @@ class DLink(Link):
                     except:
                         pdb.set_trace()
                     for l in output.keys():
-                        if l in lTi:
+                        if l in lTiw:
                             del output[l]
                     self.L.Gi.edge[e[0]][e[1]]['output']=output
                 
@@ -1895,6 +1898,8 @@ class DLink(Link):
             False
         bsig : boolean 
             False    
+        laddr : list 
+            list of signature addresses 
         cmap : colormap
         labels : boolean
             enabling edge label (useful for signature identification)
@@ -1915,6 +1920,7 @@ class DLink(Link):
         >>> from pylayers.simul.link import *
         >>> DL=Link()
         >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap=plt.cm.jet)
+        >>> DL.show(laddr=[(6,2)],bsig=True)
 
         """
         defaults ={'s':80,   # size points

@@ -7906,10 +7906,7 @@ class Layout(pro.PyLayers):
 
                     if nstr in self.Gv.nodes():
                         # list 1 of interactions
-                        if nstr==108:
-                            iprint = 1
-                        else: 
-                            iprint = 0
+                        
                         li1 = []
                         if nstr > 0:
                             # output cycle 
@@ -8026,7 +8023,6 @@ class Layout(pro.PyLayers):
                        desc ='update interraction list',
                        leave=False,
                        position=tqdmpos+1)
-
         for c in self.Gt.node:
             if verbose:
                 pbartmp.update(cpt)
@@ -8045,7 +8041,7 @@ class Layout(pro.PyLayers):
         #           or if starting point is indoor 
         # then delete interaction 
         ldelete = []
-        
+
         if self.typ=='outdoor':
             for k in self.Gi.node.keys():
                 # R and T 
@@ -8064,8 +8060,6 @@ class Layout(pro.PyLayers):
                                 #     if self.Gs.node[k[0]]['name']!='AIR':
                                 ldelete.append(k)       
 
-        #print(ldelete)
-        # pdb.set_trace()
         self.Gi.remove_nodes_from(ldelete)
         # build adjacency matrix of Gi graph
         self.Gi_A = nx.adjacency_matrix(self.Gi)

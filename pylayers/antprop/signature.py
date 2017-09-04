@@ -537,14 +537,41 @@ class Signatures(PyLayers,dict):
             nsig += size
         return(nsig)
 
+    def compl(self,lint,L):
+        """ completion from lint 
 
+        Paramaters
+        ----------
 
+        lint : list 
+            list of interactions
 
+        """
+        # all group of interactions
+        for k in self:
+            if k > len(lint):
+                Si = self[k] 
+                Ns,Nb = Si.shape
+                # all signatures form a group of interactions
+                for l in range(Ns/2):
+                    # all interactions
+                    b1 = True
+                    for i1,it in enumerate(lint): 
+                        if ((Si[2*l,i1] == it[0]) and 
+                           (Si[2*l+1,i1] == it[1])):
+                            pass 
+                        else:
+                            b1 = False
+                    if b1:
+                        sig = Si[2*l:2*l+2,:]
+                        sigi = self.sig2inter(L,sig)
+                        print(k,l,' :',sigi)
+                        # all 
 
     def sig2inter(self,L,lsi=[]):
-        ''' convert signature to corresponding interaction in Gi
+        ''' convert signature to corresponding list of interactions in Gi
 
-            Paramters:
+            Paramaters:
             ----------
 
             L : Layout
@@ -702,6 +729,12 @@ class Signatures(PyLayers,dict):
 
     def check(self):
         """ check signature
+        
+        Returns
+        -------
+
+        OK : np.array
+        KO : np.array
 
         """
 
@@ -3537,7 +3570,7 @@ class Signature(object):
         #print self
         #if np.array_equal(self.seq,np.array([5,7,4])):
         #    pdb.set_trace()
-        isvalid,Y = self.backtrace(pTx, pRx, M)
+        isvalid,Y,u = self.backtrace(pTx, pRx, M)
         #print isvalid,Y
         # 
         # If incremental mode this function returns an alternative signature
