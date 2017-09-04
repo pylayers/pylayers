@@ -875,6 +875,7 @@ class DLink(Link):
         print "Propagation Channel 2x2 (C):"
         self.C.inforay(iray)
         if self.C.islocal:
+            # back to global frame
             self.C.locbas()
             dist = self.C.tauk[iray]*0.3
             C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
