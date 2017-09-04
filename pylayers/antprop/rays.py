@@ -1654,11 +1654,11 @@ class Rays(PyLayers, dict):
                 # th : ,r
                 # fix doa/dod reciprocity
                 #th = np.arccos(si[2, -1, :])
-                tha = np.arccos(si[2, -1, :])
+                tha = np.arccos(-si[2, -1, :])
 
                 # th : ,r
                 #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
-                pha = np.arctan2(si[1, -1, :], si[0, -1, :])
+                pha = np.arctan2(-si[1, -1, :], si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
                 self[k]['aoa'] = np.vstack((tha, pha))
@@ -1673,7 +1673,7 @@ class Rays(PyLayers, dict):
                                       eph[:, np.newaxis, :]), axis=1)
 
 
-                self[k]['BiN'] = np.concatenate((si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+                self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                                                    eph[:,np.newaxis,:]),axis=1)
 
                 # Creation of B from Bi and Bo
