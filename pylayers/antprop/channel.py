@@ -152,6 +152,9 @@ class AFPchannel(bs.FUsignal):
             
     def __repr__(self):
         s = 'Angular Frequency Profile object \n'
+        s = 'Tx : '+str(self.tx)+'\n'
+        s = 'Rx : '+str(self.rx)+'\n'
+
         
         return(s)
 
