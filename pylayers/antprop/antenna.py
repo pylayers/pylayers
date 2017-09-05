@@ -425,7 +425,6 @@ class Pattern(PyLayers):
         self.evaluated = True
         self.gain()
 
-
     def __pazel(self,**kwargs):
         """ Azimuth Elevation pattern from file
 
