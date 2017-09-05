@@ -51,19 +51,19 @@ class Tesgeu(TestCase):
         assert b3
         assert not b4
 
-    def test_MAzTiltPol(self):
+    def test_MATP(self):
         vl = np.array([0,0,1])  # beam in z direction 
         pl = np.array([1,0,0])  # polar along x
 
         phi = np.pi/2  # beam in y direction 
         tilt = 0       # no tilt
 
-        M = MAzTiltPol(vl,pl,phi,tilt,'V')
+        M = MATP(vl,pl,phi,tilt,'V')
         vg = np.dot(M,vl)
         pg = np.dot(M,pl)
         np.testing.assert_equal(vg,[0,1,0])  # pointing in y 
         np.testing.assert_equal(pg,[0,0,1])  # polar along z
-        M = MAzTiltPol(vl,pl,phi,tilt,'H')
+        M = MATP(vl,pl,phi,tilt,'H')
         vg = np.dot(M,vl)
         pg = np.dot(M,pl)
         np.testing.assert_equal(vg,[0,1,0])  # pointing in y 

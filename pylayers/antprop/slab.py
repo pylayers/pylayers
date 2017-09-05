@@ -1534,7 +1534,9 @@ class Slab(Interface,dict):
                 break
 
         self.Io = Co
-        self.Ip = Cp
+        # attempt to fix bug 
+        #self.Ip = Cp
+        self.Ip = -Cp
 
         self.RT(metalic,RT=RT)
 # if compensate:

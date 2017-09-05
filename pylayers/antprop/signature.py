@@ -537,14 +537,41 @@ class Signatures(PyLayers,dict):
             nsig += size
         return(nsig)
 
+    def compl(self,lint,L):
+        """ completion from lint 
 
+        Paramaters
+        ----------
 
+        lint : list 
+            list of interactions
 
+        """
+        # all group of interactions
+        for k in self:
+            if k > len(lint):
+                Si = self[k] 
+                Ns,Nb = Si.shape
+                # all signatures form a group of interactions
+                for l in range(Ns/2):
+                    # all interactions
+                    b1 = True
+                    for i1,it in enumerate(lint): 
+                        if ((Si[2*l,i1] == it[0]) and 
+                           (Si[2*l+1,i1] == it[1])):
+                            pass 
+                        else:
+                            b1 = False
+                    if b1:
+                        sig = Si[2*l:2*l+2,:]
+                        sigi = self.sig2inter(L,sig)
+                        print(k,l,' :',sigi)
+                        # all 
 
     def sig2inter(self,L,lsi=[]):
-        ''' convert signature to corresponding interaction in Gi
+        ''' convert signature to corresponding list of interactions in Gi
 
-            Paramters:
+            Paramaters:
             ----------
 
             L : Layout
@@ -702,6 +729,12 @@ class Signatures(PyLayers,dict):
 
     def check(self):
         """ check signature
+        
+        Returns
+        -------
+
+        OK : np.array
+        KO : np.array
 
         """
 
@@ -1901,7 +1934,6 @@ class Signatures(PyLayers,dict):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-
         # display layout
         fig,ax = L.showG(**kwargs)
 
@@ -2166,17 +2198,17 @@ class Signatures(PyLayers,dict):
 
 
     def raysv(self,ptx=0,prx=1):
-        """ transfrom dict of signatures into 2D rays - default vectorized version
+        """ transform dict of signatures into 2D rays - default vectorized version
 
         Parameters
         ----------
 
         ptx : numpy.array or int
-            Tx coordinates is the center of gravity of the cycle number if
-            type(tx)=int
+            Tx coordinates is the center of gravity of the cycle ptx if
+            type(ptx)=int
         prx :  numpy.array or int
-            Rx coordinates is the center of gravity of the cycle number if
-            type(rx)=int
+            Rx coordinates is the center of gravity of the cycle prx if
+            type(prx)=int
 
         Returns
         -------
@@ -2220,9 +2252,9 @@ class Signatures(PyLayers,dict):
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
 
-
         if len(ptx) == 2:
             ptx= np.r_[ptx,0.5]
+
         if len(ptx) == 2:
             prx= np.r_[prx,0.5]
 
@@ -2425,13 +2457,14 @@ class Signatures(PyLayers,dict):
 
 
 
-            # how to do this into a while loop
+            # how to do this into a while loop ?
             p=rx
 
             # creating W matrix required in eq (2.70) thesis Nicolas AMIOT
-            #Warning W is rolled after and becomes (nsig,4,4)
-            W=np.zeros((4,4,nsig))
-            I=np.eye(2)[:,:,np.newaxis]*np.ones((nsig))
+            # Warning W is rolled after and becomes (nsig,4,4)
+            W = np.zeros((4,4,nsig))
+            I = np.eye(2)[:,:,np.newaxis]*np.ones((nsig))
+
             W[:2,:2,...] = I
             W[2:4,:2,...] = I
 
@@ -2445,7 +2478,7 @@ class Signatures(PyLayers,dict):
             ptr = pt
             Mr = copy.deepcopy(M)
 
-            epsilon = 1e-2
+            epsilon = 1e-12
             rayp_i = np.zeros((3,nsig,ninter))
             # rayp_i[:2,:,-1]=rx[:,None]
             #backtrace process
@@ -2699,10 +2732,11 @@ class Signatures(PyLayers,dict):
 
             dM.update({ninter:M})
         return dM
+
     def image(self,tx=np.array([2.7,12.5])):
         ''' Warning :
             This is an attempt to vectorize the image process.
-            Despite it has been tested on few cases with succes,
+            Despite it has been tested on few cases with success,
             this is quite new need to be validated !!!
 
 
@@ -2974,6 +3008,9 @@ class Signature(object):
         s = ''
         s = s + str(self.seq) + '\n'
         s = s + str(self.typ) + '\n'
+        if self.evaluated:
+            s = s + str(self.pa)+'\n'
+            s = s + str(self.pb)+'\n'
         return s
 
     def info(self):
@@ -3067,6 +3104,7 @@ class Signature(object):
                 pa = np.array(L.Gs.pos[k])
                 self.pa[:, n] = pa
                 self.pb[:, n] = pa
+        self.evaluated = True
 
     def ev(self, L):
         """  evaluation of Signature
@@ -3123,6 +3161,7 @@ class Signature(object):
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
+        self.evaluated = True
 
     def unfold(self):
         """ unfold a given signature
@@ -3316,6 +3355,58 @@ class Signature(object):
 
         return M
 
+    def show(self,L,tx,rx,**kwargs):
+        """
+        Parameters
+        ----------
+        L : Layout 
+        tx : 
+        rx : 
+        aw
+
+        """
+        defaults  = {'aw':True,
+                     'axes':True,
+                     'labels':False,
+                     'fig':[],
+                     'ax':[]
+                     }
+        
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        if kwargs['fig']==[]:
+            fig = plt.gcf()
+        else:
+            fig = kwargs['fig']
+        if kwargs['ax']==[]:
+            fig = plt.gcf()  
+        else:
+            ax = fig.gca()   
+
+        self.ev(L)
+        fig,ax = L.showG('s',labels=kwargs['labels'],
+                             aw=kwargs['aw'],
+                             axes=kwargs['axes']
+                             ,fig=fig,ax=ax)
+        M = self.image(tx)
+        isvalid,Y,tup = self.backtrace(tx,rx,M)
+        l1 = ax.plot(tx[0],tx[1],'or')
+        l2 = ax.plot(rx[0],rx[1],'og')
+        l3 = ax.plot(M[0,:],M[1,:],'ob')
+        l4 = ax.plot(Y[0,:],Y[1,:],'ok')
+        ray = np.hstack((np.hstack((rx.reshape(2,1),Y)),tx.reshape(2,1)))
+        for k in self.seq:
+            ax.annotate(str(k),xy=(L.Gs.pos[k]),xytext=(L.Gs.pos[k]))
+        if isvalid:
+            l5 = ax.plot(ray[0,:],ray[1,:],color='green',alpha=0.6,linewidth=0.6)
+        else:
+            l5 = ax.plot(ray[0,:],ray[1,:],color='red',alpha=0.6,linewidth=0.6)
+
+        return fig,ax    
+
     def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx
 
@@ -3397,7 +3488,7 @@ class Signature(object):
         k = 0          # interaction counter
         beta = .5      # to enter into the loop
         isvalid = True # signature is asumed being valid by default
-        epsilon = 1e-2
+        epsilon = 1e-12
         # if tuple(self.seq) == ( 42, -277,  135,   21,   46,  319):
         #     import ipdb
         #     ipdb.set_trace()
@@ -3426,6 +3517,7 @@ class Signature(object):
                 gk = xk[2::]
                 alpha = gk[0]
                 beta = gk[1]
+                #print k,alpha,beta
                 Y = np.hstack((Y, pkm1))
             else:
                 alpha = 0.5 # dummy necessary for the test below
@@ -3437,10 +3529,10 @@ class Signature(object):
             k = k + 1
         if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
-            return isvalid,Y
+            return isvalid,Y,(k,alpha,beta)
         else:
             isvalid = False
-            return isvalid,(k,alpha,beta)
+            return isvalid,Y,(k,alpha,beta)
 
 
     def sig2ray(self, L, pTx, pRx, mode='incremental'):
@@ -3478,7 +3570,7 @@ class Signature(object):
         #print self
         #if np.array_equal(self.seq,np.array([5,7,4])):
         #    pdb.set_trace()
-        isvalid,Y = self.backtrace(pTx, pRx, M)
+        isvalid,Y,u = self.backtrace(pTx, pRx, M)
         #print isvalid,Y
         # 
         # If incremental mode this function returns an alternative signature

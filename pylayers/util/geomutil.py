@@ -3692,7 +3692,7 @@ def MRot3(a, axe):
     return(M3)
 
 
-def MAzTiltPol(vl,pl,phi,tilt,pol):
+def MATP(vl,pl,phi,tilt,pol):
     """ Calculate a rotation matrix for antenna pointing and orientation control
 
     Parameters

@@ -124,8 +124,8 @@ from pylayers.gis.layout import Layout
 # Handle Antenna
 from pylayers.antprop.antenna import Antenna
 
-# Handle Signauture
-from pylayers.antprop.signature import Signatures
+# Handle Signature
+from pylayers.antprop.signature import Signatures,Signature
 # Handle Rays
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
@@ -426,7 +426,6 @@ class DLink(Link):
         if self.Ab==[]:
             self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
         
-
         if isinstance(self._L,str):
             self._Lname = self._L
             self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
@@ -456,17 +455,21 @@ class DLink(Link):
                 self.L.dumpw()
             
             #
-            # In outdoor situation we delete all reference to transmission node in Gi 
+            # In outdoor situation we delete transmission node involving  
+            # an indoor cycle at the exception of AIR 
             #
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
-        
             if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
-                
+                # lT : list of transmission interactions 
                 lT  =  [k for k in u if (len(k)==3)]
+                # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                self.L.Gi.remove_nodes_from(lTi)
+                # lTiw : those which are wall (not those above buildings) 
+                lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
+
+                self.L.Gi.remove_nodes_from(lTiw)
                 lE = self.L.Gi.edges()
                 for k in range(len(lE)):
                     e = lE[k]
@@ -475,7 +478,7 @@ class DLink(Link):
                     except:
                         pdb.set_trace()
                     for l in output.keys():
-                        if l in lTi:
+                        if l in lTiw:
                             del output[l]
                     self.L.Gi.edge[e[0]][e[1]]['output']=output
                 
@@ -488,7 +491,7 @@ class DLink(Link):
            
             ###########
             # init freq
-            # TODO Check where it is used redocdundant with fGHz
+            # TODO Check where it is used redundant with fGHz
             ###########
             #self.fmin  = self.fGHz[0]
             #self.fmax  = self.fGHz[-1]
@@ -872,6 +875,7 @@ class DLink(Link):
         print "Propagation Channel 2x2 (C):"
         self.C.inforay(iray)
         if self.C.islocal:
+            # back to global frame
             self.C.locbas()
             dist = self.C.tauk[iray]*0.3
             C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
@@ -1830,7 +1834,7 @@ class DLink(Link):
         #
         afp = AFPchannel(tx=self.a,rx=self.b,az=az)
         for ph in az:
-            self.Tb = geu.MAzTiltPol(vl,pl,ph,tilt,polar)
+            self.Tb = geu.MATP(vl,pl,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
@@ -1898,6 +1902,10 @@ class DLink(Link):
             20
         rays : boolean
             False
+        bsig : boolean 
+            False    
+        laddr : list 
+            list of signature addresses 
         cmap : colormap
         labels : boolean
             enabling edge label (useful for signature identification)
@@ -1916,8 +1924,9 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L=Link()
-        >>> L.show(rays=True,dB=True)
+        >>> DL=Link()
+        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap=plt.cm.jet)
+        >>> DL.show(laddr=[(6,2)],bsig=True)
 
         """
         defaults ={'s':80,   # size points
@@ -1925,10 +1934,13 @@ class DLink(Link):
                    'cb':'r', # color b 
                    'alpha':1,
                    'axis':True,
-                   'i':-1,
+                   'lr':-1,
+                   'ls':-1,
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':False,
+                   'bsig':True,
+                   'laddr':[(1,0)],
                    'cmap':plt.cm.hot,
                    'pol':'tot',
                    'col':'k',
@@ -1963,7 +1975,7 @@ class DLink(Link):
                    alpha=kwargs['alpha'])
         ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
         #
-        # Rays
+        # Plot Rays
         #
         if kwargs['rays']:
             ECtt,ECpp,ECtp,ECpt = self.C.energy()
@@ -1986,40 +1998,52 @@ class DLink(Link):
             #
             # Select group of interactions
             #
-            if kwargs['i']==-1:
-                li  = self.R.keys()
+            if kwargs['lr']==-1:
+                lr  = np.arange(self.R.nray)
             else:
-                li = kwargs['i']
+                lr = kwargs['lr']
+            
+            vmin = val.min()
+            vmax = val.max() 
+            if kwargs['dB']:
+                vmin = 20*np.log10(vmin)
+                vmax = 20*np.log10(vmax)
 
-            for i  in li:
-                lr = self.R[i]['rayidx']
-                for r in range(len(lr)):
-                    ir = lr[r]
-                    try:
-                        if kwargs['dB']:
-                            RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
-                        else:
-                            RayEnergy=val[ir]/val.max()
-                    except:
-                        pass
-                    if kwargs['col']=='cmap':
-                        col = clm(RayEnergy)
-                        width = RayEnergy
-                        alpha = 1
-                        #alpha = RayEnergy
-                    else:
-                        col = kwargs['col']
+            for ir  in lr:
+                if kwargs['dB']:
+                    RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                else:
+                    RayEnergy=val[ir]/val.max()
 
-                        width = kwargs['width']
-                        alpha = kwargs['alpha']
-
-                    fig,ax = self.R.show(i=i,r=r,
-                                   colray=col,
-                                   widthray=width,
-                                   alpharay=alpha,
-                                   fig=fig,ax=ax,
-                                   layout=False,
-                                   points=False)
+                if kwargs['col']=='cmap':
+                    col = clm(RayEnergy)
+                    width = 3*RayEnergy
+                    alpha = 1
+                else:
+                    col = kwargs['col']
+                    width = kwargs['width']
+                    alpha = kwargs['alpha']
+                
+                # plot ray (i,r) 
+                fig,ax = self.R.show(rlist=[ir],
+                               colray=col,
+                               widthray=width,
+                               alpharay=alpha,
+                               fig=fig,ax=ax,
+                               layout=False,
+                               points=False)
+            if kwargs['col']=='cmap':
+                sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
+                sm._A = []
+                plt.colorbar(sm)
+        #
+        # Plot Rays
+        #
+        if kwargs['bsig']:
+            for addr in kwargs['laddr']: 
+                seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]
+                Si = Signature(seq)
+                fig,ax = Si.show(self.L,self.a[0:2],self.b[0:2],fig=fig,ax=ax)
 
         return fig,ax
 
@@ -2296,9 +2320,9 @@ class DLink(Link):
         ir.plot(fig=fig,ax=ax)
         delay = ir.x 
         dist = delay*0.3
-        FSPL = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) + 19 + 2
-        if kwargs['fspl']:
-            ax.plot(delay,FSPL,linewidth=2,color='b')
+        #FSPL = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) + 19 + 2
+        #if kwargs['fspl']:
+        #    ax.plot(delay,FSPL,linewidth=2,color='b')
 
 
         if kwargs['rays'] : 

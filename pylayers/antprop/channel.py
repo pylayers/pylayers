@@ -100,6 +100,8 @@ import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import cvxpy as cvx
+from mpl_toolkits.mplot3d import Axes3D
+
 
 try:
     import h5py
@@ -152,6 +154,9 @@ class AFPchannel(bs.FUsignal):
             
     def __repr__(self):
         s = 'Angular Frequency Profile object \n'
+        s = 'Tx : '+str(self.tx)+'\n'
+        s = 'Rx : '+str(self.rx)+'\n'
+
         
         return(s)
 
@@ -3097,6 +3102,7 @@ class Tchannel(bs.FUsignal):
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
+                    'b3d':False,
                     'polar':False,
                     'colorbar':False,
                     'title':False,
@@ -3114,6 +3120,7 @@ class Tchannel(bs.FUsignal):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+#        b3d = kwargs.pop('b3d')
         the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
@@ -3388,6 +3395,7 @@ class Tchannel(bs.FUsignal):
                     'edgecolors':'none',
                     'polar':False,
                     'mode':'mean',
+                    'b3d':False,
                     'xa':0,
                     'xb':0
                     }
@@ -3408,6 +3416,8 @@ class Tchannel(bs.FUsignal):
         else:
             fig,ax = self.plotd(d='doa',fig=fig,ax=ax1,**kwargs)
             fig,ax = self.plotd(d='dod',fig=fig,ax=ax2,**kwargs)
+
+
         return fig,ax
 
     def field(self):
@@ -4766,6 +4776,7 @@ class Ctilde(PyLayers):
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
+                    'b3d':False,
                     'polar':False,
                     'colorbar':False,
                     'title' : False
@@ -4788,6 +4799,7 @@ class Ctilde(PyLayers):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+        b3d = kwargs.pop('b3d')
         the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
@@ -4840,39 +4852,44 @@ class Ctilde(PyLayers):
         if len(col) != len(di):
             print("len(col):", len(col))
             print("len(di):", len(dir))
-        if ax == []:
-            ax = fig.add_subplot(111, polar=polar)
-
-        if reverse :
-            scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
-            ax.axis((phi[0], phi[1], the[0], the[1]))
-            ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
-            ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-
+        if b3d:
+            ax = fig.add_subplot(111,projection='3d')
+            ax.scatter(1.05*array(xa),1.05*array(ya),1.05*array(za),'b')
+            ax.scatter(1.05*array(xb),1.05*array(yb),1.05*array(zb),'r')
         else:
-            scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
-            ax.axis((the[0], the[1], phi[0], phi[1]))
-            ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-            ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
+            if ax == []:
+                ax = fig.add_subplot(111, polar=polar)
 
-        if title:
-            ax.set_title(tit, fontsize=fontsize+2)
+            if reverse :
+                scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
+                ax.axis((phi[0], phi[1], the[0], the[1]))
+                ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
+                ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
 
-        ll = ax.get_xticklabels()+ax.get_yticklabels()
-        for l in ll:
-            l.set_fontsize(fontsize)
-
-        if colorbar:
-            #divider = make_axes_locatable(ax)
-            #cax = divider.append_axes("right",size="5%",pad=0.05)
-            clb = plt.colorbar(scat,ax=ax)
-            if normalize:
-                clb.set_label('dB',size=fontsize)
             else:
-                clb.set_label('Path Loss (dB)',size=fontsize)
+                scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
+                ax.axis((the[0], the[1], phi[0], phi[1]))
+                ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
+                ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
 
-            for t in clb.ax.get_yticklabels():
-                t.set_fontsize(fontsize)
+            if title:
+                ax.set_title(tit, fontsize=fontsize+2)
+
+            ll = ax.get_xticklabels()+ax.get_yticklabels()
+            for l in ll:
+                l.set_fontsize(fontsize)
+
+            if colorbar:
+                #divider = make_axes_locatable(ax)
+                #cax = divider.append_axes("right",size="5%",pad=0.05)
+                clb = plt.colorbar(scat,ax=ax)
+                if normalize:
+                    clb.set_label('dB',size=fontsize)
+                else:
+                    clb.set_label('Path Loss (dB)',size=fontsize)
+
+                for t in clb.ax.get_yticklabels():
+                    t.set_fontsize(fontsize)
 
         return (fig, ax)
 
@@ -4929,6 +4946,7 @@ class Ctilde(PyLayers):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
+                    'b3d':False,
                     'mode':'mean',
                     'colorbar':False,
                     'xa':0,

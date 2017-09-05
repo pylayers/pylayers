@@ -4938,7 +4938,7 @@ class Layout(pro.PyLayers):
                 color = slab['color']
             else:
                 if (name != 'METAL') & (name != 'METALIC'):
-                    color = slab.tocolor(fGHz)
+                    color = slab.tocolor
                 else:
                     color = 'black'
 
@@ -7906,10 +7906,7 @@ class Layout(pro.PyLayers):
 
                     if nstr in self.Gv.nodes():
                         # list 1 of interactions
-                        if nstr==108:
-                            iprint = 1
-                        else: 
-                            iprint = 0
+                        
                         li1 = []
                         if nstr > 0:
                             # output cycle 
@@ -8026,7 +8023,6 @@ class Layout(pro.PyLayers):
                        desc ='update interraction list',
                        leave=False,
                        position=tqdmpos+1)
-
         for c in self.Gt.node:
             if verbose:
                 pbartmp.update(cpt)
@@ -8039,14 +8035,16 @@ class Layout(pro.PyLayers):
             Gipbar.update(100.)
 
         # cleaning deadend Gi 
-        # if not indoor for all nodes of Gi 
-        # if not diffraction 
-        # if termination cycle is indoor 
-        # or if starting point is indoor 
-        # then delte interaction 
+        # if outdoor for all nodes of Gi 
+        #   if not diffraction 
+        #       if termination cycle is indoor 
+        #           or if starting point is indoor 
+        # then delete interaction 
         ldelete = []
+
         if self.typ=='outdoor':
             for k in self.Gi.node.keys():
+                # R and T 
                 if len(k)>1:
                     segtype = self.Gs.node[k[0]]['name']
                     if ((segtype!='AIR') and (segtype!='_AIR')):
@@ -8062,8 +8060,6 @@ class Layout(pro.PyLayers):
                                 #     if self.Gs.node[k[0]]['name']!='AIR':
                                 ldelete.append(k)       
 
-        #print(ldelete)
-        # pdb.set_trace()
         self.Gi.remove_nodes_from(ldelete)
         # build adjacency matrix of Gi graph
         self.Gi_A = nx.adjacency_matrix(self.Gi)

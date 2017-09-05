@@ -530,8 +530,8 @@ class IntB(Inter):
 
         """
 
-        self.fGHz=fGHz
-        self.nf=len(fGHz)
+        self.fGHz = fGHz
+        self.nf = len(fGHz)
 
 
         self.sinsout()

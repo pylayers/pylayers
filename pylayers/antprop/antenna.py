@@ -146,7 +146,6 @@ import glob
 import re
 import pdb
 import sys
-
 if sys.version_info.major==2:
     import PIL.Image as Image
     import mayavi.mlab as mlab
@@ -166,6 +165,7 @@ from matplotlib import cm # colormaps
 from mpl_toolkits.mplot3d import axes3d
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.ticker import MaxNLocator
+from scipy.special import sici , fresnel
 import pandas as pd
 
 import matplotlib.pylab as plt
@@ -299,7 +299,7 @@ class Pattern(PyLayers):
                 self.grid = False
                 self.full_evaluated = True
                 if kwargs['Rfloor']:
-                    dR = np.sqrt(ssi**2 + (kwargs['pr'][2,:] + kwargs['pt'][2,:])**2)  #  reflexion length
+                    dR = np.sqrt(ssi**2 + (kwargs['pr'][2,:] + kwargs['pt'][2,:])**2)  #  reflexion length
                     thetaR = np.arccos((kwargs['pr'][2,:] + kwargs['pt'][2,:]) / dR)
                     self.theta = np.hstack([self.theta,thetaR])
                     self.phi = np.hstack([self.phi,self.phi])
@@ -371,13 +371,27 @@ class Pattern(PyLayers):
         Aperture in the (x,y) plane. Main lobe in theta=0 direction
 
         polar indicates the orientation of the Electric field either 'x' or 'y'
+       
+        See theoretical background in : 
+
+        http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
+
+        Parameters
+        ----------
+
+        HPBW_x_deg : float 
+            Half Power Beamwidth (degrees)
+        HPBW_y_deg : float 
+            Half Power Beamwidth (degrees)
+
 
         """
         defaults = {'param': {'HPBW_x_deg':40,
                               'HPBW_y_deg':10,
                               'Gfactor':27000,
                               'fcGHz': 27.5,
-                              'polar':'x'
+                              'polar':'x',
+                              'window':'rect'
                              }}
         
         if 'param' not in kwargs or kwargs['param']=={}:
@@ -400,8 +414,10 @@ class Pattern(PyLayers):
             # Ndir x Nf 
             theta = self.theta[:,None]
             phi = self.phi[:,None]
-        vx = Dx_n[...,:]*np.sin(theta)*np.cos(phi)
-        vy = Dy_n[...,:]*np.sin(theta)*np.sin(phi)
+        
+        vx = Dx_n[...,:]*np.sin(theta)*np.cos(phi) # 18.1.4
+        vy = Dy_n[...,:]*np.sin(theta)*np.sin(phi) # 18.1.4
+
         F_nor = ((1+np.cos(theta))/2.)*np.abs(np.sinc(vx)*np.sinc(vy))
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
@@ -422,9 +438,218 @@ class Pattern(PyLayers):
             nan_bool = np.isnan(self.Fp)
             self.Fp[nan_bool] = F[nan_bool] 
         # enforce E.x = 0 
+        #
+        # This is experimeintal 
+        # How to apply the 2D windowing properly ?
+        #
+#        if self.param['window']!='rect':
+#            Nt = self.Fp.shape[0] 
+#            Np = self.Fp.shape[1] 
+#            Wp = np.fft.ifftshift(np.hamming(Nt)[:,None]*np.ones(Np)[None,:])[:,:,None]
+#            Wt = np.fft.ifftshift(np.ones(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            Wu = np.fft.ifftshift(np.ones(Nt)[:,None]*np.ones(Np)[None,:])[:,:,None] 
+#            Wi = np.fft.ifftshift(np.hamming(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            W = np.fft.fftshift(np.hamming(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            # Fp : t x p x f   ou r x f 
+#            # Ft : t x p x f   ou r x f 
+#
+#            Kp = np.fft.ifft2(self.Fp,axes=(0,1))
+#            Kt = np.fft.ifft2(self.Ft,axes=(0,1))
+#            
+#            self.Fp = np.fft.fft2(Kp*Wt,axes=(0,1))
+#            self.Ft = np.fft.fft2(Kt*Wp,axes=(0,1))
+
         self.evaluated = True
         self.gain()
 
+
+    def __paperture2(self,**kwargs):
+        """ Aperture Pattern 
+
+        Aperture in the (x,y) plane. Main lobe in theta=0 direction
+
+        polar indicates the orientation of the Electric field either 'x' or 'y'
+       
+        See theoretical background in : 
+
+        http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
+
+        Parameters
+        ----------
+
+        HPBW_x_deg : float 
+            Half Power Beamwidth (degrees)
+        HPBW_y_deg : float 
+            Half Power Beamwidth (degrees)
+
+
+        """
+        defaults = {'param': {'HPBW_a_deg':40,
+                              'HPBW_b_deg':10,
+                              'Gfactor':27000,
+                              'fcGHz': 27.5,
+                              'polar':'x',
+                              'window':'rect'
+                             }}
+        
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.param = kwargs['param']
+
+        deg_to_rad = np.pi/180.
+        ld_c = 0.3/self.param['fcGHz']
+        ld = 0.3/self.fGHz
+        a = 1.189*ld_c/(self.param['HPBW_a_deg']*deg_to_rad)
+        b = 0.886*ld_c/(self.param['HPBW_b_deg']*deg_to_rad)
+        a_n = a/ld
+        b_n = b/ld
+        if self.grid: 
+            # Nth x Nph x Nf
+            theta = self.theta[:,None,None]
+            phi = self.phi[None,:,None]
+        else:
+            # Ndir x Nf 
+            theta = self.theta[:,None]
+            phi = self.phi[:,None]
+        
+        vx = a_n[...,:]*np.sin(theta)*np.cos(phi) # 18.1.4
+        vy = b_n[...,:]*np.sin(theta)*np.sin(phi) # 18.1.4
+
+        #F_nor = ((1+np.cos(theta))/2.)*np.abs(np.sinc(vx)*np.sinc(vy))
+        F_nor = (1+np.cos(theta))/2*(np.cos(np.pi*vx)/(1-4*vx**2))*np.sinc(vy) # 18.1.3 + suppression rear radiation
+
+        HPBW_a = (1.189*ld/a)/deg_to_rad
+        HPBW_b = (0.886*ld/b)/deg_to_rad
+        Gmax = self.param['Gfactor']/(HPBW_a*HPBW_b)
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+
+        # Handling repartition on both vector components
+        # enforce E.y = 0 
+        if self.param['polar']=='x':
+            self.Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
+            self.Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*self.Ft
+            nan_bool = np.isnan(self.Fp)
+            self.Fp[nan_bool] = F[nan_bool] 
+        # enforce E.x = 0 
+        if self.param['polar']=='y':
+            self.Ft = F/np.sqrt(1+(np.cos(theta)*np.cos(phi)/np.sin(phi))**2)
+            self.Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*self.Ft
+            nan_bool = np.isnan(self.Fp)
+            self.Fp[nan_bool] = F[nan_bool] 
+        # enforce E.x = 0 
+        #
+        # This is experimeintal 
+        # How to apply the 2D windowing properly ?
+        #
+#        if self.param['window']!='rect':
+#            Nt = self.Fp.shape[0] 
+#            Np = self.Fp.shape[1] 
+#            Wp = np.fft.ifftshift(np.hamming(Nt)[:,None]*np.ones(Np)[None,:])[:,:,None]
+#            Wt = np.fft.ifftshift(np.ones(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            Wu = np.fft.ifftshift(np.ones(Nt)[:,None]*np.ones(Np)[None,:])[:,:,None] 
+#            Wi = np.fft.ifftshift(np.hamming(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            W = np.fft.fftshift(np.hamming(Nt)[:,None]*np.hamming(Np)[None,:])[:,:,None] 
+#            # Fp : t x p x f   ou r x f 
+#            # Ft : t x p x f   ou r x f 
+#
+#            Kp = np.fft.ifft2(self.Fp,axes=(0,1))
+#            Kt = np.fft.ifft2(self.Ft,axes=(0,1))
+#            
+#            self.Fp = np.fft.fft2(Kp*Wt,axes=(0,1))
+#            self.Ft = np.fft.fft2(Kt*Wp,axes=(0,1))
+
+        self.evaluated = True
+        self.gain()
+
+
+    def __phorn(self,**kwargs):
+        """ Horn antenna 
+
+
+        http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf (18.2) 
+
+        Parameters
+        ----------
+
+            Half Power Beamwidth (degrees)
+
+
+        """
+        defaults = {'param': {'sigma_a':1.2593,
+                              'sigma_b':1.0246,
+                              'A_wl':16,
+                              'B_wl':3,
+                              'fcGHz':28.,
+                              'polar':'x'
+                             }}
+        
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.param = kwargs['param']
+
+        deg_to_rad = np.pi/180.
+        ld_c = 0.3/self.param['fcGHz']
+        ld = 0.3/self.fGHz
+        A_wl = kwargs['param']['A_wl']
+        B_wl = kwargs['param']['B_wl']
+
+        A = A_wl*ld_c
+        B = B_wl*ld_c
+        sigma_a = kwargs['param']['sigma_a']
+        sigma_b = kwargs['param']['sigma_b']
+        #b = kwargs['param']['b']
+        #Ra = (A/(A-a))*RA
+        #Rb = (B/(B-b))*RB
+        #La = np.sqrt(Ra**2+A**2/4)
+        #Lb = np.sqrt(Rb**2+B**2/4)
+        #alpha = np.arctan(A/(2*Ra))
+        #beta = np.arctan(B/(2*Rb))
+        #Delta_a = A**2/(8*Ra)
+        #Delta_b = B**2/(8*Rb)
+        #sigma_a = A/np.sqrt((2*ld*Ra))
+        #sigma_b = B/np.sqrt((2*ld*Rb))
+        A_n = A/ld
+        B_n = B/ld
+
+
+
+        if self.grid: 
+            # Nth x Nph x Nf
+            theta = self.theta[:,None,None]
+            phi = self.phi[None,:,None]
+        else:
+            # Ndir x Nf 
+            theta = self.theta[:,None]
+            phi = self.phi[:,None]
+        
+        vx = A_n[...,:]*np.sin(theta)*np.cos(phi) # 18.3.4
+        vy = B_n[...,:]*np.sin(theta)*np.sin(phi) # 18.3.4
+
+        F = ((1+np.cos(theta))/2.)*(F1(vx,sigma_a)*F0(vy,sigma_b))
+        normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2  # 18.4.3
+        F_nor = F/normF
+        efficiency = 0.125*normF
+        Gmax = efficiency*4*np.pi*A*B/ld**2
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+
+        # Handling repatition on both vector components
+        # enforce E.y = 0 
+        if self.param['polar']=='x':
+            self.Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
+            self.Fp = (-np.cos(theta)*np.sin(phi)/np.cos(phi))*self.Ft
+            nan_bool = np.isnan(self.Fp)
+            self.Fp[nan_bool] = F[nan_bool] 
+        # enforce E.x = 0 
+        if self.param['polar']=='y':
+            self.Ft = F/np.sqrt(1+(np.cos(theta)*np.cos(phi)/np.sin(phi))**2)
+            self.Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*self.Ft
+            nan_bool = np.isnan(self.Fp)
+            self.Fp[nan_bool] = F[nan_bool] 
+
+        self.evaluated = True
+        self.gain()
     def __pazel(self,**kwargs):
         """ Azimuth Elevation pattern from file
 
@@ -1193,7 +1418,6 @@ class Pattern(PyLayers):
             self.efficiency = np.sum(np.sum(Gs,axis=0),axis=0)*dt*dp/(4*np.pi)
 
             self.sqG = np.sqrt(self.G)
-            # pdb.set_trace()
             self.GdB = 10*np.log10(self.G)
             # GdBmax (,Nf)
             self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
@@ -1260,6 +1484,7 @@ class Pattern(PyLayers):
                     'source':'satimo',
                     'show':True,
                     'mode':'index',
+                    'color':'black',
                     'u':0,
                     }
 
@@ -1323,7 +1548,7 @@ class Pattern(PyLayers):
             ik0 = np.where(df==min(df))
             ik = ik0[0][0]
             #ik=0
-            chaine = 'fc = %3.2f GHz' %(self.fGHz[ik])
+            chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
             # all theta
             if kwargs['plan']=='theta':
                 itheta = np.arange(self.nth)
@@ -1416,7 +1641,7 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)',fontsize=20)
+                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)')
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -1440,11 +1665,12 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
-                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)', fontsize=20)
+                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
             # actual plotting
-            #ax.plot(angle, r, color=col[cpt], lw=2, label=chaine, linewidth=3, fontsize=20)
-            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine, linewidth=3)
-            ax.set_rlabel_position(270)
+            if len(lfreq)>1: 
+                ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            else:
+                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
             cpt = cpt + 1
 
         if kwargs['polar']:
@@ -1452,7 +1678,7 @@ class Pattern(PyLayers):
             #ax.set_rmax(t1[-1])
             #ax.set_rmin(t1[0])
         if kwargs['legend']:
-            ax.legend(loc='best',fontsize=16)
+            ax.legend()
         if kwargs['show']:
             plt.ion()
             plt.show()
@@ -2779,7 +3005,7 @@ class Antenna(Pattern):
         # T is an unitary matrix
         T  = kwargs['T']
         if fGHz == []:
-            # self.ext == '' <=> mathematically generated => nf = 1
+            # self.ext == '' <=> mathematically generated => nf = 1
             if self.ext != '':
                 k = len(self.fGHz)/2
             else: 
@@ -4853,6 +5079,48 @@ class AntPosRot(Antenna):
         EP = E*P
         return(EP)
         #Rr, rangl = geu.BTB_rx(rang, self.Tr)
+
+def F0(nu,sigma):
+    """ F0 function for horn antenna pattern 
+    
+    Parameters
+    ----------
+
+    nu : np.array 
+        (....,nf)
+    sigma : np.array 
+        (,nf) 
+
+    Notes
+    -----
+    http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
+
+    18.3.2
+
+    """
+    nuos  = nu/sigma
+    argp = nuos + sigma
+    argm = nuos - sigma
+    expf = np.exp(1j*(np.pi/2)*nuos**2)
+    sf   = 1./sigma
+    sp , cp = fresnel(argp)
+    sm , cm = fresnel(argm)
+    Fp = cp-1j*sp
+    Fm = cm-1j*sm
+
+    F = sf*expf*(Fp -Fm)
+    return F 
+
+def F1(nu,sigma):
+    """ F1 function for horn antenna pattern 
+   
+    http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf
+
+    18.3.3
+
+    """
+    F = 0.5*(F0(nu+0.5,sigma)+F0(nu-0.5,sigma))
+    return F
 
 if (__name__ == "__main__"):
     doctest.testmod()
