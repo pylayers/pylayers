@@ -631,7 +631,6 @@ class Pattern(PyLayers):
         normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2  # 18.4.3
         F_nor = F/normF
         efficiency = 0.125*normF
-        pdb.set_trace()
         Gmax = efficiency*4*np.pi*A*B/ld**2
         F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
 
