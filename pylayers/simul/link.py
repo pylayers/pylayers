@@ -2315,9 +2315,9 @@ class DLink(Link):
         ir.plot(fig=fig,ax=ax)
         delay = ir.x 
         dist = delay*0.3
-        FSPL = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) + 19 + 2
-        if kwargs['fspl']:
-            ax.plot(delay,FSPL,linewidth=2,color='b')
+        #FSPL = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) + 19 + 2
+        #if kwargs['fspl']:
+        #    ax.plot(delay,FSPL,linewidth=2,color='b')
 
 
         if kwargs['rays'] : 

@@ -2593,6 +2593,7 @@ class Tchannel(bs.FUsignal):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+#        b3d = kwargs.pop('b3d')
         the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
