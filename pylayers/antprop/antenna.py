@@ -563,6 +563,90 @@ class Pattern(PyLayers):
         self.gain()
 
 
+    def __phornBalanis(self,**kwargs):
+        """
+        Parameters
+        ----------
+        """
+
+        defaults = {'param': {'rho1':0.198,
+                              'a1':0.088,  # aperture dimension along x
+                              'b1':0.0126, # aperture dimension along y 
+                              'Nx':100,
+                              'Ny':100}}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.param = kwargs['param']
+        #H-plane antenna
+        rho1            = self.param['rho1']
+        a1              = self.param['a1']
+        b1              = self.param['b1']
+        Nx              = self.param['Nx']
+        Ny              = self.param['Ny']
+
+        lbda   = 0.3/self.fGHz
+        k      = 2*np.pi/lbda
+        eta0    = np.sqrt(4*np.pi*1e-7/8.85429e-12)
+
+        if self.grid:
+            # X,Y aperture points (t,p,x,y,f)
+            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,None,:,None,None]
+            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,None,:,None]
+            # angular domain (theta,phi)
+            Theta= self.theta[:,None,None,None,None]
+            Phi = self.phi[None,:,None,None,None]
+        else:
+            # X,Y aperture points (r,x,y,f)
+            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,:,None,None]
+            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,:,None]
+            # angular domain (theta,phi)
+            Theta= self.theta[:,None,None,None]
+            Phi= self.phi[:,None,None,None]
+
+
+        #% Aperture field Ea:
+
+        # This 'Ea_dot_uy' is an approximation of the aperture field:
+        # (from: C. A. Balanis, Antenna Theoy: Analysis and Design. New York
+        # Wiley, 1982. ... Section 13.3.1 )
+
+        Ea_dot_uy = np.cos(X*np.pi/a1)*np.exp(-.5*1j*k*((X**2)/(rho1)+(Y**2)/(rho1)))
+        Jy   = -Ea_dot_uy/eta0
+        Mx   = Ea_dot_uy
+
+        # cosine direction
+        ctsp  = np.cos(Theta)*np.sin(Phi)
+        cp   = np.cos(Phi)
+        ctcp = np.cos(Theta)*np.cos(Phi)
+        sp  = np.sin(Phi) 
+        stcp = np.sin(Theta)*np.cos(Phi)
+        stsp = np.sin(Theta)*np.sin(Phi)
+        # N & L
+        exponent = np.exp(1j*k*( X*stcp + Y*stsp))        # exp(jk (r.r'))
+        if self.grid:
+            N_theta  = np.einsum('tpnmf->tpf',Jy*ctsp*exponent) # 12-12 a assuming Jx,Jz=0
+            N_phi    = np.einsum('tpnmf->tpf',Jy*cp*exponent)   # 12-12 b ""
+            L_theta  = np.einsum('tpnmf->tpf',Mx*ctcp*exponent) # 12-12 c assuming My,Mz=0 
+            L_phi    = np.einsum('tpnmf->tpf',-Mx*sp*exponent)  # 12-12 d ""
+        else:
+            N_theta  = np.einsum('rnmf->rf',Jy*ctsp*exponent) # 12-12 a assuming Jx,Jz=0
+            N_phi    = np.einsum('rnmf->rf',Jy*cp*exponent)   # 12-12 b ""
+            L_theta  = np.einsum('rnmf->rf',Mx*ctcp*exponent) # 12-12 c assuming My,Mz=0 
+            L_phi    = np.einsum('rnmf->rf',-Mx*sp*exponent)  # 12-12 d ""
+
+
+        # Far-Field
+        self.Ft  = -L_phi  - eta0*N_theta  # 12-10b
+        self.Fp  = L_theta - eta0*N_phi    # 12-10c
+        G = self.Ft*np.conj(self.Ft)+self.Fp*np.conj(self.Fp)
+        Gmax = G.max()
+        self.Ft = self.Ft/np.sqrt(Gmax)
+        self.Fp = self.Fp/np.sqrt(Gmax)
+        self.evaluated = True
+        self.gain()
+
     def __phorn(self,**kwargs):
         """ Horn antenna 
 
@@ -628,9 +712,9 @@ class Pattern(PyLayers):
         vy = B_n[...,:]*np.sin(theta)*np.sin(phi) # 18.3.4
 
         F = ((1+np.cos(theta))/2.)*(F1(vx,sigma_a)*F0(vy,sigma_b))
-        normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2  # 18.4.3
-        F_nor = F/normF
-        efficiency = 0.125*normF
+        normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2  
+        F_nor = F/np.sqrt(normF)
+        efficiency = 0.125*normF # 18.4.3
         Gmax = efficiency*4*np.pi*A*B/ld**2
         F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
 
