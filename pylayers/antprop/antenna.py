@@ -421,7 +421,9 @@ class Pattern(PyLayers):
         F_nor = ((1+np.cos(theta))/2.)*np.abs(np.sinc(vx)*np.sinc(vy))
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
+
         Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
+        
         F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
 
         # Handling repatition on both vector components
@@ -484,8 +486,8 @@ class Pattern(PyLayers):
 
 
         """
-        defaults = {'param': {'HPBW_a_deg':40,
-                              'HPBW_b_deg':10,
+        defaults = {'param': {'HPBW_x_deg':40,
+                              'HPBW_y_deg':10,
                               'Gfactor':27000,
                               'fcGHz': 27.5,
                               'polar':'x',
@@ -500,10 +502,10 @@ class Pattern(PyLayers):
         deg_to_rad = np.pi/180.
         ld_c = 0.3/self.param['fcGHz']
         ld = 0.3/self.fGHz
-        a = 1.189*ld_c/(self.param['HPBW_a_deg']*deg_to_rad)
-        b = 0.886*ld_c/(self.param['HPBW_b_deg']*deg_to_rad)
-        a_n = a/ld
-        b_n = b/ld
+        Dx = 1.189*ld_c/(self.param['HPBW_x_deg']*deg_to_rad)
+        Dy = 0.886*ld_c/(self.param['HPBW_y_deg']*deg_to_rad)
+        Dx_n = Dx/ld
+        Dy_n = Dy/ld
         if self.grid: 
             # Nth x Nph x Nf
             theta = self.theta[:,None,None]
@@ -513,18 +515,18 @@ class Pattern(PyLayers):
             theta = self.theta[:,None]
             phi = self.phi[:,None]
         
-        vx = a_n[...,:]*np.sin(theta)*np.cos(phi) # 18.1.4
-        vy = b_n[...,:]*np.sin(theta)*np.sin(phi) # 18.1.4
+        vx = Dx_n[...,:]*np.sin(theta)*np.cos(phi) # 18.1.4
+        vy = Dy_n[...,:]*np.sin(theta)*np.sin(phi) # 18.1.4
 
-        #F_nor = ((1+np.cos(theta))/2.)*np.abs(np.sinc(vx)*np.sinc(vy))
-        F_nor = (1+np.cos(theta))/2*(np.cos(np.pi*vx)/(1-4*vx**2))*np.sinc(vy) # 18.1.3 + suppression rear radiation
+        F_nor = ((1+np.cos(theta))/2.)*np.abs(np.sinc(vx)*np.sinc(vy))
+        HPBW_x = (1.189*ld/Dx)/deg_to_rad
+        HPBW_y = (0.886*ld/Dy)/deg_to_rad
 
-        HPBW_a = (1.189*ld/a)/deg_to_rad
-        HPBW_b = (0.886*ld/b)/deg_to_rad
-        Gmax = self.param['Gfactor']/(HPBW_a*HPBW_b)
+        Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
+        
         F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
 
-        # Handling repartition on both vector components
+        # Handling repatition on both vector components
         # enforce E.y = 0 
         if self.param['polar']=='x':
             self.Ft = F/np.sqrt(1+(np.cos(theta)*np.sin(phi)/np.cos(phi))**2)
@@ -590,6 +592,8 @@ class Pattern(PyLayers):
         self.param = kwargs['param']
 
         deg_to_rad = np.pi/180.
+
+        
         ld_c = 0.3/self.param['fcGHz']
         ld = 0.3/self.fGHz
         A_wl = kwargs['param']['A_wl']
@@ -597,8 +601,10 @@ class Pattern(PyLayers):
 
         A = A_wl*ld_c
         B = B_wl*ld_c
+        
         sigma_a = kwargs['param']['sigma_a']
         sigma_b = kwargs['param']['sigma_b']
+
         #b = kwargs['param']['b']
         #Ra = (A/(A-a))*RA
         #Rb = (B/(B-b))*RB
@@ -610,10 +616,9 @@ class Pattern(PyLayers):
         #Delta_b = B**2/(8*Rb)
         #sigma_a = A/np.sqrt((2*ld*Ra))
         #sigma_b = B/np.sqrt((2*ld*Rb))
+
         A_n = A/ld
         B_n = B/ld
-
-
 
         if self.grid: 
             # Nth x Nph x Nf
@@ -629,10 +634,12 @@ class Pattern(PyLayers):
 
         F = ((1+np.cos(theta))/2.)*(F1(vx,sigma_a)*F0(vy,sigma_b))
         normF = np.abs(F1(0,sigma_a)*F0(0,sigma_b))**2  # 18.4.3
-        F_nor = F/normF
+        F_nor = F/np.sqrt(normF)
+
         efficiency = 0.125*normF
         Gmax = efficiency*4*np.pi*A*B/ld**2
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf
 
         # Handling repatition on both vector components
         # enforce E.y = 0 
@@ -650,6 +657,7 @@ class Pattern(PyLayers):
 
         self.evaluated = True
         self.gain()
+
     def __pazel(self,**kwargs):
         """ Azimuth Elevation pattern from file
 
@@ -1668,9 +1676,18 @@ class Pattern(PyLayers):
                 plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
             # actual plotting
             if len(lfreq)>1: 
-                ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+                ax.plot(angle*(180/np.pi), r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
+                plt.grid()
+                plt.ylim(-30,0)
+                plt.xlim(50,150)
+                plt.axhline(-3)
             else:
-                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
+                ax.plot(angle*(180/np.pi), r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
+                plt.grid()
+                plt.xlim(50,150)
+                plt.ylim(-30,0)
+                plt.axhline(-3)
+
             cpt = cpt + 1
 
         if kwargs['polar']:
@@ -5082,6 +5099,7 @@ class AntPosRot(Antenna):
 
 def F0(nu,sigma):
     """ F0 function for horn antenna pattern 
+        equivalent to diffint.m
     
     Parameters
     ----------
@@ -5098,17 +5116,23 @@ def F0(nu,sigma):
     18.3.2
 
     """
-    nuos  = nu/sigma
-    argp = nuos + sigma
-    argm = nuos - sigma
-    expf = np.exp(1j*(np.pi/2)*nuos**2)
-    sf   = 1./sigma
-    sp , cp = fresnel(argp)
-    sm , cm = fresnel(argm)
-    Fp = cp-1j*sp
-    Fm = cm-1j*sm
 
-    F = sf*expf*(Fp -Fm)
+
+    if sigma != 0:
+        nuos    = nu/sigma
+        argp    = nuos + sigma
+        argm    = nuos - sigma
+        expf    = np.exp(1j*(np.pi/2)*nuos**2)
+        sf      = 1./sigma
+        sp , cp = fresnel(argp)
+        sm , cm = fresnel(argm)
+        Fp      = cp - 1j*sp
+        Fm      = cm - 1j*sm
+        F       = sf*expf*(Fp -Fm)
+    
+    else:
+        F       = (np.exp(1j*np.pi*nu*1) - np.exp(1j*np.pi*nu*(-1))) / (1j*np.pi*nu)
+                    
     return F 
 
 def F1(nu,sigma):
