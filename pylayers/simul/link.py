@@ -1809,7 +1809,7 @@ class DLink(Link):
         self.checkh5()
 
 
-    def afp(self,fGHz,vl,pl,az=0,tilt=0,polar='V'):
+    def afp(self,fGHz,az=0,tilt=0,polar='V'):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1817,10 +1817,6 @@ class DLink(Link):
 
         fGHz  : np.array 
             frequency range 
-        vl : np.array (,3)
-            main beam direction in local frame
-        pl : np.array (,3)
-            polarisation vector in a plane perpendicular to vl 
         az : azimuth angle (radian)  
         tilt : tilt angle (-pi/2<tilt<pi/2) 
         polar : string
@@ -1834,7 +1830,7 @@ class DLink(Link):
         #
         afp = AFPchannel(tx=self.a,rx=self.b,az=az)
         for ph in az:
-            self.Tb = geu.MATP(vl,pl,ph,tilt,polar)
+            self.Tb = geu.MATP(self.Ab.vl,self.Ab.pl,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
