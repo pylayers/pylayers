@@ -86,6 +86,7 @@ from __future__ import print_function
 import doctest
 import pdb
 import numpy as np
+import numpy.ma as ma
 import numpy.linalg as la
 import scipy as sp
 import pylab as plt
@@ -132,12 +133,12 @@ class AFPchannel(bs.FUsignal):
         azimuth offset w.r.t global frame
 
     """
-    def __init__(self,x=np.array([]),
-                      y=np.array([]),
-                      tx=np.array([]),
-                      rx=np.array([]),
-                      az=np.array([]),
-                      offset=21.128*np.pi/180):
+    def __init__(self,x = np.array([]),
+                      y = np.array([]),
+                      tx = np.array([]),
+                      rx = np.array([]),
+                      az = np.array([]),
+                      offset = 21.128*np.pi/180):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         self.tx = tx 
         self.rx = rx
@@ -154,8 +155,8 @@ class AFPchannel(bs.FUsignal):
             
     def __repr__(self):
         s = 'Angular Frequency Profile object \n'
-        s = 'Tx : '+str(self.tx)+'\n'
-        s = 'Rx : '+str(self.rx)+'\n'
+        s = s + 'Tx : '+str(self.tx)+'\n'
+        s = s + 'Rx : '+str(self.rx)+'\n'
 
         
         return(s)
@@ -273,17 +274,25 @@ class ADPchannel(bs.TUsignal):
         Parameters
         ----------
 
-        x : 
-        y :
-        az : 
-        tx :
-        rx :
+        x : np.array
+            delay  
+        y : np.array
+            angle x delay  
+        az : np.array
+            azimuth angle
+        tx : np.array
+            tx coordinates
+        rx : np.array
+            rx coordinates
         _filename :
         offset  : 
 
         """
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
         self.az = az
+        self.tx = tx
+        self.rx = rx 
+        self._filename = _filename 
         self.offset = offset
         if len(tx)>0:
             txrx = tx-rx
@@ -442,8 +451,135 @@ class ADPchannel(bs.TUsignal):
             plt.legend(loc='best') 
         return fig,ax,PL,spdp
 
+    def tomap(self,L,**kwargs):
+        """ surimpose PADP on the Layout 
+
+        Parameters
+        ----------
+
+        L : Layout
+
+
+        """
+        defaults = {'xmin':10,
+                    'xmax':400,
+                    'ymin':10,
+                    'ymax':400,
+                    'Nx':3000,
+                    'Ny':3000,
+                    'cmap':'jet',
+                    'mode':'image',
+                    'figsize':(20,20),
+                    'thmindB':-110,
+                    'thmaxdB':-108,
+                    'vmindB':-110,
+                    'vmaxdB':-60}
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k] 
+        
+        xmin = kwargs.pop('xmin')
+        ymin = kwargs.pop('ymin')
+        xmax = kwargs.pop('xmax')
+        ymax = kwargs.pop('ymax')
+        mode = kwargs.pop('mode')
+        vmindB = kwargs.pop('vmindB')
+        vmaxdB = kwargs.pop('vmaxdB')
+        thmindB = kwargs.pop('thmindB')
+        thmaxdB = kwargs.pop('thmaxdB')
+        Nx = kwargs.pop('Nx')
+        Ny = kwargs.pop('Ny')
+        cmap = kwargs.pop('cmap')
+        figsize = kwargs.pop('figsize')
+        
+        Z  = np.zeros((Nx,Ny),dtype=complex)
+
+        xr = np.linspace(xmin,xmax,Nx)
+        yr = np.linspace(xmin,xmax,Ny)
+
+        d2Dtxrx = np.sqrt((self.tx[1]-self.rx[1])**2+(self.tx[0]-self.rx[0])**2)
+        #print(d2Dtxrx)
+        deltah = np.abs(self.tx[2]-self.rx[2])
+        
+        #
+        # Dt = vec(P,Tx)
+        # Dr = vec(Rx,P)
+        #
+        dxt =(self.tx[0]-xr)[:,None]
+        dyt =(self.tx[1]-yr)[None,:]
+        nwt = np.sqrt(dxt*dxt+dyt*dyt)
+
+        dxr =(xr-self.rx[0])[:,None]
+        dyr =(yr-self.rx[1])[None,:]
+        nwr = np.sqrt(dxr*dxr+dyr*dyr)
+
+        dsbounce = nwt+nwr
+        dmax = dsbounce.max()
+        taumax = dmax/0.3
+        itaumax = np.where(self.x>taumax)[0][0]
+        taumax = self.x[itaumax]
+        tau2idx = taumax/itaumax
+
+        dxrn = dxr/nwr
+        dyrn = dyr/nwr
+
+        phi = np.arctan2(dyrn,dxrn)-21.18*np.pi/180
+        phi = (1-np.sign(phi))*np.pi+phi
+
+        iphi=((315-phi*180/np.pi)/5).astype(int)
+        
+        drpt = np.sqrt(dxr*dxr+dyr*dyr+dxt*dxt+dyt*dyt)
+        dpr = np.sqrt(dxr*dxr+dyr*dyr)
+
+        if mode=='sbounce':
+            iid = np.round((np.sqrt(dxt*dxt+dyt*dyt)+np.sqrt(dxr*dxr+dyr*dyr))/(0.3*0.625)).astype('int')
+        else:
+            #d = np.round(np.sqrt(dxr*dxr+dyr*dyr)/(0.3*0.625)).astype('int')
+            #d = np.round(np.sqrt(dxr*dxr+dyr*dyr)/(0.3*0.625)).astype('int')
+            alpha = np.arctan(deltah/drpt)
+            dv = dpr/np.cos(alpha)
+            iid = np.round(dv/(0.3*tau2idx)).astype('int')
+            #pdb.set_trace()
+        
+        ix = np.arange(Nx)[:,None]
+        iy = np.arange(Ny)[None,:]
+
+        ird = iid[ix,iy].ravel()
+        irp = iphi[ix,iy].ravel()
+        #
+        #  d < dmax  
+        #  iphi >= 0 and iphi < Nphimax
+        ud = np.where(ird<itaumax)
+        up = np.where((irp>=0) & (irp<len(self.az)))
+        u  = np.intersect1d(ud,up)
+
+        rz = Z.ravel()
+        # filling z with self.y nphi,Ntau
+        rz[u] = self.y[irp[u],ird[u]]
+        #
+        # back to matrix form
+        #
+        Z = rz.reshape(Nx,Ny)
+        ZdB = 20*np.log10(np.abs(Z.T))
+        mask = ((ZdB.all()>thmindB) and (ZdB.all()<thmaxdB))
+        #mzdB = ma.masked_array(ZdB,mask)
+
+        # constructing figure
+
+        fig=plt.figure(figsize=figsize)
+        L.showG('s',fig=fig,labels=0)
+        plt.axis('on')
+        plt.imshow(ZdB,extent=(xr[0],xr[-1],yr[0],yr[-1]),cmap=cmap,origin='lower',alpha=0.9,vmin=vmindB,vmax=vmaxdB,interpolation='nearest')
+        #plt.imshow(mzdB,alpha=0.9,origin='lower')
+        plt.plot(self.tx[0],self.tx[1],'or')
+        plt.plot(self.rx[0],self.rx[1],'ob')
+        plt.colorbar()
+        plt.title(self._filename)
+        plt.savefig(self._filename+'.png')
+        return(Z,np.linspace(xr[0],xr[-1],Nx),np.linspace(yr[0],yr[-1],Ny))
+
     def polarplot(self,**kwargs):
-        """  
+        """  polar plot of PADP 
 
         Parameters
         -----------
