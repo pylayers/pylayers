@@ -158,6 +158,7 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from pylayers.util.project import *
 from pylayers.antprop.spharm import *
+from pylayers.antprop.antvsh import vsh 
 from pylayers.antprop.antssh import SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
 from matplotlib import rc
@@ -318,14 +319,23 @@ class Pattern(PyLayers):
         self.nth = len(self.theta)
         self.nph = len(self.phi)
 
-        
-
         #
         # evaluation of the specific Pattern__p function 
         #
-        eval('self._Pattern__p'+self.typ)(param=self.param)
-
-        self.evaluated = True
+        if 'inplace' in self.param:
+            if self.param['inplace']:
+                eval('self._Pattern__p'+self.typ)(param=self.param)
+                self.evaluated = True
+            else:
+                Ft,Fp = eval('self._Pattern__p'+self.typ)(param=self.param)
+                return Ft,Fp
+        else:
+            eval('self._Pattern__p'+self.typ)(param=self.param)
+            self.evaluated = True
+    
+    def vsh(self):
+        if self.evaluated:
+            vsh(self)
 
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
@@ -986,7 +996,21 @@ class Pattern(PyLayers):
 
     def __pvsh3(self,**kwargs):
         """ calculate pattern for vsh3
+
+        Parameters
+        ----------
+        inplace : boolean 
+            if True overwrite self.Ft and self.Fp 
+            else return Ft and Fp 
+
         """
+        defaults = {'param':{'inplace' : True
+                   }}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+        assert hasattr(self,'C'),'no spherical coefficient'
+        assert hasattr(self.C.Br,'s3'),'no shape 3 coeff in vsh'
 
         if self.grid:
             theta = np.kron(self.theta, np.ones(self.nph))
@@ -1024,23 +1048,26 @@ class Pattern(PyLayers):
 
         # here Nf x Nd
 
-        self.Ft = Fth.transpose()
-        self.Fp = Fph.transpose()
+        Ft = Fth.transpose()
+        Fp = Fph.transpose()
 
         # then Nd x Nf
 
         if self.grid:
         # Nth x Nph x Nf
-            #self.Ft = Fth.reshape(self.nf, self.nth, self.nph)
-            #self.Fp = Fph.reshape(self.nf, self.nth, self.nph)
-            self.Ft = self.Ft.reshape(self.nth, self.nph,self.nf)
-            self.Fp = self.Fp.reshape(self.nth, self.nph,self.nf)
+            Ft = Ft.reshape(self.nth, self.nph,self.nf)
+            Fp = Fp.reshape(self.nth, self.nph,self.nf)
 
-
-        assert(self.Ft.shape[-1]==self.nf)
-        assert(self.Fp.shape[-1]==self.nf)
-
-        self.gain()
+        # last axis should be frequency 
+        assert(Ft.shape[-1]==self.nf)
+        assert(Fp.shape[-1]==self.nf)
+        
+        if kwargs['param']['inplace']:
+            self.Ft = Ft
+            self.Fp = Fp
+            self.gain()
+        else:
+            return Ft,Fp
 
     def __psh3(self,**kwargs):
         """ calculate pattern for sh3
@@ -1049,6 +1076,14 @@ class Pattern(PyLayers):
         ----------
 
         """
+        defaults = {'param':{'inplace' : True
+                   }}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        assert hasattr(self,'S'),'no spherical coefficient'
+        assert hasattr(self.S.Cx,'s3'),'no shape 3 coeff in ssh'
 
         if self.grid:
             theta = np.kron(self.theta, np.ones(self.nph))
@@ -2016,6 +2051,12 @@ class Antenna(Pattern):
 #
 #
 
+        if hasattr(self,'C'):
+            st = seld.C.__repr__()
+
+        if hasattr(self,'S'):
+            st = seld.S.__repr__()
+
         if self.evaluated:
             st = st + '-----------------------\n'
             st = st + '      evaluated        \n'
@@ -2460,17 +2501,19 @@ class Antenna(Pattern):
         if phi == []:
             phi = np.linspace(0,2*np.pi,60)
 
+        self.grid = True
+
         Nt = len(theta)
         Np = len(phi)
         Nf = len(self.fGHz)
         #Th = np.kron(theta, np.ones(Np))
         #Ph = np.kron(np.ones(Nt), phi)
         if typ =='s1':
-            FTh, FPh = self.Fsynth1(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth1(theta, phi)
         if typ =='s2':
-            FTh, FPh = self.Fsynth2b(theta,phi,pattern=True)
+            FTh, FPh = self.Fsynth2b(theta,phi)
         if typ =='s3':
-            FTh, FPh = self.Fsynth3(theta, phi,pattern=True )
+            FTh, FPh = self.Fsynth3(theta, phi)
         #FTh = Fth.reshape(Nf, Nt, Np)
         #FPh = Fph.reshape(Nf, Nt, Np)
 
@@ -2612,11 +2655,11 @@ class Antenna(Pattern):
         #Ph = np.kron(np.ones(Nt), phi)
 
         if typ =='s1':
-            FTh, FPh = self.Fsynth1(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth1(theta, phi)
         if typ =='s2':
-            FTh, FPh = self.Fsynth2b(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth2b(theta, phi)
         if typ =='s3':
-            FTh, FPh = self.Fsynth3(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth3(theta, phi)
 
         #FTh = Fth.reshape(self.nf, Nt, Np)
         #FPh = Fph.reshape(self.nf, Nt, Np)
@@ -3530,7 +3573,7 @@ class Antenna(Pattern):
             raise Warning('antenna has not been evaluated')
 
 
-    def Fsynth(self,theta=[],phi=[],pattern=True):
+    def Fsynth(self,theta=[],phi=[],):
         """ Perform Antenna synthesis
 
         Parameters
@@ -3538,21 +3581,21 @@ class Antenna(Pattern):
 
         theta : np.array
         phi :   np.array
-        pattern : boolean
             call Antenna.Fpatt or Antenna.Fsynth3
 
         Notes
         -----
 
         The antenna pattern synthesis is done either from spherical
-        harmonics coefficients or from a analytical expression of the
+        harmonics coefficients or from an analytical expression of the
         radiation pattern.
 
         """
         if ((self.fromfile) or (self.typ=='vsh') or (self.typ=='ssh')):
-            Ft,Fp = self.Fsynth3(theta,phi,pattern)
+            Ft,Fp = self.Fsynth3(theta,phi)
+            self.gain()
+            self.evaluated=True
         else :
-
             Ft = self.Ft
             Fp = self.Fp
             self.theta = theta
@@ -3563,7 +3606,7 @@ class Antenna(Pattern):
 
 
     #def Fsynth1(self, theta, phi, k=0):
-    def Fsynth1(self, theta, phi,pattern=False):
+    def Fsynth1(self, theta, phi):
         """ calculate complex antenna pattern  from VSH Coefficients (shape 1)
 
         Parameters
@@ -3584,7 +3627,7 @@ class Antenna(Pattern):
         Nt = len(theta)
         Np = len(phi)
 
-        if pattern:
+        if self.grid:
             theta = np.kron(theta, np.ones(Np))
             phi = np.kron(np.ones(Nt),phi)
 
@@ -3643,7 +3686,7 @@ class Antenna(Pattern):
         #    np.dot(Bi, np.real(W.T)) + \
         #    np.dot(Br, np.imag(W.T))
 
-        if pattern:
+        if self.grid:
             Nf = len(self.fGHz)
             Fth = Fth.reshape(Nf, Nt, Np)
             Fph = Fph.reshape(Nf, Nt, Np)
@@ -3754,7 +3797,7 @@ class Antenna(Pattern):
 
         return np.array(tEBr),np.array(tEBi),np.array(tECr),np.array(tECi)
 
-    def Fsynth2b(self, theta, phi,pattern=False):
+    def Fsynth2b(self, theta, phi):
         """  pattern synthesis from shape 2 vsh coefficients
 
         Parameters
@@ -3775,7 +3818,7 @@ class Antenna(Pattern):
         Nt = len(theta)
         Np = len(phi)
 
-        if pattern:
+        if self.grid:
             theta = np.kron(theta, np.ones(Np))
             phi = np.kron(np.ones(Nt),phi)
 
@@ -3810,14 +3853,14 @@ class Antenna(Pattern):
         Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
               np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
-        if pattern:
+        if self.grid:
             Nf = len(self.fGHz)
             Fth = Fth.reshape(Nf, Nt, Np)
             Fph = Fph.reshape(Nf, Nt, Np)
 
         return Fth, Fph
 
-    def Fsynth2(self, theta, phi,pattern=False, typ = 'vsh'):
+    def Fsynth2(self, theta, phi, typ = 'vsh'):
         """  pattern synthesis from shape 2 vsh coeff
 
         Parameters
@@ -3846,7 +3889,7 @@ class Antenna(Pattern):
 
         if typ =='vsh' :
 
-            if pattern:
+            if self.grid:
                 theta = np.kron(theta, np.ones(self.nph))
                 phi = np.kron(np.ones(self.nth),phi)
 
@@ -3880,11 +3923,11 @@ class Antenna(Pattern):
             Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
                 np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
-            if pattern:
+            if self.grid:
                 Fth = Fth.reshape(self.nf, self.nth, self.nph)
                 Fph = Fph.reshape(self.nf, self.nth, self.nph)
-        else:
 
+        if typ=='ssh':
             cx = self.S.Cx.s2
             cy = self.S.Cy.s2
             cz = self.S.Cz.s2
@@ -3901,7 +3944,7 @@ class Antenna(Pattern):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True):
+    def Fsynth3(self,theta=[],phi=[],typ='vsh'):
         r""" synthesis of a complex antenna pattern from SH coefficients
         (vsh or ssh  in shape 3)
 
@@ -3921,7 +3964,7 @@ class Antenna(Pattern):
         Returns
         -------
 
-        if pattern:
+        if self.grid:
             Fth   : ndarray (Ntheta x Nphi)
             Fph   : ndarray (Ntheta x Nphi)
         else:
@@ -3953,7 +3996,7 @@ class Antenna(Pattern):
 
         """
 
-        typ = self.typ
+        #typ = self.typ
         #self._filename.split('.')[1]
         #if typ=='satimo':
         #    coeff=1.
@@ -3961,7 +4004,8 @@ class Antenna(Pattern):
         #    coeff=1./sqrt(30)
 
 
-        assert typ in ['ssh','vsh','hfss'], "Error wrong file type"
+        #assert typ in ['ssh','vsh','hfss'], 
+        assert (hasattr(self,'C') or hasattr(self,'S')),"No SH coeffs evaluated"
 
         Nf = len(self.fGHz)
         if theta==[]:
@@ -3975,7 +4019,7 @@ class Antenna(Pattern):
         self.nth = len(theta)
         self.nph = len(phi)
 
-        if pattern:
+        if self.grid:
             #self.theta = theta[:,None]
             #self.phi = phi[None,:]
             self.theta = theta
@@ -4012,7 +4056,7 @@ class Antenna(Pattern):
                    np.dot(Bi, np.real(W.T)) + \
                    np.dot(Br, np.imag(W.T))
 
-            if pattern:
+            if self.grid:
 
                 Fth = Fth.reshape(Nf, Nt, Np)
                 Fph = Fph.reshape(Nf, Nt, Np)
@@ -4044,30 +4088,30 @@ class Antenna(Pattern):
                 Ez = np.dot(cz,Y[k])
                 Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
 
-            self.Fp = Fph
-            self.Ft = Fth
-            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
-            self.sqG = np.sqrt(G)
+            #self.Fp = Fph
+            #self.Ft = Fth
+            #G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            #self.sqG = np.sqrt(G)
 
 
-        if pattern :
-            self.Fp = Fph
-            self.Ft = Fth
-            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
-            self.sqG = np.sqrt(G)
+        #if self.grid:
+        #    self.Fp = Fph
+        #    self.Ft = Fth
+        #    G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+        #    self.sqG = np.sqrt(G)
 
         self.evaluated = True
 
-        if typ == 'hfss':
-            scipy.interpolate.griddata()
+        #if typ == 'hfss':
+        #    scipy.interpolate.griddata()
 
-            Fth = self.Ft
-            Fph = self.Fp
+        #    Fth = self.Ft
+        #    Fph = self.Fp
         # TODO create 2 different functions for pattern and not pattern
-        if not pattern:
-            return Fth, Fph
-        else:
-            return None,None
+        #if not self.grid:
+        return Fth, Fph
+        #else:
+        #    return None,None
 
     def movie_vsh(self, mode='linear'):
         """ animates vector spherical coeff w.r.t frequency
@@ -4162,7 +4206,9 @@ class Antenna(Pattern):
         #th = np.kron(self.theta, np.ones(self.nph))
         #ph = np.kron(np.ones(self.nth), self.phi)
 
-        Fth3, Fph3 = self.Fsynth3(self.theta, self.phi,pattern=True)
+        if not self.grid:
+            self.grid = True
+        Fth3, Fph3 = self.Fsynth3(self.theta, self.phi)
         Err = self.mse(Fth3, Fph3, 0)
 
         Enc = self.C.ens3()
@@ -4173,14 +4219,14 @@ class Antenna(Pattern):
 
             Emin = Enc[pos]
             d = self.C.drag3(Emin)
-            Fth3, Fph3 = self.Fsynth3(self.theta, self.phi,pattern=True)
+            Fth3, Fph3 = self.Fsynth3(self.theta, self.phi)
             Err = self.mse(Fth3, Fph3, 0)
 
             if Err[0] >= emax:
                 i = d[0][0]
                 i3 = d[1][0]
                 self.C.put3(i, i3)
-                Fth3, Fph3 = self.Fsynth3(self.theta,self.phi,pattern=True)
+                Fth3, Fph3 = self.Fsynth3(self.theta,self.phi)
                 Err = self.mse(Fth3, Fph3, 0)
 
             pos = pos + 1
