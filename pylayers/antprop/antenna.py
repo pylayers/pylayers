@@ -1134,6 +1134,8 @@ class Pattern(PyLayers):
         self.gain()
 
     def __pcst(self,**kwargs):
+        """ read antenna in text format
+        """
        
         defaults = {'param':{'p' : 2,
                     'directory':'ant/FF_Results_txt_port_1_2/',
