@@ -271,8 +271,10 @@ class Pattern(PyLayers):
             if 'fGHz' not in self.__dict__:
                 self.fGHz = np.array([2.4])
         else:
-            self.fGHz = kwargs['fGHz']
-
+            if type(kwargs['fGHz'])==np.ndarray:
+                self.fGHz = kwargs['fGHz']
+            else:
+                self.fGHz = np.array([kwargs['fGHz']])
         self.nf = len(self.fGHz)
         self.grid = kwargs['grid']
         #
@@ -422,9 +424,10 @@ class Pattern(PyLayers):
         HPBW_x = (0.886*ld/Dx)/deg_to_rad
         HPBW_y = (0.886*ld/Dy)/deg_to_rad
         Gmax = self.param['Gfactor']/(HPBW_x*HPBW_y)
-        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
+        
+        pdb.set_trace()
 
-        # pdb.set_trace()
+        F  = np.sqrt(Gmax[...,:])*F_nor # Ndir x Nf 
 
         # Handling repatition on both vector components
         # enforce E.y = 0 
@@ -439,6 +442,7 @@ class Pattern(PyLayers):
             self.Fp = (np.cos(theta)*np.cos(phi)/np.sin(phi))*self.Ft
             nan_bool = np.isnan(self.Fp)
             self.Fp[nan_bool] = F[nan_bool] 
+        
         # enforce E.x = 0 
         #
         # This is experimeintal 
@@ -565,7 +569,124 @@ class Pattern(PyLayers):
         self.gain()
 
 
-    
+    def __phplanesectoralhorn(self,**kwargs):
+        """ H plane sectoral horn 
+
+
+        Parameters
+        ----------
+        
+        rho1 : float 
+            sector radius (meter)
+        a1 : float
+            aperture dimension along x (greatest value in meters)
+        b1 : float 
+            aperture dimension along y (greatest value in meters) 
+
+        Notes
+        -----
+
+        Maximum gain in theta =0 
+        Polarized along y axis (Jx=0,Jz=0)  
+
+        """
+
+        defaults = {'param': {'rho1':0.198,
+                              'a1':0.088,  # aperture dimension along x
+                              'b1':0.0126, # aperture dimension along y 
+                              'fcGHz':28,
+                              'GcmaxdB':19,
+                              'Nx':20,
+                              'Ny':20}}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.param = kwargs['param']
+        #H-plane antenna
+        rho1            = self.param['rho1']
+        a1              = self.param['a1']
+        b1              = self.param['b1']
+        Nx              = self.param['Nx']
+        Ny              = self.param['Ny']
+        fcGHz           = self.param['fcGHz']
+        GcmaxdB         = self.param['GcmaxdB']
+        assert(a1>b1), "a1 should be greater than b1 (see fig 13.1O(a) Balanis"
+
+        lbda   = 0.3/self.fGHz
+        k      = 2*np.pi/lbda
+        eta0    = np.sqrt(4*np.pi*1e-7/8.85429e-12)
+
+        if self.grid:
+            # X,Y aperture points (t,p,x,y,f)
+            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,None,:,None,None]
+            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,None,:,None]
+            # angular domain (theta,phi)
+            Theta= self.theta[:,None,None,None,None]
+            Phi = self.phi[None,:,None,None,None]
+        else:
+            # X,Y aperture points (r,x,y,f)
+            X = np.arange(-a1/2,a1/2,a1/(Nx-1))[None,:,None,None]
+            Y = np.arange(-b1/2,b1/2,b1/(Ny-1))[None,None,:,None]
+            # angular domain (theta,phi)
+            Theta= self.theta[:,None,None,None]
+            Phi= self.phi[:,None,None,None]
+
+
+        #% Aperture field Ea:
+
+        # This 'Ea_dot_uy' is an approximation of the aperture field:
+        # (from: C. A. Balanis, Antenna Theoy: Analysis and Design. New York
+        # Wiley, 1982. ... Section 13.3.1 )
+
+        Ea_dot_uy = np.cos(X*np.pi/a1)*np.exp(-.5*1j*k*((X**2)/(rho1)+(Y**2)/(rho1)))
+        Jy   = -Ea_dot_uy/eta0
+        Mx   = Ea_dot_uy
+
+        # cosine direction
+        ctsp  = np.cos(Theta)*np.sin(Phi)
+        cp   = np.cos(Phi)
+        ctcp = np.cos(Theta)*np.cos(Phi)
+        sp  = np.sin(Phi) 
+        stcp = np.sin(Theta)*np.cos(Phi)
+        stsp = np.sin(Theta)*np.sin(Phi)
+        # N & L
+        exponent = np.exp(1j*k*( X*stcp + Y*stsp))        # exp(jk (r.r'))
+        if self.grid:
+            N_theta  = np.einsum('tpnmf->tpf',Jy*ctsp*exponent) # 12-12 a assuming Jx,Jz=0
+            N_phi    = np.einsum('tpnmf->tpf',Jy*cp*exponent)   # 12-12 b ""
+            L_theta  = np.einsum('tpnmf->tpf',Mx*ctcp*exponent) # 12-12 c assuming My,Mz=0 
+            L_phi    = np.einsum('tpnmf->tpf',-Mx*sp*exponent)  # 12-12 d ""
+        else:
+            N_theta  = np.einsum('rnmf->rf',Jy*ctsp*exponent) # 12-12 a assuming Jx,Jz=0
+            N_phi    = np.einsum('rnmf->rf',Jy*cp*exponent)   # 12-12 b ""
+            L_theta  = np.einsum('rnmf->rf',Mx*ctcp*exponent) # 12-12 c assuming My,Mz=0 
+            L_phi    = np.einsum('rnmf->rf',-Mx*sp*exponent)  # 12-12 d ""
+
+
+        # Far-Field
+        self.Ft  = -L_phi  - eta0*N_theta  # 12-10b p 661
+        self.Fp  = -L_theta + eta0*N_phi   # 12-10c p 661 (!! *-1)
+        G = self.Ft*np.conj(self.Ft)+self.Fp*np.conj(self.Fp)
+            
+        Gmax = G.max(axis=(0,1))
+        
+        #pdb.set_trace()
+
+        #if self.grid:
+        self.Ft = self.Ft/np.sqrt(Gmax[None,None,:])
+        self.Fp = self.Fp/np.sqrt(Gmax[None,None,:])
+        self.gain()
+        fcc  = np.abs(self.fGHz-fcGHz)
+        idxc = np.where(fcc==np.min(fcc))[0]
+        Gfactor = 10**(GcmaxdB/10.) * self.ehpbw[idxc]
+        Gmax = Gfactor/self.ehpbw
+        self.Ft = np.sqrt(Gmax[None,None,:])*self.Ft
+        self.Fp = np.sqrt(Gmax[None,None,:])*self.Fp
+        self.evaluated = True
+        self.gain()
+        #else:
+
 
     def __phorn(self,**kwargs):
         """ Horn antenna 
@@ -1412,7 +1533,9 @@ class Pattern(PyLayers):
 
         """
         self.G = np.real( self.Fp * np.conj(self.Fp)
-                         +  self.Ft * np.conj(self.Ft) )
+                       +  self.Ft * np.conj(self.Ft) )
+
+
         if self.grid:
             dt = self.theta[1]-self.theta[0]
             dp = self.phi[1]-self.phi[0]
@@ -1424,7 +1547,19 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(self.G)
             self.GdB = 10*np.log10(self.G)
             # GdBmax (,Nf)
+            # Get direction of Gmax and get the polarisation state in that direction 
+            # 
             self.GdBmax = np.max(np.max(self.GdB,axis=0),axis=0)
+            self.umax = np.array(np.where(self.GdB==self.GdBmax))[:,0]
+            self.theta_max = self.theta[self.umax[0]]
+            self.phi_max = self.phi[self.umax[1]]
+            M = geu.SphericalBasis(np.array([[self.theta_max,self.phi_max]]))
+            self.vl = M[:,2].squeeze()
+            uth = M[:,0] 
+            uph = M[:,1] 
+            pl = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
+            pln = pl/np.linalg.norm(pl)
+            self.pl = np.abs(pln.squeeze())
             #assert((self.efficiency<1.0).all()),pdb.set_trace()
             self.hpster=np.zeros(len(self.fGHz))
             self.ehpbw=np.zeros(len(self.fGHz))
@@ -1671,21 +1806,10 @@ class Pattern(PyLayers):
 
                 plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
             # actual plotting
-            
-            deg_to_rad = 180/np.pi
-
             if len(lfreq)>1: 
-                # ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
-                ax.plot(angle * deg_to_rad, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
-                plt.grid()
-                plt.axhline(-3)
-                plt.ylim(-50,0)
+                ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             else:
-                # ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
-                ax.plot(angle * deg_to_rad, r- self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
-                plt.grid()
-                plt.axhline(-3)
-                plt.ylim(-50,0)
+                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
             cpt = cpt + 1
 
         if kwargs['polar']:
@@ -1793,7 +1917,11 @@ class Antenna(Pattern):
                 kwargs[k] = defaults[k]
 
         if 'fGHz' in kwargs:
-            self.fGHz=kwargs['fGHz']
+            if type(kwargs['fGHz'])==np.ndarray:
+                self.fGHz=kwargs['fGHz']
+            else:
+                self.fGHz=np.array([kwargs['fGHz']])
+
 
         #mayavi selection
         self._is_selected=False
@@ -1926,6 +2054,11 @@ class Antenna(Pattern):
                     S = self.sqG[u]
                     ud = u[0]
                     uf = u[1]
+
+            st = st + "GdBmax :"+str(self.GdBmax[0])+' '+str(self.GdBmax[-1])+'\n'
+            st = st + "Gmax direction : .vl" + str(self.vl)+'\n'
+            st = st + "Polar in Gmax direction : .pl " + str(self.pl)+'\n'
+            st = st + "effective HPBW : .ehpbw " + str(self.ehpbw[0])+' '+str(self.ehpbw[-1])+'\n'
 
             if self.source=='satimo':
                 GdB = 20*np.log10(S)
@@ -3449,6 +3582,11 @@ class Antenna(Pattern):
         phi    : ndarray (1xNdir)
         k      : int
             frequency index
+
+        Returns
+        -------
+
+        Ft , Fp 
 
         """
 
