@@ -340,8 +340,15 @@ class SSHCoeff(PyLayers):
         self.Cz = Cz
 
 
+    def __repr__(self):
+        st = 'SSH Coeff \n'
+        st = st + '------------------\n'
+        st = st + self.Cx.__repr__()
+        st = st + self.Cy.__repr__()
+        st = st + self.Cz.__repr__()
+        return(st)
 
-    def s2tos3(self, threshold=1e-5):
+    def s2tos3(self, threshold=-1):
         """ convert scalar spherical coefficients from shape 2 to shape 3
 
         Parameters
@@ -356,28 +363,41 @@ class SSHCoeff(PyLayers):
         s3 corresponds to energy thresholded coefficients
 
         """
+        
+        if threshold!=-1:
+            # integrates energy over frequency axis = 0
+            Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
+            Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
+            Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
 
-        # integrates energy over frequency axis = 0
-        Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
-        Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
-        Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
+            # calculates total Energy
+            E = Ex + Ey + Ez
 
-        # calculates total Energy
-        E = Ex + Ey + Ez
+            ind = np.nonzero(E > (E.max() * threshold))[0]
 
-        ind = np.nonzero(E > (E.max() * threshold))[0]
+            self.Cx.ind3 = self.Cx.ind2[ind]
+            self.Cx.s3 = self.Cx.s2[:, ind]
+            self.Cx.k2 = ind
 
-        self.Cx.ind3 = self.Cx.ind2[ind]
-        self.Cx.s3 = self.Cx.s2[:, ind]
-        self.Cx.k2 = ind
+            self.Cy.ind3 = self.Cy.ind2[ind]
+            self.Cy.s3 = self.Cy.s2[:, ind]
+            self.Cy.k2 = ind
 
-        self.Cy.ind3 = self.Cy.ind2[ind]
-        self.Cy.s3 = self.Cy.s2[:, ind]
-        self.Cy.k2 = ind
+            self.Cz.ind3 = self.Cz.ind2[ind]
+            self.Cz.s3 = self.Cz.s2[:, ind]
+            self.Cz.k2 = ind
+        else:
+            self.Cx.ind3 = self.Cx.ind2
+            self.Cx.s3 = self.Cx.s2
+            self.Cx.k2 = np.arange(0,self.Cx.ind2.shape[0])
 
-        self.Cz.ind3 = self.Cz.ind2[ind]
-        self.Cz.s3 = self.Cz.s2[:, ind]
-        self.Cz.k2 = ind
+            self.Cy.ind3 = self.Cy.ind2
+            self.Cy.s3 = self.Cy.s2
+            self.Cy.k2 = np.arange(0,self.Cy.ind2.shape[0])
+
+            self.Cz.ind3 = self.Cz.ind2
+            self.Cz.s3 = self.Cz.s2
+            self.Cz.k2 = np.arange(0,self.Cz.ind2.shape[0])
 
     def sets3(self,Cx,Cy,Cz):
         """ set shape 3
@@ -1496,7 +1516,7 @@ class VSHCoeff(object):
         self.Ci.k2 = ib[range(k)]
         return E[ib[k-1]]
 
-    def s2tos3(self, threshold=1e-5):
+    def s2tos3(self, threshold=-1):
         """ convert vector spherical coefficients from shape 2 to shape 3
 
         Parameters
@@ -1510,30 +1530,48 @@ class VSHCoeff(object):
         """
 
         # integrates energy over frequency  axis = 0
-        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
-        EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
-        ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
-        ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
+        if threshold!=-1:
+            EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
+            EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
+            ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
+            ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
 
-        E = EBr + EBi + ECr + ECi
+            E = EBr + EBi + ECr + ECi
 
-        ind = np.nonzero(E > (E.max() * threshold))[0]
+            ind = np.nonzero(E > (E.max() * threshold))[0]
 
-        self.Br.ind3 = self.Br.ind2[ind]
-        self.Br.s3 = self.Br.s2[:, ind]
-        self.Br.k2 = ind
+            self.Br.ind3 = self.Br.ind2[ind]
+            self.Br.s3 = self.Br.s2[:, ind]
+            self.Br.k2 = ind
 
-        self.Bi.ind3 = self.Bi.ind2[ind]
-        self.Bi.s3 = self.Bi.s2[:, ind]
-        self.Bi.k2 = ind
+            self.Bi.ind3 = self.Bi.ind2[ind]
+            self.Bi.s3 = self.Bi.s2[:, ind]
+            self.Bi.k2 = ind
 
-        self.Cr.ind3 = self.Cr.ind2[ind]
-        self.Cr.s3 = self.Cr.s2[:, ind]
-        self.Cr.k2 = ind
+            self.Cr.ind3 = self.Cr.ind2[ind]
+            self.Cr.s3 = self.Cr.s2[:, ind]
+            self.Cr.k2 = ind
 
-        self.Ci.ind3 = self.Ci.ind2[ind]
-        self.Ci.s3 = self.Ci.s2[:, ind]
-        self.Ci.k2 = ind
+            self.Ci.ind3 = self.Ci.ind2[ind]
+            self.Ci.s3 = self.Ci.s2[:, ind]
+            self.Ci.k2 = ind
+        else:
+            self.Br.ind3 = self.Br.ind2
+            self.Br.s3 = self.Br.s2
+            self.Br.k2 = np.arange(0,self.Br.ind2.shape[0])
+
+            self.Bi.ind3 = self.Bi.ind2
+            self.Bi.s3 = self.Bi.s2
+            self.Bi.k2 = np.arange(0,self.Bi.ind2.shape[0])
+
+            self.Cr.ind3 = self.Cr.ind2
+            self.Cr.s3 = self.Cr.s2
+            self.Cr.k2 = np.arange(0,self.Cr.ind2.shape[0])
+            
+            self.Ci.ind3 = self.Ci.ind2
+            self.Ci.s3 = self.Ci.s2
+            self.Ci.k2 = np.arange(0,self.Ci.ind2.shape[0])
+
 
 
 
@@ -2012,10 +2050,13 @@ def VW(l, m, theta ,phi):
 
     """
 
-    if type(l) == float:
+    if (type(l) == float) or (type(l)==int):
         l = np.array([l])
-    if type(m) == float:
+    if (type(m) == float) or (type(m)==int):
         m = np.array([m])
+
+    assert(l.shape==m.shape)
+    assert(theta.shape==phi.shape)
 
     L = np.max(l)
     M = np.max(m)
@@ -2035,7 +2076,7 @@ def VW(l, m, theta ,phi):
     Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
-    Nr  = len(x)
+    Nr  = len(x)  
 
     l   = l.reshape(1,K)
     m   = m.reshape(1,K)
@@ -2112,10 +2153,10 @@ def VW0(n, m, x, phi, Pmm1n, Pmp1n):
     del t1
     del t2
     W = Y1 * np.outer(1.0 / x, (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))) * Ephi
-    W[np.isinf(W) | np.isnan(W)] = 0
+    #W[np.isinf(W) | np.isnan(W)] = 0
     del Y1
     V = Y2 * np.outer( np.ones(len(x)), (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))) * Ephi
-    V[np.isinf(V) | np.isnan(V)] = 0
+    #V[np.isinf(V) | np.isnan(V)] = 0
     del Y2
     return V, W
 
@@ -2201,23 +2242,23 @@ def plotVW(l, m, theta, phi, sf=False):
         ext2 = '.eps'
         ext3 = '.png'
         slm = ' l = '+str(l)+' m = '+str(m)
-        fig1 = plt.figure()
-        pol3D(fig1,abs(V),theta,phi,title='$|V|$'+slm)
-        fig2 = plt.figure()
-        pol3D(fig2,abs(Vcos),theta,phi,title='$\Re V$'+slm)
-        fig3 = plt.figure()
-        pol3D(fig3,abs(Vsin),theta,phi,title='$\Im V$'+slm)
-        fig4 = plt.figure()
-        pol3D(fig4,abs(W),theta,phi,title='$|W|$'+slm)
-        fig5 = plt.figure()
-        pol3D(fig5,abs(Wcos),theta,phi,title='$\Re W'+slm)
-        fig6 = plt.figure()
-        pol3D(fig6,abs(Wsin),theta,phi,title='$\Im W$'+slm)
-        plt.show()
+        #fig1 = plt.figure()
+        #pol3D(fig1,abs(V),theta,phi,title='$|V|$'+slm)
+        #fig2 = plt.figure()
+        #pol3D(fig2,abs(Vcos),theta,phi,title='$\Re V$'+slm)
+        #fig3 = plt.figure()
+        #pol3D(fig3,abs(Vsin),theta,phi,title='$\Im V$'+slm)
+        #fig4 = plt.figure()
+        #pol3D(fig4,abs(W),theta,phi,title='$|W|$'+slm)
+        #fig5 = plt.figure()
+        #pol3D(fig5,abs(Wcos),theta,phi,title='$\Re W'+slm)
+        #fig6 = plt.figure()
+        #pol3D(fig6,abs(Wsin),theta,phi,title='$\Im W$'+slm)
+        #plt.show()
 
     else:
         print("Error: m>n!!!")
-
+    return(V,W)
 
 if (__name__ == "__main__"):
     doctest.testmod()

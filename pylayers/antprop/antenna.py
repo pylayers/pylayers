@@ -159,7 +159,7 @@ import pylayers.util.geomutil as geu
 from pylayers.util.project import *
 from pylayers.antprop.spharm import *
 from pylayers.antprop.antvsh import vsh 
-from pylayers.antprop.antssh import SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
+from pylayers.antprop.antssh import ssh,SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
 from matplotlib import rc
 from matplotlib import cm # colormaps
@@ -333,9 +333,15 @@ class Pattern(PyLayers):
             eval('self._Pattern__p'+self.typ)(param=self.param)
             self.evaluated = True
     
-    def vsh(self):
+    def vsh(self,threshold=-1):
         if self.evaluated:
             vsh(self)
+            self.C.s1tos2()
+            self.C.s2tos3(threshold=threshold)
+
+    def ssh(self,L=89,dsf=1):
+        if self.evaluated:
+            ssh(self,L,dsf)
 
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
@@ -640,51 +646,65 @@ class Pattern(PyLayers):
 
 
         #% Aperture field Ea:
-
-        # This 'Ea_dot_uy' is an approximation of the aperture field:
+        # Ea is an approximation of the aperture field:
         # (from: C. A. Balanis, Antenna Theoy: Analysis and Design. New York
         # Wiley, 1982. ... Section 13.3.1 )
 
-        Ea_dot_uy = np.cos(X*np.pi/a1)*np.exp(-.5*1j*k*((X**2)/(rho1)+(Y**2)/(rho1)))
-        Jy   = -Ea_dot_uy/eta0
-        Mx   = Ea_dot_uy
+        Ea = np.cos(X*np.pi/a1)*np.exp(-.5*1j*k*((X**2)/(rho1)+(Y**2)/(rho1)))
+        Jy = -Ea/eta0
+        Mx = Ea
 
         # cosine direction
-        ctsp  = np.cos(Theta)*np.sin(Phi)
-        cp   = np.cos(Phi)
+        ctsp = np.cos(Theta)*np.sin(Phi)
+        cp = np.cos(Phi)
         ctcp = np.cos(Theta)*np.cos(Phi)
-        sp  = np.sin(Phi) 
+        sp = np.sin(Phi) 
         stcp = np.sin(Theta)*np.cos(Phi)
         stsp = np.sin(Theta)*np.sin(Phi)
         # N & L
-        exponent = np.exp(1j*k*( X*stcp + Y*stsp))        # exp(jk (r.r'))
+        ejkrrp = np.exp(1j*k*( X*stcp + Y*stsp))        # exp(jk (r.r'))
         if self.grid:
-            N_theta  = np.einsum('tpnmf->tpf',Jy*ctsp*exponent) # 12-12 a assuming Jx,Jz=0
-            N_phi    = np.einsum('tpnmf->tpf',Jy*cp*exponent)   # 12-12 b ""
-            L_theta  = np.einsum('tpnmf->tpf',Mx*ctcp*exponent) # 12-12 c assuming My,Mz=0 
-            L_phi    = np.einsum('tpnmf->tpf',-Mx*sp*exponent)  # 12-12 d ""
+            N_theta  = np.einsum('tpnmf->tpf',Jy*ctsp*ejkrrp) # 12-12 a assuming Jx,Jz=0
+            N_phi    = np.einsum('tpnmf->tpf',Jy*cp*ejkrrp)   # 12-12 b ""
+            L_theta  = np.einsum('tpnmf->tpf',Mx*ctcp*ejkrrp) # 12-12 c assuming My,Mz=0 
+            L_phi    = np.einsum('tpnmf->tpf',-Mx*sp*ejkrrp)  # 12-12 d ""
         else:
-            N_theta  = np.einsum('rnmf->rf',Jy*ctsp*exponent) # 12-12 a assuming Jx,Jz=0
-            N_phi    = np.einsum('rnmf->rf',Jy*cp*exponent)   # 12-12 b ""
-            L_theta  = np.einsum('rnmf->rf',Mx*ctcp*exponent) # 12-12 c assuming My,Mz=0 
-            L_phi    = np.einsum('rnmf->rf',-Mx*sp*exponent)  # 12-12 d ""
+            N_theta  = np.einsum('rnmf->rf',Jy*ctsp*ejkrrp) # 12-12 a assuming Jx,Jz=0
+            N_phi    = np.einsum('rnmf->rf',Jy*cp*ejkrrp)   # 12-12 b ""
+            L_theta  = np.einsum('rnmf->rf',Mx*ctcp*ejkrrp) # 12-12 c assuming My,Mz=0 
+            L_phi    = np.einsum('rnmf->rf',-Mx*sp*ejkrrp)  # 12-12 d ""
 
 
         # Far-Field
         self.Ft  = -L_phi  - eta0*N_theta  # 12-10b p 661
         self.Fp  = -L_theta + eta0*N_phi   # 12-10c p 661 (!! *-1)
         G = self.Ft*np.conj(self.Ft)+self.Fp*np.conj(self.Fp)
-        Gmax = G.max(axis=(0,1))
-        self.Ft = self.Ft/np.sqrt(Gmax[None,None,:])
-        self.Fp = self.Fp/np.sqrt(Gmax[None,None,:])
-        self.gain()
-        fcc  = np.abs(self.fGHz-fcGHz)
-        idxc = np.where(fcc==np.min(fcc))[0]
-        Gfactor = 10**(GcmaxdB/10.) * self.ehpbw[idxc]
-        Gmax = Gfactor/self.ehpbw
-        self.Ft = np.sqrt(Gmax[None,None,:])*self.Ft
-        self.Fp = np.sqrt(Gmax[None,None,:])*self.Fp
-        self.evaluated = True
+        if self.grid:
+            # Umax : ,f 
+            self.Umax = G.max(axis=(0,1))
+            self.Ft = self.Ft/np.sqrt(self.Umax[None,None,:])
+            self.Fp = self.Fp/np.sqrt(self.Umax[None,None,:])
+            self.gain()
+            # centered frequency range
+            fcc = np.abs(self.fGHz-fcGHz)
+            idxc = np.where(fcc==np.min(fcc))[0]
+            # effective half power bandwidth
+            self.Gfactor = 10**(GcmaxdB/10.)*self.ehpbw[idxc]
+            Gmax = self.Gfactor/self.ehpbw
+            self.Ft = np.sqrt(Gmax[None,None,:])*self.Ft
+            self.Fp = np.sqrt(Gmax[None,None,:])*self.Fp
+            self.evaluated = True
+        else:
+            ##
+            ## self.Ft (r x f ) 
+            ## self.Fp (r x f ) 
+            ##
+            self.Ft = self.Ft/np.sqrt(self.Umax[None,:])
+            self.Fp = self.Fp/np.sqrt(self.Umax[None,:])
+            Gmax = self.Gfactor/self.ehpbw
+            self.Ft = np.sqrt(Gmax[None,:])*self.Ft
+            self.Fp = np.sqrt(Gmax[None,:])*self.Fp
+
         self.gain()
 
     def __phorn(self,**kwargs):
@@ -994,8 +1014,109 @@ class Pattern(PyLayers):
         self.radF()
         self.gain()
 
+    def __pvsh1(self,**kwargs):
+        """ calculate pattern from VSH Coeffs (shape 1)
+
+        Parameters
+        ----------
+
+        theta  : ndarray (1xNdir)
+        phi    : ndarray (1xNdir)
+        k      : int
+            frequency index
+
+        Returns
+        -------
+
+        Ft , Fp 
+
+        """
+        defaults = {'param':{'inplace' : True
+                   }}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+        assert hasattr(self,'C'),'no spherical coefficient'
+        assert hasattr(self.C.Br,'s1'),'no shape 1 coeff in vsh'
+        
+        if self.grid:
+            theta = np.kron(self.theta, np.ones(self.nph))
+            phi = np.kron(np.ones(self.nth),self.phi)
+        else:
+            theta = self.theta
+            phi = self.phi
+
+        Nt = len(theta)
+        Np = len(phi)
+
+        if self.grid:
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
+
+        nray = len(theta)
+
+        Br = self.C.Br.s1[:, :, :]
+        Bi = self.C.Bi.s1[:, :, :]
+        Cr = self.C.Cr.s1[:, :, :]
+        Ci = self.C.Ci.s1[:, :, :]
+
+        L = self.C.Br.L1
+        M = self.C.Br.M1
+        # The - sign is necessary to get the good reconstruction
+        #     deduced from observation
+        #     May be it comes from a different definition of theta in SPHEREPACK
+        ind = index_vsh(L, M)
+        l = ind[:, 0]
+        m = ind[:, 1]
+        #
+        V, W = VW(l, m, theta, phi)
+        #
+        # broadcasting along frequency axis
+        #
+        V = np.expand_dims(V,0)
+        W = np.expand_dims(V,0)
+        #
+        #   k : frequency axis
+        #   l : axis l (theta)
+        #   m : axis m (phi)
+        #
+        Fth = np.eisum('klm,kilm->ki',Br,np.real(V.T)) - \
+              np.eisum('klm,kilm->ki',Bi,np.imag(V.T)) + \
+              np.eisum('klm,kilm->ki',Ci,np.real(W.T)) + \
+              np.eisum('klm,kilm->ki',Cr,np.imag(W.T))
+
+        Fph = -np.eisum('klm,kilm->ki',Cr,np.real(V.T)) + \
+              np.eisum('klm,kilm->ki',Ci,np.imag(V.T)) + \
+              np.eisum('klm,kilm->ki',Bi,np.real(W.T)) + \
+              np.eisum('klm,kilm->ki',Br,np.imag(W.T))
+
+        # here Nf x Nd
+
+        Ft = Fth.transpose()
+        Fp = Fph.transpose()
+
+        # then Nd x Nf
+
+        if self.grid:
+        # Nth x Nph x Nf
+            Ft = Ft.reshape(self.nth, self.nph,self.nf)
+            Fp = Fp.reshape(self.nth, self.nph,self.nf)
+
+        # last axis should be frequency 
+        assert(Ft.shape[-1]==self.nf)
+        assert(Fp.shape[-1]==self.nf)
+        
+        if kwargs['param']['inplace']:
+            self.Ft = Ft
+            self.Fp = Fp
+            self.gain()
+        else:
+            return Ft,Fp
+
+        return Fth, Fph
+
     def __pvsh3(self,**kwargs):
-        """ calculate pattern for vsh3
+        """ calculate pattern from vsh3
 
         Parameters
         ----------
@@ -1033,9 +1154,7 @@ class Pattern(PyLayers):
         # vector spherical harmonics basis functions
 
         # V, W = VW(lBr, mBr, theta, phi)
-
         V, W = VW(lBr, mBr, theta, phi)
-
         Fth = np.dot(Br, np.real(V.T)) - \
               np.dot(Bi, np.imag(V.T)) + \
               np.dot(Ci, np.real(W.T)) + \
@@ -2052,10 +2171,10 @@ class Antenna(Pattern):
 #
 
         if hasattr(self,'C'):
-            st = seld.C.__repr__()
+            st = st + self.C.__repr__()
 
         if hasattr(self,'S'):
-            st = seld.S.__repr__()
+            st = st + self.S.__repr__()
 
         if self.evaluated:
             st = st + '-----------------------\n'
@@ -3606,6 +3725,7 @@ class Antenna(Pattern):
 
 
     #def Fsynth1(self, theta, phi, k=0):
+
     def Fsynth1(self, theta, phi):
         """ calculate complex antenna pattern  from VSH Coefficients (shape 1)
 
@@ -3692,7 +3812,6 @@ class Antenna(Pattern):
             Fph = Fph.reshape(Nf, Nt, Np)
 
         return Fth, Fph
-
 
 
     def Fsynth2s(self,dsf=1):
