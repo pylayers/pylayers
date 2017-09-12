@@ -9,7 +9,6 @@
 """
 import pdb
 import doctest
-import pylayers.antprop.antenna as ant
 from pylayers.antprop.spharm import *
 from sphere import spherepack, Wrapec, mathtogeo
 import numpy as np
@@ -73,11 +72,17 @@ def vsh(A, dsf=1):
         #
         # Real part
         #
-        Fpr = A.Fp[::dsf, ::dsf,k].real
         Ftr = A.Ft[::dsf, ::dsf,k].real
+        Fpr = A.Fp[::dsf, ::dsf,k].real
         #
-        # Fpr     Ntheta,Nphi
+        # Ftr  Ntheta,Nphi
+        # Fpr  Ntheta,Nphi
         #
+        if Ftr.shape!=(nth,nph):
+            Ftr=Ftr*np.ones((nth,nph))
+        if Fpr.shape!=(nth,nph):
+            Fpr=Fpr*np.ones((nth,nph))
+        
         brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
                                           lvha, wvha,
                                           np.transpose(Fpr),
@@ -85,8 +90,14 @@ def vsh(A, dsf=1):
         #
         # Imaginary part
         #
-        Fpi = A.Fp[::dsf, ::dsf,k].imag
         Fti = A.Ft[::dsf, ::dsf,k].imag
+        Fpi = A.Fp[::dsf, ::dsf,k].imag
+
+        if Fti.shape!=(nth,nph):
+            Fti=Fti*np.ones((nth,nph))
+        if Fpi.shape!=(nth,nph):
+            Fpi=Fpi*np.ones((nth,nph))
+
         bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
                                           lvha, wvha,
                                           np.transpose(Fpi),
@@ -107,11 +118,11 @@ def vsh(A, dsf=1):
     Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
 
 
-    Br = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Br)
-    Bi = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Bi)
-    Cr = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Cr)
-    Ci = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Ci)
-    A.C = ant.VSHCoeff(Br, Bi, Cr, Ci)
+    Br = VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Br)
+    Bi = VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Bi)
+    Cr = VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Cr)
+    Ci = VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Ci)
+    A.C = VSHCoeff(Br, Bi, Cr, Ci)
     return(A)
 
 if (__name__ == "__main__"):

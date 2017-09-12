@@ -2316,9 +2316,11 @@ class DLink(Link):
         ir.plot(fig=fig,ax=ax)
         delay = ir.x 
         dist = delay*0.3
-        #FSPL = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) + 19 + 2
-        #if kwargs['fspl']:
-        #    ax.plot(delay,FSPL,linewidth=2,color='b')
+        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
+        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
+        if kwargs['fspl']:
+            ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
+            ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
 
 
         if kwargs['rays'] : 
@@ -2329,7 +2331,7 @@ class DLink(Link):
             ax.scatter(self.H.taud[uER],20*np.log10(self.H.y[uER,0,0,0]),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
-
+        ax.legend()
         return fig,ax
 
 
