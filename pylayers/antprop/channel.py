@@ -86,6 +86,7 @@ from __future__ import print_function
 import doctest
 import pdb
 import numpy as np
+import numpy.ma as ma
 import numpy.linalg as la
 import scipy as sp
 import pylab as plt
@@ -99,6 +100,7 @@ import pylayers.util.geomutil as geu
 import pylayers.antprop.antenna as ant
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.mplot3d import Axes3D
 
 try:
     import h5py
@@ -107,12 +109,38 @@ except:
 
 class AFPchannel(bs.FUsignal):
     """ Angular Frequency Profile channel
+
+    Members
+    -------
+
+    x : np.array
+        frequency ,Nf
+    y : np.array
+        Amplitude Na,Nf
+    tx : np.array
+        tx coordinate (,3)
+    rx : np.array
+        rx coordinates (,3)
+    az : np.array (,Na)
+        AFP azimutal range in radians
+    theta : link elevation angle 
+    phi : link (txrx) azimuth angle (with offset)
+    tau : link delay (ns) 
+        
+    offset : float angle in radians
+        azimuth offset w.r.t global frame
+
     """
-    def __init__(self,x=np.array([]),y=np.array([]),tx=np.array([]),rx=np.array([]),a=np.array([]),offset=21.128*np.pi/180):
+    def __init__(self,x = np.array([]),
+                      y = np.array([]),
+                      tx = np.array([]),
+                      rx = np.array([]),
+                      az = np.array([]),
+                      offset = 21.128*np.pi/180):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         self.tx = tx 
         self.rx = rx
-        self.a = a
+        self.az = az
         self.offset=offset
         self._filename = ''
         if len(tx)>0:
@@ -120,17 +148,47 @@ class AFPchannel(bs.FUsignal):
             self.dist = np.sqrt(np.sum(txrx*txrx))
             txrx_n = txrx/self.dist
             self.theta = np.arccos(txrx_n[2])
-            self.phi  = np.arctan2(txrx_n[1],txrx_n[0])-self.offset
-            self.tau  = self.dist/0.3
+            self.phi   = np.arctan2(txrx_n[1],txrx_n[0])-self.offset
+            self.tau   = self.dist/0.3
             
+    def __repr__(self):
+        s = 'Angular Frequency Profile object \n'
+        s = s + 'Tx : '+str(self.tx)+'\n'
+        s = s + 'Rx : '+str(self.rx)+'\n'
 
+        
+        return(s)
 
-    
     def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
         """ Load measurement file 
 
         Measurement files and the associated back to back calibration files 
         are placed in the mes directory of the project.
+
+        Parameters
+        ----------
+
+        _filename : string
+            data matfile name
+        _filecal : string 
+            calibration matfile name
+        fcGHz : float 
+            center frequency 
+        BW : float 
+            measurement bandwidth 
+        win : string 
+            window type in ['rect','hamming','blackman']
+
+        Notes 
+        -----
+        This function updates : 
+        + self.x (frequency GHz)
+        + self.y 
+        + self.az azimuth radians 
+
+        SEE ALSO 
+        --------
+        pylayers.util.pyutil.getlong 
 
         """
         self._filename = _filename
@@ -138,6 +196,7 @@ class AFPchannel(bs.FUsignal):
         self.fcGHz = fcGHz
         self.fmin = fcGHz-BW/2.
         self.fmax = fcGHz+BW/2.
+        self.win = win
         # load Back 2 Back calibration file
         filecal = pyu.getlong(_filecal,'meas')
         filename = pyu.getlong(_filename,'meas')
@@ -150,6 +209,7 @@ class AFPchannel(bs.FUsignal):
         #
         amp = D[:,2::2]
         ang = D[:,3::2]
+
         self.Na  = amp.shape[0]
         self.Nf  = amp.shape[1]
         #
@@ -166,13 +226,23 @@ class AFPchannel(bs.FUsignal):
         #
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
-        self.a = rot = (360-D[:,0])*np.pi/180.
+        self.az = (360-D[:,0])*np.pi/180.
 
     def toadp(self):
+        """ convert afp into adp (frequency->delay) 
 
+        """
+        # x : delay (starting at 0 ns) 
+        # y : ifft axis 1 (frequency) 
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
-        adp = ADPchannel(x=x,y=y,a=self.a,tx=self.tx,rx=self.rx,_filename=self._filename,offset=self.offset)
+        adp = ADPchannel(x=x,
+                         y=y,
+                         az=self.az,
+                         tx=self.tx,
+                         rx=self.rx,
+                         _filename=self._filename,
+                         offset=self.offset)
         return adp 
 
 class ADPchannel(bs.TUsignal):
@@ -186,24 +256,42 @@ class ADPchannel(bs.TUsignal):
     theta :  float 
     phi : 
     tau : 
+    _filename : string
+        short filename for saving     
+
 
     """
-    def __init__(self,x=np.array([]),y=np.array([]),a=np.array([]),tx=np.array([]),rx=np.array([]),_filename='',offset=0):
+    def __init__(self,
+            x=np.array([]),
+            y=np.array([]),
+            az=np.array([]),
+            tx=np.array([]),
+            rx=np.array([]),
+            _filename='',
+            offset=0):
         """
         Parameters
         ----------
 
-        x : 
-        y :
-        a : 
-        tx :
-        rx :
+        x : np.array
+            delay  
+        y : np.array
+            angle x delay  
+        az : np.array
+            azimuth angle
+        tx : np.array
+            tx coordinates
+        rx : np.array
+            rx coordinates
         _filename :
         offset  : 
 
         """
         bs.TUsignal.__init__(self,x=x,y=y,label='ADP')
-        self.a = a
+        self.az = az
+        self.tx = tx
+        self.rx = rx 
+        self._filename = _filename 
         self.offset = offset
         if len(tx)>0:
             txrx = tx-rx
@@ -214,6 +302,10 @@ class ADPchannel(bs.TUsignal):
             self.tau  = self.dist/0.3
 
         self._filename = _filename
+    
+    def __repr__(self):
+        s = 'Angular Delay Profile object \n'
+        return(s)
 
     def clean(self,threshold_dB=20):
         """  clean ADP 
@@ -260,7 +352,7 @@ class ADPchannel(bs.TUsignal):
             ax  = fig.add_subplot(111)
         else:
             ax = ax
-        ax.plot(self.a*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
+        ax.plot(self.az*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
         #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
         ax.set_ylim(-80,-60)
         if xlabel:
@@ -280,7 +372,7 @@ class ADPchannel(bs.TUsignal):
 
 
     def pdp(self,**kwargs):
-        """ Calculate Power Delay Profile
+        """ Calculate and plot Power Delay Profile
 
         Parameters
         ----------
@@ -356,8 +448,135 @@ class ADPchannel(bs.TUsignal):
             plt.legend(loc='best') 
         return fig,ax,PL,spdp
 
+    def tomap(self,L,**kwargs):
+        """ surimpose PADP on the Layout 
+
+        Parameters
+        ----------
+
+        L : Layout
+
+
+        """
+        defaults = {'xmin':10,
+                    'xmax':400,
+                    'ymin':10,
+                    'ymax':400,
+                    'Nx':3000,
+                    'Ny':3000,
+                    'cmap':'jet',
+                    'mode':'image',
+                    'figsize':(20,20),
+                    'thmindB':-110,
+                    'thmaxdB':-108,
+                    'vmindB':-110,
+                    'vmaxdB':-60}
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k] 
+        
+        xmin = kwargs.pop('xmin')
+        ymin = kwargs.pop('ymin')
+        xmax = kwargs.pop('xmax')
+        ymax = kwargs.pop('ymax')
+        mode = kwargs.pop('mode')
+        vmindB = kwargs.pop('vmindB')
+        vmaxdB = kwargs.pop('vmaxdB')
+        thmindB = kwargs.pop('thmindB')
+        thmaxdB = kwargs.pop('thmaxdB')
+        Nx = kwargs.pop('Nx')
+        Ny = kwargs.pop('Ny')
+        cmap = kwargs.pop('cmap')
+        figsize = kwargs.pop('figsize')
+        
+        Z  = np.zeros((Nx,Ny),dtype=complex)
+
+        xr = np.linspace(xmin,xmax,Nx)
+        yr = np.linspace(xmin,xmax,Ny)
+
+        d2Dtxrx = np.sqrt((self.tx[1]-self.rx[1])**2+(self.tx[0]-self.rx[0])**2)
+        #print(d2Dtxrx)
+        deltah = np.abs(self.tx[2]-self.rx[2])
+        
+        #
+        # Dt = vec(P,Tx)
+        # Dr = vec(Rx,P)
+        #
+        dxt =(self.tx[0]-xr)[:,None]
+        dyt =(self.tx[1]-yr)[None,:]
+        nwt = np.sqrt(dxt*dxt+dyt*dyt)
+
+        dxr =(xr-self.rx[0])[:,None]
+        dyr =(yr-self.rx[1])[None,:]
+        nwr = np.sqrt(dxr*dxr+dyr*dyr)
+
+        dsbounce = nwt+nwr
+        dmax = dsbounce.max()
+        taumax = dmax/0.3
+        itaumax = np.where(self.x>taumax)[0][0]
+        taumax = self.x[itaumax]
+        tau2idx = taumax/itaumax
+
+        dxrn = dxr/nwr
+        dyrn = dyr/nwr
+
+        phi = np.arctan2(dyrn,dxrn)-21.18*np.pi/180
+        phi = (1-np.sign(phi))*np.pi+phi
+
+        iphi=((315-phi*180/np.pi)/5).astype(int)
+        
+        drpt = np.sqrt(dxr*dxr+dyr*dyr+dxt*dxt+dyt*dyt)
+        dpr = np.sqrt(dxr*dxr+dyr*dyr)
+
+        if mode=='sbounce':
+            iid = np.round((np.sqrt(dxt*dxt+dyt*dyt)+np.sqrt(dxr*dxr+dyr*dyr))/(0.3*0.625)).astype('int')
+        else:
+            #d = np.round(np.sqrt(dxr*dxr+dyr*dyr)/(0.3*0.625)).astype('int')
+            #d = np.round(np.sqrt(dxr*dxr+dyr*dyr)/(0.3*0.625)).astype('int')
+            alpha = np.arctan(deltah/drpt)
+            dv = dpr/np.cos(alpha)
+            iid = np.round(dv/(0.3*tau2idx)).astype('int')
+            #pdb.set_trace()
+        
+        ix = np.arange(Nx)[:,None]
+        iy = np.arange(Ny)[None,:]
+
+        ird = iid[ix,iy].ravel()
+        irp = iphi[ix,iy].ravel()
+        #
+        #  d < dmax  
+        #  iphi >= 0 and iphi < Nphimax
+        ud = np.where(ird<itaumax)
+        up = np.where((irp>=0) & (irp<len(self.az)))
+        u  = np.intersect1d(ud,up)
+
+        rz = Z.ravel()
+        # filling z with self.y nphi,Ntau
+        rz[u] = self.y[irp[u],ird[u]]
+        #
+        # back to matrix form
+        #
+        Z = rz.reshape(Nx,Ny)
+        ZdB = 20*np.log10(np.abs(Z.T))
+        mask = ((ZdB.all()>thmindB) and (ZdB.all()<thmaxdB))
+        #mzdB = ma.masked_array(ZdB,mask)
+
+        # constructing figure
+
+        fig=plt.figure(figsize=figsize)
+        L.showG('s',fig=fig,labels=0)
+        plt.axis('on')
+        plt.imshow(ZdB,extent=(xr[0],xr[-1],yr[0],yr[-1]),cmap=cmap,origin='lower',alpha=0.9,vmin=vmindB,vmax=vmaxdB,interpolation='nearest')
+        #plt.imshow(mzdB,alpha=0.9,origin='lower')
+        plt.plot(self.tx[0],self.tx[1],'or')
+        plt.plot(self.rx[0],self.rx[1],'ob')
+        plt.colorbar()
+        plt.title(self._filename)
+        plt.savefig(self._filename+'.png')
+        return(Z,np.linspace(xr[0],xr[-1],Nx),np.linspace(yr[0],yr[-1],Ny))
+
     def polarplot(self,**kwargs):
-        """  
+        """  polar plot of PADP 
 
         Parameters
         -----------
@@ -410,7 +629,7 @@ class ADPchannel(bs.TUsignal):
         cmap = kwargs.pop('cmap')
         title = kwargs.pop('title')
 
-        rho,theta = np.meshgrid(self.x*cvel,self.a)
+        rho,theta = np.meshgrid(self.x*cvel,self.az)
         # convert y data in desired format
         dt,ylabels = self.cformat(**kwargs)
         val = dt[:,0::Ndec][:,0:imax/Ndec]
@@ -2209,15 +2428,29 @@ class Tchannel(bs.FUsignal):
         ----------
 
         BWGHz : Bandwidth 
-        Nf    : Number of frequency point 
+        Nf    : Number of frequency points
         fftshift : boolean 
+
+        See Also
+        --------
+
+        pylayers.simul.link.DLink.plt_cir
 
         """
         fGHz  = np.linspace(0,BWGHz,Nf)
         dfGHz = fGHz[1]-fGHz[0]
         tauns = np.linspace(0,1/dfGHz,Nf)
+        # E : r x nr x nt x f 
         E    = np.exp(-2*1j*np.pi*self.taud[:,None,None,None]*fGHz[None,None,None,:])
-        H    = np.sum(E*self.y,axis=0)
+        # self.y : r x nr x nt x f 
+        if self.y.shape[3]==E.shape[3]:
+            H    = np.sum(E*self.y,axis=0)
+        else:
+            if self.y.shape[3]==1:
+                H    = np.sum(E*self.y,axis=0)
+            else:
+                H    = np.sum(E*self.y[:,:,:,0][:,:,:,None],axis=0)
+        # back in time - last axis is frequency (axis=2) 
         cir  = np.fft.ifft(H,axis=2)
         if fftshift:
             cir = np.fft.fftshift(cir,axes=2)
@@ -2481,6 +2714,7 @@ class Tchannel(bs.FUsignal):
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
+                    'b3d':False,
                     'polar':False,
                     'colorbar':False,
                     'title':False,
@@ -2498,6 +2732,7 @@ class Tchannel(bs.FUsignal):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+#        b3d = kwargs.pop('b3d')
         the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
@@ -2771,6 +3006,7 @@ class Tchannel(bs.FUsignal):
                     'edgecolors':'none',
                     'polar':False,
                     'mode':'mean',
+                    'b3d':False,
                     'xa':0,
                     'xb':0
                     }
@@ -2791,6 +3027,8 @@ class Tchannel(bs.FUsignal):
         else:
             fig,ax = self.plotd(d='doa',fig=fig,ax=ax1,**kwargs)
             fig,ax = self.plotd(d='dod',fig=fig,ax=ax2,**kwargs)
+
+
         return fig,ax
 
     def field(self):
@@ -3689,23 +3927,107 @@ class Ctilde(PyLayers):
             + generated from a statistical model of the propagation channel
 
         """
-        self.fail = False
+        # by default C is expressed between the global frames
         self.islocal = False
-        self.Tt = np.eye(3)
-        self.Tr = np.eye(3)
+        # by default antenna rotation matrices are identity 
+        self.Ta = np.eye(3)
+        self.Tb = np.eye(3)
+        self.fGHz = np.array([2.4])
+        # a single ray
+        self.nray = 1
+        self.Ctt = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
+        self.Ctp = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
+        self.Cpt = bs.FUsignal(x=self.fGHz,y=np.array([[0]]))
+        self.Cpp = bs.FUsignal(x=self.fGHz,y=np.array([[1]]))
+        #
+        self.tang = np.array([[np.pi/2,np.pi/2]])
+        self.rang = np.array([[np.pi/2,3*np.pi/2]])
+        #
+        self.tangl = np.array([[np.pi/2,np.pi/2]])
+        self.rangl = np.array([[np.pi/2,3*np.pi/2]])
 
     def __repr__(self):
-        s = 'Ctilde : Ray Propagation Channel Matrices'+'\n---------\n'
-        if hasattr(self, 'Cpp'):
-            s = s + str(np.shape(self.Cpp.y))+'\n'
-        if hasattr(self, 'nray'):
-            s = s + 'Nray : ' + str(self.nray)+'\n'
+        s = 'Ctilde : Ray Propagation Channel Tensor (2x2xrxf)'+'\n---------\n'
+        if self.islocal:
+            s = s + 'between antennas local frames\n'
+        else:
+            s = s + 'between termination global frames\n'
+
+        s = s + 'Nray : ' + str(self.nray)+'\n'
+        if self.Cpp.x[0]!=self.Cpp.x[-1]:
+            s = s + 'Nfreq : ' + str(len(self.Cpp.x))+'\n'
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
-            s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
+        else:
+            s = s + 'fGHz : ' + str(self.Cpp.x[0])+'\n'
+        s = s + '---1st ray 1st freq ---\n'
+        s = s + 'global angles (th,ph) degrees : \n'
+        s = s + str(np.round(self.tang[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + str(np.round(self.rang[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + 'local angles (th,ph) degrees : \n'
+        s = s + str(np.round(self.tangl[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + str(np.round(self.rangl[0,:]*1800/np.pi)/10.)+'\n'
+        s = s + '    | '+ str(self.Ctt.y[0,0])+'   '+str(self.Ctp.y[0,0])+' |\n'
+        s = s + '    | '+ str(self.Cpt.y[0,0])+'   '+str(self.Cpp.y[0,0])+' |\n'
         return(s)
 
-    
+    def inforay(self,iray,ifreq=0):
+        """ provide information about a specific ray 
+        
+        """
+        dray   = self.tauk[iray]*0.3
+        draydB = 20*np.log10(1./dray)
+
+        Ctt = self.Ctt.y[iray,ifreq]
+        Ctp = self.Ctp.y[iray,ifreq]
+        Cpt = self.Cpt.y[iray,ifreq]
+        Cpp = self.Cpp.y[iray,ifreq]
+
+        
+        Cttc = Ctt*dray
+        Ctpc = Ctp*dray
+        Cppc = Cpp*dray
+        Cptc = Cpt*dray
+        if self.islocal:
+            print("between local frames")
+            print("--------------------")
+        else:
+            print("between global frames")
+            print("--------------------")
+        print('distance losses',draydB)
+        if (np.abs(Cttc)!=0):
+            CttdB = 20*np.log10(np.abs(Ctt))
+            CttcdB = 20*np.log10(np.abs(Cttc))
+        else:
+            CttdB = -np.inf
+            CttcdB = -np.inf
+        if (np.abs(Cppc)!=0):
+            CppdB = 20*np.log10(np.abs(Cpp))
+            CppcdB = 20*np.log10(np.abs(Cppc))
+        else:
+            CppdB = -np.inf
+            CppcdB = -np.inf
+        if (np.abs(Ctpc)!=0):
+            CtpdB = 20*np.log10(np.abs(Ctp))
+            CtpcdB =20*np.log10(np.abs(Ctpc))
+        else:
+            CtpdB = -np.inf
+            CtpcdB = -np.inf
+        if (np.abs(Cptc)!=0):
+            CptdB = 20*np.log10(np.abs(Cpt))
+            CptcdB = 20*np.log10(np.abs(Cptc))
+        else:
+            CptdB = -np.inf
+            CptcdB = -np.inf
+        print('Without distance losses (Interactions only)')
+        print("-----------------------------------------------")
+        print('co-pol (tt,pp)    dB :',CttcdB,CppcdB)
+        print('cross-pol (tt,pp) dB :',CtpcdB,CptcdB)
+        
+        print('With distance losses (Interactions + distance)')
+        print("-----------------------------------------------")
+        print('co-pol (tt,pp)    dB :',CttdB,CppdB)
+        print('cross-pol (tp,pt) dB :',CtpdB,CptdB)
 
 
     def saveh5(self,Lfilename,idx,a,b):
@@ -3732,15 +4054,16 @@ class Ctilde(PyLayers):
         filename=pyu.getlong(_filename,pstruc['DIRCT'])
 
         # save channel in global basis
+        # new call to locbas
         if self.islocal:
-            self.locbas(b2g=True)
+            self.locbas()
 
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filename,'w')
-            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('Ta',shape=np.shape(self.Ta),data=self.Ta)
+            f.create_dataset('Tb',shape=np.shape(self.Tb),data=self.Tb)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
             f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
             f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
@@ -3796,8 +4119,8 @@ class Ctilde(PyLayers):
             self.rang = f['rang'][:]
             self.tauk = f['tauk'][:]
 
-            self.Tt = f['Tt'][:]
-            self.Tr = f['Tr'][:]
+            self.Ta = f['Ta'][:]
+            self.Tb = f['Tb'][:]
 
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
@@ -3837,9 +4160,9 @@ class Ctilde(PyLayers):
 
 
         """
-
+        # back to global frame
         if self.islocal:
-            self.locbas(b2g=True)
+            self.locbas()
 
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
@@ -3855,8 +4178,8 @@ class Ctilde(PyLayers):
             f=fh5['Ct/'+grpname]
 
             # save channel in global basis
-            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('Ta',shape=np.shape(self.Ta),data=self.Ta)
+            f.create_dataset('Tb',shape=np.shape(self.Tb),data=self.Tb)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
             f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
             f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
@@ -3874,7 +4197,7 @@ class Ctilde(PyLayers):
             fh5.close()
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
-    def los(self,pa=np.r_[0,0,0],pb=np.r_[3,0,0],fGHz=np.r_[2.4],tang=np.r_[[1.57,3.14]],rang=np.r_[[1.57,0]]):
+    def los(self,**kwargs):
         """ Line of site channel
 
         Parameters
@@ -3886,26 +4209,49 @@ class Ctilde(PyLayers):
         rang (1x2)
 
         """
-        self.pa = pa
-        self.pb = pb
-        self.fGHz = fGHz
-        self.nfreq = len(fGHz)
+        defaults = {'pa':np.r_[197,189.8,1.65]
+                   ,'pb': np.r_[220,185,6]
+                   ,'fGHz':np.r_[32.6] 
+                   ,'Ta':np.eye(3)
+                   ,'Tb':np.array([[0.28378894, -0.8972627,  -0.33820628],
+                        [-0.57674955, -0.44149706,  0.68734293],
+                         [-0.76604425,  0.,         -0.64278784]])
+                   }
+
+        for k in defaults: 
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+        self.pa = kwargs['pa']
+        self.pb = kwargs['pb'] 
+        self.fGHz = kwargs['fGHz']
+        self.Ta = kwargs['Ta']
+        self.Tb = kwargs['Tb']
         self.nray = 1
-        si = pb-pa
+
+        si = self.pb-self.pa
+
         d = np.r_[np.sqrt(np.sum(si*si))]
+        si = si/d
         self.tauk = d/0.3
-        tht =  np.arccos(si[2])
-        pht =  np.arctan2(si[1],si[0])
-        thr =  np.arccos(-si[2])
-        phr =  np.arctan2(-si[1],-si[0])
-        self.tang = np.array([tht,pht]).reshape((1,2))
-        self.rang = np.array([thr,phr]).reshape((1,2))
+        #
+        # ka = - kb for LOS 
+        #
+        tha =  np.arccos(si[2])
+        pha =  np.arctan2(si[1],si[0])
+        thb =  np.arccos(-si[2])
+        phb =  np.arctan2(-si[1],-si[0])
+
+        self.tang = np.array([tha,pha]).reshape((1,2))
+        self.rang = np.array([thb,phb]).reshape((1,2))
+
         U = np.ones(len(self.fGHz),dtype=complex)/d[0]
         Z = np.zeros(len(self.fGHz),dtype=complex)
+         
         self.Ctt = bs.FUsignal(self.fGHz, U)
         self.Ctp = bs.FUsignal(self.fGHz, Z)
         self.Cpt = bs.FUsignal(self.fGHz, Z)
         self.Cpp = bs.FUsignal(self.fGHz, U)
+        self.locbas()
 
     def _loadh5(self,filenameh5,grpname,**kwargs):
         """ load Ctilde object in hdf5 format
@@ -3931,8 +4277,9 @@ class Ctilde(PyLayers):
             self.rang = f['rang'][:]
             self.tauk = f['tauk'][:]
 
-            self.Tt = f['Tt'][:]
-            self.Tr = f['Tr'][:]
+            self.Ta = f['Ta'][:]
+            self.Tb = f['Tb'][:]
+
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
             Ctp = f['Ctp_y'][:]
@@ -3952,123 +4299,6 @@ class Ctilde(PyLayers):
             fh5.close()
             raise NameError('Channel.Ctilde: issue when reading h5py file')
 
-#     def load(self, filefield, transpose=False):
-#         """ load a Ctilde from a .field file
-
-#         Load the three files .tauk .tang .rang which contain respectively
-#         delay , angle of departure , angle of arrival.
-# maicher
-#         Parameters
-#         ----------
-
-#         filefield  : string
-#         transpose  : boolean
-#             default False
-
-#         Examples
-#         --------
-
-#         >>> from pylayers.antprop.channel import *
-#         >>> from pylayers.simul.simulem import *
-#         >>> S = Simul()
-#         >>> S.load('default.ini')
-#         >>> C = Ctilde()
-#         >>> out = C.load(pyu.getlong(S.dtud[1][1],'output'))
-
-#         """
-#         filetauk = filefield.replace('.field', '.tauk')
-#         filetang = filefield.replace('.field', '.tang')
-#         filerang = filefield.replace('.field', '.rang')
-#         try:
-#             fo = open(filefield, "rb")
-#         except:
-#             raise NameError( "file " + filefield + " is unreachable")
-
-#         # decode filename (*.field file obtained from evalfield simulation)
-#         nray = stru.unpack('i', fo.read(4))[0]
-#         nfreq = stru.unpack('i', fo.read(4))[0]
-#         if nfreq == 0:
-#             print " Error : incorrect number of frequency points in .field"
-#             self.fail = True
-#             return
-
-#         n = nray * nfreq
-#         buf = fo.read()
-#         fo.close()
-
-#         CMat = np.ndarray(shape=(n, 8), buffer=buf)
-#         c11 = CMat[:, 0] + CMat[:, 1]*1j
-#         c12 = CMat[:, 2] + CMat[:, 3]*1j
-#         c21 = CMat[:, 4] + CMat[:, 5]*1j
-#         c22 = CMat[:, 6] + CMat[:, 7]*1j
-
-#         c11 = c11.reshape(nray, nfreq)
-#         c12 = c12.reshape(nray, nfreq)
-#         c21 = c21.reshape(nray, nfreq)
-#         c22 = c22.reshape(nray, nfreq)
-
-#         if transpose:
-#             c11 = c11.transpose()
-#             c12 = c12.transpose()
-#             c21 = c21.transpose()
-#             c22 = c22.transpose()
-
-#         #
-#         # Temporary freq --> read filefreq
-#         #
-#         fGHz = np.linspace(2, 11, nfreq)
-
-#         self.Ctt = bs.FUsignal(fGHz, c11)
-#         self.Ctp = bs.FUsignal(fGHz, c12)
-#         self.Cpt = bs.FUsignal(fGHz, c21)
-#         self.Cpp = bs.FUsignal(fGHz, c22)
-#         self.nfreq = nfreq
-#         self.nray = nray
-
-#         try:
-#             fo = open(filetauk, "rb")
-#         except:
-#             self.fail = True
-#             print "file ", filetauk, " is unreachable"
-#         # decode filetauk
-#         if not self.fail:
-#             nray_tauk = stru.unpack('i', fo.read(4))[0]
-#             #print "nb rays in .tauk file: ", nray_tauk
-#             buf = fo.read()
-#             fo.close()
-#             nray = len(buf) / 8
-#             #print "nb rays 2: ", nray
-#             self.tauk = np.ndarray(shape=nray, buffer=buf)
-#             #if nray_tauk != nray:
-#             #    print nray_tauk - nray
-#         self.tauk = self.tauk
-
-#         # decode the angular files (.tang and .rang)
-#         try:
-#             fo = open(filetang, "rb")
-#         except:
-#             self.fail = True
-#             print "file ", filetang, " is unreachable"
-#         if not self.fail:
-#             nray_tang = stru.unpack('i', fo.read(4))[0]
-#             buf = fo.read()
-#             fo.close()
-#             # coorectif Bug evalfield
-#             tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
-#             self.tang = tmp[0:nray,:]
-#         try:
-#             fo = open(filerang, "rb")
-#         except:
-#             self.fail = True
-#             print "file ", filerang, " is unreachable"
-
-#         if not self.fail:
-#             nray_rang = stru.unpack('i', fo.read(4))[0]
-#             buf = fo.read()
-#             fo.close()
-#             # corectif Bug evalfield
-#             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
-#             self.rang = tmp[0:nray,:]
 
     def mobility(self, v, dt):
         """ modify channel for uniform mobility
@@ -4157,6 +4387,7 @@ class Ctilde(PyLayers):
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
+                    'b3d':False,
                     'polar':False,
                     'colorbar':False,
                     'title' : False
@@ -4179,6 +4410,7 @@ class Ctilde(PyLayers):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+        b3d = kwargs.pop('b3d')
         the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
@@ -4231,39 +4463,44 @@ class Ctilde(PyLayers):
         if len(col) != len(di):
             print("len(col):", len(col))
             print("len(di):", len(dir))
-        if ax == []:
-            ax = fig.add_subplot(111, polar=polar)
-
-        if reverse :
-            scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
-            ax.axis((phi[0], phi[1], the[0], the[1]))
-            ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
-            ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-
+        if b3d:
+            ax = fig.add_subplot(111,projection='3d')
+            ax.scatter(1.05*array(xa),1.05*array(ya),1.05*array(za),'b')
+            ax.scatter(1.05*array(xb),1.05*array(yb),1.05*array(zb),'r')
         else:
-            scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
-            ax.axis((the[0], the[1], phi[0], phi[1]))
-            ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-            ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
+            if ax == []:
+                ax = fig.add_subplot(111, polar=polar)
 
-        if title:
-            ax.set_title(tit, fontsize=fontsize+2)
+            if reverse :
+                scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
+                ax.axis((phi[0], phi[1], the[0], the[1]))
+                ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
+                ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
 
-        ll = ax.get_xticklabels()+ax.get_yticklabels()
-        for l in ll:
-            l.set_fontsize(fontsize)
-
-        if colorbar:
-            #divider = make_axes_locatable(ax)
-            #cax = divider.append_axes("right",size="5%",pad=0.05)
-            clb = plt.colorbar(scat,ax=ax)
-            if normalize:
-                clb.set_label('dB',size=fontsize)
             else:
-                clb.set_label('Path Loss (dB)',size=fontsize)
+                scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
+                ax.axis((the[0], the[1], phi[0], phi[1]))
+                ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
+                ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
 
-            for t in clb.ax.get_yticklabels():
-                t.set_fontsize(fontsize)
+            if title:
+                ax.set_title(tit, fontsize=fontsize+2)
+
+            ll = ax.get_xticklabels()+ax.get_yticklabels()
+            for l in ll:
+                l.set_fontsize(fontsize)
+
+            if colorbar:
+                #divider = make_axes_locatable(ax)
+                #cax = divider.append_axes("right",size="5%",pad=0.05)
+                clb = plt.colorbar(scat,ax=ax)
+                if normalize:
+                    clb.set_label('dB',size=fontsize)
+                else:
+                    clb.set_label('Path Loss (dB)',size=fontsize)
+
+                for t in clb.ax.get_yticklabels():
+                    t.set_fontsize(fontsize)
 
         return (fig, ax)
 
@@ -4320,6 +4557,7 @@ class Ctilde(PyLayers):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
+                    'b3d':False,
                     'mode':'mean',
                     'colorbar':False,
                     'xa':0,
@@ -4354,7 +4592,7 @@ class Ctilde(PyLayers):
         return fig,[ax1,ax2]
 
 
-    def locbas(self,b2g=False,**kwargs):
+    def locbas(self,**kwargs):
         """ global reference frame to local reference frame
 
         If Tt and Tr are [] the global channel is  retrieved
@@ -4362,71 +4600,64 @@ class Ctilde(PyLayers):
         Parameters
         ----------
 
-        Tt  : Tx rotation matrix 3x3
+        Ta  : rotation matrix 3x3  side a 
             default []
-        Tr  : Rx rotation matrix 3x3
+        Tb  : rotation matrix 3x3  side b
             default []
-        b2g: bool
-            back to global reference frame
 
         Returns
         -------
+        
+        This method affects the boolean islocal 
+        This method update the ray propagation channel in either local or global frame
+        self.Ta and self.Tb are updated with input parameters Ta an Tb 
 
-        Cl : Ctilde local/global
-            depends on self.islocal boolean value
+        C : ray propagtion channel (2x2xrxf) complex 
+            either local or global depends on self.islocal boolean value
 
         Examples
         --------
+
+        >>> C = Ctilde()
+        >>> Ta = MEulerAngle(np.pi/2,np.pi/2,np.pi/2.)
+        >>> Tb = MEulerAngle(np.pi/3,np.pi/3,np.pi/3.)
+        >>> C.locbas(Ta=Ta,Tb=Tb)
 
         """
         
         # get Ctilde frequency axes
 
         fGHz = self.fGHz
-        # if rot matrices are passed
-        if ('Tt' in kwargs) & ('Tr' in kwargs):
+#       if rotation matrices are passed in argument 
+#       back to global if local 
+        if ('Ta' in kwargs) & ('Tb' in kwargs):
             if self.islocal:
-                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                    # run locbas to return to global basis
-                    self.locbas(b2g=True)
-                else:
-                    raise NameError('Channel has no self.Tt or self.Tr')
-            self.Tt = kwargs['Tt']
-            self.Tr = kwargs['Tr']
-            self.islocal = True
-        # if a return to global is requested
-        elif b2g:
-            if self.islocal :
-                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                    self.Tt = self.Tt.transpose()
-                    self.Tr = self.Tr.transpose()
-                    self.islocal = False
-                else:
-                    raise NameError ('self.Tt and self.Tr should exist')
-            else:
-                print("nothing to do to return in global basis")
-                return self
-        # if Tt and Tr == []
-        else:
-            return self
-
-        # get angular axes
-        # Rt (2x2)
-        # Rr (2x2)
+                self.locbas()
+                self.islocal=False
+            self.Tb = kwargs['Tb']
+            self.Ta = kwargs['Ta']
+        # angular axes
         #
         # tang : r x 2
         # rang : r x 2
         #
-        # Rt : 2 x 2 x r
-        # Rr : 2 x 2 x r
+        # Ra : 2 x 2 x r
+        # Rb : 2 x 2 x r
         #
         # tangl : r x 2
         # rangl : r x 2
         #
 
+        tangl,Ra = geu.BTB(self.tang, self.Ta)
+        rangl,Rb = geu.BTB(self.rang, self.Tb)
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
+        if self.islocal:
+            Ra = Ra.transpose((1,0,2))
+            self.islocal=False
+        else:
+            Rb = Rb.transpose((1,0,2))
+            self.islocal=True
+
         #
         # update direction of departure and arrival
         #
@@ -4440,34 +4671,34 @@ class Ctilde(PyLayers):
         # r0 : r x 1(f)
         #
 
-        #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:, None]
-        #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:, None]
+        #r0 = rb00
+        r0 = Rb[0,0,:][:, None]
+        #r1 = rb01
+        r1 = Rb[0,1,:][:, None]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:, None]
-        #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:, None]
+        #r0 = rb10 
+        r0 = Rb[1, 0,:][:, None]
+        #r1 = rb11 
+        r1 = Rb[1, 1,:][:, None]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0, 0, :][:, None]
-        #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1, 0, :][:, None]
+        #r0 = ra00 
+        r0 = Ra[0, 0, :][:, None]
+        #r1 = ra10 
+        r1 = Ra[1, 0, :][:, None]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
-        #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0, 1, :][:, None]
-        #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1, 1, :][:, None]
+        #r0 = ra01
+        r0 = Ra[0, 1, :][:, None]
+        #r1 = ra11
+        r1 = Ra[1, 1, :][:, None]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -4506,12 +4737,12 @@ class Ctilde(PyLayers):
         fGHz = self.fGHz
 
         if (Tt !=[]) & (Tr!=[]):
-            self.Tt = Tt
-            self.Tr = Tr
+            self.Ta = Tt
+            self.Tb = Tr
         else:
-            if (hasattr(self,'Tt')) & (hasattr(self, 'Tr')):
-                self.Tt = self.Tt.transpose()
-                self.Tr = self.Tr.transpose()
+            if (hasattr(self,'Ta')) & (hasattr(self, 'Tb')):
+                self.Ta = self.Ta.transpose()
+                self.Tb = self.Tb.transpose()
             else:
                 return
 
@@ -4529,9 +4760,9 @@ class Ctilde(PyLayers):
         # rangl : r x 2
         #
 
-        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
-
+        tangl , Ra = geu.BTB(self.tang, self.Ta)
+        rangl , Rb = geu.BTB(self.rang, self.Tb)
+        Rb = Rb.transpose((1,0,2))
         #
         # update direction of departure and arrival
         #
@@ -4836,20 +5067,36 @@ class Ctilde(PyLayers):
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
-        # Cg2cl should be applied here
         #
-
+        #  C  :  2 x 2 x r x f
         #
-        #  C  = 2 x 2 x r x f
-        #  Ctt : r x f
-        #  Fa = 2 x r x f
-        #  Fb = 2 x r x f
+        #  Ctt : r x f     (complex FUsignal)
+        #  Cpp : r x f     (complex FUsignal)
+        #  Ctp : r x f     (complex FUsignal)
+        #  Cpt : r x f     (complex FUsignal)
+        #
+        #  a.Ft = r x (Na) x f  (complex ndarray)
+        #  a.Fp = r x (Na) x f  (complex ndarray)
+        #  b.Ft = r x (Nb) x f  (complex ndarray)
+        #  b.Fp = r x (Nb) x f  (complex ndarray)
         #
         #  (r x f ) (r x Nt x f )
+        #
+        # This exploit * overloading in FUsignal 
+
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 
-        # depending on siso or mimo case
+        # depending on SISO or MIMO case
+        # the shape of the received fields T1 and T2 
+        # 
+        # In MIMO case
+        #   a.Ft.y.shape == (r x Na x f) 
+        #   a.Fp.y.shape == (r x Na x f)
+        # In SISO case 
+        #   a.Ft.y.shape == (r x f) 
+        #   a.Fp.y.shape == (r x f)
+        #
         if len(t1.y.shape)==3:
             T1 = t1.y[:,None,:,:]
             T2 = t2.y[:,None,:,:]

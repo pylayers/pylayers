@@ -15,11 +15,10 @@ fGHz  = np.linspace(fmin,fmax,nf)
 fonts = 20 # fontsize
 
 # Initialization of the Layout and the link.
-DL      = DLink()
+L       = Layout('espoo.lay',bbuild=1)
+DL      = DLink(L=L)
 DL.fGHz = fGHz
 
-L       = Layout('espoo.lay',bbuild=1)
-DL.L    = L
 
 # coordinates of the MS and the BS in the scene.
 ms10 = np.array([188.2,199.5,hms])

@@ -1380,7 +1380,7 @@ class Rays(PyLayers, dict):
             print self[ik]['si']
 
     def locbas(self, L):
-        """ calculate ray local basis
+        """ calculate ray local bas
 
         Parameters
         ----------
@@ -1482,8 +1482,7 @@ class Rays(PyLayers, dict):
 
                 # norm : 3 x i x r
                 #
-                # norm name is improper norm is in fact the vector associated to the
-                # interaction
+                # norm is the vector associated to the interaction
                 # For the diffraction case the normal is replaced by the unit
                 # vector along the wedge directed upward.
                 #
@@ -1578,6 +1577,7 @@ class Rays(PyLayers, dict):
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     u = np.where(nw==0)
                     if len(u[0])!=0:
+                        print('colinear situation detected')
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
 
@@ -1611,21 +1611,16 @@ class Rays(PyLayers, dict):
                 #
                 # w : 3 x i x r
                 #
-                # Handling channel reciprocity s_in --> -s_in
-                #
-                #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
-
-                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+                w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
 
                 # nw : i x r
                 w, nw = fix_colinear()
 
                 wn = w/nw
-                # Handling channel reciprocity s_in --> -s_in
-                #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
-                v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
+                v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
 
-                es_in = np.expand_dims(-s_in, axis=1)
+                es_in = np.expand_dims(s_in, axis=1)
+
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
@@ -1634,6 +1629,7 @@ class Rays(PyLayers, dict):
                 #  self[k]['Bi'] 3 x 3 x i x r
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
                 ################################
+
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
 
                 w, nw = fix_colinear()
@@ -2334,7 +2330,8 @@ class Rays(PyLayers, dict):
         # loop on interaction blocks
         if ib==[]:
             ib=self.keys()
-
+        
+        # loop over group of interactions
         for l in ib:
             # ir : ray index
 
@@ -2357,7 +2354,7 @@ class Rays(PyLayers, dict):
                 # 1 , r , l , 2 , 2
                 #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
                 Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
-                # get the first uitary matrix B0l
+                # get the first unitary matrix B0l
                 B0l = B0[:,ir,:, :]
                 # get alpha
                 # alpha = self.I.alpha[rrl].reshape(r, l,order='F')
@@ -2485,10 +2482,16 @@ class Rays(PyLayers, dict):
         # Construction of the Ctilde propagation channel structure
         #
         Cn = Ctilde()
-        Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
-        Cn.Cpt = bs.FUsignal(self.I.fGHz, c12)
-        Cn.Ctp = bs.FUsignal(self.I.fGHz, c21)
-        Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
+
+        # Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
+        # Cn.Cpt = bs.FUsignal(self.I.fGHz, c12)
+        # Cn.Ctp = bs.FUsignal(self.I.fGHz, c21)
+        # Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
+        Cn.Ctt = bs.FUsignal(self.I.fGHz, c11)
+        Cn.Ctp = bs.FUsignal(self.I.fGHz, c12)
+        Cn.Cpt = bs.FUsignal(self.I.fGHz, c21)
+        Cn.Cpp = bs.FUsignal(self.I.fGHz, c22)
+
         Cn.nfreq = self.I.nf
         Cn.nray = self.nray
         Cn.tauk = self.delays
@@ -2574,7 +2577,8 @@ class Rays(PyLayers, dict):
         Returns
         -------
 
-        ir : index of interactions of r
+        ir : nd.array
+            index of interactions of r
 
         Examples
         --------
@@ -2582,6 +2586,41 @@ class Rays(PyLayers, dict):
         """
         raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
         return(self[self._ray2nbi[r]]['rays'][:,raypos][:,0])
+
+    def ir2a(self,ir):
+        """ index ray 2 address ray
+
+        Parameters
+        ----------
+        ir : integer
+        
+        Returns
+        -------
+        (ni,ux) : tuple address (group of interactions, index)
+
+        """
+        assert ir < self.nray, "wrong ray index"
+        ni = self._ray2nbi[ir]
+        ur = np.where(self[ni]['rayidx']==ir)[0][0]
+        return(ni,ur)
+
+    def a2ir(self,t):
+        """  address ray 2 index ray
+        
+        Parameters
+        ----------
+        t = (ni,ux) : tuple address (group of interactions, index)
+            address ray 
+        
+        Returns
+        -------
+        ir : integer
+            index ray 
+
+        """
+        assert t[0] in self.keys(), "wrong number of interactions"
+        ir = self[t[0]]['rayidx'][t[1]]
+        return(ir)
 
     def ray2nbi(self,r):
         """ Get interaction block/number of interactions of a given ray
@@ -2598,7 +2637,8 @@ class Rays(PyLayers, dict):
         nbi : int
             interaction block number
         """
-        return self._ray2nbi[r]
+        i = self._ray2nbi[r]
+        return 
 
     def ray2iidx(self,ir):
         """ Get interactions index of a given ray
@@ -2724,7 +2764,76 @@ class Rays(PyLayers, dict):
             a = self.ray(r)
             return(self.I.typ[a])
 
-    def info(self,ir,ifGHz=0,B=True,matrix=False):
+    def dump(self,ir,L,ifGHz=0,filename='dumpray.ray'):
+        """ dump the full information of a ray in a file 
+        """
+        nbi = self._ray2nbi[ir]  
+        ur = np.where(self[nbi]['rayidx']==ir)[0][0]
+        fd=open(filename,'w')
+        fd.write('ray #'+str(ir)+'\n')
+        fd.write(str(ur)+ ' th ray from the group of ' + str(nbi)+' Interactions' +'\n')
+        cy_a = L.pt2cy(self.pTx)
+        cy_b = L.pt2cy(self.pRx)
+
+        #fd.write('Tx #'+str(self.pTx)+'\n')
+        #fd.write('Rx #'+str(self.pRx)+'\n')
+        if self.evaluated:
+            ray = self.ray(ir)
+            typ = self.typ(ir)
+            slabnb = self.slab_nb(ir)
+            fd.write('   ray #'+str(ray)+'\n')
+            #fd.write('   typ #'+str(typ)+'\n')
+            fd.write('   slab #'+str(slabnb)+'\n')
+        for k in range(nbi+2):
+            if k==0:
+                fd.write('Tx  :        ')
+            elif k==(nbi+1):
+                fd.write('Rx  :        ')
+            else:
+                six = slabnb[k-1]
+                if six==0:
+                    slabname='FLOOR'
+                    cyc =[-2,-3]
+                else:
+                    slabname = L.Gs.node[six]['name']
+                    cyc = L.Gs.node[six]['ncycles']
+                if typ[k-1]=='T':
+                    fd.write('T '+slabname +'       ('+str(six)+','+str(cyc[0])+','+str(cyc[1])+')')
+                if typ[k-1]=='R':
+                    fd.write('R '+slabname +'       ('+str(six)+',)')
+                if typ[k-1]=='D':
+                    fd.write('D ('+str(six)+') :')
+
+            fd.write(str(self[nbi]['pt'][:,k,ur])+'\n' )
+            if k==0:
+                fd.write('  '+str(cy_a)+'\n')
+            elif k==(nbi+1):
+                fd.write('  '+str(cy_b)+'\n')
+            if k==0:
+                for l in range(3):
+                    if l<2:
+                        fd.write('\t'+str(self[nbi]['Bo0'][l,:,ur])
+                     +'\t'+str(self[nbi]['B'][l,:,0,ur])+'\n')
+                    else:
+                        fd.write('\t'+str(self[nbi]['Bo0'][l,:,ur]) +'\n')
+            elif k==(nbi+1):
+                for l in range(3):
+                    fd.write('\t'+str(self[nbi]['BiN'][l,:,ur])+'\n')
+            else:
+                for l in range(3):
+                    if l<2:
+                        fd.write('\t'+str(self[nbi]['Bi'][l,:,k-1,ur])+'\t'+
+                              str(self[nbi]['Bo'][l,:,k-1,ur])
+                         +'\t'+str(self[nbi]['B'][l,:,k-1,ur])+'\n')
+                    else:
+                        fd.write('\t'+str(self[nbi]['Bi'][l,:,k-1,ur])+'\t'+
+                              str(self[nbi]['Bo'][l,:,k-1,ur])+'\n')
+
+
+        fd.close()
+
+
+    def info(self,ir,ifGHz=0,bB=True,matrix=False):
         """ provides information for a given ray r
 
         Parameters
@@ -2734,7 +2843,7 @@ class Rays(PyLayers, dict):
             ray index
         ifGHz : int
             frequency index
-        B: boolean
+        bB: boolean
             display Basis
         matrix :
             display matrix 
@@ -2809,7 +2918,7 @@ class Rays(PyLayers, dict):
                                     print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
                                     .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
                     else:
-                        if B:
+                        if bB:
                             print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
@@ -2817,16 +2926,48 @@ class Rays(PyLayers, dict):
                 print '\n----------------------------------------'
                 print ' Matrix of ray #', ir, 'at f=', self.I.fGHz[ifGHz]
                 print '----------------------------------------'
-                if B:
+                lmat = []
+                ltran = []
+                if bB:
                     print 'rotation matrix#', 'type: B0'
-                    print self.B0.data[ir,:,:]
+                    
+                    B0 = self.B0.data[ir,:,:]
+                    addr = self.ir2a(ir)
+                    Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]] 
+                    Bi1 = self[addr[0]]['Bi'][:,:,0,addr[1]] 
+                    U  = np.dot(Bi1[:,1:3].T,Bo0[:,1:3])
+                    assert np.allclose(B0,U) 
+                    lmat.append(B0)
+                    ltran.append(B0)
+                    print(B0)
                 for iidx, i in enumerate(typ):
                     print 'interaction #', ray[iidx], 'type:', i
                     # f x l x 2 x 2
-                    print self.I.I[ifGHz, ray[iidx], :, :]
-                    if B:
+                    I = self.I.I[ifGHz, ray[iidx], :, :]
+                    print(I)
+                    lmat.append(I)
+                   
+                    if bB:
                         print 'rotation matrix#',[ray[iidx]], 'type: B'
-                        print self.B.data[ray[iidx], :, :]
+                        B = self.B.data[ray[iidx], :, :]
+                        print(B) 
+                        lmat.append(B)
+                        ltran.append(B)
+                # evaluate matrix product
+                PM0=np.eye(2)
+                PM1=np.eye(2)
+                for m in lmat[::-1]:
+                    PM0=np.dot(PM0,m)
+                for m in ltran[::-1]:
+                    PM1=np.dot(PM1,m)
+                print("matrix product with interactions (dB)")
+                print(20*np.log10(np.abs(PM0[0,0])),'  ',20*np.log10(np.abs(PM0[0,1])))
+                print(20*np.log10(np.abs(PM0[1,0])),'  ',20*np.log10(np.abs(PM0[1,1])))
+                print("matrix product without interactions (dB)")
+                print(20*np.log10(np.abs(PM1[0,0])),'  ',20*np.log10(np.abs(PM1[0,1])))
+                print(20*np.log10(np.abs(PM1[1,0])),'  ',20*np.log10(np.abs(PM1[1,1])))
+                return(PM0)
+
             else:
                 print '\nto display matrix, use matrix=True on call'
         else:

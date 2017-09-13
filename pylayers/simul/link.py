@@ -124,8 +124,8 @@ from pylayers.gis.layout import Layout
 # Handle Antenna
 from pylayers.antprop.antenna import Antenna
 
-# Handle Signauture
-from pylayers.antprop.signature import Signatures
+# Handle Signature
+from pylayers.antprop.signature import Signatures,Signature
 # Handle Rays
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
@@ -426,7 +426,6 @@ class DLink(Link):
         if self.Ab==[]:
             self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
         
-
         if isinstance(self._L,str):
             self._Lname = self._L
             self._L = Layout(self._Lname,bgraphs=True,bcheck=False)
@@ -456,17 +455,21 @@ class DLink(Link):
                 self.L.dumpw()
             
             #
-            # In outdoor situation we delete all reference to transmission node in Gi 
+            # In outdoor situation we delete transmission node involving  
+            # an indoor cycle at the exception of AIR 
             #
             cindoor = [p for p in self.L.Gt.nodes() if self.L.Gt.node[p]['indoor']]
 
-        
             if self._L.typ =='outdoor':
                 u = self.L.Gi.node.keys()
-                
+                # lT : list of transmission interactions 
                 lT  =  [k for k in u if (len(k)==3)]
+                # lTi : transmission connected at least to an indoor cycle
                 lTi = [ k for k in lT if ((k[1]  in cindoor) or (k[2] in cindoor))]
-                self.L.Gi.remove_nodes_from(lTi)
+                # lTiw : those which are wall (not those above buildings) 
+                lTiw = [ k for k in lTi if self.L.Gs.node[k[0]]['name']!='AIR' ]
+
+                self.L.Gi.remove_nodes_from(lTiw)
                 lE = self.L.Gi.edges()
                 for k in range(len(lE)):
                     e = lE[k]
@@ -475,7 +478,7 @@ class DLink(Link):
                     except:
                         pdb.set_trace()
                     for l in output.keys():
-                        if l in lTi:
+                        if l in lTiw:
                             del output[l]
                     self.L.Gi.edge[e[0]][e[1]]['output']=output
                 
@@ -488,7 +491,7 @@ class DLink(Link):
            
             ###########
             # init freq
-            # TODO Check where it is used redocdundant with fGHz
+            # TODO Check where it is used redundant with fGHz
             ###########
             #self.fmin  = self.fGHz[0]
             #self.fmax  = self.fGHz[-1]
@@ -722,7 +725,7 @@ class DLink(Link):
             self.checkh5()
 
         # if self.dexist['Ct']['exist']:
-        #     self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        #     self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         #     #T channel
         #     self.H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
 
@@ -824,6 +827,14 @@ class DLink(Link):
             s = s + '----------------------------- \n'
             s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
             s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
+            rd2deg = 180/np.pi
+            if not np.allclose(self.a,self.b):
+                vsba = self.b-self.a
+                a1 = geu.angledir(vsba[None,:])
+                a2 = geu.angledir(-vsba[None,:])
+                s = s + 'azimuth (a | b ) : '+str(a1[0,1]*rd2deg)+' deg  | '+str(a2[0,1]*rd2deg)+ ' deg\n'
+                s = s + 'elevation (a | b ) : '+str(a1[0,0]*rd2deg)+ ' deg |  '+str(a2[0,0]*rd2deg)+ ' deg\n'
+                s = s + 'tilt (a |  b ) : '+str((a1[0,0]-np.pi/2)*rd2deg)+ ' deg  | '+ str((a2[0,0]-np.pi/2)*rd2deg)+ ' deg\n'
             #s = s + 'Frequency range :  \n'
             s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
             s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
@@ -839,10 +850,38 @@ class DLink(Link):
             else:
                 fcGHz = self.fGHz[0]
             L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
+            s = s + 'Algorithm information : \n'
+            s = s + '----------------------------- \n'
+            s = s + 'cutoff : '+ str(self.cutoff)+'\n'
+            s = s + 'threshold :'+ str(self.threshold)+'\n'
         else:
             s = 'No Layout specified'
         return s
 
+    def inforay(self,iray):
+        """ provide full information about a specified ray
+
+        Parameters
+        ----------
+
+        iray : int 
+            ray index
+
+        """
+        print "Ray : "+str(iray)
+        if not self.R.evaluated:
+            self.R.eval()
+        PM = self.R.info(iray,ifGHz=0,matrix=1)
+        print "Propagation Channel 2x2 (C):"
+        self.C.inforay(iray)
+        if self.C.islocal:
+            # back to global frame
+            self.C.locbas()
+            dist = self.C.tauk[iray]*0.3
+            C = dist*np.array([[self.C.Ctt.y[iray,0],self.C.Ctp.y[iray,0]],
+                        [self.C.Cpt.y[iray,0],self.C.Cpt.y[iray,0]]] )
+            b = np.allclose(PM,C)
+            self.C.locbas()
 
     # def initfreq(self):
     #     """ Automatic freq determination from
@@ -899,7 +938,12 @@ class DLink(Link):
 
 
     def init_positions(self,force=False):
-        """ 
+        """ initialize random positions for a link
+
+        Parameters
+        ----------
+        force : boolean 
+
         """
         ###########
         # init pos & cycles
@@ -1333,8 +1377,7 @@ class DLink(Link):
 
 
     def array_exist(self,key,array,tol=1e-3) :
-        """ check if an array of a given key (h5py group)
-            has already been stored into the h5py file
+        """ check an array key has already been stored in h5py file
 
 
         Parameters
@@ -1431,9 +1474,18 @@ class DLink(Link):
 
     def evalH(self,**kwargs):
         """ evaluate channel transfer function
+
+        Notes
+        -----
+
+        This function modifies the orientation of the antenna at both sides
+        via Ta and Tb 3x3 matrices and recalculates the channel transfer function 
+        for those new orientations. 
+        The self.H variable is updated
+
         """
         # Antenna Rotation
-        self.C.locbas(Tt=self.Ta, Tr=self.Tb)
+        self.C.locbas(Ta=self.Ta, Tb=self.Tb)
         # Transmission channel calculation
         H = self.C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
         self.H = H
@@ -1707,7 +1759,6 @@ class DLink(Link):
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             C = Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
-
         else :
             #if not hasattr(R,'I'):
             # Ctilde...
@@ -1734,7 +1785,7 @@ class DLink(Link):
             self.load(H,self.dexist['H']['grpname'])
         else :
             # Ctilde antenna
-            C.locbas(Tt=self.Ta, Tr=self.Tb)
+            C.locbas(Ta=self.Ta, Tb=self.Tb)
             #T channel
             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=kwargs['debug'])
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
@@ -1758,31 +1809,45 @@ class DLink(Link):
         self.checkh5()
 
 
-    def afp(self,phi,beta=0,gamma=np.pi/2.):
+    def afp(self,fGHz,az=0,tilt=0,polar='V'):
         """ Evaluate angular frequency profile 
 
         Parameters
         ----------
 
-        phi   : Euler angle phi
-        beta  : Euler angle beta 
-        gamma : Euler angle gamma
+        fGHz  : np.array 
+            frequency range 
+        az : azimuth angle (radian)  
+        tilt : tilt angle (-pi/2<tilt<pi/2) 
+        polar : string
 
         """
-        afp = AFPchannel(tx=self.a,rx=self.b,a=phi)
-        for ph in phi:
-            # self.Tb = geu.MEulerAngle(ph,gamma=0,beta=-np.pi/2)
-            self.Tb = geu.MEulerAngle(alpha=ph,beta=beta,gamma=gamma)
+
+        # create an empty AFP 
+        # tx = a
+        # rx = b 
+        # angular range (a) : phi 
+        #
+        afp = AFPchannel(tx=self.a,rx=self.b,az=az)
+        for ph in az:
+            self.Tb = geu.MATP(self.Ab.vl,self.Ab.pl,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
-            S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            if self.H.y.shape[3]!=1:
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
+            else:
+                S = np.sum(self.H.y*np.exp(-2*1j*np.pi*fGHz*self.H.taud[:,None,None,None]),axis=0)
+
             try:
                 afp.y = np.vstack((afp.y,np.squeeze(S)))
             except:
                 afp.y = np.squeeze(S)
+        if self.H.y.shape[3]!=1:
+            afp.x = self.H.x
+        else:
+            afp.x = fGHz
 
-        afp.x = self.H.x
         return(afp)
 
 
@@ -1828,6 +1893,10 @@ class DLink(Link):
             20
         rays : boolean
             False
+        bsig : boolean 
+            False    
+        laddr : list 
+            list of signature addresses 
         cmap : colormap
         labels : boolean
             enabling edge label (useful for signature identification)
@@ -1846,8 +1915,9 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L=Link()
-        >>> L.show(rays=True,dB=True)
+        >>> DL=Link()
+        >>> DL.show(lr=-1,rays=True,dB=True,col='cmap',cmap=plt.cm.jet)
+        >>> DL.show(laddr=[(6,2)],bsig=True)
 
         """
         defaults ={'s':80,   # size points
@@ -1855,10 +1925,13 @@ class DLink(Link):
                    'cb':'r', # color b 
                    'alpha':1,
                    'axis':True,
-                   'i':-1,
+                   'lr':-1,
+                   'ls':-1,
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':False,
+                   'bsig':True,
+                   'laddr':[(1,0)],
                    'cmap':plt.cm.hot,
                    'pol':'tot',
                    'col':'k',
@@ -1893,7 +1966,7 @@ class DLink(Link):
                    alpha=kwargs['alpha'])
         ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
         #
-        # Rays
+        # Plot Rays
         #
         if kwargs['rays']:
             ECtt,ECpp,ECtp,ECpt = self.C.energy()
@@ -1916,40 +1989,52 @@ class DLink(Link):
             #
             # Select group of interactions
             #
-            if kwargs['i']==-1:
-                li  = self.R.keys()
+            if kwargs['lr']==-1:
+                lr  = np.arange(self.R.nray)
             else:
-                li = kwargs['i']
+                lr = kwargs['lr']
+            
+            vmin = val.min()
+            vmax = val.max() 
+            if kwargs['dB']:
+                vmin = 20*np.log10(vmin)
+                vmax = 20*np.log10(vmax)
 
-            for i  in li:
-                lr = self.R[i]['rayidx']
-                for r in range(len(lr)):
-                    ir = lr[r]
-                    try:
-                        if kwargs['dB']:
-                            RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
-                        else:
-                            RayEnergy=val[ir]/val.max()
-                    except:
-                        pass
-                    if kwargs['col']=='cmap':
-                        col = clm(RayEnergy)
-                        width = RayEnergy
-                        alpha = 1
-                        #alpha = RayEnergy
-                    else:
-                        col = kwargs['col']
+            for ir  in lr:
+                if kwargs['dB']:
+                    RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                else:
+                    RayEnergy=val[ir]/val.max()
 
-                        width = kwargs['width']
-                        alpha = kwargs['alpha']
-
-                    fig,ax = self.R.show(i=i,r=r,
-                                   colray=col,
-                                   widthray=width,
-                                   alpharay=alpha,
-                                   fig=fig,ax=ax,
-                                   layout=False,
-                                   points=False)
+                if kwargs['col']=='cmap':
+                    col = clm(RayEnergy)
+                    width = 3*RayEnergy
+                    alpha = 1
+                else:
+                    col = kwargs['col']
+                    width = kwargs['width']
+                    alpha = kwargs['alpha']
+                
+                # plot ray (i,r) 
+                fig,ax = self.R.show(rlist=[ir],
+                               colray=col,
+                               widthray=width,
+                               alpharay=alpha,
+                               fig=fig,ax=ax,
+                               layout=False,
+                               points=False)
+            if kwargs['col']=='cmap':
+                sm = plt.cm.ScalarMappable(cmap=kwargs['cmap'], norm=plt.Normalize(vmin=vmin, vmax=vmax))
+                sm._A = []
+                plt.colorbar(sm)
+        #
+        # Plot Rays
+        #
+        if kwargs['bsig']:
+            for addr in kwargs['laddr']: 
+                seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]
+                Si = Signature(seq)
+                fig,ax = Si.show(self.L,self.a[0:2],self.b[0:2],fig=fig,ax=ax)
 
         return fig,ax
 
@@ -2182,13 +2267,13 @@ class DLink(Link):
         #     ds.children[0].children[0].actor.property.opacity=1.
 
     def plt_cir(self,**kwargs):
-        """ plot  CIR
+        """ plot link channel impulse response
 
         Parameters
         ----------
 
         BWGHz : Bandwidth 
-        Nf    : Number of frequency point 
+        Nf    : Number of frequency points
         fftshift : boolean 
         rays : boolean
             display rays contributors
@@ -2204,7 +2289,8 @@ class DLink(Link):
                     'ax': [],
                      'BWGHz':5,
                     'Nf':1000,
-                    'rays':True
+                    'rays':True,
+                    'fspl':True,
                     }
 
         for key, value in defaults.items():
@@ -2220,9 +2306,18 @@ class DLink(Link):
         else:
             ax = kwargs['ax']
 
-
+        # getcir is a Tchannel method 
         ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
         ir.plot(fig=fig,ax=ax)
+        delay = ir.x 
+        dist = delay*0.3
+        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
+        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
+        if kwargs['fspl']:
+            ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
+            ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
+
+
         if kwargs['rays'] : 
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
@@ -2231,7 +2326,7 @@ class DLink(Link):
             ax.scatter(self.H.taud[uER],20*np.log10(self.H.y[uER,0,0,0]),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
-
+        ax.legend()
         return fig,ax
 
 
@@ -2356,8 +2451,7 @@ class DLink(Link):
         return fig,ax
 
     def _autocufoff(self):
-        """ automatically determine minimum cutoof
-
+        """ automatically determine minimum cutoff
 
         See Also
         --------
@@ -2366,18 +2460,21 @@ class DLink(Link):
         pylayers.gis.layout.angleonlink3
         """
 
-        v=np.vectorize( lambda t:self.L.Gs.node[t]['name'])
+        v = np.vectorize( lambda t:self.L.Gs.node[t]['name'])
         # determine incidence angles on segment crossing p1-p2 segment
         #data = L.angleonlink(p1,p2)
-        data = self.L.angleonlink3(self.a,self.b)
-        # as many slabs as segments and subsegments
-        us    = data['s'] 
-        if len(us) >0:
-            sl = v(us)
-            uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
-            self.cutoff = len(uus)
+        if np.allclose(self.a,self.b):
+            self.cutoff = 2
         else:
-            self.cutoff = 1
+            data = self.L.angleonlink3(self.a,self.b)
+            # as many slabs as segments and subsegments
+            us    = data['s'] 
+            if len(us) >0:
+                sl = v(us)
+                uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
+                self.cutoff = len(uus)
+            else:
+                self.cutoff = 2
         return self.cutoff
 
 if (__name__ == "__main__"):
