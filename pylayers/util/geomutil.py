@@ -166,6 +166,7 @@ from scipy.linalg import toeplitz
 import pylayers.util.project as pro
 import pylayers.util.pyutil as pyu
 import pylayers.util.graphutil as gru
+import numpy.ma as ma
 
 # from antenna import *
 import shapely.geometry as shg
@@ -3383,7 +3384,7 @@ def intersect_line_seg(line, seg):
 
 
 def intersect3(a, b, pg, u1, u2, l1, l2):
-    """ Intersection of a line and a rectangle screen
+    """ Intersection of a line and a 3D rectangle screen
 
     Parameters
     ----------
@@ -3395,7 +3396,7 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     pg  : np.array (3,Nscreen) of floats 
         center of gravity of the screen 
     u1  : np.array (3,Nscreen) of floats 
-        unitary vector along first imension
+        unitary vector along first dimension
     u2  : np.array (3,Nscreen) of floats 
         unitary vector along second dimension
     l1   : np.array (,Nscreen)

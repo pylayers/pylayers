@@ -1925,7 +1925,7 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)')
+                plt.title(u'$\\theta$ plane')
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -1949,7 +1949,7 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
-                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
+                plt.title(u'$\\phi$ plane ')
             # actual plotting
             if len(lfreq)>1: 
                 ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
