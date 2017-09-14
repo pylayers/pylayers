@@ -235,13 +235,13 @@ class PylayersGUI(HasTraits):
     # frequency
 
     fmmin = 0.
-    fmmax = 80.
+    fmmax = 300.
 
     
 
     fmin=Range(low = 'fmmin', high = 'fmmax',value = float(DL.Aa.fGHz[0]) )
     fmax=Range(low = 'fmmin', high = 'fmmax',value = float(DL.Aa.fGHz[-1]) )
-    fstep=Range(low = 0.001,high = 100, value = 0.5)
+    fstep=Range(low = 0,high = 10, value = 0)
 
     # advanced
 

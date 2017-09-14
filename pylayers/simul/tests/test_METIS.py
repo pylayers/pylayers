@@ -11,13 +11,13 @@ fGHz = np.linspace(fcGHz-WMHz*0.5e-3,fcGHz+WMHz*0.5e-3,Nf)
 #L=Layout('defstr.ini',build=False)
 #L=Layout('defstr.ini',diffraction=True)
 #L=Layout('defstr.ini',build=False)
-L=Layout('TC2_METIS.ini',bbuild=False)
+L=Layout('TC2_METIS.lay')
 #L=Layout('W2PTIN.ini',build=False)
 # set the link
 DL=DLink(L=L,fGHz=fGHz,outdoor=True,applywav=True)
 #DL.L.indoor=True
 DL.L.indoor=False
-DL.L.build(diffraction=True)
+DL.L.build()
 DL.ca= 40 
 DL.a[2]=20
 #DL.cb=14

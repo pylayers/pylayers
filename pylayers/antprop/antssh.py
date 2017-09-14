@@ -233,7 +233,6 @@ def ssh(A,L= 20,dsf=1):
     nth = len(th)
     nph = len(ph)
     nf = A.nf
-    pdb.set_trace()
 
     if (nph % 2) == 1:
         mdab = min(nth, (nph + 1) / 2)

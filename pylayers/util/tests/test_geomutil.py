@@ -5,7 +5,7 @@ import numpy as np
 import scipy as sp
 from numpy.testing import ( TestCase, assert_almost_equal, assert_raises, assert_equal, assert_, run_module_suite)
 
-class Tesonb(TestCase):
+class Tesgeu(TestCase):
     def test_onb(self):
         print "testing geomutil.onb"
         A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
@@ -50,6 +50,25 @@ class Tesonb(TestCase):
         assert not b2
         assert b3
         assert not b4
+
+    def test_MATP(self):
+        vl = np.array([0,0,1])  # beam in z direction 
+        pl = np.array([1,0,0])  # polar along x
+
+        phi = np.pi/2  # beam in y direction 
+        tilt = 0       # no tilt
+
+        M = MATP(vl,pl,phi,tilt,'V')
+        vg = np.dot(M,vl)
+        pg = np.dot(M,pl)
+        np.testing.assert_equal(vg,[0,1,0])  # pointing in y 
+        np.testing.assert_equal(pg,[0,0,1])  # polar along z
+        M = MATP(vl,pl,phi,tilt,'H')
+        vg = np.dot(M,vl)
+        pg = np.dot(M,pl)
+        np.testing.assert_equal(vg,[0,1,0])  # pointing in y 
+        np.testing.assert_equal(pg,[-1,0,0])  # polar along x
+
 
 if __name__ == "__main__":
     run_module_suite()
