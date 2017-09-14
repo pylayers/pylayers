@@ -216,6 +216,9 @@ class Pattern(PyLayers):
         pt : np.array (3,N)
         pr : np.array (3,N)
         azoffset : int (0) 
+        Rfloor:bool
+            if true add gain value to reflected ray on the floor. 
+            values are append at the end of sqG.
         fGHz:list 
             []
         nth: int 

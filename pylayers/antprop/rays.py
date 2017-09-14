@@ -2958,6 +2958,7 @@ class Rays(PyLayers, dict):
             f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
             f = mlab.gcf()
+            # view=mlab.view()
 
 
         if L != []:
@@ -3027,6 +3028,7 @@ class Rays(PyLayers, dict):
                                                      color=(0, 0, 0), )
                 f.children[-1].name='Rays with ' + str(int(i)) + 'interactions'
 
+        # mlab.view(view[0],view[1],view[2],view[3])
         return(f)
 
     def show3(self,
