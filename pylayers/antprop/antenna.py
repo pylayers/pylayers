@@ -158,7 +158,10 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from pylayers.util.project import *
 from pylayers.antprop.spharm import *
-from pylayers.antprop.antvsh import vsh 
+try:
+    from pylayers.antprop.antvsh import vsh 
+except:
+    pass
 from pylayers.antprop.antssh import ssh,SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
 from matplotlib import rc
@@ -243,6 +246,8 @@ class Pattern(PyLayers):
 
         Examples
         --------
+
+
 
         >>> from pylayers.antprop.aarray import *
         >>> A0=Antenna('Omni',param={'pol':'t','GmaxdB':0})
