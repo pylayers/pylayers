@@ -3673,20 +3673,31 @@ def Bthph(th,ph,M):
     """ Return theta and phi from a basis to another basis.
         passage between bassis ensure by a rotation matrix M
 
+        th (N)
+        ph (N)
+        M (3,3)
+
         spherical convention WARNING : 
         theta < 0 <=> z>0
         theta = 0 <=> z=0
         theta > 0 <=> z<0
     """
-
+    if not isinstance(th,np.ndarray):
+        th = np.ndarray([th])
+    if not isinstance(ph,np.ndarray):
+        ph = np.ndarray([ph])
     # spherical to cartesian 
     sp2cart = np.array([np.cos(th)*np.cos(ph),np.cos(th)*np.sin(ph),np.sin(th)])
     # apply rotation matrix
-    Cloc = np.dot(sp2cart,M.T)
+
+    Cloc = np.einsum('ij,ik->kj',sp2cart,M.T)
+    Clocref = np.dot(sp2cart[:,0],M.T)
     # return in psherical coodinates    
     # [ sin-1(z) , tan-1(y/x) ]
     cart2sp = np.array([np.arcsin(Cloc[2]),np.arctan2(Cloc[1],Cloc[0])])
-    return cart2sp[0],cart2sp[1]
+    cart2spref = np.array([np.arcsin(Clocref[2]),np.arctan2(Clocref[1],Clocref[0])])
+
+    return cart2sp[0,:],cart2sp[1,:]
 
 def MRot3(a, axe):
     """

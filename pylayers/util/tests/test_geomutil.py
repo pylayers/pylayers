@@ -70,21 +70,22 @@ class Tesgeu(TestCase):
         np.testing.assert_equal(pg,[-1,0,0])  # polar along x
 
     def test_Bthph(self):
-        ph = np.array(np.pi/4)
-        th = np.array(-np.pi/4)
+        ph = np.array([np.pi/4])
+        th = np.array([-np.pi/4])
 
         M=np.array([[0,-1,0],[1,0,0],[0,0,1]]) # rotation np.pi/2 along z
         thg,phg = Bthph(th,ph,M)
-        np.testing.assert_allclose(thg,th)
-        np.testing.assert_allclose(phg,ph+np.pi/2.)
+        np.testing.assert_almost_equal(thg,th)
+        np.testing.assert_almost_equal(phg,ph+np.pi/2.)
 
 
-        ph = 0.
-        th = np.array(-np.pi/4)
+        ph = np.array([0.])
+        th = np.array([-np.pi/4])
+
         M=np.array([[1,0,0],[0,0,-1],[0,1,0]]) # rotation np.pi/2 along x
         thg,phg = Bthph(th,ph,M)
-        np.testing.assert_allclose(thg,0.)
-        np.testing.assert_allclose(phg,np.pi/4.)
+        np.testing.assert_almost_equal(thg,0.)
+        np.testing.assert_almost_equal(phg,np.pi/4.)
 
 
 if __name__ == "__main__":
