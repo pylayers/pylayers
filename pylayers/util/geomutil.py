@@ -3891,6 +3891,7 @@ def SphericalBasis(a):
                     np.cos(a[:, 0]))).T
 
     M = np.dstack((tha, pha, sa)).T
+    M = np.swapaxes(M,0,1)
     return M
 
 
