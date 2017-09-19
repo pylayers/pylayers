@@ -3428,6 +3428,11 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     >>> bo = intersect3(a,b,pg,u1,u2,l1,l2)
     >>> assert bo 
 
+    See Also
+    --------
+
+    pylayers.gis.layout.Layout.angleonlink3
+
     """
 
     Nseg = a.shape[1]
@@ -3465,9 +3470,20 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     detA = np.linalg.det(A)
     # matrix A (Nseg,Nscreen,3,3) is valid if not singular 
     boolvalid = ~ (np.isclose(detA,0))
+    c = pg.T[None, :, :] - a.T[:, None, :]
+
     if boolvalid.all():
-        Am = A
-        ui = (np.arange(A.shape[0]),np.arange(A.shape[1]))
+        x  = np.linalg.solve(A, c)
+        condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
+        cond1 = ((x[:, :, 1] > l1[None, :] / 2.) +
+                (x[:, :, 1] < -l1[None, :] / 2.))
+        cond2 = ((x[:, :, 2] > l2[None, :] / 2.) +
+                (x[:, :, 2] < -l2[None, :] / 2.))
+
+        visi = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+        #i0 = np.kron(np.arange(A.shape[0],dtype=int),np.ones(A.shape[1],dtype=int))
+        #i1 = np.kron(np.ones(A.shape[0],dtype=int),np.arange(A.shape[1],dtype=int))
+        #ui = (i0,i1)
         #boolvalid = (np.ones(A.shape[0],dtype=bool),np.ones(A.shape[1],dtype=bool))
     else:
         ui = np.where(boolvalid)
@@ -3478,28 +3494,27 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
             Am=Am[None,...]
         
 
-    c = pg.T[None, :, :] - a.T[:, None, :]
-    cm = c[ui[0],ui[1],:]
-    # test if loosing one axis
-    if (len(c.shape)!=len(cm.shape)):
-        cm=cm[None,...]
+        cm = c[ui[0],ui[1],:]
+        # test if loosing one axis
+        if (len(c.shape)!=len(cm.shape)):
+            cm=cm[None,...]
     #
     # Warning scipy.linalg do not handle MDA
     #
     # x : Nseg x Nscreen
-    if Am.size > 0:
-        x = np.linalg.solve(Am, cm)
-    # condition of occultation
+        if Am.size > 0:
+            x = np.linalg.solve(Am, cm)
+        # condition of occultation
 
-        condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
-        cond1 = ((x[:, :, 1] > l1[None, ui[1]] / 2.) +
-             (x[:, :, 1] < -l1[None, ui[1]] / 2.))
-        cond2 = ((x[:, :, 2] > l2[None, ui[1]] / 2.) +
-             (x[:, :, 2] < -l2[None, ui[1]] / 2.))
+            condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
+            cond1 = ((x[:, :, 1] > l1[None, ui[1]] / 2.) +
+                 (x[:, :, 1] < -l1[None, ui[1]] / 2.))
+            cond2 = ((x[:, :, 2] > l2[None, ui[1]] / 2.) +
+                 (x[:, :, 2] < -l2[None, ui[1]] / 2.))
 
-        visi[ui[0],ui[1]] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
-        #print boolvalid
-        #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+            visi[ui[0],ui[1]] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+            #print boolvalid
+            #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
 
     return(visi)
 
