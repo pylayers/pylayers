@@ -3752,19 +3752,19 @@ def MRot3(a, axe):
     return(M3)
 
 
-def MATP(vl,pl,phi,tilt,pol):
+def MATP(sl,el,phi,tilt,pol):
     """ Calculate a rotation matrix for antenna pointing and orientation control
 
     Parameters
     ----------
 
-    vl : np.array (,3) unitary 
+    sl : np.array (,3) unitary 
         main radiation direction in antenna local frame
-    pl : np.array(,3) unitary 
-        main direction in the wave plane 
+    el : np.array(,3) unitary 
+        main direction in the E field plane 
     phi : float 0<phi<2*pi
     tilt : float -pi/2<tilt<pi/2
-    pol : string 'H' or 'V'
+    pol : string 'H' (Horizontal) or 'V' (Vertical)
 
     """
     assert np.isclose(np.dot(vl,vl),1)
@@ -3774,8 +3774,8 @@ def MATP(vl,pl,phi,tilt,pol):
     #
     # local frame completion (vl,pl,ql) direct frame 
     #
-    ql = np.cross(vl,pl)
-    Tl = np.vstack((vl,pl,ql)).T
+    hl = np.cross(sl,el)
+    Tl = np.vstack((sl,el,hl)).T
 
     # global frame construction
     #
