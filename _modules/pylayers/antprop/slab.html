@@ -207,7 +207,6 @@
 <span class="sd">    MatDB.__init__</span>
 <span class="sd">    MatDB.info</span>
 <span class="sd">    MatDB.dass</span>
-<span class="sd">    MatDB.maxindex</span>
 <span class="sd">    MatDB.delete</span>
 <span class="sd">    MatDB.edit</span>
 <span class="sd">    MatDB.add</span>
@@ -246,7 +245,6 @@
 <span class="sd">    SlabDB.showall</span>
 <span class="sd">    SlabDB.info</span>
 <span class="sd">    SlabDB.dass</span>
-<span class="sd">    SlabDB.maxindex</span>
 <span class="sd">    SlabDB.delete</span>
 <span class="sd">    SlabDB.edit</span>
 <span class="sd">    SlabDB.show</span>
@@ -640,6 +638,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">args</span><span class="p">[</span><span class="s1">&#39;nlin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="s1">&#39;labels&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">args</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
@@ -792,10 +791,13 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">MatInterface</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m2</span> <span class="o">=</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="c1"># 2*np.pi* f(GHz)*eps0 = f(Ghz)/18</span>
+        <span class="c1"># 2*np.pi* f(GHz)*eps0 = f(Ghz)/17.98</span>
 
-        <span class="n">epr1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m1</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m1</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
-        <span class="n">epr2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m2</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m2</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
+        <span class="c1">#epr1 = self.m1[&#39;epr&#39;] - 1j * abs(self.m1[&#39;sigma&#39;]) * 17.98 / self.fGHz</span>
+        <span class="c1">#epr2 = self.m2[&#39;epr&#39;] - 1j * abs(self.m2[&#39;sigma&#39;]) * 17.98 / self.fGHz</span>
+        <span class="c1">#pdb.set_trace()</span>
+        <span class="n">epr1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m1</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">epr2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m2</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 
         <span class="n">mur1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m1</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span>
         <span class="n">mur2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m2</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span>
@@ -894,17 +896,7 @@
 <span class="sd">    (meter) 0</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Mat.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.__init__.html#pylayers.antprop.slab.Mat.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
-                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;AIR&quot;</span><span class="p">,</span> 
-                 <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-                 <span class="n">epr</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> 
-                 <span class="n">mur</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> 
-                 <span class="n">sigma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                 <span class="n">roughness</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="n">a</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">b</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">d</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Mat.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.__init__.html#pylayers.antprop.slab.Mat.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="o">**</span><span class="n">dm</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -916,10 +908,11 @@
 <span class="sd">        mur : complex</span>
 <span class="sd">        sigma : float</span>
 <span class="sd">        roughness : float</span>
-<span class="sd">        a : ITU parameter</span>
-<span class="sd">        b : ITU parameter</span>
-<span class="sd">        c : ITU parameter</span>
-<span class="sd">        d : ITU parameter</span>
+
+<span class="sd">        a : ITU permittivity parameter </span>
+<span class="sd">        b : ITU permittivty exponent parameter </span>
+<span class="sd">        c : ITU conductivity parameter</span>
+<span class="sd">        d : ITU conductivity exponent parameter</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -928,22 +921,52 @@
 <span class="sd">        &gt;&gt;&gt; M = Mat(name=&#39;Phantom&#39;,index=17,epr=2+0.15j,mur=1,sigma=4,roughness=0)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;epr&#39;</span><span class="p">:</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> 
+                 <span class="s1">&#39;mur&#39;</span><span class="p">:</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> 
+                 <span class="s1">&#39;sigma&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="s1">&#39;roughness&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="s1">&#39;c&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="s1">&#39;d&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">}</span>
+
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epr</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mur</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roughness</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dm</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+
+        <span class="c1">#MATERIAL ;  a  ; b ;   c  ;  d  ;  fmin ; fmax </span>
+        <span class="c1"># ITU-R P2040 Table 3</span>
+        <span class="n">ITU_P2040_T3</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;ITU_CONCRETE&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>  <span class="mf">5.31</span>  <span class="p">,</span>  <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0326</span> <span class="p">,</span> <span class="mf">0.8095</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_BRICK&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.75</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.038</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">10</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_PLASTERBOARD&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.94</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0116</span> <span class="p">,</span> <span class="mf">0.7076</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_WOOD&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.99</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0047</span> <span class="p">,</span> <span class="mf">1.0718</span> <span class="p">,</span> <span class="mf">0.001</span> <span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_GLASS&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">6.27</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0043</span> <span class="p">,</span> <span class="mf">1.1925</span> <span class="p">,</span> <span class="mf">0.1</span> <span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_CEILINGBOARD&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.50</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0005</span> <span class="p">,</span> <span class="mf">1.1634</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_CHIPBOARD&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.58</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0217</span> <span class="p">,</span> <span class="mf">0.7800</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_FLOORBOARD&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.66</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.0044</span> <span class="p">,</span> <span class="mf">1.3515</span> <span class="p">,</span> <span class="mi">50</span> <span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_VERYDRYGROUND&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">3</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">0.00015</span> <span class="p">,</span> <span class="mf">2.52</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">10</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_MEDIUMDRYGROUND&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">15</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span> <span class="p">,</span> <span class="mf">0.035</span> <span class="p">,</span> <span class="mf">1.63</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">10</span><span class="p">]),</span>
+        <span class="s1">&#39;ITU_WETGROUND&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">30</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span> <span class="p">,</span> <span class="mf">0.15</span> <span class="p">,</span> <span class="mf">1.30</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+        <span class="p">}</span>
         <span class="c1"># Parameters a,b,c,d </span>
         <span class="c1"># Table 3 Rec ITU-R P.2040.1</span>
         <span class="c1">#</span>
         <span class="c1"># epsrp  = a * fGHZ ** b </span>
         <span class="c1"># sigma  = c * fGHZ ** d </span>
         <span class="c1">#</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">None</span></div>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="n">ITU_P2040_T3</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">abcd</span> <span class="o">=</span> <span class="n">ITU_P2040_T3</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">abcd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">abcd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">abcd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">abcd</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Mat.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.eval.html#pylayers.antprop.slab.Mat.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate Mat at given frequencies</span>
@@ -967,16 +990,16 @@
 <span class="sd">        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e9*eps0)</span>
 <span class="sd">        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e9*8.854e-12)</span>
 <span class="sd">        sigma/(w*eps0) = sigma/(2*pi*fGHz*1e-3*8.854)</span>
-<span class="sd">        sigma/(w*eps0) = 18 * sigma/fGHz</span>
+<span class="sd">        sigma/(w*eps0) = 17.98 * sigma/fGHz</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fGHz</span>
+        <span class="c1">#self[&#39;fGHz&#39;] = fGHz</span>
         <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">epsc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">/</span>  <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">epsr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHZ&#39;</span><span class="p">]</span><span class="o">**</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
-            <span class="n">sigma</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHZ&#39;</span><span class="p">]</span><span class="o">**</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span>
-            <span class="n">epsc</span> <span class="o">=</span> <span class="n">epsr</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">/</span>  <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span>
+            <span class="n">epsc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mf">17.98</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">/</span>  <span class="n">fGHz</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># from P.2040</span>
+            <span class="n">epsr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">fGHz</span><span class="o">**</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+            <span class="n">sigma</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">fGHz</span><span class="o">**</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span>
+            <span class="n">epsc</span> <span class="o">=</span> <span class="n">epsr</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mf">17.98</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">/</span>  <span class="n">fGHz</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">epsc</span><span class="p">)</span></div>
 
@@ -1004,9 +1027,14 @@
 <span class="sd">        fGHz : frequency GHz</span>
 <span class="sd">        theta : incidence angle referenced from interface normal</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        Ro,Rp : orthogonal and parallel Reflexion coefficient</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">air</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">()</span>
+        <span class="n">air</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="s1">&#39;AIR&#39;</span><span class="p">)</span>
         <span class="n">lmat</span> <span class="o">=</span> <span class="p">[</span><span class="n">air</span><span class="p">,</span> <span class="bp">self</span><span class="p">]</span>
 
         <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
@@ -1032,7 +1060,7 @@
 <span class="sd">    associate numeric and alphanumeric keys</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="MatDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.__init__.html#pylayers.antprop.slab.MatDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">dm</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="MatDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.__init__.html#pylayers.antprop.slab.MatDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">dm</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -1040,28 +1068,39 @@
 
 <span class="sd">        _fileini : string</span>
 
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        There are 2 ways to load a MatDB either from a file or a dict.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span> <span class="n">_fileini</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filemat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.ini&#39;</span><span class="p">,</span><span class="s1">&#39;.mat&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">dm</span><span class="o">==</span><span class="p">{}:</span>
+        <span class="k">if</span> <span class="n">_fileini</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_fileini</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1">#self.update(dm)</span>
             <span class="k">for</span> <span class="n">matname</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">M</span><span class="o">=</span><span class="n">Mat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">matname</span><span class="p">)</span>
-                <span class="n">ddm</span> <span class="o">=</span> <span class="n">dm</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ddm</span><span class="p">:</span>
-                    <span class="n">M</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">dm</span><span class="p">[</span><span class="n">matname</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">dm</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">dm</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+                <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">matname</span><span class="p">,</span><span class="o">**</span><span class="n">dm</span><span class="p">[</span><span class="n">matname</span><span class="p">])</span>
+                <span class="c1">#ddm = dm[matname]</span>
+                <span class="c1"># fill each field of the dict </span>
+                <span class="c1">#for k in ddm:</span>
+                <span class="c1">#    M[k] = dm[matname][k]</span>
+                <span class="c1"># update the MatDB with M</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span></div>
 
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;List of Materials</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;List of Materials&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_fileini&#39;</span><span class="p">):</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;from &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_fileini</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;-------------------</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">epsr</span>  <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;epr&#39;</span><span class="p">])</span>
             <span class="n">sigma</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="s1">&#39; (&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;)    |epsr|=&#39;</span><span class="o">+</span> <span class="n">epsr</span> <span class="o">+</span><span class="s1">&#39; sigma (S/m)=&#39;</span><span class="o">+</span><span class="n">sigma</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="s1">&#39;|epsr|=&#39;</span><span class="o">+</span> <span class="n">epsr</span> <span class="o">+</span><span class="s1">&#39; sigma (S/m)=&#39;</span><span class="o">+</span><span class="n">sigma</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 
@@ -1073,32 +1112,6 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="MatDB.dass"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.dass.html#pylayers.antprop.slab.MatDB.dass">[docs]</a>    <span class="k">def</span> <span class="nf">dass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; create a dictionnary to associate index | name</span>
-
-<span class="sd">        This dictionnary helps for quick access to a given slab</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">di</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="c1"># get the integer</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
-            <span class="c1"># associate the integer to name</span>
-            <span class="n">di</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c1"># update Class variable key association dictionnary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">di</span> <span class="o">=</span> <span class="n">di</span></div>
-
-<div class="viewcode-block" id="MatDB.maxindex"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.maxindex.html#pylayers.antprop.slab.MatDB.maxindex">[docs]</a>    <span class="k">def</span> <span class="nf">maxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; find the max value of the index in DB</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">maxi</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">maxi</span><span class="p">):</span>
-                <span class="n">maxi</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">maxi</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MatDB.delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.delete.html#pylayers.antprop.slab.MatDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete a material in the DB</span>
@@ -1118,22 +1131,16 @@
 
 <span class="sd">        name : vstring</span>
 
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        pylayers.antprop.slab.dass</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s1">&#39;Material&#39;</span><span class="p">,</span> <span class="s1">&#39;Enter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;epr&#39;</span><span class="p">,</span> <span class="s1">&#39;mur&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;roughness&#39;</span><span class="p">),</span>
-                            <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">epr</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">mur</span><span class="p">),</span> <span class="n">M</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">roughness</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s1">&#39;Material&#39;</span><span class="p">,</span> <span class="s1">&#39;Enter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;epr&#39;</span><span class="p">,</span> <span class="s1">&#39;mur&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;roughness&#39;</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">epr</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">mur</span><span class="p">),</span> <span class="n">M</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">roughness</span><span class="p">))</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span></div>
         <span class="c1"># update keys association dictionnary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MatDB.add"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.add.html#pylayers.antprop.slab.MatDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a material in the DB</span>
@@ -1170,6 +1177,9 @@
 
 <span class="sd">        iv) &#39;THz&#39;</span>
 
+<span class="sd">        v) ITU parameter (a,b,c,d)</span>
+<span class="sd">            </span>
+
 
 
 <span class="sd">        Examples</span>
@@ -1195,10 +1205,7 @@
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="c1"># get the next available index</span>
-        <span class="n">maxid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxindex</span><span class="p">()</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">()</span>
-        <span class="n">M</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="n">M</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;epsr&#39;</span><span class="p">:</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cval&#39;</span><span class="p">]</span>
@@ -1209,14 +1216,14 @@
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epsr&#39;</span><span class="p">])</span> <span class="c1"># warning check causality</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epsr&#39;</span><span class="p">])</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epsr&#39;</span><span class="p">])</span>
-            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">18.</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">17.98</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s1">&#39;ind&#39;</span><span class="p">:</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cval&#39;</span><span class="p">]</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epsr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cval&#39;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epsr&#39;</span><span class="p">])</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epsr&#39;</span><span class="p">])</span>
-            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">18.</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">17.98</span>
         <span class="c1">#</span>
         <span class="c1"># Terahertz Dielectric Properties of Polymers Yun-Sik Jin</span>
         <span class="c1"># Terahertz characterization of building materials (R.Piesiewicz) El.Jou Jan 2005 Vol 41 N18</span>
@@ -1227,7 +1234,7 @@
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;alpha_cmm1&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">])</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
-            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">18.</span>
+            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">17.98</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr2&#39;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s1">&#39;itu&#39;</span><span class="p">:</span>
@@ -1239,9 +1246,8 @@
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">M</span></div>
         <span class="c1"># updating dictionnary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MatDB.addgui"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.addgui.html#pylayers.antprop.slab.MatDB.addgui">[docs]</a>    <span class="k">def</span> <span class="nf">addgui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;MAT&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add a material in the DB</span>
@@ -1253,18 +1259,15 @@
 <span class="sd">        default &#39;MAT&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxindex</span><span class="p">()</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s1">&#39;Material&#39;</span><span class="p">,</span> <span class="s1">&#39;Enter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;epr&#39;</span><span class="p">,</span> <span class="s1">&#39;mur&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;roughness&#39;</span><span class="p">),</span>
-                            <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;(1+0j)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1+0j)&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">()</span>
-        <span class="n">M</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">M</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1">#max = self.maxindex()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s1">&#39;Material&#39;</span><span class="p">,</span> <span class="s1">&#39;Enter&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;epr&#39;</span><span class="p">,</span> <span class="s1">&#39;mur&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;roughness&#39;</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;(1+0j)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1+0j)&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
         <span class="n">M</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span></div>
 
 
 <div class="viewcode-block" id="MatDB.choose"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.choose.html#pylayers.antprop.slab.MatDB.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1290,18 +1293,20 @@
 <span class="sd">        _fileini : string</span>
 <span class="sd">            name of the matDB file (usually matDB.ini)</span>
 
+<span class="sd">        TODO</span>
+<span class="sd">        ----</span>
+
+<span class="sd">        add ITU format (abcd)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRMAT&#39;</span><span class="p">])</span>
         <span class="n">materials</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">materials</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">di</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">matname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">sections</span><span class="p">()):</span>
             <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">matname</span><span class="p">)</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">matname</span><span class="p">,</span><span class="s1">&#39;sigma&#39;</span><span class="p">))</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">matname</span><span class="p">,</span><span class="s1">&#39;roughness&#39;</span><span class="p">))</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">matname</span><span class="p">,</span><span class="s1">&#39;epr&#39;</span><span class="p">))</span>
-            <span class="n">M</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">matname</span>
             <span class="n">M</span><span class="p">[</span><span class="s1">&#39;mur&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">matname</span><span class="p">,</span><span class="s1">&#39;mur&#39;</span><span class="p">))</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span></div>
 
@@ -1313,8 +1318,8 @@
 <span class="sd">        [name1]</span>
 <span class="sd">        epsr =</span>
 <span class="sd">        mur =</span>
+<span class="sd">        sigma = </span>
 <span class="sd">        roughness =</span>
-<span class="sd">        index =</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1326,11 +1331,7 @@
         <span class="c1">#</span>
         <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;dict&quot;</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">vid</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">vid</span><span class="p">])</span>
-
-        <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">vid</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;epr&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;epr&#39;</span><span class="p">]))</span>
@@ -1348,7 +1349,6 @@
                 <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;roughness&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;roughness&#39;</span><span class="p">]))</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;roughness&quot;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]))</span>
 
         <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
@@ -1387,41 +1387,39 @@
 <span class="sd">    evaluated : Boolean</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Slab.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.__init__.html#pylayers.antprop.slab.Slab.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="o">=</span><span class="p">[],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;NEWSLAB&#39;</span><span class="p">,</span><span class="n">ds</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="Slab.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.__init__.html#pylayers.antprop.slab.Slab.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">matDB</span><span class="p">,</span><span class="n">ds</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        mat : matdb</span>
 <span class="sd">        name : string</span>
-<span class="sd">        slab name</span>
+<span class="sd">            slab name</span>
+<span class="sd">        matDB : matdb</span>
+<span class="sd">        ds  : dict </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># if not specified choose default material database</span>
         <span class="c1">#super(Slab,self).__init__()</span>
         <span class="n">Interface</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mat</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span>
+        <span class="c1">#if mat==[]:</span>
+        <span class="c1">#    self.mat = MatDB()</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    self.mat = mat</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">if</span> <span class="n">ds</span><span class="o">==</span><span class="p">{}:</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="c1"># lmatname has to be set before lthick</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">]</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
-            <span class="c1"># lmatname has to be set before lthick</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">matDB</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; dictionnary setter</span>
@@ -1432,10 +1430,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;lmatname&quot;</span><span class="p">:</span>
             <span class="n">nbmat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">na</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">na</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">__repr__</span><span class="p">())</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">na</span><span class="o">+</span> <span class="s1">&#39; not in material Database&#39;</span><span class="p">)</span>
+            <span class="c1">#for na in value:</span>
+            <span class="c1">#    if na not in self.mat:</span>
+            <span class="c1">#        print(self.mat.__repr__())</span>
+            <span class="c1">#        raise ValueError(na+ &#39; not in material Database&#39;)</span>
             <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;lmatname&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="c1">#dict.__setitem__(self,&quot;nbmat&quot;,nbmat)</span>
             <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;lthick&quot;</span><span class="p">,[</span><span class="mf">0.05</span><span class="p">]</span><span class="o">*</span><span class="n">nbmat</span><span class="p">)</span>
@@ -1454,14 +1452,14 @@
         <span class="sd">&quot;&quot;&quot; This function makes the addition between 2 Slabs</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">MatDB</span><span class="p">)</span>
         <span class="c1"># lmatname should be modified before lthick</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span>
-        <span class="n">U</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">u</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">])):</span>
             <span class="n">namem</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">U</span><span class="o">.</span><span class="n">conv</span><span class="p">()</span>
+        <span class="n">U</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">MatDB</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Slab.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.__repr__.html#pylayers.antprop.slab.Slab.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1503,7 +1501,7 @@
 <span class="sd">            &gt;&gt;&gt; sl.add(&#39;placo&#39;,lmatname,lthick)</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)</span>
 <span class="sd">            &gt;&gt;&gt; fGHz = np.array([57.5])</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;placo&#39;].ev(fGHz,theta)</span>
+<span class="sd">            &gt;&gt;&gt; sl[&#39;placo&#39;].eval(fGHz,theta)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax=sl[&#39;placo&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;m&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; plt.ion()</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
@@ -1520,7 +1518,6 @@
                 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;epsrc : &quot;</span><span class="p">,</span> <span class="n">epsrc</span><span class="p">)</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;index : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">])</span>
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;color : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">])</span>
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;linewidth :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]:</span>
@@ -1537,18 +1534,18 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;th (rad) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Slab.conv"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv">[docs]</a>    <span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.conv"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv">[docs]</a>    <span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">matDB</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build lmat </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">matname</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]:</span>
-            <span class="n">mi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span>
+            <span class="n">mi</span> <span class="o">=</span> <span class="n">matDB</span><span class="p">[</span><span class="n">matname</span><span class="p">]</span> 
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Slab.ev"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.ev.html#pylayers.antprop.slab.Slab.ev">[docs]</a>    <span class="k">def</span> <span class="nf">ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s1">&#39;RT&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s1">&#39;RT&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluation of the Slab</span>
 
 <span class="sd">        Parameters</span>
@@ -1611,11 +1608,11 @@
         <span class="c1">#</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># first material is AIR</span>
-                <span class="n">ml</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">()</span>
+                <span class="n">ml</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="s1">&#39;AIR&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ml</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmat&#39;</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">mr</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">()</span> <span class="c1"># last material is AIR</span>
+                <span class="n">mr</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="s1">&#39;AIR&#39;</span><span class="p">)</span> <span class="c1"># last material is AIR</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;lmat&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">mr</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;METAL&#39;</span><span class="p">:</span>
@@ -1673,7 +1670,9 @@
                 <span class="k">break</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Io</span> <span class="o">=</span> <span class="n">Co</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span> <span class="o">=</span> <span class="n">Cp</span>
+        <span class="c1"># attempt to fix bug </span>
+        <span class="c1">#self.Ip = Cp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span> <span class="o">=</span> <span class="o">-</span><span class="n">Cp</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">RT</span><span class="p">(</span><span class="n">metalic</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="n">RT</span><span class="p">)</span>
 <span class="c1"># if compensate:</span>
@@ -1706,7 +1705,7 @@
 
 
 
-        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span></div>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 
 <div class="viewcode-block" id="Slab.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.filter.html#pylayers.antprop.slab.Slab.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">win</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; filtering waveform</span>
@@ -1729,7 +1728,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get frequency base of the waveform</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">win</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">wout</span> <span class="o">=</span> <span class="n">Wafeform</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">wout</span><span class="p">)</span></div>
 
@@ -1770,7 +1769,7 @@
 
         <span class="n">df</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="c1"># f x th x p x q</span>
         <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span>
@@ -1805,7 +1804,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">color</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">color</span><span class="p">)</span></div>
 
@@ -1840,7 +1839,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span></div>
 
@@ -1870,52 +1869,10 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">:</span>
             <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
         <span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span></div>
 
-<span class="c1">#    def editgui(self):</span>
-<span class="c1">#        &quot;&quot;&quot; edit a Slab in the DB</span>
-<span class="c1">#</span>
-<span class="c1">#        &quot;&quot;&quot;</span>
-<span class="c1">#        chaine1 = &quot;&quot;</span>
-<span class="c1">#        chaine2 = &quot;&quot;</span>
-<span class="c1">#        for i in range(self.nbmat):</span>
-<span class="c1">#            index_mat = self.imat[i]</span>
-<span class="c1">#            name_mat = self.mat.di[index_mat]</span>
-<span class="c1">#            thick = str(self.thickness[i])</span>
-<span class="c1">#            chaine1 = chaine1 + name_mat + &#39; &#39;</span>
-<span class="c1">#            chaine2 = chaine2 + thick + &#39; &#39;</span>
-<span class="c1">#</span>
-<span class="c1">#        data = multenterbox(&#39;Slab&#39;, &#39;Enter&#39;,</span>
-<span class="c1">#                            (&#39;name&#39;, &#39;index&#39;, &#39;nbmat&#39;, &#39;imat&#39;,</span>
-<span class="c1">#                             &#39;thickness (cm)&#39;, &#39;color&#39;, &#39;linewidth&#39;),</span>
-<span class="c1">#                            (self.name, self.index, self.nbmat, chaine1,</span>
-<span class="c1">#                             chaine2, self.color, str(self.linewidth)))</span>
-<span class="c1">#</span>
-<span class="c1">#        self.index = eval(data[1])</span>
-<span class="c1">#        self.nbmat = eval(data[2])</span>
-<span class="c1">#        chaine1 = data[3].split()</span>
-<span class="c1">#        chaine2 = data[4].split()</span>
-<span class="c1">#</span>
-<span class="c1">#        tt = [0, 0, 0, 0, 0, 0, 0, 0]</span>
-<span class="c1">#        th = [0, 0, 0, 0, 0, 0, 0, 0]</span>
-<span class="c1">#        if (len(chaine1) != len(chaine2)):</span>
-<span class="c1">#            print (&#39;erreur edit slab&#39;)</span>
-<span class="c1">#            return(-1)</span>
-<span class="c1">#        for i in range(len(chaine1)):</span>
-<span class="c1">#            nom = chaine1[i]</span>
-<span class="c1">#            thick = chaine2[i]</span>
-<span class="c1">#            index = self.mat[nom].index</span>
-<span class="c1">#            tt[i] = index</span>
-<span class="c1">#            th[i] = eval(thick)</span>
-<span class="c1">#</span>
-<span class="c1">#        self.imat = tt</span>
-<span class="c1">#        self.charindex = str(tt)</span>
-<span class="c1">#        self.thickness = th</span>
-<span class="c1">#        self.color = data[5]</span>
-<span class="c1">#        self.linewidth = eval(data[6])</span>
-<span class="c1">#        self.dass()</span>
 
 <div class="viewcode-block" id="Slab.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.show.html#pylayers.antprop.slab.Slab.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show slab Reflection and Transmission coefficient</span>
@@ -1933,7 +1890,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]:</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;l20&#39;</span><span class="p">])</span>
 
@@ -1949,7 +1906,7 @@
 <span class="sd">    DB : slab dictionnary</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SlabDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">fileslab</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">ds</span><span class="o">=</span><span class="p">{},</span><span class="n">dm</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="SlabDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fileslab</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">ds</span><span class="o">=</span><span class="p">{},</span><span class="n">dm</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -1962,32 +1919,40 @@
 <span class="sd">        dm : dict </span>
 <span class="sd">            mat dict read from layout file. </span>
 
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        There are two way tp initialize a SlabDB either from dict ds and dm usually read in  the </span>
+<span class="sd">        Layout file .ini or from 2 specified file</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span> <span class="o">=</span> <span class="n">fileslab</span>
-
-        <span class="k">if</span> <span class="n">ds</span><span class="o">==</span><span class="p">{}:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">filemat</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filemat</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">fileslab</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileslab</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        
+        <span class="c1"># Load from file</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fileslab</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span> <span class="o">=</span> <span class="n">fileslab</span>
+            <span class="k">if</span> <span class="n">filemat</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filemat</span> <span class="o">=</span> <span class="n">filemat</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">(</span><span class="n">filemat</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">(</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileslab</span><span class="p">)</span>
+        <span class="c1"># Load from dict </span>
+        <span class="k">else</span> <span class="p">:</span>
             <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span><span class="o">==</span><span class="nb">dict</span><span class="p">)</span>
             <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span><span class="o">==</span><span class="nb">dict</span><span class="p">)</span>
             <span class="c1"># copier le contenu du load ici </span>
             <span class="c1">#self.update(ds)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="n">filemat</span><span class="p">,</span><span class="n">dm</span><span class="o">=</span><span class="n">dm</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">(</span><span class="n">dm</span><span class="o">=</span><span class="n">dm</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">slabname</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
-                <span class="n">S</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">slabname</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span><span class="n">ds</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">slabname</span><span class="p">])</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="n">slabname</span><span class="p">]:</span>
-                    <span class="n">S</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">slabname</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+                <span class="c1"># create slab slabname from ds</span>
+                <span class="n">S</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span><span class="n">ds</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">slabname</span><span class="p">])</span>
+                <span class="c1"># </span>
+                <span class="c1">#for k in ds[slabname]:</span>
+                <span class="c1">#    S[k] = ds[slabname][k]</span>
+                <span class="c1">#S[&#39;nmat&#39;]=len(ds[slabname][&#39;lmatname&#39;])</span>
+                <span class="c1">#S.conv()</span>
+                <span class="c1"># add slab to SlabDB</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">slabname</span><span class="p">]</span><span class="o">=</span><span class="n">S</span></div>
 
-                <span class="n">S</span><span class="p">[</span><span class="s1">&#39;nmat&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">slabname</span><span class="p">][</span><span class="s1">&#39;lmatname&#39;</span><span class="p">])</span>
-                <span class="n">S</span><span class="o">.</span><span class="n">conv</span><span class="p">()</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">slabname</span><span class="p">]</span><span class="o">=</span><span class="n">S</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;List of Slabs</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -2014,30 +1979,6 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-
-<div class="viewcode-block" id="SlabDB.dass"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.dass.html#pylayers.antprop.slab.SlabDB.dass">[docs]</a>    <span class="k">def</span> <span class="nf">dass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; update conversion dictionnary</span>
-
-<span class="sd">        code &lt;--&gt; name</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">di</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
-            <span class="n">di</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">di</span> <span class="o">=</span> <span class="n">di</span></div>
-
-<div class="viewcode-block" id="SlabDB.maxindex"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.maxindex.html#pylayers.antprop.slab.SlabDB.maxindex">[docs]</a>    <span class="k">def</span> <span class="nf">maxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; find the max value of the index in DB</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">maxi</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">maxi</span><span class="p">):</span>
-                <span class="n">maxi</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">maxi</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="SlabDB.delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.delete.html#pylayers.antprop.slab.SlabDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete an element from the database</span>
 
@@ -2047,8 +1988,7 @@
 <span class="sd">        name : string</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__delitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__delitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SlabDB.edit"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.edit.html#pylayers.antprop.slab.SlabDB.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; edit a Slab in the DB</span>
@@ -2074,7 +2014,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="n">slab</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">slab</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
@@ -2098,7 +2038,7 @@
 
 <span class="sd">        Examples from the paper:</span>
 
-<span class="sd">        &quot;Reflection ant Transmission Properties of Building Materials in D-Band</span>
+<span class="sd">        &quot;Reflection and Transmission Properties of Building Materials in D-Band</span>
 <span class="sd">        for Modeling Future mm-Wave Communication Systems &quot;</span>
 <span class="sd">        Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz</span>
 <span class="sd">        EUCAP 2010</span>
@@ -2110,21 +2050,20 @@
 <span class="sd">            &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
 <span class="sd">            &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
-<span class="sd">            &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-
+<span class="sd">            &gt;&gt;&gt; sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;ConcreteJc&#39;,cval=3.5,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;GlassJc&#39;,cval=2.55,alpha_cmm1=2.4,fGHz=120,typ=&#39;THz&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.add(&#39;ConcreteJc&#39;,[&#39;ConcreteJc&#39;],[0.049])</span>
 <span class="sd">            &gt;&gt;&gt; sl.add(&#39;DoubleGlass&#39;,[&#39;GlassJc&#39;,&#39;AIR&#39;,&#39;GlassJc&#39;],[0.0029,0.0102,0.0029])</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.linspace(20,60,100)*np.pi/180</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].ev(120,theta)</span>
+<span class="sd">            &gt;&gt;&gt; sl[&#39;ConcreteJc&#39;].eval(120,theta)</span>
 <span class="sd">            &gt;&gt;&gt; f,a=sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(120,theta)</span>
+<span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].eval(120,theta)</span>
 <span class="sd">            &gt;&gt;&gt; f,a = sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,typ=[&#39;l20&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; freq = np.linspace(110,135,50)</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].ev(freq,theta)</span>
+<span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].eval(freq,theta)</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;DoubleGlass&#39;].pcolor(dB=True)</span>
 
 <span class="sd">        Exemple from paper `&quot;[Kiani2007] Glass Characterization for Designing</span>
@@ -2148,29 +2087,26 @@
 <span class="sd">            &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
 <span class="sd">            &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
-<span class="sd">            &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;CoatingPilkington&#39;,cval=1,sigma=2.5e6,typ=&#39;epsr&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.mat.add(name=&#39;GlassPilkington&#39;,cval = 6.9,sigma = 5e-4,typ=&#39;epsr&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; sl.add(&#39;Optitherm382&#39;,[&#39;CoatingPilkington&#39;,&#39;GlassPilkington&#39;],[100e-9,0.00382])</span>
 <span class="sd">            &gt;&gt;&gt; fGHz  = np.linspace(0.9,2.2,50)</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.linspace(0,np.pi/2,100)</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;Optitherm382&#39;].ev(fGHz,theta)</span>
+<span class="sd">            &gt;&gt;&gt; sl[&#39;Optitherm382&#39;].eval(fGHz,theta)</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;Optitherm382&#39;].pcolor(dB=True)</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-        <span class="n">maxi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxindex</span><span class="p">()</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lmatname</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lthick</span>
-        <span class="n">U</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxi</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">U</span><span class="p">[</span><span class="s1">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="n">U</span><span class="o">.</span><span class="n">conv</span><span class="p">()</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
+        <span class="n">U</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span></div>
 
 <div class="viewcode-block" id="SlabDB.addgui"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.addgui.html#pylayers.antprop.slab.SlabDB.addgui">[docs]</a>    <span class="k">def</span> <span class="nf">addgui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a slab in the DB</span>
@@ -2181,10 +2117,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
         <span class="n">U</span><span class="o">.</span><span class="n">edit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">U</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="p">[</span><span class="n">U</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span></div>
 
 
 <div class="viewcode-block" id="SlabDB.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.load.html#pylayers.antprop.slab.SlabDB.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">):</span>
@@ -2200,23 +2135,27 @@
         <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;mat&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">(</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span> 
+        <span class="k">else</span><span class="p">:</span>    
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">(</span><span class="s1">&#39;matDB.ini&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span> 
+        
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">slabname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">()):</span>
             <span class="c1"># warning the Slab takes the whole Material Database</span>
-            <span class="n">S</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">slabname</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
             <span class="n">S</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="s1">&#39;lmatname&#39;</span><span class="p">))</span>
-            <span class="n">S</span><span class="p">[</span><span class="s1">&#39;nbmat&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;lmatname&#39;</span><span class="p">])</span>
+            <span class="c1">#S[&#39;nbmat&#39;]=len(S[&#39;lmatname&#39;])</span>
             <span class="n">S</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="s1">&#39;color&#39;</span><span class="p">)</span>
-            <span class="n">S</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">k</span> 
-            <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">slabname</span>
             <span class="n">S</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="s1">&#39;lthick&#39;</span><span class="p">))</span>
             <span class="n">S</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="s1">&#39;linewidth&#39;</span><span class="p">))</span>
-
-            <span class="n">S</span><span class="o">.</span><span class="n">conv</span><span class="p">()</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">slabname</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span></div>
 
 <div class="viewcode-block" id="SlabDB.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.save.html#pylayers.antprop.slab.SlabDB.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;slabDB.ini&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; save SlabDB in an ini file</span>
+        <span class="sd">&quot;&quot;&quot; save SlabDB in a .ini file</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2232,15 +2171,11 @@
         <span class="c1"># config names</span>
         <span class="c1">#</span>
         <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;dict&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;dict&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">vid</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">vid</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">vid</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]))</span>
             <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;linewidth&#39;</span><span class="p">])</span>
             <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;lthick&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;lthick&#39;</span><span class="p">])</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">])</span>
             <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;lmatname&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;lmatname&#39;</span><span class="p">])</span>
 
         <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
@@ -2392,7 +2327,7 @@
 
     <span class="n">epr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">epsr</span><span class="p">)</span>
     <span class="n">epr2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">epsr</span><span class="p">)</span>
-    <span class="n">sigma</span> <span class="o">=</span> <span class="o">-</span><span class="n">epr2</span> <span class="o">*</span> <span class="n">fGHz</span> <span class="o">/</span> <span class="mi">18</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="o">-</span><span class="n">epr2</span> <span class="o">*</span> <span class="n">fGHz</span> <span class="o">/</span> <span class="mf">17.98</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epsr</span><span class="p">)</span>
     <span class="n">n2</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -2423,7 +2358,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

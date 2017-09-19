@@ -185,10 +185,41 @@
 <dl class="function">
 <dt id="pylayers.util.geomutil.SphericalBasis">
 <code class="descclassname">pylayers.util.geomutil.</code><code class="descname">SphericalBasis</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#SphericalBasis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.SphericalBasis" title="Permalink to this definition">¶</a></dt>
-<dd><p>SphericalBasis(a):</p>
-<p>a[:,0] : N x theta   theta angle
-a[:,1] : N x phi     phi angle</p>
-<p>M = N x [th,ph,s]  : 3 x 3 x N</p>
+<dd><p>construct a spherical basis from a direction theta,phi</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : N x 2</p>
+<blockquote>
+<div><p>a[:,0] : N theta angle
+a[:,1] : N phi angle</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>M</strong> : np.array</p>
+<blockquote class="last">
+<div><p>N x [th,ph,s]  : 3 x 3 x N</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.util.geomutil.angledir.html#pylayers.util.geomutil.angledir" title="pylayers.util.geomutil.angledir"><code class="xref py py-obj docutils literal"><span class="pre">angledir</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The unit vector uth,uph,us are places along the lines of the 
+3 x 3 matrices</p>
+<p>uth
+uph
+us</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; a = np.array([[0,0]])
+&gt;&gt;&gt; SphericalBasis(a)
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -204,7 +235,7 @@ a[:,1] : N x phi     phi angle</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.geomutil.SphericalBasis.rst.txt"

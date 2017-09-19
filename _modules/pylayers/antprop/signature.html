@@ -606,7 +606,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Signatures.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.__init__.html#pylayers.antprop.signature.Signatures.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.__init__.html#pylayers.antprop.signature.Signatures.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -635,6 +635,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span></div>
 
 <div class="viewcode-block" id="Signatures.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.__repr__.html#pylayers.antprop.signature.Signatures.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -679,14 +681,41 @@
             <span class="n">nsig</span> <span class="o">+=</span> <span class="n">size</span>
         <span class="k">return</span><span class="p">(</span><span class="n">nsig</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">compl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lint</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; completion from lint </span>
 
+<span class="sd">        Paramaters</span>
+<span class="sd">        ----------</span>
 
+<span class="sd">        lint : list </span>
+<span class="sd">            list of interactions</span>
 
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># all group of interactions</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lint</span><span class="p">):</span>
+                <span class="n">Si</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> 
+                <span class="n">Ns</span><span class="p">,</span><span class="n">Nb</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">shape</span>
+                <span class="c1"># all signatures form a group of interactions</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Ns</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
+                    <span class="c1"># all interactions</span>
+                    <span class="n">b1</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">for</span> <span class="n">i1</span><span class="p">,</span><span class="n">it</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lint</span><span class="p">):</span> 
+                        <span class="k">if</span> <span class="p">((</span><span class="n">Si</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span> <span class="o">==</span> <span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> 
+                           <span class="p">(</span><span class="n">Si</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span> <span class="o">==</span> <span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+                            <span class="k">pass</span> 
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">b1</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">if</span> <span class="n">b1</span><span class="p">:</span>
+                        <span class="n">sig</span> <span class="o">=</span> <span class="n">Si</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="o">+</span><span class="mi">2</span><span class="p">,:]</span>
+                        <span class="n">sigi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sig2inter</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">sig</span><span class="p">)</span>
+                        <span class="k">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="s1">&#39; :&#39;</span><span class="p">,</span><span class="n">sigi</span><span class="p">)</span>
+                        <span class="c1"># all </span>
 
     <span class="k">def</span> <span class="nf">sig2inter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">lsi</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&#39;&#39;&#39; convert signature to corresponding interaction in Gi</span>
+        <span class="sd">&#39;&#39;&#39; convert signature to corresponding list of interactions in Gi</span>
 
-<span class="sd">            Paramters:</span>
+<span class="sd">            Paramaters:</span>
 <span class="sd">            ----------</span>
 
 <span class="sd">            L : Layout</span>
@@ -844,6 +873,12 @@
 
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check signature</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        OK : np.array</span>
+<span class="sd">        KO : np.array</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -956,15 +991,19 @@
             <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span>
             <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span>
             <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;ratio&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;sig&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">f</span><span class="p">[</span><span class="s1">&#39;sig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">f</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Signature: issue when writting h5py file&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Signatures._loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures._loadh5.html#pylayers.antprop.signature.Signatures._loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures._loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures._loadh5.html#pylayers.antprop.signature.Signatures._loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load signatures in hdf5 format compliant with class Links</span>
 
 <span class="sd">        Parameters</span>
@@ -975,6 +1014,11 @@
 <span class="sd">        grpname : string</span>
 <span class="sd">            groupname of the h5py file (from Links Class)</span>
 
+<span class="sd">        kwargs </span>
+<span class="sd">            may contain a L: layout object</span>
+<span class="sd">            if L =  [] the layout is loaded from the layout name stored</span>
+<span class="sd">            into the h5 file</span>
+<span class="sd">            if L = Layout the layout passed in arg is used</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
@@ -992,19 +1036,41 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
             <span class="n">f</span><span class="o">=</span><span class="n">fh5</span><span class="p">[</span><span class="s1">&#39;sig/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">][:]})</span>
+
+            <span class="c1"># compliant with new h5 format:</span>
+            <span class="k">if</span> <span class="s1">&#39;sig&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;sig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;sig&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][:]})</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][:]})</span>
+            <span class="c1"># old h5 format</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">][:]})</span>
             <span class="n">Lname</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s1">&#39;threshold&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span>
+            <span class="c1"># ensure backward compatibility</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># find threshold</span>
+                <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> 
+                                 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Signature: issue when reading h5py file&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">layout</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">Lname</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;L&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">layout</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">Lname</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Signatures.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.save.html#pylayers.antprop.signature.Signatures.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1223,8 +1289,7 @@
 <span class="sd">            activate diffraction </span>
 <span class="sd">        threshold : float </span>
 <span class="sd">            for reducing calculation time</span>
-<span class="sd">        threshold_prob : float </span>
-<span class="sd">            threshold on output probability</span>
+
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1241,7 +1306,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cutoff&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> 
                     <span class="s1">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
-                    <span class="s1">&#39;threshold_prob&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
                     <span class="s1">&#39;nD&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s1">&#39;nR&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
                     <span class="s1">&#39;nT&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
@@ -1256,8 +1320,11 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> 
         
         <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">]</span>
-        <span class="n">threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span> 
-        <span class="n">threshold_prob</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold_prob&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;threshold&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span>
+
         <span class="n">nD</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nD&#39;</span><span class="p">]</span>
         <span class="n">nT</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nT&#39;</span><span class="p">]</span>
         <span class="n">nR</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nR&#39;</span><span class="p">]</span>
@@ -1267,6 +1334,10 @@
         <span class="n">animation</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;animation&#39;</span><span class="p">]</span> 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span>
+        <span class="c1">#</span>
+        <span class="c1"># AIR : editable AIR separation </span>
+        <span class="c1"># _AIR : constructed AIR separation </span>
+        <span class="c1">#</span>
         <span class="n">lair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;_AIR&#39;</span><span class="p">]</span>
 
         <span class="c1"># list of interactions visible from source</span>
@@ -1364,8 +1435,10 @@
                 <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">anstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="mf">1.</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">anstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">])</span>
                 <span class="c1"># update signature counter</span>
                 <span class="n">cptsig</span> <span class="o">+=</span><span class="mi">1</span>
             <span class="c1"># stack is a list of iterators</span>
@@ -1392,6 +1465,7 @@
                 <span class="n">iter_on_interactions</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="c1"># next interaction child</span>
                 <span class="n">interaction</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iter_on_interactions</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="c1">#print visited</span>
                 <span class="c1">#if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):</span>
                 <span class="c1">#    import ipdb</span>
                 <span class="c1">#    ipdb.set_trace()</span>
@@ -1731,7 +1805,7 @@
                 <span class="c1">#    th = self.L.Gs.pos[nstr]</span>
                 <span class="c1">#    th = np.array([th,th])</span>
                 <span class="c1">#    ratio = 1</span>
-                    <span class="k">if</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
                         <span class="c1">#</span>
                         <span class="c1"># Update sequence of mirrored points</span>
                         <span class="k">if</span> <span class="n">nstr</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
@@ -1770,8 +1844,10 @@
                                 <span class="n">lhash</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sighash</span><span class="p">)</span>
                                 <span class="k">try</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">sig</span><span class="p">))</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">ratio</span><span class="p">)</span>
                                 <span class="k">except</span><span class="p">:</span>
                                     <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">sig</span><span class="p">))</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ratio</span><span class="p">])</span>
                             <span class="c1"># print (&#39;added&#39;,visited)</span>
                                 <span class="n">cptsig</span> <span class="o">+=</span><span class="mi">1</span>
 
@@ -2002,7 +2078,6 @@
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
         <span class="c1"># display layout</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -2267,17 +2342,17 @@
 
 
 <div class="viewcode-block" id="Signatures.raysv"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.raysv.html#pylayers.antprop.signature.Signatures.raysv">[docs]</a>    <span class="k">def</span> <span class="nf">raysv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">prx</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; transfrom dict of signatures into 2D rays - default vectorized version</span>
+        <span class="sd">&quot;&quot;&quot; transform dict of signatures into 2D rays - default vectorized version</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        ptx : numpy.array or int</span>
-<span class="sd">            Tx coordinates is the center of gravity of the cycle number if</span>
-<span class="sd">            type(tx)=int</span>
+<span class="sd">            Tx coordinates is the center of gravity of the cycle ptx if</span>
+<span class="sd">            type(ptx)=int</span>
 <span class="sd">        prx :  numpy.array or int</span>
-<span class="sd">            Rx coordinates is the center of gravity of the cycle number if</span>
-<span class="sd">            type(rx)=int</span>
+<span class="sd">            Rx coordinates is the center of gravity of the cycle prx if</span>
+<span class="sd">            type(prx)=int</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2321,9 +2396,9 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">prx</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">:</span>
             <span class="n">prx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">prx</span><span class="p">])</span>
 
-
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">ptx</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">ptx</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ptx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">prx</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">prx</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]</span>
 
@@ -2526,13 +2601,14 @@
 
 
 
-            <span class="c1"># how to do this into a while loop</span>
+            <span class="c1"># how to do this into a while loop ?</span>
             <span class="n">p</span><span class="o">=</span><span class="n">rx</span>
 
             <span class="c1"># creating W matrix required in eq (2.70) thesis Nicolas AMIOT</span>
-            <span class="c1">#Warning W is rolled after and becomes (nsig,4,4)</span>
-            <span class="n">W</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">nsig</span><span class="p">))</span>
-            <span class="n">I</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nsig</span><span class="p">))</span>
+            <span class="c1"># Warning W is rolled after and becomes (nsig,4,4)</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">nsig</span><span class="p">))</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nsig</span><span class="p">))</span>
+
             <span class="n">W</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span>
             <span class="n">W</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,:</span><span class="mi">2</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span>
 
@@ -2546,7 +2622,7 @@
             <span class="n">ptr</span> <span class="o">=</span> <span class="n">pt</span>
             <span class="n">Mr</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
 
-            <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-2</span>
+            <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>
             <span class="n">rayp_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="n">nsig</span><span class="p">,</span><span class="n">ninter</span><span class="p">))</span>
             <span class="c1"># rayp_i[:2,:,-1]=rx[:,None]</span>
             <span class="c1">#backtrace process</span>
@@ -2800,10 +2876,11 @@
 
             <span class="n">dM</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">ninter</span><span class="p">:</span><span class="n">M</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">dM</span></div>
+
 <div class="viewcode-block" id="Signatures.image"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.image.html#pylayers.antprop.signature.Signatures.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">12.5</span><span class="p">])):</span>
         <span class="sd">&#39;&#39;&#39; Warning :</span>
 <span class="sd">            This is an attempt to vectorize the image process.</span>
-<span class="sd">            Despite it has been tested on few cases with succes,</span>
+<span class="sd">            Despite it has been tested on few cases with success,</span>
 <span class="sd">            this is quite new need to be validated !!!</span>
 
 
@@ -3075,6 +3152,9 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
 <div class="viewcode-block" id="Signature.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.info.html#pylayers.antprop.signature.Signature.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3167,7 +3247,8 @@
             <span class="k">else</span><span class="p">:</span>      <span class="c1"># node</span>
                 <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span></div>
 
 <div class="viewcode-block" id="Signature.ev"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.ev.html#pylayers.antprop.signature.Signature.ev">[docs]</a>    <span class="k">def</span> <span class="nf">ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  evaluation of Signature</span>
@@ -3223,7 +3304,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pc</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pa</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span></div>
 
 <div class="viewcode-block" id="Signature.unfold"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.unfold.html#pylayers.antprop.signature.Signature.unfold">[docs]</a>    <span class="k">def</span> <span class="nf">unfold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; unfold a given signature</span>
@@ -3417,6 +3499,58 @@
 
         <span class="k">return</span> <span class="n">M</span></div>
 
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        L : Layout </span>
+<span class="sd">        tx : </span>
+<span class="sd">        rx : </span>
+<span class="sd">        aw</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">defaults</span>  <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;aw&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;axes&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;labels&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
+                     <span class="s1">&#39;ax&#39;</span><span class="p">:[]</span>
+                     <span class="p">}</span>
+        
+        
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>  
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>   
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span>
+                             <span class="n">aw</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;aw&#39;</span><span class="p">],</span>
+                             <span class="n">axes</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;axes&#39;</span><span class="p">]</span>
+                             <span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+        <span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">tup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
+        <span class="n">l2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;og&#39;</span><span class="p">)</span>
+        <span class="n">l3</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;ob&#39;</span><span class="p">)</span>
+        <span class="n">l4</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span>
+        <span class="n">ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">Y</span><span class="p">)),</span><span class="n">tx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span><span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">isvalid</span><span class="p">:</span>
+            <span class="n">l5</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">l5</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>    
+
 <div class="viewcode-block" id="Signature.backtrace"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.backtrace.html#pylayers.antprop.signature.Signature.backtrace">[docs]</a>    <span class="k">def</span> <span class="nf">backtrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; backtrace given image, tx, and rx</span>
 
@@ -3498,7 +3632,7 @@
         <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>          <span class="c1"># interaction counter</span>
         <span class="n">beta</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>      <span class="c1"># to enter into the loop</span>
         <span class="n">isvalid</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1"># signature is asumed being valid by default</span>
-        <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-2</span>
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>
         <span class="c1"># if tuple(self.seq) == ( 42, -277,  135,   21,   46,  319):</span>
         <span class="c1">#     import ipdb</span>
         <span class="c1">#     ipdb.set_trace()</span>
@@ -3527,6 +3661,7 @@
                 <span class="n">gk</span> <span class="o">=</span> <span class="n">xk</span><span class="p">[</span><span class="mi">2</span><span class="p">::]</span>
                 <span class="n">alpha</span> <span class="o">=</span> <span class="n">gk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">beta</span> <span class="o">=</span> <span class="n">gk</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c1">#print k,alpha,beta</span>
                 <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y</span><span class="p">,</span> <span class="n">pkm1</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># dummy necessary for the test below</span>
@@ -3538,10 +3673,10 @@
             <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">k</span> <span class="o">==</span> <span class="n">N</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">beta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">beta</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">))):</span>
             <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y</span><span class="p">,</span> <span class="n">tx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
-            <span class="k">return</span> <span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span>
+            <span class="k">return</span> <span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">isvalid</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="k">return</span> <span class="n">isvalid</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Signature.sig2ray"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.sig2ray.html#pylayers.antprop.signature.Signature.sig2ray">[docs]</a>    <span class="k">def</span> <span class="nf">sig2ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;incremental&#39;</span><span class="p">):</span>
@@ -3579,7 +3714,7 @@
         <span class="c1">#print self</span>
         <span class="c1">#if np.array_equal(self.seq,np.array([5,7,4])):</span>
         <span class="c1">#    pdb.set_trace()</span>
-        <span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+        <span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
         <span class="c1">#print isvalid,Y</span>
         <span class="c1"># </span>
         <span class="c1"># If incremental mode this function returns an alternative signature</span>
@@ -3620,7 +3755,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

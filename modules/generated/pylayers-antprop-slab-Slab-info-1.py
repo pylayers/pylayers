@@ -7,7 +7,7 @@ lthick = [0.018,0.03,0.018]
 sl.add('placo',lmatname,lthick)
 theta = np.arange(0,np.pi/2,0.01)
 fGHz = np.array([57.5])
-sl['placo'].ev(fGHz,theta)
+sl['placo'].eval(fGHz,theta)
 fig,ax=sl['placo'].plotwrt(var='a',typ=['m'])
 plt.ion()
 plt.show()

@@ -448,8 +448,14 @@
         <span class="k">return</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ininter"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.ininter.html#pylayers.util.pyutil.ininter">[docs]</a><span class="k">def</span> <span class="nf">ininter</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    ininter(ar,val1,val2):</span>
+    <span class="sd">&quot;&quot;&quot; in interval </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ar </span>
+<span class="sd">    val1 </span>
+<span class="sd">    val2 </span>
 
 <span class="sd">    This function return the set of samples from array ar </span>
 <span class="sd">    which are included in the interval [val1 val2] </span>
@@ -459,6 +465,67 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">criterium</span><span class="o">=</span> <span class="p">(</span><span class="n">ar</span><span class="o">&gt;=</span><span class="n">val1</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">ar</span><span class="o">&lt;=</span><span class="n">val2</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">ar</span><span class="p">[</span><span class="n">criterium</span><span class="p">])</span></div>
+
+<span class="k">def</span> <span class="nf">compint</span><span class="p">(</span><span class="n">linterval</span><span class="p">,</span><span class="n">zmin</span><span class="p">,</span><span class="n">zmax</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; get complementary intervals </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    linterval : tuple or list of tuple </span>
+<span class="sd">    zmin : min value</span>
+<span class="sd">    zmax : max value </span>
+<span class="sd">    </span>
+<span class="sd">    This function is used for filling the gap with air walls in layout</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">        &gt;&gt;&gt; linterval = [(0.2,1),(1.5,2),(2.5,2.7)]</span>
+<span class="sd">        &gt;&gt;&gt; zmin =0. </span>
+<span class="sd">        &gt;&gt;&gt; zmax =3.</span>
+<span class="sd">        &gt;&gt;&gt; compint(linterval,zmin,zmax)</span>
+<span class="sd">        [(0.0, 0.2), (1, 1.5), (2, 2.5), (2.7, 3.0)]</span>
+<span class="sd">        &gt;&gt;&gt; linterval = [(1.5,2),(0.2,1),(2.5,2.7)]</span>
+<span class="sd">        &gt;&gt;&gt; compint(linterval,zmin,zmax)</span>
+<span class="sd">        [(0.0, 0.2), (1, 1.5), (2, 2.5), (2.7, 3.0)]</span>
+<span class="sd">        &gt;&gt;&gt; linterval = [(0,1),(1,3)]</span>
+<span class="sd">        &gt;&gt;&gt; compint(linterval,zmin,zmax)</span>
+<span class="sd">        []</span>
+<span class="sd">        &gt;&gt;&gt; compint(linterval,-2.,4.)</span>
+<span class="sd">        [(-2.0, 0), (3, 4.0)]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">linterval</span><span class="p">)</span>
+    <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">linterval</span><span class="p">:</span> 
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span><span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+    <span class="c1"># check there is no overlap</span>
+    <span class="c1">#if (u==v).all():</span>
+    <span class="c1">#    pass</span>
+    <span class="c1">#else:</span>
+    <span class="c1">#    pdb.set_trace()</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">u</span><span class="o">==</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span><span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;compint : interval overlap&quot;</span><span class="p">)</span>
+    <span class="c1"># sort interval in increasing order </span>
+    <span class="n">lint</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+        <span class="n">lint</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">linterval</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="n">k</span><span class="p">]])</span>
+
+    <span class="n">compint</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">it</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lint</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">k</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># first interval</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">zmin</span><span class="p">)</span><span class="o">&gt;</span><span class="n">tol</span><span class="p">:</span>
+                <span class="n">compint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">zmin</span><span class="p">,</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">ip</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">&gt;</span><span class="n">tol</span><span class="p">:</span>
+                <span class="n">compint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ip</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="n">it</span> 
+    <span class="k">if</span> <span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">zmax</span><span class="p">:</span>
+        <span class="n">compint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmax</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">compint</span> 
 
 <div class="viewcode-block" id="cshift"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.cshift.html#pylayers.util.pyutil.cshift">[docs]</a><span class="k">def</span> <span class="nf">cshift</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; ndarray circular shift     </span>
@@ -2082,7 +2149,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

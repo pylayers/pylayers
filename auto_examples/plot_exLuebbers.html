@@ -170,8 +170,6 @@
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
 Warning Unable to read graph Gw
-Warning Unable to read graph Gr
-Warning Unable to read graph Gw
 Layout Graph loaded
 </pre></div>
 </div>
@@ -180,7 +178,8 @@ Layout Graph loaded
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cm</span>
-<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;Luebbers.ini&#39;</span><span class="p">,</span><span class="n">bdiffraction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;Luebbers.lay&#39;</span><span class="p">,</span><span class="n">bbuild</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
 <span class="c1">#ax = fig.add_subplot(2,2,1)</span>
 <span class="c1">#fig,ax = L._visual_check(fig=fig,ax=ax)</span>
 <span class="c1">#L.build()</span>
@@ -190,7 +189,7 @@ Layout Graph loaded
 <span class="n">DL</span><span class="o">=</span><span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">])</span>
 <span class="c1">#DL.a = np.array(([25,21.67,2.]))</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mf">37.5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">2.</span><span class="p">]))</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mf">37.5</span><span class="p">,</span><span class="mf">5.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]))</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mf">12.5</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]))</span>
 <span class="c1">#</span>
 <span class="c1"># Set the antennas</span>
@@ -205,11 +204,11 @@ Layout Graph loaded
 <span class="c1"># Link evaluation</span>
 <span class="c1">#</span>
 
-<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">nD</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">DL</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">DL</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">rlist</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">DL</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">DL</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
 <span class="n">cir</span> <span class="o">=</span> <span class="n">DL</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">getcir</span><span class="p">(</span><span class="n">BWGHz</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:])))</span>
@@ -226,7 +225,7 @@ Layout Graph loaded
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 1.678 seconds)</p>
+(0 minutes 12.683 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_exLuebbers.py" download=""><code class="xref download docutils literal"><span class="pre">plot_exLuebbers.py</span></code></a></div>
 <div class="sphx-glr-download container">
@@ -245,7 +244,7 @@ Layout Graph loaded
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/auto_examples/plot_exLuebbers.rst.txt"

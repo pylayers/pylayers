@@ -184,7 +184,7 @@
 <h1>pylayers.antprop.signature.Signatures._loadh5<a class="headerlink" href="#pylayers-antprop-signature-signatures-loadh5" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures._loadh5">
-<code class="descclassname">Signatures.</code><code class="descname">_loadh5</code><span class="sig-paren">(</span><em>filenameh5</em>, <em>grpname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signatures._loadh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures._loadh5" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Signatures.</code><code class="descname">_loadh5</code><span class="sig-paren">(</span><em>filenameh5</em>, <em>grpname</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signatures._loadh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures._loadh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>load signatures in hdf5 format compliant with class Links</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -195,8 +195,15 @@
 <div><p>filename of the h5py file (from Links Class)</p>
 </div></blockquote>
 <p><strong>grpname</strong> : string</p>
-<blockquote class="last">
+<blockquote>
 <div><p>groupname of the h5py file (from Links Class)</p>
+</div></blockquote>
+<p><strong>kwargs</strong></p>
+<blockquote class="last">
+<div><p>may contain a L: layout object
+if L =  [] the layout is loaded from the layout name stored
+into the h5 file
+if L = Layout the layout passed in arg is used</p>
 </div></blockquote>
 </td>
 </tr>
@@ -221,7 +228,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.signature.Signatures._loadh5.rst.txt"

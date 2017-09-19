@@ -184,7 +184,7 @@
 <h1>pylayers.simul.link.DLink.load<a class="headerlink" href="#pylayers-simul-link-dlink-load" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.simul.link.DLink.load">
-<code class="descclassname">DLink.</code><code class="descname">load</code><span class="sig-paren">(</span><em>obj</em>, <em>grpname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/link.html#DLink.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.load" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">DLink.</code><code class="descname">load</code><span class="sig-paren">(</span><em>obj</em>, <em>grpname</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/link.html#DLink.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.DLink.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a given object in the correct grp</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -195,9 +195,11 @@
 <div><p>(Signatures|Rays|Ctilde|Tchannel)</p>
 </div></blockquote>
 <p><strong>grpname</strong> : string</p>
-<blockquote class="last">
+<blockquote>
 <div><p>groupe name of the h5py file</p>
 </div></blockquote>
+<p><strong>kwargs :</strong></p>
+<p class="last"><strong>layout for sig and rays</strong></p>
 </td>
 </tr>
 </tbody>
@@ -217,7 +219,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.load.rst.txt"

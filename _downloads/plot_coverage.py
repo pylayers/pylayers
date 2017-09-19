@@ -18,9 +18,9 @@ pylayers/antprop/antenna.py
     file = 'points.ini'
 
     [layout]
-    filename = TA-Office.ini ; 0 40 0 15
-    ;filename = W2PTIN.ini
-    ;filename = Lstruc.str
+    filename = TA-Office.lay ; 0 40 0 15
+    ;filename = W2PTIN.lay
+    ;filename = Lstruc.lay
 
     [ap]
     0 = {'name':'room1','wstd':'ieee80211b','p':(1,12,1.2),'PtdBm':0,'chan':[11],'on':True,'ant':'Gauss','phideg':90} 
@@ -40,6 +40,7 @@ pylayers/antprop/antenna.py
 from pylayers.antprop.coverage import *
 import matplotlib.pyplot as plt
 import time
+import pdb
 C = Coverage()
 C.L._filename
 C.tx = np.array((39,1))

@@ -13,7 +13,7 @@ import pylayers.signal.waveform as wvf
 # set the frequency range from 2.4GHz to 10GHz
 fGHz=np.arange(2.4,10.,0.05)
 # set the layout from its filename
-L=Layout('defstr.ini')
+L=Layout('defstr.lay')
 # set the link
 DL=DLink(L=L,fGHz=fGHz)
 # set the b point position 

@@ -291,7 +291,7 @@ is the exitence of  and </p>
 <td>check existence of previous simulations run with the same parameters.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.array_exist.html#pylayers.simul.link.DLink.array_exist" title="pylayers.simul.link.DLink.array_exist"><code class="xref py py-obj docutils literal"><span class="pre">DLink.array_exist</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
-<td>check if an array of a given key (h5py group)</td>
+<td>check an array key has already been stored in h5py file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.get_grpname.html#pylayers.simul.link.DLink.get_grpname" title="pylayers.simul.link.DLink.get_grpname"><code class="xref py py-obj docutils literal"><span class="pre">DLink.get_grpname</span></code></a>()</td>
 <td>Determine the data group name for the given configuration</td>
@@ -316,7 +316,7 @@ is the exitence of  and </p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.save.html#pylayers.simul.link.DLink.save" title="pylayers.simul.link.DLink.save"><code class="xref py py-obj docutils literal"><span class="pre">DLink.save</span></code></a>(obj,&nbsp;key,&nbsp;grpname[,&nbsp;force])</td>
 <td>Save a given object in the correct group</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.load.html#pylayers.simul.link.DLink.load" title="pylayers.simul.link.DLink.load"><code class="xref py py-obj docutils literal"><span class="pre">DLink.load</span></code></a>(obj,&nbsp;grpname)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.load.html#pylayers.simul.link.DLink.load" title="pylayers.simul.link.DLink.load"><code class="xref py py-obj docutils literal"><span class="pre">DLink.load</span></code></a>(obj,&nbsp;grpname,&nbsp;**kwargs)</td>
 <td>Load a given object in the correct grp</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.stack.html#pylayers.simul.link.DLink.stack" title="pylayers.simul.link.DLink.stack"><code class="xref py py-obj docutils literal"><span class="pre">DLink.stack</span></code></a>(key,&nbsp;array)</td>
@@ -342,7 +342,7 @@ is the exitence of  and </p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.link.rst.txt"

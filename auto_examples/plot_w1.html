@@ -178,15 +178,20 @@
             
   <div class="section" id="indoor-radio-coverage">
 <span id="sphx-glr-auto-examples-plot-w1-py"></span><h1>Indoor Radio Coverage<a class="headerlink" href="#indoor-radio-coverage" title="Permalink to this headline">¶</a></h1>
-<ul class="sphx-glr-horizontal">
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_w1_001.png"><img alt="../_images/sphx_glr_plot_w1_001.png" src="../_images/sphx_glr_plot_w1_001.png" style="width: 846.0px; height: 282.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../_images/sphx_glr_plot_w1_002.png"><img alt="../_images/sphx_glr_plot_w1_002.png" src="../_images/sphx_glr_plot_w1_002.png" style="width: 470.0px; height: 470.0px;" /></a>
-</li>
-</ul>
+<div class="highlight-pytb"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/uguen/anaconda2/lib/python2.7/site-packages/sphinx_gallery-0.1.2-py2.7.egg/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">520</span>, in <span class="n">execute_code_block</span>
+    <span class="k">exec</span><span class="p">(</span><span class="n">code_block</span><span class="p">,</span> <span class="n">example_globals</span><span class="p">)</span>
+  File <span class="nb">&quot;&lt;string&gt;&quot;</span>, line <span class="m">3</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/coverage.py&quot;</span>, line <span class="m">102</span>, in <span class="n">__init__</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">layoutopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">))</span>
+  File <span class="nb">&quot;/home/uguen/anaconda2/lib/python2.7/ConfigParser.py&quot;</span>, line <span class="m">642</span>, in <span class="n">items</span>
+    <span class="k">raise</span> <span class="n">NoSectionError</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+<span class="gr">NoSectionError</span>: <span class="n">No section: &#39;layout&#39;</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="n">C</span><span class="o">=</span><span class="n">Coverage</span><span class="p">(</span><span class="s1">&#39;where1cov.ini&#39;</span><span class="p">)</span>
+<span class="n">C</span><span class="o">=</span><span class="n">Coverage</span><span class="p">(</span><span class="s1">&#39;where1cov.lay&#39;</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
@@ -214,7 +219,7 @@
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 11.510 seconds)</p>
+(0 minutes 0.000 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_w1.py" download=""><code class="xref download docutils literal"><span class="pre">plot_w1.py</span></code></a></div>
 <div class="sphx-glr-download container">
@@ -233,7 +238,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/auto_examples/plot_w1.rst.txt"

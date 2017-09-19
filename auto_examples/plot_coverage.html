@@ -190,9 +190,9 @@ boundary = [20,0,30,20]
 mode = full ; file, zone , full
 file = &#8216;points.ini&#8217;</p>
 <p>[layout]
-filename = TA-Office.ini ; 0 40 0 15
-;filename = W2PTIN.ini
-;filename = Lstruc.str</p>
+filename = TA-Office.lay ; 0 40 0 15
+;filename = W2PTIN.lay
+;filename = Lstruc.lay</p>
 <p>[ap]
 0 = {&#8216;name&#8217;:&#8217;room1&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(1,12,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Gauss&#8217;,&#8217;phideg&#8217;:90}
 1 = {&#8216;name&#8217;:&#8217;room2&#8217;,&#8217;wstd&#8217;:&#8217;ieee80211b&#8217;,&#8217;p&#8217;:(10,2,1.2),&#8217;PtdBm&#8217;:0,&#8217;chan&#8217;:[11],&#8217;on&#8217;:True,&#8217;ant&#8217;:&#8217;Omni&#8217;,&#8217;phideg&#8217;:0}
@@ -207,8 +207,10 @@ show = True</p>
 </div></blockquote>
 <img alt="../_images/sphx_glr_plot_coverage_001.png" class="align-center" src="../_images/sphx_glr_plot_coverage_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
-Warning Unable to read graph Gw
+<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gs
+Warning Unable to read graph Gt
+Warning Unable to read graph Gv
+Warning Unable to read graph Gi
 Warning Unable to read graph Gr
 Warning Unable to read graph Gw
 </pre></div>
@@ -219,6 +221,7 @@ Warning Unable to read graph Gw
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
 <span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span>
 <span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">39</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
@@ -232,7 +235,7 @@ Warning Unable to read graph Gw
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong>
-(0 minutes 9.112 seconds)</p>
+(0 minutes 13.585 seconds)</p>
 <div class="sphx-glr-download container">
 <strong>Download Python source code:</strong> <a class="reference download internal" href="../_downloads/plot_coverage.py" download=""><code class="xref download docutils literal"><span class="pre">plot_coverage.py</span></code></a></div>
 <div class="sphx-glr-download container">
@@ -251,7 +254,7 @@ Warning Unable to read graph Gw
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2017.
+      Last updated on Sep 19, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/auto_examples/plot_coverage.rst.txt"
