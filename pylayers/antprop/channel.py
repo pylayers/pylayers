@@ -89,6 +89,7 @@ import numpy as np
 import numpy.ma as ma
 import numpy.linalg as la
 import scipy as sp
+import scipy.signal as si
 import pylab as plt
 import struct as stru
 import scipy.stats as st
@@ -228,7 +229,7 @@ class AFPchannel(bs.FUsignal):
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         self.az = (360-D[:,0])*np.pi/180.
 
-    def toadp(self):
+    def toadp(self,imax=-1):
         """ convert afp into adp (frequency->delay) 
 
         """
@@ -236,6 +237,9 @@ class AFPchannel(bs.FUsignal):
         # y : ifft axis 1 (frequency) 
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
+        if imax!=-1:
+            y = y[:,0:imax]
+            x = x[0:imax] 
         adp = ADPchannel(x=x,
                          y=y,
                          az=self.az,
@@ -306,6 +310,68 @@ class ADPchannel(bs.TUsignal):
     def __repr__(self):
         s = 'Angular Delay Profile object \n'
         return(s)
+
+    def correlate(self,adp,thresholddB=-105):
+        """ correlate ADP with an other ADP
+
+        Parameters
+        ----------
+
+        adp : ADPchannel
+
+        Returns
+        -------
+
+        rhoE  : energy ratio of padp Eadp/Eself
+        rhoEc : energy ratio of centered padp Ecadp/Ecself
+        rho   : normalized intercorrelation  :  <self-mean(self),adp-mean(adp)>/Eself 
+        rhon  : intercorrelation of normalized padp   <self_normalized,adp_normalized> 
+
+        Notes
+        -----
+        This can be uesd to compare a measured PADP with a Ray tracing PADP 
+
+        """
+        #import ipdb
+        #ipdb.set_trace()
+        #
+        # apply the min dB level thresholding 
+        #
+        tmp_self = np.abs(self.y)
+        tmp_adp  = np.abs(adp.y)
+        u1 = np.where(20*np.log10(tmp_self)>thresholddB)
+        u2 = np.where(20*np.log10(tmp_adp)>thresholddB)
+        padp_self = np.zeros(tmp_self.shape)
+        padp_adp = np.zeros(tmp_adp.shape)
+
+        padp_self[u1] = tmp_self[u1]
+        padp_adp[u2] = tmp_adp[u2]
+
+        padpc_self = padp_self-np.mean(padp_self)
+        padpc_adp  = padp_adp-np.mean(padp_adp)
+
+        Eself = np.max(si.correlate2d(padp_self,padp_self,mode='same'))
+        Ecself = np.max(si.correlate2d(padpc_self,padpc_self,mode='same'))
+        Eadp = np.max(si.correlate2d(padp_adp,padp_adp,mode='same'))
+        Ecadp = np.max(si.correlate2d(padpc_adp,padpc_adp,mode='same'))
+        #Eself =  np.sum(padp_self*padp_self)
+        #Ecself = np.sum(padpc_self*padpc_self)
+        #Eadp = np.sum(padp_adp*padp_adp)
+        #Ecadp = np.sum(padpc_adp*padpc_adp)
+
+        padpcn_self = padpc_self/np.sqrt(Ecself)
+        padpcn_adp = padpc_adp/np.sqrt(Ecadp)
+
+        rhoE = Eadp/Eself
+        rhoEc = Ecadp/Ecself
+        #rho  = np.sum(padpc_self*padpc_adp)/Eself
+        #rhoc = np.sum(padpc_self*padpc_adp)/Ecself
+        #rhon = np.sum(padpcn_self*padpcn_adp)
+        rho  = np.max(si.correlate2d(padpc_self,padpc_adp,mode='same'))/Eself
+        rhoc = np.max(si.correlate2d(padpc_self,padpc_adp,mode='same'))/Ecself
+        rhon = np.max(si.correlate2d(padpcn_self,padpcn_adp,mode='same'))
+
+        return rhoE,rhoEc,rho,rhoc,rhon
 
     def clean(self,threshold_dB=20):
         """  clean ADP 

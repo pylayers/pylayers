@@ -171,7 +171,7 @@ import numpy.ma as ma
 # from antenna import *
 import shapely.geometry as shg
 from descartes.patch import PolygonPatch
-from itertools import combinations, permutations
+from itertools import combinations, permutations,product
 
 
 COLOR = {
@@ -3056,6 +3056,11 @@ def vec_sph(th, ph):
       [ eph]    (theta,phi)
       [ er ] ]
 
+    See Also 
+    --------
+
+    SphericalBasis
+
     """
 
     e_th = np.array(
@@ -3410,6 +3415,19 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     bool : True   => intersection (occultation)
            False 
 
+    Examples
+    --------
+
+    >>> a = np.array([[1,0,1]]).T
+    >>> b = np.array([[10,0,1]]).T
+    >>> pg = np.array([[5,0,0]]).T
+    >>> u1 = np.array([[0,1,0]]).T
+    >>> u2 = np.array([[0,0,1]]).T
+    >>> l1 = np.array([3]).T
+    >>> l2 = np.array([3]).T
+    >>> bo = intersect3(a,b,pg,u1,u2,l1,l2)
+    >>> assert bo 
+
     """
 
     Nseg = a.shape[1]
@@ -3438,24 +3456,51 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     U2e = U2 + np.zeros(U.shape)
     # Ue  : Nseg,Nscreen,3,1
     Ue = U + np.zeros(U2e.shape)
-
+    
     A = np.concatenate((Ue, -U1e, -U2e), axis=3)
+    # visi : Nseg,Nscreen
+    visi = np.zeros((A.shape[0],A.shape[1]),dtype=bool)
+    # check non singularity 
+    # detA (Nseg,Nscreen) 
+    detA = np.linalg.det(A)
+    # matrix A (Nseg,Nscreen,3,3) is valid if not singular 
+    boolvalid = ~ (np.isclose(detA,0))
+    if boolvalid.all():
+        Am = A
+        ui = (np.arange(A.shape[0]),np.arange(A.shape[1]))
+        #boolvalid = (np.ones(A.shape[0],dtype=bool),np.ones(A.shape[1],dtype=bool))
+    else:
+        ui = np.where(boolvalid)
+        #pdb.set_trace()
+        Am = A[ui[0],ui[1],:,:]
+        #Am = A[boolvalid,:,:]
+        if len(Am.shape)==3:
+            Am=Am[None,...]
+        
 
     c = pg.T[None, :, :] - a.T[:, None, :]
+    cm = c[ui[0],ui[1],:]
+    # test if loosing one axis
+    if (len(c.shape)!=len(cm.shape)):
+        cm=cm[None,...]
     #
     # Warning scipy.linalg do not handle MDA
     #
     # x : Nseg x Nscreen
-    x = np.linalg.solve(A, c)
+    if Am.size > 0:
+        x = np.linalg.solve(Am, cm)
     # condition of occultation
 
-    condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
-    cond1 = ((x[:, :, 1] > l1[None, :] / 2.) +
-             (x[:, :, 1] < -l1[None, :] / 2.))
-    cond2 = ((x[:, :, 2] > l2[None, :] / 2.) +
-             (x[:, :, 2] < -l2[None, :] / 2.))
+        condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
+        cond1 = ((x[:, :, 1] > l1[None, ui[1]] / 2.) +
+             (x[:, :, 1] < -l1[None, ui[1]] / 2.))
+        cond2 = ((x[:, :, 2] > l2[None, ui[1]] / 2.) +
+             (x[:, :, 2] < -l2[None, ui[1]] / 2.))
 
-    visi = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+        visi[ui[0],ui[1]] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+        #print boolvalid
+        #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+
     return(visi)
 
 
@@ -3811,6 +3856,11 @@ def SphericalBasis(a):
 
     >>> a = np.array([[0,0]])
     >>> SphericalBasis(a)
+
+    See Also
+    --------
+
+    angledir
 
     """
     assert(a.shape[1]==2)

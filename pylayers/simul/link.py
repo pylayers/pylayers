@@ -2466,11 +2466,9 @@ class DLink(Link):
         if np.allclose(self.a,self.b):
             self.cutoff = 2
         else:
-            import ipdb
-            ipdb.set_trace()
             data = self.L.angleonlink3(self.a,self.b)
             # as many slabs as segments and subsegments
-            us    = data['s'] 
+            us  = data['s'] 
             if len(us) >0:
                 sl = v(us)
                 uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]
