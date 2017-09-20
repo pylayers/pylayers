@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 r"""
-================================
+===============================================
 UWB Ray tracing simulation  in outdoor scenario
-================================
+===============================================
 
 Example taken from Joseph W. Schuster, R.J Luebbers [Techniques for Evaluating the Accuracy of Ray-Tracing Propagation Models for Microcells](http://tinyurl.com/z2plo2v) 
 
