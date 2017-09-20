@@ -3,7 +3,7 @@ r"""
 .. currentmodule:: pylayers.antprop.channel
 
 .. autosummary::
-    :toctree: generated
+    :toctree: generated/
 
 TBchannel class
 ===============
@@ -20,7 +20,7 @@ TBchannel class
 TUchannel class
 ===============
 
-.. autosummar::::
+.. autosummary::
     :toctree:generated/
 
     TUchannel.psd
@@ -39,13 +39,6 @@ TUDchannel
 
 Tchannel
 =========
-
-Members
--------
-
-    filcal : calibration file
-    win : string type of window {'rect'| }
-
 
 .. autosummary::
     :toctree: generated/

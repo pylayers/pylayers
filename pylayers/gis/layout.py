@@ -5,6 +5,155 @@
 #
 #
 #
+r"""
+
+.. currentmodule:: pylayers.gis.layout
+
+.. autosummary::
+    :toctree: generated
+
+Layout Class
+============
+
+.. autosummary::
+    :toctree: generated
+
+    Layout.Layout.add_fnod
+    Layout.add_furniture
+    Layout.add_furniture_file
+    Layout.add_nfpe
+    Layout._addoutcy
+    Layout.add_pnod
+    Layout.add_pons
+    Layout.add_segment
+    Layout.angleonlink
+    Layout.angleonlink3
+    Layout.angleonlinkold
+    Layout.boundary
+    Layout.build
+    Layout.buildGi
+    Layout.buildGr
+    Layout.buildGt
+    Layout.buildGt_old
+    Layout.buildGv
+    Layout.buildGw
+    Layout.check
+    Layout.check2
+    Layout.check_Gi
+    Layout.chgmss
+    Layout.cleanup
+    Layout.clip
+    Layout.closest_edge
+    Layout._convex_hull
+    Layout.cy2pt
+    Layout.cycleinline
+    Layout._delaunay
+    Layout.del_points
+    Layout.del_segment
+    Layout.diag
+    Layout.displaygui
+    Layout.dumpr
+    Layout.dumpw
+    Layout.ed2nd
+    Layout.editor
+    Layout.editorTk
+    Layout.edit_point
+    Layout.edit_seg
+    Layout.edit_segment
+    Layout.exportosm
+    Layout.extrseg
+    Layout.facet3D
+    Layout.facets3D
+    Layout.filterGi
+    Layout._find_diffractions
+    Layout.find_edgelist
+    Layout.g2npy
+    Layout.geomfile
+    Layout.getangles
+    Layout.get_diffslab
+    Layout.get_points
+    Layout.get_Sg_pos
+    Layout.get_zone
+    Layout.have_subseg
+    Layout._help
+    Layout.importosm
+    Layout.importres
+    Layout.importshp
+    Layout.info
+    Layout.info_segment
+    Layout.intercy
+    Layout._interlist
+    Layout.ispoint
+    Layout.isseg
+    Layout.layerongrid
+    Layout.layeronlink
+    Layout.load
+    Layout.loadfur
+    Layout.load_modif
+    Layout.ls
+    Layout.mask
+    Layout._merge_polygons
+    Layout.nd2seg
+    Layout.numseg
+    Layout.off_overlay
+    Layout.offset_index
+    Layout.onseg
+    Layout.outputGi
+    Layout.outputGi_mp
+    Layout.outputGi_new
+    Layout.plot
+    Layout.plot_segments
+    Layout.pltlines
+    Layout.pltpoly
+    Layout.pltvnodes
+    Layout.polysh2geu
+    Layout.pt2cy
+    Layout.pt2ro
+    Layout.ptGs2cy
+    Layout.ptin
+    Layout.randTxRx
+    Layout.room2nodes
+    Layout.room2segments
+    Layout.rotate
+    Layout.save
+    Layout.scl_overlay
+    Layout.seg2pts
+    Layout.seg2ro
+    Layout.seginframe
+    Layout.seginframe2
+    Layout.seginline
+    Layout.segpt
+    Layout.seguv
+    Layout.show
+    Layout.show3
+    Layout._show3
+    Layout.showG
+    Layout._showGi
+    Layout.showGs
+    Layout._showGt
+    Layout._showGv
+    Layout.show_layer
+    Layout.show_nodes
+    Layout.show_seg1
+    Layout.show_segment
+    Layout.showSig
+    Layout.signature
+    Layout.subseg
+    Layout.thwall
+    Layout.translate
+    Layout._triangle
+    Layout._triangle_old
+    Layout.updateshseg
+    Layout._updGsncy
+    Layout.visilist
+    Layout.visi_papb
+    Layout._visual_check
+    Layout.waypoint
+    Layout.waypointGw
+    Layout.wedge
+    Layout.wedge2
+
+"""
 from __future__ import print_function
 try:
     from tvtk.api import tvtk
