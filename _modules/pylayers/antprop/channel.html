@@ -159,6 +159,7 @@
 <span class="sd">    TBchannel.tau_moy</span>
 <span class="sd">    TBchannel.tau_rms</span>
 <span class="sd">    TBchannel.delays</span>
+<span class="sd">    TBchannel.toFD</span>
 <span class="sd">    TBchannel.SalehValenzuela</span>
 
 <span class="sd">TUchannel class</span>
@@ -173,6 +174,10 @@
 <span class="sd">    TUchannel.Ewin</span>
 <span class="sd">    TUchannel.Etot</span>
 <span class="sd">    TUchannel.Emax</span>
+<span class="sd">    TUchannel.toa_max2</span>
+<span class="sd">    TUchannel.toa_new</span>
+<span class="sd">    TUchannel.toa_win</span>
+<span class="sd">    TUchannel.toa_max</span>
 
 
 <span class="sd">TUDchannel</span>
@@ -192,14 +197,16 @@
 <span class="sd">    Tchannel.saveh5</span>
 <span class="sd">    Tchannel.loadh5</span>
 <span class="sd">    Tchannel.apply</span>
-<span class="sd">    Tchannel.applywavC</span>
+<span class="sd">    Tchannel.applywav</span>
+<span class="sd">    Tchannel.getcir</span>
+<span class="sd">    Tchannel.get_cir</span>
 <span class="sd">    Tchannel.chantap</span>
-<span class="sd">    Tchannel.applywavB</span>
-<span class="sd">    Tchannel.applywavA</span>
+<span class="sd">    Tchannel.baseband</span>
 <span class="sd">    Tchannel.plotd</span>
 <span class="sd">    Tchannel.plotad</span>
 <span class="sd">    Tchannel.doadod</span>
 <span class="sd">    Tchannel.energy</span>
+<span class="sd">    Tchannel.rssi</span>
 <span class="sd">    Tchannel.wavefig</span>
 <span class="sd">    Tchannel.rayfig</span>
 <span class="sd">    Tchannel.rssi</span>
@@ -209,10 +216,10 @@
 <span class="sd">    Tchannel.tap</span>
 <span class="sd">    Tchannel.ifft</span>
 <span class="sd">    Tchannel.totime</span>
-<span class="sd">    Tchannel.tomap</span>
 <span class="sd">    Tchannel.iftd</span>
 <span class="sd">    Tchannel.ft1</span>
 <span class="sd">    Tchannel.ftau</span>
+<span class="sd">    Tchannel.rir</span>
 <span class="sd">    Tchannel.cir</span>
 <span class="sd">    Tchannel.plot3d</span>
 <span class="sd">    Tchannel.ft2</span>
@@ -220,6 +227,28 @@
 <span class="sd">    Tchannel.capacity</span>
 <span class="sd">    Tchannel.calibrate</span>
 <span class="sd">    Tchannel.pdp</span>
+
+<span class="sd">Mchannel</span>
+<span class="sd">========</span>
+<span class="sd">    Mchannel.eig</span>
+<span class="sd">    Mchannel.Bcapacity</span>
+<span class="sd">    Mchannel.WFcapacity</span>
+<span class="sd">    Mchannel.plt2</span>
+
+
+<span class="sd">AFPchannel</span>
+<span class="sd">==========</span>
+<span class="sd">    AFPchannel.loadmes </span>
+<span class="sd">    AFPchannel.tomap </span>
+
+<span class="sd">ADPchannel</span>
+<span class="sd">==========</span>
+<span class="sd">    ADPchannel.correlate</span>
+<span class="sd">    ADPchannel.clean</span>
+<span class="sd">    ADPchannel.pdp</span>
+<span class="sd">    ADPchannel.app</span>
+<span class="sd">    ADPchannel.tomap</span>
+<span class="sd">    ADPchannel.polarplot</span>
 
 <span class="sd">Ctilde</span>
 <span class="sd">======</span>
@@ -1029,7 +1058,7 @@
 
         <span class="k">return</span> <span class="n">taurms</span></div>
 
-    <span class="k">def</span> <span class="nf">toFD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">256</span><span class="p">)):</span>
+<div class="viewcode-block" id="TBchannel.toFD"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TBchannel.toFD.html#pylayers.antprop.channel.TBchannel.toFD">[docs]</a>    <span class="k">def</span> <span class="nf">toFD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">256</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; Transform to Frequency domain</span>
 
 <span class="sd">        Returns</span>
@@ -1041,7 +1070,7 @@
 
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">z</span><span class="p">,</span><span class="n">tau</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">H</span>
+        <span class="k">return</span> <span class="n">H</span></div>
 
 <div class="viewcode-block" id="TBchannel.SalehValenzuela"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TBchannel.SalehValenzuela.html#pylayers.antprop.channel.TBchannel.SalehValenzuela">[docs]</a>    <span class="k">def</span> <span class="nf">SalehValenzuela</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; generic Saleh and Valenzuela Model</span>
@@ -1116,7 +1145,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">label</span><span class="o">=</span><span class="p">[]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TBchannel</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">toa_max2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TUchannel.toa_max2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.toa_max2.html#pylayers.antprop.channel.TUchannel.toa_max2">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate time of arrival max2 method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1160,9 +1189,9 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Gamma/Vmax&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="c1">#       ylabel(&#39;Interval Number&#39;)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">toa_new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TUchannel.toa_new"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.toa_new.html#pylayers.antprop.channel.TUchannel.toa_new">[docs]</a>    <span class="k">def</span> <span class="nf">toa_new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; estimate time of arrival (new method)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1212,9 +1241,9 @@
             <span class="n">nn</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">tau</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">nn</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">tau</span>
+        <span class="k">return</span> <span class="n">tau</span></div>
 
-    <span class="k">def</span> <span class="nf">toa_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+<div class="viewcode-block" id="TUchannel.toa_win"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.toa_win.html#pylayers.antprop.channel.TUchannel.toa_win">[docs]</a>    <span class="k">def</span> <span class="nf">toa_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calulate time of arrival (window method)</span>
 
 <span class="sd">        Parameters</span>
@@ -1270,9 +1299,9 @@
             <span class="n">nn</span> <span class="o">=</span> <span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">tau</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">nn</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">tau</span>
+        <span class="k">return</span> <span class="n">tau</span></div>
 
-    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nint</span><span class="p">):</span>
+<div class="viewcode-block" id="TUchannel.toa_max"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.toa_max.html#pylayers.antprop.channel.TUchannel.toa_max">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nint</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate time of arrival</span>
 
 <span class="sd">        descendant threshold based toa estimation</span>
@@ -1305,7 +1334,7 @@
 
     <span class="c1">#       plt.show()</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="k">return</span> <span class="n">tau</span>
+        <span class="k">return</span> <span class="n">tau</span></div>
 
     <span class="k">def</span> <span class="nf">toa_th</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thlos</span><span class="p">,</span> <span class="n">thnlos</span><span class="p">,</span> <span class="n">visibility</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate time of arrival</span>
@@ -2607,7 +2636,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">V</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">applywav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Tchannel.applywav"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.applywav.html#pylayers.antprop.channel.Tchannel.applywav">[docs]</a>    <span class="k">def</span> <span class="nf">applywav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; apply waveform (time domain ) to obtain the</span>
 <span class="sd">            rays impulses response</span>
 
@@ -2648,10 +2677,10 @@
         <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">Wgam</span><span class="p">)</span>
         <span class="c1"># back in time domain</span>
         <span class="n">rir</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">rir</span><span class="p">(</span><span class="n">Nz</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">ffts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">rir</span>
+        <span class="k">return</span> <span class="n">rir</span></div>
 
 
-    <span class="k">def</span> <span class="nf">getcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">BWGHz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span><span class="n">fftshift</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Tchannel.getcir"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.getcir.html#pylayers.antprop.channel.Tchannel.getcir">[docs]</a>    <span class="k">def</span> <span class="nf">getcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">BWGHz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Nf</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span><span class="n">fftshift</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2687,9 +2716,9 @@
 
         <span class="n">cir</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">tauns</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">cir</span><span class="p">)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">cir</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">cir</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Wgam</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Tchannel.get_cir"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.get_cir.html#pylayers.antprop.channel.Tchannel.get_cir">[docs]</a>    <span class="k">def</span> <span class="nf">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Wgam</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; get Channel impulse response of the channel </span>
 <span class="sd">            for a given waveform</span>
 
@@ -2714,7 +2743,7 @@
 
         <span class="n">rir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">applywav</span><span class="p">(</span><span class="n">Wgam</span><span class="p">)</span>
         <span class="n">cir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rir</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">rir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">cir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">rir</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">cir</span><span class="p">)</span></div>
         
 
 <div class="viewcode-block" id="Tchannel.applywavC"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.applywavC.html#pylayers.antprop.channel.Tchannel.applywavC">[docs]</a>    <span class="k">def</span> <span class="nf">applywavC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dxw</span><span class="p">):</span>
@@ -2757,7 +2786,7 @@
         <span class="n">ri</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">ri</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">baseband</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Tchannel.baseband"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.baseband.html#pylayers.antprop.channel.Tchannel.baseband">[docs]</a>    <span class="k">def</span> <span class="nf">baseband</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Channel transfer function in baseband</span>
 
 <span class="sd">        Parameters</span>
@@ -2792,7 +2821,7 @@
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">abb</span><span class="o">*</span><span class="n">E</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">H</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fMHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Tchannel.chantap"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.chantap.html#pylayers.antprop.channel.Tchannel.chantap">[docs]</a>    <span class="k">def</span> <span class="nf">chantap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; channel tap</span>
@@ -3802,7 +3831,7 @@
             <span class="n">rf</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">y</span>
         <span class="k">return</span> <span class="n">rf</span></div>
 
-    <span class="k">def</span> <span class="nf">rir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Tchannel.rir"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.rir.html#pylayers.antprop.channel.Tchannel.rir">[docs]</a>    <span class="k">def</span> <span class="nf">rir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  construct ray impulse response</span>
 
 <span class="sd">        Parameters</span>
@@ -3856,7 +3885,7 @@
     
         <span class="n">rir</span><span class="p">[</span><span class="n">index</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">index</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">t0</span><span class="o">+</span><span class="n">taumin</span><span class="p">,</span><span class="n">te</span><span class="o">+</span><span class="n">taumax</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">rir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">rir</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Tchannel.ft1"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.ft1.html#pylayers.antprop.channel.Tchannel.ft1">[docs]</a>    <span class="k">def</span> <span class="nf">ft1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>

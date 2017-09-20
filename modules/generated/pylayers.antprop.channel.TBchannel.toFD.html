@@ -1,0 +1,249 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.channel.TBchannel.toFD &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
+    <link rel="next" title="pylayers.antprop.channel.TBchannel.SalehValenzuela" href="pylayers.antprop.channel.TBchannel.SalehValenzuela.html" />
+    <link rel="prev" title="pylayers.antprop.channel.TBchannel.delays" href="pylayers.antprop.channel.TBchannel.delays.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body role="document">
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../download.html">Download</a></li>
+            <li><a href="../../notebook/TOC.html">User Guide</a></li>
+            <li><a href="../pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	  <div class="rel">
+	   
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="pylayers.antprop.channel.TBchannel.delays.html" title="pylayers.antprop.channel.TBchannel.delays"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.channel.TBchannel.delays
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.antprop.channel.TBchannel.SalehValenzuela.html" title="pylayers.antprop.channel.TBchannel.SalehValenzuela"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.channel.TBchannel.SalehValenzuela
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.antprop.channel.html" title="pylayers.antprop.channel" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.antp...
+	</span>
+	<span class="hiddenrellink">
+	pylayers.antprop.channel
+	</span>
+	
+	</a>
+	</div>
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">pylayers.antprop.channel.TBchannel.toFD</a></li>
+</ul>
+
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pylayers-antprop-channel-tbchannel-tofd">
+<h1>pylayers.antprop.channel.TBchannel.toFD<a class="headerlink" href="#pylayers-antprop-channel-tbchannel-tofd" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.channel.TBchannel.toFD">
+<code class="descclassname">TBchannel.</code><code class="descname">toFD</code><span class="sig-paren">(</span><em>fGHz=array([ 2.</em>, <em>2.01176471</em>, <em>2.02352941</em>, <em>2.03529412</em>, <em>2.04705882</em>, <em>2.05882353</em>, <em>2.07058824</em>, <em>2.08235294</em>, <em>2.09411765</em>, <em>2.10588235</em>, <em>2.11764706</em>, <em>2.12941176</em>, <em>2.14117647</em>, <em>2.15294118</em>, <em>2.16470588</em>, <em>2.17647059</em>, <em>2.18823529</em>, <em>2.2</em>, <em>2.21176471</em>, <em>2.22352941</em>, <em>2.23529412</em>, <em>2.24705882</em>, <em>2.25882353</em>, <em>2.27058824</em>, <em>2.28235294</em>, <em>2.29411765</em>, <em>2.30588235</em>, <em>2.31764706</em>, <em>2.32941176</em>, <em>2.34117647</em>, <em>2.35294118</em>, <em>2.36470588</em>, <em>2.37647059</em>, <em>2.38823529</em>, <em>2.4</em>, <em>2.41176471</em>, <em>2.42352941</em>, <em>2.43529412</em>, <em>2.44705882</em>, <em>2.45882353</em>, <em>2.47058824</em>, <em>2.48235294</em>, <em>2.49411765</em>, <em>2.50588235</em>, <em>2.51764706</em>, <em>2.52941176</em>, <em>2.54117647</em>, <em>2.55294118</em>, <em>2.56470588</em>, <em>2.57647059</em>, <em>2.58823529</em>, <em>2.6</em>, <em>2.61176471</em>, <em>2.62352941</em>, <em>2.63529412</em>, <em>2.64705882</em>, <em>2.65882353</em>, <em>2.67058824</em>, <em>2.68235294</em>, <em>2.69411765</em>, <em>2.70588235</em>, <em>2.71764706</em>, <em>2.72941176</em>, <em>2.74117647</em>, <em>2.75294118</em>, <em>2.76470588</em>, <em>2.77647059</em>, <em>2.78823529</em>, <em>2.8</em>, <em>2.81176471</em>, <em>2.82352941</em>, <em>2.83529412</em>, <em>2.84705882</em>, <em>2.85882353</em>, <em>2.87058824</em>, <em>2.88235294</em>, <em>2.89411765</em>, <em>2.90588235</em>, <em>2.91764706</em>, <em>2.92941176</em>, <em>2.94117647</em>, <em>2.95294118</em>, <em>2.96470588</em>, <em>2.97647059</em>, <em>2.98823529</em>, <em>3.</em>, <em>3.01176471</em>, <em>3.02352941</em>, <em>3.03529412</em>, <em>3.04705882</em>, <em>3.05882353</em>, <em>3.07058824</em>, <em>3.08235294</em>, <em>3.09411765</em>, <em>3.10588235</em>, <em>3.11764706</em>, <em>3.12941176</em>, <em>3.14117647</em>, <em>3.15294118</em>, <em>3.16470588</em>, <em>3.17647059</em>, <em>3.18823529</em>, <em>3.2</em>, <em>3.21176471</em>, <em>3.22352941</em>, <em>3.23529412</em>, <em>3.24705882</em>, <em>3.25882353</em>, <em>3.27058824</em>, <em>3.28235294</em>, <em>3.29411765</em>, <em>3.30588235</em>, <em>3.31764706</em>, <em>3.32941176</em>, <em>3.34117647</em>, <em>3.35294118</em>, <em>3.36470588</em>, <em>3.37647059</em>, <em>3.38823529</em>, <em>3.4</em>, <em>3.41176471</em>, <em>3.42352941</em>, <em>3.43529412</em>, <em>3.44705882</em>, <em>3.45882353</em>, <em>3.47058824</em>, <em>3.48235294</em>, <em>3.49411765</em>, <em>3.50588235</em>, <em>3.51764706</em>, <em>3.52941176</em>, <em>3.54117647</em>, <em>3.55294118</em>, <em>3.56470588</em>, <em>3.57647059</em>, <em>3.58823529</em>, <em>3.6</em>, <em>3.61176471</em>, <em>3.62352941</em>, <em>3.63529412</em>, <em>3.64705882</em>, <em>3.65882353</em>, <em>3.67058824</em>, <em>3.68235294</em>, <em>3.69411765</em>, <em>3.70588235</em>, <em>3.71764706</em>, <em>3.72941176</em>, <em>3.74117647</em>, <em>3.75294118</em>, <em>3.76470588</em>, <em>3.77647059</em>, <em>3.78823529</em>, <em>3.8</em>, <em>3.81176471</em>, <em>3.82352941</em>, <em>3.83529412</em>, <em>3.84705882</em>, <em>3.85882353</em>, <em>3.87058824</em>, <em>3.88235294</em>, <em>3.89411765</em>, <em>3.90588235</em>, <em>3.91764706</em>, <em>3.92941176</em>, <em>3.94117647</em>, <em>3.95294118</em>, <em>3.96470588</em>, <em>3.97647059</em>, <em>3.98823529</em>, <em>4.</em>, <em>4.01176471</em>, <em>4.02352941</em>, <em>4.03529412</em>, <em>4.04705882</em>, <em>4.05882353</em>, <em>4.07058824</em>, <em>4.08235294</em>, <em>4.09411765</em>, <em>4.10588235</em>, <em>4.11764706</em>, <em>4.12941176</em>, <em>4.14117647</em>, <em>4.15294118</em>, <em>4.16470588</em>, <em>4.17647059</em>, <em>4.18823529</em>, <em>4.2</em>, <em>4.21176471</em>, <em>4.22352941</em>, <em>4.23529412</em>, <em>4.24705882</em>, <em>4.25882353</em>, <em>4.27058824</em>, <em>4.28235294</em>, <em>4.29411765</em>, <em>4.30588235</em>, <em>4.31764706</em>, <em>4.32941176</em>, <em>4.34117647</em>, <em>4.35294118</em>, <em>4.36470588</em>, <em>4.37647059</em>, <em>4.38823529</em>, <em>4.4</em>, <em>4.41176471</em>, <em>4.42352941</em>, <em>4.43529412</em>, <em>4.44705882</em>, <em>4.45882353</em>, <em>4.47058824</em>, <em>4.48235294</em>, <em>4.49411765</em>, <em>4.50588235</em>, <em>4.51764706</em>, <em>4.52941176</em>, <em>4.54117647</em>, <em>4.55294118</em>, <em>4.56470588</em>, <em>4.57647059</em>, <em>4.58823529</em>, <em>4.6</em>, <em>4.61176471</em>, <em>4.62352941</em>, <em>4.63529412</em>, <em>4.64705882</em>, <em>4.65882353</em>, <em>4.67058824</em>, <em>4.68235294</em>, <em>4.69411765</em>, <em>4.70588235</em>, <em>4.71764706</em>, <em>4.72941176</em>, <em>4.74117647</em>, <em>4.75294118</em>, <em>4.76470588</em>, <em>4.77647059</em>, <em>4.78823529</em>, <em>4.8</em>, <em>4.81176471</em>, <em>4.82352941</em>, <em>4.83529412</em>, <em>4.84705882</em>, <em>4.85882353</em>, <em>4.87058824</em>, <em>4.88235294</em>, <em>4.89411765</em>, <em>4.90588235</em>, <em>4.91764706</em>, <em>4.92941176</em>, <em>4.94117647</em>, <em>4.95294118</em>, <em>4.96470588</em>, <em>4.97647059</em>, <em>4.98823529</em>, <em>5.        ])</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#TBchannel.toFD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.toFD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform to Frequency domain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>H</strong> : Tchannel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.TBchannel.toFD.rst.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
+    </div>
+     <div class="rel">
+    
+    <div class="buttonPrevious">
+      <a href="pylayers.antprop.channel.TBchannel.delays.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.antprop.channel.TBchannel.SalehValenzuela.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.channel.TBchannel.delays &mdash; Python 1 documentation</title>
+    <title>pylayers.antprop.channel.Tchannel.applywav &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
     <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
-    <link rel="next" title="pylayers.antprop.channel.TBchannel.toFD" href="pylayers.antprop.channel.TBchannel.toFD.html" />
-    <link rel="prev" title="pylayers.antprop.channel.TBchannel.tau_rms" href="pylayers.antprop.channel.TBchannel.tau_rms.html" />
+    <link rel="next" title="pylayers.antprop.channel.Tchannel.getcir" href="pylayers.antprop.channel.Tchannel.getcir.html" />
+    <link rel="prev" title="pylayers.antprop.channel.Tchannel.apply" href="pylayers.antprop.channel.Tchannel.apply.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,14 +92,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.channel.TBchannel.tau_rms.html" title="pylayers.antprop.channel.TBchannel.tau_rms"
+	<a href="pylayers.antprop.channel.Tchannel.apply.html" title="pylayers.antprop.channel.Tchannel.apply"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
 	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.TBchannel.tau_rms
+	    pylayers.antprop.channel.Tchannel.apply
 	    </span>
 	    
 	    </a>
@@ -109,14 +109,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="pylayers.antprop.channel.TBchannel.toFD.html" title="pylayers.antprop.channel.TBchannel.toFD"
+	<a href="pylayers.antprop.channel.Tchannel.getcir.html" title="pylayers.antprop.channel.Tchannel.getcir"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
 	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.TBchannel.toFD
+	    pylayers.antprop.channel.Tchannel.getcir
 	    </span>
 	    
 	    </a>
@@ -166,7 +166,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.channel.TBchannel.delays</a></li>
+<li><a class="reference internal" href="#">pylayers.antprop.channel.Tchannel.applywav</a></li>
 </ul>
 
     
@@ -180,34 +180,43 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pylayers-antprop-channel-tbchannel-delays">
-<h1>pylayers.antprop.channel.TBchannel.delays<a class="headerlink" href="#pylayers-antprop-channel-tbchannel-delays" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-antprop-channel-tchannel-applywav">
+<h1>pylayers.antprop.channel.Tchannel.applywav<a class="headerlink" href="#pylayers-antprop-channel-tchannel-applywav" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.antprop.channel.TBchannel.delays">
-<code class="descclassname">TBchannel.</code><code class="descname">delays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#TBchannel.delays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.TBchannel.delays" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate delay parameters and orthogonality factor from cir</p>
+<dt id="pylayers.antprop.channel.Tchannel.applywav">
+<code class="descclassname">Tchannel.</code><code class="descname">applywav</code><span class="sig-paren">(</span><em>Wgam=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.applywav"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.applywav" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>apply waveform (time domain ) to obtain the</dt>
+<dd><p class="first">rays impulses response</p>
+<p class="last">this is the 2015 vectorized method for applying 
+wav on Tchannel</p>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">taum :</p>
-<blockquote>
-<div><p>mean excess delay</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Wgam</strong> : waveform</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rir</strong> : array,</p>
+<blockquote class="last">
+<div><p>impulse response for each ray separately
+the size of the array is (nb_rays, support_length)
+support_length is calculated in regard of the 
+delays of the channel</p>
 </div></blockquote>
-<p>delayspread</p>
-<blockquote>
-<div><p>rms delay spread</p>
-</div></blockquote>
-<p>of  :</p>
-<blockquote>
-<div><p>orthogonality factor</p>
-</div></blockquote>
-<p>Neelesh Metha, Andreas Molish, Lary Greenstein &#8220;Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular</p>
-<p class="last">environments&#8221;</p>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.channel.rir</span></code></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The overall received signal is built in time domain</p>
+<p>Wgam is applied on each Ray Transfer function</p>
 </dd></dl>
 
 </div>
@@ -226,19 +235,19 @@
       Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.TBchannel.delays.rst.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.applywav.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.channel.TBchannel.tau_rms.html">
+      <a href="pylayers.antprop.channel.Tchannel.apply.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.antprop.channel.TBchannel.toFD.html">
+      <a href="pylayers.antprop.channel.Tchannel.getcir.html">
         Next
       </a>  
     </div>

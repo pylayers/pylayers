@@ -171,6 +171,9 @@
 <li><a class="reference internal" href="#tuchannel-class">TUchannel class</a></li>
 <li><a class="reference internal" href="#tudchannel">TUDchannel</a></li>
 <li><a class="reference internal" href="#tchannel">Tchannel</a></li>
+<li><a class="reference internal" href="#mchannel">Mchannel</a></li>
+<li><a class="reference internal" href="#afpchannel">AFPchannel</a></li>
+<li><a class="reference internal" href="#adpchannel">ADPchannel</a></li>
 <li><a class="reference internal" href="#ctilde">Ctilde</a></li>
 </ul>
 </li>
@@ -217,7 +220,10 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.delays.html#pylayers.antprop.channel.TBchannel.delays" title="pylayers.antprop.channel.TBchannel.delays"><code class="xref py py-obj docutils literal"><span class="pre">TBchannel.delays</span></code></a>()</td>
 <td>calculate delay parameters and orthogonality factor from cir</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.SalehValenzuela.html#pylayers.antprop.channel.TBchannel.SalehValenzuela" title="pylayers.antprop.channel.TBchannel.SalehValenzuela"><code class="xref py py-obj docutils literal"><span class="pre">TBchannel.SalehValenzuela</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.toFD.html#pylayers.antprop.channel.TBchannel.toFD" title="pylayers.antprop.channel.TBchannel.toFD"><code class="xref py py-obj docutils literal"><span class="pre">TBchannel.toFD</span></code></a>([fGHz])</td>
+<td>Transform to Frequency domain</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TBchannel.SalehValenzuela.html#pylayers.antprop.channel.TBchannel.SalehValenzuela" title="pylayers.antprop.channel.TBchannel.SalehValenzuela"><code class="xref py py-obj docutils literal"><span class="pre">TBchannel.SalehValenzuela</span></code></a>(**kwargs)</td>
 <td>generic Saleh and Valenzuela Model</td>
 </tr>
 </tbody>
@@ -248,6 +254,18 @@
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.Emax.html#pylayers.antprop.channel.TUchannel.Emax" title="pylayers.antprop.channel.TUchannel.Emax"><code class="xref py py-obj docutils literal"><span class="pre">TUchannel.Emax</span></code></a>([Tint,&nbsp;sym,&nbsp;dB])</td>
 <td>calculate the maximum of Energy integrated over a duration Tint</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.toa_max2.html#pylayers.antprop.channel.TUchannel.toa_max2" title="pylayers.antprop.channel.TUchannel.toa_max2"><code class="xref py py-obj docutils literal"><span class="pre">TUchannel.toa_max2</span></code></a>()</td>
+<td>calculate time of arrival max2 method</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.toa_new.html#pylayers.antprop.channel.TUchannel.toa_new" title="pylayers.antprop.channel.TUchannel.toa_new"><code class="xref py py-obj docutils literal"><span class="pre">TUchannel.toa_new</span></code></a>()</td>
+<td>estimate time of arrival (new method)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.toa_win.html#pylayers.antprop.channel.TUchannel.toa_win" title="pylayers.antprop.channel.TUchannel.toa_win"><code class="xref py py-obj docutils literal"><span class="pre">TUchannel.toa_win</span></code></a>(w)</td>
+<td>calulate time of arrival (window method)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.TUchannel.toa_max.html#pylayers.antprop.channel.TUchannel.toa_max" title="pylayers.antprop.channel.TUchannel.toa_max"><code class="xref py py-obj docutils literal"><span class="pre">TUchannel.toa_max</span></code></a>(nint)</td>
+<td>calculate time of arrival</td>
 </tr>
 </tbody>
 </table>
@@ -283,29 +301,43 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.apply.html#pylayers.antprop.channel.Tchannel.apply" title="pylayers.antprop.channel.Tchannel.apply"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.apply</span></code></a>([W])</td>
 <td>apply FUsignal W to the Tchannel</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavC.html#pylayers.antprop.channel.Tchannel.applywavC" title="pylayers.antprop.channel.Tchannel.applywavC"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.applywavC</span></code></a>(w,&nbsp;dxw)</td>
-<td>apply waveform method C</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywav.html#pylayers.antprop.channel.Tchannel.applywav" title="pylayers.antprop.channel.Tchannel.applywav"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.applywav</span></code></a>([Wgam])</td>
+<td>apply waveform (time domain ) to obtain the</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.getcir.html#pylayers.antprop.channel.Tchannel.getcir" title="pylayers.antprop.channel.Tchannel.getcir"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.getcir</span></code></a>([BWGHz,&nbsp;Nf,&nbsp;fftshift])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.get_cir.html#pylayers.antprop.channel.Tchannel.get_cir" title="pylayers.antprop.channel.Tchannel.get_cir"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.get_cir</span></code></a>([Wgam])</td>
+<td>get Channel impulse response of the channel</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.chantap.html#pylayers.antprop.channel.Tchannel.chantap" title="pylayers.antprop.channel.Tchannel.chantap"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.chantap</span></code></a>(**kwargs)</td>
 <td>channel tap</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavB.html#pylayers.antprop.channel.Tchannel.applywavB" title="pylayers.antprop.channel.Tchannel.applywavB"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.applywavB</span></code></a>(Wgam)</td>
-<td>apply waveform method B (time domain )</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.baseband.html#pylayers.antprop.channel.Tchannel.baseband" title="pylayers.antprop.channel.Tchannel.baseband"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.baseband</span></code></a>(**kwargs)</td>
+<td>Channel transfer function in baseband</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.applywavA.html#pylayers.antprop.channel.Tchannel.applywavA" title="pylayers.antprop.channel.Tchannel.applywavA"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.applywavA</span></code></a>(Wgam,&nbsp;Tw)</td>
-<td>apply waveform method A</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotd.html#pylayers.antprop.channel.Tchannel.plotd" title="pylayers.antprop.channel.Tchannel.plotd"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.plotd</span></code></a>([d])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotd.html#pylayers.antprop.channel.Tchannel.plotd" title="pylayers.antprop.channel.Tchannel.plotd"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.plotd</span></code></a>([d])</td>
 <td>plot direction of arrival and departure</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotad.html#pylayers.antprop.channel.Tchannel.plotad" title="pylayers.antprop.channel.Tchannel.plotad"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.plotad</span></code></a>([a])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plotad.html#pylayers.antprop.channel.Tchannel.plotad" title="pylayers.antprop.channel.Tchannel.plotad"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.plotad</span></code></a>([a])</td>
 <td>plot angular delays</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.doadod.html#pylayers.antprop.channel.Tchannel.doadod" title="pylayers.antprop.channel.Tchannel.doadod"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.doadod</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.doadod.html#pylayers.antprop.channel.Tchannel.doadod" title="pylayers.antprop.channel.Tchannel.doadod"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.doadod</span></code></a>(**kwargs)</td>
 <td>scatter plot of the DoA-DoD channel structure</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.energy.html#pylayers.antprop.channel.Tchannel.energy" title="pylayers.antprop.channel.Tchannel.energy"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.energy</span></code></a>([mode,&nbsp;sumray])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.energy.html#pylayers.antprop.channel.Tchannel.energy" title="pylayers.antprop.channel.Tchannel.energy"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.energy</span></code></a>([mode,&nbsp;sumray])</td>
 <td>calculates channel energy including antennas spatial filtering</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.rssi.html#pylayers.antprop.channel.Tchannel.rssi" title="pylayers.antprop.channel.Tchannel.rssi"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.rssi</span></code></a>([ufreq])</td>
+<td>Compute RSSI value for a frequency index</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.wavefig.html#pylayers.antprop.channel.Tchannel.wavefig" title="pylayers.antprop.channel.Tchannel.wavefig"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.wavefig</span></code></a>(w[,&nbsp;Nray])</td>
 <td>display</td>
@@ -334,17 +366,17 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.totime.html#pylayers.antprop.channel.Tchannel.totime" title="pylayers.antprop.channel.Tchannel.totime"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.totime</span></code></a>([Nz,&nbsp;ffts])</td>
 <td>transform to TUDchannel</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.tomap</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.iftd.html#pylayers.antprop.channel.Tchannel.iftd" title="pylayers.antprop.channel.Tchannel.iftd"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.iftd</span></code></a>([Nz,&nbsp;tstart,&nbsp;tstop,&nbsp;ffts])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.iftd.html#pylayers.antprop.channel.Tchannel.iftd" title="pylayers.antprop.channel.Tchannel.iftd"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.iftd</span></code></a>([Nz,&nbsp;tstart,&nbsp;tstop,&nbsp;ffts])</td>
 <td>time pasting</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft1.html#pylayers.antprop.channel.Tchannel.ft1" title="pylayers.antprop.channel.Tchannel.ft1"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ft1</span></code></a>(Nz[,&nbsp;ffts])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft1.html#pylayers.antprop.channel.Tchannel.ft1" title="pylayers.antprop.channel.Tchannel.ft1"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ft1</span></code></a>(Nz[,&nbsp;ffts])</td>
 <td>construct CIR from ifft(RTF)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ftau.html#pylayers.antprop.channel.Tchannel.ftau" title="pylayers.antprop.channel.Tchannel.ftau"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ftau</span></code></a>([Nz,&nbsp;k,&nbsp;ffts])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ftau.html#pylayers.antprop.channel.Tchannel.ftau" title="pylayers.antprop.channel.Tchannel.ftau"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ftau</span></code></a>([Nz,&nbsp;k,&nbsp;ffts])</td>
 <td>time superposition</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.rir.html#pylayers.antprop.channel.Tchannel.rir" title="pylayers.antprop.channel.Tchannel.rir"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.rir</span></code></a>(Nz[,&nbsp;ffts])</td>
+<td>construct ray impulse response</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.cir</span></code></td>
 <td></td>
@@ -377,6 +409,30 @@
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="mchannel">
+<h2>Mchannel<a class="headerlink" href="#mchannel" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Mchannel.eig
+Mchannel.Bcapacity
+Mchannel.WFcapacity
+Mchannel.plt2</div></blockquote>
+</div>
+<div class="section" id="afpchannel">
+<h2>AFPchannel<a class="headerlink" href="#afpchannel" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>AFPchannel.loadmes 
+AFPchannel.tomap</div></blockquote>
+</div>
+<div class="section" id="adpchannel">
+<h2>ADPchannel<a class="headerlink" href="#adpchannel" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>ADPchannel.correlate
+ADPchannel.clean
+ADPchannel.pdp
+ADPchannel.app
+ADPchannel.tomap
+ADPchannel.polarplot</div></blockquote>
 </div>
 <div class="section" id="ctilde">
 <h2>Ctilde<a class="headerlink" href="#ctilde" title="Permalink to this headline">¶</a></h2>
