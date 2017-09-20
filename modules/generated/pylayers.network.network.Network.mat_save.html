@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,15 +19,20 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.network.network" href="../pylayers.network.network.html" />
+    <link rel="next" title="pylayers.network.network.Network.txt_save" href="pylayers.network.network.Network.txt_save.html" />
+    <link rel="prev" title="pylayers.network.network.Network.init_save" href="pylayers.network.network.Network.init_save.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +48,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +88,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.network.network.Network.init_save.html" title="pylayers.network.network.Network.init_save"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.netw...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.network.network.Network.init_save
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.network.network.Network.txt_save.html" title="pylayers.network.network.Network.txt_save"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.netw...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.network.network.Network.txt_save
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.network.network.html" title="pylayers.network.network" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.netw...
+	</span>
+	<span class="hiddenrellink">
+	pylayers.network.network
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,10 +179,36 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-network-network-network-mat-save">
 <h1>pylayers.network.network.Network.mat_save<a class="headerlink" href="#pylayers-network-network-network-mat-save" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.network.network.Network.mat_save">
+<code class="descclassname">Network.</code><code class="descname">mat_save</code><span class="sig-paren">(</span><em>S</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.mat_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.mat_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED</p>
+<p>REPLACED BY pylayers.util.save</p>
+<p>DEPRECATED</p>
+<blockquote>
+<div>save node positions into a matlab structure file</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>name of the mat file</p>
+</div></blockquote>
+<p><strong>S</strong> : Simulation</p>
+<blockquote class="last">
+<div><p>Scipy.Simulation object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +222,30 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.network.network.Network.mat_save.txt"
+    <a href="../../_sources/modules/generated/pylayers.network.network.Network.mat_save.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.network.network.Network.init_save.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.network.network.Network.txt_save.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
