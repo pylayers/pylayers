@@ -56,23 +56,23 @@ from pathos.multiprocessing import cpu_count
 from functools import partial
 
 def _pickle_method(method):
-	func_name = method.im_func.__name__
-	obj = method.im_self
-	cls = method.im_class
-	if func_name.startswith('__') and not func_name.endswith('__'): #deal with mangled names
-		cls_name = cls.__name__.lstrip('_')
-		func_name = '_' + cls_name + func_name
-	return _unpickle_method, (func_name, obj, cls)
+    func_name = method.im_func.__name__
+    obj = method.im_self
+    cls = method.im_class
+    if func_name.startswith('__') and not func_name.endswith('__'): #deal with mangled names
+        cls_name = cls.__name__.lstrip('_')
+        func_name = '_' + cls_name + func_name
+    return _unpickle_method, (func_name, obj, cls)
 
 def _unpickle_method(func_name, obj, cls):
-	for cls in cls.__mro__:
-		try:
-			func = cls.__dict__[func_name]
-		except KeyError:
-			pass
-		else:
-			break
-	return func.__get__(obj, cls)
+    for cls in cls.__mro__:
+        try:
+            func = cls.__dict__[func_name]
+        except KeyError:
+            pass
+        else:
+            break
+    return func.__get__(obj, cls)
 
 import types
 if sys.version_info.major==2:
@@ -456,8 +456,8 @@ class Layout(pro.PyLayers):
                         else:
                             print(".lay file has changed you must rebuild the grahs")
                     else:
-                        # if graph are requested and it not exists a pickle of a graph
-                        # they are built
+                        # if graph are requested and it not exists a pickle of a graph
+                        # they are built
                         self.build()
                         self.lbltg.append('s')
                         self.dumpw()
@@ -660,7 +660,7 @@ class Layout(pro.PyLayers):
 
         st = st + "\nUseful Sparse arrays"+"\n----------------\n"
         if hasattr(self,'sgsg'):
-            st = st + "sgsg : "+"get common point of 2 segment (usage self.sgsg[seg1,seg2] => return common point \n"
+            st = st + "sgsg : "+"get common point of 2 segment (usage self.sgsg[seg1,seg2] => return common point \n"
         if hasattr(self,'s2pc'):
             st = st + "s2pc : "+"from a Gs segment node to its 2 extremal points (tahe) coordinates\n"
         if hasattr(self,'s2pu'):
@@ -1019,7 +1019,7 @@ class Layout(pro.PyLayers):
 
         # matrix segment-segment 
         # usage 
-        # self.sgsg[seg1,seg2] => return common point
+        # self.sgsg[seg1,seg2] => return common point
         mno = max(self.Gs.nodes())
         self.sgsg = sparse.lil_matrix((mno+1,mno+1),dtype='int')
 
@@ -2253,7 +2253,7 @@ class Layout(pro.PyLayers):
         # exploit iso for segment completion (AIR type) 
         #
         #  Complement single segment which do not reach zceil or zfloor with
-        #  an iso segment with AIR property
+        #  an iso segment with AIR property
         # 
         segdone = []
         for key in di['segments']:
@@ -7714,7 +7714,7 @@ class Layout(pro.PyLayers):
                     if not aligned:
                         if ((0 not in self.Gs.node[nk[0]]['ncycles']) and
                             (0 not in self.Gs.node[nk[1]]['ncycles'])):
-                            # get the iso segments of both nk[0] and nk[1]
+                            # get the iso segments of both nk[0] and nk[1]
                             if ((self.typ=='indoor') or (not self.Gt.node[icycle]['indoor'])):
                                 l0 = [nk[0]]+self.Gs.node[nk[0]]['iso']
                                 l1 = [nk[1]]+self.Gs.node[nk[1]]['iso']
@@ -7918,7 +7918,7 @@ class Layout(pro.PyLayers):
                             # R , Tin , Tout
                             if cyo1 > 0:
                                 if (nstr, cy) in self.Gi.nodes():
-                                    li1.append((nstr, cy))  # R 
+                                    li1.append((nstr, cy))  # R 
                                 if (nstr, cy, cyo1) in self.Gi.nodes():
                                     li1.append((nstr, cy, cyo1)) # T cy -> cyo1 
                                 if (nstr, cyo1, cy) in self.Gi.nodes():
@@ -8061,7 +8061,7 @@ class Layout(pro.PyLayers):
                                 ldelete.append(k)       
 
         self.Gi.remove_nodes_from(ldelete)
-        # build adjacency matrix of Gi graph
+        # build adjacency matrix of Gi graph
         self.Gi_A = nx.adjacency_matrix(self.Gi)
         #store list of nodes of Gi ( for keeping order)
         self.Gi_no = self.Gi.nodes()
@@ -8399,7 +8399,7 @@ class Layout(pro.PyLayers):
                 i2 = [self.Gi_no[u] for u in ui]
                 # i2 = nx.neighbors(self.Gi, i1)
 
-                # how to find neighbors without network
+                # how to find neighbors without network
                 # ngi=L.Gi.nodes()
                 # A=nx.adjacency_matrix(L.Gi)
                 # inter = ngi[10]
@@ -8603,7 +8603,7 @@ class Layout(pro.PyLayers):
         e = self.Gi.edges()
         #Gi_no = [self.Gi_no]*len(e)
 
-        # densify sparse matrix
+        # densify sparse matrix
         #aGi_A = self.Gi_A.toarray()
         #ap2pc = self.p2pc.toarray()
         #asgsg = self.sgsg.toarray()
@@ -8633,7 +8633,7 @@ class Layout(pro.PyLayers):
 
         pool = Pool(cpu_count())
 
-        # multiprocessing style
+        # multiprocessing style
         #Z=zip(e, Gi_no, Gi_A, p2pc, sgsg, s2pc, s2pu)
         #res = pool.map(outputGi_func,Z)
         Z = zip(e)
@@ -9927,9 +9927,9 @@ class Layout(pro.PyLayers):
                 zinf = lz <=self.Gs.node[x]['z'][1]
                 z    = zsup & zinf 
                 uz = np.where(z)[0]
-                # fill dz_seg at the correct height with a lseg_valid 
-                # and simulnaneously 
-                # fill dz_sl at the correct height with correspondong slab
+                # fill dz_seg at the correct height with a lseg_valid 
+                # and simulnaneously 
+                # fill dz_sl at the correct height with correspondong slab
                 [(dz_seg[i].append(x),dz_sl[i].append(self.Gs.node[x]['name']))
                                                                     for i in uz]
 
@@ -11762,7 +11762,7 @@ def outputGi_func(args):
         i2 = [Gi_no[u] for u in ui]
         # i2 = nx.neighbors(self.Gi, i1)
 
-        # how to find neighbors without network
+        # how to find neighbors without network
         # ngi=L.Gi.nodes()
         # A=nx.adjacency_matrix(L.Gi)
         # inter = ngi[10]
