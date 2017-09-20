@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.channel.Tchannel.pdp &mdash; Python 1 documentation</title>
+    <title>pylayers.antprop.channel.AFPchannel.loadmes &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,8 +30,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
     <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
-    <link rel="next" title="pylayers.antprop.channel.Mchannel.eig" href="pylayers.antprop.channel.Mchannel.eig.html" />
-    <link rel="prev" title="pylayers.antprop.channel.Tchannel.calibrate" href="pylayers.antprop.channel.Tchannel.calibrate.html" />
+    <link rel="next" title="pylayers.antprop.channel.AFPchannel.toadp" href="pylayers.antprop.channel.AFPchannel.toadp.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,31 +91,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.channel.Tchannel.calibrate.html" title="pylayers.antprop.channel.Tchannel.calibrate"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antp...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.Tchannel.calibrate
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.channel.Mchannel.eig.html" title="pylayers.antprop.channel.Mchannel.eig"
+	<a href="pylayers.antprop.channel.AFPchannel.toadp.html" title="pylayers.antprop.channel.AFPchannel.toadp"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
 	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.Mchannel.eig
+	    pylayers.antprop.channel.AFPchannel.toadp
 	    </span>
 	    
 	    </a>
@@ -166,7 +148,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.channel.Tchannel.pdp</a></li>
+<li><a class="reference internal" href="#">pylayers.antprop.channel.AFPchannel.loadmes</a></li>
 </ul>
 
     
@@ -180,24 +162,51 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pylayers-antprop-channel-tchannel-pdp">
-<h1>pylayers.antprop.channel.Tchannel.pdp<a class="headerlink" href="#pylayers-antprop-channel-tchannel-pdp" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-antprop-channel-afpchannel-loadmes">
+<h1>pylayers.antprop.channel.AFPchannel.loadmes<a class="headerlink" href="#pylayers-antprop-channel-afpchannel-loadmes" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.antprop.channel.Tchannel.pdp">
-<code class="descclassname">Tchannel.</code><code class="descname">pdp</code><span class="sig-paren">(</span><em>win='hamming'</em>, <em>calibrate=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.pdp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.pdp" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculates power delay profile</p>
+<dt id="pylayers.antprop.channel.AFPchannel.loadmes">
+<code class="descclassname">AFPchannel.</code><code class="descname">loadmes</code><span class="sig-paren">(</span><em>_filename</em>, <em>_filecal</em>, <em>fcGHz=32.6</em>, <em>BW=1.6</em>, <em>win='rect'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#AFPchannel.loadmes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.AFPchannel.loadmes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load measurement file</p>
+<p>Measurement files and the associated back to back calibration files 
+are placed in the mes directory of the project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>win</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote>
+<div><p>data matfile name</p>
+</div></blockquote>
+<p><strong>_filecal</strong> : string</p>
+<blockquote>
+<div><p>calibration matfile name</p>
+</div></blockquote>
+<p><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency</p>
+</div></blockquote>
+<p><strong>BW</strong> : float</p>
+<blockquote>
+<div><p>measurement bandwidth</p>
+</div></blockquote>
+<p><strong>win</strong> : string</p>
 <blockquote class="last">
-<div><p>window name</p>
+<div><p>window type in [&#8216;rect&#8217;,&#8217;hamming&#8217;,&#8217;blackman&#8217;]</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.util.pyutil.getlong.html#pylayers.util.pyutil.getlong" title="pylayers.util.pyutil.getlong"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.pyutil.getlong</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>This function updates : 
++ self.x (frequency GHz)
++ self.y 
++ self.az azimuth radians</p>
 </dd></dl>
 
 </div>
@@ -216,25 +225,20 @@
       Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.pdp.rst.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.AFPchannel.loadmes.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.channel.Tchannel.calibrate.html">
+      <a href="pylayers.antprop.channel.AFPchannel.toadp.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.antprop.channel.Mchannel.eig.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

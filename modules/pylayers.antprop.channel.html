@@ -412,27 +412,75 @@
 </div>
 <div class="section" id="mchannel">
 <h2>Mchannel<a class="headerlink" href="#mchannel" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>Mchannel.eig
-Mchannel.Bcapacity
-Mchannel.WFcapacity
-Mchannel.plt2</div></blockquote>
+<p>VNA Measured channel</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Mchannel.eig.html#pylayers.antprop.channel.Mchannel.eig" title="pylayers.antprop.channel.Mchannel.eig"><code class="xref py py-obj docutils literal"><span class="pre">Mchannel.eig</span></code></a>([HdH])</td>
+<td>calculate eigen values of the transfer matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Mchannel.Bcapacity.html#pylayers.antprop.channel.Mchannel.Bcapacity" title="pylayers.antprop.channel.Mchannel.Bcapacity"><code class="xref py py-obj docutils literal"><span class="pre">Mchannel.Bcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
+<td>calculates BLAST deterministic MIMO channel capacity</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Mchannel.WFcapacity.html#pylayers.antprop.channel.Mchannel.WFcapacity" title="pylayers.antprop.channel.Mchannel.WFcapacity"><code class="xref py py-obj docutils literal"><span class="pre">Mchannel.WFcapacity</span></code></a>([Pt,&nbsp;Tp])</td>
+<td>calculates deterministic MIMO channel capacity</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Mchannel.plt2</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="afpchannel">
 <h2>AFPchannel<a class="headerlink" href="#afpchannel" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>AFPchannel.loadmes 
-AFPchannel.tomap</div></blockquote>
+<p>Angular Frequency Profile Channel</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.AFPchannel.loadmes.html#pylayers.antprop.channel.AFPchannel.loadmes" title="pylayers.antprop.channel.AFPchannel.loadmes"><code class="xref py py-obj docutils literal"><span class="pre">AFPchannel.loadmes</span></code></a>(_filename,&nbsp;_filecal[,&nbsp;...])</td>
+<td>Load measurement file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.AFPchannel.toadp.html#pylayers.antprop.channel.AFPchannel.toadp" title="pylayers.antprop.channel.AFPchannel.toadp"><code class="xref py py-obj docutils literal"><span class="pre">AFPchannel.toadp</span></code></a>([imax])</td>
+<td>convert afp into adp (frequency-&gt;delay)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="adpchannel">
 <h2>ADPchannel<a class="headerlink" href="#adpchannel" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>ADPchannel.correlate
-ADPchannel.clean
-ADPchannel.pdp
-ADPchannel.app
-ADPchannel.tomap
-ADPchannel.polarplot</div></blockquote>
+<p>Angular Delay Profile Channel</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.ADPchannel.correlate.html#pylayers.antprop.channel.ADPchannel.correlate" title="pylayers.antprop.channel.ADPchannel.correlate"><code class="xref py py-obj docutils literal"><span class="pre">ADPchannel.correlate</span></code></a>(adp[,&nbsp;thresholddB])</td>
+<td>correlate ADP with an other ADP</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.ADPchannel.clean.html#pylayers.antprop.channel.ADPchannel.clean" title="pylayers.antprop.channel.ADPchannel.clean"><code class="xref py py-obj docutils literal"><span class="pre">ADPchannel.clean</span></code></a>([threshold_dB])</td>
+<td>clean ADP</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.ADPchannel.pdp.html#pylayers.antprop.channel.ADPchannel.pdp" title="pylayers.antprop.channel.ADPchannel.pdp"><code class="xref py py-obj docutils literal"><span class="pre">ADPchannel.pdp</span></code></a>(**kwargs)</td>
+<td>Calculate and plot Power Delay Profile</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.ADPchannel.app.html#pylayers.antprop.channel.ADPchannel.app" title="pylayers.antprop.channel.ADPchannel.app"><code class="xref py py-obj docutils literal"><span class="pre">ADPchannel.app</span></code></a>(**kwargs)</td>
+<td>Calculate Angular Power Profile</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.ADPchannel.tomap.html#pylayers.antprop.channel.ADPchannel.tomap" title="pylayers.antprop.channel.ADPchannel.tomap"><code class="xref py py-obj docutils literal"><span class="pre">ADPchannel.tomap</span></code></a>(L,&nbsp;**kwargs)</td>
+<td>surimpose PADP on the Layout</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.ADPchannel.polarplot.html#pylayers.antprop.channel.ADPchannel.polarplot" title="pylayers.antprop.channel.ADPchannel.polarplot"><code class="xref py py-obj docutils literal"><span class="pre">ADPchannel.polarplot</span></code></a>(**kwargs)</td>
+<td>polar plot of PADP</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="ctilde">
 <h2>Ctilde<a class="headerlink" href="#ctilde" title="Permalink to this headline">¶</a></h2>
