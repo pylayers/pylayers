@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -292,8 +293,8 @@ f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
 <div class="math">
-<p><span class="math">\alpha=\frac{-jc}{4\pi f}</span></p>
-</div><p>This factor is fundamental and has to be applied only once. By default
+\[\alpha=\frac{-jc}{4\pi f}\]</div>
+<p>This factor is fundamental and has to be applied only once. By default
 the link is evaluated with the Friis factor : <code class="docutils literal"><span class="pre">isFriis=True</span></code>. This
 can be checked at the end of the <strong>repr</strong> of <code class="docutils literal"><span class="pre">H</span></code>.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H
@@ -407,12 +408,12 @@ f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
-<p>The tap methods takes as parameters : + The system bandwidth <span class="math">W</span>
-expressed in MHz + The two extremities velocities <span class="math">V_a</span> and
-<span class="math">V_b</span> + The number of taps to be evaluted <span class="math">N_{tap}</span> + The
-number of time samples <span class="math">N_m</span> + The number of spatial realizations
-<span class="math">N_s</span></p>
-<p>This method returns a Multi Dimensional Array <span class="math">htap(f,s,m,tap)</span></p>
+<p>The tap methods takes as parameters : + The system bandwidth <span class="math">\(W\)</span>
+expressed in MHz + The two extremities velocities <span class="math">\(V_a\)</span> and
+<span class="math">\(V_b\)</span> + The number of taps to be evaluted <span class="math">\(N_{tap}\)</span> + The
+number of time samples <span class="math">\(N_m\)</span> + The number of spatial realizations
+<span class="math">\(N_s\)</span></p>
+<p>This method returns a Multi Dimensional Array <span class="math">\(htap(f,s,m,tap)\)</span></p>
 <p>htap has 4 axes.</p>
 <ul class="simple">
 <li>axis 0 is frequency,</li>

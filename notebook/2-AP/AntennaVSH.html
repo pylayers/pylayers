@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -197,11 +198,11 @@ from pylayers.antprop.antvsh import *
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S2R2.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
 </pre></div>
 </div>
-<p>The shape of the <span class="math">F_{\phi}</span> functions indicates :</p>
+<p>The shape of the <span class="math">\(F_{\phi}\)</span> functions indicates :</p>
 <ul class="simple">
-<li><span class="math">N_{\theta} = 91</span></li>
+<li><span class="math">\(N_{\theta} = 91\)</span></li>
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
-<li><span class="math">N_f= 104</span></li>
+<li><span class="math">\(N_f= 104\)</span></li>
 </ul>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>np.shape(A.Fp)
 </pre></div>
@@ -209,8 +210,8 @@ from pylayers.antprop.antvsh import *
 <div class="highlight-none"><div class="highlight"><pre><span></span>(91, 180, 104)
 </pre></div>
 </div>
-<p>The frequency array is expressed in <span class="math">GHz</span> and delays are expressed
-in <span class="math">ns</span></p>
+<p>The frequency array is expressed in <span class="math">\(GHz\)</span> and delays are expressed
+in <span class="math">\(ns\)</span></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = A.fGHz
 </pre></div>
 </div>
@@ -220,8 +221,8 @@ in <span class="math">ns</span></p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(104,)
 </pre></div>
 </div>
-<p>Then an electrical delay of <span class="math">4.185ns</span> is applied on the
-<span class="math">F_{\theta}</span></p>
+<p>Then an electrical delay of <span class="math">\(4.185ns\)</span> is applied on the
+<span class="math">\(F_{\theta}\)</span></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>I = A.Ft[:,:,:]
 </pre></div>
 </div>

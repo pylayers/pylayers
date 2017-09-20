@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -623,10 +624,10 @@ in charge of the conversion.</p>
 </div>
 <div class="section" id="tahe-tail-head">
 <h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal"><span class="pre">tahe</span></code> is a <span class="math">(2\times N_{s})</span> where <span class="math">N_s</span> denotes the
+<p><code class="docutils literal"><span class="pre">tahe</span></code> is a <span class="math">\((2\times N_{s})\)</span> where <span class="math">\(N_s\)</span> denotes the
 number of segment. The first line is the tail index of the segment
-<span class="math">k</span> and the second line is the head of the segment <span class="math">k</span>.
-Where <span class="math">k</span> is the index of a given segment (starting in 0).</p>
+<span class="math">\(k\)</span> and the second line is the head of the segment <span class="math">\(k\)</span>.
+Where <span class="math">\(k\)</span> is the index of a given segment (starting in 0).</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
 </pre></div>
 </div>
@@ -636,7 +637,7 @@ passed
 </pre></div>
 </div>
 <p>The figure below illustrates a Layout and a superimposition of the graph
-of cycles <span class="math">\mathcal{G}_c</span>. Those cycles are automatically
+of cycles <span class="math">\(\mathcal{G}_c\)</span>. Those cycles are automatically
 extracted from a well defined layout. This concept of <strong>cycles</strong> is
 central in the ray determination algorithm which is implemented in
 PyLayers. Notice that the exterior region is the cycle indexed by 0. All
@@ -658,7 +659,7 @@ connected to the origin (corresponding to exterior cycle).</p>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
 <h2><code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length <span class="math">N_s</span>+1. The index 0 is not used
+<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length <span class="math">\(N_s\)</span>+1. The index 0 is not used
 because none segment has 0 as an index.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ns = 5
 &gt;&gt;&gt; utahe = L.tgs[ns]

@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -326,8 +327,8 @@ Ncoeff s3 : 72
 </div>
 <p>The <code class="docutils literal"><span class="pre">plotG()</span></code> method allow to superpose different pattern for a list
 of frequencies <code class="docutils literal"><span class="pre">fGHz</span></code> + If <code class="docutils literal"><span class="pre">phd</span></code> (phi in degree) is specified the
-diagram is given as a function of <span class="math">\theta</span> + If <code class="docutils literal"><span class="pre">thd</span></code> (theta in
-degree) is specified the diagram is given as a function of <span class="math">\phi</span></p>
+diagram is given as a function of <span class="math">\(\theta\)</span> + If <code class="docutils literal"><span class="pre">thd</span></code> (theta in
+degree) is specified the diagram is given as a function of <span class="math">\(\phi\)</span></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 a1 = f.add_subplot(121,projection=&#39;polar&#39;)
 f1,a1 = A.plotG(fGHz=[3,4,5.6],plan=&#39;theta&#39;,angdeg=0,GmaxdB=5,fig=f,ax=a1,show=False)

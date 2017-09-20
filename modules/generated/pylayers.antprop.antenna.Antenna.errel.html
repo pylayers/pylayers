@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -200,11 +201,11 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>errelTh</strong> : float</p>
 <blockquote>
-<div><p>relative error on <span class="math">F_{\theta}</span></p>
+<div><p>relative error on <span class="math">\(F_{\theta}\)</span></p>
 </div></blockquote>
 <p><strong>errelPh</strong> : float</p>
 <blockquote>
-<div><p>relative error on <span class="math">F_{\phi}</span></p>
+<div><p>relative error on <span class="math">\(F_{\phi}\)</span></p>
 </div></blockquote>
 <p class="last"><strong>errel</strong> : float</p>
 </td>
@@ -213,14 +214,12 @@
 </table>
 <p class="rubric">Notes</p>
 <div class="math">
-<p><span class="math">\epsilon_r^{\theta} =
+\[ \begin{align}\begin{aligned}\epsilon_r^{\theta} =
 \frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta)(\phi)|^2}
-     {|F_{\theta}(\theta,\phi)|^2}
-
-\epsilon_r^{\phi} =
+     {|F_{\theta}(\theta,\phi)|^2}\\\epsilon_r^{\phi} =
 \frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta)(\phi)|^2}
-     {|F_{\theta}(\theta,\phi)|^2}</span></p>
-</div></dd></dl>
+     {|F_{\theta}(\theta,\phi)|^2}\end{aligned}\end{align} \]</div>
+</dd></dl>
 
 </div>
 

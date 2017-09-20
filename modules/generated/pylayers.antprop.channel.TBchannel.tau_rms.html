@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -193,7 +194,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
 <p><strong>threshold</strong> : float</p>
 <blockquote>
-<div><p>( delay interval is defined between <span class="math">\tau(\alpha)</span> and <span class="math">\tau(1 -\alpha)</span> )</p>
+<div><p>( delay interval is defined between <span class="math">\(\tau(\alpha)\)</span> and <span class="math">\(\tau(1 -\alpha)\)</span> )</p>
 </div></blockquote>
 <p><strong>tau0</strong> : float</p>
 <blockquote class="last">
@@ -205,8 +206,8 @@
 </table>
 <p class="rubric">Notes</p>
 <div class="math">
-<p><span class="math">\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</span></p>
-</div><p>TUsignal.ecdf
+\[\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}\]</div>
+<p>TUsignal.ecdf
 TUsignal.tau_moy</p>
 </dd></dl>
 

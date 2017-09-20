@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
@@ -277,10 +278,10 @@ title(&#39;extract mode&#39;)
 <h2>FHsignal in CIR mode<a class="headerlink" href="#fhsignal-in-cir-mode" title="Permalink to this headline">¶</a></h2>
 <p>We create a Fusignal which corresponds to the signal</p>
 <div class="math">
-<p><span class="math">X_u(f) = \alpha e^{-2j\pi f \tau}</span></p>
-</div><div class="math">
-<p><span class="math">f\in [f_{min},f_{max}]</span></p>
-</div><div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = np.arange(2,10,0.01)
+\[X_u(f) = \alpha e^{-2j\pi f \tau}\]</div>
+<div class="math">
+\[f\in [f_{min},f_{max}]\]</div>
+<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = np.arange(2,10,0.01)
 tau = 20
 y = 2*np.ones(len(fGHz))*np.exp(-2*1j*np.pi*fGHz*tau)
 Hu = FUsignal(fGHz,y)
@@ -300,7 +301,7 @@ Hu.plot(typ=&#39;r&#39;)
 </pre></div>
 </div>
 <p>The inverse Fourier transform allows to recover perfectly the amplitude
-<span class="math">\alpha</span> and the delay <span class="math">\tau</span> of the channel</p>
+<span class="math">\(\alpha\)</span> and the delay <span class="math">\(\tau\)</span> of the channel</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>hu.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
