@@ -34,6 +34,7 @@ class Tesgeu(TestCase):
         assert_equal(ccave,[-1, -2, -3, -4, -6] )
 
     def test_is_aligned(self):
+        print "testing is_aligned"
         p1 = np.array([0,0])
         p2 = np.array([1,0])
         p3 = np.array([3,0])
@@ -52,6 +53,7 @@ class Tesgeu(TestCase):
         assert not b4
 
     def test_MATP(self):
+        print "test_MATP"
         vl = np.array([0,0,1])  # beam in z direction 
         pl = np.array([1,0,0])  # polar along x
 
@@ -61,13 +63,13 @@ class Tesgeu(TestCase):
         M = MATP(vl,pl,phi,tilt,'V')
         vg = np.dot(M,vl)
         pg = np.dot(M,pl)
-        np.testing.assert_equal(vg,[0,1,0])  # pointing in y 
-        np.testing.assert_equal(pg,[0,0,1])  # polar along z
+        np.testing.assert_almost_equal(vg,[0,1,0])  # pointing in y 
+        np.testing.assert_almost_equal(pg,[0,0,1])  # polar along z
         M = MATP(vl,pl,phi,tilt,'H')
         vg = np.dot(M,vl)
         pg = np.dot(M,pl)
-        np.testing.assert_equal(vg,[0,1,0])  # pointing in y 
-        np.testing.assert_equal(pg,[-1,0,0])  # polar along x
+        np.testing.assert_almost_equal(vg,[0,1,0])  # pointing in y 
+        np.testing.assert_almost_equal(pg,[-1,0,0])  # polar along x
 
     def test_Bthph(self):
         th = np.array([0.])
@@ -111,6 +113,18 @@ class Tesgeu(TestCase):
         np.testing.assert_almost_equal(thg,0.)
         np.testing.assert_almost_equal(phg,np.pi/4.)
 
+
+    def test_intersect3(self):
+        print "test_intersect3"
+        a = np.array([[1,0,1]]).T
+        b = np.array([[10,0,1]]).T
+        pg = np.array([[5,0,0]]).T
+        u1 = np.array([[0,1,0]]).T
+        u2 = np.array([[0,0,1]]).T
+        l1 = np.array([3])
+        l2 = np.array([3])
+        bo = intersect3(a,b,pg,u1,u2,l1,l2)
+        assert bo 
 
 if __name__ == "__main__":
     run_module_suite()

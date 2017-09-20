@@ -1707,12 +1707,13 @@ class Pattern(PyLayers):
             self.theta_max = self.theta[self.umax[0]]
             self.phi_max = self.phi[self.umax[1]]
             M = geu.SphericalBasis(np.array([[self.theta_max,self.phi_max]]))
-            self.vl = M[:,2].squeeze()
+            self.sl = M[:,2].squeeze()
             uth = M[:,0] 
             uph = M[:,1] 
-            pl = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
-            pln = pl/np.linalg.norm(pl)
-            self.pl = np.abs(pln.squeeze())
+            el = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
+            eln = el/np.linalg.norm(el)
+            self.el = np.abs(eln.squeeze())
+            self.hl = np.cross(self.sl,self.el)
             #assert((self.efficiency<1.0).all()),pdb.set_trace()
             self.hpster=np.zeros(len(self.fGHz))
             self.ehpbw=np.zeros(len(self.fGHz))
@@ -1933,7 +1934,7 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)')
+                plt.title(u'$\\theta$ plane')
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -1957,7 +1958,7 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
-                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
+                plt.title(u'$\\phi$ plane ')
             # actual plotting
             if len(lfreq)>1: 
                 ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
@@ -2215,8 +2216,9 @@ class Antenna(Pattern):
                     uf = u[1]
 
             st = st + "GdBmax :"+str(self.GdBmax[0])+' '+str(self.GdBmax[-1])+'\n'
-            st = st + "Gmax direction : .vl" + str(self.vl)+'\n'
-            st = st + "Polar in Gmax direction : .pl " + str(self.pl)+'\n'
+            st = st + "Gmax direction : .sl" + str(self.sl)+'\n'
+            st = st + "Orientation of E field in Gmax direction : .el " + str(self.el)+'\n'
+            st = st + "Orientation of H field in Gmax direction : .hl " + str(self.hl)+'\n'
             st = st + "effective HPBW : .ehpbw " + str(self.ehpbw[0])+' '+str(self.ehpbw[-1])+'\n'
 
             if self.source=='satimo':
