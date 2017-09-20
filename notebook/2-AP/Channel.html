@@ -291,7 +291,9 @@ f,a =Lk.H.show(fig=f,cmap=&#39;jet&#39;)
 <div class="section" id="the-friis-factor">
 <h2>The Friis factor<a class="headerlink" href="#the-friis-factor" title="Permalink to this headline">¶</a></h2>
 <p>The Friis factor is :</p>
-<p>This factor is fundamental and has to be applied only once. By default
+<div class="math">
+<p><span class="math">\alpha=\frac{-jc}{4\pi f}</span></p>
+</div><p>This factor is fundamental and has to be applied only once. By default
 the link is evaluated with the Friis factor : <code class="docutils literal"><span class="pre">isFriis=True</span></code>. This
 can be checked at the end of the <strong>repr</strong> of <code class="docutils literal"><span class="pre">H</span></code>.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.H
@@ -405,12 +407,12 @@ f=Lk.H.show(cmap=&#39;jet&#39;,fig=f)
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
-<p>The tap methods takes as parameters : + The system bandwidth 
-expressed in MHz + The two extremities velocities  and
- + The number of taps to be evaluted  + The
-number of time samples  + The number of spatial realizations
-</p>
-<p>This method returns a Multi Dimensional Array </p>
+<p>The tap methods takes as parameters : + The system bandwidth <img class="math" src="../../_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/>
+expressed in MHz + The two extremities velocities <img class="math" src="../../_images/math/50853d281f58a0326091554917cda70c43ffd227.png" alt="V_a"/> and
+<img class="math" src="../../_images/math/61b96a9fdcd5f40f1950b96d02658b96e97acbcb.png" alt="V_b"/> + The number of taps to be evaluted <img class="math" src="../../_images/math/67be65e8e8a2991de3935287b0056cac5d340898.png" alt="N_{tap}"/> + The
+number of time samples <img class="math" src="../../_images/math/c4a8a2957d6d5970fef35cce3e86d31427eaa216.png" alt="N_m"/> + The number of spatial realizations
+<img class="math" src="../../_images/math/f9b03df42cc4eecc1f289434c88139073ffd3847.png" alt="N_s"/></p>
+<p>This method returns a Multi Dimensional Array <img class="math" src="../../_images/math/c8b1b9670a534efadefeb660e2a634bde62e4e5d.png" alt="htap(f,s,m,tap)"/></p>
 <p>htap has 4 axes.</p>
 <ul class="simple">
 <li>axis 0 is frequency,</li>
@@ -495,7 +497,7 @@ for the first channel tap. :exit</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 19, 2017.
+      Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Channel.rst.txt"

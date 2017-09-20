@@ -246,10 +246,12 @@ EUCAP 2010</p>
 <p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">&#8220;[Kiani2007] Glass Characterization for Designing
 Frequency Selective Surfaces to Improve Transmission through Energy saving
 glass windows  Kiani 2007&#8221;</a>
-The surface impedance is , the thicknesss is </p>
+The surface impedance is <img class="math" src="../../_images/math/1cc1f717f12cb2d8b9d8f1ab350c9092e3d32f4e.png" alt="R = 4 \Omega"/>, the thicknesss is <img class="math" src="../../_images/math/e7fd625f68aa1f65c98c6a274218ada86615fe07.png" alt="d = 100 nm"/></p>
 <p><a class="reference external" href="http://www.pilkington.com/spectrum2/default.aspx?country_code=FR">Pilkington Spectrum OnLine applet</a></p>
 <p><a class="reference external" href="http://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=530536&amp;fileOId=624944">Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz</a></p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
+<div class="math">
+<p><span class="math">\sigma =  \frac{1}{Rd} = 2.5 10^{6} S/m</span></p>
+</div><div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.slab import *
 &gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; import matplotlib.pylab as plt
 &gt;&gt;&gt; sl = SlabDB(filemat=&#39;matDB.ini&#39;,fileslab=&#39;slabDB.ini&#39;)

@@ -623,10 +623,10 @@ in charge of the conversion.</p>
 </div>
 <div class="section" id="tahe-tail-head">
 <h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal"><span class="pre">tahe</span></code> is a  where  denotes the
+<p><code class="docutils literal"><span class="pre">tahe</span></code> is a <img class="math" src="../../_images/math/77d0fe9b1043354dbc8847094426fa1e856dd778.png" alt="(2\times N_{s})"/> where <img class="math" src="../../_images/math/f9b03df42cc4eecc1f289434c88139073ffd3847.png" alt="N_s"/> denotes the
 number of segment. The first line is the tail index of the segment
- and the second line is the head of the segment .
-Where  is the index of a given segment (starting in 0).</p>
+<img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> and the second line is the head of the segment <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
+Where <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is the index of a given segment (starting in 0).</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; L.build()
 </pre></div>
 </div>
@@ -636,7 +636,7 @@ passed
 </pre></div>
 </div>
 <p>The figure below illustrates a Layout and a superimposition of the graph
-of cycles . Those cycles are automatically
+of cycles <img class="math" src="../../_images/math/0abf127ba06052874b2d0334312c08a635791dda.png" alt="\mathcal{G}_c"/>. Those cycles are automatically
 extracted from a well defined layout. This concept of <strong>cycles</strong> is
 central in the ray determination algorithm which is implemented in
 PyLayers. Notice that the exterior region is the cycle indexed by 0. All
@@ -658,7 +658,7 @@ connected to the origin (corresponding to exterior cycle).</p>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
 <h2><code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length +1. The index 0 is not used
+<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length <img class="math" src="../../_images/math/f9b03df42cc4eecc1f289434c88139073ffd3847.png" alt="N_s"/>+1. The index 0 is not used
 because none segment has 0 as an index.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ns = 5
 &gt;&gt;&gt; utahe = L.tgs[ns]
@@ -730,7 +730,7 @@ because none segment has 0 as an index.</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 19, 2017.
+      Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Layout.rst.txt"

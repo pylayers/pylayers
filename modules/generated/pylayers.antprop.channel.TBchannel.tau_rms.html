@@ -193,7 +193,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
 <p><strong>threshold</strong> : float</p>
 <blockquote>
-<div><p>( delay interval is defined between  and  )</p>
+<div><p>( delay interval is defined between <img class="math" src="../../_images/math/301b769d08b32ffdfd8a5eff20129c24cf492650.png" alt="\tau(\alpha)"/> and <img class="math" src="../../_images/math/d5ab105336fdefc284143a7fe82ce0dfb03e1bc1.png" alt="\tau(1 -\alpha)"/> )</p>
 </div></blockquote>
 <p><strong>tau0</strong> : float</p>
 <blockquote class="last">
@@ -204,7 +204,9 @@
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>TUsignal.ecdf
+<div class="math">
+<p><span class="math">\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</span></p>
+</div><p>TUsignal.ecdf
 TUsignal.tau_moy</p>
 </dd></dl>
 

@@ -276,7 +276,11 @@ title(&#39;extract mode&#39;)
 <div class="section" id="fhsignal-in-cir-mode">
 <h2>FHsignal in CIR mode<a class="headerlink" href="#fhsignal-in-cir-mode" title="Permalink to this headline">¶</a></h2>
 <p>We create a Fusignal which corresponds to the signal</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = np.arange(2,10,0.01)
+<div class="math">
+<p><span class="math">X_u(f) = \alpha e^{-2j\pi f \tau}</span></p>
+</div><div class="math">
+<p><span class="math">f\in [f_{min},f_{max}]</span></p>
+</div><div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = np.arange(2,10,0.01)
 tau = 20
 y = 2*np.ones(len(fGHz))*np.exp(-2*1j*np.pi*fGHz*tau)
 Hu = FUsignal(fGHz,y)
@@ -296,7 +300,7 @@ Hu.plot(typ=&#39;r&#39;)
 </pre></div>
 </div>
 <p>The inverse Fourier transform allows to recover perfectly the amplitude
- and the delay  of the channel</p>
+<img class="math" src="../../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> and the delay <img class="math" src="../../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> of the channel</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>hu.plot(typ=&#39;m&#39;)
 </pre></div>
 </div>
@@ -387,7 +391,7 @@ len(H.y)
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 19, 2017.
+      Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Bsignal.rst.txt"

@@ -326,8 +326,8 @@ Ncoeff s3 : 72
 </div>
 <p>The <code class="docutils literal"><span class="pre">plotG()</span></code> method allow to superpose different pattern for a list
 of frequencies <code class="docutils literal"><span class="pre">fGHz</span></code> + If <code class="docutils literal"><span class="pre">phd</span></code> (phi in degree) is specified the
-diagram is given as a function of  + If <code class="docutils literal"><span class="pre">thd</span></code> (theta in
-degree) is specified the diagram is given as a function of </p>
+diagram is given as a function of <img class="math" src="../../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/> + If <code class="docutils literal"><span class="pre">thd</span></code> (theta in
+degree) is specified the diagram is given as a function of <img class="math" src="../../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(20,10))
 a1 = f.add_subplot(121,projection=&#39;polar&#39;)
 f1,a1 = A.plotG(fGHz=[3,4,5.6],plan=&#39;theta&#39;,angdeg=0,GmaxdB=5,fig=f,ax=a1,show=False)
@@ -422,7 +422,7 @@ antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 19, 2017.
+      Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Antenna.rst.txt"

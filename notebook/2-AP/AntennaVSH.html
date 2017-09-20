@@ -197,11 +197,11 @@ from pylayers.antprop.antvsh import *
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>A = Antenna(&#39;S2R2.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)
 </pre></div>
 </div>
-<p>The shape of the  functions indicates :</p>
+<p>The shape of the <img class="math" src="../../_images/math/25ec171b8cd2533076b18a6196dd5f139999b5bb.png" alt="F_{\phi}"/> functions indicates :</p>
 <ul class="simple">
-<li></li>
+<li><img class="math" src="../../_images/math/76bc0ee53b05a44ab3a61a38b6d86fedeca2dae8.png" alt="N_{\theta} = 91"/></li>
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
-<li></li>
+<li><img class="math" src="../../_images/math/a002bf44d9dd6a26e70c61d3c743e28ecb09799d.png" alt="N_f= 104"/></li>
 </ul>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>np.shape(A.Fp)
 </pre></div>
@@ -209,8 +209,8 @@ from pylayers.antprop.antvsh import *
 <div class="highlight-none"><div class="highlight"><pre><span></span>(91, 180, 104)
 </pre></div>
 </div>
-<p>The frequency array is expressed in  and delays are expressed
-in </p>
+<p>The frequency array is expressed in <img class="math" src="../../_images/math/75ff9e3612d49cb2c7909cde17452a307348fe5f.png" alt="GHz"/> and delays are expressed
+in <img class="math" src="../../_images/math/da93a4433922cc997c2ea624d1828cda4232ec10.png" alt="ns"/></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz = A.fGHz
 </pre></div>
 </div>
@@ -220,8 +220,8 @@ in </p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>(104,)
 </pre></div>
 </div>
-<p>Then an electrical delay of  is applied on the
-</p>
+<p>Then an electrical delay of <img class="math" src="../../_images/math/20f53356c4c104c5a34eafd0d9ad7358b59d1fbc.png" alt="4.185ns"/> is applied on the
+<img class="math" src="../../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>I = A.Ft[:,:,:]
 </pre></div>
 </div>
@@ -430,7 +430,7 @@ plt.tight_layout()
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 19, 2017.
+      Last updated on Sep 20, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/AntennaVSH.rst.txt"
