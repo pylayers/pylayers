@@ -147,7 +147,7 @@
 <span class="sd">.. currentmodule:: pylayers.antprop.channel</span>
 
 <span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated</span>
+<span class="sd">    :toctree: generated/</span>
 
 <span class="sd">TBchannel class</span>
 <span class="sd">===============</span>
@@ -164,7 +164,7 @@
 <span class="sd">TUchannel class</span>
 <span class="sd">===============</span>
 
-<span class="sd">.. autosummar::::</span>
+<span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree:generated/</span>
 
 <span class="sd">    TUchannel.psd</span>
@@ -1428,7 +1428,7 @@
 
 
 
-<div class="viewcode-block" id="TUchannel.psd"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.psd.html#pylayers.antprop.channel.TUchannel.psd">[docs]</a>    <span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tpns</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tpns</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate power spectral density</span>
 
 <span class="sd">        Parameters</span>
@@ -1454,9 +1454,9 @@
             <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">Tpns</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span> <span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="n">P</span></div>
+        <span class="k">return</span> <span class="n">P</span>
 
-<div class="viewcode-block" id="TUchannel.awgn"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.awgn.html#pylayers.antprop.channel.TUchannel.awgn">[docs]</a>    <span class="k">def</span> <span class="nf">awgn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PSDdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">,</span><span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">awgn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PSDdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;psd&#39;</span><span class="p">,</span><span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a white Gaussian noise</span>
 
 <span class="sd">        Parameters</span>
@@ -1503,9 +1503,9 @@
         <span class="n">sn</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">n</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)]</span>
         <span class="n">sn</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
 
-        <span class="k">return</span> <span class="n">sn</span><span class="p">,</span><span class="n">n</span></div>
+        <span class="k">return</span> <span class="n">sn</span><span class="p">,</span><span class="n">n</span>
 
-<div class="viewcode-block" id="TUchannel.Etau0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.Etau0.html#pylayers.antprop.channel.TUchannel.Etau0">[docs]</a>    <span class="k">def</span> <span class="nf">Etau0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Etau0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate energy around delay tau0</span>
 
 <span class="sd">        Parameters</span>
@@ -1521,9 +1521,9 @@
         <span class="n">etau0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]))</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
             <span class="n">etau0</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">etau0</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">etau0</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">etau0</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TUchannel.Ewin"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.Ewin.html#pylayers.antprop.channel.TUchannel.Ewin">[docs]</a>    <span class="k">def</span> <span class="nf">Ewin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Ewin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  integrate energy around delay tau</span>
 
 <span class="sd">        Parameters</span>
@@ -1541,9 +1541,9 @@
         <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]))</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
             <span class="n">energy</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TUchannel.Etot"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.Etot.html#pylayers.antprop.channel.TUchannel.Etot">[docs]</a>    <span class="k">def</span> <span class="nf">Etot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">taumax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Etot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">taumax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Etot  calculate the energy of the signal</span>
 
 <span class="sd">        Parameters</span>
@@ -1561,7 +1561,7 @@
         <span class="n">etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]))</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
             <span class="n">etot</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">etot</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">etot</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">etot</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">Efirst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toa</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate the energy of the first path</span>
@@ -1681,7 +1681,7 @@
             <span class="n">pc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">pc</span><span class="p">,</span> <span class="n">tp</span><span class="p">))</span>
         <span class="k">return</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TUchannel.Emax"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUchannel.Emax.html#pylayers.antprop.channel.TUchannel.Emax">[docs]</a>    <span class="k">def</span> <span class="nf">Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate the maximum of Energy integrated over a duration Tint</span>
 
 <span class="sd">        A symetry of sym around the max value of the squared signal</span>
@@ -1738,7 +1738,7 @@
         <span class="n">Emax</span> <span class="o">=</span> <span class="n">maxY</span> <span class="o">*</span> <span class="n">te</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
             <span class="k">return</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emax</span><span class="p">))</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">Emax</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">Emax</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">tau_Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate the delay of max energy peak</span>
