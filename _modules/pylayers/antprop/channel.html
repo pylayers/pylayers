@@ -1975,7 +1975,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s1</span><span class="o">+</span><span class="n">s</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">fig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<div class="viewcode-block" id="TUDchannel.fig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.TUDchannel.fig.html#pylayers.antprop.channel.TUDchannel.fig">[docs]</a>    <span class="k">def</span> <span class="nf">fig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot a figure of the N first signals</span>
 
 <span class="sd">        Parameters</span>
@@ -1998,7 +1998,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
             <span class="n">gk</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gk</span><span class="p">)</span>
-            <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yN1</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yN1</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:])</span></div>
 
            <span class="c1">#r.plot(x, yN1, main=&#39;Ray response&#39;, xlab=&#39;Time (ns)&#39;, ylab=&#39;y&#39;, type=&#39;l&#39;, col=&#39;black&#39; ,frame=&#39;False&#39;,  ylim=r.range(y1,yN1) )</span>
            <span class="c1">#for i in range(N1-1):</span>
@@ -4200,7 +4200,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;    | &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;   &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; |</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">,</span><span class="n">ifreq</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.inforay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.inforay.html#pylayers.antprop.channel.Ctilde.inforay">[docs]</a>    <span class="k">def</span> <span class="nf">inforay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iray</span><span class="p">,</span><span class="n">ifreq</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provide information about a specific ray </span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4256,10 +4256,10 @@
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;With distance losses (Interactions + distance)&#39;</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;-----------------------------------------------&quot;</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;co-pol (tt,pp)    dB :&#39;</span><span class="p">,</span><span class="n">CttdB</span><span class="p">,</span><span class="n">CppdB</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;cross-pol (tp,pt) dB :&#39;</span><span class="p">,</span><span class="n">CtpdB</span><span class="p">,</span><span class="n">CptdB</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;cross-pol (tp,pt) dB :&#39;</span><span class="p">,</span><span class="n">CtpdB</span><span class="p">,</span><span class="n">CptdB</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.saveh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.saveh5.html#pylayers.antprop.channel.Ctilde.saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save Ctilde object in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -4311,12 +4311,12 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when writting h5py file&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when writting h5py file&#39;</span><span class="p">)</span></div>
 
 
 
 
-    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.loadh5.html#pylayers.antprop.channel.Ctilde.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load Ctilde object in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -4373,7 +4373,7 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when reading h5py file&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">output</span> <span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">Lfilename</span> <span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">Lfilename</span> <span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
@@ -4426,7 +4426,7 @@
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when writting h5py file&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">los</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.los"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.los.html#pylayers.antprop.channel.Ctilde.los">[docs]</a>    <span class="k">def</span> <span class="nf">los</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Line of site channel</span>
 
 <span class="sd">        Parameters</span>
@@ -4480,9 +4480,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">locbas</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">locbas</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde._loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde._loadh5.html#pylayers.antprop.channel.Ctilde._loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load Ctilde object in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -4526,10 +4526,10 @@
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when reading h5py file&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Channel.Ctilde: issue when reading h5py file&#39;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">mobility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.mobility"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.mobility.html#pylayers.antprop.channel.Ctilde.mobility">[docs]</a>    <span class="k">def</span> <span class="nf">mobility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; modify channel for uniform mobility</span>
 
 <span class="sd">        Parameters</span>
@@ -4573,9 +4573,9 @@
         <span class="n">sk_ch_ch</span> <span class="o">=</span> <span class="p">(</span><span class="n">rk</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rk_ch</span> <span class="o">+</span> <span class="n">cos_alph</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
         <span class="n">tauk_ch</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">rk_ch</span><span class="p">)</span> <span class="o">*</span> <span class="n">sk_ch_ch</span><span class="p">)</span> <span class="o">/</span> <span class="n">c</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">tauk_ch</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">tauk_ch</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">plotd</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="s1">&#39;doa&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.plotd"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.plotd.html#pylayers.antprop.channel.Ctilde.plotd">[docs]</a>    <span class="k">def</span> <span class="nf">plotd</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="s1">&#39;doa&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot direction of arrival/departure</span>
 
 <span class="sd">        Parameters</span>
@@ -4731,9 +4731,9 @@
                 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">clb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
                     <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">doadod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.doadod"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.doadod.html#pylayers.antprop.channel.Ctilde.doadod">[docs]</a>    <span class="k">def</span> <span class="nf">doadod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; doadod scatter plot</span>
 
 <span class="sd">        Parameters</span>
@@ -4818,10 +4818,10 @@
             <span class="n">fig</span><span class="p">,</span><span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s1">&#39;doa&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s1">&#39;dod&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,[</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,[</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.locbas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.locbas.html#pylayers.antprop.channel.Ctilde.locbas">[docs]</a>    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; global reference frame to local reference frame</span>
 
 <span class="sd">        If Tt and Tr are [] the global channel is  retrieved</span>
@@ -4935,11 +4935,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cttl</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ctpl</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cptl</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cppl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cppl</span><span class="p">)</span></div>
 
         <span class="c1">#return self</span>
 
-    <span class="k">def</span> <span class="nf">Cg2Cl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tt</span><span class="o">=</span><span class="p">[],</span> <span class="n">Tr</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Ctilde.Cg2Cl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.Cg2Cl.html#pylayers.antprop.channel.Ctilde.Cg2Cl">[docs]</a>    <span class="k">def</span> <span class="nf">Cg2Cl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tt</span><span class="o">=</span><span class="p">[],</span> <span class="n">Tr</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; global reference frame to local reference frame</span>
 
 <span class="sd">        If Tt and Tr are [] the global channel is  retrieved</span>
@@ -5045,10 +5045,10 @@
 
 
 
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.show.html#pylayers.antprop.channel.Ctilde.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the propagation channel</span>
 
 <span class="sd">        Parameters</span>
@@ -5094,9 +5094,9 @@
         <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span>
         <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">u&#39;$C_{\phi\phi}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">,</span> <span class="n">ax4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">,</span> <span class="n">ax4</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.check_reciprocity"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.check_reciprocity.html#pylayers.antprop.channel.Ctilde.check_reciprocity">[docs]</a>    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check channel reciprocity</span>
 
 <span class="sd">        Parameters</span>
@@ -5121,13 +5121,13 @@
         <span class="k">else</span><span class="p">:</span> 
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;WARNING Reciprocity issue WARNING&quot;</span><span class="p">)</span>
             <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">issue</span><span class="p">),</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">,</span> <span class="s1">&#39;rays are not reciprocal,&#39;</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;rays number with an issue :&quot;</span><span class="p">,</span><span class="n">issue</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;rays number with an issue :&quot;</span><span class="p">,</span><span class="n">issue</span><span class="p">)</span></div>
 
         <span class="c1"># assert np.allclose(self.tang,C.rang)</span>
         <span class="c1"># assert np.allclose(self.rang,C.tang)</span>
 
 
-    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.energy.html#pylayers.antprop.channel.Ctilde.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates energy on each channel</span>
 
 <span class="sd">        Parameters</span>
@@ -5182,9 +5182,9 @@
             <span class="n">ECpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ECpt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">ECpp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ECpp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">ECtt</span><span class="p">,</span> <span class="n">ECpp</span><span class="p">,</span> <span class="n">ECtp</span><span class="p">,</span> <span class="n">ECpt</span>
+        <span class="k">return</span> <span class="n">ECtt</span><span class="p">,</span> <span class="n">ECpp</span><span class="p">,</span> <span class="n">ECtp</span><span class="p">,</span> <span class="n">ECpt</span></div>
 
-    <span class="k">def</span> <span class="nf">cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold_dB</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.cut"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.cut.html#pylayers.antprop.channel.Ctilde.cut">[docs]</a>    <span class="k">def</span> <span class="nf">cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold_dB</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; cut rays from a energy threshold</span>
 
 <span class="sd">        Parameters</span>
@@ -5210,9 +5210,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">w</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">w</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">w</span><span class="p">,:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">w</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">w</span><span class="p">,:]</span></div>
 
-    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;tauk&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.sort"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.sort.html#pylayers.antprop.channel.Ctilde.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;tauk&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sort Ctilde with respect to typ (default tauk)</span>
 
 <span class="sd">        Parameters</span>
@@ -5249,9 +5249,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span></div>
 
-    <span class="k">def</span> <span class="nf">prop2tran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="p">[],</span><span class="n">b</span><span class="o">=</span><span class="p">[],</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.prop2tran"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.prop2tran.html#pylayers.antprop.channel.Ctilde.prop2tran">[docs]</a>    <span class="k">def</span> <span class="nf">prop2tran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="p">[],</span><span class="n">b</span><span class="o">=</span><span class="p">[],</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; transform propagation channel into transmission channel</span>
 
 <span class="sd">        Parameters</span>
@@ -5381,7 +5381,7 @@
             <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
 
 
-        <span class="k">return</span> <span class="n">H</span>
+        <span class="k">return</span> <span class="n">H</span></div>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>

@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
+    <link rel="next" title="pylayers.antprop.channel.Ctilde.locbas" href="pylayers.antprop.channel.Ctilde.locbas.html" />
+    <link rel="prev" title="pylayers.antprop.channel.Ctilde.plotd" href="pylayers.antprop.channel.Ctilde.plotd.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -59,18 +64,21 @@
 <div class="search_form">
 
 <div id="cse" style="width: 100%;"></div>
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript">
-  google.load('search', '1', {language : 'en'});
-  google.setOnLoadCallback(function() {
-    var customSearchControl = new google.search.CustomSearchControl('016639176250731907682:tjtqbvtvij0');
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    var options = new google.search.DrawOptions();
-    options.setAutoComplete(true);
-    customSearchControl.draw('cse', options);
-  }, true);
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
 </script>
-
+<gcse:search></gcse:search>
 </div>
 </div> <!-- end navbar --></div>
     </div>
@@ -79,16 +87,50 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.antprop.channel.Ctilde.plotd.html" title="pylayers.antprop.channel.Ctilde.plotd"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.channel.Ctilde.plotd
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.antprop.channel.Ctilde.locbas.html" title="pylayers.antprop.channel.Ctilde.locbas"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.channel.Ctilde.locbas
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -97,6 +139,22 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.antprop.channel.html" title="pylayers.antprop.channel" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.antp...
+	</span>
+	<span class="hiddenrellink">
+	pylayers.antprop.channel
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -120,13 +178,13 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-channel-ctilde-doadod">
 <h1>pylayers.antprop.channel.Ctilde.doadod<a class="headerlink" href="#pylayers-antprop-channel-ctilde-doadod" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.doadod">
-<tt class="descclassname">Ctilde.</tt><tt class="descname">doadod</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Ctilde.</code><code class="descname">doadod</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
 <dd><p>scatter plot of the DoA-DoD channel structure
 the energy is color coded over all couples of DoA-DoD</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -161,18 +219,18 @@ the energy is color coded over all couples of DoA-DoD</p>
 <p><strong>fontsize</strong> : float</p>
 <p><strong>edgecolors</strong> : bool</p>
 <p><strong>colorbar</strong> : bool</p>
-<p><strong>xa :</strong> :</p>
-<p class="last"><strong>xb :</strong> :</p>
+<p><strong>xa :</strong></p>
+<p class="last"><strong>xb :</strong></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.energy</span></tt></p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.energy</span></code></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.antprop.channel import *
 </pre></div>
 </div>
 </dd></dl>
@@ -189,16 +247,26 @@ the energy is color coded over all couples of DoA-DoD</p>
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on avril 20, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Ctilde.doadod.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.channel.Ctilde.doadod.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.antprop.channel.Ctilde.plotd.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.antprop.channel.Ctilde.locbas.html">
+        Next
+      </a>  
+    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous
