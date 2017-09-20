@@ -171,6 +171,7 @@
 <li><a class="reference internal" href="#tuchannel-class">TUchannel class</a></li>
 <li><a class="reference internal" href="#tudchannel">TUDchannel</a></li>
 <li><a class="reference internal" href="#tchannel">Tchannel</a></li>
+<li><a class="reference internal" href="#ctilde">Ctilde</a></li>
 </ul>
 </li>
 </ul>
@@ -259,6 +260,9 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUDchannel.fig</span></code>(N)</td>
+<td>plot a figure of the N first signals</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -330,31 +334,34 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.totime.html#pylayers.antprop.channel.Tchannel.totime" title="pylayers.antprop.channel.Tchannel.totime"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.totime</span></code></a>([Nz,&nbsp;ffts])</td>
 <td>transform to TUDchannel</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.iftd.html#pylayers.antprop.channel.Tchannel.iftd" title="pylayers.antprop.channel.Tchannel.iftd"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.iftd</span></code></a>([Nz,&nbsp;tstart,&nbsp;tstop,&nbsp;ffts])</td>
-<td>time pasting</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft1.html#pylayers.antprop.channel.Tchannel.ft1" title="pylayers.antprop.channel.Tchannel.ft1"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ft1</span></code></a>(Nz[,&nbsp;ffts])</td>
-<td>construct CIR from ifft(RTF)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ftau.html#pylayers.antprop.channel.Tchannel.ftau" title="pylayers.antprop.channel.Tchannel.ftau"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ftau</span></code></a>([Nz,&nbsp;k,&nbsp;ffts])</td>
-<td>time superposition</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.cir</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.tomap</span></code></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plot3d.html#pylayers.antprop.channel.Tchannel.plot3d" title="pylayers.antprop.channel.Tchannel.plot3d"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.plot3d</span></code></a>([fig,&nbsp;ax])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.iftd.html#pylayers.antprop.channel.Tchannel.iftd" title="pylayers.antprop.channel.Tchannel.iftd"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.iftd</span></code></a>([Nz,&nbsp;tstart,&nbsp;tstop,&nbsp;ffts])</td>
+<td>time pasting</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft1.html#pylayers.antprop.channel.Tchannel.ft1" title="pylayers.antprop.channel.Tchannel.ft1"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ft1</span></code></a>(Nz[,&nbsp;ffts])</td>
+<td>construct CIR from ifft(RTF)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ftau.html#pylayers.antprop.channel.Tchannel.ftau" title="pylayers.antprop.channel.Tchannel.ftau"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ftau</span></code></a>([Nz,&nbsp;k,&nbsp;ffts])</td>
+<td>time superposition</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.cir</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.plot3d.html#pylayers.antprop.channel.Tchannel.plot3d" title="pylayers.antprop.channel.Tchannel.plot3d"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.plot3d</span></code></a>([fig,&nbsp;ax])</td>
 <td>plot in 3D</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft2.html#pylayers.antprop.channel.Tchannel.ft2" title="pylayers.antprop.channel.Tchannel.ft2"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ft2</span></code></a>([df])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.ft2.html#pylayers.antprop.channel.Tchannel.ft2" title="pylayers.antprop.channel.Tchannel.ft2"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.ft2</span></code></a>([df])</td>
 <td>build channel transfer function (frequency domain)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.frombuf.html#pylayers.antprop.channel.Tchannel.frombuf" title="pylayers.antprop.channel.Tchannel.frombuf"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.frombuf</span></code></a>(S[,&nbsp;sign])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.frombuf.html#pylayers.antprop.channel.Tchannel.frombuf" title="pylayers.antprop.channel.Tchannel.frombuf"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.frombuf</span></code></a>(S[,&nbsp;sign])</td>
 <td>load a buffer from vna</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.capacity.html#pylayers.antprop.channel.Tchannel.capacity" title="pylayers.antprop.channel.Tchannel.capacity"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.capacity</span></code></a>(Pt[,&nbsp;T,&nbsp;mode])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.capacity.html#pylayers.antprop.channel.Tchannel.capacity" title="pylayers.antprop.channel.Tchannel.capacity"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.capacity</span></code></a>(Pt[,&nbsp;T,&nbsp;mode])</td>
 <td>calculates channel Shannon capacity (no csi)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.calibrate.html#pylayers.antprop.channel.Tchannel.calibrate" title="pylayers.antprop.channel.Tchannel.calibrate"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.calibrate</span></code></a>([filecal,&nbsp;conjugate])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.calibrate.html#pylayers.antprop.channel.Tchannel.calibrate" title="pylayers.antprop.channel.Tchannel.calibrate"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.calibrate</span></code></a>([filecal,&nbsp;conjugate])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -365,8 +372,67 @@
 </table>
 </td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.pdp.html#pylayers.antprop.channel.Tchannel.pdp" title="pylayers.antprop.channel.Tchannel.pdp"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.pdp</span></code></a>([win,&nbsp;calibrate])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.pdp.html#pylayers.antprop.channel.Tchannel.pdp" title="pylayers.antprop.channel.Tchannel.pdp"><code class="xref py py-obj docutils literal"><span class="pre">Tchannel.pdp</span></code></a>([win,&nbsp;calibrate])</td>
 <td>calculates power delay profile</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ctilde">
+<h2>Ctilde<a class="headerlink" href="#ctilde" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.inforay</span></code>(iray[,&nbsp;ifreq])</td>
+<td>provide information about a specific ray</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.saveh5</span></code>(Lfilename,&nbsp;idx,&nbsp;a,&nbsp;b)</td>
+<td>save Ctilde object in hdf5 format</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.loadh5</span></code>(Lfilename,&nbsp;idx[,&nbsp;output])</td>
+<td>load Ctilde object in hdf5 format</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde._loadh5</span></code>(filenameh5,&nbsp;grpname,&nbsp;**kwargs)</td>
+<td>load Ctilde object in hdf5 format</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.los</span></code>(**kwargs)</td>
+<td>Line of site channel</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.mobility</span></code>(v,&nbsp;dt)</td>
+<td>modify channel for uniform mobility</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.plotd</span></code>([d])</td>
+<td>plot direction of arrival/departure</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.doadod</span></code>(**kwargs)</td>
+<td>scatter plot of the DoA-DoD channel structure</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.locbas</span></code>(**kwargs)</td>
+<td>global reference frame to local reference frame</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.Cg2Cl</span></code>([Tt,&nbsp;Tr])</td>
+<td>global reference frame to local reference frame</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.show</span></code>(**kwargs)</td>
+<td>show the propagation channel</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.check_reciprocity</span></code>(C)</td>
+<td>check channel reciprocity</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.energy</span></code>([mode,&nbsp;Friis,&nbsp;sumray])</td>
+<td>calculates energy on each channel</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.cut</span></code>([threshold_dB])</td>
+<td>cut rays from a energy threshold</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.sort</span></code>([typ])</td>
+<td>sort Ctilde with respect to typ (default tauk)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">Ctilde.prop2tran</span></code>([a,&nbsp;b,&nbsp;Friis,&nbsp;debug])</td>
+<td>transform propagation channel into transmission channel</td>
 </tr>
 </tbody>
 </table>
