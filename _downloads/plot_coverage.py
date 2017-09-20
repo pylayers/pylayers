@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 r"""
-==================================
+=========================================
 Indoor Radio Coverage with Motley Keenan
-==================================
+=========================================
 
 This is an example of Motley-Keenan coverage 
 

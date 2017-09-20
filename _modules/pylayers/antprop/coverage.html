@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,12 +19,14 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../../index.html" />
@@ -92,7 +95,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -148,8 +151,6 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    Coverage.__init__</span>
-<span class="sd">    Coverage.__repr__</span>
 <span class="sd">    Coverage.creategrid</span>
 <span class="sd">    Coverage.cover</span>
 <span class="sd">    Coverage.sinr</span>
@@ -222,7 +223,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Coverage.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__init__.html#pylayers.antprop.coverage.Coverage.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;coverage.ini&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;coverage.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -248,10 +249,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">apopt</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;ap&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;rx&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showopt</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">))</span>
-
+        
         <span class="c1"># get the Layout</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layoutopt</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;ini&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;lay&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;indoor&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
@@ -259,12 +260,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;nx&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;ny&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">,</span><span class="s1">&#39;full&#39;</span><span class="p">,</span><span class="s1">&#39;zone&#39;</span><span class="p">],</span> <span class="s2">&quot;Error reading grid mode &quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
             <span class="c1">#</span>
             <span class="c1"># create grid</span>
             <span class="c1">#</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">creategrid</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="p">)</span>
+            
             <span class="bp">self</span><span class="o">.</span><span class="n">dap</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apopt</span><span class="p">:</span>
                 <span class="n">kwargs</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apopt</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -287,6 +290,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="o">.</span><span class="n">rebase</span><span class="p">()</span>
 
+        <span class="c1"># The frequency is fixed from the AP nature</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="c1">#self.fGHz = eval(self.txopt[&#39;fghz&#39;])</span>
         <span class="c1">#self.tx = np.array((eval(self.txopt[&#39;x&#39;]),eval(self.txopt[&#39;y&#39;])))</span>
@@ -300,12 +304,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s1">&#39;noisefactordb&#39;</span><span class="p">])</span>
 
         <span class="c1"># show section</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bshow</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showopt</span><span class="p">[</span><span class="s1">&#39;show&#39;</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bshow</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showopt</span><span class="p">[</span><span class="s1">&#39;show&#39;</span><span class="p">])</span>
 
-<div class="viewcode-block" id="Coverage.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__repr__.html#pylayers.antprop.coverage.Coverage.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;indoor&#39;</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;Layout file : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;Layout file : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;-----list of Access Points ------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">:</span>
                 <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -321,7 +325,7 @@
                 <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;boundary (xmin,ymin,xmax,ymax) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
                 <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39; filename : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Coverage.creategrid"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.creategrid.html#pylayers.antprop.coverage.Coverage.creategrid">[docs]</a>    <span class="k">def</span> <span class="nf">creategrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="p">[],</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a grid</span>
@@ -335,6 +339,7 @@
 <span class="sd">            if full is False the boundary argument is used</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s2">&quot;file&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">RN</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                                <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span>
@@ -473,11 +478,16 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
+    
         <span class="bp">self</span><span class="o">.</span><span class="n">kB</span> <span class="o">=</span> <span class="mf">1.3806503e-23</span> <span class="c1"># Boltzmann constant</span>
+        <span class="c1">#</span>
+        <span class="c1"># Loop opver access points</span>
+        <span class="c1">#</span>
         <span class="k">for</span> <span class="n">iap</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;on&#39;</span><span class="p">]:</span>
                 <span class="n">lactiveAP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iap</span><span class="p">)</span>
                 <span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">fcghz</span>
+                <span class="c1"># The frequency band is set here</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">fGHz</span><span class="p">)))</span>
                 <span class="n">apchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;chan&#39;</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -500,15 +510,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="o">.</span><span class="n">T</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">.</span><span class="n">T</span>
         <span class="c1"># creating all links</span>
+        <span class="c1"># all grid to all ap </span>
+        <span class="c1">#</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">),</span><span class="n">lactiveAP</span><span class="p">)</span>
         <span class="c1">#</span>
         <span class="c1"># pa : access point</span>
         <span class="c1"># pg : grid point</span>
         <span class="c1">#</span>
         <span class="c1"># 1 x na</span>
+        
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
             <span class="n">pg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span>
-            <span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1"># exemple with 3 AP </span>
+            <span class="c1"># 321 0</span>
+            <span class="c1"># 321 1</span>
+            <span class="c1"># 321 2</span>
+            <span class="c1"># 322 0</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">,</span><span class="n">pa</span><span class="p">))</span>
             <span class="k">except</span><span class="p">:</span>
@@ -519,7 +537,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">pg</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">shpa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">shpg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="o">.</span><span class="n">shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shpa</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="o">.</span><span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shpg</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 
         <span class="c1"># retrieving dimensions along the 3 axis</span>
@@ -527,8 +550,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">na</span> <span class="o">=</span> <span class="n">na</span>
         <span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ng</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span>
-
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">iap</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">):</span>
+            <span class="c1"># select only one access point</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">na</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">k</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;on&#39;</span><span class="p">]:</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[:,</span><span class="n">u</span><span class="p">]</span>
+                <span class="n">pr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">[:,</span><span class="n">u</span><span class="p">]</span>
+                <span class="n">azoffset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;phideg&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">pt</span><span class="o">=</span><span class="n">pt</span><span class="p">,</span><span class="n">pr</span><span class="o">=</span><span class="n">pr</span><span class="p">,</span><span class="n">azoffset</span><span class="o">=</span><span class="n">azoffset</span><span class="p">)</span>
+                
+                <span class="n">gain</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">G</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                <span class="c1">#pdb.set_trace()</span>
+                <span class="c1"># to handle omnidirectional antenna (nf,1,1)</span>
+                <span class="k">if</span> <span class="n">gain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">gain</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tgain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">tgain</span><span class="p">,</span><span class="n">gain</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]))</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">tgain</span> <span class="o">=</span> <span class="n">gain</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span>
+        
+        <span class="c1">#Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)</span>
         <span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span> <span class="o">=</span> <span class="n">Lwo</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">na</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Edo</span> <span class="o">=</span> <span class="n">Edo</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">na</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span> <span class="o">=</span> <span class="n">Lwp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">na</span><span class="p">)</span>
@@ -541,8 +585,8 @@
         <span class="c1"># f x g x a</span>
 
         <span class="c1"># CmW : Received Power coverage in mW</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span><span class="o">*</span><span class="n">tgain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span><span class="o">*</span><span class="n">tgain</span>
 
 
         <span class="k">if</span> <span class="n">snr</span><span class="p">:</span>
@@ -553,7 +597,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">evbestsv</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">evsnr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculates snr</span>
+        <span class="sd">&quot;&quot;&quot; calculates signal to noise ratio</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">NmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">/</span><span class="mf">10.</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
@@ -889,6 +933,8 @@
                      <span class="s1">&#39;f&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                      <span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                      <span class="s1">&#39;db&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;p&#39;</span><span class="p">,</span>
                      <span class="s1">&#39;col&#39;</span><span class="p">:</span><span class="s1">&#39;b&#39;</span>
                    <span class="p">}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
@@ -907,18 +953,24 @@
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;pr&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">&lt;&gt;-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">]:</span>
                 <span class="n">U</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 
         <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">&lt;&gt;-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]],</span><span class="n">U</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]],</span><span class="n">U</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
@@ -980,6 +1032,8 @@
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="n">polar</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;polar&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">polar</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">],</span><span class="s2">&quot;polar wrongly defined in show coverage&quot;</span>
+
         <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="s1">&#39;ax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">])</span>
@@ -1000,6 +1054,7 @@
         <span class="n">f</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
         <span class="n">typ</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;best&#39;</span><span class="p">,</span><span class="s1">&#39;egd&#39;</span><span class="p">,</span><span class="s1">&#39;sinr&#39;</span><span class="p">,</span><span class="s1">&#39;snr&#39;</span><span class="p">,</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span><span class="s1">&#39;pr&#39;</span><span class="p">,</span><span class="s1">&#39;loss&#39;</span><span class="p">],</span><span class="s2">&quot;typ unknown in show coverage&quot;</span>
         <span class="n">best</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;best&#39;</span><span class="p">]</span>
 
         <span class="n">dB</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">]</span>
@@ -1115,7 +1170,14 @@
                             <span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span><span class="p">,</span>
                             <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">img</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="n">U</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">img</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span>
+                               <span class="n">c</span><span class="o">=</span><span class="n">U</span><span class="p">,</span>
+                               <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                               <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                               <span class="n">cmap</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">],</span>
+                               <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+                               <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="p">):</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">]))</span>
@@ -1223,9 +1285,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     
