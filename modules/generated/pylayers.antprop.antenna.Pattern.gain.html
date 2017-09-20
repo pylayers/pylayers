@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.aarray" href="../pylayers.antprop.antenna.html" />
+    <link rel="next" title="pylayers.antprop.antenna.Pattern.radF" href="pylayers.antprop.antenna.Pattern.radF.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.Pattern.eval" href="pylayers.antprop.antenna.Pattern.eval.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.antprop.antenna.Pattern.eval.html" title="pylayers.antprop.antenna.Pattern.eval"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.antenna.Pattern.eval
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.antprop.antenna.Pattern.radF.html" title="pylayers.antprop.antenna.Pattern.radF"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.antenna.Pattern.radF
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.antprop.antenna.html" title="pylayers.antprop.aarray" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.antp...
+	</span>
+	<span class="hiddenrellink">
+	pylayers.antprop.aarray
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,10 +178,53 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-antenna-pattern-gain">
 <h1>pylayers.antprop.antenna.Pattern.gain<a class="headerlink" href="#pylayers-antprop-antenna-pattern-gain" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Pattern.gain">
+<code class="descclassname">Pattern.</code><code class="descname">gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Pattern.gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates antenna gain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.G</strong> : np.array(Nt,Np,Nf) dtype:float</p>
+<blockquote class="last">
+<div><blockquote>
+<div><dl class="docutils">
+<dt>linear gain </dt>
+<dd><p class="first last">or np.array(Nr,Nf)</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>self.sqG</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array(Nt,Np,Nf) dtype:float </span><dd><dl class="first last docutils">
+<dt>linear sqare root of gain </dt>
+<dd><p class="first last">or np.array(Nr,Nf)</p>
+</dd>
+</dl>
+</dd>
+<dt>self.efficiency</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtype:float </span><dd><p class="first last">efficiency</p>
+</dd>
+<dt>self.hpster</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtype:float</span><dd><p class="first last">half power solid angle :  1 ~ 4pi steradian</p>
+</dd>
+<dt>self.ehpbw</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtyp:float </span><dd><p class="first last">equivalent half power beamwidth (radians)</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>(</p>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +238,30 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Pattern.gain.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Pattern.gain.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.antprop.antenna.Pattern.eval.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.antprop.antenna.Pattern.radF.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

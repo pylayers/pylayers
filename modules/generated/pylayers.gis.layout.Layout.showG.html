@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
+    <link rel="next" title="pylayers.gis.layout.Layout._showGi" href="pylayers.gis.layout.Layout._showGi.html" />
+    <link rel="prev" title="pylayers.gis.layout.Layout._show3" href="pylayers.gis.layout.Layout._show3.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.gis.layout.Layout._show3.html" title="pylayers.gis.layout.Layout._show3"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.gis....
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.gis.layout.Layout._show3
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.gis.layout.Layout._showGi.html" title="pylayers.gis.layout.Layout._showGi"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.gis....
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.gis.layout.Layout._showGi
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.gis.layout.html" title="pylayers.gis.layout" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.gis.layout
+	</span>
+	<span class="hiddenrellink">
+	pylayers.gis.layout
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,10 +178,212 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-gis-layout-layout-showg">
 <h1>pylayers.gis.layout.Layout.showG<a class="headerlink" href="#pylayers-gis-layout-layout-showg" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showG">
+<code class="descclassname">Layout.</code><code class="descname">showG</code><span class="sig-paren">(</span><em>graph='s'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.showG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showG" title="Permalink to this definition">¶</a></dt>
+<dd><p>show the different graphs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : char</p>
+<blockquote>
+<div><p>&#8216;t&#8217; : Gt &#8216;r&#8217; : Gr &#8216;s&#8217; : Gs &#8216;v&#8217; : Gv  &#8216;i&#8217; : Gi</p>
+</div></blockquote>
+<p><strong>fig</strong> : matplotlib figure</p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>ax</strong> : matplotlib figure</p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>show</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>nodes</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>edges</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>airwalls | aw: boolean</strong></p>
+<blockquote>
+<div><p>display airwalls (False)</p>
+</div></blockquote>
+<p><strong>subseg: boolean</strong></p>
+<blockquote>
+<div><p>display subsegments (False)</p>
+</div></blockquote>
+<p><strong>slab</strong> : boolean</p>
+<blockquote>
+<div><p>display color and width of slabs (False)</p>
+</div></blockquote>
+<p><strong>labels</strong> : boolean <a href="#id1"><span class="problematic" id="id2">|</span></a>list</p>
+<blockquote>
+<div><p>display graph labels (False)
+if list precise label of which cycle to display
+(e.g. [&#8216;t&#8217;])</p>
+</div></blockquote>
+<p><strong>alphan</strong> : float</p>
+<blockquote>
+<div><p>transparency of nodes (1.0)</p>
+</div></blockquote>
+<p><strong>alphae</strong> : float</p>
+<blockquote>
+<div><p>transparency of edges (1.0)</p>
+</div></blockquote>
+<p><strong>width</strong> : float</p>
+<blockquote>
+<div><p>line width (2)</p>
+</div></blockquote>
+<p><strong>node_color: string</strong></p>
+<blockquote>
+<div><p>w</p>
+</div></blockquote>
+<p><strong>posnode_color: string</strong></p>
+<blockquote>
+<div><p>positive node color (k)</p>
+</div></blockquote>
+<p><strong>negnode_color: string</strong></p>
+<blockquote>
+<div><p>negative node color (b)</p>
+</div></blockquote>
+<p><strong>edge_color</strong> : string</p>
+<blockquote>
+<div><p>k</p>
+</div></blockquote>
+<p><strong>node_size</strong> : float</p>
+<blockquote>
+<div><p>20</p>
+</div></blockquote>
+<p><strong>font_size</strong> : float</p>
+<blockquote>
+<div><p>15,</p>
+</div></blockquote>
+<p><strong>nodelist</strong> : list</p>
+<blockquote>
+<div><p>list of nodes to be displayed (all)</p>
+</div></blockquote>
+<p><strong>edgelist</strong> : list</p>
+<blockquote>
+<div><p>list of edges to be displayed (all)</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;cycle&#8217; | &#8216;none&#8217; | &#8216;room&#8217;</p>
+</div></blockquote>
+<p><strong>alphacy</strong> : string</p>
+<blockquote>
+<div><p>transparency of cycles (0.8)</p>
+</div></blockquote>
+<p><strong>colorcy :</strong></p>
+<blockquote>
+<div><p>&#8216;#abcdef&#8217;</p>
+</div></blockquote>
+<p><strong>linter</strong> : list</p>
+<blockquote>
+<div><p>list of interaction for Gi
+[&#8216;RR&#8217;,&#8217;TT&#8217;,&#8217;RT&#8217;,&#8217;TR&#8217;,&#8217;RD&#8217;,&#8217;DR&#8217;,&#8217;TD&#8217;,&#8217;DT&#8217;,&#8217;DD&#8217;]</p>
+</div></blockquote>
+<p><strong>show0</strong> : boolean</p>
+<blockquote>
+<div><p>If true display connection to cycle  0 of Gt (False)</p>
+</div></blockquote>
+<p><strong>eded</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>ndnd</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>nded</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>width</strong> : int</p>
+<blockquote>
+<div><p>2</p>
+</div></blockquote>
+<p><strong>nodelist</strong> : list</p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>diffraction :boolean</strong></p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>defaults = {&#8216;show&#8217;: False,</strong></p>
+<blockquote class="last">
+<div><p>&#8216;fig&#8217;: [],
+&#8216;ax&#8217;: [],
+&#8216;nodes&#8217;: False,
+&#8216;edges&#8217;: True,
+&#8216;sllist&#8217;:[],
+&#8216;airwalls&#8217;: False,
+&#8216;subseg&#8217;: False,
+&#8216;slab&#8217;: True,
+&#8216;labels&#8217;: False,
+&#8216;alphan&#8217;: 1.0,
+&#8216;alphae&#8217;: 1.0,
+&#8216;width&#8217;: 2,
+&#8216;node_color&#8217;:&#8217;w&#8217;,
+&#8216;edge_color&#8217;:&#8217;k&#8217;,
+&#8216;node_size&#8217;:20,
+&#8216;font_size&#8217;:15,
+&#8216;nodelist&#8217;: [],
+&#8216;edgelist&#8217;: [],
+&#8216;figsize&#8217;: (5,5),
+&#8216;mode&#8217;:&#8217;nocycle&#8217;,
+&#8216;alphacy&#8217;:0.8,
+&#8216;colorcy&#8217;:&#8217;abcdef&#8217;,
+&#8216;linter&#8217; : [&#8216;RR&#8217;,&#8217;TT&#8217;,&#8217;RT&#8217;,&#8217;TR&#8217;,&#8217;RD&#8217;,&#8217;DR&#8217;,&#8217;TD&#8217;,&#8217;DT&#8217;,&#8217;DD&#8217;],
+&#8216;show0&#8217;:False,
+&#8216;axis&#8217;:False,
+&#8216;overlay&#8217;:False,
+&#8216;diffraction&#8217;:False
+}</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.util.graphutil.draw.html#pylayers.util.graphutil.draw" title="pylayers.util.graphutil.draw"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.util.graphutil.draw</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.layout import  *
+&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; L = Layout(&#39;TA-Office.ini&#39;)
+&gt;&gt;&gt; L.dumpr()
+&gt;&gt;&gt; fig = plt.figure(figsize=(10,10))
+&gt;&gt;&gt; ax = fig.add_subplot(221)
+&gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,fig=fig,ax=ax)
+&gt;&gt;&gt; tis = plt.title(&quot;Gs&quot;)
+&gt;&gt;&gt; ax = fig.add_subplot(222)
+&gt;&gt;&gt; fig,ax = L.showG(&#39;t&#39;,fig=fig,ax=ax)
+&gt;&gt;&gt; tit = plt.title(&quot;Gt&quot;)
+&gt;&gt;&gt; ax = fig.add_subplot(223)
+&gt;&gt;&gt; fig,ax = L.showG(&#39;r&#39;,fig=fig,ax=ax)
+&gt;&gt;&gt; tic = plt.title(&quot;Gr&quot;)
+&gt;&gt;&gt; ax = fig.add_subplot(224)
+&gt;&gt;&gt; fig,ax = L.showG(&#39;v&#39;,fig=fig,ax=ax)
+&gt;&gt;&gt; tiv = plt.title(&quot;Gv&quot;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-gis-layout-Layout-showG-1.py">Source code</a>)</p>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +397,30 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.gis.layout.Layout.showG.txt"
+    <a href="../../_sources/modules/generated/pylayers.gis.layout.Layout.showG.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.gis.layout.Layout._show3.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.gis.layout.Layout._showGi.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">

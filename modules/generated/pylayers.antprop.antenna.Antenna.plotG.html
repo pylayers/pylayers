@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -27,6 +29,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.aarray" href="../pylayers.antprop.antenna.html" />
+    <link rel="next" title="pylayers.antprop.antenna.Antenna._show3" href="pylayers.antprop.antenna.Antenna._show3.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.Antenna.pattern" href="pylayers.antprop.antenna.Antenna.pattern.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +47,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +87,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.antprop.antenna.Antenna.pattern.html" title="pylayers.antprop.antenna.Antenna.pattern"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.antenna.Antenna.pattern
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.antprop.antenna.Antenna._show3.html" title="pylayers.antprop.antenna.Antenna._show3"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.antp...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.antprop.antenna.Antenna._show3
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.antprop.antenna.html" title="pylayers.antprop.aarray" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.antp...
+	</span>
+	<span class="hiddenrellink">
+	pylayers.antprop.aarray
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -110,10 +178,50 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-antenna-antenna-plotg">
 <h1>pylayers.antprop.antenna.Antenna.plotG<a class="headerlink" href="#pylayers-antprop-antenna-antenna-plotg" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.plotG">
+<code class="descclassname">Antenna.</code><code class="descname">plotG</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.plotG" title="Permalink to this definition">¶</a></dt>
+<dd><p>antenna plot gain in 2D</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency</p>
+<p><strong>plan</strong> : &#8216;theta&#8217; | &#8216;phi&#8217; depending on the selected plan to be displayed</p>
+<p><strong>angdeg</strong> : phi or theta in degrees, if plan==&#8217;phi&#8217; it corresponds to theta</p>
+<p><strong>GmaxdB</strong> :  max gain to be displayed</p>
+<p><strong>polar</strong> : boolean</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">fig</p>
+<p class="last">ax</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; import matplotlib.pyplot as plt
+&gt;&gt;&gt; from pylayers.antprop.antenna import *
+&gt;&gt;&gt; A = Antenna(&#39;defant.vsh3&#39;)
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;theta&#39;,angdeg=0)
+&gt;&gt;&gt; fig,ax = A.plotG(fGHz=[2,3,4],plan=&#39;phi&#39;,angdeg=90)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1.py">Source code</a>)</p>
+<div class="figure" id="id1">
+<img alt="../../_images/pylayers-antprop-antenna-Antenna-plotG-1_00.png" src="../../_images/pylayers-antprop-antenna-Antenna-plotG-1_00.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1_00.pdf">pdf</a>)</span></p>
+</div>
+<div class="figure" id="id2">
+<img alt="../../_images/pylayers-antprop-antenna-Antenna-plotG-1_01.png" src="../../_images/pylayers-antprop-antenna-Antenna-plotG-1_01.png" />
+<p class="caption"><span class="caption-text">(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-plotG-1_01.pdf">pdf</a>)</span></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +235,30 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.plotG.txt"
+    <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.plotG.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.antprop.antenna.Antenna.pattern.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.antprop.antenna.Antenna._show3.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
