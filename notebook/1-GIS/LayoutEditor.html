@@ -170,7 +170,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 <h2>Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>At first a Layout is described by a set of points (negative index) and a
 set of segments (positive index).</p>
-<p>Points and segments are nodes of the <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
+<p>Points and segments are nodes of the <span class="math">\mathcal{G}_s</span> graph.</p>
 <p>It is required to respect a strict non overlapping rule. <strong>No segments
 can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
@@ -322,32 +322,32 @@ Gr Edges    : 0
 check len(ncycles) == 2 passed
 </pre></div>
 </div>
-<p>The topological graph <img class="math" src="../../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of convex cycles.</p>
+<p>The topological graph <span class="math">\mathcal{G}_t</span> or graph of convex cycles.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;t&#39;)
 b=plt.axis(&#39;off&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/LayoutEditor_14_0.png" src="../../_images/LayoutEditor_14_0.png" />
-<p>The graph of room <img class="math" src="../../_images/math/7adf94bbad41196d6e46a083c8fa572339f33f2f.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
+<p>The graph of room <span class="math">\mathcal{G}_r</span>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span># f,a=L.showG(&#39;r&#39;)
 # b=plt.axis(&#39;off&#39;)
 </pre></div>
 </div>
-<p>The graph of waypath <img class="math" src="../../_images/math/a7abe4ad210aa755e26fe5019ee06b8dee65bd62.png" alt="\mathcal{G}_w"/>. This graph is used for agent
+<p>The graph of waypath <span class="math">\mathcal{G}_w</span>. This graph is used for agent
 mobility. It allows to determine the shortest path between 2 rooms.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>#f,a=L.showG(&#39;w&#39;)
 # b=plt.axis(&#39;off&#39;)
 </pre></div>
 </div>
-<p>The graph of visibility <img class="math" src="../../_images/math/2019da1c9a58643ae395b7177603bf14a9346d5a.png" alt="\mathcal{G_v}"/></p>
+<p>The graph of visibility <span class="math">\mathcal{G_v}</span></p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>f,a=L.showG(&#39;v&#39;)
 b=plt.axis(&#39;off&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/LayoutEditor_20_0.png" src="../../_images/LayoutEditor_20_0.png" />
-<p>The graph of interactions <img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> used to determine the
+<p>The graph of interactions <span class="math">\mathcal{G}_i</span> used to determine the
 ray signatures.</p>
 <div class="code python highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(15,15))
 a = f.gca()
@@ -590,8 +590,8 @@ plt.axis(&#39;off&#39;)
 </pre></div>
 </div>
 <img alt="../../_images/LayoutEditor_32_2.png" src="../../_images/LayoutEditor_32_2.png" />
-<p>Each node of <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
-<p>Each node of <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
+<p>Each node of <span class="math">\mathcal{G}_s</span> with a negative index is a point.</p>
+<p>Each node of <span class="math">\mathcal{G}_s</span> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="./Multisubsegments.html">Multi Subsegments</a></p>
