@@ -3995,19 +3995,13 @@ def Bthph(th,ph,M):
     if not isinstance(ph,np.ndarray):
         ph = np.ndarray([ph])
     # spherical to cartesian 
-    # sp2cart = np.array([np.cos(th)*np.cos(ph),np.cos(th)*np.sin(ph),-np.sin(th)])
     sp2cart = np.array([np.cos(ph)*np.sin(th),
                         np.sin(ph)*np.sin(th),
                         np.cos(th)])
     # apply rotation matrix
-
     Cloc = np.einsum('ij,ik->kj',sp2cart,M)
-    # Clocref = np.dot(sp2cart[:,0],M.T)
     # return in psherical coodinates    
-    # [ sin-1(z) , tan-1(y/x) ]
-    # cart2sp = np.array([np.arcsin(Cloc[2]),np.arctan2(Cloc[1],Cloc[0])])
     cart2sp = np.array([np.arctan2(Cloc[1],Cloc[0]),np.arccos(Cloc[2])])
-    # cart2spref = np.array([np.arcsin(Clocref[2]),np.arctan2(Clocref[1],Clocref[0])])
 
     return cart2sp[1,:],cart2sp[0,:]
 
