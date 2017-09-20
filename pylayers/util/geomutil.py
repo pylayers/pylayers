@@ -167,11 +167,12 @@ from scipy.linalg import toeplitz
 import pylayers.util.project as pro
 import pylayers.util.pyutil as pyu
 import pylayers.util.graphutil as gru
+import numpy.ma as ma
 
 # from antenna import *
 import shapely.geometry as shg
 from descartes.patch import PolygonPatch
-from itertools import combinations, permutations
+from itertools import combinations, permutations,product
 
 
 COLOR = {
@@ -3056,6 +3057,11 @@ def vec_sph(th, ph):
       [ eph]    (theta,phi)
       [ er ] ]
 
+    See Also 
+    --------
+
+    SphericalBasis
+
     """
 
     e_th = np.array(
@@ -3384,7 +3390,7 @@ def intersect_line_seg(line, seg):
 
 
 def intersect3(a, b, pg, u1, u2, l1, l2):
-    """ Intersection of a line and a rectangle screen
+    """ Intersection of a line and a 3D rectangle screen
 
     Parameters
     ----------
@@ -3396,7 +3402,7 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     pg  : np.array (3,Nscreen) of floats 
         center of gravity of the screen 
     u1  : np.array (3,Nscreen) of floats 
-        unitary vector along first imension
+        unitary vector along first dimension
     u2  : np.array (3,Nscreen) of floats 
         unitary vector along second dimension
     l1   : np.array (,Nscreen)
@@ -3409,6 +3415,24 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
 
     bool : True   => intersection (occultation)
            False 
+
+    Examples
+    --------
+
+    >>> a = np.array([[1,0,1]]).T
+    >>> b = np.array([[10,0,1]]).T
+    >>> pg = np.array([[5,0,0]]).T
+    >>> u1 = np.array([[0,1,0]]).T
+    >>> u2 = np.array([[0,0,1]]).T
+    >>> l1 = np.array([3]).T
+    >>> l2 = np.array([3]).T
+    >>> bo = intersect3(a,b,pg,u1,u2,l1,l2)
+    >>> assert bo 
+
+    See Also
+    --------
+
+    pylayers.gis.layout.Layout.angleonlink3
 
     """
 
@@ -3438,24 +3462,61 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     U2e = U2 + np.zeros(U.shape)
     # Ue  : Nseg,Nscreen,3,1
     Ue = U + np.zeros(U2e.shape)
-
+    
     A = np.concatenate((Ue, -U1e, -U2e), axis=3)
-
+    # visi : Nseg,Nscreen
+    visi = np.zeros((A.shape[0],A.shape[1]),dtype=bool)
+    # check non singularity 
+    # detA (Nseg,Nscreen) 
+    detA = np.linalg.det(A)
+    # matrix A (Nseg,Nscreen,3,3) is valid if not singular 
+    boolvalid = ~ (np.isclose(detA,0))
     c = pg.T[None, :, :] - a.T[:, None, :]
+
+    if boolvalid.all():
+        x  = np.linalg.solve(A, c)
+        condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
+        cond1 = ((x[:, :, 1] > l1[None, :] / 2.) +
+                (x[:, :, 1] < -l1[None, :] / 2.))
+        cond2 = ((x[:, :, 2] > l2[None, :] / 2.) +
+                (x[:, :, 2] < -l2[None, :] / 2.))
+
+        visi = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+        #i0 = np.kron(np.arange(A.shape[0],dtype=int),np.ones(A.shape[1],dtype=int))
+        #i1 = np.kron(np.ones(A.shape[0],dtype=int),np.arange(A.shape[1],dtype=int))
+        #ui = (i0,i1)
+        #boolvalid = (np.ones(A.shape[0],dtype=bool),np.ones(A.shape[1],dtype=bool))
+    else:
+        ui = np.where(boolvalid)
+        #pdb.set_trace()
+        Am = A[ui[0],ui[1],:,:]
+        #Am = A[boolvalid,:,:]
+        if len(Am.shape)==3:
+            Am=Am[None,...]
+        
+
+        cm = c[ui[0],ui[1],:]
+        # test if loosing one axis
+        if (len(c.shape)!=len(cm.shape)):
+            cm=cm[None,...]
     #
     # Warning scipy.linalg do not handle MDA
     #
     # x : Nseg x Nscreen
-    x = np.linalg.solve(A, c)
-    # condition of occultation
+        if Am.size > 0:
+            x = np.linalg.solve(Am, cm)
+        # condition of occultation
 
-    condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
-    cond1 = ((x[:, :, 1] > l1[None, :] / 2.) +
-             (x[:, :, 1] < -l1[None, :] / 2.))
-    cond2 = ((x[:, :, 2] > l2[None, :] / 2.) +
-             (x[:, :, 2] < -l2[None, :] / 2.))
+            condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
+            cond1 = ((x[:, :, 1] > l1[None, ui[1]] / 2.) +
+                 (x[:, :, 1] < -l1[None, ui[1]] / 2.))
+            cond2 = ((x[:, :, 2] > l2[None, ui[1]] / 2.) +
+                 (x[:, :, 2] < -l2[None, ui[1]] / 2.))
 
-    visi = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+            visi[ui[0],ui[1]] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+            #print boolvalid
+            #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+
     return(visi)
 
 
@@ -3669,7 +3730,6 @@ def cylmap(Y, r=0.0625, l=0.5):
     A = np.dot(Yc, pX)
     return(A, B)
 
-
 def MRot3(a, axe):
     """
     Return a 3D rotation matrix along axe 0|1|2
@@ -3692,30 +3752,30 @@ def MRot3(a, axe):
     return(M3)
 
 
-def MATP(vl,pl,phi,tilt,pol):
+def MATP(sl,el,phi,tilt,pol):
     """ Calculate a rotation matrix for antenna pointing and orientation control
 
     Parameters
     ----------
 
-    vl : np.array (,3) unitary 
+    sl : np.array (,3) unitary 
         main radiation direction in antenna local frame
-    pl : np.array(,3) unitary 
-        main direction in the wave plane 
+    el : np.array(,3) unitary 
+        main direction in the E field plane 
     phi : float 0<phi<2*pi
     tilt : float -pi/2<tilt<pi/2
-    pol : string 'H' or 'V'
+    pol : string 'H' (Horizontal) or 'V' (Vertical)
 
     """
-    assert np.isclose(np.dot(vl,vl),1)
-    assert np.isclose(np.dot(pl,pl),1)
-    assert np.isclose(np.dot(pl,vl),0)
+    assert np.isclose(np.dot(sl,sl),1)
+    assert np.isclose(np.dot(el,el),1)
+    assert np.isclose(np.dot(sl,el),0,atol=1e-1)
     
     #
     # local frame completion (vl,pl,ql) direct frame 
     #
-    ql = np.cross(vl,pl)
-    Tl = np.vstack((vl,pl,ql)).T
+    hl = np.cross(sl,el)
+    Tl = np.vstack((sl,el,hl)).T
 
     # global frame construction
     #
@@ -3812,6 +3872,11 @@ def SphericalBasis(a):
     >>> a = np.array([[0,0]])
     >>> SphericalBasis(a)
 
+    See Also
+    --------
+
+    angledir
+
     """
     assert(a.shape[1]==2)
 
@@ -3826,6 +3891,7 @@ def SphericalBasis(a):
                     np.cos(a[:, 0]))).T
 
     M = np.dstack((tha, pha, sa)).T
+    M = np.swapaxes(M,0,1)
     return M
 
 
@@ -3894,52 +3960,51 @@ def angledir(s):
     return(a_new)
 
 
-#def BTB_rx(a_g, T):
-#    """ Produce a set of rotation matrices for passage between global and
-#    local frames
-#
-#    Parameters
-#    ----------
-#
-#    a_g  :
-#        angle in global reference frame   2 x N  :  (theta,phi) x N
-#    T    :
-#        Rx rotation matrix     3 x 3
-#
-#    Returns
-#    -------
-#
-#    R  :  ndarray (3x3)
-#    al :  ndarray (r x 2)
-#        angle expressed in local basis
-#
-#    See Also
-#    --------
-#
-#    angledir
-#    SphericalBasis
-#
-#
-#    Notes
-#    -----
-#
-#    N is the number or rays
-#
-#    """
-#    G = SphericalBasis(a_g)
-#    th_g = G[0, :, :]
-#    ph_g = G[1, :, :]
-#    B_g = np.dstack((th_g, ph_g)).transpose((0, 2, 1))
-#    s_l = np.dot(T.T, G[2, :, :]).T
-#    a_l = angledir(s_l)
-#    L = SphericalBasis(a_l)
-#    th_l = L[0, :, :]
-#    ph_l = L[1, :, :]
-#    B_lT = np.dstack((th_l, ph_l)).transpose((2, 0, 1))
-#    U = np.einsum('ijk,jlk->ilk',B_lT,T.T[:,:,None])
-#    R = np.einsum('ijk,jlk->ilk',U,B_g)
-#
-#    return a_l,R
+
+def Bthph(th,ph,M):
+    """ Return theta and phi tranformed from a rotation matrix M
+
+
+        th (N)
+        ph (N)
+        M (3,3)
+
+
+        Returns
+        -------
+
+        theta,phi 
+
+
+        Notes
+        -----
+
+        This function is convenient for Antennas in addition of 
+        MATP.
+        MATP returns a rotation matrix M which allow the
+        transformation  from a local basis to a global basis.
+
+        Using Bthph with MATP allows to evaluate the Antenna
+        for given theta phi in a global basis and determine 
+        associated gain values in the Antenna local basis 
+
+
+
+    """
+    if not isinstance(th,np.ndarray):
+        th = np.ndarray([th])
+    if not isinstance(ph,np.ndarray):
+        ph = np.ndarray([ph])
+    # spherical to cartesian 
+    sp2cart = np.array([np.cos(ph)*np.sin(th),
+                        np.sin(ph)*np.sin(th),
+                        np.cos(th)])
+    # apply rotation matrix
+    Cloc = np.einsum('ij,ik->kj',sp2cart,M)
+    # return in psherical coodinates    
+    cart2sp = np.array([np.arctan2(Cloc[1],Cloc[0]),np.arccos(Cloc[2])])
+
+    return cart2sp[1,:],cart2sp[0,:]
 
 
 def BTB(a_g, T):

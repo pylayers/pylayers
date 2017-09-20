@@ -3894,6 +3894,14 @@ class Layout(pro.PyLayers):
         U1 = np.vstack((Ptahe / L1, np.zeros(Nscreen)))
         L2 = zmax - zmin
         U2 = np.array([0, 0, 1])[:, None]  # 3 x 1  U2 is along z
+        #
+        # p1 : 3 x Ng 
+        # p2 : 3 x Ng
+        # Pg : 3 x Nscreen
+        # U1 : 3 x Nscreen 
+        # U2 : 3 x 1 
+        # L1 : ,Nscreen
+        # L2 : ,Nscreen 
 
         bo = geu.intersect3(p1, p2, Pg, U1, U2, L1, L2)
 

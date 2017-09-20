@@ -1830,7 +1830,7 @@ class DLink(Link):
         #
         afp = AFPchannel(tx=self.a,rx=self.b,az=az)
         for ph in az:
-            self.Tb = geu.MATP(self.Ab.vl,self.Ab.pl,ph,tilt,polar)
+            self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()
             self.evalH()
@@ -2473,7 +2473,7 @@ class DLink(Link):
         else:
             data = self.L.angleonlink3(self.a,self.b)
             # as many slabs as segments and subsegments
-            us    = data['s'] 
+            us  = data['s'] 
             if len(us) >0:
                 sl = v(us)
                 uus = np.where((sl != 'AIR') & (sl != '_AIR'))[0]

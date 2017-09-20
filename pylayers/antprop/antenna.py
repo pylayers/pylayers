@@ -158,7 +158,10 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from pylayers.util.project import *
 from pylayers.antprop.spharm import *
-#from pylayers.antprop.antvsh import vsh 
+try:
+    from pylayers.antprop.antvsh import vsh 
+except:
+    pass
 from pylayers.antprop.antssh import ssh,SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
 from matplotlib import rc
@@ -218,6 +221,9 @@ class Pattern(PyLayers):
         pt : np.array (3,N)
         pr : np.array (3,N)
         azoffset : int (0) 
+        Rfloor:bool
+            if true add gain value to reflected ray on the floor. 
+            values are append at the end of sqG.
         fGHz:list 
             []
         nth: int 
@@ -240,6 +246,8 @@ class Pattern(PyLayers):
 
         Examples
         --------
+
+
 
         >>> from pylayers.antprop.aarray import *
         >>> A0=Antenna('Omni',param={'pol':'t','GmaxdB':0})
@@ -1699,12 +1707,13 @@ class Pattern(PyLayers):
             self.theta_max = self.theta[self.umax[0]]
             self.phi_max = self.phi[self.umax[1]]
             M = geu.SphericalBasis(np.array([[self.theta_max,self.phi_max]]))
-            self.vl = M[:,2].squeeze()
+            self.sl = M[:,2].squeeze()
             uth = M[:,0] 
             uph = M[:,1] 
-            pl = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
-            pln = pl/np.linalg.norm(pl)
-            self.pl = np.abs(pln.squeeze())
+            el = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
+            eln = el/np.linalg.norm(el)
+            self.el = np.abs(eln.squeeze())
+            self.hl = np.cross(self.sl,self.el)
             #assert((self.efficiency<1.0).all()),pdb.set_trace()
             self.hpster=np.zeros(len(self.fGHz))
             self.ehpbw=np.zeros(len(self.fGHz))
@@ -1925,9 +1934,7 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                #plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)')
-                plt.title(u'Elevation plane (degrees)')
-                # plt.title(u'Azimuth plane (degrees)')
+                plt.title(u'$\\theta$ plane')
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -1951,16 +1958,12 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
-                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
+                plt.title(u'$\\phi$ plane ')
             # actual plotting
             if len(lfreq)>1: 
-                ax.plot(angle*180/np.pi, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
+                ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             else:
-                ax.plot(angle*180/np.pi, r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
-                plt.grid()
-                plt.xlim(0,180)
-                plt.ylim(-50,0)
-                plt.axhline(-3)
+                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
             cpt = cpt + 1
 
         if kwargs['polar']:
@@ -2213,8 +2216,9 @@ class Antenna(Pattern):
                     uf = u[1]
 
             st = st + "GdBmax :"+str(self.GdBmax[0])+' '+str(self.GdBmax[-1])+'\n'
-            st = st + "Gmax direction : .vl" + str(self.vl)+'\n'
-            st = st + "Polar in Gmax direction : .pl " + str(self.pl)+'\n'
+            st = st + "Gmax direction : .sl" + str(self.sl)+'\n'
+            st = st + "Orientation of E field in Gmax direction : .el " + str(self.el)+'\n'
+            st = st + "Orientation of H field in Gmax direction : .hl " + str(self.hl)+'\n'
             st = st + "effective HPBW : .ehpbw " + str(self.ehpbw[0])+' '+str(self.ehpbw[-1])+'\n'
 
             if self.source=='satimo':
