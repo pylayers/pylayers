@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -92,7 +94,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -306,13 +308,18 @@
 <span class="kn">from</span> <span class="nn">matplotlib.widgets</span> <span class="kn">import</span> <span class="n">Slider</span><span class="p">,</span> <span class="n">CheckButtons</span><span class="p">,</span> <span class="n">Button</span><span class="p">,</span> <span class="n">Cursor</span>
 <span class="kn">from</span> <span class="nn">pylayers.signal.DF</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="kn">from</span> <span class="nn">moviepy.editor</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># from moviepy.editor import *</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">img_as_ubyte</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 
 <span class="kn">import</span> <span class="nn">pickle</span>
-
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s1">&#39;Layout:Mayavi is not installed&#39;</span>
 <span class="c1">#Those lines handle incompatibility between mayavi and VTK</span>
 <span class="c1">#and redirect noisy warning message into a log file</span>
 <span class="c1"># import vtk</span>
@@ -380,7 +387,7 @@
 <span class="sd">        several subject (Jihad, Eric , Nicolas)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CorSer.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.__init__.html#pylayers.measures.cormoran.CorSer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">serie</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;CITI&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CorSer.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.__init__.html#pylayers.measures.cormoran.CorSer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">serie</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;CITI&#39;</span><span class="p">,</span><span class="n">layout</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -451,7 +458,8 @@
 
 
         <span class="c1">#Layout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;MOCAP-small2.ini&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layout</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;MOCAP-small2.ini&#39;</span><span class="p">)</span>
 
 
         <span class="c1"># Load Infrastructure Nodes</span>
@@ -474,9 +482,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_computedevpdf</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;L&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="s1">&#39;notloaded&#39;</span>
+
             <span class="k">else</span> <span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
 
         <span class="c1"># reference time is tmocap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tmocap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">time</span>
@@ -1516,6 +1528,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;Jog&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mf">1.5</span><span class="p">))</span>
+        
 
         <span class="c1">#set time to -10 is a trick to make appear interferers cylinder</span>
         <span class="c1">#because __refreshshow3i only update the data of the cylinder.</span>
@@ -1539,6 +1552,7 @@
         <span class="n">slax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;t=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="n">fId</span><span class="p">]),</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
         <span class="n">sliderx</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span><span class="n">slax</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">),</span>
                         <span class="n">valinit</span><span class="o">=</span><span class="n">fId</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#AAAAAA&#39;</span><span class="p">)</span>
+
 
         <span class="k">def</span> <span class="nf">update_x</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliderx</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
@@ -1592,7 +1606,140 @@
         <span class="n">axpp</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">])</span>
         <span class="n">bpp</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">axpp</span><span class="p">,</span> <span class="s1">&#39;+10&#39;</span><span class="p">)</span>
         <span class="n">bpp</span><span class="o">.</span><span class="n">on_clicked</span><span class="p">(</span><span class="n">pplus</span><span class="p">)</span>
+
+
+
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_show3idemo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show3 interactive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;nodename&#39;</span><span class="p">:</span><span class="s1">&#39;TorsoTopLeft&#39;</span><span class="p">}</span>
+
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;Jog&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mf">1.5</span><span class="p">))</span>
+        
+
+        <span class="c1">#set time to -10 is a trick to make appear interferers cylinder</span>
+        <span class="c1">#because __refreshshow3i only update the data of the cylinder.</span>
+        <span class="c1"># if cylinder is not present in the first _show3, they are not displayed</span>
+        <span class="c1"># later.</span>
+        <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">time</span>
+
+        <span class="n">fId</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">time</span><span class="o">&lt;=</span> <span class="n">t</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bodytime&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tmocap</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">]]</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;returnfig&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;tagtraj&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">mayafig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__refreshshow3i</span><span class="p">(</span><span class="n">fId</span><span class="p">)</span>
+        <span class="c1"># ax.grid()</span>
+
+
+        <span class="c1"># matplotlib Widgets </span>
+
+        <span class="n">slax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+        <span class="n">slax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;t=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="n">fId</span><span class="p">]),</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="n">sliderx</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span><span class="n">slax</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">),</span>
+                        <span class="n">valinit</span><span class="o">=</span><span class="n">fId</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#AAAAAA&#39;</span><span class="p">)</span>
+
+
+        <span class="k">def</span> <span class="nf">update_x</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliderx</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__refreshshow3i</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">slax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;t=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="n">val</span><span class="p">]),</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+            <span class="n">vline0</span><span class="o">.</span><span class="n">set_data</span><span class="p">(([</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">],</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">]],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">vline1</span><span class="o">.</span><span class="n">set_data</span><span class="p">(([</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">],</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">]],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">vline2</span><span class="o">.</span><span class="n">set_data</span><span class="p">(([</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">],</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">]],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">vline3</span><span class="o">.</span><span class="n">set_data</span><span class="p">(([</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">],</span><span class="n">time</span><span class="p">[</span><span class="n">value</span><span class="p">]],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+            <span class="n">fig2</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+        <span class="n">sliderx</span><span class="o">.</span><span class="n">on_changed</span><span class="p">(</span><span class="n">update_x</span><span class="p">)</span>
+
+
+        <span class="k">def</span> <span class="nf">plus</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="n">sliderx</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="n">sliderx</span><span class="o">.</span><span class="n">val</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">minus</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="n">sliderx</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="n">sliderx</span><span class="o">.</span><span class="n">val</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">pplus</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="n">sliderx</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="n">sliderx</span><span class="o">.</span><span class="n">val</span> <span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+
+
+        <span class="k">def</span> <span class="nf">mminus</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="n">sliderx</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="n">sliderx</span><span class="o">.</span><span class="n">val</span> <span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+
+        <span class="c1">#QUIT by pressing &#39;q&#39;</span>
+        <span class="k">def</span> <span class="nf">press</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;q&#39;</span><span class="p">:</span>
+                <span class="n">mlab</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">mayafig</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig2</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="n">press</span><span class="p">)</span>
+
+
+        <span class="c1">#-1 frame axes</span>
+        <span class="n">axm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">])</span>
+        <span class="n">bm</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">axm</span><span class="p">,</span> <span class="s1">&#39;-1&#39;</span><span class="p">)</span>
+        <span class="n">bm</span><span class="o">.</span><span class="n">on_clicked</span><span class="p">(</span><span class="n">minus</span><span class="p">)</span>
+                <span class="c1">#+1 frame axes</span>
+        <span class="n">axp</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">])</span>
+        <span class="n">bp</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">axp</span><span class="p">,</span> <span class="s1">&#39;+1&#39;</span><span class="p">)</span>
+        <span class="n">bp</span><span class="o">.</span><span class="n">on_clicked</span><span class="p">(</span><span class="n">plus</span><span class="p">)</span>
+
+        <span class="c1">#-10 frames axes</span>
+        <span class="n">axmm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">])</span>
+        <span class="n">bmm</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">axmm</span><span class="p">,</span> <span class="s1">&#39;-10&#39;</span><span class="p">)</span>
+        <span class="n">bmm</span><span class="o">.</span><span class="n">on_clicked</span><span class="p">(</span><span class="n">mminus</span><span class="p">)</span>
+
+
+        <span class="c1">#+10 frames axes</span>
+        <span class="n">axpp</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">])</span>
+        <span class="n">bpp</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">axpp</span><span class="p">,</span> <span class="s1">&#39;+10&#39;</span><span class="p">)</span>
+        <span class="n">bpp</span><span class="o">.</span><span class="n">on_clicked</span><span class="p">(</span><span class="n">pplus</span><span class="p">)</span>
+
+
+
+        <span class="n">fig2</span><span class="p">,</span><span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+        <span class="n">ax2</span><span class="o">=</span><span class="n">ax2</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+        <span class="n">df0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodename&#39;</span><span class="p">],</span><span class="s1">&#39;AP1&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">)</span>
+        <span class="n">df0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
+        
+        <span class="n">df1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodename&#39;</span><span class="p">],</span><span class="s1">&#39;AP2&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">)</span>
+        <span class="n">df1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
+
+        <span class="n">df2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodename&#39;</span><span class="p">],</span><span class="s1">&#39;AP3&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">)</span>
+        <span class="n">df2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
+
+        <span class="n">df3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodename&#39;</span><span class="p">],</span><span class="s1">&#39;AP4&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">)</span>
+        <span class="n">df3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
+
+        <span class="n">ax2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;AP1&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;AP2&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;AP3&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;AP4&#39;</span><span class="p">)</span>
+
+        <span class="n">vline0</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">fId</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="n">vline1</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">fId</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="n">vline2</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">fId</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="n">vline3</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">time</span><span class="p">[</span><span class="n">fId</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+        <span class="n">fig2</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodename&#39;</span><span class="p">])</span>
+
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
     <span class="k">def</span> <span class="nf">__refreshshow3i</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">kt</span><span class="p">):</span>
@@ -2128,6 +2275,7 @@
                      <span class="s1">&#39;subject&#39;</span><span class="p">:[],</span>
                      <span class="s1">&#39;interf&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                      <span class="s1">&#39;trajectory&#39;</span> <span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;trajectory_list&#39;</span> <span class="p">:[],</span>
                      <span class="s1">&#39;devsize&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
                      <span class="s1">&#39;devlist&#39;</span><span class="p">:[],</span>
                      <span class="s1">&#39;pattern&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
@@ -2144,7 +2292,8 @@
                      <span class="s1">&#39;tagname&#39;</span><span class="p">:[],</span>
                      <span class="s1">&#39;tagpoffset&#39;</span><span class="p">:[],</span>
                      <span class="s1">&#39;fontsizetag&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
-                     <span class="s1">&#39;trajectory_color_range&#39;</span><span class="p">:</span><span class="bp">True</span>
+                     <span class="s1">&#39;trajectory_color_range&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;trajectory_linewidth&#39;</span><span class="p">:</span><span class="mf">0.01</span>
                     <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
@@ -2187,7 +2336,7 @@
                         <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
                         <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;s3off&#39;</span><span class="p">],</span>
                         <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="n">scale</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;innamesize&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))]</span>
+                        <span class="n">scale</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;innamesize&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">in_color</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))]</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]:</span>
 
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bodytime&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
@@ -2222,8 +2371,14 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bodyname&#39;</span><span class="p">],</span><span class="n">tube_sides</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;trajectory&#39;</span><span class="p">]:</span>
-            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">subject</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;trajectory_color_range&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;trajectory_list&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+                <span class="n">tr_subject</span> <span class="o">=</span> <span class="n">subject</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tr_subject</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;trajectory_list&#39;</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">tr_subject</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">color_range</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;trajectory_color_range&#39;</span><span class="p">],</span>
+                                      <span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;trajectory_linewidth&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;camera&#39;</span><span class="p">]</span> <span class="p">:</span>
             <span class="n">mlab</span><span class="o">.</span><span class="n">points3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="n">scale_factor</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;camerasize&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">cam_color</span><span class="p">)</span>
         <span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mf">111.44127634143871</span><span class="p">,</span>
@@ -4452,6 +4607,220 @@
         <span class="n">ldf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></div>
 
 
+    <span class="k">def</span> <span class="nf">savemat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; save in Matlab Format </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span><span class="p">{}</span>
+        <span class="c1"># Access Point Coordinates </span>
+
+        <span class="n">pAP1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+        <span class="n">pAP2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+        <span class="n">pAP3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+        <span class="n">pAP4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+
+
+        <span class="n">AP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">pAP1</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pAP1</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+              <span class="p">[</span><span class="n">pAP2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pAP2</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+              <span class="p">[</span><span class="n">pAP3</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pAP3</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+              <span class="p">[</span><span class="n">pAP4</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pAP4</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+             <span class="p">])</span>
+
+
+        <span class="n">pTTR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="s1">&#39;TorsoTopRight&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+        <span class="n">pTTL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="s1">&#39;TorsoTopLeft&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+        <span class="n">pBC</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="s1">&#39;BackCenter&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;HKB&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+
+
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;AP&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">AP</span>
+ 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;pTTR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pTTR</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">pTTR</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;pTTL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pTTL</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">pTTL</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;pBC&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pBC</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">pBC</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+        
+        <span class="c1"># observables radios TTR/TTL/BC</span>
+
+        <span class="n">TTR_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP1-TorsoTopRight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">TTL_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP1-TorsoTopLeft&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">BC_1</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP1-BackCenter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">Rho1R</span> <span class="o">=</span> <span class="n">BC_1</span><span class="o">-</span><span class="n">TTR_1</span>
+        <span class="n">Rho1L</span> <span class="o">=</span> <span class="n">BC_1</span><span class="o">-</span><span class="n">TTL_1</span>
+
+        <span class="n">RhoM1R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho1R</span><span class="p">)</span>
+        <span class="n">Rhom1R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho1R</span><span class="p">)</span>
+        <span class="n">RhoM1L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho1L</span><span class="p">)</span>
+        <span class="n">Rhom1L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho1L</span><span class="p">)</span>
+
+
+        <span class="c1">### AP2 </span>
+
+        <span class="n">TTR_2</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP2-TorsoTopRight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">TTL_2</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP2-TorsoTopLeft&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">BC_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP2-BackCenter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">Rho2R</span> <span class="o">=</span> <span class="n">BC_2</span><span class="o">-</span><span class="n">TTR_2</span>
+        <span class="n">Rho2L</span> <span class="o">=</span> <span class="n">BC_2</span><span class="o">-</span><span class="n">TTL_2</span>
+
+        <span class="n">RhoM2R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho2R</span><span class="p">)</span>
+        <span class="n">Rhom2R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho2R</span><span class="p">)</span>
+        <span class="n">RhoM2L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho2L</span><span class="p">)</span>
+        <span class="n">Rhom2L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho2L</span><span class="p">)</span>
+
+
+        <span class="c1">### AP3</span>
+
+        <span class="n">TTR_3</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP3-TorsoTopRight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">TTL_3</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP3-TorsoTopLeft&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">BC_3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP3-BackCenter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">Rho3R</span> <span class="o">=</span> <span class="n">BC_3</span><span class="o">-</span><span class="n">TTR_3</span>
+        <span class="n">Rho3L</span> <span class="o">=</span> <span class="n">BC_3</span><span class="o">-</span><span class="n">TTL_3</span>
+
+        <span class="n">RhoM3R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho3R</span><span class="p">)</span>
+        <span class="n">Rhom3R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho3R</span><span class="p">)</span>
+        <span class="n">RhoM3L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho3L</span><span class="p">)</span>
+        <span class="n">Rhom3L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho3L</span><span class="p">)</span>
+
+        <span class="c1">### AP4 </span>
+
+        <span class="n">TTR_4</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP4-TorsoTopRight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">TTL_4</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP4-TorsoTopLeft&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">BC_4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s1">&#39;AP4-BackCenter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">Rho4R</span> <span class="o">=</span> <span class="n">BC_4</span><span class="o">-</span><span class="n">TTR_4</span>
+        <span class="n">Rho4L</span> <span class="o">=</span> <span class="n">BC_4</span><span class="o">-</span><span class="n">TTL_4</span>
+
+        <span class="n">RhoM4R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho4R</span><span class="p">)</span>
+        <span class="n">Rhom4R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho4R</span><span class="p">)</span>
+        <span class="n">RhoM4L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Rho4L</span><span class="p">)</span>
+        <span class="n">Rhom4L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">Rho4L</span><span class="p">)</span>
+
+        
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttr1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTR_1</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTR_2</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttr3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTR_3</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttr4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTR_4</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttl1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTL_1</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttl2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTL_2</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttl3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTL_3</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ttl4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TTL_4</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;bc1&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">BC_1</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;bc2&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">BC_2</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;bc3&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">BC_3</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;bc4&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">BC_4</span>
+
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">]</span>
+        
+        <span class="n">vpRC</span> <span class="o">=</span> <span class="p">(</span><span class="n">pTTR</span><span class="o">-</span><span class="n">pBC</span><span class="p">)</span>
+        <span class="n">vpLC</span> <span class="o">=</span> <span class="p">(</span><span class="n">pTTL</span><span class="o">-</span><span class="n">pBC</span><span class="p">)</span>
+        <span class="n">vp</span> <span class="o">=</span> <span class="p">(</span><span class="n">pTTR</span><span class="o">-</span><span class="n">pBC</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">pTTL</span><span class="o">-</span><span class="n">pBC</span><span class="p">)</span>
+
+        <span class="c1"># unitary vectors </span>
+        <span class="n">vpRC</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">vpRC</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">vpRC</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+        <span class="n">vpLC</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">vpLC</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">vpLC</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+        <span class="n">vp</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+
+        <span class="c1"># unitary vectors </span>
+
+        <span class="n">vpn</span> <span class="o">=</span> <span class="n">vp</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vp</span><span class="o">*</span><span class="n">vp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">vpRCn</span> <span class="o">=</span> <span class="n">vpRC</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vpRC</span><span class="o">*</span><span class="n">vpRC</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">vpLCn</span> <span class="o">=</span> <span class="n">vpLC</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vpLC</span><span class="o">*</span><span class="n">vpLC</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+        <span class="c1"># coord des AP</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">pAP1</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">pAP2</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">p3</span> <span class="o">=</span> <span class="n">pAP3</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">p4</span> <span class="o">=</span> <span class="n">pAP4</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+        <span class="n">v1C</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">pBC</span>
+        <span class="n">v2C</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-</span><span class="n">pBC</span>
+        <span class="n">v3C</span> <span class="o">=</span> <span class="n">p3</span><span class="o">-</span><span class="n">pBC</span>
+        <span class="n">v4C</span> <span class="o">=</span> <span class="n">p4</span><span class="o">-</span><span class="n">pBC</span>
+
+        <span class="n">v1C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">v1C</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">v1C</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">v2C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">v2C</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">v2C</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">v3C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">v3C</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">v3C</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">v4C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">v4C</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">v4C</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+
+
+        <span class="n">v1Cn</span> <span class="o">=</span> <span class="n">v1C</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v1C</span><span class="o">*</span><span class="n">v1C</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+        <span class="n">v2Cn</span> <span class="o">=</span> <span class="n">v2C</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v2C</span><span class="o">*</span><span class="n">v2C</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+        <span class="n">v3Cn</span> <span class="o">=</span> <span class="n">v3C</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v3C</span><span class="o">*</span><span class="n">v3C</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+        <span class="n">v4Cn</span> <span class="o">=</span> <span class="n">v4C</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v4C</span><span class="o">*</span><span class="n">v4C</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+
+
+        <span class="n">cr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpn</span><span class="p">,</span><span class="n">v1Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpn</span><span class="p">,</span><span class="n">v2Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpn</span><span class="p">,</span><span class="n">v3Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpn</span><span class="p">,</span><span class="n">v4Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">cr1R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpRCn</span><span class="p">,</span><span class="n">v1Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr2R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpRCn</span><span class="p">,</span><span class="n">v2Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr3R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpRCn</span><span class="p">,</span><span class="n">v3Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr4R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpRCn</span><span class="p">,</span><span class="n">v4Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">cr1L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpLCn</span><span class="p">,</span><span class="n">v1Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr2L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpLCn</span><span class="p">,</span><span class="n">v2Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr3L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpLCn</span><span class="p">,</span><span class="n">v3Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cr4L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vpLCn</span><span class="p">,</span><span class="n">v4Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+        <span class="n">dvpnv1n</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpn</span><span class="o">*</span><span class="n">v1Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv2n</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpn</span><span class="o">*</span><span class="n">v2Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv3n</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpn</span><span class="o">*</span><span class="n">v3Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv4n</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpn</span><span class="o">*</span><span class="n">v4Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+        <span class="n">dvpnv1Rn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpRCn</span><span class="o">*</span><span class="n">v1Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv2Rn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpRCn</span><span class="o">*</span><span class="n">v2Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv3Rn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpRCn</span><span class="o">*</span><span class="n">v3Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv4Rn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpRCn</span><span class="o">*</span><span class="n">v4Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+        <span class="n">dvpnv1Ln</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpLCn</span><span class="o">*</span><span class="n">v1Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv2Ln</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpLCn</span><span class="o">*</span><span class="n">v2Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv3Ln</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpLCn</span><span class="o">*</span><span class="n">v3Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dvpnv4Ln</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">vpLCn</span><span class="o">*</span><span class="n">v4Cn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    
+        <span class="n">alf1R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr1R</span><span class="p">,</span><span class="n">dvpnv1Rn</span><span class="p">)</span>
+        <span class="n">alf2R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr2R</span><span class="p">,</span><span class="n">dvpnv2Rn</span><span class="p">)</span>
+        <span class="n">alf3R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr3R</span><span class="p">,</span><span class="n">dvpnv3Rn</span><span class="p">)</span>
+        <span class="n">alf4R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr4R</span><span class="p">,</span><span class="n">dvpnv4Rn</span><span class="p">)</span>
+
+
+        <span class="n">alf1L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr1L</span><span class="p">,</span><span class="n">dvpnv1Ln</span><span class="p">)</span>
+        <span class="n">alf2L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr2L</span><span class="p">,</span><span class="n">dvpnv2Ln</span><span class="p">)</span>
+        <span class="n">alf3L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr3L</span><span class="p">,</span><span class="n">dvpnv3Ln</span><span class="p">)</span>
+        <span class="n">alf4L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">cr4L</span><span class="p">,</span><span class="n">dvpnv4Ln</span><span class="p">)</span>
+
+    
+
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al1R_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf1R</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al2R_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf2R</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al3R_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf3R</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al4R_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf4R</span>
+
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al1L_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf1L</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al2L_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf2L</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al3L_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf3L</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al4L_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alf4L</span>
+
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al1R_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al1ebR</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al2R_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al2ebR</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al3R_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al3ebR</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al4R_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al4ebR</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al1L_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al1ebL</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al2L_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al2ebL</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al3L_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al3ebL</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;al4L_est&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">al4ebL</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10001</span><span class="p">])</span>
+
+        <span class="n">_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filemocap</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.c3d&#39;</span><span class="p">,</span><span class="s1">&#39;.mat&#39;</span><span class="p">)</span>
+        <span class="n">savemat</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="CorSer.getlinkd"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.getlinkd.html#pylayers.measures.cormoran.CorSer.getlinkd">[docs]</a>    <span class="k">def</span> <span class="nf">getlinkd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;    get the distance for a link between devices</span>
 
@@ -4611,7 +4980,7 @@
         <span class="n">a</span><span class="p">,</span><span class="n">ia</span><span class="p">,</span><span class="n">nna</span><span class="p">,</span><span class="n">subjecta</span><span class="p">,</span><span class="n">techno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">techno</span><span class="p">)</span>
         <span class="n">b</span><span class="p">,</span><span class="n">ib</span><span class="p">,</span><span class="n">nnb</span><span class="p">,</span><span class="n">subjectb</span><span class="p">,</span><span class="n">techno</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;HK&#39;</span> <span class="ow">in</span> <span class="n">techno</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;HK&#39;</span> <span class="ow">in</span> <span class="n">techno</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">link</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">b</span>
             <span class="k">elif</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -4620,7 +4989,7 @@
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Link between &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ra</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39; and &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rb</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; is not available in hkb dataframe&#39;</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span>
 
-        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;BS&#39;</span> <span class="ow">in</span> <span class="n">techno</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;BS&#39;</span> <span class="ow">in</span> <span class="n">techno</span><span class="o">.</span><span class="n">upper</span><span class="p">()):</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bespo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">link</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">b</span>
             <span class="k">elif</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bespo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -4630,7 +4999,7 @@
 
             <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bespo</span>
 
-        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="n">techno</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="n">techno</span><span class="o">.</span><span class="n">upper</span><span class="p">()):</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">link</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">b</span>
             <span class="k">elif</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcr</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -5200,9 +5569,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on juin 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

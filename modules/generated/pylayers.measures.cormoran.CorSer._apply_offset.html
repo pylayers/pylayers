@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,7 +19,8 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -42,7 +44,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -86,6 +88,19 @@
 	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
@@ -110,10 +125,22 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-measures-cormoran-corser-apply-offset">
 <h1>pylayers.measures.cormoran.CorSer._apply_offset<a class="headerlink" href="#pylayers-measures-cormoran-corser-apply-offset" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer._apply_offset">
+<code class="descclassname">CorSer.</code><code class="descname">_apply_offset</code><span class="sig-paren">(</span><em>techno</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/measures/cormoran.html#CorSer._apply_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer._apply_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply offset from self.offset[self._filename][techno+&#8217;_index&#8217;]</p>
+<dl class="docutils">
+<dt>if offset &gt;0</dt>
+<dd>add np.nan at the begining</dd>
+<dt>if offset &lt;0</dt>
+<dd>first values of self.hkb will be dropped</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -127,15 +154,20 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jul 06, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Sep 20, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.measures.cormoran.CorSer._apply_offset.txt"
+    <a href="../../_sources/modules/generated/pylayers.measures.cormoran.CorSer._apply_offset.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel rellarge">
     
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
