@@ -71,6 +71,62 @@ class Tesgeu(TestCase):
         np.testing.assert_almost_equal(vg,[0,1,0])  # pointing in y 
         np.testing.assert_almost_equal(pg,[-1,0,0])  # polar along x
 
+    def test_Bthph(self):
+        th = np.array([np.pi/2.])
+        ph = np.array([np.pi/4.])
+        M=np.array([[0,-1,0],[1,0,0],[0,0,1]]) # rotation -np.pi/2 along z
+        thg,phg = geu.Bthph(th,ph,M)
+        np.testing.assert_almost_equal(thg,np.pi/2.)
+        np.testing.assert_almost_equal(phg,-np.pi/4.)
+
+
+
+        th = np.array([np.pi/2.])
+
+        ph = np.array([np.pi/4.])
+
+        M=np.array([[1,0,0],[0,0,-1],[0,1,0]])# rotation -np.pi/2 along x
+        thg,phg = geu.Bthph(th,ph,M)
+        np.testing.assert_almost_equal(thg,3*np.pi/4.)
+        np.testing.assert_almost_equal(phg,0.)
+
+
+        th = np.array([np.pi/2.])
+        ph = np.array([np.pi/4.])
+
+        M=np.array([[1,0,0],[0,0,1],[0,-1,0]])# rotation np.pi/2 along x
+        thg,phg = geu.Bthph(th,ph,M)
+
+        np.testing.assert_almost_equal(thg,np.pi/4.)
+        np.testing.assert_almost_equal(phg,0.)
+
+
+
+        th = np.array([np.pi/4])
+        ph = np.array([0.])
+
+        M=np.array([[1,0,0],[0,0,1],[0,-1,0]]) # rotation np.pi/2 along x
+        thg,phg = geu.Bthph(th,ph,M)
+        np.testing.assert_almost_equal(thg,np.pi/2.)
+        np.testing.assert_almost_equal(phg,-np.pi/4.)
+
+
+
+
+        M=np.array([[1,0,0],[0,0,-1],[0,1,0]]) # rotation -np.pi/2 along x
+        thg,phg = geu.Bthph(th,ph,M)
+        np.testing.assert_almost_equal(thg,np.pi/2.)
+        np.testing.assert_almost_equal(phg,np.pi/4.)
+
+
+        M=np.eye(3) 
+        thg,phg = geu.Bthph(th,ph,M)
+
+
+        np.testing.assert_almost_equal(thg,th)
+        np.testing.assert_almost_equal(phg,ph)
+
+
     def test_intersect3(self):
         print "test_intersect3"
         a = np.array([[1,0,1]]).T

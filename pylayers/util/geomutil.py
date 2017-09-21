@@ -3729,7 +3729,6 @@ def cylmap(Y, r=0.0625, l=0.5):
     A = np.dot(Yc, pX)
     return(A, B)
 
-
 def MRot3(a, axe):
     """
     Return a 3D rotation matrix along axe 0|1|2
@@ -3767,9 +3766,9 @@ def MATP(sl,el,phi,tilt,pol):
     pol : string 'H' (Horizontal) or 'V' (Vertical)
 
     """
-    assert np.isclose(np.dot(vl,vl),1)
-    assert np.isclose(np.dot(pl,pl),1)
-    assert np.isclose(np.dot(pl,vl),0)
+    assert np.isclose(np.dot(sl,sl),1)
+    assert np.isclose(np.dot(el,el),1)
+    assert np.isclose(np.dot(sl,el),0,atol=1e-1)
     
     #
     # local frame completion (vl,pl,ql) direct frame 
@@ -3960,52 +3959,51 @@ def angledir(s):
     return(a_new)
 
 
-#def BTB_rx(a_g, T):
-#    """ Produce a set of rotation matrices for passage between global and
-#    local frames
-#
-#    Parameters
-#    ----------
-#
-#    a_g  :
-#        angle in global reference frame   2 x N  :  (theta,phi) x N
-#    T    :
-#        Rx rotation matrix     3 x 3
-#
-#    Returns
-#    -------
-#
-#    R  :  ndarray (3x3)
-#    al :  ndarray (r x 2)
-#        angle expressed in local basis
-#
-#    See Also
-#    --------
-#
-#    angledir
-#    SphericalBasis
-#
-#
-#    Notes
-#    -----
-#
-#    N is the number or rays
-#
-#    """
-#    G = SphericalBasis(a_g)
-#    th_g = G[0, :, :]
-#    ph_g = G[1, :, :]
-#    B_g = np.dstack((th_g, ph_g)).transpose((0, 2, 1))
-#    s_l = np.dot(T.T, G[2, :, :]).T
-#    a_l = angledir(s_l)
-#    L = SphericalBasis(a_l)
-#    th_l = L[0, :, :]
-#    ph_l = L[1, :, :]
-#    B_lT = np.dstack((th_l, ph_l)).transpose((2, 0, 1))
-#    U = np.einsum('ijk,jlk->ilk',B_lT,T.T[:,:,None])
-#    R = np.einsum('ijk,jlk->ilk',U,B_g)
-#
-#    return a_l,R
+
+def Bthph(th,ph,M):
+    """ Return theta and phi tranformed from a rotation matrix M
+
+
+        th (N)
+        ph (N)
+        M (3,3)
+
+
+        Returns
+        -------
+
+        theta,phi 
+
+
+        Notes
+        -----
+
+        This function is convenient for Antennas in addition of 
+        MATP.
+        MATP returns a rotation matrix M which allow the
+        transformation  from a local basis to a global basis.
+
+        Using Bthph with MATP allows to evaluate the Antenna
+        for given theta phi in a global basis and determine 
+        associated gain values in the Antenna local basis 
+
+
+
+    """
+    if not isinstance(th,np.ndarray):
+        th = np.ndarray([th])
+    if not isinstance(ph,np.ndarray):
+        ph = np.ndarray([ph])
+    # spherical to cartesian 
+    sp2cart = np.array([np.cos(ph)*np.sin(th),
+                        np.sin(ph)*np.sin(th),
+                        np.cos(th)])
+    # apply rotation matrix
+    Cloc = np.einsum('ij,ik->kj',sp2cart,M)
+    # return in psherical coodinates    
+    cart2sp = np.array([np.arctan2(Cloc[1],Cloc[0]),np.arccos(Cloc[2])])
+
+    return cart2sp[1,:],cart2sp[0,:]
 
 
 def BTB(a_g, T):
