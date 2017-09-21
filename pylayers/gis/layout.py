@@ -2799,7 +2799,7 @@ class Layout(pro.PyLayers):
                 print("add_segment : error not a node", n1, n2)
             return
 
-        transition = False
+        # transition = False
         if (name == '_AIR'):
             # if name == 'AIR':
             transition = True
@@ -7438,306 +7438,6 @@ class Layout(pro.PyLayers):
 
         return polys
 
-    def buildGw(self):
-        """ build Graph of waypaths
-
-        See Also
-        --------
-
-        buildGr
-
-        Notes
-        -----
-
-        for all edges of Gr (adjascent room)
-            if room1 and room2 have a common transition
-
-
-        """
-
-        self.Gw = nx.Graph()
-        self.Gw.pos = {}
-
-        d_id = max(self.Gr.nodes())  # for numerotation of Gw nodes
-        d_id_index = d_id + 1
-
-        for e in self.Gr.edges_iter():  # iterator on Gr edges
-
-            self.Gw.add_node(e[0], {'room': e[0], 'door': False})
-            self.Gw.add_node(e[1], {'room': e[1], 'door': False})
-
-            # transitions of room e[0]
-            trans1 = self.Gr.node[e[0]]['transition']
-            # transitions of room e[1]
-            trans2 = self.Gr.node[e[1]]['transition']
-            Id = np.intersect1d(trans1, trans2)[0]  # list of common doors
-
-            unode = self.Gs.neighbors(Id)  # get edge number of common doors
-            up0 = self.Gs.pos[unode[0]]
-            up1 = self.Gs.pos[unode[1]]
-
-            name = self.Gs.node[Id]['name']
-
-            if True:  # name != 'AIR':
-                pn = self.Gs.node[Id]['norm']
-                sl = self.sl[name]
-                thick = (sum(sl['lthick']) / 2.) + 0.2
-
-                # middle of the common door
-                pdoor0 = (np.array(up0) + pn[:2] * thick +
-                          np.array(up1) + pn[:2] * thick) / 2.
-                pdoor1 = (np.array(up0) - pn[:2] * thick +
-                          np.array(up1) - pn[:2] * thick) / 2.
-                P0 = sh.Point(pdoor0)
-                P1 = sh.Point(pdoor1)
-
-                ep0 = self.Gr.pos[e[0]]
-                ep1 = self.Gr.pos[e[1]]
-
-                if self.Gr.node[e[0]]['polyg'].contains(P0):
-                    upd0 = d_id_index
-                    self.Gw.pos[upd0] = pdoor0
-                    self.Gw.add_node(upd0, {'room': e[0], 'door': True})
-                    # if self.seginline(pdoor0,ep0).shape[1] <= 1:
-                    #     self.Gw.add_edges_from([(e[0],upd0)])
-                    d_id_index = d_id_index + 1
-
-                    upd1 = d_id_index
-                    self.Gw.pos[upd1] = pdoor1
-                    self.Gw.add_node(upd1, {'room': e[1], 'door': True})
-                    # if self.seginline(pdoor1,ep1).shape[1] <= 1:
-                    #     self.Gw.add_edges_from([(e[1],upd1)])
-                    d_id_index = d_id_index + 1
-                else:
-                    upd0 = d_id_index
-                    self.Gw.pos[upd0] = pdoor0
-                    self.Gw.add_node(upd0, {'room': e[1], 'door': True})
-                    # if self.seginline(pdoor0,ep1).shape[1] <= 1:
-                    #     self.Gw.add_edges_from([(e[1],upd0)])
-                    d_id_index = d_id_index + 1
-
-                    upd1 = d_id_index
-                    self.Gw.pos[upd1] = pdoor1
-                    self.Gw.add_node(upd1, {'room': e[0], 'door': True})
-                    # if self.seginline(pdoor1,ep0).shape[1] <= 1:
-                    #     self.Gw.add_edges_from([(e[0],upd1)])
-                    d_id_index = d_id_index + 1
-                self.Gw.add_edges_from([(upd0, upd1)])
-            # Airwalls case
-            else:
-
-                pdoor = (np.array(up0) + np.array(up1)) / 2
-                self.Gw.pos[d_id_index] = pdoor
-                self.Gw.add_edges_from(
-                    [(e[0], d_id_index), (e[1], d_id_index)])
-                d_id_index = d_id_index + 1
-
-        self.Gw.pos.update(self.Gr.pos)
-
-#####################
-        # # SINGLE POINT SEGMENT TRANSITION
-        # d_id = max(self.Gr.nodes())+1
-        # # Add trnasistion segments in visibility
-        # for e in self.Gr.edges_iter(): # iterator on Gr edges
-        #     trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
-        #     trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
-        #     Id = np.intersect1d(trans1,trans2)[0]  # list of common doors
-
-        #     unode = self.Gs.neighbors(Id) # get edge number of common doors
-        #     p1 = self.Gs.pos[unode[0]]
-        #     p2 = self.Gs.pos[unode[1]]
-        # pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common
-        # door
-
-        #     self.Gw.add_node(Id + d_id,door=True)     # new node
-        #     self.Gw.pos[Id + d_id] = pdoor  # in the middle of the door|airwall
-        #     pe0=self.Gr.pos[e[0]]
-        #     pe1=self.Gr.pos[e[1]]
-
-        #     # if only the trnasisiton intersects
-        #     if self.seginline(pdoor,pe0).shape[1] == 1:
-        #         self.Gw.add_edges_from([(e[0], Id + d_id)])
-        #     if self.seginline(pdoor,pe1).shape[1] == 1:
-        #         self.Gw.add_edges_from([(e[1], Id + d_id)])
-        #     self.Gw.pos.update(self.Gr.pos)
-####################
-        # ADD CONVEX POINTS
-        # d_id = max(self.Gw.nodes())+1
-        # pcid = d_id
-        # tmp = []
-        # for n in self.Gr.nodes():
-        #     # get segment number of the room
-        #     tcc, nn = self.Gr.node[n]['polyg'].ptconvex()
-        #     uconvex = np.nonzero(tcc == 1)[0]
-
-        #     if len(uconvex) != 0 :
-        #         lr = self.Gr.node[n]['polyg'].exterior
-        #         x,y = lr.xy
-        #         p = [np.array((x[i],y[i])) for i in uconvex]
-        #         ln = self.Gr.node[n]['cycle'].cycle
-        #         lp = filter(lambda x: x< 0, ln)
-        #         pc = [lp[i] for i in uconvex]
-        #         for uu,uc in enumerate(uconvex):
-        #             # convex point position take into account wall width
-        #             npc = nx.neighbors(self.Gs,pc[uu])
-        #             # only corner are considered (point with 3 neighbors are not)
-        #             if len(npc) <=2:
-        #                 nname = [self.Gs.node[nd]['name'] for nd in npc]
-        #                 npos = [self.Gs.pos[nd] for nd in npc]
-        #                 nv = [p[uu]- i for i in npos]
-        #                 nvn = sum(nv)/abs(sum(nv))
-        #                 nsl = [self.sl[name] for name in nname]
-        #                 thick = sum([sum(sl['lthick']) for sl in nsl])
-        #                 # vector to add to the convex point position
-        #                 v = nvn*thick
-        #                 pid = uc+pcid
-        #                 self.Gw.add_node(pid,{'diff':True,'room':n,'door':False})
-        #                 self.Gw.pos.update({pid:p[uu]+v[:2]})
-        #                 pcid = pcid +1
-
-        # pdb.set_trace()
-        for n in self.Gr.nodes():
-
-            nr = nx.get_node_attributes(self.Gw, 'room').items()
-            # get the Gw nodes in current room
-            f = map(lambda y: y[0], filter(lambda x: x[1] == n, nr))
-            for nw in combinations(f, 2):
-                pf = map(lambda x: self.Gw.pos[x], nw)
-                pf = np.array((pf))
-                # if self.seginline(pf[0],pf[1]).shape[1] <= 1:
-                d = np.sqrt(np.sum((pf[0] - pf[1])**2))
-                self.Gw.add_edges_from([(nw[0], nw[1])], weight=d)
-
-            # kudr = [kdr[u] for u in udr]
-            # cdr = combinations(dr.keys()[udr],2)
-            # for
-            # import ipdb
-            # ipdb.set_trace()
-
-        # for n in self.Gr.nodes_iter():
-        #     d = self.Gw.neighbors(n)   # neighbors of room n in Gw
-        #     if len(d) > 1:
-        #         self.Gw.add_edges_from(combinations(d, 2))
-
-        # udn = nx.get_node_attributes(self.Gw,'diff').keys()
-        # import ipdb
-        # ipdb.set_trace()
-        # for u in udn:
-        #     [self.Gw[u].update({i:{'weigth':0.01}})for i in self.Gw.edge[u].keys()]
-    # def buildGw(self):
-    #     """ build Graph of waypaths
-
-    #     See Also
-    #     --------
-
-    #     buildGr
-
-    #     Notes
-    #     -----
-
-    #     for all edges of Gr (adjascent room)
-    #         if room1 and room2 have a common transition
-    #     """
-
-    #     self.Gw = nx.Graph()
-    #     self.Gw.pos = {}
-
-    #     d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
-
-    #     for e in self.Gr.edges_iter(): # iterator on Gr edges
-    #         trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
-    #         trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
-    #         Id = np.intersect1d(trans1,trans2)[0]  # list of common doors
-
-    #         unode = self.Gs.neighbors(Id) # get edge number of common doors
-    #         p1 = self.Gs.pos[unode[0]]
-    #         p2 = self.Gs.pos[unode[1]]
-    # pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common door
-
-    #         self.Gw.add_node(Id + d_id,door=True)     # new node
-    #         self.Gw.pos[Id + d_id] = pdoor  # in the middle of the door|airwall
-    #         self.Gw.add_edges_from([(e[0], Id + d_id),
-    #                                 (e[1], Id + d_id)])
-    #         self.Gw.pos.update(self.Gr.pos)
-
-    #     for n in self.Gr.nodes_iter():
-    #         d = self.Gw.neighbors(n)   # neighbors of room n in Gw
-    #         if len(d) > 1:
-    #             self.Gw.add_edges_from(combinations(d, 2))
-
-    # def buildGw2(self):
-    #     """ build Graph of waypaths
-
-    #     See Also
-    #     --------
-
-    #     buildGr
-
-    #     Notes
-    #     -----
-
-    #     for all edges of Gr (adjascent room)
-    #         if room1 and room2 have a common transition
-
-    #     """
-
-    #     self.Gw = nx.Graph()
-    #     self.Gw.pos = {}
-
-    #     d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
-    #     d_id_index = d_id + 1
-    #     for e in self.Gr.edges_iter(): # iterator on Gr edges
-    #         trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
-    #         trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
-    #         Id = np.intersect1d(trans1,trans2)[0]  # list of common doors
-
-    #         unode = self.Gs.neighbors(Id) # get edge number of common doors
-
-    #         pn = self.Gs.node[Id]['norm']
-    #         name = self.Gs.node[Id]['name']
-    #         sl = self.sl[name]
-    #         thick = sum(sl['lthick'])/2.
-
-    #         p1 = self.Gs.pos[unode[0]]
-    #         p2 = self.Gs.pos[unode[1]]
-
-    #         # middle of the common door
-    #         pdoor0 = (np.array(p1) + pn[:2] * thick +\
-    #                   np.array(p2) + pn[:2] * thick) / 2
-    #         pdoor1 = (np.array(p1) - pn[:2] * thick +\
-    #                   np.array(p2) - pn[:2] * thick) / 2
-
-    #         upd0 = d_id_index
-    #         self.Gw.add_node(upd0)     # new node
-    #         self.Gw.pos[upd0] = pdoor0
-    #         d_id_index = d_id_index +1
-
-    #         upd1 = d_id_index
-    #         self.Gw.add_node(upd1)     # new node
-    #         self.Gw.pos[upd1] = pdoor1
-    #         d_id_index = d_id_index +1
-
-    #         de0p0 = np.sqrt(np.sum((self.Gr.pos[e[0]]-pdoor0)**2))
-    #         de0p1 = np.sqrt(np.sum((self.Gr.pos[e[0]]-pdoor1)**2))
-    #         de1p0 = np.sqrt(np.sum((self.Gr.pos[e[1]]-pdoor0)**2))
-    #         de1p1 = np.sqrt(np.sum((self.Gr.pos[e[1]]-pdoor1)**2))
-
-    #         self.Gw.add_edges_from([(upd0, upd1)])
-    #         if de0p0 < de0p1:
-    #             self.Gw.add_edges_from([(e[0],upd0)])
-    #         else:
-    #             self.Gw.add_edges_from([(e[0],upd1)])
-    #         if de1p0 < de1p1:
-    #             self.Gw.add_edges_from([(e[1],upd0)])
-    #         else:
-    #             self.Gw.add_edges_from([(e[1],upd1)])
-
-    #         self.Gw.pos.update(self.Gr.pos)
-    #     for n in self.Gr.nodes_iter():
-    #         d = self.Gw.neighbors(n)   # neighbors of room n in Gw
-    #         if len(d) > 1:
-    #             self.Gw.add_edges_from(combinations(d, 2))
-
 
     def buildGv(self, show=False,verbose=False,tqdmpos=0):
         """ build visibility graph
@@ -10206,47 +9906,6 @@ class Layout(pro.PyLayers):
                 if k in self.degree[1]:
                     self.ddiff[k] = (lcyk, 2 * np.pi)
 
-    # def buildGr(self):
-    #     """ build the graph of rooms Gr
-
-    #     Notes
-    #     -----
-
-    #     + A room is a set of convex cycles connected together through _AIR or AIR segment
-    #     + A room is not necessarily convex
-
-    #     This graph is used for room electromagnetics evaluation
-
-    #     """
-
-    #     # list of all indoor convex cycle
-    #     to_visit = [ x for x in self.Gt.node.keys() if self.Gt.node[x]['indoor']]
-    #     # list of cycles already in a room
-    #     visited = []
-    #     # law : list of air walls
-    #     law = self.name['AIR']+self.name['_AIR']
-    #     room_cnt = 1
-    #     r = {}
-    #     cur_cy = to_visit[0]
-    #     while len(to_visit)>0:
-    #         cur_cy = to_visit.pop()
-    #         #printcur_cy
-    #         # get neighbors of current_cycle
-    #         neighbors = nx.neighbors(self.Gt,cur_cy)
-    #         # get neighbors separated from the current cycle by an air_wall
-    #         neighbors_aw = [ x for x in neighbors if self.Gt[cur_cy][x]['segment'] in law ]
-    #         # if at least one of the neighbors is already in a room --> same room
-    #         # else --> new room
-    #         neighbors_already_in_a_room = [ x for x in neighbors if x in visited ]
-    #         for cy in neighbors:
-    #             if len(already_in_a_room) >0 :
-    #                 r[cy] = r[already_in_a_room[0]]
-    #             else:
-    #                 r[cy] = room_cnt
-    #                 room_cnt += 1
-    #             visited.append(cy)
-    #         cur_cy = neighbors_aw[0]
-    #     return r,to_visit,visited
 
     def buildGr(self):
         """ build the graph of rooms Gr
@@ -10266,171 +9925,119 @@ class Layout(pro.PyLayers):
 
         self.Gr = copy.deepcopy(self.Gt)
         self.Gr.remove_node(0)
+        self.Gr.remove_edges_from(self.Gt.edges())
 
-        to_visit = [x for x in self.Gr.node.keys() if self.Gr.node[
-            x]['indoor']]
+        for e in self.Gt.edges():
+            if (not 0 in e) and (self.Gt.node[e[0]]['indoor']) and (self.Gt.node[e[1]]['indoor']):
 
-        law = self.name['AIR'] + self.name['_AIR']
-        while len(to_visit) > 0:
-            remaining_nodes = self.Gr.node.keys()
-            to_visit = [x for x in to_visit if x in remaining_nodes]
-            cur_cy = to_visit.pop()
-            ln = nx.neighbors(self.Gr, cur_cy)
-            ln = [x for x in ln if self.Gr.node[x]['indoor']]
-            # ls : list of segment
-            ls = [self.Gr[cur_cy][x]['segment'] for x in ln]
-            for x in zip(ln, ls):
-                if x[1] in law:
-                    p1 = self.Gr.node[cur_cy]['polyg']
-                    p2 = self.Gr.node[x[0]]['polyg']
-                    P = p1 + p2
-                    P.setvnodes(self)
-                    ine = nx.neighbors(self.Gr, x[0])
-                    sne = [self.Gr[x[0]][y]['segment'] for y in ine]
-                    self.Gr.add_node(cur_cy, polyg=P)
-                    self.Gt.pos[cur_cy] = np.array((P.centroid.xy)).squeeze()
-                    self.Gr.add_edges_from([(cur_cy, y)
-                                            for y in ine if y != cur_cy])
-                    for k in zip(ine, sne):
-                        if k[0] != cur_cy:
-                            self.Gr[cur_cy][k[0]]['segment'] = k[1]
-                    self.Gr.remove_node(x[0])
-                    del(self.Gr.pos[x[0]])
+                seg = self.Gt[e[0]][e[1]]['segment']
+                seg = np.unique(seg)
+                trans_seg = [n for n in seg 
+                             if (self.Gs.node[n]['transition'])
+                             and n not in self.segboundary]
+                if trans_seg != []:
+                    self.Gr.add_edge(e[0],e[1],{'segment':trans_seg})
+        deg = self.Gr.degree()
+        self.Gr.remove_nodes_from([n for n in deg if deg[n] == 0])
 
-        #
-        #  Connected components might not be all contiguous
-        #  this is a problem because the concatenation of cycles
-        #  operation requires cycles contiguity
-        #
+    def buildGw(self):
+        """ build Graph of waypaths
 
-        for n in self.Gr.nodes():
-            self.Gr.node[n]['transition'] = []
 
-        ltrans = self.listtransition
-        ltmp = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-        ldoors = filter(lambda x:self.Gs.node[x]['name']!='_AIR',ltmp)
-        keys = self.Gr.node.keys()
+        See Also
+        --------
 
-#        for a in _airseg:
-#            n0,n1=iuE[a]
-#            found=False
-#            while not found:
-#                nn0 = mapoldcy[n0]
-#                if n0==nn0:
-#                    found=True
-#                else:
-#                    n0=nn0
-#                    found=False
-#            while not found:
-#                nn1 = mapoldcy[n1]
-#                if n1==nn1:
-#                    found=True
-#                else:
-#                    n1=nn1
-#
-#            p0=self.Gt.node[n0]['polyg']
-#            p1=self.Gt.node[n1]['polyg']
-#
-#            # Merge polygon
-#            P = p0+p1
-#            # If the new Polygon is convex update Gt
-#            #
-#            if geu.isconvex(P):
-#             # updates vnodes of the new merged polygon
-#                P.setvnodes(self)
-#             # update edge
-#                n0s = n0
-#                n1s = n1
-#             # get segments information from cycle n0
-#                dne = self.Gt[n0]
-#             # remove connection to n0 to avoid a cycle being
-#             # connected to itself
-#                self.Gt[n1].pop(n0)
-#             # add information from adjacent cycle n1
-#                dne.update(self.Gt[n1])
-#             # list of items of the merged dictionnary
-#                ine = dne.items()
-#             #update n0 with the new merged polygon
-#                self.Gt.add_node(n0,polyg=P)
-#             # connect new cycle n0 to neighbors
-#                self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-#             #remove old cycle n1
-#                self.Gt.remove_node(n1)
-#             # update pos of the cycle with merged polygon centroid
-#                self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
-#             # delete _air segment a
-#             # do not apply g2npy
-#                self.del_segment(a,verbose=False,g2npy=False)
-#                mapoldcy[n1]=n0
-#
-#     for cy in keys:
-#         p = self.Gr.node[cy]['polyg']
-#         lseg = [ x for x in p.vnodes if x > 0 ]
-#         #hasdoor = filter(lambda n : n in ldoors,lseg)
-#         hasdoor = [ x for x in lseg if x in ldoors]
-#         if len(hasdoor)>0:
-#             pass
-#         else:
-#             self.Gr.remove_node(cy)
-#             self.Gr.pos.pop(cy)
-#
-#     # Destroy edges which do not share a transition
-#     for e in self.Gr.edges():
-#         keep = False
-#         if (e[0]>0) & (e[1]>0):
-#             cy1 = self.Gr.node[e[0]]['cycle']
-#             cy2 = self.Gr.node[e[1]]['cycle']
-#             f,b = cy1.intersect(cy2)
-#             for s in b:
-#                 if s>0:
-#                     if self.Gs.node[s]['transition']:
-#                         keep = True
-#                         self.Gr.node[e[0]]['transition'].append(s)
-#                         self.Gr.node[e[1]]['transition'].append(s)
-#
-#         if not keep:
-#             self.Gr.remove_edge(*e)
+        buildGr
 
-    def waypoint(self, nroom1, nroom2):
-        """ get the waypoint between room1 and room2
+        Notes
+        -----
 
-        Parameters
-        -----------
+        for all edges of Gr (adjascent room)
+            if room1 and room2 have a common transition
 
-        nroom1 : int 
-            room number 1
-        nromm2 : int 
-            room number 2
-
-        Returns
-        -------
-
-        waypoint : 
 
         """
-        rooms = nx.dijkstra_path(self.Gr, nroom1, nroom2)
-        nroom = len(rooms)
-        waypoint = []
-        for k in np.arange(nroom - 1):
-            room1 = rooms[k]
-            proom1 = self.Gr.pos[room1]
-            room2 = rooms[k + 1]
-            doors1 = self.Gr.node[room1]['doors']
-            doors2 = self.Gr.node[room2]['doors']
-            doorId = np.intersect1d(doors1, doors2)[0]
-            #
-            # coord door
-            #
-            unode = self.Gs.neighbors(doorId)
-            p1 = self.Gs.pos[unode[0]]
-            p2 = self.Gs.pos[unode[1]]
-            pdoor = (np.array(p1) + np.array(p2)) / 2
-            waypoint.append((proom1[0], proom1[1]))
-            waypoint.append((pdoor[0], pdoor[1]))
 
-        proom2 = self.Gr.pos[nroom2]
-        waypoint.append((proom2[0], proom2[1]))
-        return(waypoint)
+        self.Gw = nx.Graph()
+        self.Gw.pos = {}
+
+        d_id = max(self.Gr.nodes())  # for numerotation of Gw nodes
+        d_id_index = d_id + 1
+
+        for e in self.Gr.edges_iter():  # iterator on Gr edges
+
+            self.Gw.add_node(e[0], {'room': e[0], 'door': False})
+            self.Gw.add_node(e[1], {'room': e[1], 'door': False})
+
+            # transitions of room e[0]
+            # trans1 = self.Gr.node[e[0]]['segment']
+            # # transitions of room e[1]
+            # trans2 = self.Gr.node[e[1]]['segment']
+            # Id = np.intersect1d(trans1, trans2)[0]  # list of common doors
+            # import ipdb
+            # ipdb.set_trace()
+            Ids = self.Gr.edge[e[0]][e[1]]['segment']
+            # here is supposed that 2 room may have more than 1 door in common
+            for Id in Ids:
+                unode = self.Gs.neighbors(Id)  # get edge number of common doors
+                up0 = self.Gs.pos[unode[0]]
+                up1 = self.Gs.pos[unode[1]]
+
+                name = self.Gs.node[Id]['name']
+                pn = self.Gs.node[Id]['norm']
+                sl = self.sl[name]
+                thick = (sum(sl['lthick']) / 2.) + 0.2
+
+                # for ""doors"" extra waypoints points are added 
+                # in front and back of the aperture.
+                # this is not done for AIR slabs
+                if 'AIR' not in name : 
+
+                    # middle of the common door
+                    pdoor0 = (np.array(up0) + pn[:2] * thick +
+                              np.array(up1) + pn[:2] * thick) / 2.
+                    pdoor1 = (np.array(up0) - pn[:2] * thick +
+                              np.array(up1) - pn[:2] * thick) / 2.
+                    P0 = sh.Point(pdoor0)
+                    P1 = sh.Point(pdoor1)
+
+                    ep0 = self.Gr.pos[e[0]]
+                    ep1 = self.Gr.pos[e[1]]
+
+                    if self.Gr.node[e[0]]['polyg'].contains(P0):
+                        upd0 = d_id_index
+                        self.Gw.pos[upd0] = pdoor0
+                        self.Gw.add_node(upd0, {'room': e[0], 'door': True})
+                        # if self.seginline(pdoor0,ep0).shape[1] <= 1:
+                        self.Gw.add_edges_from([(e[0],upd0)])
+                        d_id_index = d_id_index + 1
+
+                        upd1 = d_id_index
+                        self.Gw.pos[upd1] = pdoor1
+                        self.Gw.add_node(upd1, {'room': e[1], 'door': True})
+                        # if self.seginline(pdoor1,ep1).shape[1] <= 1:
+                        self.Gw.add_edges_from([(e[1],upd1)])
+                        d_id_index = d_id_index + 1
+                    else:
+                        upd0 = d_id_index
+                        self.Gw.pos[upd0] = pdoor0
+                        self.Gw.add_node(upd0, {'room': e[1], 'door': True})
+                        # if self.seginline(pdoor0,ep1).shape[1] <= 1:
+                        self.Gw.add_edges_from([(e[1],upd0)])
+                        d_id_index = d_id_index + 1
+
+                        upd1 = d_id_index
+                        self.Gw.pos[upd1] = pdoor1
+                        self.Gw.add_node(upd1, {'room': e[0], 'door': True})
+                        # if self.seginline(pdoor1,ep0).shape[1] <= 1:
+                        self.Gw.add_edges_from([(e[0],upd1)])
+                        d_id_index = d_id_index + 1
+                    self.Gw.add_edges_from([(upd0, upd1)])
+                else:
+                    self.Gw.add_edges_from([(e[0],e[1])])
+        self.Gw.pos.update(self.Gr.pos)
+
+
 
     def editor(self):
         """ invoke interactive layout graphical editor

@@ -29,23 +29,50 @@ def draw(G,**kwargs):
     ----------
 
     G : Graph with pos (geometric graph)
-    show : False
-    fig : []
-    ax : []
-    'nodes':True,
-    'edges':True,
-    'airwalls':False,
-    'labels':True,
-    'width': 2,
-    'node_color':'w',
-    'edge_color':'k',
-    'node_size': 200,
-    'font_size': 30,
-    'alphan': 0.8,
-    'alphae': 1.0,
-    'nodelist': [],
-    'edgelist': [],
+    'show': False,
+        plt.show
     'figsize': (8,8)
+        figsize from plt.figure
+    'fig': [],
+        plt.figure instance
+    'ax': [],
+        plt.axis instance
+    'arrows':False,
+        display arrows on segments
+    'nodes':True,
+        displays nodes for points
+    'edges':True,
+        display nodes for segments
+    'lowerseg' : False
+        only display segment in contact with floor. Remove
+        other iso segments
+    'airwalls':False,
+        display airwalls
+    'labels':True,
+        display labels on nodes (points and segments)
+    'width': 2,
+        edge line width
+    'node_color':'w',
+        node color
+    'edge_color':'k',
+        edge color
+    'posnode_color':'k',
+        point font color
+    'negnode_color':'b',
+        segment font color
+    'font_size': 30,
+        font size
+    'node_size': 200,
+        node size
+    'alphan': 0.8,
+        node transparence ( alpha)
+    'alphae': 1.0,
+        edge transparence ( alpha)
+    'nodelist': [],
+        list of nodes to be displayed
+    'edgelist': [],
+        list of edges to be displayed
+
 
     See Also
     --------
@@ -68,7 +95,6 @@ def draw(G,**kwargs):
                 'posnode_color':'k',
                 'negnode_color':'b',
                 'node_size': 200,
-                'width': 2,
                 'font_size': 30,
                 'alphan': 0.8,
                 'alphae': 1.0,
@@ -131,6 +157,7 @@ def draw(G,**kwargs):
         edgelist = filter(lambda x: x not in ea, edgelist)
     except:
         pass
+
     if kwargs['nodes']:
         nx.draw_networkx_nodes(G, G.pos,
                                nodelist = nodelist,
@@ -168,11 +195,11 @@ def draw(G,**kwargs):
                                    alpha = kwargs['alphae'],
                                    style='dotted',
                                    ax=ax)
-        if kwargs['labels']:
-            nx.draw_networkx_labels(G, G.pos,
-                                        labels={n:n for n in nodelista},
-                                        font_color=kwargs['posnode_color'],
-                                        font_size=kwargs['font_size'],ax=ax)
+            if kwargs['labels']:
+                nx.draw_networkx_labels(G, G.pos,
+                                            labels={n:n for n in nodelista},
+                                            font_color=kwargs['posnode_color'],
+                                            font_size=kwargs['font_size'],ax=ax)
             
     if kwargs['show']:
         plt.show()
