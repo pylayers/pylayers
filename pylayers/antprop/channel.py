@@ -291,6 +291,7 @@ class AFPchannel(bs.FUsignal):
         #
         # complex transfer function 
         #
+
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         self.az = (360-D[:,0])*np.pi/180.
