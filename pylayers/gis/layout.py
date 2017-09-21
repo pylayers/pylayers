@@ -9937,7 +9937,8 @@ class Layout(pro.PyLayers):
                              and n not in self.segboundary]
                 if trans_seg != []:
                     self.Gr.add_edge(e[0],e[1],{'segment':trans_seg})
-
+        deg = self.Gr.degree()
+        self.Gr.remove_nodes_from([n for n in deg if deg[n] == 0])
 
     def buildGw(self):
         """ build Graph of waypaths
