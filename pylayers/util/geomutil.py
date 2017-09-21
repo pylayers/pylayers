@@ -160,7 +160,7 @@ import logging
 import networkx as nx
 import doctest
 import os
-import mayavi.mlab as mlab
+#import mayavi.mlab as mlab
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.linalg import toeplitz
@@ -168,6 +168,7 @@ import pylayers.util.project as pro
 import pylayers.util.pyutil as pyu
 import pylayers.util.graphutil as gru
 import numpy.ma as ma
+
 
 # from antenna import *
 import shapely.geometry as shg

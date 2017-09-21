@@ -298,7 +298,6 @@ class AFPchannel(bs.FUsignal):
         self.az = (360-D[:,0])*np.pi/180.
 
 
-
     def toadp(self,imax=-1):
         """ convert afp into adp (frequency->delay) 
         """
