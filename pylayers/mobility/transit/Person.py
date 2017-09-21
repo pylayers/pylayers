@@ -166,6 +166,7 @@ class Person(Process):
         self.manager_args = []
         self.waypoints = []
         self.moving=moving
+        pdb.set_trace()
         # random.seed(seed)
         if roomId < 0:
             try :

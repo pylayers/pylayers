@@ -19,8 +19,18 @@ Array class
 .. autosummary::
     :toctree: generated/
 
+    Array.show
+
 ULAarray class
 ==============
+
+.. autosummary::
+    :toctree: generated/
+
+    set_position 
+
+UCAarray
+========
 
 .. autosummary::
     :toctree: generated/
@@ -30,6 +40,12 @@ AntArray class
 
 .. autosummary::
     :toctree: generated/
+
+    AntArray.steervec
+    AntArray.k2xyz
+    AntArray.xyztok
+    AntArray.weights
+
 
 """
 class TXRU(object):

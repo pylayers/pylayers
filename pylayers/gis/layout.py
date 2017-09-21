@@ -10302,91 +10302,94 @@ class Layout(pro.PyLayers):
         #  this is a problem because the concatenation of cycles
         #  operation requires cycles contiguity
         #
-        # for n in self.Gr.nodes():
-        #     self.Gr.node[n]['transition'] = []
-        # ltrans = self.listtransition
-        # ltmp = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
-        # ldoors = filter(lambda x:self.Gs.node[x]['name']!='_AIR',ltmp)
-        # keys = self.Gr.node.keys()
 
-        # for a in _airseg:
-        #     n0,n1=iuE[a]
-        #     found=False
-        #     while not found:
-        #         nn0 = mapoldcy[n0]
-        #         if n0==nn0:
-        #             found=True
-        #         else:
-        #             n0=nn0
-        #     found=False
-        #     while not found:
-        #         nn1 = mapoldcy[n1]
-        #         if n1==nn1:
-        #             found=True
-        #         else:
-        #             n1=nn1
+        for n in self.Gr.nodes():
+            self.Gr.node[n]['transition'] = []
 
-        #     p0=self.Gt.node[n0]['polyg']
-        #     p1=self.Gt.node[n1]['polyg']
+        ltrans = self.listtransition
+        ltmp = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
+        ldoors = filter(lambda x:self.Gs.node[x]['name']!='_AIR',ltmp)
+        keys = self.Gr.node.keys()
 
-        #     # Merge polygon
-        #     P = p0+p1
-        #     # If the new Polygon is convex update Gt
-        #     #
-        #     if geu.isconvex(P):
-        #         # updates vnodes of the new merged polygon
-        #         P.setvnodes(self)
-        #         # update edge
-        #         n0s = n0
-        #         n1s = n1
-        #         # get segments information from cycle n0
-        #         dne = self.Gt[n0]
-        #         # remove connection to n0 to avoid a cycle being
-        #         # connected to itself
-        #         self.Gt[n1].pop(n0)
-        #         # add information from adjacent cycle n1
-        #         dne.update(self.Gt[n1])
-        #         # list of items of the merged dictionnary
-        #         ine = dne.items()
-        #         #update n0 with the new merged polygon
-        #         self.Gt.add_node(n0,polyg=P)
-        #         # connect new cycle n0 to neighbors
-        #         self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
-        #         #remove old cycle n1
-        #         self.Gt.remove_node(n1)
-        #         # update pos of the cycle with merged polygon centroid
-        #         self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
-        #         # delete _air segment a
-        #         # do not apply g2npy
-        #         self.del_segment(a,verbose=False,g2npy=False)
-        #         mapoldcy[n1]=n0
-        # for cy in keys:
-        #     p = self.Gr.node[cy]['polyg']
-        #     lseg = [ x for x in p.vnodes if x > 0 ]
-        #     #hasdoor = filter(lambda n : n in ldoors,lseg)
-        #     hasdoor = [ x for x in lseg if x in ldoors]
-        #     if len(hasdoor)>0:
-        #         pass
-        #     else:
-        #         self.Gr.remove_node(cy)
-        #         self.Gr.pos.pop(cy)
-
-        # # Destroy edges which do not share a transition
-        # for e in self.Gr.edges():
-        #     keep = False
-        #     if (e[0]>0) & (e[1]>0):
-        #         cy1 = self.Gr.node[e[0]]['cycle']
-        #         cy2 = self.Gr.node[e[1]]['cycle']
-        #         f,b = cy1.intersect(cy2)
-        #         for s in b:
-        #             if s>0:
-        #                 if self.Gs.node[s]['transition']:
-        #                     keep = True
-        #                     self.Gr.node[e[0]]['transition'].append(s)
-        #                     self.Gr.node[e[1]]['transition'].append(s)
-
-        #     if not keep:
-        #         self.Gr.remove_edge(*e)
+#        for a in _airseg:
+#            n0,n1=iuE[a]
+#            found=False
+#            while not found:
+#                nn0 = mapoldcy[n0]
+#                if n0==nn0:
+#                    found=True
+#                else:
+#                    n0=nn0
+#                    found=False
+#            while not found:
+#                nn1 = mapoldcy[n1]
+#                if n1==nn1:
+#                    found=True
+#                else:
+#                    n1=nn1
+#
+#            p0=self.Gt.node[n0]['polyg']
+#            p1=self.Gt.node[n1]['polyg']
+#
+#            # Merge polygon
+#            P = p0+p1
+#            # If the new Polygon is convex update Gt
+#            #
+#            if geu.isconvex(P):
+#             # updates vnodes of the new merged polygon
+#                P.setvnodes(self)
+#             # update edge
+#                n0s = n0
+#                n1s = n1
+#             # get segments information from cycle n0
+#                dne = self.Gt[n0]
+#             # remove connection to n0 to avoid a cycle being
+#             # connected to itself
+#                self.Gt[n1].pop(n0)
+#             # add information from adjacent cycle n1
+#                dne.update(self.Gt[n1])
+#             # list of items of the merged dictionnary
+#                ine = dne.items()
+#             #update n0 with the new merged polygon
+#                self.Gt.add_node(n0,polyg=P)
+#             # connect new cycle n0 to neighbors
+#                self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])
+#             #remove old cycle n1
+#                self.Gt.remove_node(n1)
+#             # update pos of the cycle with merged polygon centroid
+#                self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()
+#             # delete _air segment a
+#             # do not apply g2npy
+#                self.del_segment(a,verbose=False,g2npy=False)
+#                mapoldcy[n1]=n0
+#
+#     for cy in keys:
+#         p = self.Gr.node[cy]['polyg']
+#         lseg = [ x for x in p.vnodes if x > 0 ]
+#         #hasdoor = filter(lambda n : n in ldoors,lseg)
+#         hasdoor = [ x for x in lseg if x in ldoors]
+#         if len(hasdoor)>0:
+#             pass
+#         else:
+#             self.Gr.remove_node(cy)
+#             self.Gr.pos.pop(cy)
+#
+#     # Destroy edges which do not share a transition
+#     for e in self.Gr.edges():
+#         keep = False
+#         if (e[0]>0) & (e[1]>0):
+#             cy1 = self.Gr.node[e[0]]['cycle']
+#             cy2 = self.Gr.node[e[1]]['cycle']
+#             f,b = cy1.intersect(cy2)
+#             for s in b:
+#                 if s>0:
+#                     if self.Gs.node[s]['transition']:
+#                         keep = True
+#                         self.Gr.node[e[0]]['transition'].append(s)
+#                         self.Gr.node[e[1]]['transition'].append(s)
+#
+#         if not keep:
+#             self.Gr.remove_edge(*e)
 
     def waypoint(self, nroom1, nroom2):
         """ get the waypoint between room1 and room2
