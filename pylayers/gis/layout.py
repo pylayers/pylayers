@@ -9447,8 +9447,8 @@ class Layout(pro.PyLayers):
         --------
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('WHERE1.ini')
-            >>> L.dumpr()
+            >>> L = Layout('TA-Office.lay')
+            >>> L.build()
 
         Notes
         -----

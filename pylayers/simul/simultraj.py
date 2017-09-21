@@ -278,17 +278,16 @@ class Simul(PyLayers):
         """
 
         if isinstance(source.B,Body):
-            B=[source.B]
+            B = [source.B]
         elif isinstance(source.B,list):
-            B=source.B
+            B = source.B
         elif isinstance(source.B,dict):
             B=source.B.values()
         else:
             raise AttributeError('CorSer.B must be a list or a Body')
-
-        self.L=source.L
+        self.L = source.L
         self.traj = tr.Trajectories()
-        self.traj.Lfilename=self.L.filename
+        self.traj.Lfilename=self.L._filename
 
         for b in B:
             self.dpersons.update({b.name: b})
@@ -528,14 +527,14 @@ class Simul(PyLayers):
         Examples
         --------
 
-            >>> from pylayers.simul.simultraj import *
-            >>> from pylayers.measures.cormoran import *
-            >>> C=CorSer()
-            >>> S=Simul(C,verbose=True)
-            >>> link={'ieee802154':[]}
-            >>> link['ieee802154'].append(S.N.links['ieee802154'][0])
-            >>> lt = [0,0.2,0.3,0.4,0.5]
-            >>> S.run(links=link,t=lt)
+        >>> from pylayers.simul.simultraj import *
+        >>> from pylayers.measures.cormoran import *
+        >>> C=CorSer(layout=True)
+        >>> S=Simul(C,verbose=True)
+        >>> link={'ieee802154':[]}
+        >>> link['ieee802154'].append(S.N.links['ieee802154'][0])
+        >>> lt = [0,0.2,0.3,0.4,0.5]
+        >>> S.run(links=link,t=lt)
 
 
         """
@@ -1072,12 +1071,11 @@ class Simul(PyLayers):
         Examples
         --------
 
-        >>> from pylayers.simul.simultraj import *
-        >>> from pylayers.measures.cormoran import *
-        >>> C=CorSer(serie=6i,day=11)
-        >>> S = Simul(C,verb ose=False)
-        >>> DL = S.get_link(typ=['R','C','H'])
-                ...
+            >>> from pylayers.simul.simultraj import *
+            >>> from pylayers.measures.cormoran import *
+            >>> C=CorSer(serie=6,day=11,layout=True)
+            >>> S = Simul(C,verbose=False)
+            >>> DL = S.get_link(typ=['R','C','H'])
         """
 
 
@@ -1361,11 +1359,12 @@ class Simul(PyLayers):
         Parameters
         ----------
 
-       grpname : string
+        grpname : string
             group name which can be found sin self.data aktk_idx column
 
         Returns
         -------
+
         (ak, tk, conf)
 
         ak : ndarray:
