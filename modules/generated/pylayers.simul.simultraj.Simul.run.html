@@ -245,7 +245,7 @@
 <p class="rubric">Examples</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.simultraj import *
 &gt;&gt;&gt; from pylayers.measures.cormoran import *
-&gt;&gt;&gt; C=CorSer()
+&gt;&gt;&gt; C=CorSer(layout=True)
 &gt;&gt;&gt; S=Simul(C,verbose=True)
 &gt;&gt;&gt; link={&#39;ieee802154&#39;:[]}
 &gt;&gt;&gt; link[&#39;ieee802154&#39;].append(S.N.links[&#39;ieee802154&#39;][0])
@@ -268,7 +268,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.simultraj.Simul.run.rst.txt"

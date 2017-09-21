@@ -3874,7 +3874,6 @@
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Yc</span><span class="p">,</span> <span class="n">pX</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="MRot3"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.MRot3.html#pylayers.util.geomutil.MRot3">[docs]</a><span class="k">def</span> <span class="nf">MRot3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axe</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a 3D rotation matrix along axe 0|1|2</span>
@@ -3912,9 +3911,9 @@
 <span class="sd">    pol : string &#39;H&#39; (Horizontal) or &#39;V&#39; (Vertical)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vl</span><span class="p">,</span><span class="n">vl</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span><span class="n">pl</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span><span class="n">vl</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span><span class="n">sl</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">el</span><span class="p">,</span><span class="n">el</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span><span class="n">el</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">)</span>
     
     <span class="c1">#</span>
     <span class="c1"># local frame completion (vl,pl,ql) direct frame </span>
@@ -4105,52 +4104,51 @@
     <span class="k">return</span><span class="p">(</span><span class="n">a_new</span><span class="p">)</span></div>
 
 
-<span class="c1">#def BTB_rx(a_g, T):</span>
-<span class="c1">#    &quot;&quot;&quot; Produce a set of rotation matrices for passage between global and</span>
-<span class="c1">#    local frames</span>
-<span class="c1">#</span>
-<span class="c1">#    Parameters</span>
-<span class="c1">#    ----------</span>
-<span class="c1">#</span>
-<span class="c1">#    a_g  :</span>
-<span class="c1">#        angle in global reference frame   2 x N  :  (theta,phi) x N</span>
-<span class="c1">#    T    :</span>
-<span class="c1">#        Rx rotation matrix     3 x 3</span>
-<span class="c1">#</span>
-<span class="c1">#    Returns</span>
-<span class="c1">#    -------</span>
-<span class="c1">#</span>
-<span class="c1">#    R  :  ndarray (3x3)</span>
-<span class="c1">#    al :  ndarray (r x 2)</span>
-<span class="c1">#        angle expressed in local basis</span>
-<span class="c1">#</span>
-<span class="c1">#    See Also</span>
-<span class="c1">#    --------</span>
-<span class="c1">#</span>
-<span class="c1">#    angledir</span>
-<span class="c1">#    SphericalBasis</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#    Notes</span>
-<span class="c1">#    -----</span>
-<span class="c1">#</span>
-<span class="c1">#    N is the number or rays</span>
-<span class="c1">#</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-<span class="c1">#    G = SphericalBasis(a_g)</span>
-<span class="c1">#    th_g = G[0, :, :]</span>
-<span class="c1">#    ph_g = G[1, :, :]</span>
-<span class="c1">#    B_g = np.dstack((th_g, ph_g)).transpose((0, 2, 1))</span>
-<span class="c1">#    s_l = np.dot(T.T, G[2, :, :]).T</span>
-<span class="c1">#    a_l = angledir(s_l)</span>
-<span class="c1">#    L = SphericalBasis(a_l)</span>
-<span class="c1">#    th_l = L[0, :, :]</span>
-<span class="c1">#    ph_l = L[1, :, :]</span>
-<span class="c1">#    B_lT = np.dstack((th_l, ph_l)).transpose((2, 0, 1))</span>
-<span class="c1">#    U = np.einsum(&#39;ijk,jlk-&gt;ilk&#39;,B_lT,T.T[:,:,None])</span>
-<span class="c1">#    R = np.einsum(&#39;ijk,jlk-&gt;ilk&#39;,U,B_g)</span>
-<span class="c1">#</span>
-<span class="c1">#    return a_l,R</span>
+
+<span class="k">def</span> <span class="nf">Bthph</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">,</span><span class="n">M</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return theta and phi tranformed from a rotation matrix M</span>
+
+
+<span class="sd">        th (N)</span>
+<span class="sd">        ph (N)</span>
+<span class="sd">        M (3,3)</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        theta,phi </span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        This function is convenient for Antennas in addition of </span>
+<span class="sd">        MATP.</span>
+<span class="sd">        MATP returns a rotation matrix M which allow the</span>
+<span class="sd">        transformation  from a local basis to a global basis.</span>
+
+<span class="sd">        Using Bthph with MATP allows to evaluate the Antenna</span>
+<span class="sd">        for given theta phi in a global basis and determine </span>
+<span class="sd">        associated gain values in the Antenna local basis </span>
+
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">([</span><span class="n">th</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ph</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">([</span><span class="n">ph</span><span class="p">])</span>
+    <span class="c1"># spherical to cartesian </span>
+    <span class="n">sp2cart</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)])</span>
+    <span class="c1"># apply rotation matrix</span>
+    <span class="n">Cloc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,ik-&gt;kj&#39;</span><span class="p">,</span><span class="n">sp2cart</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+    <span class="c1"># return in psherical coodinates    </span>
+    <span class="n">cart2sp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">Cloc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">Cloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">Cloc</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
+
+    <span class="k">return</span> <span class="n">cart2sp</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">cart2sp</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
 
 
 <div class="viewcode-block" id="BTB"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.BTB.html#pylayers.util.geomutil.BTB">[docs]</a><span class="k">def</span> <span class="nf">BTB</span><span class="p">(</span><span class="n">a_g</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
@@ -5658,7 +5656,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

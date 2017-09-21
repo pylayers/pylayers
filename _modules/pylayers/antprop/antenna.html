@@ -303,7 +303,10 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.spharm</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="n">vsh</span> 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="n">vsh</span> 
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="n">ssh</span><span class="p">,</span><span class="n">SSHFunc2</span><span class="p">,</span> <span class="n">SSHFunc</span><span class="p">,</span> <span class="n">SSHCoeff</span><span class="p">,</span> <span class="n">CartToSphere</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.coeffModel</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rc</span>
@@ -363,6 +366,9 @@
 <span class="sd">        pt : np.array (3,N)</span>
 <span class="sd">        pr : np.array (3,N)</span>
 <span class="sd">        azoffset : int (0) </span>
+<span class="sd">        Rfloor:bool</span>
+<span class="sd">            if true add gain value to reflected ray on the floor. </span>
+<span class="sd">            values are append at the end of sqG.</span>
 <span class="sd">        fGHz:list </span>
 <span class="sd">            []</span>
 <span class="sd">        nth: int </span>
@@ -385,6 +391,8 @@
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
+
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.antprop.aarray import *</span>
 <span class="sd">        &gt;&gt;&gt; A0=Antenna(&#39;Omni&#39;,param={&#39;pol&#39;:&#39;t&#39;,&#39;GmaxdB&#39;:0})</span>
@@ -816,8 +824,8 @@
 
 
         <span class="c1"># Far-Field</span>
-        <span class="n">Ft</span>  <span class="o">=</span> <span class="o">-</span><span class="n">L_phi</span>  <span class="o">-</span> <span class="n">eta0</span><span class="o">*</span><span class="n">N_theta</span>  <span class="c1"># 12-10b p 661</span>
-        <span class="n">Fp</span>  <span class="o">=</span> <span class="o">-</span><span class="n">L_theta</span> <span class="o">+</span> <span class="n">eta0</span><span class="o">*</span><span class="n">N_phi</span>   <span class="c1"># 12-10c p 661 (!! *-1)</span>
+        <span class="n">Ft</span>  <span class="o">=</span> <span class="o">-</span><span class="n">L_phi</span>  <span class="o">-</span> <span class="n">eta0</span><span class="o">*</span><span class="n">N_theta</span> <span class="c1"># 12-10b p 661</span>
+        <span class="n">Fp</span>  <span class="o">=</span> <span class="n">L_theta</span> <span class="o">-</span> <span class="n">eta0</span><span class="o">*</span><span class="n">N_phi</span>   <span class="c1"># 12-10c p 661 </span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">Ft</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Ft</span><span class="p">)</span><span class="o">+</span><span class="n">Fp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Fp</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
             <span class="c1"># Umax : ,f </span>
@@ -5691,7 +5699,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

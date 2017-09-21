@@ -174,23 +174,50 @@
 <span class="sd">    ----------</span>
 
 <span class="sd">    G : Graph with pos (geometric graph)</span>
-<span class="sd">    show : False</span>
-<span class="sd">    fig : []</span>
-<span class="sd">    ax : []</span>
-<span class="sd">    &#39;nodes&#39;:True,</span>
-<span class="sd">    &#39;edges&#39;:True,</span>
-<span class="sd">    &#39;airwalls&#39;:False,</span>
-<span class="sd">    &#39;labels&#39;:True,</span>
-<span class="sd">    &#39;width&#39;: 2,</span>
-<span class="sd">    &#39;node_color&#39;:&#39;w&#39;,</span>
-<span class="sd">    &#39;edge_color&#39;:&#39;k&#39;,</span>
-<span class="sd">    &#39;node_size&#39;: 200,</span>
-<span class="sd">    &#39;font_size&#39;: 30,</span>
-<span class="sd">    &#39;alphan&#39;: 0.8,</span>
-<span class="sd">    &#39;alphae&#39;: 1.0,</span>
-<span class="sd">    &#39;nodelist&#39;: [],</span>
-<span class="sd">    &#39;edgelist&#39;: [],</span>
+<span class="sd">    &#39;show&#39;: False,</span>
+<span class="sd">        plt.show</span>
 <span class="sd">    &#39;figsize&#39;: (8,8)</span>
+<span class="sd">        figsize from plt.figure</span>
+<span class="sd">    &#39;fig&#39;: [],</span>
+<span class="sd">        plt.figure instance</span>
+<span class="sd">    &#39;ax&#39;: [],</span>
+<span class="sd">        plt.axis instance</span>
+<span class="sd">    &#39;arrows&#39;:False,</span>
+<span class="sd">        display arrows on segments</span>
+<span class="sd">    &#39;nodes&#39;:True,</span>
+<span class="sd">        displays nodes for points</span>
+<span class="sd">    &#39;edges&#39;:True,</span>
+<span class="sd">        display nodes for segments</span>
+<span class="sd">    &#39;lowerseg&#39; : False</span>
+<span class="sd">        only display segment in contact with floor. Remove</span>
+<span class="sd">        other iso segments</span>
+<span class="sd">    &#39;airwalls&#39;:False,</span>
+<span class="sd">        display airwalls</span>
+<span class="sd">    &#39;labels&#39;:True,</span>
+<span class="sd">        display labels on nodes (points and segments)</span>
+<span class="sd">    &#39;width&#39;: 2,</span>
+<span class="sd">        edge line width</span>
+<span class="sd">    &#39;node_color&#39;:&#39;w&#39;,</span>
+<span class="sd">        node color</span>
+<span class="sd">    &#39;edge_color&#39;:&#39;k&#39;,</span>
+<span class="sd">        edge color</span>
+<span class="sd">    &#39;posnode_color&#39;:&#39;k&#39;,</span>
+<span class="sd">        point font color</span>
+<span class="sd">    &#39;negnode_color&#39;:&#39;b&#39;,</span>
+<span class="sd">        segment font color</span>
+<span class="sd">    &#39;font_size&#39;: 30,</span>
+<span class="sd">        font size</span>
+<span class="sd">    &#39;node_size&#39;: 200,</span>
+<span class="sd">        node size</span>
+<span class="sd">    &#39;alphan&#39;: 0.8,</span>
+<span class="sd">        node transparence ( alpha)</span>
+<span class="sd">    &#39;alphae&#39;: 1.0,</span>
+<span class="sd">        edge transparence ( alpha)</span>
+<span class="sd">    &#39;nodelist&#39;: [],</span>
+<span class="sd">        list of nodes to be displayed</span>
+<span class="sd">    &#39;edgelist&#39;: [],</span>
+<span class="sd">        list of edges to be displayed</span>
+
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -213,7 +240,6 @@
                 <span class="s1">&#39;posnode_color&#39;</span><span class="p">:</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;negnode_color&#39;</span><span class="p">:</span><span class="s1">&#39;b&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;node_size&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
-                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="s1">&#39;font_size&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
                 <span class="s1">&#39;alphan&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
                 <span class="s1">&#39;alphae&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -276,6 +302,7 @@
         <span class="n">edgelist</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ea</span><span class="p">,</span> <span class="n">edgelist</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
+
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]:</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
                                <span class="n">nodelist</span> <span class="o">=</span> <span class="n">nodelist</span><span class="p">,</span>
@@ -313,11 +340,11 @@
                                    <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alphae&#39;</span><span class="p">],</span>
                                    <span class="n">style</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">,</span>
                                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]:</span>
-            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
-                                        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodelista</span><span class="p">},</span>
-                                        <span class="n">font_color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;posnode_color&#39;</span><span class="p">],</span>
-                                        <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;font_size&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]:</span>
+                <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+                                            <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodelista</span><span class="p">},</span>
+                                            <span class="n">font_color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;posnode_color&#39;</span><span class="p">],</span>
+                                            <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;font_size&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
             
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;show&#39;</span><span class="p">]:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -408,7 +435,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

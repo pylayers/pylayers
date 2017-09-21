@@ -215,8 +215,8 @@
 <p class="rubric">Examples</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.simul.simultraj import *
 &gt;&gt;&gt; from pylayers.measures.cormoran import *
-&gt;&gt;&gt; C=CorSer(serie=6i,day=11)
-&gt;&gt;&gt; S = Simul(C,verb ose=False)
+&gt;&gt;&gt; C=CorSer(serie=6,day=11,layout=True)
+&gt;&gt;&gt; S = Simul(C,verbose=False)
 &gt;&gt;&gt; DL = S.get_link(typ=[&#39;R&#39;,&#39;C&#39;,&#39;H&#39;])
         ...
 </pre></div>
@@ -236,7 +236,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.simultraj.Simul.get_link.rst.txt"

@@ -2944,7 +2944,7 @@
                 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;add_segment : error not a node&quot;</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="n">transition</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c1"># transition = False</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;_AIR&#39;</span><span class="p">):</span>
             <span class="c1"># if name == &#39;AIR&#39;:</span>
             <span class="n">transition</span> <span class="o">=</span> <span class="bp">True</span>
@@ -7583,306 +7583,6 @@
 
         <span class="k">return</span> <span class="n">polys</span></div>
 
-<div class="viewcode-block" id="Layout.buildGw"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGw.html#pylayers.gis.layout.Layout.buildGw">[docs]</a>    <span class="k">def</span> <span class="nf">buildGw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; build Graph of waypaths</span>
-
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        buildGr</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        for all edges of Gr (adjascent room)</span>
-<span class="sd">            if room1 and room2 have a common transition</span>
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="n">d_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>  <span class="c1"># for numerotation of Gw nodes</span>
-        <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id</span> <span class="o">+</span> <span class="mi">1</span>
-
-        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">edges_iter</span><span class="p">():</span>  <span class="c1"># iterator on Gr edges</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
-
-            <span class="c1"># transitions of room e[0]</span>
-            <span class="n">trans1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;transition&#39;</span><span class="p">]</span>
-            <span class="c1"># transitions of room e[1]</span>
-            <span class="n">trans2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;transition&#39;</span><span class="p">]</span>
-            <span class="n">Id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">trans1</span><span class="p">,</span> <span class="n">trans2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># list of common doors</span>
-
-            <span class="n">unode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">Id</span><span class="p">)</span>  <span class="c1"># get edge number of common doors</span>
-            <span class="n">up0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">unode</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-            <span class="n">up1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">unode</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-
-            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">Id</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="bp">True</span><span class="p">:</span>  <span class="c1"># name != &#39;AIR&#39;:</span>
-                <span class="n">pn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">Id</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">]</span>
-                <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-                <span class="n">thick</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span>
-
-                <span class="c1"># middle of the common door</span>
-                <span class="n">pdoor0</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up0</span><span class="p">)</span> <span class="o">+</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span> <span class="o">+</span>
-                          <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up1</span><span class="p">)</span> <span class="o">+</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
-                <span class="n">pdoor1</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up0</span><span class="p">)</span> <span class="o">-</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span> <span class="o">+</span>
-                          <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
-                <span class="n">P0</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pdoor0</span><span class="p">)</span>
-                <span class="n">P1</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pdoor1</span><span class="p">)</span>
-
-                <span class="n">ep0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                <span class="n">ep1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">P0</span><span class="p">):</span>
-                    <span class="n">upd0</span> <span class="o">=</span> <span class="n">d_id_index</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor0</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
-                    <span class="c1"># if self.seginline(pdoor0,ep0).shape[1] &lt;= 1:</span>
-                    <span class="c1">#     self.Gw.add_edges_from([(e[0],upd0)])</span>
-                    <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
-
-                    <span class="n">upd1</span> <span class="o">=</span> <span class="n">d_id_index</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor1</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
-                    <span class="c1"># if self.seginline(pdoor1,ep1).shape[1] &lt;= 1:</span>
-                    <span class="c1">#     self.Gw.add_edges_from([(e[1],upd1)])</span>
-                    <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">upd0</span> <span class="o">=</span> <span class="n">d_id_index</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor0</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
-                    <span class="c1"># if self.seginline(pdoor0,ep1).shape[1] &lt;= 1:</span>
-                    <span class="c1">#     self.Gw.add_edges_from([(e[1],upd0)])</span>
-                    <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
-
-                    <span class="n">upd1</span> <span class="o">=</span> <span class="n">d_id_index</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor1</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
-                    <span class="c1"># if self.seginline(pdoor1,ep0).shape[1] &lt;= 1:</span>
-                    <span class="c1">#     self.Gw.add_edges_from([(e[0],upd1)])</span>
-                    <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">upd0</span><span class="p">,</span> <span class="n">upd1</span><span class="p">)])</span>
-            <span class="c1"># Airwalls case</span>
-            <span class="k">else</span><span class="p">:</span>
-
-                <span class="n">pdoor</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">d_id_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span>
-                    <span class="p">[(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d_id_index</span><span class="p">),</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">d_id_index</span><span class="p">)])</span>
-                <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
-
-<span class="c1">#####################</span>
-        <span class="c1"># # SINGLE POINT SEGMENT TRANSITION</span>
-        <span class="c1"># d_id = max(self.Gr.nodes())+1</span>
-        <span class="c1"># # Add trnasistion segments in visibility</span>
-        <span class="c1"># for e in self.Gr.edges_iter(): # iterator on Gr edges</span>
-        <span class="c1">#     trans1 = self.Gr.node[e[0]][&#39;transition&#39;]  # transitions of room e[0]</span>
-        <span class="c1">#     trans2 = self.Gr.node[e[1]][&#39;transition&#39;]  # transitions of room e[1]</span>
-        <span class="c1">#     Id = np.intersect1d(trans1,trans2)[0]  # list of common doors</span>
-
-        <span class="c1">#     unode = self.Gs.neighbors(Id) # get edge number of common doors</span>
-        <span class="c1">#     p1 = self.Gs.pos[unode[0]]</span>
-        <span class="c1">#     p2 = self.Gs.pos[unode[1]]</span>
-        <span class="c1"># pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common</span>
-        <span class="c1"># door</span>
-
-        <span class="c1">#     self.Gw.add_node(Id + d_id,door=True)     # new node</span>
-        <span class="c1">#     self.Gw.pos[Id + d_id] = pdoor  # in the middle of the door|airwall</span>
-        <span class="c1">#     pe0=self.Gr.pos[e[0]]</span>
-        <span class="c1">#     pe1=self.Gr.pos[e[1]]</span>
-
-        <span class="c1">#     # if only the trnasisiton intersects</span>
-        <span class="c1">#     if self.seginline(pdoor,pe0).shape[1] == 1:</span>
-        <span class="c1">#         self.Gw.add_edges_from([(e[0], Id + d_id)])</span>
-        <span class="c1">#     if self.seginline(pdoor,pe1).shape[1] == 1:</span>
-        <span class="c1">#         self.Gw.add_edges_from([(e[1], Id + d_id)])</span>
-        <span class="c1">#     self.Gw.pos.update(self.Gr.pos)</span>
-<span class="c1">####################</span>
-        <span class="c1"># ADD CONVEX POINTS</span>
-        <span class="c1"># d_id = max(self.Gw.nodes())+1</span>
-        <span class="c1"># pcid = d_id</span>
-        <span class="c1"># tmp = []</span>
-        <span class="c1"># for n in self.Gr.nodes():</span>
-        <span class="c1">#     # get segment number of the room</span>
-        <span class="c1">#     tcc, nn = self.Gr.node[n][&#39;polyg&#39;].ptconvex()</span>
-        <span class="c1">#     uconvex = np.nonzero(tcc == 1)[0]</span>
-
-        <span class="c1">#     if len(uconvex) != 0 :</span>
-        <span class="c1">#         lr = self.Gr.node[n][&#39;polyg&#39;].exterior</span>
-        <span class="c1">#         x,y = lr.xy</span>
-        <span class="c1">#         p = [np.array((x[i],y[i])) for i in uconvex]</span>
-        <span class="c1">#         ln = self.Gr.node[n][&#39;cycle&#39;].cycle</span>
-        <span class="c1">#         lp = filter(lambda x: x&lt; 0, ln)</span>
-        <span class="c1">#         pc = [lp[i] for i in uconvex]</span>
-        <span class="c1">#         for uu,uc in enumerate(uconvex):</span>
-        <span class="c1">#             # convex point position take into account wall width</span>
-        <span class="c1">#             npc = nx.neighbors(self.Gs,pc[uu])</span>
-        <span class="c1">#             # only corner are considered (point with 3 neighbors are not)</span>
-        <span class="c1">#             if len(npc) &lt;=2:</span>
-        <span class="c1">#                 nname = [self.Gs.node[nd][&#39;name&#39;] for nd in npc]</span>
-        <span class="c1">#                 npos = [self.Gs.pos[nd] for nd in npc]</span>
-        <span class="c1">#                 nv = [p[uu]- i for i in npos]</span>
-        <span class="c1">#                 nvn = sum(nv)/abs(sum(nv))</span>
-        <span class="c1">#                 nsl = [self.sl[name] for name in nname]</span>
-        <span class="c1">#                 thick = sum([sum(sl[&#39;lthick&#39;]) for sl in nsl])</span>
-        <span class="c1">#                 # vector to add to the convex point position</span>
-        <span class="c1">#                 v = nvn*thick</span>
-        <span class="c1">#                 pid = uc+pcid</span>
-        <span class="c1">#                 self.Gw.add_node(pid,{&#39;diff&#39;:True,&#39;room&#39;:n,&#39;door&#39;:False})</span>
-        <span class="c1">#                 self.Gw.pos.update({pid:p[uu]+v[:2]})</span>
-        <span class="c1">#                 pcid = pcid +1</span>
-
-        <span class="c1"># pdb.set_trace()</span>
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-
-            <span class="n">nr</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="p">,</span> <span class="s1">&#39;room&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="c1"># get the Gw nodes in current room</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span><span class="p">,</span> <span class="n">nr</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">nw</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-                <span class="n">pf</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">nw</span><span class="p">)</span>
-                <span class="n">pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">pf</span><span class="p">))</span>
-                <span class="c1"># if self.seginline(pf[0],pf[1]).shape[1] &lt;= 1:</span>
-                <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pf</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">nw</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nw</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span> <span class="n">weight</span><span class="o">=</span><span class="n">d</span><span class="p">)</span></div>
-
-            <span class="c1"># kudr = [kdr[u] for u in udr]</span>
-            <span class="c1"># cdr = combinations(dr.keys()[udr],2)</span>
-            <span class="c1"># for</span>
-            <span class="c1"># import ipdb</span>
-            <span class="c1"># ipdb.set_trace()</span>
-
-        <span class="c1"># for n in self.Gr.nodes_iter():</span>
-        <span class="c1">#     d = self.Gw.neighbors(n)   # neighbors of room n in Gw</span>
-        <span class="c1">#     if len(d) &gt; 1:</span>
-        <span class="c1">#         self.Gw.add_edges_from(combinations(d, 2))</span>
-
-        <span class="c1"># udn = nx.get_node_attributes(self.Gw,&#39;diff&#39;).keys()</span>
-        <span class="c1"># import ipdb</span>
-        <span class="c1"># ipdb.set_trace()</span>
-        <span class="c1"># for u in udn:</span>
-        <span class="c1">#     [self.Gw[u].update({i:{&#39;weigth&#39;:0.01}})for i in self.Gw.edge[u].keys()]</span>
-    <span class="c1"># def buildGw(self):</span>
-    <span class="c1">#     &quot;&quot;&quot; build Graph of waypaths</span>
-
-    <span class="c1">#     See Also</span>
-    <span class="c1">#     --------</span>
-
-    <span class="c1">#     buildGr</span>
-
-    <span class="c1">#     Notes</span>
-    <span class="c1">#     -----</span>
-
-    <span class="c1">#     for all edges of Gr (adjascent room)</span>
-    <span class="c1">#         if room1 and room2 have a common transition</span>
-    <span class="c1">#     &quot;&quot;&quot;</span>
-
-    <span class="c1">#     self.Gw = nx.Graph()</span>
-    <span class="c1">#     self.Gw.pos = {}</span>
-
-    <span class="c1">#     d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes</span>
-
-    <span class="c1">#     for e in self.Gr.edges_iter(): # iterator on Gr edges</span>
-    <span class="c1">#         trans1 = self.Gr.node[e[0]][&#39;transition&#39;]  # transitions of room e[0]</span>
-    <span class="c1">#         trans2 = self.Gr.node[e[1]][&#39;transition&#39;]  # transitions of room e[1]</span>
-    <span class="c1">#         Id = np.intersect1d(trans1,trans2)[0]  # list of common doors</span>
-
-    <span class="c1">#         unode = self.Gs.neighbors(Id) # get edge number of common doors</span>
-    <span class="c1">#         p1 = self.Gs.pos[unode[0]]</span>
-    <span class="c1">#         p2 = self.Gs.pos[unode[1]]</span>
-    <span class="c1"># pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common door</span>
-
-    <span class="c1">#         self.Gw.add_node(Id + d_id,door=True)     # new node</span>
-    <span class="c1">#         self.Gw.pos[Id + d_id] = pdoor  # in the middle of the door|airwall</span>
-    <span class="c1">#         self.Gw.add_edges_from([(e[0], Id + d_id),</span>
-    <span class="c1">#                                 (e[1], Id + d_id)])</span>
-    <span class="c1">#         self.Gw.pos.update(self.Gr.pos)</span>
-
-    <span class="c1">#     for n in self.Gr.nodes_iter():</span>
-    <span class="c1">#         d = self.Gw.neighbors(n)   # neighbors of room n in Gw</span>
-    <span class="c1">#         if len(d) &gt; 1:</span>
-    <span class="c1">#             self.Gw.add_edges_from(combinations(d, 2))</span>
-
-    <span class="c1"># def buildGw2(self):</span>
-    <span class="c1">#     &quot;&quot;&quot; build Graph of waypaths</span>
-
-    <span class="c1">#     See Also</span>
-    <span class="c1">#     --------</span>
-
-    <span class="c1">#     buildGr</span>
-
-    <span class="c1">#     Notes</span>
-    <span class="c1">#     -----</span>
-
-    <span class="c1">#     for all edges of Gr (adjascent room)</span>
-    <span class="c1">#         if room1 and room2 have a common transition</span>
-
-    <span class="c1">#     &quot;&quot;&quot;</span>
-
-    <span class="c1">#     self.Gw = nx.Graph()</span>
-    <span class="c1">#     self.Gw.pos = {}</span>
-
-    <span class="c1">#     d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes</span>
-    <span class="c1">#     d_id_index = d_id + 1</span>
-    <span class="c1">#     for e in self.Gr.edges_iter(): # iterator on Gr edges</span>
-    <span class="c1">#         trans1 = self.Gr.node[e[0]][&#39;transition&#39;]  # transitions of room e[0]</span>
-    <span class="c1">#         trans2 = self.Gr.node[e[1]][&#39;transition&#39;]  # transitions of room e[1]</span>
-    <span class="c1">#         Id = np.intersect1d(trans1,trans2)[0]  # list of common doors</span>
-
-    <span class="c1">#         unode = self.Gs.neighbors(Id) # get edge number of common doors</span>
-
-    <span class="c1">#         pn = self.Gs.node[Id][&#39;norm&#39;]</span>
-    <span class="c1">#         name = self.Gs.node[Id][&#39;name&#39;]</span>
-    <span class="c1">#         sl = self.sl[name]</span>
-    <span class="c1">#         thick = sum(sl[&#39;lthick&#39;])/2.</span>
-
-    <span class="c1">#         p1 = self.Gs.pos[unode[0]]</span>
-    <span class="c1">#         p2 = self.Gs.pos[unode[1]]</span>
-
-    <span class="c1">#         # middle of the common door</span>
-    <span class="c1">#         pdoor0 = (np.array(p1) + pn[:2] * thick +\</span>
-    <span class="c1">#                   np.array(p2) + pn[:2] * thick) / 2</span>
-    <span class="c1">#         pdoor1 = (np.array(p1) - pn[:2] * thick +\</span>
-    <span class="c1">#                   np.array(p2) - pn[:2] * thick) / 2</span>
-
-    <span class="c1">#         upd0 = d_id_index</span>
-    <span class="c1">#         self.Gw.add_node(upd0)     # new node</span>
-    <span class="c1">#         self.Gw.pos[upd0] = pdoor0</span>
-    <span class="c1">#         d_id_index = d_id_index +1</span>
-
-    <span class="c1">#         upd1 = d_id_index</span>
-    <span class="c1">#         self.Gw.add_node(upd1)     # new node</span>
-    <span class="c1">#         self.Gw.pos[upd1] = pdoor1</span>
-    <span class="c1">#         d_id_index = d_id_index +1</span>
-
-    <span class="c1">#         de0p0 = np.sqrt(np.sum((self.Gr.pos[e[0]]-pdoor0)**2))</span>
-    <span class="c1">#         de0p1 = np.sqrt(np.sum((self.Gr.pos[e[0]]-pdoor1)**2))</span>
-    <span class="c1">#         de1p0 = np.sqrt(np.sum((self.Gr.pos[e[1]]-pdoor0)**2))</span>
-    <span class="c1">#         de1p1 = np.sqrt(np.sum((self.Gr.pos[e[1]]-pdoor1)**2))</span>
-
-    <span class="c1">#         self.Gw.add_edges_from([(upd0, upd1)])</span>
-    <span class="c1">#         if de0p0 &lt; de0p1:</span>
-    <span class="c1">#             self.Gw.add_edges_from([(e[0],upd0)])</span>
-    <span class="c1">#         else:</span>
-    <span class="c1">#             self.Gw.add_edges_from([(e[0],upd1)])</span>
-    <span class="c1">#         if de1p0 &lt; de1p1:</span>
-    <span class="c1">#             self.Gw.add_edges_from([(e[1],upd0)])</span>
-    <span class="c1">#         else:</span>
-    <span class="c1">#             self.Gw.add_edges_from([(e[1],upd1)])</span>
-
-    <span class="c1">#         self.Gw.pos.update(self.Gr.pos)</span>
-    <span class="c1">#     for n in self.Gr.nodes_iter():</span>
-    <span class="c1">#         d = self.Gw.neighbors(n)   # neighbors of room n in Gw</span>
-    <span class="c1">#         if len(d) &gt; 1:</span>
-    <span class="c1">#             self.Gw.add_edges_from(combinations(d, 2))</span>
-
 
 <div class="viewcode-block" id="Layout.buildGv"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGv.html#pylayers.gis.layout.Layout.buildGv">[docs]</a>    <span class="k">def</span> <span class="nf">buildGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">tqdmpos</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build visibility graph</span>
@@ -9892,8 +9592,8 @@
 <span class="sd">        --------</span>
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;WHERE1.ini&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; L.dumpr()</span>
+<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;TA-Office.lay&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; L.build()</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -10351,47 +10051,6 @@
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">ddiff</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lcyk</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
 
-    <span class="c1"># def buildGr(self):</span>
-    <span class="c1">#     &quot;&quot;&quot; build the graph of rooms Gr</span>
-
-    <span class="c1">#     Notes</span>
-    <span class="c1">#     -----</span>
-
-    <span class="c1">#     + A room is a set of convex cycles connected together through _AIR or AIR segment</span>
-    <span class="c1">#     + A room is not necessarily convex</span>
-
-    <span class="c1">#     This graph is used for room electromagnetics evaluation</span>
-
-    <span class="c1">#     &quot;&quot;&quot;</span>
-
-    <span class="c1">#     # list of all indoor convex cycle</span>
-    <span class="c1">#     to_visit = [ x for x in self.Gt.node.keys() if self.Gt.node[x][&#39;indoor&#39;]]</span>
-    <span class="c1">#     # list of cycles already in a room</span>
-    <span class="c1">#     visited = []</span>
-    <span class="c1">#     # law : list of air walls</span>
-    <span class="c1">#     law = self.name[&#39;AIR&#39;]+self.name[&#39;_AIR&#39;]</span>
-    <span class="c1">#     room_cnt = 1</span>
-    <span class="c1">#     r = {}</span>
-    <span class="c1">#     cur_cy = to_visit[0]</span>
-    <span class="c1">#     while len(to_visit)&gt;0:</span>
-    <span class="c1">#         cur_cy = to_visit.pop()</span>
-    <span class="c1">#         #printcur_cy</span>
-    <span class="c1">#         # get neighbors of current_cycle</span>
-    <span class="c1">#         neighbors = nx.neighbors(self.Gt,cur_cy)</span>
-    <span class="c1">#         # get neighbors separated from the current cycle by an air_wall</span>
-    <span class="c1">#         neighbors_aw = [ x for x in neighbors if self.Gt[cur_cy][x][&#39;segment&#39;] in law ]</span>
-    <span class="c1">#         # if at least one of the neighbors is already in a room --&gt; same room</span>
-    <span class="c1">#         # else --&gt; new room</span>
-    <span class="c1">#         neighbors_already_in_a_room = [ x for x in neighbors if x in visited ]</span>
-    <span class="c1">#         for cy in neighbors:</span>
-    <span class="c1">#             if len(already_in_a_room) &gt;0 :</span>
-    <span class="c1">#                 r[cy] = r[already_in_a_room[0]]</span>
-    <span class="c1">#             else:</span>
-    <span class="c1">#                 r[cy] = room_cnt</span>
-    <span class="c1">#                 room_cnt += 1</span>
-    <span class="c1">#             visited.append(cy)</span>
-    <span class="c1">#         cur_cy = neighbors_aw[0]</span>
-    <span class="c1">#     return r,to_visit,visited</span>
 
 <div class="viewcode-block" id="Layout.buildGr"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGr.html#pylayers.gis.layout.Layout.buildGr">[docs]</a>    <span class="k">def</span> <span class="nf">buildGr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build the graph of rooms Gr</span>
@@ -10411,168 +10070,119 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
 
-        <span class="n">to_visit</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span>
-            <span class="n">x</span><span class="p">][</span><span class="s1">&#39;indoor&#39;</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">e</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;indoor&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;indoor&#39;</span><span class="p">]):</span>
 
-        <span class="n">law</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;AIR&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s1">&#39;_AIR&#39;</span><span class="p">]</span>
-        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_visit</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">remaining_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-            <span class="n">to_visit</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_visit</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">remaining_nodes</span><span class="p">]</span>
-            <span class="n">cur_cy</span> <span class="o">=</span> <span class="n">to_visit</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-            <span class="n">ln</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">,</span> <span class="n">cur_cy</span><span class="p">)</span>
-            <span class="n">ln</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ln</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;indoor&#39;</span><span class="p">]]</span>
-            <span class="c1"># ls : list of segment</span>
-            <span class="n">ls</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">[</span><span class="n">cur_cy</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;segment&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ln</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ln</span><span class="p">,</span> <span class="n">ls</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">law</span><span class="p">:</span>
-                    <span class="n">p1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cur_cy</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span>
-                    <span class="n">p2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span>
-                    <span class="n">P</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">+</span> <span class="n">p2</span>
-                    <span class="n">P</span><span class="o">.</span><span class="n">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-                    <span class="n">ine</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">sne</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;segment&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ine</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">cur_cy</span><span class="p">,</span> <span class="n">polyg</span><span class="o">=</span><span class="n">P</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">cur_cy</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">P</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">xy</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">cur_cy</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-                                            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ine</span> <span class="k">if</span> <span class="n">y</span> <span class="o">!=</span> <span class="n">cur_cy</span><span class="p">])</span>
-                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ine</span><span class="p">,</span> <span class="n">sne</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">cur_cy</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">[</span><span class="n">cur_cy</span><span class="p">][</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;segment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="k">del</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span></div>
+                <span class="n">seg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;segment&#39;</span><span class="p">]</span>
+                <span class="n">seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span>
+                <span class="n">trans_seg</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">seg</span> 
+                             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;transition&#39;</span><span class="p">])</span>
+                             <span class="ow">and</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">segboundary</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">trans_seg</span> <span class="o">!=</span> <span class="p">[]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],{</span><span class="s1">&#39;segment&#39;</span><span class="p">:</span><span class="n">trans_seg</span><span class="p">})</span>
+        <span class="n">deg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_nodes_from</span><span class="p">([</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">deg</span> <span class="k">if</span> <span class="n">deg</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span></div>
 
-        <span class="c1">#</span>
-        <span class="c1">#  Connected components might not be all contiguous</span>
-        <span class="c1">#  this is a problem because the concatenation of cycles</span>
-        <span class="c1">#  operation requires cycles contiguity</span>
-        <span class="c1">#</span>
-        <span class="c1"># for n in self.Gr.nodes():</span>
-        <span class="c1">#     self.Gr.node[n][&#39;transition&#39;] = []</span>
-        <span class="c1"># ltrans = self.listtransition</span>
-        <span class="c1"># ltmp = filter(lambda x:self.Gs.node[x][&#39;name&#39;]!=&#39;AIR&#39;,ltrans)</span>
-        <span class="c1"># ldoors = filter(lambda x:self.Gs.node[x][&#39;name&#39;]!=&#39;_AIR&#39;,ltmp)</span>
-        <span class="c1"># keys = self.Gr.node.keys()</span>
+<div class="viewcode-block" id="Layout.buildGw"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGw.html#pylayers.gis.layout.Layout.buildGw">[docs]</a>    <span class="k">def</span> <span class="nf">buildGw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; build Graph of waypaths</span>
 
-        <span class="c1"># for a in _airseg:</span>
-        <span class="c1">#     n0,n1=iuE[a]</span>
-        <span class="c1">#     found=False</span>
-        <span class="c1">#     while not found:</span>
-        <span class="c1">#         nn0 = mapoldcy[n0]</span>
-        <span class="c1">#         if n0==nn0:</span>
-        <span class="c1">#             found=True</span>
-        <span class="c1">#         else:</span>
-        <span class="c1">#             n0=nn0</span>
-        <span class="c1">#     found=False</span>
-        <span class="c1">#     while not found:</span>
-        <span class="c1">#         nn1 = mapoldcy[n1]</span>
-        <span class="c1">#         if n1==nn1:</span>
-        <span class="c1">#             found=True</span>
-        <span class="c1">#         else:</span>
-        <span class="c1">#             n1=nn1</span>
 
-        <span class="c1">#     p0=self.Gt.node[n0][&#39;polyg&#39;]</span>
-        <span class="c1">#     p1=self.Gt.node[n1][&#39;polyg&#39;]</span>
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
 
-        <span class="c1">#     # Merge polygon</span>
-        <span class="c1">#     P = p0+p1</span>
-        <span class="c1">#     # If the new Polygon is convex update Gt</span>
-        <span class="c1">#     #</span>
-        <span class="c1">#     if geu.isconvex(P):</span>
-        <span class="c1">#         # updates vnodes of the new merged polygon</span>
-        <span class="c1">#         P.setvnodes(self)</span>
-        <span class="c1">#         # update edge</span>
-        <span class="c1">#         n0s = n0</span>
-        <span class="c1">#         n1s = n1</span>
-        <span class="c1">#         # get segments information from cycle n0</span>
-        <span class="c1">#         dne = self.Gt[n0]</span>
-        <span class="c1">#         # remove connection to n0 to avoid a cycle being</span>
-        <span class="c1">#         # connected to itself</span>
-        <span class="c1">#         self.Gt[n1].pop(n0)</span>
-        <span class="c1">#         # add information from adjacent cycle n1</span>
-        <span class="c1">#         dne.update(self.Gt[n1])</span>
-        <span class="c1">#         # list of items of the merged dictionnary</span>
-        <span class="c1">#         ine = dne.items()</span>
-        <span class="c1">#         #update n0 with the new merged polygon</span>
-        <span class="c1">#         self.Gt.add_node(n0,polyg=P)</span>
-        <span class="c1">#         # connect new cycle n0 to neighbors</span>
-        <span class="c1">#         self.Gt.add_edges_from([(n0,x[0],x[1]) for x in ine if x[0] != n0])</span>
-        <span class="c1">#         #remove old cycle n1</span>
-        <span class="c1">#         self.Gt.remove_node(n1)</span>
-        <span class="c1">#         # update pos of the cycle with merged polygon centroid</span>
-        <span class="c1">#         self.Gt.pos[n0] = np.array((P.centroid.xy)).squeeze()</span>
-        <span class="c1">#         # delete _air segment a</span>
-        <span class="c1">#         # do not apply g2npy</span>
-        <span class="c1">#         self.del_segment(a,verbose=False,g2npy=False)</span>
-        <span class="c1">#         mapoldcy[n1]=n0</span>
-        <span class="c1"># for cy in keys:</span>
-        <span class="c1">#     p = self.Gr.node[cy][&#39;polyg&#39;]</span>
-        <span class="c1">#     lseg = [ x for x in p.vnodes if x &gt; 0 ]</span>
-        <span class="c1">#     #hasdoor = filter(lambda n : n in ldoors,lseg)</span>
-        <span class="c1">#     hasdoor = [ x for x in lseg if x in ldoors]</span>
-        <span class="c1">#     if len(hasdoor)&gt;0:</span>
-        <span class="c1">#         pass</span>
-        <span class="c1">#     else:</span>
-        <span class="c1">#         self.Gr.remove_node(cy)</span>
-        <span class="c1">#         self.Gr.pos.pop(cy)</span>
+<span class="sd">        buildGr</span>
 
-        <span class="c1"># # Destroy edges which do not share a transition</span>
-        <span class="c1"># for e in self.Gr.edges():</span>
-        <span class="c1">#     keep = False</span>
-        <span class="c1">#     if (e[0]&gt;0) &amp; (e[1]&gt;0):</span>
-        <span class="c1">#         cy1 = self.Gr.node[e[0]][&#39;cycle&#39;]</span>
-        <span class="c1">#         cy2 = self.Gr.node[e[1]][&#39;cycle&#39;]</span>
-        <span class="c1">#         f,b = cy1.intersect(cy2)</span>
-        <span class="c1">#         for s in b:</span>
-        <span class="c1">#             if s&gt;0:</span>
-        <span class="c1">#                 if self.Gs.node[s][&#39;transition&#39;]:</span>
-        <span class="c1">#                     keep = True</span>
-        <span class="c1">#                     self.Gr.node[e[0]][&#39;transition&#39;].append(s)</span>
-        <span class="c1">#                     self.Gr.node[e[1]][&#39;transition&#39;].append(s)</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 
-        <span class="c1">#     if not keep:</span>
-        <span class="c1">#         self.Gr.remove_edge(*e)</span>
+<span class="sd">        for all edges of Gr (adjascent room)</span>
+<span class="sd">            if room1 and room2 have a common transition</span>
 
-<div class="viewcode-block" id="Layout.waypoint"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.waypoint.html#pylayers.gis.layout.Layout.waypoint">[docs]</a>    <span class="k">def</span> <span class="nf">waypoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nroom1</span><span class="p">,</span> <span class="n">nroom2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get the waypoint between room1 and room2</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        -----------</span>
-
-<span class="sd">        nroom1 : int </span>
-<span class="sd">            room number 1</span>
-<span class="sd">        nromm2 : int </span>
-<span class="sd">            room number 2</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        waypoint : </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">rooms</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">dijkstra_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">,</span> <span class="n">nroom1</span><span class="p">,</span> <span class="n">nroom2</span><span class="p">)</span>
-        <span class="n">nroom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rooms</span><span class="p">)</span>
-        <span class="n">waypoint</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nroom</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">room1</span> <span class="o">=</span> <span class="n">rooms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">proom1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">room1</span><span class="p">]</span>
-            <span class="n">room2</span> <span class="o">=</span> <span class="n">rooms</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="n">doors1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">room1</span><span class="p">][</span><span class="s1">&#39;doors&#39;</span><span class="p">]</span>
-            <span class="n">doors2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">room2</span><span class="p">][</span><span class="s1">&#39;doors&#39;</span><span class="p">]</span>
-            <span class="n">doorId</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">doors1</span><span class="p">,</span> <span class="n">doors2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c1">#</span>
-            <span class="c1"># coord door</span>
-            <span class="c1">#</span>
-            <span class="n">unode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">doorId</span><span class="p">)</span>
-            <span class="n">p1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">unode</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-            <span class="n">p2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">unode</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-            <span class="n">pdoor</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
-            <span class="n">waypoint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">proom1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proom1</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="n">waypoint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pdoor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pdoor</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
-        <span class="n">proom2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nroom2</span><span class="p">]</span>
-        <span class="n">waypoint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">proom2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proom2</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">waypoint</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">d_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>  <span class="c1"># for numerotation of Gw nodes</span>
+        <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">edges_iter</span><span class="p">():</span>  <span class="c1"># iterator on Gr edges</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
+
+            <span class="c1"># transitions of room e[0]</span>
+            <span class="c1"># trans1 = self.Gr.node[e[0]][&#39;segment&#39;]</span>
+            <span class="c1"># # transitions of room e[1]</span>
+            <span class="c1"># trans2 = self.Gr.node[e[1]][&#39;segment&#39;]</span>
+            <span class="c1"># Id = np.intersect1d(trans1, trans2)[0]  # list of common doors</span>
+            <span class="c1"># import ipdb</span>
+            <span class="c1"># ipdb.set_trace()</span>
+            <span class="n">Ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;segment&#39;</span><span class="p">]</span>
+            <span class="c1"># here is supposed that 2 room may have more than 1 door in common</span>
+            <span class="k">for</span> <span class="n">Id</span> <span class="ow">in</span> <span class="n">Ids</span><span class="p">:</span>
+                <span class="n">unode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">Id</span><span class="p">)</span>  <span class="c1"># get edge number of common doors</span>
+                <span class="n">up0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">unode</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="n">up1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">unode</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">Id</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                <span class="n">pn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">Id</span><span class="p">][</span><span class="s1">&#39;norm&#39;</span><span class="p">]</span>
+                <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">thick</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;lthick&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.2</span>
+
+                <span class="c1"># for &quot;&quot;doors&quot;&quot; extra waypoints points are added </span>
+                <span class="c1"># in front and back of the aperture.</span>
+                <span class="c1"># this is not done for AIR slabs</span>
+                <span class="k">if</span> <span class="s1">&#39;AIR&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name</span> <span class="p">:</span> 
+
+                    <span class="c1"># middle of the common door</span>
+                    <span class="n">pdoor0</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up0</span><span class="p">)</span> <span class="o">+</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span> <span class="o">+</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up1</span><span class="p">)</span> <span class="o">+</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+                    <span class="n">pdoor1</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up0</span><span class="p">)</span> <span class="o">-</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span> <span class="o">+</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pn</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">thick</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+                    <span class="n">P0</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pdoor0</span><span class="p">)</span>
+                    <span class="n">P1</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pdoor1</span><span class="p">)</span>
+
+                    <span class="n">ep0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                    <span class="n">ep1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">P0</span><span class="p">):</span>
+                        <span class="n">upd0</span> <span class="o">=</span> <span class="n">d_id_index</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor0</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+                        <span class="c1"># if self.seginline(pdoor0,ep0).shape[1] &lt;= 1:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">upd0</span><span class="p">)])</span>
+                        <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+                        <span class="n">upd1</span> <span class="o">=</span> <span class="n">d_id_index</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor1</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+                        <span class="c1"># if self.seginline(pdoor1,ep1).shape[1] &lt;= 1:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">upd1</span><span class="p">)])</span>
+                        <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">upd0</span> <span class="o">=</span> <span class="n">d_id_index</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor0</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+                        <span class="c1"># if self.seginline(pdoor0,ep1).shape[1] &lt;= 1:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">upd0</span><span class="p">)])</span>
+                        <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+                        <span class="n">upd1</span> <span class="o">=</span> <span class="n">d_id_index</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">upd1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor1</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">upd1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;door&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+                        <span class="c1"># if self.seginline(pdoor1,ep0).shape[1] &lt;= 1:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">upd1</span><span class="p">)])</span>
+                        <span class="n">d_id_index</span> <span class="o">=</span> <span class="n">d_id_index</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">upd0</span><span class="p">,</span> <span class="n">upd1</span><span class="p">)])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span></div>
+
+
 
 <div class="viewcode-block" id="Layout.editor"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.editor.html#pylayers.gis.layout.Layout.editor">[docs]</a>    <span class="k">def</span> <span class="nf">editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; invoke interactive layout graphical editor</span>
@@ -12236,7 +11846,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

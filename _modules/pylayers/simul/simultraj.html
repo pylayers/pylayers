@@ -423,17 +423,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">B</span><span class="p">,</span><span class="n">Body</span><span class="p">):</span>
-            <span class="n">B</span><span class="o">=</span><span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">B</span><span class="p">]</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">B</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">B</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
-            <span class="n">B</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">B</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">B</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">B</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
             <span class="n">B</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;CorSer.B must be a list or a Body&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">L</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">traj</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">Trajectories</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">Lfilename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span>
 
         <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">B</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">b</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">b</span><span class="p">})</span>
@@ -673,14 +672,14 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">            &gt;&gt;&gt; from pylayers.simul.simultraj import *</span>
-<span class="sd">            &gt;&gt;&gt; from pylayers.measures.cormoran import *</span>
-<span class="sd">            &gt;&gt;&gt; C=CorSer()</span>
-<span class="sd">            &gt;&gt;&gt; S=Simul(C,verbose=True)</span>
-<span class="sd">            &gt;&gt;&gt; link={&#39;ieee802154&#39;:[]}</span>
-<span class="sd">            &gt;&gt;&gt; link[&#39;ieee802154&#39;].append(S.N.links[&#39;ieee802154&#39;][0])</span>
-<span class="sd">            &gt;&gt;&gt; lt = [0,0.2,0.3,0.4,0.5]</span>
-<span class="sd">            &gt;&gt;&gt; S.run(links=link,t=lt)</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.simul.simultraj import *</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.measures.cormoran import *</span>
+<span class="sd">        &gt;&gt;&gt; C=CorSer(layout=True)</span>
+<span class="sd">        &gt;&gt;&gt; S=Simul(C,verbose=True)</span>
+<span class="sd">        &gt;&gt;&gt; link={&#39;ieee802154&#39;:[]}</span>
+<span class="sd">        &gt;&gt;&gt; link[&#39;ieee802154&#39;].append(S.N.links[&#39;ieee802154&#39;][0])</span>
+<span class="sd">        &gt;&gt;&gt; lt = [0,0.2,0.3,0.4,0.5]</span>
+<span class="sd">        &gt;&gt;&gt; S.run(links=link,t=lt)</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1219,8 +1218,8 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.simul.simultraj import *</span>
 <span class="sd">        &gt;&gt;&gt; from pylayers.measures.cormoran import *</span>
-<span class="sd">        &gt;&gt;&gt; C=CorSer(serie=6i,day=11)</span>
-<span class="sd">        &gt;&gt;&gt; S = Simul(C,verb ose=False)</span>
+<span class="sd">        &gt;&gt;&gt; C=CorSer(serie=6,day=11,layout=True)</span>
+<span class="sd">        &gt;&gt;&gt; S = Simul(C,verbose=False)</span>
 <span class="sd">        &gt;&gt;&gt; DL = S.get_link(typ=[&#39;R&#39;,&#39;C&#39;,&#39;H&#39;])</span>
 <span class="sd">                ...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1506,11 +1505,12 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">       grpname : string</span>
+<span class="sd">        grpname : string</span>
 <span class="sd">            group name which can be found sin self.data aktk_idx column</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        (ak, tk, conf)</span>
 
 <span class="sd">        ak : ndarray:</span>
@@ -1577,7 +1577,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 20, 2017.
+      Last updated on Sep 21, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
