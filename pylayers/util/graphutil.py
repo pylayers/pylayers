@@ -195,11 +195,11 @@ def draw(G,**kwargs):
                                    alpha = kwargs['alphae'],
                                    style='dotted',
                                    ax=ax)
-        if kwargs['labels']:
-            nx.draw_networkx_labels(G, G.pos,
-                                        labels={n:n for n in nodelista},
-                                        font_color=kwargs['posnode_color'],
-                                        font_size=kwargs['font_size'],ax=ax)
+            if kwargs['labels']:
+                nx.draw_networkx_labels(G, G.pos,
+                                            labels={n:n for n in nodelista},
+                                            font_color=kwargs['posnode_color'],
+                                            font_size=kwargs['font_size'],ax=ax)
             
     if kwargs['show']:
         plt.show()
