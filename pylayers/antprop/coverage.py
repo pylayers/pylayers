@@ -406,9 +406,9 @@ class Coverage(PyLayers):
         ng = self.ng
         nf = self.nf
         
-        for iap in self.dap:
+        for k,iap in enumerate(self.dap):
             # select only one access point
-            u = na*np.arange(0,ng,1).astype('int')+iap
+            u = na*np.arange(0,ng,1).astype('int')+k
             if self.dap[iap]['on']:
                 pt = self.pa[:,u]
                 pr = self.pg[:,u]

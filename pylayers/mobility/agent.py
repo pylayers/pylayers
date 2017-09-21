@@ -18,7 +18,14 @@ from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
 #from pylayers.util.pymysqldb import Database
 import pdb
+""""
 
+.. currentmodule:: pylayers.mobility.agent
+
+.. autosummary::
+    :toctree: generated/
+
+"""
 
 class Agent(object):
     """   Class Agent

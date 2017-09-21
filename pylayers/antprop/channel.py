@@ -3,7 +3,7 @@ r"""
 .. currentmodule:: pylayers.antprop.channel
 
 .. autosummary::
-    :toctree: generated
+    :toctree: generated/
 
 TBchannel class
 ===============
@@ -15,12 +15,13 @@ TBchannel class
     TBchannel.tau_moy
     TBchannel.tau_rms
     TBchannel.delays
+    TBchannel.toFD
     TBchannel.SalehValenzuela
 
 TUchannel class
 ===============
 
-.. autosummar::::
+.. autosummary::
     :toctree:generated/
 
     TUchannel.psd
@@ -29,6 +30,10 @@ TUchannel class
     TUchannel.Ewin
     TUchannel.Etot
     TUchannel.Emax
+    TUchannel.toa_max2
+    TUchannel.toa_new
+    TUchannel.toa_win
+    TUchannel.toa_max
 
 
 TUDchannel
@@ -37,15 +42,10 @@ TUDchannel
 .. autosummary::
     :toctree: generated/
 
+    TUDchannel.fig
+
 Tchannel
 =========
-
-Members
--------
-
-    filcal : calibration file
-    win : string type of window {'rect'| }
-
 
 .. autosummary::
     :toctree: generated/
@@ -53,14 +53,16 @@ Members
     Tchannel.saveh5
     Tchannel.loadh5
     Tchannel.apply
-    Tchannel.applywavC
+    Tchannel.applywav
+    Tchannel.getcir
+    Tchannel.get_cir
     Tchannel.chantap
-    Tchannel.applywavB
-    Tchannel.applywavA
+    Tchannel.baseband
     Tchannel.plotd
     Tchannel.plotad
     Tchannel.doadod
     Tchannel.energy
+    Tchannel.rssi
     Tchannel.wavefig
     Tchannel.rayfig
     Tchannel.rssi
@@ -73,6 +75,7 @@ Members
     Tchannel.iftd
     Tchannel.ft1
     Tchannel.ftau
+    Tchannel.rir
     Tchannel.cir
     Tchannel.plot3d
     Tchannel.ft2
@@ -80,6 +83,69 @@ Members
     Tchannel.capacity
     Tchannel.calibrate
     Tchannel.pdp
+
+Mchannel
+========
+
+VNA Measured channel 
+
+.. autosummary::
+    :toctree: generated/
+
+    Mchannel.eig
+    Mchannel.Bcapacity
+    Mchannel.WFcapacity
+    Mchannel.plt2
+
+
+AFPchannel
+==========
+
+Angular Frequency Profile Channel 
+
+.. autosummary::
+    :toctree: generated/
+
+    AFPchannel.loadmes 
+    AFPchannel.toadp 
+
+ADPchannel
+==========
+
+Angular Delay Profile Channel 
+
+.. autosummary::
+    :toctree: generated/
+
+    ADPchannel.correlate
+    ADPchannel.clean
+    ADPchannel.pdp
+    ADPchannel.app
+    ADPchannel.tomap
+    ADPchannel.polarplot
+
+Ctilde
+======
+
+.. autosummary::
+    :toctree: generated/
+
+    Ctilde.inforay 
+    Ctilde.saveh5 
+    Ctilde.loadh5 
+    Ctilde._loadh5 
+    Ctilde.los 
+    Ctilde.mobility
+    Ctilde.plotd
+    Ctilde.doadod
+    Ctilde.locbas
+    Ctilde.Cg2Cl
+    Ctilde.show
+    Ctilde.check_reciprocity
+    Ctilde.energy 
+    Ctilde.cut
+    Ctilde.sort
+    Ctilde.prop2tran
 
 """
 from __future__ import print_function
@@ -231,6 +297,8 @@ class AFPchannel(bs.FUsignal):
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         self.az = (360-D[:,0])*np.pi/180.
 
+
+
     def toadp(self,imax=-1):
         """ convert afp into adp (frequency->delay) 
         """
@@ -373,6 +441,15 @@ class ADPchannel(bs.TUsignal):
         rhon = np.max(si.correlate2d(padpcn_self,padpcn_adp,mode='same'))
 
         return rhoE,rhoEc,rho,rhoc,rhon
+    
+    def svd(self):
+        """ perform singular value decomposition of the PADP
+        """
+        [U,S,V]=la.svd(self.y)
+        self.d = {}
+        for k,sv in enumerate(S):
+            b = sv*np.dot(U[:,k][:,None],V[k,:][None,:])
+            self.d[k] = {'sv':sv,'b':b}
 
     def clean(self,threshold_dB=20):
         """  clean ADP 
@@ -535,11 +612,15 @@ class ADPchannel(bs.TUsignal):
                     'Ny':3000,
                     'cmap':'jet',
                     'mode':'image',
+                    'excess':'los',
                     'figsize':(20,20),
                     'thmindB':-110,
                     'thmaxdB':-108,
                     'vmindB':-110,
-                    'vmaxdB':-60}
+                    'vmaxdB':-60,
+                    'offset':21.8,
+                    'display':True,
+                    'tauns_excess':0}
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k] 
@@ -556,15 +637,32 @@ class ADPchannel(bs.TUsignal):
         Nx = kwargs.pop('Nx')
         Ny = kwargs.pop('Ny')
         cmap = kwargs.pop('cmap')
+        offset = kwargs.pop('offset')
+        excess = kwargs.pop('excess')
+        display = kwargs.pop('display')
+        tauns_excess = kwargs.pop('tauns_excess')
         figsize = kwargs.pop('figsize')
         
+        #
+        # Prepare the array for spatial information in horizontal plane x,y
+        # Nx and Ny should be large enough
+        #
         Z  = np.zeros((Nx,Ny),dtype=complex)
 
+        # 
+        # spatial indexation in x and  y
+        #
         xr = np.linspace(xmin,xmax,Nx)
         yr = np.linspace(xmin,xmax,Ny)
 
-        d2Dtxrx = np.sqrt((self.tx[1]-self.rx[1])**2+(self.tx[0]-self.rx[0])**2)
-        #print(d2Dtxrx)
+        # distance Tx Rx in the horizontal plane (2D) 
+        dtx_rx_2D = np.sqrt((self.tx[0]-self.rx[0])**2+(self.tx[1]-self.rx[1])**2)
+        # distance Tx Rx in the horizontal plane (3D) 
+        dtx_rx = np.sqrt((self.tx[0]-self.rx[0])**2+(self.tx[1]-self.rx[1])**2+(self.tx[2]-self.rx[2])**2)
+        # distance  Tx ground Rx (3D) 
+        dtx_gr_rx = np.sqrt(dtx_rx_2D**2+(self.tx[2]+self.rx[2])**2)
+        assert(dtx_gr_rx>dtx_rx)
+        # difference of heights beween Tx and Rx 
         deltah = np.abs(self.tx[2]-self.rx[2])
         
         #
@@ -573,23 +671,38 @@ class ADPchannel(bs.TUsignal):
         #
         dxt =(self.tx[0]-xr)[:,None]
         dyt =(self.tx[1]-yr)[None,:]
+        #
+        # nwt : distance between Tx and each point of the plane 
+        # nwr : distance between Rx and each point of the plane 
+        #
         nwt = np.sqrt(dxt*dxt+dyt*dyt)
 
         dxr =(xr-self.rx[0])[:,None]
         dyr =(yr-self.rx[1])[None,:]
         nwr = np.sqrt(dxr*dxr+dyr*dyr)
-
+        
+        # dsbounce : elliposidal distance (single bounce hypothesis) 
         dsbounce = nwt+nwr
+
+        # maximal ellipsoidal distance on the Z selected region 
         dmax = dsbounce.max()
         taumax = dmax/0.3
-        itaumax = np.where(self.x>taumax)[0][0]
-        taumax = self.x[itaumax]
-        tau2idx = taumax/itaumax
 
+        # determine index of maximal distance 
+        itaumax = np.where(self.x>taumax)[0][0]
+        # convert maximal distance into maximal delay (self.x is delay) 
+        taumax = self.x[itaumax]
+        # determine coefficient  between delay and index ( ns --> integer) 
+        tau2idx = taumax/itaumax
+        
+        # Determine the angle of arraival 
+        # direction of arrival normalization of the vector 
         dxrn = dxr/nwr
         dyrn = dyr/nwr
-
-        phi = np.arctan2(dyrn,dxrn)-21.18*np.pi/180
+        
+        # angle of arrival in [-pi,pi]
+        phi = np.arctan2(dyrn,dxrn)-offset*np.pi/180
+        # back in [0-2pi]
         phi = (1-np.sign(phi))*np.pi+phi
 
         iphi=((315-phi*180/np.pi)/5).astype(int)
@@ -598,7 +711,7 @@ class ADPchannel(bs.TUsignal):
         dpr = np.sqrt(dxr*dxr+dyr*dyr)
 
         if mode=='sbounce':
-            iid = np.round((np.sqrt(dxt*dxt+dyt*dyt)+np.sqrt(dxr*dxr+dyr*dyr))/(0.3*0.625)).astype('int')
+            iid = np.round((np.sqrt(dxt*dxt+dyt*dyt)+np.sqrt(dxr*dxr+dyr*dyr))/(0.3*tau2idx)).astype('int')
         else:
             #d = np.round(np.sqrt(dxr*dxr+dyr*dyr)/(0.3*0.625)).astype('int')
             #d = np.round(np.sqrt(dxr*dxr+dyr*dyr)/(0.3*0.625)).astype('int')
@@ -607,20 +720,38 @@ class ADPchannel(bs.TUsignal):
             iid = np.round(dv/(0.3*tau2idx)).astype('int')
             #pdb.set_trace()
         
+        #
+        # create indexation for spatial region Z
+        #
         ix = np.arange(Nx)[:,None]
         iy = np.arange(Ny)[None,:]
-
+        
+        # ird : index for delays (d for delays) 
         ird = iid[ix,iy].ravel()
+        # irp : index for directio of arrival (p for phi)  
         irp = iphi[ix,iy].ravel()
         #
-        #  d < dmax  
+        #  (d < dmax ) and (d>dlos+tauns_excess) 
         #  iphi >= 0 and iphi < Nphimax
-        ud = np.where(ird<itaumax)
-        up = np.where((irp>=0) & (irp<len(self.az)))
-        u  = np.intersect1d(ud,up)
+        ilos    = np.round((dtx_rx/(0.3*tau2idx))).astype(int)
+        iground = np.round((dtx_gr_rx/(0.3*tau2idx))).astype(int)
+        iexcess = np.round(tauns_excess/tau2idx).astype(int)
+        
+        if excess=='los':
+            ud = np.where((ird<itaumax) & (ird>ilos+iexcess))
+        if excess=='ground':
+            ud = np.where((ird<itaumax) & (ird>iground+iexcess))
 
+        up = np.where((irp>=0) & (irp<len(self.az)))
+
+        # determine the index of points in a corona wich satisfy jointly the 
+        # condition on delays and angles
+        #
+        u  = np.intersect1d(ud,up)
+        
+        # rebvelize Z (2D -> 1D) 
         rz = Z.ravel()
-        # filling z with self.y nphi,Ntau
+        # filling rz with self.y nphi,Ntau
         rz[u] = self.y[irp[u],ird[u]]
         #
         # back to matrix form
@@ -631,18 +762,19 @@ class ADPchannel(bs.TUsignal):
         #mzdB = ma.masked_array(ZdB,mask)
 
         # constructing figure
+        if display:
+            fig=plt.figure(figsize=figsize)
+            L.showG('s',fig=fig,labels=0)
+            plt.axis('on')
+            plt.imshow(ZdB,extent=(xr[0],xr[-1],yr[0],yr[-1]),cmap=cmap,origin='lower',alpha=0.9,vmin=vmindB,vmax=vmaxdB,interpolation='nearest')
+            #plt.imshow(mzdB,alpha=0.9,origin='lower')
+            plt.plot(self.tx[0],self.tx[1],'or')
+            plt.plot(self.rx[0],self.rx[1],'ob')
+            plt.colorbar()
+            plt.title(self._filename)
+            plt.savefig(self._filename+'.png')
 
-        fig=plt.figure(figsize=figsize)
-        L.showG('s',fig=fig,labels=0)
-        plt.axis('on')
-        plt.imshow(ZdB,extent=(xr[0],xr[-1],yr[0],yr[-1]),cmap=cmap,origin='lower',alpha=0.9,vmin=vmindB,vmax=vmaxdB,interpolation='nearest')
-        #plt.imshow(mzdB,alpha=0.9,origin='lower')
-        plt.plot(self.tx[0],self.tx[1],'or')
-        plt.plot(self.rx[0],self.rx[1],'ob')
-        plt.colorbar()
-        plt.title(self._filename)
-        plt.savefig(self._filename+'.png')
-        return(Z,np.linspace(xr[0],xr[-1],Nx),np.linspace(yr[0],yr[-1],Ny))
+        return Z,np.linspace(xr[0],xr[-1],Nx),np.linspace(yr[0],yr[-1],Ny)
 
     def polarplot(self,**kwargs):
         """  polar plot of PADP 
@@ -4417,7 +4549,7 @@ class Tchannel(bs.FUsignal):
             return(C,SNR)
 
     def calibrate(self,filecal='calibration.mat',conjugate=False):
-        """ calibrate
+        """ calibrate data 
 
         Parameters
         ----------
