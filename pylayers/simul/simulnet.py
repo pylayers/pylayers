@@ -350,7 +350,7 @@ class Simul(SimulationRT):  # Sympy 2
         """
         filename = pyu.getlong(
             eval(self.sim_opt["filename"]), pstruc['DIRNETSAVE'])
-        layfile = self.L.filename.split('.')[0]
+        layfile = self.L._filename.split('.')[0]
         store = pd.HDFStore(filename + '_' + layfile + '.h5', 'w')
         for a in self.lAg:
 
@@ -363,7 +363,7 @@ class Simul(SimulationRT):  # Sympy 2
             store.get_storer(a.ID).attrs.typ = a.typ
             store.get_storer(a.ID).attrs.name = a.name
             store.get_storer(a.ID).attrs.ID = a.ID
-            store.get_storer(a.ID).attrs.layout = self.L.filename
+            store.get_storer(a.ID).attrs.layout = self.L._filename
         # saving metadata
         store.close()
         self.traj.loadh5(
