@@ -1,5 +1,4 @@
 import mayavi.mlab as mlab
-from pylayers.simul.simulem import * #Obsolete
 from pylayers.simul.link import *
 from pylayers.antprop.rays import *
 from pylayers.antprop.channel import *
