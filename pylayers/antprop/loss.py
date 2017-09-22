@@ -23,7 +23,7 @@ This module implements path loss models for various situations.
     cost231
     cost259
     cost2100
-    Dgrid_points
+    Dgrid_points<
     Dgrid_zone
     calnu
     visuPts
@@ -36,7 +36,6 @@ import logging
 import numpy as np
 from scipy import io
 import matplotlib.pylab as plt
-import pylayers.simul.simulem
 import pylayers.measures.mesuwb
 import pylayers.gis.gisutil as gu
 import numpy.linalg as la
@@ -799,7 +798,6 @@ def Losst(L,fGHz,p1,p2,dB=True):
         :include-source:
 
         >>> import matplotlib.pyplot as plt
-        >>> from pylayers.simul.simulem import *
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.loss import *
         >>> S = Simul()

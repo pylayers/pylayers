@@ -3,7 +3,6 @@ from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
 import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf 
-from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt 
 from pylayers.antprop.antenna import *
 from pylayers.antprop.channel import *
