@@ -50,8 +50,8 @@ CorSer visualization tools
     :toctree: generated/
 
 
-2D  vizualization
-~~~~~~~~~~~~~~~~
+2D  visualization
+~~~~~~~~~~~~~~~~~
 
 .. autosummary::
     :toctree: generated/
@@ -67,7 +67,7 @@ CorSer visualization tools
     CorSer.pltgt
 
 
-3D vizualization
+3D visualization
 ~~~~~~~~~~~~~~~~
 
 .. autosummary::
@@ -81,7 +81,7 @@ CorSer visualization tools
 
 
 
-Video Vizualization
+Video Visualization
 ~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
@@ -315,7 +315,7 @@ class CorSer(PyLayers):
 
         #Layout
         if layout:
-            self.L= Layout('MOCAP-small2.ini')
+            self.L= Layout('MOCAP-small2.lay')
 
 
         # Load Infrastructure Nodes
@@ -3162,7 +3162,8 @@ bernard
 
 
     def plot(self,a,b,techno='',t='',**kwargs):
-        """
+        """ ploting 
+
         Parameters
         ----------
 
@@ -3346,8 +3347,10 @@ bernard
 
 
     def plthkb(self,a,b,techno='HKB',**kwargs):
-        """
+        """ plot Hikob devices 
+
         DEPRECATED
+
         Parameters
         ----------
 
@@ -3481,7 +3484,8 @@ bernard
         return fig,ax
 
     def plttcr(self,a,b,**kwargs):
-        """
+        """ plot TCR devices 
+
         Parameters
         ----------
 
@@ -4748,7 +4752,7 @@ bernard
 
 
     def getlinkp(self,a,b,technoa='',technob='',t='',fId=''):
-        """    get a link devices positions
+        """  get a link devices positions
 
         Parameters
         ----------

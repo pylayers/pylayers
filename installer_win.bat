@@ -16,4 +16,7 @@ pip install geocoder
 pip install triangle
 pip install osmapi
 pip install pyshp 
+pip install Image
+pip install pathos
+pip install SimPy==2.2
 python setup.py install

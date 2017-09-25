@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 print '--------------'
 print 'antprop/test_aarray.py'
 print '--------------'
-A = AntArray()
+A = AntArray(tarr='UA',N=[10,10,1],dm=[0.5,0.5,0],fGHz=0.3)
 A.eval()
 f1,a1 = A.plotG()
 f1.savefig('ArrayDiag.png')

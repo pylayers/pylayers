@@ -107,7 +107,7 @@ class Coverage(PyLayers):
         
         # get the Layout
         filename = self.layoutopt['filename']
-        if filename.endswith('ini'):
+        if filename.endswith('lay'):
             self.typ = 'indoor'
             self.L = Layout(filename)
 
@@ -358,6 +358,7 @@ class Coverage(PyLayers):
         PnW = np.array((10**(self.noisefactordb/10.))*self.kB*self.temperaturek*self.bmhz*1e6)
         # Evaluate Noise Power (in dBm)
         self.pndbm = np.array(10*np.log10(PnW)+30)
+
         #lchan = map(lambda x: self.dap[x]['chan'],lap)
         #apchan = zip(self.dap.keys(),lchan)
         #self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]]['BMHz']*len(x[1]),apchan))
@@ -367,6 +368,10 @@ class Coverage(PyLayers):
         # creating all links
         # all grid to all ap 
         #
+        if len(self.pndbm.shape ) == 0:
+            self.ptdbm = self.ptdbm.reshape(1,1)
+            self.pndbm = self.pndbm.reshape(1,1)
+
         p = product(range(self.ng),lactiveAP)
         #
         # pa : access point
@@ -406,9 +411,9 @@ class Coverage(PyLayers):
         ng = self.ng
         nf = self.nf
         
-        for iap in self.dap:
+        for k,iap in enumerate(self.dap):
             # select only one access point
-            u = na*np.arange(0,ng,1).astype('int')+iap
+            u = na*np.arange(0,ng,1).astype('int')+k
             if self.dap[iap]['on']:
                 pt = self.pa[:,u]
                 pr = self.pg[:,u]
@@ -881,7 +886,7 @@ class Coverage(PyLayers):
                      'best':True
                    }
 
-        title = self.dap[1].s.name+ ' : '
+        title = self.dap[self.dap.keys()[0]].s.name+ ' : '
 
         for k in defaults:
             if k not in kwargs:

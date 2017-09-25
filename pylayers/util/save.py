@@ -97,6 +97,8 @@ class Save(Process):
         out=[0]
         infile = open(os.path.join(basename,pstruc['DIRNETSAVE'],filename), 'r')
         while 1:
+            import ipdb
+            ipdb.set_trace()
             try:
                 out.append(pickle.load(infile))
             except (EOFError, pickle.UnpicklingError):

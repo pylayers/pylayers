@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 import numpy as np
 import pylayers.antprop.antenna as ant
+import pylayers.util.geomutil as geu
 import matplotlib.pyplot as plt
 import scipy.signal as si
 import doctest
@@ -18,8 +19,18 @@ Array class
 .. autosummary::
     :toctree: generated/
 
+    Array.show
+
 ULAarray class
 ==============
+
+.. autosummary::
+    :toctree: generated/
+
+    set_position 
+
+UCAarray
+========
 
 .. autosummary::
     :toctree: generated/
@@ -29,6 +40,12 @@ AntArray class
 
 .. autosummary::
     :toctree: generated/
+
+    AntArray.steervec
+    AntArray.k2xyz
+    AntArray.xyztok
+    AntArray.weights
+
 
 """
 class TXRU(object):
@@ -325,6 +342,33 @@ class AntArray(Array, ant.Antenna):
         typ = 'Array'
         ant.Antenna.__init__(self,typ=typ,**kwargs)
 
+    def steervec(self,ang,nbit=3):
+        """
+        Parameters
+        ----------
+        ang : Mx2  (steering directions) 
+            [[theta0,phi0],[theta1,phi1],....,[theta(M-1),phi(M-1)]]
+        nbit : phase quantization number of bits
+
+        Returns
+        -------
+        W : np.array  (Na x Ndir x Nf) 
+            steering matrix
+
+        """
+        M = geu.SphericalBasis(ang) 
+        # extracting direction 3xM
+        u = M[:,2,:]
+        lam = 0.3/self.fGHz 
+        k = 2*np.pi/lam
+        # self.p (3xNant)
+        # s : space (3)
+        # a : antennas
+        # d : directions
+        # (space,antenna) (space,diections) -> (antenna,directions)
+        up = np.einsum('sa,sd->ad',self.p,u)
+        W  = np.exp(1j*k[None,None,:]*up[...,None])
+        return(W)
 
     def __repr__(self):
         st = ant.Antenna.__repr__(self)
