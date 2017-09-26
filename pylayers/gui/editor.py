@@ -230,16 +230,16 @@ class SubSegWin(QDialog):    # any super class is okay
             if uline < self.Nss-1:
                 # if subseg+1 max is higher than subseg zmin
                 # subseg+1 max = subseg zmin
-                if self.lzQ[uline][0].value() <= self.lzQ[uline+1][1].value():
-                    self.lzQ[uline+1][1].setValue(self.lzQ[uline][0].value())
+                # if self.lzQ[uline][0].value() <= self.lzQ[uline+1][1].value():
+                self.lzQ[uline+1][1].setValue(self.lzQ[uline][0].value())
         # sender is a zmax
         elif lz.index(sender) == 1:
             # not first line
             if uline >0:
                 # if subseg-1 min is lower than subseg zmax
                 # subseg-1 min = subseg zmax
-                if self.lzQ[uline][1].value() >= self.lzQ[uline-1][0].value():
-                    self.lzQ[uline-1][0].setValue(self.lzQ[uline][1].value())
+                # if self.lzQ[uline][1].value() >= self.lzQ[uline-1][0].value():
+                self.lzQ[uline-1][0].setValue(self.lzQ[uline][1].value())
 
     def valide(self):
         self.parent.subsegdata={}
@@ -252,6 +252,19 @@ class SubSegWin(QDialog):    # any super class is okay
             self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
             self.parent.subsegdata['ss_z'].append(z)
             self.parent.subsegdata['ss_offset'].append(self.loffset[ss].value())
+            import ipdb
+            ipdb.set_trace()
+            if ss == 0:
+                self.parent.segdata['name']=str(self.lcomboslab[ss].currentText())
+                self.parent.segdata['offset']=self.loffset[ss].value()
+                self.parent.segdata['z']=z
+                idx=self.parent.comboslab.findText(str(self.lcomboslab[ss].currentText()))
+                self.parent.comboslab.setCurrentIndex(idx)
+                self.parent.heightmin.setValue(z[0])
+                self.parent.heightmax.setValue(z[1])
+
+
+
 
         # if not self.mulseg:
         #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
@@ -286,17 +299,15 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.subsegdata['ss_name']=[]
         self.subsegdata['ss_offset']=[]
         self.subsegdata['ss_z']=[]
+        sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
+        Nss = sub['iso']
+        # if len(Nss) == 1 => this is the segment and not subseg
 
-        if self.parent.selectl.nsel in self.parent.L.lsss :
-            sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
-            Nss = len(sub['ss_name'])
-        else :
-            Nss=0
-
-        for ss in range(Nss):
-            self.subsegdata['ss_name'].append(sub['ss_name'][ss])
-            self.subsegdata['ss_offset'].append(sub['ss_offset'][ss])
-            self.subsegdata['ss_z'].append(sub['ss_z'][ss])
+        for uss,ss in enumerate(Nss):
+            node = self.parent.L.Gs.node[ss]
+            self.subsegdata['ss_name'].append(node['name'])
+            self.subsegdata['ss_offset'].append(node['offset'])
+            self.subsegdata['ss_z'].append(node['z'])
 
     def _init_slab_prop(self):
 
@@ -307,6 +318,7 @@ class PropertiesWin(QDialog):    # any super class is okay
             self.segdata['offset']=0.0
             self.segdata['z']=(0.0,self.parent.L.maxheight)
             self.segdata['transition']=False
+            self.segdata['iso']=self.parent.L.Gs.node[self.parent.selectl.nsel]['iso']
 
         # else : default are read from self.Gs.node[node]
         else :
@@ -348,10 +360,8 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.nbsubseg = QSpinBox()
         self.nbsubseg.setObjectName("nbsubseg")
         self.nbsubseg.setRange(0,20.)
-        try:
-            self.nbsubseg.setValue(len(self.segdata['ss_name']))
-        except:
-            self.nbsubseg.setValue(0.)
+        self.nbsubseg.setValue(len(self.segdata['iso']))
+
 
         self.editssbutton = QPushButton("Edit Sub-Segments")
         self.editssbutton.clicked.connect(self.editsubseg)
@@ -450,11 +460,16 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         Nss = self.nbsubseg.value()
 
+        import ipdb
+        ipdb.set_trace()
+
         if Nss>len(self.subsegdata['ss_name']):
+
             zmin=self.heightmin.value()
             zmax=self.heightmax.value()
             for i in range(Nss-len(self.subsegdata['ss_name'])):
-                self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
+                # self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
+                self.subsegdata['ss_name'].append('AIR')
                 self.subsegdata['ss_offset'].append(0.)
                 self.subsegdata['ss_z'].append((zmin,zmax))
 
@@ -463,7 +478,12 @@ class PropertiesWin(QDialog):    # any super class is okay
                               'ss_z':self.subsegdata['ss_z'][:Nss]})
 
         if not self.mulseg:
+
+
             self.parent.L.edit_seg(self.parent.selectl.nsel,self.segdata)
+
+            # for k in 
+
             self.parent.L.update_sseg(self.parent.selectl.nsel,self.subsegdata)
             self.parent.selectl.modeIni()
         else:
@@ -604,7 +624,7 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def new(self):
-        self.parent.L=Layout('void.ini',check=False)
+        self.parent.L=Layout('void.ini')
 
         if self.doverlay.has_key('overlay_file'):
             self.parent.L.display['overlay_file']=self.doverlay['overlay_file']
@@ -1007,11 +1027,11 @@ class AppForm(QMainWindow):
 
         if filename != '':
             _filename = pyu.getshort(str(filename))
-            self.L = Layout(_filename,check=False)
-            self.filename = self.L.filename
+            self.L = Layout(_filename)
+            self.filename = self.L._filename
             self.create_main_frame()
             self.on_draw()
-            self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
 
@@ -1025,15 +1045,15 @@ class AppForm(QMainWindow):
             except:
                 pass
         else :
-            _filename=self.L.filename
+            _filename=self.L._filename
         try:
             oldCursor = QCursor()
             QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
             self.L.saveini(_filename)
             self.L.saveosm(_filename.split('.')[0] + '.osm')
             # self.L = Layout(_filename)
-            self.filename=self.L.filename
-            self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+            self.filename=self.L._filename
+            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
             QApplication.setOverrideCursor(oldCursor)
 
             print 'saved'
