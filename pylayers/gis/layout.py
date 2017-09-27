@@ -3173,6 +3173,8 @@ class Layout(pro.PyLayers):
             assert(e > 0)
             name = self.Gs.node[e]['name']
             iso = self.Gs.node[e]['iso']
+            [self.Gs.node[i]['iso'].remove(e) for i in iso 
+             if e in self.Gs.node[i]['iso']]
             del self.Gs.pos[e]  # delete edge position
             self.Gs.remove_node(e)
             self.labels.pop(e)
@@ -3180,8 +3182,7 @@ class Layout(pro.PyLayers):
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
             # delete iso if required
-            [self.Gs.node[i]['iso'].remove(e) for i in iso 
-             if e in self.Gs.node[i]['iso']]
+
             try:
                 # remove shapely seg
                 self.pop(_shseg[e])
@@ -3602,7 +3603,10 @@ class Layout(pro.PyLayers):
             for k in data:
                 self.Gs.node[e1][k] = data[k]
 
-        self.name[data['name']].append(e1)
+        if data['name'] in self.name:
+            self.name[data['name']].append(e1)
+        else:
+            self.name[data['name']]=[e1]
 
         if data['name'] not in self.display['layers']:
             self.display['layers'].append(data['name'])
@@ -5448,7 +5452,7 @@ class Layout(pro.PyLayers):
 
         if self.display['isonb']:
             if hasattr(self,'lsss'):
-                seg = self.lsss
+                seg = [x for x in self.Gs.nodes() if x >0]
                 # psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
                 # nbsseg = np.array([len(self.Gs.node[x]['iso']) for x in seg],dtype='int')
                 psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg 
@@ -5456,8 +5460,8 @@ class Layout(pro.PyLayers):
 
         #         [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
         # fontdict={'size':8},ha='center') for x in range(len(seg))]
-        [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,'+',
-        fontdict={'size':8},ha='center') for x in range(len(psseg))]
+                [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,'+',
+                fontdict={'size':8},ha='center') for x in range(len(psseg))]
 
         if self.display['transition']:
             try:

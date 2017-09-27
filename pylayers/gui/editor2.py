@@ -602,7 +602,7 @@ class NewLayout(QDialog):    # any super class is okay
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
-        self.parent.setWindowTitle(self.parent.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
+        self.parent.setWindowTitle(self.parent.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
         self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
         self.close()
 
@@ -949,7 +949,7 @@ class AppForm(QMainWindow):
     def __init__(self, parent=None):
         super(AppForm,self).__init__()
         # QMainWindow.__init__(self, parent)
-        self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
+        self.setWindowTitle('Pylayers : Stand Alone Editor (Alpha)')
         self.filename=''
 
         self.create_menu()
@@ -959,7 +959,7 @@ class AppForm(QMainWindow):
             self.create_toolbar()
 
         self.show3On = False
-        self.__loaddebug()
+        # self.__loaddebug()
 
 
 
@@ -968,7 +968,7 @@ class AppForm(QMainWindow):
         self.filename = self.L._filename
         self.create_main_frame()
         self.on_draw()
-        self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
+        self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
         self.resize(self.fig.canvas.width(),self.fig.canvas.height())
         print 'loaded'
 
@@ -991,7 +991,7 @@ class AppForm(QMainWindow):
             self.filename = self.L._filename
             self.create_main_frame()
             self.on_draw()
-            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
+            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
 
@@ -1013,7 +1013,7 @@ class AppForm(QMainWindow):
             self.L.saveosm(_filename.split('.')[0] + '.osm')
             # self.L = Layout(_filename)
             self.filename=self.L._filename
-            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
+            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
             QApplication.setOverrideCursor(oldCursor)
 
             print 'saved'
@@ -1134,7 +1134,7 @@ class AppForm(QMainWindow):
 
 
     def on_about(self):
-        msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
+        msg = """ This is the PyLayers' Stand-Alone Layout Editor (Alpha)
 
          This tool allows to edit/modyfy a building floor plan and/or constitutive materials.
          Once saved, the layout s ready to be used with PyLayers simunlation tools.
@@ -1166,7 +1166,7 @@ class AppForm(QMainWindow):
          www.pylayers.org
 
         """
-        QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (BETA)", msg.strip())
+        QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (Alpha)", msg.strip())
 
 
 
@@ -1228,9 +1228,12 @@ class AppForm(QMainWindow):
         string = string +'\t'+self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
 
-        if self.selectl.nsel > 0:
-            idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
-            self.layerselector.setCurrentIndex(idx)
+        if self.selectl.nsel > 0 :
+            try:
+                idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
+                self.layerselector.setCurrentIndex(idx)
+            except:
+                pass
 
         if self.show3On:
             self.show3()
