@@ -365,9 +365,14 @@ class Simul(SimulationRT):  # Sympy 2
             store.get_storer(a.ID).attrs.ID = a.ID
             store.get_storer(a.ID).attrs.layout = self.L._filename
         # saving metadata
+        store.root._v_attrs.attributes=self.sim_opt
         store.close()
         self.traj.loadh5(
             eval(self.sim_opt["filename"]) + '_' + layfile + '.h5')
+
+
+
+
 
     def runsimul(self):
         """ run simulation
