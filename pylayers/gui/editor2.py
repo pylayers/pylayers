@@ -273,12 +273,6 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         self.setLayout(vbox)
 
-        # # # central widget
-        # self.centralWidget = QWidget()
-        # self.centralWidget.setLayout(self.mainLayout)
-
-        # # # set central widget
-        # self.setCentralWidget(self.centralWidget)
 
         self.Nss = len(self.subsegdata['ss_name'])
 
@@ -578,7 +572,7 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def new(self):
-        self.parent.L=Layout('void.ini')
+        self.parent.L=Layout()
 
         if self.doverlay.has_key('overlay_file'):
             self.parent.L.display['overlay_file']=self.doverlay['overlay_file']
@@ -608,7 +602,7 @@ class NewLayout(QDialog):    # any super class is okay
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
-        self.parent.setWindowTitle(self.parent.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+        self.parent.setWindowTitle(self.parent.L._filename + '- Pylayers : Stand Alone Editor (Beta)')
         self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
         self.close()
 
@@ -965,11 +959,11 @@ class AppForm(QMainWindow):
             self.create_toolbar()
 
         self.show3On = False
-        self.debug()
+        # self.__loaddebug()
 
 
 
-    def debug(self):
+    def __loaddebug(self):
         self.L = Layout('defstr.lay')
         self.filename = self.L._filename
         self.create_main_frame()
@@ -1194,7 +1188,7 @@ class AppForm(QMainWindow):
         self.L.display['nodes']=True
         self.L.display['ednodes']=True
         self.L.display['subseg']=False
-        self.L.display['subsegnb']=True
+        self.L.display['isonb']=True
         self.L.display['ticksoff']=False
 
 

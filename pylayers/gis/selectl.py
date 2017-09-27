@@ -156,7 +156,7 @@ class SelectL(object):
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True)
+        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,isonb=True)
         return(self.fig,self.ax)
 
 
