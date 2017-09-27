@@ -523,6 +523,7 @@ class Layout(pro.PyLayers):
         else:  # No argument
             self._filename = 'newfile.lay'
             newfile = True
+            self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
 
         if not newfile:
             if loadlay:
