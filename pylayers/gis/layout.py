@@ -4908,9 +4908,11 @@ class Layout(pro.PyLayers):
         #    ndlist  = self.Gs.node.keys()
 
         # printndlist
+
         Z = nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
                                    node_size=size, nodelist=ndlist, alpha=alpha,
                                    node_shape=node_shape, fig=fig, ax=ax)
+
         try:
             fig = Z.figure
             ax = Z.axes
@@ -5025,7 +5027,8 @@ class Layout(pro.PyLayers):
         ecmap = clr.ListedColormap(clrlist)
 
         U = self.Gs.edges(kwargs['edlist'])
-        ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
+        # ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
+        ue = np.ones(len(U),dtype='int').tolist()
         if len(U) > 0:
             Z = nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
                                        edge_color=ue, edge_cmap=ecmap,
