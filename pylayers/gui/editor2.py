@@ -959,7 +959,7 @@ class AppForm(QMainWindow):
             self.create_toolbar()
 
         self.show3On = False
-        # self.__loaddebug()
+        self.__loaddebug()
 
 
 

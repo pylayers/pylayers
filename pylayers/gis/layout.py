@@ -473,7 +473,7 @@ class Layout(pro.PyLayers):
         self.display['edges'] = True
         self.display['ednodes'] = False
         self.display['subseg'] = True
-        self.display['subsegnb'] = True
+        self.display['isonb'] = True
         self.display['transition'] = True
         self.display['visu'] = False
         self.display['thin'] = False
@@ -5446,14 +5446,18 @@ class Layout(pro.PyLayers):
             fig, ax = self.show_nodes(
                 ndlist, size=30, color='k', dlabels=dlabels, node_shape='s', fig=fig, ax=ax)
 
-        # if self.display['subsegnb']:
-        #     if hasattr(self,'lsss'):
-        #         seg = self.lsss
-        #         psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
-        #         nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+        if self.display['isonb']:
+            if hasattr(self,'lsss'):
+                seg = self.lsss
+                # psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+                # nbsseg = np.array([len(self.Gs.node[x]['iso']) for x in seg],dtype='int')
+                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg 
+                                   if len(self.Gs.node[x]['iso']) >1])
 
         #         [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
         # fontdict={'size':8},ha='center') for x in range(len(seg))]
+        [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,'+',
+        fontdict={'size':8},ha='center') for x in range(len(psseg))]
 
         if self.display['transition']:
             try:
