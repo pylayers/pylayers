@@ -1,25 +1,25 @@
 # -*- coding:Utf-8 -*-
 #####################################################################
-#This file is part of Network.
-
-#Foobar is free software: you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation, either version 3 of the License, or
-#(at your option) any later version.
-
-#Foobar is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-
-#You should have received a copy of the GNU General Public License
-#along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-
-#-------------------------------------------------------------------
 #authors :
 #Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr
 #Bernard UGUEN        : bernard.uguen@univ-rennes1.fr
 #####################################################################
+"""
+
+.. currentmodule:: pylayers.antprop.
+
+This module handles electromagnetic solver 
+Class EMsolver
+--------------
+    
+.. autosummary::
+    :toctree: generated/
+
+    EMsolver.save_model
+    EMsolver.load_model
+    EMsolver.solve
+
+"""
 import os
 import pkgutil
 
@@ -138,7 +138,8 @@ class EMSolver(object):
 
 
     def solve(self,p,e,LDP,RAT,epwr,sens):
-        """ computes and returns a LDP value a given method
+        """ computes and returns a LDP value 
+
 
         Parameters
         ----------
@@ -148,7 +149,7 @@ class EMSolver(object):
         LDP : string
             Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
         epwr : list
-           nodes emmited power
+           nodes transmitted power
         sens : list
             nodes sensitivity
 
@@ -161,6 +162,8 @@ class EMSolver(object):
         std : float
             A LDP value standard deviation:     * A time in ns for LDP ='TOA'
                                 * A received power in dBm for LDP ='Pr'
+
+        LDP (Location Dependent Parameter) 
 
         """
 
@@ -203,7 +206,7 @@ class EMSolver(object):
 
         if self.EMS_method == 'multiwall':
 
-            dd={} # distance dictionnary
+            dd = {} # distance dictionnary
             if len(e) > 0:
 
                 lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
@@ -211,7 +214,7 @@ class EMSolver(object):
                 # This explain the following licenses
                 lp = lp[:,:,:2]
                 dim = lp.shape[2]
-                # euclidian distance
+                # d euclidian distance
                 d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
                 slp = np.shape(lp)[1]
 
@@ -232,7 +235,7 @@ class EMSolver(object):
                         # Losst returns 4 parameters
                         #   Lo Lp Edo Edp
                         #
-                        #
+                        pdb.set_trace()
                         MW = lo.Losst(self.L,model.f,pa[i+1:lpa,:dim].T,pa[i,:dim])
                         # MW = lo.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
                         # loss free space

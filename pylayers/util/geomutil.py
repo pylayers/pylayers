@@ -3890,7 +3890,6 @@ def SphericalBasis(a):
     sa = np.vstack((np.sin(a[:, 0]) * np.cos(a[:, 1]), 
                     np.sin(a[:, 0]) * np.sin(a[:, 1]), 
                     np.cos(a[:, 0]))).T
-
     M = np.dstack((tha, pha, sa)).T
     # M = np.swapaxes(M,0,1)
     return M

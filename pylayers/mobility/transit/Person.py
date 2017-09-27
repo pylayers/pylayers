@@ -166,8 +166,8 @@ class Person(Process):
         self.manager_args = []
         self.waypoints = []
         self.moving=moving
-        pdb.set_trace()
         # random.seed(seed)
+        
         if roomId < 0:
             try :
                 self.roomId   = random.sample(self.L.Gr.nodes(),1)[0]
@@ -201,6 +201,7 @@ class Person(Process):
            self.nextroomId=self.room_seq[self.room_counter]
            self.wait=self.room_wait[self.room_counter]
         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
+
         self.rooms, self.wp =  self.L.waypointGw(self.roomId,self.nextroomId)
         # self.dlist =  [i in self.L.Gw.ldo for i in self.rooms]
         for tup in self.wp[1:]:

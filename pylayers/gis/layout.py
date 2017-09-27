@@ -473,7 +473,7 @@ class Layout(pro.PyLayers):
         self.display['edges'] = True
         self.display['ednodes'] = False
         self.display['subseg'] = True
-        self.display['subsegnb'] = True
+        self.display['isonb'] = True
         self.display['transition'] = True
         self.display['visu'] = False
         self.display['thin'] = False
@@ -523,6 +523,7 @@ class Layout(pro.PyLayers):
         else:  # No argument
             self._filename = 'newfile.lay'
             newfile = True
+            self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
 
         if not newfile:
             if loadlay:
@@ -2854,8 +2855,10 @@ class Layout(pro.PyLayers):
         # update iso of the 2 segments 
         #
         for k in same_seg:
-            self.Gs.node[k]['iso'].append(num)
-            self.Gs.node[num]['iso'].append(k)
+            if num not in self.Gs.node[k]['iso']:
+                self.Gs.node[k]['iso'].append(num)
+            if k not in self.Gs.node[num]['iso']:
+                self.Gs.node[num]['iso'].append(k)
 
         #
         # Segment punctual position is in the middle of segment
@@ -3169,15 +3172,20 @@ class Layout(pro.PyLayers):
         for e in le:
             assert(e > 0)
             name = self.Gs.node[e]['name']
+            iso = self.Gs.node[e]['iso']
+            [self.Gs.node[i]['iso'].remove(e) for i in iso 
+             if e in self.Gs.node[i]['iso']]
             del self.Gs.pos[e]  # delete edge position
             self.Gs.remove_node(e)
             self.labels.pop(e)
             self.Ns = self.Ns - 1
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
-            # delete subseg if required
+            # delete iso if required
+
             try:
-                self.pop._shseg(e)
+                # remove shapely seg
+                self.pop(_shseg[e])
             except:
                 pass
         if g2npy:
@@ -3595,7 +3603,10 @@ class Layout(pro.PyLayers):
             for k in data:
                 self.Gs.node[e1][k] = data[k]
 
-        self.name[data['name']].append(e1)
+        if data['name'] in self.name:
+            self.name[data['name']].append(e1)
+        else:
+            self.name[data['name']]=[e1]
 
         if data['name'] not in self.display['layers']:
             self.display['layers'].append(data['name'])
@@ -4897,9 +4908,11 @@ class Layout(pro.PyLayers):
         #    ndlist  = self.Gs.node.keys()
 
         # printndlist
+
         Z = nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
                                    node_size=size, nodelist=ndlist, alpha=alpha,
                                    node_shape=node_shape, fig=fig, ax=ax)
+
         try:
             fig = Z.figure
             ax = Z.axes
@@ -5014,7 +5027,8 @@ class Layout(pro.PyLayers):
         ecmap = clr.ListedColormap(clrlist)
 
         U = self.Gs.edges(kwargs['edlist'])
-        ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
+        # ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
+        ue = np.ones(len(U),dtype='int').tolist()
         if len(U) > 0:
             Z = nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
                                        edge_color=ue, edge_cmap=ecmap,
@@ -5439,14 +5453,18 @@ class Layout(pro.PyLayers):
             fig, ax = self.show_nodes(
                 ndlist, size=30, color='k', dlabels=dlabels, node_shape='s', fig=fig, ax=ax)
 
-        # if self.display['subsegnb']:
-        #     if hasattr(self,'lsss'):
-        #         seg = self.lsss
-        #         psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
-        #         nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+        if self.display['isonb']:
+            if hasattr(self,'lsss'):
+                seg = [x for x in self.Gs.nodes() if x >0]
+                # psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+                # nbsseg = np.array([len(self.Gs.node[x]['iso']) for x in seg],dtype='int')
+                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg 
+                                   if len(self.Gs.node[x]['iso']) >1])
 
         #         [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
         # fontdict={'size':8},ha='center') for x in range(len(seg))]
+                [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,'+',
+                fontdict={'size':8},ha='center') for x in range(len(psseg))]
 
         if self.display['transition']:
             try:
@@ -9447,8 +9465,8 @@ class Layout(pro.PyLayers):
         --------
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('WHERE1.ini')
-            >>> L.dumpr()
+            >>> L = Layout('TA-Office.lay')
+            >>> L.build()
 
         Notes
         -----

@@ -679,7 +679,7 @@ class Pattern(PyLayers):
 
 
         # Far-Field
-        Ft  = -L_phi  - eta0*N_theta  # 12-10b p 661
+        Ft  = -L_phi  - eta0*N_theta # 12-10b p 661
         Fp  = L_theta - eta0*N_phi   # 12-10c p 661 
         G = Ft*np.conj(Ft)+Fp*np.conj(Fp)
         if self.grid:
