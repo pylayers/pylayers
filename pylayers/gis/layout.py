@@ -2854,8 +2854,10 @@ class Layout(pro.PyLayers):
         # update iso of the 2 segments 
         #
         for k in same_seg:
-            self.Gs.node[k]['iso'].append(num)
-            self.Gs.node[num]['iso'].append(k)
+            if num not in self.Gs.node[k]['iso']:
+                self.Gs.node[k]['iso'].append(num)
+            if k not in self.Gs.node[num]['iso']:
+                self.Gs.node[num]['iso'].append(k)
 
         #
         # Segment punctual position is in the middle of segment
@@ -3169,15 +3171,19 @@ class Layout(pro.PyLayers):
         for e in le:
             assert(e > 0)
             name = self.Gs.node[e]['name']
+            iso = self.Gs.node[e]['iso']
             del self.Gs.pos[e]  # delete edge position
             self.Gs.remove_node(e)
             self.labels.pop(e)
             self.Ns = self.Ns - 1
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
-            # delete subseg if required
+            # delete iso if required
+            [self.Gs.node[i]['iso'].remove(e) for i in iso 
+             if e in self.Gs.node[i]['iso']]
             try:
-                self.pop._shseg(e)
+                # remove shapely seg
+                self.pop(_shseg[e])
             except:
                 pass
         if g2npy:
