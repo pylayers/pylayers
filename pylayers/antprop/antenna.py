@@ -1747,7 +1747,7 @@ class Pattern(PyLayers):
                     'show':True,
                     'mode':'index',
                     'color':'black',
-                    'u':0,
+                    'u':0
                     }
 
         for k in defaults:
@@ -1903,7 +1903,8 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'$\\theta$ plane')
+                #plt.title(u'$\\theta$ plane')
+                #plt.title(u'Simulated antenna pattern in azimuth (blue) and elevation (black) planes',fontsize=15)
 
             if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
@@ -1929,10 +1930,19 @@ class Pattern(PyLayers):
 
                 plt.title(u'$\\phi$ plane ')
             # actual plotting
+            rad2deg = 180/np.pi
             if len(lfreq)>1: 
-                ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+                # ax.plot(angle*rad2deg, r, color=col[cpt], lw=2, label=chaine)
+                # plt.grid()
+                ax.plot(angle*rad2deg, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
+                plt.axhline(-3,0,color='g')
+                plt.grid('on')
             else:
-                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
+                # ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
+                # plt.grid()
+                ax.plot(angle*rad2deg, r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
+                plt.axhline(-3,0,color='g')
+                plt.grid('on')
             cpt = cpt + 1
 
         if kwargs['polar']:
