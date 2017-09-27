@@ -220,6 +220,9 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.addButton = QPushButton('Add H seg')
         self.addButton.clicked.connect(self.addWidget)
 
+        self.transition = QCheckBox("Transition")
+        self.transition.setCheckState(bool(sum(self.subsegdata['ss_transition'])))
+
         # scroll area widget contents - layout
         self.scrollLayout = QFormLayout()
 
@@ -237,6 +240,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         # add all main to the main vLayout
         self.mainLayout.addWidget(self.addButton)
+        self.mainLayout.addWidget(self.transition)
 
 
         hboxfloor = QHBoxLayout()
@@ -365,6 +369,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.subsegdata['ss_offset']=[]
         self.subsegdata['ss_z']=[]
         self.subsegdata['ss_ID']=[]
+        self.subsegdata['ss_transition']=[]
         sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
         Nss = sub['iso']
 
@@ -376,11 +381,13 @@ class PropertiesWin(QDialog):    # any super class is okay
                 self.subsegdata['ss_offset'].append(node['offset'])
                 self.subsegdata['ss_z'].append(node['z'])
                 self.subsegdata['ss_ID'].append(ss)
+                self.subsegdata['ss_transition'].append(sub['transition'])
         else:
             self.subsegdata['ss_name'].append(sub['name'])
             self.subsegdata['ss_offset'].append(sub['offset'])
             self.subsegdata['ss_z'].append(sub['z'])
             self.subsegdata['ss_ID'].append(self.parent.selectl.nsel)
+            self.subsegdata['ss_transition'].append(sub['transition'])
 
     def valide(self):
         """ ok click
@@ -421,7 +428,7 @@ class PropertiesWin(QDialog):    # any super class is okay
                                         n2,
                                         num=w.subsegdata['ss_ID'],
                                         maxnum=-1,
-                                        transition = False,
+                                        transition = self.transition.isChecked(),
                                         name=name, 
                                         z=(zmin, zmax), 
                                         offset=offset,
