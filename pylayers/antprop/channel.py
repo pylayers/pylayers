@@ -205,6 +205,8 @@ class AFPchannel(bs.FUsignal):
                       az = np.array([]),
                       offset = 21.128*np.pi/180):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
+        if len(self.x)!=0:
+            self.fcGHz = self.x[len(self.x)/2]
         self.tx = tx 
         self.rx = rx
         self.az = az
@@ -4882,7 +4884,6 @@ class Ctilde(PyLayers):
         # tangl : r x 2
         # rangl : r x 2
         #
-
         tangl,Ra = geu.BTB(self.tang, self.Ta)
         rangl,Rb = geu.BTB(self.rang, self.Tb)
 
