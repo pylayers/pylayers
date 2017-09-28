@@ -2,8 +2,12 @@ from pylayers.antprop.loss import *
 import matplotlib.cm as cm
 import pdb
 
+<<<<<<< HEAD
 fGHz = np.array([24,25,26])
 # fGHz = fGHz=np.arange(18,28,0.1)
+=======
+fGHz = np.array([3,25,60])
+>>>>>>> b27014e9a940b367ff58465846bdb402cd4a9d8e
 h = 0.75
 w = 0.3
 tx = np.array([0,0,10])    # over axis z

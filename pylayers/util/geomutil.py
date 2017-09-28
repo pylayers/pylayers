@@ -4023,15 +4023,21 @@ def BTB(a_g, T):
         Rotation matrix in the wave plane   
     a_l : np.array (Nx2) 
         angle in local frame
+    
+    See Also
+    --------
 
+    SphericalBasis
 
     """
 
     # 3 x 3 x r 
     G = SphericalBasis(a_g)
-
-    th_g = G[0, :, :]
-    ph_g = G[1, :, :]
+    # old version of SphericalBasis
+    #th_g = G[0, :, :]
+    #ph_g = G[1, :, :]
+    th_g = G[:, 0, :]
+    ph_g = G[:, 1, :]
     
     #
     # 2 x 3 x r 
@@ -4042,7 +4048,8 @@ def BTB(a_g, T):
     # s = G[2,:,:]   3 x N 
     # s_l : N x 3 
     #
-    s_l = np.dot(T.T, G[2, :, :]).T
+    #s_l = np.dot(T.T, G[2, :, :]).T
+    s_l = np.dot(T.T, G[:, 2, :]).T
     
     # get the N couples of angles in local frame 
 
@@ -4050,8 +4057,11 @@ def BTB(a_g, T):
     a_l = angledir(s_l)
 
     L = SphericalBasis(a_l)
-    th_l = L[0, :, :]
-    ph_l = L[1, :, :]
+    # old version of SphericalBasis
+    #th_l = L[0, :, :]
+    #ph_l = L[1, :, :]
+    th_l = L[:, 0, :]
+    ph_l = L[:, 1, :]
     #
     # B_l : 3 x 2 x r 
     #
