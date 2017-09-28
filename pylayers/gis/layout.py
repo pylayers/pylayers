@@ -493,7 +493,7 @@ class Layout(pro.PyLayers):
         self.name = {}
         self.ax = self.display['box']
         self.zmin = 0
-        self.maxheight = 3
+        self.maxheight = 3.
 
         newfile = False
         loadlay = False
@@ -524,6 +524,8 @@ class Layout(pro.PyLayers):
             self._filename = 'newfile.lay'
             newfile = True
             self.sl = sb.SlabDB(fileslab=_fileslabini, filemat=_filematini)
+            self.zfloor = 0.
+            self.zceil = self.maxheight
 
         if not newfile:
             if loadlay:
@@ -2047,7 +2049,7 @@ class Layout(pro.PyLayers):
                 # AIR segment reaching zfloor are not stored (cond5) 
                 #
                 if (cond1 and (not cond5) and (not cond6)) or cond7: 
-                    d = self.Gs.node[n]
+                    d = copy.deepcopy(self.Gs.node[n])
                     d['connect'] = nx.neighbors(self.Gs, n)
                     try:
                         if d['transition']:
@@ -2105,6 +2107,8 @@ class Layout(pro.PyLayers):
 
         for s in lslab:
             ds = {}
+            import ipdb
+            ipdb.set_trace()
             if s not in self.sl:
                 if s not in self.sl.mat:
                     self.sl.mat.add(name=s,cval=6,sigma=0,typ='epsr')
@@ -5458,8 +5462,12 @@ class Layout(pro.PyLayers):
                 seg = [x for x in self.Gs.nodes() if x >0]
                 # psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
                 # nbsseg = np.array([len(self.Gs.node[x]['iso']) for x in seg],dtype='int')
-                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg 
-                                   if len(self.Gs.node[x]['iso']) >1])
+                try:
+                    psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg 
+                                   if len(self.Gs.node[x]['iso']) >1])  
+                except:
+                    import ipdb
+                    ipdb.set_trace()
 
         #         [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
         # fontdict={'size':8},ha='center') for x in range(len(seg))]

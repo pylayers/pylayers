@@ -150,7 +150,7 @@ class SubSegWin(QDialog):    # any super class is okay
 
 
         self.comboslab = QComboBox()
-        for s in self.gparent.L.sl.keys():
+        for s in self.gparent.slabname:
             self.comboslab.addItem(s)
         idx=self.comboslab.findText(self.subsegdata['ss_name'])
         self.comboslab.setCurrentIndex(idx)
@@ -424,6 +424,10 @@ class PropertiesWin(QDialog):    # any super class is okay
             zmax = w.heightmax.value()
             offset = w.offset.value()
             name = str(w.comboslab.currentText())
+            if not name in self.parent.L.name:
+                slab = self.parent.slabDB[name]
+                self.parent.L.sl + slab
+
             self.parent.L.add_segment(n1,
                                         n2,
                                         num=w.subsegdata['ss_ID'],
@@ -1004,28 +1008,27 @@ class AppForm(QMainWindow):
 
         # self.setgrid()
     def save(self,force=False):
-
         if self.filename == '' or force:
-            filename = QFileDialog.getSaveFileName(self, 'Save Layout', pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
-            try:
-                _filename= pyu.getshort(str(filename))
-            except:
-                pass
+            filename = QFileDialog.getSaveFileName(self, 'Save Layout', pyu.getlong('',pstruc['DIRLAY']),'(*.lay);;(*.osm)')
+            _filename= pyu.getshort(str(filename))
+            _filename,ext = os.path.splitext(_filename)
+            if ext == '':
+                _filename = _filename + '.lay'
+            self.L._filename = _filename
         else :
             _filename=self.L._filename
-        try:
-            oldCursor = QCursor()
-            QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
-            self.L.saveini(_filename)
-            self.L.saveosm(_filename.split('.')[0] + '.osm')
-            # self.L = Layout(_filename)
-            self.filename=self.L._filename
-            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
-            QApplication.setOverrideCursor(oldCursor)
 
-            print 'saved'
-        except:
-            pass
+        oldCursor = QCursor()
+        QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
+        self.filename=self.L._filename
+        self.L.save()
+        # self.L.saveosm(_filename.split('.')[0] + '.osm')
+        # self.L = Layout(_filename)
+        self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
+        QApplication.setOverrideCursor(oldCursor)
+        self.selectl.ctrl_is_held = False
+        self.selectl.shift_is_held = False
+
 
     def chgover(self):
         """ change overlay file
@@ -1106,6 +1109,10 @@ class AppForm(QMainWindow):
     def updatelayerselector(self):
         slname={}
         slname['name']=str(self.layerselector.currentText())
+        if not slname['name'] in self.L.name:
+            slab = self.slabDB[slname['name']]
+            self.L.sl + slab
+
         if self.selectl.state == 'Init' or self.selectl.state == 'SS':
             if self.selectl.nsel > 0:
                 if (self.selectl.state == 'SS'):
@@ -1491,11 +1498,17 @@ class AppForm(QMainWindow):
 
         try:
             self.layerselector=QComboBox()
-            for s in self.L.sl.keys():
+            self.slabDB = sb.SlabDB('slabDB.ini')
+            self.slabname= self.slabDB.keys()
+            self.slabname.sort()
+            for s in self.slabname:
                 self.layerselector.addItem(s)
             self.toolbar.addWidget(self.layerselector)
         except:
             pass
+        if 'PARTITION' in self.slabname:
+            idx=self.layerselector.findText('PARTITION')
+            self.layerselector.setCurrentIndex(idx)
         self.layerselector.activated.connect(self.updatelayerselector)
 
 
