@@ -58,6 +58,7 @@ DLink simulation
 
     DLink.eval
     DLink.afp
+    DLink.adp
     DLink._show3
 
 
@@ -1810,7 +1811,13 @@ class DLink(Link):
         self.checkh5()
 
 
-    def afp(self,fGHz,az=0,tilt=0,polar='V'):
+    def adp(self,imax=1000):
+        self.adpmes = self.afpmes.toadp()
+        self.adpmes.cut(imax=imax)
+        self.adprt = self.afprt.toadp()
+        self.adprt.cut(imax=imax)
+        
+    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1821,15 +1828,30 @@ class DLink(Link):
         az : azimuth angle (radian)  
         tilt : tilt angle (-pi/2<tilt<pi/2) 
         polar : string
+        win : string 'rect' | 'hamming'
+        _filemeas : string 
+        _filecal : string 
 
         """
-
+        # read measurement if available
+        if _filemeas!='':
+            fcGHz = self.fGHz[0]
+            self.afpmes = AFPchannel(tx=self.a,rx=self.b)
+            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset)
+            az = self.afpmes.azrt
+            #
+            # afpmes.x
+            # afpmes.y
+            # afpmes.fcGHz
+            # afpmes.az     measure angular range 
+            # afpmes.azrt   ray tracing angular range  
         # create an empty AFP 
         # tx = a
         # rx = b 
         # angular range (a) : phi 
         #
-        afp = AFPchannel(tx=self.a,rx=self.b,az=az)
+       
+        self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
         for ph in az:
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
@@ -1841,17 +1863,17 @@ class DLink(Link):
                 S = np.sum(self.H.y*np.exp(-2*1j*np.pi*fGHz*self.H.taud[:,None,None,None]),axis=0)
 
             try:
-                afp.y = np.vstack((afp.y,np.squeeze(S)))
+                self.afprt.y = np.vstack((self.afprt.y,np.squeeze(S)))
             except:
-                afp.y = np.squeeze(S)
+                self.afprt.y = np.squeeze(S)
         if self.H.y.shape[3]!=1:
-            afp.x = self.H.x
-            afp.fcGHz = afp.x[len(afp.x)/2]
+            self.afprt.x = self.H.x
+            self.afprt.fcGHz = self.afprt.x[len(self.afprt.x)/2]
         else:
-            afp.x = fGHz
-            afp.fcGHz = fGHz[len(fGHz)/2]
+            self.afprt.x = fGHz
+            self.afprt.fcGHz = fGHz[len(fGHz)/2]
 
-        return(afp)
+        #return(afp)
 
 
 
@@ -2317,20 +2339,25 @@ class DLink(Link):
         FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
         FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
         if kwargs['fspl']:
+            # Free space path loss
             ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
+            # Free space path loss + gain
             ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
 
 
         if kwargs['rays'] : 
+            # energy of each ray
             ER = np.squeeze(self.H.energy())
             color_range = np.linspace( 0, 1., len(ER))#np.linspace( 0, np.pi, len(ER))
+            # sort rays by increasing energy
             uER = ER.argsort()[::-1]
             colors= color_range[uER]
-            ax.scatter(self.H.taud[uER],20*np.log10(self.H.y[uER,0,0,0]),c=colors,cmap='hot')
+            # most important rays , it=0 ir=0 , if =0 
+            ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
 
         ax.legend()
-        return fig,ax
+        return fig,ax,ir
 
 
     def plt_doa(self,**kwargs):
