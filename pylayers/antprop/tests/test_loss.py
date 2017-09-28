@@ -1,7 +1,7 @@
 from pylayers.antprop.loss import *
 import pdb
 
-fGHz = np.array([24,25,26])
+fGHz = np.array([3,25,60])
 h = 0.75
 w = 0.3
 tx = np.array([0,0,10])    # over axis z

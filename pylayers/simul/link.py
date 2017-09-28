@@ -57,6 +57,7 @@ DLink simulation
     :toctree: generated/
 
     DLink.eval
+    DLink.afp
     DLink._show3
 
 
@@ -1845,8 +1846,10 @@ class DLink(Link):
                 afp.y = np.squeeze(S)
         if self.H.y.shape[3]!=1:
             afp.x = self.H.x
+            afp.fcGHz = afp.x[len(afp.x)/2]
         else:
             afp.x = fGHz
+            afp.fcGHz = fGHz[len(fGHz)/2]
 
         return(afp)
 
