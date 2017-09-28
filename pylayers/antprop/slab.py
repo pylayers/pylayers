@@ -855,14 +855,6 @@ class Mat(PyLayers,dict):
         else: # from P.2040
             epsr = self['a'] * fGHz**self['b']
             sigma  = self['c'] * fGHz**self['d']
-
-            # print ("a :",self['a'])
-            # print ("b :",self['b'])
-            # print ("c :",self['c'])
-            # print ("d :",self['d']) 
-            # print ("epsr :",epsr)
-            # print ("sigma :",sigma)
-
             epsc = epsr - 1j * 17.98 * sigma /  fGHz
 
         return(epsc)
@@ -1828,6 +1820,46 @@ class SlabDB(dict):
         #st = st + "Material file name : " +  self.mat.fileini+'\n'
         return(st)
 
+
+    def __contains__(self,sl):
+        """ slabDB contains slab
+        """
+
+        if type(sl).__name__ == 'str':
+            return sl in self.keys()
+        elif type(sl).__name__ == 'Slab':
+            return sl['name'] in self.keys()
+
+
+    def __add__(self,sl):
+        """ add new slab to a slabDB or new slabDB to slabDB
+        """
+
+        # defaults = {'name':'MAT',
+        #             'cval':1+0*1j,
+        #             'sigma':0,
+        #             'alpha_cmm1':1,
+        #             'mur':1,
+        #             'fGHz':1,
+        #             'typ':'epsr'
+        #            }
+
+
+        if type(sl).__name__ == Slab.__name__:
+
+            if sl not in self:
+                # check if material is in the self.mat
+                # otherwise add it
+                lmatname = sl['lmatname']
+                mat_exist = [m in self.mat for m in lmatname]
+                # add material if not exist in MatDB
+                [self.mat.add(**sl['lmat'][i]) 
+                 for i in range(len(lmatname)) if not mat_exist[i]]
+                self[sl['name']]=sl
+
+        elif type(sl).__name__ == SlabDB.__name__:
+            pass
+
     def showall(self):
         """ show all slabs
 
@@ -1962,7 +1994,6 @@ class SlabDB(dict):
 
 
         """
-
         U = Slab(name,self.mat)
         U['lmatname'] = lmatname
         U['lthick'] = lthick
