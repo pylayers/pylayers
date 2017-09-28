@@ -97,8 +97,6 @@ class Save(Process):
         out=[0]
         infile = open(os.path.join(basename,pstruc['DIRNETSAVE'],filename), 'r')
         while 1:
-            import ipdb
-            ipdb.set_trace()
             try:
                 out.append(pickle.load(infile))
             except (EOFError, pickle.UnpicklingError):
@@ -170,7 +168,7 @@ class Save(Process):
         self.idx=0
 
         ### init save dictionnary
-        self.save['saveopt']['Layout'] = self.L.filename
+        self.save['saveopt']['Layout'] = self.L._filename
         self.save['saveopt']['type'] = nx.get_node_attributes(self.net,'type')
         self.save['saveopt']['epwr'] = nx.get_node_attributes(self.net,'epwr')
         self.save['saveopt']['sens'] = nx.get_node_attributes(self.net,'sens')

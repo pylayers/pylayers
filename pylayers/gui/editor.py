@@ -24,19 +24,20 @@ import sys
 
 
 class SubSegWin(QDialog):    # any super class is okay
-    def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
+    def __init__(self,idx,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
         self.gparent=parent.parent
         self.parent=parent
+        self.idx=idx
         # mulsti segment selection indicator
         self.mulseg=parent.mulseg
         # dictionnary to pass subseg data
-        self.subsegdata=parent.subsegdata
-        self.Nss=Nss
-        self.zmin=zmin
-        self.zmax=zmax
-        self._autocalc_height_val()
+        self.subsegdata=subsegdata
+        # self.Nss=Nss
+        # self.zmin=zmin
+        # self.zmax=zmax
+        # # self._autocalc_height_val()
         self._init_subseg_prop()
         self._init_layout()
 
@@ -44,64 +45,59 @@ class SubSegWin(QDialog):    # any super class is okay
 
         vbox = QVBoxLayout()
 
-        # Indicate Ceil
-        hboxceil = QHBoxLayout()
-        ceillabel = QLabel('Ceil')
-        ceillabel.setStyleSheet("font: bold 14px;")
-        hboxceil.addWidget(ceillabel)
-        hboxceil.setAlignment(Qt.AlignCenter)
+        # # Indicate Ceil
+        # hboxceil = QHBoxLayout()
+        # ceillabel = QLabel('Ceil')
+        # ceillabel.setStyleSheet("font: bold 14px;")
+        # hboxceil.addWidget(ceillabel)
+        # hboxceil.setAlignment(Qt.AlignCenter)
 
-        vbox.addLayout(hboxceil)
+        # vbox.addLayout(hboxceil)
 
+        # vbox.addWidget(self.Hline())
         vbox.addWidget(self.Hline())
-        vbox.addWidget(self.Hline())
 
 
-        for ss in range(self.Nss):
             #slab
             # hboxtitle=QHBoxLayout()
             # hboxtitle.addWidget(QLabel('Sub-Segment'+str(ss+1)))
-            hbox1 = QHBoxLayout()
-            hbox1.addWidget(self.lcomboslab[ss])
+        hbox1 = QHBoxLayout()
+        hbox1.addWidget(self.comboslab)
 
-            # slab prop
-            hboxl2 = QHBoxLayout()
-            hbox2 = QHBoxLayout()
-            label=['zmin','zmax','offset','']
-            for iw,w in enumerate([ self.lheightmin[ss],self.lheightmax[ss],
-                                    self.loffset[ss]]):
-                hboxl2.addWidget(QLabel(label[iw]))
-                hbox2.addWidget(w)
+        # slab prop
+        hboxl2 = QHBoxLayout()
+        hbox2 = QHBoxLayout()
+        label=['zmin','zmax','offset','']
+        for iw,w in enumerate([ self.heightmin,self.heightmax,
+                                self.offset]):
+            hboxl2.addWidget(QLabel(label[iw]))
+            hbox2.addWidget(w)
 
-            # vbox.addLayout(hboxtitle)
-            vbox.addLayout(hbox1)
-            vbox.addLayout(hboxl2)
-            vbox.addLayout(hbox2)
-            if ss < self.Nss-1:
-                vbox.addWidget(self.Hline())
+        # vbox.addLayout(hboxtitle)
+        vbox.addLayout(hbox1)
+        vbox.addLayout(hboxl2)
+        vbox.addLayout(hbox2)
 
-
-        vbox.addWidget(self.Hline())
-        vbox.addWidget(self.Hline())
-        # Indicate Floor
-        hboxfloor = QHBoxLayout()
-        floorlabel = QLabel('Floor')
-        floorlabel.setStyleSheet("font: bold 14px;")
-        hboxfloor.addWidget(floorlabel)
-        hboxfloor.setAlignment(Qt.AlignCenter)
-        vbox.addLayout(hboxfloor)
+        # vbox.addWidget(self.Hline())
+        # # Indicate Floor
+        # hboxfloor = QHBoxLayout()
+        # floorlabel = QLabel('Floor')
+        # floorlabel.setStyleSheet("font: bold 14px;")
+        # hboxfloor.addWidget(floorlabel)
+        # hboxfloor.setAlignment(Qt.AlignCenter)
+        # vbox.addLayout(hboxfloor)
 
 
 
         # validation
-        buttono=QPushButton("OK")
-        buttonc=QPushButton("Cancel")
-        buttono.clicked.connect(self.valide)
+        # buttono=QPushButton("Cancel")
+        buttonc=QPushButton("Delete")
+        # buttono.clicked.connect(self.valide)
         buttonc.clicked.connect(self.cancel)
 
         hboxDial = QHBoxLayout()
         hboxDial.addWidget(buttonc)
-        hboxDial.addWidget(buttono)
+        # hboxDial.addWidget(buttono)
 
 
 
@@ -116,16 +112,16 @@ class SubSegWin(QDialog):    # any super class is okay
         hline.setFrameShape(QFrame.HLine)
         hline.setFrameShadow(QFrame.Sunken)
         return hline
-    def _autocalc_height_val(self):
-        """ split height proportionnaly to the number of subsegs
-            when new subseg
-            TO BE DONE
-        """
-        self.lma=[]
-        self.lmi=[]
-        for s in range(self.Nss):
-            self.lma.append(self.zmax)
-            self.lmi.append(self.zmin)
+    # def _autocalc_height_val(self):
+    #     """ split height proportionnaly to the number of subsegs
+    #         when new subseg
+    #         TO BE DONE
+    #     """
+    #     self.lma=[]
+    #     self.lmi=[]
+    #     for s in range(self.Nss):
+    #         self.lma.append(self.zmax)
+    #         self.lmi.append(self.zmin)
     #     if self.Nss >1:
 
 
@@ -142,57 +138,48 @@ class SubSegWin(QDialog):    # any super class is okay
 
 
     def _init_subseg_prop(self):
-        self.lheightmin=[]
-        self.lheightmax=[]
-        self.loffset=[]
-        self.lcomboslab = []
-        self.lzQ=[]
-
+        
         #TODO
         # sort subsegments from floor to ceil
         # add connect to impose begin of previous segment
         # sort subseg by height
 
-        z = np.array(self.subsegdata['ss_z'])
-        self.sszo = np.argsort(z[:,0])[::-1]
+  
+  
 
 
-        for ss in self.sszo:#range(self.Nss):
 
-            self.lcomboslab.append(QComboBox())
-            for s in self.gparent.L.sl.keys():
-                self.lcomboslab[-1].addItem(s)
-            idx=self.lcomboslab[-1].findText(self.subsegdata['ss_name'][ss])
-            self.lcomboslab[-1].setCurrentIndex(idx)
+        self.comboslab = QComboBox()
+        for s in self.gparent.L.sl.keys():
+            self.comboslab.addItem(s)
+        idx=self.comboslab.findText(self.subsegdata['ss_name'])
+        self.comboslab.setCurrentIndex(idx)
 
 
-            self.lheightmin.append(QDoubleSpinBox())
-            self.connect(self.lheightmin[-1], SIGNAL('valueChanged(double)'), self.color_restore)
+        self.heightmin = QDoubleSpinBox()
+        self.connect(self.heightmin, SIGNAL('valueChanged(double)'), self.color_restore)
 
-            self.lheightmin[-1].setObjectName("zmin")
-            self.lheightmin[-1].setSingleStep(0.01)
-            self.lheightmin[-1].setRange(0.,self.gparent.L.maxheight)
-            self.lheightmin[-1].setValue(self.subsegdata['ss_z'][ss][0])
+        self.heightmin.setObjectName("zmin")
+        self.heightmin.setSingleStep(0.01)
+        self.heightmin.setRange(0.,self.gparent.L.maxheight)
+        self.heightmin.setValue(self.subsegdata['ss_z'][0])
 
-            self.lheightmax.append(QDoubleSpinBox())
-            self.connect(self.lheightmax[-1], SIGNAL('valueChanged(double)'), self.color_restore)
-            self.lheightmax[-1].setSingleStep(0.01)
-            self.lheightmax[-1].setObjectName("zmax")
-            self.lheightmax[-1].setRange(0.,self.gparent.L.maxheight)
-            self.lheightmax[-1].setValue(self.subsegdata['ss_z'][ss][1])
-            self.loffset.append(QDoubleSpinBox())
-            self.loffset[-1].setObjectName("offset")
-            self.loffset[-1].setSingleStep(0.01)
-            self.loffset[-1].setRange(-1.,1.)
-            self.loffset[-1].setValue(self.subsegdata['ss_offset'][ss])
+        self.heightmax = QDoubleSpinBox()
+        self.connect(self.heightmax, SIGNAL('valueChanged(double)'), self.color_restore)
+        self.heightmax.setSingleStep(0.01)
+        self.heightmax.setObjectName("zmax")
+        self.heightmax.setRange(0.,self.gparent.L.maxheight)
+        self.heightmax.setValue(self.subsegdata['ss_z'][1])
+        self.offset = QDoubleSpinBox()
+        self.offset.setObjectName("offset")
+        self.offset.setSingleStep(0.01)
+        self.offset.setRange(-1.,1.)
+        self.offset.setValue(self.subsegdata['ss_offset'])
 
-            self.lzQ.append([self.lheightmin[-1],self.lheightmax[-1]])
-        for ss in self.sszo:
-            self.connect(self.lheightmin[ss], SIGNAL('valueChanged(double)'), self.force_ss_minmax)
-            self.connect(self.lheightmax[ss], SIGNAL('valueChanged(double)'), self.force_ss_minmax)
-            if self.Nss >1:
-                self.connect(self.lheightmin[ss], SIGNAL('valueChanged(double)'), self.force_minmax_previous)
-                self.connect(self.lheightmax[ss], SIGNAL('valueChanged(double)'), self.force_minmax_previous)
+        self.connect(self.heightmin, SIGNAL('valueChanged(double)'), self.parent.force_ss_minmax)
+        self.connect(self.heightmax, SIGNAL('valueChanged(double)'), self.parent.force_ss_minmax)
+        self.connect(self.heightmin, SIGNAL('valueChanged(double)'), self.parent.force_minmax_previous)
+        self.connect(self.heightmax, SIGNAL('valueChanged(double)'), self.parent.force_minmax_previous)
 
     def color_restore(self, event):
         """ retore black color to SpinBox
@@ -202,198 +189,75 @@ class SubSegWin(QDialog):    # any super class is okay
         # val = self.lheightmax[-1].value()
         # print val
 
-    def force_ss_minmax(self,event):
-        """ Force sub-segment zmin < zmax
-        """
-        sender = self.sender()
-        # find sender in self.lzq
-        us = [sender in x for x in self.lzQ]
-        uline = np.where(us)[0]
-        uline=uline[0]
-        lz = self.lzQ[uline]
-
-        zmin =lz[0].value()
-        zmax =lz[1].value()
-        if zmin >= zmax:
-            self.lzQ[uline][0].setValue(zmax)
-
-    def force_minmax_previous(self,event):
-        sender = self.sender()
-        # find sender in self.lzq
-        us = [sender in x for x in self.lzQ]
-        uline = np.where(us)[0]
-        uline = uline[0]
-        lz = self.lzQ[uline]
-        # if sender is a zmin
-        if lz.index(sender) == 0:
-            # not last line
-            if uline < self.Nss-1:
-                # if subseg+1 max is higher than subseg zmin
-                # subseg+1 max = subseg zmin
-                if self.lzQ[uline][0].value() <= self.lzQ[uline+1][1].value():
-                    self.lzQ[uline+1][1].setValue(self.lzQ[uline][0].value())
-        # sender is a zmax
-        elif lz.index(sender) == 1:
-            # not first line
-            if uline >0:
-                # if subseg-1 min is lower than subseg zmax
-                # subseg-1 min = subseg zmax
-                if self.lzQ[uline][1].value() >= self.lzQ[uline-1][0].value():
-                    self.lzQ[uline-1][0].setValue(self.lzQ[uline][1].value())
-
-    def valide(self):
-        self.parent.subsegdata={}
-        self.parent.subsegdata['ss_name']=[]
-        self.parent.subsegdata['ss_z']=[]
-        self.parent.subsegdata['ss_offset']=[]
-
-        for ss in self.sszo:
-            z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
-            self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
-            self.parent.subsegdata['ss_z'].append(z)
-            self.parent.subsegdata['ss_offset'].append(self.loffset[ss].value())
 
         # if not self.mulseg:
         #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
         # else:
         #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
-        self.close()
+        # self.close()
 
     def cancel(self):
+        XX = self.parent.dwidget.pop(self.idx)
         self.close()
 
 
 class PropertiesWin(QDialog):    # any super class is okay
+
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
         # determine if multiple se gments are selected
         self.mulseg=mulseg
-
-        # combo box
-        self._init_slab_prop()
+        self.widx = 0
         self._init_subsegs()
         self._init_layout()
 
 
-        # self.button.clicked.connect(self.create_child)
-
-
-
-    def _init_subsegs(self):
-        self.subsegdata={}
-        self.subsegdata['ss_name']=[]
-        self.subsegdata['ss_offset']=[]
-        self.subsegdata['ss_z']=[]
-
-        if self.parent.selectl.nsel in self.parent.L.lsss :
-            sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
-            Nss = len(sub['ss_name'])
-        else :
-            Nss=0
-
-        for ss in range(Nss):
-            self.subsegdata['ss_name'].append(sub['ss_name'][ss])
-            self.subsegdata['ss_offset'].append(sub['ss_offset'][ss])
-            self.subsegdata['ss_z'].append(sub['ss_z'][ss])
-
-    def _init_slab_prop(self):
-
-        # if mulseg, default value are default
-        if self.mulseg:
-            self.segdata={}
-            self.segdata['name']=str(self.parent.layerselector.currentText())
-            self.segdata['offset']=0.0
-            self.segdata['z']=(0.0,self.parent.L.maxheight)
-            self.segdata['transition']=False
-
-        # else : default are read from self.Gs.node[node]
-        else :
-            self.segdata = self.parent.L.Gs.node[self.parent.selectl.nsel]
-
-
-        self.comboslab = QComboBox()
-        for s in self.parent.L.sl.keys():
-            self.comboslab.addItem(s)
-        idx=self.comboslab.findText(self.segdata['name'])
-        self.comboslab.setCurrentIndex(idx)
-
-
-
-        self.heightmin = QDoubleSpinBox()
-        self.heightmin.setObjectName("zmin")
-        self.heightmin.setSingleStep(0.01)
-        self.heightmin.setRange(0.,800.)
-        self.heightmin.setValue(self.segdata['z'][0])
-
-
-        self.heightmax = QDoubleSpinBox()
-        self.heightmax.setSingleStep(0.01)
-        self.heightmax.setObjectName("zmax")
-        self.heightmax.setRange(0.,800.)
-        self.heightmax.setValue(self.segdata['z'][1])
-
-        self.offset =  QDoubleSpinBox()
-        self.offset.setObjectName("offset")
-        self.offset.setSingleStep(0.01)
-        self.offset.setRange(-1.,1.)
-        self.offset.setValue(self.segdata['offset'])
-
-        self.transition = QCheckBox("Transition")
-        # self.transition.setCheckable(True)
-        self.transition.setCheckState(self.segdata['transition'])
-        # self.transition.setText("0")
-
-        self.nbsubseg = QSpinBox()
-        self.nbsubseg.setObjectName("nbsubseg")
-        self.nbsubseg.setRange(0,20.)
-        try:
-            self.nbsubseg.setValue(len(self.segdata['ss_name']))
-        except:
-            self.nbsubseg.setValue(0.)
-
-        self.editssbutton = QPushButton("Edit Sub-Segments")
-        self.editssbutton.clicked.connect(self.editsubseg)
-
-
-
-        self.heightmin.setMinimumWidth(5)
-        self.heightmax.setMinimumWidth(5)
-        self.transition.setMinimumWidth(10)
-
-
-        self.heightmin.setMaximumWidth(70)
-        self.heightmax.setMaximumWidth(70)
-        self.transition.setMaximumWidth(70)
-        self.nbsubseg.setMaximumWidth(50)
-        self.editssbutton.setMaximumWidth(120)
 
     def _init_layout(self):
+    # main button
+        self.addButton = QPushButton('Add H seg')
+        self.addButton.clicked.connect(self.addWidget)
 
-        #slab
-        hbox1 = QHBoxLayout()
-        hbox1.addWidget(self.comboslab)
+        self.transition = QCheckBox("Transition")
+        self.transition.setCheckState(bool(sum(self.subsegdata['ss_transition'])))
 
-        # slab prop
-        hbox2 = QHBoxLayout()
-        hboxl2 = QHBoxLayout()
-        label=['zmin','zmax','offset','']
-        for iw,w in enumerate([ self.heightmin,self.heightmax,self.offset,self.transition]):
-            hboxl2.addWidget(QLabel(label[iw]))
-            hbox2.addWidget(w)
-            # hbox2.setAlignment(w, Qt.AlignVCenter)
+        # scroll area widget contents - layout
+        self.scrollLayout = QFormLayout()
 
-        # subseg prop
-        hbox3 = QHBoxLayout()
-        hboxl3 = QHBoxLayout()
+        # scroll area widget contents
+        self.scrollWidget = QWidget()
+        self.scrollWidget.setLayout(self.scrollLayout)
 
-        hbox3.addWidget(self.nbsubseg)
-        hbox3.addWidget(self.editssbutton)
-        hboxl3.addWidget(QLabel('Number of \nSub-segments'))
+        # scroll area
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setWidget(self.scrollWidget)
+
+        # main layout
+        self.mainLayout = QVBoxLayout()
+
+        # add all main to the main vLayout
+        self.mainLayout.addWidget(self.addButton)
+        self.mainLayout.addWidget(self.transition)
 
 
-        # validation
+        hboxfloor = QHBoxLayout()
+        ceillabel = QLabel('Ceil')
+        ceillabel.setStyleSheet("font: bold 14px;")
+        ceillabel.setAlignment(Qt.AlignCenter)
+        self.mainLayout.addWidget(ceillabel)
+
+        self.mainLayout.addWidget(self.scrollArea)
+
+        hboxfloor = QHBoxLayout()
+        floorlabel = QLabel('Floor')
+        floorlabel.setStyleSheet("font: bold 14px;")
+        floorlabel.setAlignment(Qt.AlignCenter)
+        self.mainLayout.addWidget(floorlabel)
+
+
 
         buttono=QPushButton("OK")
         buttonc=QPushButton("Cancel")
@@ -407,76 +271,187 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         # create Layout
         vbox = QVBoxLayout()
-        vbox.addLayout(hbox1)
-        vbox.addLayout(hboxl2)
-        vbox.addLayout(hbox2)
-        vbox.addLayout(hboxl3)
-        vbox.addLayout(hbox3)
+
+        vbox.addLayout(self.mainLayout)
         vbox.addLayout(hboxDial)
 
         self.setLayout(vbox)
 
-    def editsubseg(self):
-        """ open a edit subseg window
+
+        self.Nss = len(self.subsegdata['ss_name'])
+
+        # order subseg in order of zmin to zmax
+        z = np.array(self.subsegdata['ss_z'])
+
+        self.sszo = np.argsort(z[:,0])[::-1]
+
+        self.dwidget = {}
+
+        for ss in self.sszo:
+            subsegdata = {'ss_name':self.subsegdata['ss_name'][ss],
+                          'ss_z':self.subsegdata['ss_z'][ss],
+                          'ss_offset':self.subsegdata['ss_offset'][ss],
+                          'ss_ID':self.subsegdata['ss_ID'][ss]}
+            self.addWidget(subsegdata)
+
+    def addWidget(self,subsegdata={}):
+        if subsegdata==False:
+            subsegdata = {'ss_name':'AIR',
+                         'ss_z':(0,3.0),
+                         'ss_offset':0.,
+                         'ss_ID':-1}
+        self.dwidget.update({self.widx:SubSegWin(parent=self,idx = self.widx, subsegdata=subsegdata)})
+        self.scrollLayout.addRow(self.dwidget[self.widx])
+        self.widx = self.widx +1
+
+
+
+
+    def force_ss_minmax(self,event):
+        """ Force sub-segment zmin < zmax
         """
-        print 'SSDATA :',self.subsegdata
-        Nss=self.nbsubseg.value()
-        if Nss>0:
-            zmin=self.heightmin.value()
-            zmax=self.heightmax.value()
-            if Nss>len(self.subsegdata['ss_name']):
-                for i in range(Nss-len(self.subsegdata['ss_name'])):
-                    self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
-                    self.subsegdata['ss_offset'].append(0.)
-                    self.subsegdata['ss_z'].append((zmin,zmax))
+        sender = self.sender()
+        wid = None
+        for k,w in self.dwidget.items():
+            if w.heightmin == sender:
+                wid = self.dwidget[k]
+                break
+            elif w.heightmax == sender:
+                wid = self.dwidget[k]
+                break
 
-            self.subseg=SubSegWin(parent=self,subsegdata=self.subsegdata,Nss=Nss,zmin=zmin,zmax=zmax)
-            self.subseg.show()
+        
+        zmin =wid.heightmin.value()
+        zmax =wid.heightmax.value()
+        if zmin >= zmax:
+            wid.heightmin.setValue(zmax)
 
+    def force_minmax_previous(self,event):
+        sender = self.sender()
+        wid = None
+        widkey = None
+        for k,w in self.dwidget.items():
+            if w.heightmin == sender:
+                wid = self.dwidget[k]
+                widkey = k
+                break
+            elif w.heightmax == sender:
+                wid = self.dwidget[k]
+                widkey = k
+                break
+        # here it is supposed that larger key number are at the lowest level
+        lw = self.dwidget.keys()
+        lw.sort()
+        ulw = lw.index(k)
+
+
+        # if sender is a zmin
+        if 'min' in sender.objectName():
+            # not last line <=> bottom of the segment
+            if ulw != lw[-1]:
+                #next widget
+                nwid = self.dwidget[lw[ulw+1]]
+                nwid.heightmax.setValue(wid.heightmin.value())
+
+
+        elif 'max' in sender.objectName():
+            # not 1st line <=> top of the segment
+            if ulw != lw[0]:
+                #previous widget
+                pwid = self.dwidget[lw[ulw-1]]
+                pwid.heightmin.setValue(wid.heightmax.value())
+
+
+
+    def _init_subsegs(self):
+        self.subsegdata={}
+        self.subsegdata['ss_name']=[]
+        self.subsegdata['ss_offset']=[]
+        self.subsegdata['ss_z']=[]
+        self.subsegdata['ss_ID']=[]
+        self.subsegdata['ss_transition']=[]
+        sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
+        Nss = sub['iso']
+
+        # if len(Nss) == 1 => this is the segment and not subseg
+        if len(Nss) != 0:
+            for uss,ss in enumerate(Nss):
+                node = self.parent.L.Gs.node[ss]
+                self.subsegdata['ss_name'].append(node['name'])
+                self.subsegdata['ss_offset'].append(node['offset'])
+                self.subsegdata['ss_z'].append(node['z'])
+                self.subsegdata['ss_ID'].append(ss)
+                self.subsegdata['ss_transition'].append(sub['transition'])
+        else:
+            self.subsegdata['ss_name'].append(sub['name'])
+            self.subsegdata['ss_offset'].append(sub['offset'])
+            self.subsegdata['ss_z'].append(sub['z'])
+            self.subsegdata['ss_ID'].append(self.parent.selectl.nsel)
+            self.subsegdata['ss_transition'].append(sub['transition'])
 
     def valide(self):
         """ ok click
         """
-        z = [self.heightmin.value(),self.heightmax.value()]
-        if self.transition.isChecked():
-            trans = True
-        else :
-            trans = False
-        self.segdata = {'name':str(self.comboslab.currentText()),
-                'z':z,
-                'transition':trans,
-                'offset':self.offset.value()
-                }
 
-        Nss = self.nbsubseg.value()
 
-        if Nss>len(self.subsegdata['ss_name']):
-            zmin=self.heightmin.value()
-            zmax=self.heightmax.value()
-            for i in range(Nss-len(self.subsegdata['ss_name'])):
-                self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
-                self.subsegdata['ss_offset'].append(0.)
-                self.subsegdata['ss_z'].append((zmin,zmax))
+        node = self.parent.L.Gs.node[self.parent.selectl.nsel]
+        n1,n2 = node['connect']
+        iso = node['iso']
 
-        self.subsegdata.update({'ss_name':self.subsegdata['ss_name'][:Nss],
-                              'ss_offset':self.subsegdata['ss_offset'][:Nss],
-                              'ss_z':self.subsegdata['ss_z'][:Nss]})
+        newID = [self.dwidget[x].subsegdata['ss_ID'] for x in self.dwidget]
 
-        if not self.mulseg:
-            self.parent.L.edit_seg(self.parent.selectl.nsel,self.segdata)
-            self.parent.L.update_sseg(self.parent.selectl.nsel,self.subsegdata)
-            self.parent.selectl.modeIni()
-        else:
-            [self.parent.L.edit_seg(s,self.segdata) for s in self.parent.selectl.selectseg]
-            [self.parent.L.update_sseg(s,self.subsegdata) for s in self.parent.selectl.selectseg]
-            self.parent.selectl.modeSMS()
-            self.parent.selectl.multsel()
+
+        # import ipdb
+        # ipdb.set_trace()
+        # no segments just quit discarding changes
+        if len(self.dwidget) == 0:
+            self.close()
+
+        # diffseg = len(self.dwidget) - len(iso) 
+        # # try to reaffect segment number to existing ones
+        # if diffseg == 0:
+        #     # same number of created seg than existing before edit
+        #     segID = iso
+        # elif diffseg > 0 :
+        #     # segments have been added
+        #     segID = iso + [-1]*diffseg
+        # elif diffseg < 0:
+        #     # segments have been removed
+        #     pass
+        for w in self.dwidget.values():
+            # get nodes
+            zmin = w.heightmin.value()
+            zmax = w.heightmax.value()
+            offset = w.offset.value()
+            name = str(w.comboslab.currentText())
+            self.parent.L.add_segment(n1,
+                                        n2,
+                                        num=w.subsegdata['ss_ID'],
+                                        maxnum=-1,
+                                        transition = self.transition.isChecked(),
+                                        name=name, 
+                                        z=(zmin, zmax), 
+                                        offset=offset,
+                                        verbose=False)
+            newID.append(w.subsegdata['ss_ID'])
+        # determine if a segment has been removed, and then removeit from Gs
+        # seg to be removed
+        bsegtbr = [i not in newID for i in iso]
+        utbr = np.where(bsegtbr)[0]
+        if len(utbr) > 0 :
+            segtbr = np.array(iso)[utbr].tolist()
+            self.parent.L.del_segment(segtbr,g2npy=False)
+        self.parent.L.g2npy()
+
+
         self.close()
 
     def cancel(self):
         """ cancel click
         """
         self.close()
+
+
 
 
 class SaveQuitWin(QDialog):    # any super class is okay
@@ -604,7 +579,7 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def new(self):
-        self.parent.L=Layout('void.ini',check=False)
+        self.parent.L=Layout()
 
         if self.doverlay.has_key('overlay_file'):
             self.parent.L.display['overlay_file']=self.doverlay['overlay_file']
@@ -634,7 +609,7 @@ class NewLayout(QDialog):    # any super class is okay
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
-        self.parent.setWindowTitle(self.parent.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+        self.parent.setWindowTitle(self.parent.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
         self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
         self.close()
 
@@ -981,7 +956,7 @@ class AppForm(QMainWindow):
     def __init__(self, parent=None):
         super(AppForm,self).__init__()
         # QMainWindow.__init__(self, parent)
-        self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
+        self.setWindowTitle('Pylayers : Stand Alone Editor (Alpha)')
         self.filename=''
 
         self.create_menu()
@@ -991,6 +966,18 @@ class AppForm(QMainWindow):
             self.create_toolbar()
 
         self.show3On = False
+        # self.__loaddebug()
+
+
+
+    def __loaddebug(self):
+        self.L = Layout('defstr.lay')
+        self.filename = self.L._filename
+        self.create_main_frame()
+        self.on_draw()
+        self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
+        self.resize(self.fig.canvas.width(),self.fig.canvas.height())
+        print 'loaded'
 
 
     def new(self):
@@ -1007,11 +994,11 @@ class AppForm(QMainWindow):
 
         if filename != '':
             _filename = pyu.getshort(str(filename))
-            self.L = Layout(_filename,check=False)
-            self.filename = self.L.filename
+            self.L = Layout(_filename)
+            self.filename = self.L._filename
             self.create_main_frame()
             self.on_draw()
-            self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
 
@@ -1025,15 +1012,15 @@ class AppForm(QMainWindow):
             except:
                 pass
         else :
-            _filename=self.L.filename
+            _filename=self.L._filename
         try:
             oldCursor = QCursor()
             QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
             self.L.saveini(_filename)
             self.L.saveosm(_filename.split('.')[0] + '.osm')
             # self.L = Layout(_filename)
-            self.filename=self.L.filename
-            self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+            self.filename=self.L._filename
+            self.setWindowTitle(self.L._filename + '- Pylayers : Stand Alone Editor (Alpha)')
             QApplication.setOverrideCursor(oldCursor)
 
             print 'saved'
@@ -1154,7 +1141,7 @@ class AppForm(QMainWindow):
 
 
     def on_about(self):
-        msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
+        msg = """ This is the PyLayers' Stand-Alone Layout Editor (Alpha)
 
          This tool allows to edit/modyfy a building floor plan and/or constitutive materials.
          Once saved, the layout s ready to be used with PyLayers simunlation tools.
@@ -1186,7 +1173,7 @@ class AppForm(QMainWindow):
          www.pylayers.org
 
         """
-        QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (BETA)", msg.strip())
+        QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (Alpha)", msg.strip())
 
 
 
@@ -1208,7 +1195,7 @@ class AppForm(QMainWindow):
         self.L.display['nodes']=True
         self.L.display['ednodes']=True
         self.L.display['subseg']=False
-        self.L.display['subsegnb']=True
+        self.L.display['isonb']=True
         self.L.display['ticksoff']=False
 
 
@@ -1248,9 +1235,12 @@ class AppForm(QMainWindow):
         string = string +'\t'+self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
 
-        if self.selectl.nsel > 0:
-            idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
-            self.layerselector.setCurrentIndex(idx)
+        if self.selectl.nsel > 0 :
+            try:
+                idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
+                self.layerselector.setCurrentIndex(idx)
+            except:
+                pass
 
         if self.show3On:
             self.show3()

@@ -183,7 +183,7 @@ class SelectL2(object):
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True)
+        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,isonb=True)
         if self.gridOn:
             self.setgrid()
         else:
@@ -1396,7 +1396,9 @@ class SelectL2(object):
             if isinstance(self.current_layer,list):
                 self.current_layer = self.L.sl.keys()[0]
                 self.L.display['activelayer']=self.current_layer
-            self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
+            self.nsel  = self.L.add_segment(ta, he,
+                                            name=self.current_layer,
+                                            z=(0,self.L.maxheight))
         else:
             print "segment ("+str(ta)+","+str(he)+") already exists"
         if self.L.Ns > 1:
@@ -1415,7 +1417,10 @@ class SelectL2(object):
         if (pt_new != []):
             # calculate alpha
             self.L.add_pons(self.selected_edge1, 1. - alpha)
-            self.current_layer = self.L.Gs.node[self.selected_edge1]['name']
+            try:
+                self.current_layer = self.L.Gs.node[self.selected_edge1]['name']
+            except: 
+                pass
             self.state = 'Init'
         self.update_state()
 
