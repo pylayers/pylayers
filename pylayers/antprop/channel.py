@@ -394,6 +394,7 @@ class ADPchannel(bs.TUsignal):
    
     def cut(self,imin=0,imax=1000):
         self.y = self.y[:,imin:imax]
+        self.x = self.x[imin:imax]
 
     def correlate(self,adp,thresholddB=-105):
         """ correlate ADP with an other ADP
@@ -466,10 +467,49 @@ class ADPchannel(bs.TUsignal):
             b = sv*np.dot(U[:,k][:,None],V[k,:][None,:])
             self.d[k] = {'sv':sv,'b':b}
 
-    def show(self):
+    def imshow(self,**kwargs):
+        """ show Angular Delay Profile
         """
-        """
-        pass
+        defaults = {'origin':'lower',
+                    'vmax' : -65,
+                    'vmin' : -120,
+                    'interpolation' : 'nearest',
+                    'imin':0,
+                    'imax':-1,
+                    'dB' : True,
+                    'fonts':18,
+                    'fig' :[],
+                    'ax' : []
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k] 
+
+        imin = kwargs.pop('imin')
+        imax = kwargs.pop('imax')
+        dB   = kwargs.pop('dB')
+        fig  = kwargs.pop('fig')
+        ax   = kwargs.pop('ax')
+        fonts = kwargs.pop('fonts')
+        if fig==[]:
+            fig = plt.figure()
+        if ax==[]:
+            ax = fig.add_subplot(111)
+        rd2deg = 180/np.pi
+        extent = (self.az[-1]*rd2deg,self.az[0]*rd2deg,self.x[imin],self.x[imax])
+        padp = np.abs(self.y)[:,imin:imax].T
+        if dB:
+            padp  = 20*np.log10(padp)
+	im = ax.imshow(padp,extent=extent,**kwargs)
+	plt.axis('auto')
+	plt.colorbar(im)
+	plt.ylabel('Propagation delay [ns]',fontsize=fonts)
+	plt.xlabel('Angle[deg]',fontsize=fonts)
+	#ax.title('PADP',fontsize=fonts)
+	plt.xticks(fontsize=fonts)
+	plt.yticks(fontsize=fonts)
+        return fig,ax
 
     def clean(self,threshold_dB=20):
         """  clean ADP 
