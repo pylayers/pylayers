@@ -228,7 +228,7 @@ class AFPchannel(bs.FUsignal):
         
         return(s)
 
-    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect'):
+    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect',offset=0.37):
         """ Load measurement file 
 
         Measurement files and the associated back to back calibration files 
@@ -298,6 +298,7 @@ class AFPchannel(bs.FUsignal):
         self.fcGHz = self.x[len(self.x)/2]
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
         self.az = (360-D[:,0])*np.pi/180.
+        self.azrt = self.az + offset - 2*np.pi
 
 
 
@@ -379,7 +380,7 @@ class ADPchannel(bs.TUsignal):
             self.tau  = self.dist/0.3
 
         self._filename = _filename
-    
+     
     def __repr__(self):
         s = 'Angular Delay Profile object \n'
         return(s)
@@ -390,6 +391,9 @@ class ADPchannel(bs.TUsignal):
         tau = self.x[u[1]]        
         phi = self.az[u[0]]        
         return alphamax,tau,phi
+   
+    def cut(self,imin=0,imax=1000):
+        self.y = self.y[:,imin:imax]
 
     def correlate(self,adp,thresholddB=-105):
         """ correlate ADP with an other ADP
@@ -462,6 +466,11 @@ class ADPchannel(bs.TUsignal):
             b = sv*np.dot(U[:,k][:,None],V[k,:][None,:])
             self.d[k] = {'sv':sv,'b':b}
 
+    def show(self):
+        """
+        """
+        pass
+
     def clean(self,threshold_dB=20):
         """  clean ADP 
 
@@ -483,8 +492,8 @@ class ADPchannel(bs.TUsignal):
         
         self.y[u] = 0+0j
 
-    def adp(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
-        """ Calculate Angular Delay Profile
+    def pap(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
+        """ Calculate Power Angular Profile 
 
         Parameters
         ----------

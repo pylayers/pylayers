@@ -263,7 +263,7 @@ class Bsignal(PyLayers):
 
         shx = np.shape(self.x)
         shy = np.shape(self.y)
-        self.N  = shx[0]
+        self.N = shx[0]
         ly  = shy[-1]
         # multi axes indexation
         self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N])).astype('int')
