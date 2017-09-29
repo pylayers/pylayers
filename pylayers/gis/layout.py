@@ -3225,8 +3225,10 @@ class Layout(pro.PyLayers):
         elif 'shLine' in kwargs:
             seg = kwargs['shLine']
 
-
-        binter = [seg.intersects(x) for x in self._shseg.values()]
+        # WARNING : use crosses instead of interesects
+        # otherwise 2 segment connected to a same node
+        # are considered as intersecting
+        binter = [seg.crosses(x) for x in self._shseg.values()]
         if np.sum(binter) > 0:
             uinter = np.where(binter)[0]
             llay_seg = []
