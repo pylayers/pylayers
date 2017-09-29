@@ -3201,14 +3201,14 @@ class Layout(pro.PyLayers):
             self.g2npy()
 
 
-    def seg_instersection(self,**kwargs):
+    def seg_intersection(self,**kwargs):
         '''
             determine if a segment intersect any other segment of the layout
 
             Parameters
             ----------
 
-            n : a segment id from GS
+            shLine : a shapely LineString
             OR
             ta,he : tail/head coordinates of a segment
 
@@ -3220,10 +3220,11 @@ class Layout(pro.PyLayers):
             
         '''
 
-        if ('ta' in kwargs) and ('he') in kwargs:
-            seg = sh.LineString((self.Gs.pos[kwargs['ta']],self.Gs.pos[kwargs['he']]))
-        elif 'seg' in kwargs:
-            seg = kwargs['seg']
+        if ('ta' in kwargs) and ('he' in kwargs):
+            seg = sh.LineString((kwargs['ta'],kwargs['he']))
+        elif 'shLine' in kwargs:
+            seg = kwargs['shLine']
+
 
         binter = [seg.intersects(x) for x in self._shseg.values()]
         if np.sum(binter) > 0:
@@ -3240,7 +3241,7 @@ class Layout(pro.PyLayers):
             return(llay_seg,lshP)
 
         else:
-            return ([None],[None])
+            return ([],[])
 
 
 
