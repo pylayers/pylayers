@@ -439,6 +439,8 @@ class Layout(pro.PyLayers):
 
         self.Gt.pos = {}
 
+
+        self._shseg = {}
         #
         # related files
         #
@@ -2107,8 +2109,6 @@ class Layout(pro.PyLayers):
 
         for s in lslab:
             ds = {}
-            import ipdb
-            ipdb.set_trace()
             if s not in self.sl:
                 if s not in self.sl.mat:
                     self.sl.mat.add(name=s,cval=6,sigma=0,typ='epsr')
@@ -2891,6 +2891,10 @@ class Layout(pro.PyLayers):
 
         if name not in self.display['layers']:
             self.display['layers'].append(name)
+
+        # update shseg
+        self._shseg.update({num:sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))})
+
         return(num)
 
     def wedge2(self, apnt):
@@ -3189,11 +3193,58 @@ class Layout(pro.PyLayers):
 
             try:
                 # remove shapely seg
-                self.pop(_shseg[e])
+                self._shseg.pop(e)
+
             except:
                 pass
         if g2npy:
             self.g2npy()
+
+
+    def seg_instersection(self,**kwargs):
+        '''
+            determine if a segment intersect any other segment of the layout
+
+            Parameters
+            ----------
+
+            n : a segment id from GS
+            OR
+            ta,he : tail/head coordinates of a segment
+
+            Return
+            ------
+            
+            llay_seg : list of layout's segments intersected
+            lshP : list of shapely points of intersections.
+            
+        '''
+
+        if ('ta' in kwargs) and ('he') in kwargs:
+            seg = sh.LineString((self.Gs.pos[kwargs['ta']],self.Gs.pos[kwargs['he']]))
+        elif 'seg' in kwargs:
+            seg = kwargs['seg']
+
+        binter = [seg.intersects(x) for x in self._shseg.values()]
+        if np.sum(binter) > 0:
+            uinter = np.where(binter)[0]
+            llay_seg = []
+            lshP = []
+            for k in uinter:
+                # layout segment 
+                llay_seg.append(self._shseg.keys()[k])
+                lay_shseg = self._shseg[llay_seg[-1]]
+                # intersection shapely point
+                lshP.append(seg.intersection(lay_shseg))
+
+            return(llay_seg,lshP)
+
+        else:
+            return ([None],[None])
+
+
+
+
 
     def mask(self):
         """  returns the polygonal mask of the building
