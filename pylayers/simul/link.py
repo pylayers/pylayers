@@ -1817,7 +1817,7 @@ class DLink(Link):
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)
         
-    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6):
+    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6,ext='txt',dirmeas='meas'):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1831,13 +1831,20 @@ class DLink(Link):
         win : string 'rect' | 'hamming'
         _filemeas : string 
         _filecal : string 
+        offset : 
+        BW : float 
+            bandwidth
+        ext : string 
+            'txt' | 'mat'
+        dirmeas : string 
+            directory of the data in the project path 
 
         """
         # read measurement if available
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset)
+            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset,ext=ext,dirmeas=dirmeas)
             az = self.afpmes.azrt
             #
             # afpmes.x
@@ -1852,7 +1859,7 @@ class DLink(Link):
         #
        
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
-        for ph in az:
+        for ph in az.squeeze():
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
             # pdb.set_trace()

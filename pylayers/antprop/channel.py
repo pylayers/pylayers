@@ -228,7 +228,7 @@ class AFPchannel(bs.FUsignal):
         
         return(s)
 
-    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect',offset=0.37):
+    def loadmes(self,_filename,_filecal,fcGHz=32.6,BW=1.6,win='rect',offset=0.37,ext='txt',dirmeas='meas/Espoo'):
         """ Load measurement file 
 
         Measurement files and the associated back to back calibration files 
@@ -247,6 +247,9 @@ class AFPchannel(bs.FUsignal):
             measurement bandwidth 
         win : string 
             window type in ['rect','hamming','blackman']
+        ext : string
+            file extension 'txt' | '.mat'
+        diremeas : string 
 
         Notes 
         -----
@@ -254,6 +257,9 @@ class AFPchannel(bs.FUsignal):
         + self.x (frequency GHz)
         + self.y 
         + self.az azimuth radians 
+
+        The calibration file _filecal (.mat file) should be added in the data directory
+        In practice for Espoo B2B.mat
 
         SEE ALSO 
         --------
@@ -266,18 +272,27 @@ class AFPchannel(bs.FUsignal):
         self.fmin = fcGHz-BW/2.
         self.fmax = fcGHz+BW/2.
         self.win = win
-        # load Back 2 Back calibration file
-        filecal = pyu.getlong(_filecal,'meas')
-        filename = pyu.getlong(_filename,'meas')
+        # read calibration file (Matlab file) in the same directory as measurments (convention)
+        filecal = pyu.getlong(_filecal,dirmeas)
         U = loadmat(filecal)
         cal_trf = U['cal_trf'][:,0]
+        # read measurement file (.txt or Mat file) 
+        filename = pyu.getlong(_filename,dirmeas)
+        if ext=='txt':
+            D = np.loadtxt(filename,skiprows=2)# load Back 2 Back calibration file
+            amp = D[:,2::2]
+            ang = D[:,3::2]
+        else:
+            D = loadmat(filename)
+            amp = D['amp']
+            ang = D['ang'] 
+            rotationangle = D['rotationangle'].squeeze()
+
         # load Back 2 Back calibration file
-        D = np.loadtxt(filename,skiprows=2)
+        
         #
         # Transfer function reconstruction 
         #
-        amp = D[:,2::2]
-        ang = D[:,3::2]
 
         self.Na  = amp.shape[0]
         self.Nf  = amp.shape[1]
@@ -297,8 +312,14 @@ class AFPchannel(bs.FUsignal):
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
         self.fcGHz = self.x[len(self.x)/2]
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
-        self.az = (360-D[:,0])*np.pi/180.
-        self.azrt = self.az + offset - 2*np.pi
+        if ext=='txt':
+            self.az = (360-D[:,0])*np.pi/180.
+            self.azrt = self.az + offset - 2*np.pi
+        else:
+            self.az = rotationangle*np.pi/180.
+            self.azrt = offset - self.az 
+
+        
 
 
 
@@ -479,7 +500,10 @@ class ADPchannel(bs.TUsignal):
                     'dB' : True,
                     'fonts':18,
                     'fig' :[],
-                    'ax' : []
+                    'ax' : [],
+                    'label':'',
+                    'offset':0,
+                    'alpha':1
                     }
 
         for k in defaults:
@@ -492,18 +516,36 @@ class ADPchannel(bs.TUsignal):
         fig  = kwargs.pop('fig')
         ax   = kwargs.pop('ax')
         fonts = kwargs.pop('fonts')
+        label = kwargs.pop('label')
+        agoffset = kwargs.pop('offset')
+
         if fig==[]:
             fig = plt.figure()
         if ax==[]:
             ax = fig.add_subplot(111)
         rd2deg = 180/np.pi
-        extent = (self.az[-1]*rd2deg,self.az[0]*rd2deg,self.x[imin],self.x[imax])
+        #extent = (self.az[-1]*rd2deg+agoffset,
+        #          self.az[0]*rd2deg+agoffset,
+        #          self.x[imin],self.x[imax])
+        #extent = (self.az[0]*rd2deg+agoffset,
+        #          self.az[-1]*rd2deg+agoffset,
+        #          self.x[imin],self.x[imax])
+        extent = (0,360,self.x[imin],self.x[imax])
         padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
+
 	im = ax.imshow(padp,extent=extent,**kwargs)
 	plt.axis('auto')
-	plt.colorbar(im)
+	cbar = plt.colorbar(im)
+        if dB:
+            cbar.set_label(label+' dB',fontsize=fonts)
+        else:
+            cbar.set_label(label+' linear',fontsize=fonts)
+
+        for t in cbar.ax.get_yticklabels():
+            t.set_fontsize(fonts)
+
 	plt.ylabel('Propagation delay [ns]',fontsize=fonts)
 	plt.xlabel('Angle[deg]',fontsize=fonts)
 	#ax.title('PADP',fontsize=fonts)
@@ -596,6 +638,7 @@ class ADPchannel(bs.TUsignal):
                      'losdelay': True,
                      'freespace': True,
                      'desembeded': True,
+                     'semilogx':False,
                      'raw': False,
                      'Gmax':22.68,
                      'Gmin':19,
@@ -637,22 +680,41 @@ class ADPchannel(bs.TUsignal):
         else:
             ax = kwargs['ax']
 
-        if kwargs['raw']:
-            ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
-        ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
-        if kwargs['desembeded']:
-            ax.semilogx(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax))
-            ax.semilogx(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin))
+        if kwargs['semilogx']:
+            if kwargs['raw']:
+                ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+            ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
+            if kwargs['desembeded']:
+                ax.semilogx(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax))
+                ax.semilogx(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin))
 
-        if kwargs['freespace']:
-            ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+            if kwargs['freespace']:
+                ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
 
-        if kwargs['losdelay']:
-            ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+            if kwargs['losdelay']:
+                ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
 
-        ax.set_xlim(10,1000)
-        if kwargs['xlabel']:
-            ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
+            #ax.set_xlim(10,1000)
+            if kwargs['xlabel']:
+                ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
+        else:
+            if kwargs['raw']:
+                ax.plot(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+            ax.plot(np.array([tau]),np.array([AttmaxdB]),color='k')
+            if kwargs['desembeded']:
+                ax.plot(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax))
+                ax.plot(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin))
+
+            if kwargs['freespace']:
+                ax.plot(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+
+            if kwargs['losdelay']:
+                ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+
+            #ax.set_xlim(0,1000)
+            if kwargs['xlabel']:
+                ax.set_xlabel('Delay (ns)',fontsize=kwargs['fontsize']) 
+
         if kwargs['ylabel']:
             ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
         ax.set_title(self._filename+' '+str(PL))
