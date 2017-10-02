@@ -1389,8 +1389,10 @@ class SelectL2(object):
         else :
             ta = newpt1
             he = newpt2
-        segexist = self.L.isseg(ta,he)
-        print segexist
+        if ta >0 or he > 0 :
+            segexist = False
+        else:
+            segexist = self.L.isseg(ta,he)
 
         # if segment do not already exist, create it
         if not segexist:
@@ -1400,11 +1402,11 @@ class SelectL2(object):
             pt1 = self.L.Gs.pos[ta]
             pt2 = self.L.Gs.pos[he]
             liseg,lipsh = self.L.seg_intersection(**{'ta':pt1,'he':pt2})
-            # ltseg = self.L.point_touches_seg(pt2)
+            ltseg = self.L.point_touches_seg(pt2)
             # print liseg
             # print ltseg
             # no cross / no touch
-            if (len(liseg) == 0):# and (len(ltseg) == 0):
+            if (len(liseg) == 0) and (len(ltseg) == 0):
                 self.nsel  = self.L.add_segment(ta, he,
                                             name=self.current_layer,
                                             z=(0,self.L.maxheight))
@@ -1450,30 +1452,29 @@ class SelectL2(object):
                                      name = self.current_layer, 
                                      z=(0,self.L.maxheight))
             # # touching segments case
-            # elif len(liseg) == 0:
+            elif len(liseg) == 0:
 
-            #     for us, s  in enumerate(ltseg):
-            #         # find nodes connections
-            #         in1,in2 = self.L.Gs.node[s]['connect']
-            #         # get segment slab
-            #         name = self.L.Gs.node[s]['name']
-            #         # get segment height
-            #         z = self.L.Gs.node[s]['z']
-                    
+                for us, s  in enumerate(ltseg):
+                    # find nodes connections
+                    in1,in2 = self.L.Gs.node[s]['connect']
+                    # get segment slab
+                    name = self.L.Gs.node[s]['name']
+                    # get segment height
+                    z = self.L.Gs.node[s]['z']
 
-            #         # check if point has already been created (iso situation)
-            #         ip = self.L.ispoint(np.array(lipsh[us].xy))
-            #         # ip can be >0 if it is a segment
-            #         if ip >= 0:
-            #             ip = self.L.add_fnod(tuple(np.array(lipsh[us].xy)[:,0]))
-            #         # delete previous connection 
-            #         self.L.del_segment(s,g2npy=False)
-            #         # add both segmentsurrounding the interesection point
-            #         self.L.add_segment(in1,ip,name = name, z=z)
-            #         self.L.add_segment(in2,ip,name = name, z=z)
-            #     self.L.add_segment(ta,ip,
-            #                          name = self.current_layer, 
-            #                          z=(0,self.L.maxheight))
+                    # check if point has already been created (iso situation)
+                    ip = self.L.ispoint(np.array(pt2))
+                    # ip can be >0 if it is a segment
+                    if ip >= 0:
+                        ip = self.L.add_fnod(pt2)
+                    # delete previous connection 
+                    self.L.del_segment(s,g2npy=False)
+                    # add both segmentsurrounding the interesection point
+                    self.L.add_segment(in1,ip,name = name, z=z)
+                    self.L.add_segment(in2,ip,name = name, z=z)
+                self.L.add_segment(ta,ip,
+                                     name = self.current_layer, 
+                                     z=(0,self.L.maxheight))
 
 
 

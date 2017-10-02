@@ -10417,8 +10417,12 @@ class Layout(pro.PyLayers):
         # transpose point numbering
 
         upnt = filter(lambda x: x < 0, self.Gs.nodes())
-        ta = np.nonzero(np.array(upnt) == ta)[0][0]
-        he = np.nonzero(np.array(upnt) == he)[0][0]
+        try:
+            ta = np.nonzero(np.array(upnt) == ta)[0][0]
+            he = np.nonzero(np.array(upnt) == he)[0][0]
+        except:
+            import ipdb
+            ipdb.set_trace()
         res = filter(lambda x: (((x[0] == ta) & (x[1] == he))
                                 | ((x[0] == he) & (x[1] == ta))), zip(self.tahe[0], self.tahe[1]))
         if len(res) > 0:
