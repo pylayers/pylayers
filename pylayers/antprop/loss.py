@@ -821,7 +821,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
     pylayers.slab.Interface.losst
 
     """
-    
+
     if (type(fGHz)==float) | (type(fGHz)==int):
         fGHz=np.array([fGHz],dtype=float)
 

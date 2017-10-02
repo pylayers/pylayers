@@ -114,6 +114,10 @@ class Coverage(PyLayers):
             # get the receiving grid
             self.nx = eval(self.gridopt['nx'])
             self.ny = eval(self.gridopt['ny'])
+            if 'zgrid' in self.gridopt:
+                self.zgrid = eval(self.gridopt['zgrid'])
+            else:
+                self.zgrid = 1.0
             self.mode = self.gridopt['mode']
             assert self.mode in ['file','full','zone'], "Error reading grid mode "
             self.boundary = eval(self.gridopt['boundary'])
@@ -403,7 +407,7 @@ class Coverage(PyLayers):
         if shpa[0] != 3:
             self.pa = np.vstack((self.pa,np.ones(shpa[1])))
         self.pg = self.pg.T
-        self.pg = np.vstack((self.pg,np.ones(shpg[0])))
+        self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
         
         self.nf = len(self.fGHz)
 
