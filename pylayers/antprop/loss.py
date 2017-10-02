@@ -847,8 +847,6 @@ def Losst(L,fGHz,p1,p2,dB=True):
 
 
 
-    # check crossing ceil
-    # if (p1[2,:]> L.maxheight).any() or (p1[2,:]> L.maxheight).any():
 
 
     #slabs = L.sla[us]
@@ -905,6 +903,85 @@ def Losst(L,fGHz,p1,p2,dB=True):
 
         EdWallo[:,involved_links] = EdWallo[:,involved_links] + Edo
         EdWallp[:,involved_links] = EdWallp[:,involved_links] + Edp
+
+
+    # Managing Ceil / Floor transmission
+
+
+    # check crossing ceil
+    if (p1[2,:]> L.zceil).any() or (p2[2,:]> L.zceil).any():
+
+        # WARNING : this test sohould be done individually
+        if (p1[2]>p2[2]).all():
+            v0 = p1
+            v1 = p2
+        else:
+            v0 = p2
+            v1 = p1
+
+        uu = v0 - v1
+        # 1 x N
+        nu = np.sqrt(np.sum(uu * uu, axis=0))
+        # 3 x N
+        un = uu / nu[np.newaxis, :]
+        dotp = np.einsum('ij,i->j',un,np.array([0,0,1]))
+        alphas = np.arccos(dotp)
+
+        #
+        # calculate Loss for slab CEIL
+        #
+        lkco,lkcp  = L.sl['CEIL'].losst(fGHz,alphas)
+        #
+        # calculate Excess delay for slab CEIL
+        #
+        dco , dcp  = L.sl['CEIL'].excess_grdelay(theta=alphas)
+
+
+
+        LossWallo = LossWallo + lkco
+        LossWallp = LossWallp + lkcp
+
+        EdWallo = EdWallo + dco
+        EdWallp = EdWallp + dcp
+
+
+    # check crossing floor
+    if (p1[2,:]< L.zfloor).any() or (p2[2,:]< L.zfloor).any():
+
+
+        # WARNING : this test sohould be done individually
+        if (p1[2]>p2[2]).all():
+            v0 = p1
+            v1 = p2
+        else:
+            v0 = p2
+            v1 = p1
+
+        uu = v0 - v1
+        # 1 x N
+        nu = np.sqrt(np.sum(uu * uu, axis=0))
+        # 3 x N
+        un = uu / nu[np.newaxis, :]
+        dotp = np.einsum('ij,i->j',un,np.array([0,0,1]))
+        alphas = np.arccos(dotp)
+
+        #
+        # calculate Loss for slab CEIL
+        #
+        lkoc,lkpc  = L.sl['FLOOR'].losst(fGHz,alphas)
+        #
+        # calculate Excess delay for slab CEIL
+        #
+        doc , dpc  = L.sl['FLOOR'].excess_grdelay(theta=alphas)
+
+
+
+        LossWallo = LossWallo + lkco
+        LossWallp = LossWallp + lkcp
+
+        EdWallo = EdWallo + dco
+        EdWallp = EdWallp + dcp
+
 
     if not dB:
         LossWallo = 10**(-LossWallo/10)
