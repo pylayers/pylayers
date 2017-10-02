@@ -968,19 +968,19 @@ def Losst(L,fGHz,p1,p2,dB=True):
         #
         # calculate Loss for slab CEIL
         #
-        lkoc,lkpc  = L.sl['FLOOR'].losst(fGHz,alphas)
+        lkfo,lkfp  = L.sl['FLOOR'].losst(fGHz,alphas)
         #
         # calculate Excess delay for slab CEIL
         #
-        doc , dpc  = L.sl['FLOOR'].excess_grdelay(theta=alphas)
+        dfo , dfp  = L.sl['FLOOR'].excess_grdelay(theta=alphas)
 
 
 
-        LossWallo = LossWallo + lkco
-        LossWallp = LossWallp + lkcp
+        LossWallo = LossWallo + lkfo
+        LossWallp = LossWallp + lkfp
 
-        EdWallo = EdWallo + dco
-        EdWallp = EdWallp + dcp
+        EdWallo = EdWallo + dfo
+        EdWallp = EdWallp + dfp
 
 
     if not dB:
