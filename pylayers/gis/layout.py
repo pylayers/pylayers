@@ -4183,6 +4183,7 @@ class Layout(pro.PyLayers):
         angle = np.arccos(unn)
 
         data['a'] = angle
+
         return(data)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):

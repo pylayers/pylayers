@@ -844,6 +844,13 @@ def Losst(L,fGHz,p1,p2,dB=True):
     # as many slabs as segments and subsegments
     us    = data['s'] 
     slabs = np.array([ L.Gs.node[x]['name'] for x in us ])
+
+
+
+    # check crossing ceil
+    # if (p1[2,:]> L.maxheight).any() or (p1[2,:]> L.maxheight).any():
+
+
     #slabs = L.sla[us]
     check = np.where(slabs=='')
 
