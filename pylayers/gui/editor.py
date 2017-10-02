@@ -485,7 +485,6 @@ class SaveQuitWin(QDialog):    # any super class is okay
         # create Layout
 
         self.setLayout(hboxDial)
-        print exit
     def quit(self):
         try:
             self.parent.fig.clear()
@@ -1063,7 +1062,7 @@ class AppForm(QMainWindow):
         except:
             pass        
 
-        QApplication.quit()
+        QApplication.exit()
 
     def edit_properties(self):
         """ edit wall properties
@@ -1540,10 +1539,9 @@ class AppForm(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    form = AppForm()
+    form = AppForm(sys.argv)
     # form.setGeometry(100,100,300,300)
     form.show()
     sys.exit(app.exec_())
-
 if __name__ == "__main__":
     main()

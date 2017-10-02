@@ -114,6 +114,10 @@ class Coverage(PyLayers):
             # get the receiving grid
             self.nx = eval(self.gridopt['nx'])
             self.ny = eval(self.gridopt['ny'])
+            if 'zgrid' in self.gridopt:
+                self.zgrid = eval(self.gridopt['zgrid'])
+            else:
+                self.zgrid = 1.0
             self.mode = self.gridopt['mode']
             assert self.mode in ['file','full','zone'], "Error reading grid mode "
             self.boundary = eval(self.gridopt['boundary'])
@@ -346,12 +350,12 @@ class Coverage(PyLayers):
                 self.fGHz=np.unique(np.hstack((self.fGHz,fGHz)))
                 apchan = self.dap[iap]['chan']
                 try:
-                    self.aap   = np.vstack((self.aap,self.dap[iap]['p'][0:2]))
+                    self.aap   = np.vstack((self.aap,self.dap[iap]['p']))
                     self.ptdbm = np.vstack((self.ptdbm,self.dap[iap]['PtdBm']))
                     self.bmhz  = np.vstack((self.bmhz,
                                  self.dap[iap].s.chan[apchan[0]]['BMHz']))
                 except:
-                    self.aap   = self.dap[iap]['p'][0:2]
+                    self.aap   = self.dap[iap]['p']
                     self.ptdbm = np.array(self.dap[iap]['PtdBm'])
                     self.bmhz  = np.array(self.dap[iap].s.chan[apchan[0]]['BMHz'])
 
@@ -378,10 +382,10 @@ class Coverage(PyLayers):
         # pg : grid point
         #
         # 1 x na
-        
+
         for k in p:
             pg = self.grid[k[0],:]
-            pa = np.array(self.dap[k[1]]['p'][0:2])
+            pa = np.array(self.dap[k[1]]['p'])
             # exemple with 3 AP 
             # 321 0
             # 321 1
@@ -399,9 +403,11 @@ class Coverage(PyLayers):
         self.pa = self.pa.T
         shpa = self.pa.shape
         shpg = self.pg.shape
-        self.pa = np.vstack((self.pa,np.ones(shpa[1])))
+
+        if shpa[0] != 3:
+            self.pa = np.vstack((self.pa,np.ones(shpa[1])))
         self.pg = self.pg.T
-        self.pg = np.vstack((self.pg,np.ones(shpg[0])))
+        self.pg = np.vstack((self.pg,self.zgrid*np.ones(shpg[0])))
         
         self.nf = len(self.fGHz)
 
