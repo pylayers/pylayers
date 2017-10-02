@@ -3200,10 +3200,50 @@ class Layout(pro.PyLayers):
         if g2npy:
             self.g2npy()
 
+    def point_touches_seg(self,pt,lseg=[],segtol=1e-2,tahetol=1e-2):
+        """ determine if a point is touching a segment
+
+            Parameters
+            ----------
+
+            pt : a point (2,)
+            seg : a list of segments to test. 
+                 if [] => all Gs segments are tested
+
+            segdtol : distance tolerance point to segment
+            tahetol : distance tolerance point to segment extremeties
+                        => a point on segment extremeties is considered
+                           not touching the segseg
+
+
+
+            Return
+            ------
+
+            ltseg : lsit of touched segments (by the point)
+
+        """
+
+        if lseg == []:
+            lseg = self.Gs.nodes()
+
+        ltseg = []
+        allnodes = self.Gs.nodes()
+        for s in lseg :
+            if s > 0 and s in allnodes:
+                n0,n1  = self.Gs.node[s]['connect']
+                dta,dhe,h = geu.dptseg(np.array(pt)[:,None],
+                            np.array(self.Gs.pos[n0])[:,None],
+                            np.array(self.Gs.pos[n1])[:,None])
+                if (h <= segtol) and ((dta > tahetol) and (dhe > tahetol)):
+                    ltseg.append(s)
+        return ltseg
+
+
 
     def seg_intersection(self,**kwargs):
         '''
-            determine if a segment intersect any other segment of the layout
+            determine if a segment intersects any other segment of the layout
 
             Parameters
             ----------
@@ -4143,6 +4183,7 @@ class Layout(pro.PyLayers):
         angle = np.arccos(unn)
 
         data['a'] = angle
+
         return(data)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
@@ -10376,8 +10417,12 @@ class Layout(pro.PyLayers):
         # transpose point numbering
 
         upnt = filter(lambda x: x < 0, self.Gs.nodes())
-        ta = np.nonzero(np.array(upnt) == ta)[0][0]
-        he = np.nonzero(np.array(upnt) == he)[0][0]
+        try:
+            ta = np.nonzero(np.array(upnt) == ta)[0][0]
+            he = np.nonzero(np.array(upnt) == he)[0][0]
+        except:
+            import ipdb
+            ipdb.set_trace()
         res = filter(lambda x: (((x[0] == ta) & (x[1] == he))
                                 | ((x[0] == he) & (x[1] == ta))), zip(self.tahe[0], self.tahe[1]))
         if len(res) > 0:

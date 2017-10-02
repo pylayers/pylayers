@@ -5,14 +5,18 @@ try:
     from mayavi import mlab
 except:
     'Mayavi not installed'
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 import matplotlib
+matplotlib.use('Qt4Agg')
+matplotlib.rcParams['backend.qt4']='PyQt4'
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+
 
 from pylayers.gis.layout import *
 from pylayers.gui.editor_select import SelectL2
@@ -20,7 +24,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import os
 import sys
-
+import pdb
 
 
 class SubSegWin(QDialog):    # any super class is okay
@@ -485,7 +489,6 @@ class SaveQuitWin(QDialog):    # any super class is okay
         # create Layout
 
         self.setLayout(hboxDial)
-        print exit
     def quit(self):
         try:
             self.parent.fig.clear()
@@ -1063,7 +1066,7 @@ class AppForm(QMainWindow):
         except:
             pass        
 
-        QApplication.quit()
+        QApplication.exit()
 
     def edit_properties(self):
         """ edit wall properties
@@ -1256,6 +1259,7 @@ class AppForm(QMainWindow):
     def create_main_frame(self):
 
         self.main_frame = QWidget()
+        pdb.set_trace()
         self.create_toolbar()
         self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
 
@@ -1540,10 +1544,9 @@ class AppForm(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    form = AppForm()
+    form = AppForm(sys.argv)
     # form.setGeometry(100,100,300,300)
     form.show()
     sys.exit(app.exec_())
-
 if __name__ == "__main__":
     main()
