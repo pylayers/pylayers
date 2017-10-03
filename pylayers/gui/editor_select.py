@@ -7,8 +7,10 @@ import numpy as np
 from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
-
+from shapely.ops import polygonize
+import shapely.geometry as shg
 import matplotlib.pyplot as plt
+
 from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
 
@@ -188,7 +190,6 @@ class SelectL2(object):
             self.setgrid()
         else:
             self.ax.grid(which='major',visible=False)
-
         return(self.fig,self.ax)
 
 
@@ -1159,6 +1160,7 @@ class SelectL2(object):
         #plt.axis('tight')
         plt.axis(self.L.display['box'])
         self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+
         self.state = 'Init'
         self.update_state()
 

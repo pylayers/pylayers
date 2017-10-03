@@ -25,6 +25,8 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+from shapely.ops import polygonize
+import shapely as sh
 
 
 from pylayers.gis.layout import *

@@ -183,7 +183,7 @@ from networkx.readwrite import write_gpickle, read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
-from shapely.ops import cascaded_union
+from shapely.ops import cascaded_union,polygonize
 from descartes.patch import PolygonPatch
 from numpy import array
 import PIL.Image as Image
@@ -441,6 +441,8 @@ class Layout(pro.PyLayers):
 
 
         self._shseg = {}
+
+        self.faces={}
         #
         # related files
         #
@@ -1979,7 +1981,7 @@ class Layout(pro.PyLayers):
         """ save Layout structure in a .lay file
 
         """
-        current_version = 1.3
+        current_version = 1.4
         if os.path.splitext(self._filename)[1]=='.ini':
             self._filename = self._filename.replace('.ini','.lay')
         #
@@ -1990,6 +1992,7 @@ class Layout(pro.PyLayers):
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
+        config.add_section("faces")
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
@@ -2006,6 +2009,9 @@ class Layout(pro.PyLayers):
             config.add_section("indoor")
             config.set("indoor", "zceil", self.zceil)
             config.set("indoor", "zfloor", self.zfloor)
+            for n in self.faces:
+                face = {k:v for k,v in self.faces[n].items() if k!='p'}
+                config.set("faces", n, face)
 
         if self.typ == 'outdoor':
             config.add_section("outdoor")
@@ -2190,6 +2196,39 @@ class Layout(pro.PyLayers):
         # self.g2npy()
         self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
 
+    def _create_faces(self):
+        '''
+        '''
+        # segments to be ignored
+        stbi = []
+        stbi.extend(self.name['_AIR'])
+        stbi.extend(self.name['AIR'])
+        stbi.extend(self.segboundary)
+        shseg = {k:v for k,v in self._shseg.items() if k not in stbi}
+        P = polygonize(shseg.values())
+        P = [geu.Polygon(p) for p in P]
+        [p.setvnodes(self) for p in P]
+
+        self.faces={}
+        fid = 1
+        for p in P:
+            self.faces.update({fid:
+                                {'p':p,
+                                'vnodes':p.vnodes,
+                                'name':'FLOOR',
+                                'z':self.zfloor
+                                }
+                             })
+            fid += 1 
+            self.faces.update({fid:
+                                {'p':p,
+                                'vnodes':p.vnodes,
+                                'name':'CEIL',
+                                'z':self.zceil
+                                }
+                             })
+            fid += 1 
+
     def load(self):
         """ load a layout  from a .lay file
 
@@ -2275,6 +2314,7 @@ class Layout(pro.PyLayers):
         if self.typ == 'indoor':
             self.zceil = eval(di['indoor']['zceil'])
             self.zfloor = eval(di['indoor']['zfloor'])
+
 
         # old format 
         if self.typ == 'floorplan':
@@ -2496,6 +2536,20 @@ class Layout(pro.PyLayers):
             self.display['overlay_flip'] = ""
             self.display.pop('inverse')
             self.save()
+
+
+
+        if self.typ == 'indoor':
+            if self.version >= '1.4' :
+                for k,v in di['faces'].items():
+                    self.faces.update({eval(k):eval(v)})
+                    vn = self.faces[eval(k)]['vnodes']
+                    pos = [self.Gs.pos[i] for i in vn]
+                    self.faces[eval(k)]['p']=geu.Polygon(pos,vnodes=vn)
+            else:
+                self._create_faces()
+
+
 
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()

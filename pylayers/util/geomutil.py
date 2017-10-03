@@ -4184,26 +4184,21 @@ def v_color(ob):
 
 
 # def createPolygons(
-def plotPolygon(poly, color="#abcdef", alpha=0.8):
-    """ plot a shapely Polygon
 
-    Parameters
-    ----------
-
-    poly  : shapely polygon
-    color : default "#abcdef"
-    alpha : float
-           transparency   (default 0.8)
+def plotPolygon(self, poly, fig=[], ax=[], color='r', alpha=0.2):
+    """  plot a shapely polygon with a specified color and transparency
     """
-    fig = plt.gcf()
-    gax = fig.get_axes()
-    if len(gax) != 0:
-        ax = gax[0]
-    else:
-        ax = fig.add_subplot(111)
-    patch = PolygonPatch(poly, facecolor=color, alpha=alpha)
-    ax.add_patch(patch)
-    plt.show()
+    if fig == []:
+        fig = plt.gcf()
+    if ax == []:
+        ax = plt.gca()
+    try:
+        mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in poly]
+    except:
+        mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in [poly]]
+    [ax.add_patch(x) for x in mpl]
+    plt.axis(self.ax)
+    plt.draw()
 
 
 def shrinkPolygon(poly, d=0.1):
