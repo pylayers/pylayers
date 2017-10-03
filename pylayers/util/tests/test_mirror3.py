@@ -3,7 +3,7 @@ import numpy as np
 Nplane = 1
 r0 = np.array([[1,2/3.,1]]).T
 r1 = np.array([[1,1/3.,2]]).T
-p  = np.concatenate((r0[:,:,None],r0[:,:,None]),axis=2)
+p  = np.concatenate((r0[:,:,None],r1[:,:,None]),axis=2)
 p1 = np.array([[0,0] ,[1,0],[0,1]])  #yz
 p2 = np.array([[1,0] ,[0,0],[0,1]])  #xz 
 #p3 = np.array([[1,0] ,[0,1],[0,0]])  #xy 
