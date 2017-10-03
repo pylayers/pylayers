@@ -5,14 +5,18 @@ try:
     from mayavi import mlab
 except:
     'Mayavi not installed'
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 import matplotlib
+matplotlib.use('Qt4Agg')
+matplotlib.rcParams['backend.qt4']='PyQt4'
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+
 
 from pylayers.gis.layout import *
 from pylayers.gui.editor_select import SelectL2
@@ -20,7 +24,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import os
 import sys
-
+import pdb
 
 
 class SubSegWin(QDialog):    # any super class is okay

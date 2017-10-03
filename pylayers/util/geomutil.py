@@ -3465,15 +3465,23 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     A = np.concatenate((Ue, -U1e, -U2e), axis=3)
     # visi : Nseg,Nscreen
     visi = np.zeros((A.shape[0],A.shape[1]),dtype=bool)
+    pinter = np.nan*np.zeros((Nseg,Nscreen,3))
     # check non singularity 
     # detA (Nseg,Nscreen) 
     detA = np.linalg.det(A)
     # matrix A (Nseg,Nscreen,3,3) is valid if not singular 
     boolvalid = ~ (np.isclose(detA,0))
     c = pg.T[None, :, :] - a.T[:, None, :]
-
+    # ba (3,Nseg) 
+    # ba.T (Nseg,3) 
+    # ba.T[:,None,:] (Nseg,1,3)
+    # x (Nseg,Nscreen,3)
+    # pinter (Nseg,Nscreen,3)
     if boolvalid.all():
         x  = np.linalg.solve(A, c)
+        # calculate intersection points
+        pinter = ba.T[:,None,:]*x+a.T[:,None,:] 
+
         condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
         cond1 = ((x[:, :, 1] > l1[None, :] / 2.) +
                 (x[:, :, 1] < -l1[None, :] / 2.))
@@ -3481,6 +3489,7 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
                 (x[:, :, 2] < -l2[None, :] / 2.))
 
         visi = ~(((condseg + cond1 + cond2) % 2).astype(bool))
+
         #i0 = np.kron(np.arange(A.shape[0],dtype=int),np.ones(A.shape[1],dtype=int))
         #i1 = np.kron(np.ones(A.shape[0],dtype=int),np.arange(A.shape[1],dtype=int))
         #ui = (i0,i1)
@@ -3504,6 +3513,7 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
     # x : Nseg x Nscreen
         if Am.size > 0:
             x = np.linalg.solve(Am, cm)
+            pinter = ba.T[ui[0],None,:]*x+a.T[ui[0],None,:]
         # condition of occultation
 
             condseg = ((x[:, :, 0] > 1) + (x[:, :, 0] < 0))
@@ -3516,7 +3526,8 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
             #print boolvalid
             #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
 
-    return(visi)
+
+    return visi,pinter
 
 
 def intersect(a, b, c, d):
