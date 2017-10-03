@@ -1259,7 +1259,6 @@ class AppForm(QMainWindow):
     def create_main_frame(self):
 
         self.main_frame = QWidget()
-        pdb.set_trace()
         self.create_toolbar()
         self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
 
