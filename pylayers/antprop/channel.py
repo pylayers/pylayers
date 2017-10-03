@@ -300,19 +300,96 @@ class AFPchannel(bs.FUsignal):
         self.az = (360-D[:,0])*np.pi/180.
         self.azrt = self.az + offset - 2*np.pi
 
+    def loadmesmat(self,freq=15,ilink=1,fcGHz=15,BW=2,win='rect'):
+        """ Load measurement mat file 
 
+        Measurement files and the associated back to back calibration files 
+        are placed in the mes directory of the project.
+
+        Parameters
+        ----------
+
+        _filename : string
+            data matfile name
+        _filecal : string 
+            calibration matfile name
+        fcGHz : float 
+            center frequency 
+        BW : float 
+            measurement bandwidth 
+        win : string 
+            window type in ['rect','hamming','blackman']
+
+        Notes 
+        -----
+        This function updates : 
+        + self.x (frequency GHz)
+        + self.y 
+        + self.az azimuth radians 
+
+        SEE ALSO 
+        --------
+        pylayers.util.pyutil.getlong 
+
+        """
+
+        _directory   = "/home/dialounke/code/Aalto/SIMULATIONS/STROMBERG/{}GHz".format(freq)
+        pathdata     = '/Results/all_trf_data/'
+        pathcal      = '/B2B_before/B2B.mat'
+        C            = loadmat(_directory+pathcal)
+        _filename    = _directory+pathdata+'Tx'+str(ilink)+'Rx1.mat'
+        self._filename = _filename
+
+        data         = loadmat(self._filename)
+        cal_trf      = C['cal_trf'][:,0]
+
+        amp = data['amp']
+        ang = data['ang']
+        rotdeg = data['rotationangle']
+        rot_step = rotdeg[0][1]-rotdeg[0][0]
+        self.BW = BW
+        self.fcGHz = fcGHz
+        self.fmin = fcGHz-BW/2.
+        self.fmax = fcGHz+BW/2.
+        self.win = win
+
+        self.Na  = amp.shape[0]
+        self.Nf  = amp.shape[1]
+        
+        # import ipdb
+        # ipdb.set_trace()
+
+        #
+        # select apodisation window 
+        #
+        if win=='hamming':
+            window = np.hamming(self.Nf)
+        elif win=='blackman':
+            window = np.blackman(self.Nf)
+        else:
+            window = np.ones(self.Nf)
+        #
+        # complex transfer function 
+        #
+
+        self.x = np.linspace(self.fmin,self.fmax,self.Nf)
+        self.fcGHz = self.x[len(self.x)/2]
+        self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
+        self.az = (360-rotdeg)*np.pi/180.
+        self.azrt = self.az
 
     def toadp(self,imax=-1):
         """ convert afp into adp (frequency->delay) 
 
         """
         # x : delay (starting at 0 ns) 
-        # y : ifft axis 1 (frequency) 
+        # y : ifft axis 1 (frequency)
+
         x = np.linspace(0,(len(self.x)-1)/(self.x[-1]-self.x[0]),len(self.x))
         y = np.fft.ifft(self.y,axis=1)
         if imax!=-1:
             y = y[:,0:imax]
-            x = x[0:imax] 
+            x = x[0:imax]
         adp = ADPchannel(x=x,
                          y=y,
                          az=self.az,
@@ -386,10 +463,12 @@ class ADPchannel(bs.TUsignal):
         return(s)
     
     def peak(self):
+        """ Find the maximum peak of the path in the CIR.
+        """
         alphamax = np.max(np.abs(self.y)) 
         u = np.where(np.abs(self.y)==alphamax)
-        tau = self.x[u[1]]        
-        phi = self.az[u[0]]        
+        tau = self.x[u[0]]   
+        phi = self.az[u[1]]        
         return alphamax,tau,phi
    
     def cut(self,imin=0,imax=1000):
@@ -471,6 +550,128 @@ class ADPchannel(bs.TUsignal):
         """
         pass
 
+    def imshow(self,**kwargs):
+        r""" imshow of y matrix
+
+        Parameters
+        ----------
+
+        interpolation : string
+            'none'|'nearest'|'bilinear'
+        cmap : colormap
+            plt.cm.BrBG
+        aspect : string
+            'auto' (default) ,'equal','scalar'
+        function : string
+            {'imshow'|'pcolormesh'}
+        typ : string 
+            'l20','l10'
+        vmin : min value
+        vmax : max value 
+        sax  : list 
+            selct axe
+        bindex 
+
+        Examples
+        --------
+
+
+        >>> f = np.arange(100)
+        >>> y = np.random.randn(50,100)+1j*np.random.randn(50,100)
+        >>> F = FUsignal(f,y)
+
+        """
+        defaults = {'interpolation':'none',
+                    'cmap':plt.cm.jet,
+                    'aspect':'auto',
+                    'extent':(45,270,0,800),
+                    'fontsize':25,
+                    'function':'imshow',
+                    'vmin':-130,
+                    'vmax':-65,
+                    'bindex':[],
+                    'xlabel':'Ang [deg]',
+                    'ylabel':'Propagation delay [ns]'}
+
+        for k in defaults.keys():
+            if not kwargs.has_key(k):
+                kwargs[k]=defaults[k]
+
+        self.y = self.y.swapaxes(0,1)
+
+        if not kwargs.has_key('fig'):
+            fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+
+        if not kwargs.has_key('ax'):
+            ax = fig.add_subplot(111)
+        else:
+            ax = kwargs['ax']
+
+        #
+        # bindex bound index [ixmin,ixmax,iamin,iamax]
+        # 
+        
+
+        if kwargs['bindex']==[]:
+            ixmin=0
+            ixmax=len(self.x) - 1
+            iamin=0 
+            iamax=np.shape(np.squeeze(self.y))[0] - 1
+        else:
+            ixmin = kwargs['bindex'][0]
+            ixmax = kwargs['bindex'][1]
+            iamin = kwargs['bindex'][2]
+            iamax = kwargs['bindex'][3]
+
+
+        # convert y data in desired format
+        dt,ylabels = self.cformat(**kwargs)
+
+        xmin = self.x[ixmin]
+        xmax = self.x[ixmax]
+        
+        if hasattr(self,'a'): 
+            ymin = self.a[iamin]
+            ymax = self.a[iamax]
+        else:
+            ymin = max(iamin,0)
+            imax = np.squeeze(dt).shape[0]
+            ymax = min(iamax,imax)
+
+        if kwargs['function']=='imshow':
+            im = ax.imshow(np.squeeze(dt)[iamin:iamax,ixmin:ixmax],
+                       origin = 'lower',
+                       vmin = kwargs['vmin'],
+                       vmax = kwargs['vmax'],
+                       aspect = kwargs['aspect'],
+                       extent = kwargs['extent'],
+                       interpolation=kwargs['interpolation'],
+                       cmap = kwargs['cmap'],
+                       )
+
+        ax.set_xlabel(kwargs['xlabel'],fontsize=kwargs['fontsize'])
+        ax.set_ylabel(kwargs['ylabel'],fontsize=kwargs['fontsize'])
+
+        ll = ax.get_xticklabels()+ax.get_yticklabels()
+        for l in ll:
+            l.set_fontsize(kwargs['fontsize'])
+
+        if kwargs['function'] =='pcolormesh':
+            im = ax.pcolormesh(xn,np.arange(dt.shape[0]),dt)
+
+        cb = fig.colorbar(im)
+        cb.set_label(ylabels,size=kwargs['fontsize'])
+
+        for t in cb.ax.get_yticklabels():
+            t.set_fontsize(kwargs['fontsize'])
+
+        plt.axis('auto')
+        fig.tight_layout()
+
+        return fig, ax
+
     def clean(self,threshold_dB=20):
         """  clean ADP 
 
@@ -535,6 +736,8 @@ class ADPchannel(bs.TUsignal):
         app = np.real(np.sum(self.y*np.conj(self.y),axis=1))
 
 
+    
+
     def pdp(self,**kwargs):
         """ Calculate and plot Power Delay Profile
 
@@ -573,6 +776,8 @@ class ADPchannel(bs.TUsignal):
         # get peak value of the PADP
         alpha,tau,phi = self.peak()
         Na = self.y.shape[0]
+        # import ipdb
+        # ipdb.set_trace()
         pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
         spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
         u  = np.where(pdp==max(pdp))[0]
