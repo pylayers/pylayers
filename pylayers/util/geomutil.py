@@ -4958,6 +4958,136 @@ def linepoly_intersection(l, poly):
     return np.array([[psh.x], [psh.y]])
 
 
+def mirror3b(tp, aplane, pplane):
+    """ compute recursively the image of p wrt the list of facet 
+    
+    Parameters
+    ----------
+
+    tp     : numpy.ndarray (3 x Ns x Npt)
+        Ns : number of screen 
+        Npt : number of points
+    aplane : numpy.ndarray
+        array of planes (3xNplanex2))
+    pplane : numpy.ndarray
+        array of points (3xNplane)
+
+    Returns
+    -------
+
+    tp : np.array 
+        sequence of images 
+            tp[:,-1] is the final image
+            tp[:,0] is the original point 
+
+    Examples
+    --------
+
+    >>> tp = np.array([[1,1,1]]).T
+    >>> p1 = np.array([[0,0] ,[1,0],[0,1]])  #yz
+    >>> p2 = np.array([[1,0] ,[0,0],[0,1]])  #yz
+    >>> p3 = np.array([[1,0] ,[0,1],[0,0]])  #xy
+    >>> aplane = np.hstack((p1,p2,p3))
+
+    """
+    # take last points of the sequence 
+    # p : 3 x 1 x n
+    #
+    p = tp[:,[-1],:]
+    Nplane = aplane.shape[1]# vector plane normalisation
+    # norm : 3 x Nplane 
+    norm  = np.cross(aplane[:,:,0],aplane[:,:,1],axis=0)
+    # T change basis matrix
+    # T (3 x Nplane,3)
+    T = np.dstack((aplane,norm[:,:,None]))
+    # take last transformation matrix 
+    T_ = T[:,-1,:]
+    # v : 3 x 1 x n 
+    v  = p-pplane[:,[-1]][:,:,None]
+    # go to frame attached to reflection plane
+    #Tpmp = np.dot(T_.T,v)
+    # Tpmp : 3 x 1 x n 
+    Tpmp = np.einsum('sv,vln->sln',T_.T,v)
+    # apply symmetry 
+    R  = np.eye(3)
+    R[2,2] = -1 
+    #RTpmp = np.dot(R,Tpmp)
+    RTpmp = np.einsum('sv,vln->sln',R,Tpmp)
+    #go back to global frame 
+    #TTRTpmp = np.dot(T_,RTpmp)
+    TTRTpmp = np.einsum('sv,vln->sln',T_,RTpmp)
+    # append image to list of points 
+    pdb.set_trace()
+    pim = TTRTpmp + pplane[:,[-1]][:,:,None]  
+    tp = np.concatenate((tp,pim),axis=1)
+    # if there are other plane enter recursion 
+    if Nplane>1:
+        tp = mirror3b(tp,aplane[:,0:-1,:],pplane[:,0:-1])
+
+    return tp
+
+def mirror3(tp, aplane, pplane):
+    """ compute recursively the image of p wrt the list of facet 
+    
+    Parameters
+    ----------
+
+    tp     : numpy.ndarray (3 x Ns )
+        Ns : number of screen 
+        Npt : number of points
+    aplane : numpy.ndarray
+        array of planes (3xNplanex2))
+    pplane : numpy.ndarray
+        array of points (3xNplane)
+
+    Returns
+    -------
+
+    tp : np.array 
+        sequence of images 
+            tp[:,-1] is the final image
+            tp[:,0] is the original point 
+
+    Examples
+    --------
+
+    >>> tp = np.array([[1,1,1]]).T
+    >>> p1 = np.array([[0,0] ,[1,0],[0,1]])  #yz
+    >>> p2 = np.array([[1,0] ,[0,0],[0,1]])  #yz
+    >>> p3 = np.array([[1,0] ,[0,1],[0,0]])  #xy
+    >>> aplane = np.hstack((p1,p2,p3))
+
+    """
+    # take last point of the sequence 
+    p = tp[:,[-1]]
+    Nplane = aplane.shape[1]# vector plane normalisation
+    # norm : 3 x Nplane 
+    norm  = np.cross(aplane[:,:,0],aplane[:,:,1],axis=0)
+    # T change basis matrix
+    # T (3 x Nplane,3)
+    T = np.dstack((aplane,norm[:,:,None]))
+    # take last transformation matrix 
+    T_ = T[:,-1,:]
+    # go to frame attached to reflection plane
+    Tpmp = np.dot(T_.T,p-pplane[:,[-1]])
+    # apply symmetry 
+    R  = np.eye(3)
+    R[2,2] = -1 
+    RTpmp = np.dot(R,Tpmp)
+    #go back to global frame 
+    TTRTpmp = np.dot(T_,RTpmp)
+    # append image to list of points 
+    try:
+        tp = np.hstack((tp,TTRTpmp + pplane[:,[-1]]))
+    except:
+        tp = TTRTpmp + pplane[:,[-1]] 
+    # if there are other plane enter recursion 
+    if Nplane>1:
+        tp = mirror3(tp,aplane[:,0:-1,:],pplane[:,0:-1])
+
+    return tp
+
+
 def mirror(p, pa, pb):
     """ compute the image of p wrt the segment (pa,pb)
 
