@@ -439,6 +439,8 @@ class Layout(pro.PyLayers):
 
         self.Gt.pos = {}
 
+
+        self._shseg = {}
         #
         # related files
         #
@@ -2107,8 +2109,6 @@ class Layout(pro.PyLayers):
 
         for s in lslab:
             ds = {}
-            import ipdb
-            ipdb.set_trace()
             if s not in self.sl:
                 if s not in self.sl.mat:
                     self.sl.mat.add(name=s,cval=6,sigma=0,typ='epsr')
@@ -2891,6 +2891,10 @@ class Layout(pro.PyLayers):
 
         if name not in self.display['layers']:
             self.display['layers'].append(name)
+
+        # update shseg
+        self._shseg.update({num:sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))})
+
         return(num)
 
     def wedge2(self, apnt):
@@ -3189,11 +3193,101 @@ class Layout(pro.PyLayers):
 
             try:
                 # remove shapely seg
-                self.pop(_shseg[e])
+                self._shseg.pop(e)
+
             except:
                 pass
         if g2npy:
             self.g2npy()
+
+    def point_touches_seg(self,pt,lseg=[],segtol=1e-2,tahetol=1e-2):
+        """ determine if a point is touching a segment
+
+            Parameters
+            ----------
+
+            pt : a point (2,)
+            seg : a list of segments to test. 
+                 if [] => all Gs segments are tested
+
+            segdtol : distance tolerance point to segment
+            tahetol : distance tolerance point to segment extremeties
+                        => a point on segment extremeties is considered
+                           not touching the segseg
+
+
+
+            Return
+            ------
+
+            ltseg : lsit of touched segments (by the point)
+
+        """
+
+        if lseg == []:
+            lseg = self.Gs.nodes()
+
+        ltseg = []
+        allnodes = self.Gs.nodes()
+        for s in lseg :
+            if s > 0 and s in allnodes:
+                n0,n1  = self.Gs.node[s]['connect']
+                dta,dhe,h = geu.dptseg(np.array(pt)[:,None],
+                            np.array(self.Gs.pos[n0])[:,None],
+                            np.array(self.Gs.pos[n1])[:,None])
+                if (h <= segtol) and ((dta > tahetol) and (dhe > tahetol)):
+                    ltseg.append(s)
+        return ltseg
+
+
+
+    def seg_intersection(self,**kwargs):
+        '''
+            determine if a segment intersects any other segment of the layout
+
+            Parameters
+            ----------
+
+            shLine : a shapely LineString
+            OR
+            ta,he : tail/head coordinates of a segment
+
+            Return
+            ------
+            
+            llay_seg : list of layout's segments intersected
+            lshP : list of shapely points of intersections.
+            
+        '''
+
+        if ('ta' in kwargs) and ('he' in kwargs):
+            seg = sh.LineString((kwargs['ta'],kwargs['he']))
+        elif 'shLine' in kwargs:
+            seg = kwargs['shLine']
+
+        # WARNING : use crosses instead of interesects
+        # otherwise 2 segment connected to a same node
+        # are considered as intersecting
+        binter = [seg.crosses(x) for x in self._shseg.values()]
+        if np.sum(binter) > 0:
+            uinter = np.where(binter)[0]
+            llay_seg = []
+            lshP = []
+            for k in uinter:
+                # layout segment 
+                llay_seg.append(self._shseg.keys()[k])
+                lay_shseg = self._shseg[llay_seg[-1]]
+                # intersection shapely point
+                lshP.append(seg.intersection(lay_shseg))
+
+            return(llay_seg,lshP)
+
+        else:
+            return ([],[])
+
+
+
+
 
     def mask(self):
         """  returns the polygonal mask of the building
@@ -4089,6 +4183,7 @@ class Layout(pro.PyLayers):
         angle = np.arccos(unn)
 
         data['a'] = angle
+
         return(data)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
@@ -10322,8 +10417,12 @@ class Layout(pro.PyLayers):
         # transpose point numbering
 
         upnt = filter(lambda x: x < 0, self.Gs.nodes())
-        ta = np.nonzero(np.array(upnt) == ta)[0][0]
-        he = np.nonzero(np.array(upnt) == he)[0][0]
+        try:
+            ta = np.nonzero(np.array(upnt) == ta)[0][0]
+            he = np.nonzero(np.array(upnt) == he)[0][0]
+        except:
+            import ipdb
+            ipdb.set_trace()
         res = filter(lambda x: (((x[0] == ta) & (x[1] == he))
                                 | ((x[0] == he) & (x[1] == ta))), zip(self.tahe[0], self.tahe[1]))
         if len(res) > 0:
