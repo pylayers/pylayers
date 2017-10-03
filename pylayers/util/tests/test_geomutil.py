@@ -136,7 +136,7 @@ class Tesgeu(TestCase):
         u2 = np.array([[0,0,1]]).T
         l1 = np.array([3])
         l2 = np.array([3])
-        bo = intersect3(a,b,pg,u1,u2,l1,l2)
+        bo,pinter = intersect3(a,b,pg,u1,u2,l1,l2)
         assert bo 
 
 if __name__ == "__main__":
