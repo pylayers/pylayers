@@ -5017,7 +5017,6 @@ def mirror3b(tp, aplane, pplane):
     #TTRTpmp = np.dot(T_,RTpmp)
     TTRTpmp = np.einsum('sv,vln->sln',T_,RTpmp)
     # append image to list of points 
-    pdb.set_trace()
     pim = TTRTpmp + pplane[:,[-1]][:,:,None]  
     tp = np.concatenate((tp,pim),axis=1)
     # if there are other plane enter recursion 
