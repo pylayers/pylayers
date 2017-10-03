@@ -2214,7 +2214,7 @@ class Layout(pro.PyLayers):
         for p in P:
             self.faces.update({fid:
                                 {'p':p,
-                                'vnodes':p.vnodes,
+                                'vnodes':p.vnodes.tolist(),
                                 'name':'FLOOR',
                                 'z':self.zfloor
                                 }
@@ -2222,7 +2222,7 @@ class Layout(pro.PyLayers):
             fid += 1 
             self.faces.update({fid:
                                 {'p':p,
-                                'vnodes':p.vnodes,
+                                'vnodes':p.vnodes.tolist(),
                                 'name':'CEIL',
                                 'z':self.zceil
                                 }
