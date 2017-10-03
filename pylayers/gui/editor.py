@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 import sys, os, random
+
+if 'QT_API' in os.environ:
+    if os.environ['QT_API'] != 'pyqt':
+        saveQTAPI = os.environ['QT_API']
+        os.environ['QT_API'] = 'pyqt'
+else: 
+    saveQTAPI = ''
+    os.environ['QT_API'] = 'pyqt'
+
 try:
     from mayavi.sources.vtk_data_source import VTKDataSource
     from mayavi import mlab
@@ -1122,7 +1131,7 @@ class AppForm(QMainWindow):
                     self.L.edit_seg(self.selectl.nsel,slname)
         elif self.selectl.state == 'SMS' or self.selectl.state == 'SMP':
             [self.L.edit_seg(sl,slname) for sl in self.selectl.selectseg]
-
+        self.selectl.refresh()
 
 
     def selectnodes(self):
@@ -1547,5 +1556,6 @@ def main():
     # form.setGeometry(100,100,300,300)
     form.show()
     sys.exit(app.exec_())
+    os.environ['QT_API'] = saveQTAPI
 if __name__ == "__main__":
     main()
