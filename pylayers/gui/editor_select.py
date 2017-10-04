@@ -541,6 +541,8 @@ class SelectL2(object):
                 norm = np.array([t[1], -t[0], 0])
                 self.L.Gs.node[s]['norm']=norm
                 self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
+                self._shseg[s]=sh.LineString((p1,p2))
+
             self.L.g2npy()
             self.modeIni()
             self.new_state()
