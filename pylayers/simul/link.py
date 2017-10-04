@@ -1827,7 +1827,7 @@ class DLink(Link):
 
         
 
-    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6,ext='txt',dirmeas='meas'):
+    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',ang_offset=0.37,BW=1.6,ext='txt',dirmeas='meas'):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1841,7 +1841,7 @@ class DLink(Link):
         win : string 'rect' | 'hamming'
         _filemeas : string 
         _filecal : string 
-        offset : 
+        ang_offset : 
         BW : float 
             bandwidth
         ext : string 
@@ -1854,7 +1854,7 @@ class DLink(Link):
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset,ext=ext,dirmeas=dirmeas)
+            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,ang_offset=ang_offset,ext=ext,dirmeas=dirmeas)
             az = self.afpmes.azrt
             #
             # afpmes.x

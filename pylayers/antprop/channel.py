@@ -574,15 +574,15 @@ class ADPchannel(bs.TUsignal):
         if dB:
             padp  = 20*np.log10(padp)
 
-    im = ax.imshow(padp,extent=extent,**kwargs)
+        im = ax.imshow(padp,extent=extent,**kwargs)
         if blos:
             a1 = agoffset + orientation*self.angpeak_est
             a2 = agoffset + orientation*self.anglos_geo
             ax.scatter(a1,self.taupeak_est,marker='*',s=70,color='k')
             ax.scatter(a2,self.taulos_geo,marker='D',s=70,color='k')
 
-    plt.axis('auto')
-    cbar = plt.colorbar(im)
+        plt.axis('auto')
+        cbar = plt.colorbar(im)
         if dB:
             cbar.set_label(label+' dB',fontsize=fonts)
         else:
@@ -591,11 +591,11 @@ class ADPchannel(bs.TUsignal):
         for t in cbar.ax.get_yticklabels():
             t.set_fontsize(fonts)
 
-    plt.ylabel('Propagation delay [ns]',fontsize=fonts)
-    plt.xlabel('Angle[deg]',fontsize=fonts)
-    #ax.title('PADP',fontsize=fonts)
-    plt.xticks(fontsize=fonts)
-    plt.yticks(fontsize=fonts)
+        plt.ylabel('Propagation delay [ns]',fontsize=fonts)
+        plt.xlabel('Angle[deg]',fontsize=fonts)
+        #ax.title('PADP',fontsize=fonts)
+        plt.xticks(fontsize=fonts)
+        plt.yticks(fontsize=fonts)
         return fig,ax
 
     def clean(self,threshold_dB=20):
@@ -810,6 +810,10 @@ class ADPchannel(bs.TUsignal):
                 u = np.where(dang==np.min(dang))[0][0]
                 ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,'r')
                 ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,'g')
+
+        ll = ax.get_xticklabels()+ax.get_yticklabels()
+        for l in ll:
+            l.set_fontsize(kwargs['fontsize'])
 
         if kwargs['ylabel']:
             ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 

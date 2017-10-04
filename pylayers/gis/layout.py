@@ -3265,19 +3265,19 @@ class Layout(pro.PyLayers):
         elif 'shLine' in kwargs:
             seg = kwargs['shLine']
 
-        # WARNING : use crosses instead of interesects
-        # otherwise 2 segment connected to a same node
-        # are considered as intersecting
+        # WARNING : use crosses instead of interesects
+        # otherwise 2 segment connected to a same node
+        # are considered as intersecting
         binter = [seg.crosses(x) for x in self._shseg.values()]
         if np.sum(binter) > 0:
             uinter = np.where(binter)[0]
             llay_seg = []
             lshP = []
             for k in uinter:
-                # layout segment 
+                # layout segment 
                 llay_seg.append(self._shseg.keys()[k])
                 lay_shseg = self._shseg[llay_seg[-1]]
-                # intersection shapely point
+                # intersection shapely point
                 lshP.append(seg.intersection(lay_shseg))
 
             return(llay_seg,lshP)
@@ -10098,7 +10098,7 @@ class Layout(pro.PyLayers):
             # import ipdb
             # ipdb.set_trace()
             Ids = self.Gr.edge[e[0]][e[1]]['segment']
-            # here is supposed that 2 room may have more than 1 door in common
+            # here is supposed that 2 room may have more than 1 door in common
             for Id in Ids:
                 unode = self.Gs.neighbors(Id)  # get edge number of common doors
                 up0 = self.Gs.pos[unode[0]]
@@ -10109,9 +10109,9 @@ class Layout(pro.PyLayers):
                 sl = self.sl[name]
                 thick = (sum(sl['lthick']) / 2.) + 0.2
 
-                # for ""doors"" extra waypoints points are added 
-                # in front and back of the aperture.
-                # this is not done for AIR slabs
+                # for ""doors"" extra waypoints points are added 
+                # in front and back of the aperture.
+                # this is not done for AIR slabs
                 if 'AIR' not in name : 
 
                     # middle of the common door
