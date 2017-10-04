@@ -4188,22 +4188,25 @@ def v_color(ob):
 
 # def createPolygons(
 
-def plotPolygon(self, poly, fig=[], ax=[], color='r', alpha=0.2):
+def plotPolygon(poly, fig=[], ax=[], color='r', alpha=0.2):
     """  plot a shapely polygon with a specified color and transparency
     """
     if fig == []:
         fig = plt.gcf()
     if ax == []:
         ax = plt.gca()
+    if not isinstance(poly,list):
+        poly = [poly]
     if isinstance(color,str):
-        color=[color]
+        color=[color]*len(poly)
     try:
         mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate(poly)]
     except:
         mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate([poly])]
     [ax.add_patch(x) for x in mpl]
-    plt.axis(self.ax)
+    # plt.axis(ax)
     plt.draw()
+    return fig,ax
 
 
 def shrinkPolygon(poly, d=0.1):

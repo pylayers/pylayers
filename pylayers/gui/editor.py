@@ -984,7 +984,7 @@ class AppForm(QMainWindow):
             self.create_toolbar()
 
         self.show3On = False
-        # self.__loaddebug()
+        self.__loaddebug()
 
 
 
@@ -1154,6 +1154,11 @@ class AppForm(QMainWindow):
         QApplication.setOverrideCursor(QCursor(Qt.CrossCursor))
         self.L.display['activelayer']=str(self.layerselector.currentText())
         self.selectl.current_layer=self.L.display['activelayer']
+        slname={}
+        slname['name']=str(self.layerselector.currentText())
+        if not slname['name'] in self.L.name:
+            slab = self.slabDB[slname['name']]
+            self.L.sl + slab
         self.selectl.modeCP()
         string = self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
@@ -1468,6 +1473,12 @@ class AppForm(QMainWindow):
         editAction = QAction(QIcon(os.path.join(iconpath,'gnome_accessories_text_editor.png')), 'Edit Segments', self)
         editAction.triggered.connect(self.edit_properties)
         self.toolbar.addAction(editAction)
+
+        # #switch faces segments
+        sfswitchAction = QAction(QIcon(os.path.join(iconpath,'seg_faces.png')), 'Segments / Faces', self)
+        # sfswitchAction.triggered.connect(self.sfswitch)
+        self.toolbar.addAction(sfswitchAction)
+
 
         self.toolbar.addSeparator()
 

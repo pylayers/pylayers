@@ -79,7 +79,8 @@ class SelectL2(object):
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
                 'SMP': 'Multiple Points Selection',
-                'SMS': 'Multiple Segments Selection'
+                'SMS': 'Multiple Segments Selection',
+                'FS' : 'Face selection'
                 }
         self.help={'':'',
                 'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments properties',
@@ -91,7 +92,9 @@ class SelectL2(object):
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
                 'SMP': 'F3: Edit Involved Segment(s) Properties, Shift + select : add selected points, CTRL + select : remove selected points, t: toggle point/segment',
-                'SMS': 'F3: Edit Selected Segment(s) Properties , t: toggle point/segment'
+                'SMS': 'F3: Edit Selected Segment(s) Properties , t: toggle point/segment',
+                'FS' : 'F4 : Edit Faces (Ceil/FLoor)'
+
                 }
         self.nsel = 0
         box = self.L.display['box']
@@ -776,6 +779,13 @@ class SelectL2(object):
         #print self.nsel
         #print self.selected_pt1
 
+
+        if 'FS' in self.state:
+            self.L._update_faces()
+            colors=plu.random_color(len(self.L._shfaces))
+            self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
+                                              fig=self.fig,ax=self.ax,color=colors)
+
         #print self.selected_pt2
         self.fig.canvas.draw()
         return(self.fig,self.ax)
@@ -1220,6 +1230,12 @@ class SelectL2(object):
         """ switch to SMS mode
         """
         self.state = "SMP"
+        self.update_state()
+
+    def modeFS(self):
+        """ switch to FS mode
+        """
+        self.state = "FS"
         self.update_state()
 
     def modetoggle(self):
@@ -1798,7 +1814,8 @@ class SelectL2(object):
             return
 
         if self.evt == 'f4' :
-            self.setorigin(parameter='O')
+            # self.setorigin(parameter='O')
+            self.modeFS()
             return
 
 
