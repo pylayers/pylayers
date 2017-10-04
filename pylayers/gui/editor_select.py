@@ -11,6 +11,7 @@ import pylayers.util.plotutil as plu
 import matplotlib.pyplot as plt
 from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
+import shapely.geometry as sh
 
 import copy
 
@@ -537,8 +538,8 @@ class SelectL2(object):
                 norm = np.array([t[1], -t[0], 0])
                 self.L.Gs.node[s]['norm']=norm
                 self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
+                self.L._shseg[s]=sh.LineString((p1,p2))
             self.L.g2npy()
-            self.L.updateshseg()
             self.modeIni()
             self.new_state()
 
