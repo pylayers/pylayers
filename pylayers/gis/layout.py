@@ -439,10 +439,11 @@ class Layout(pro.PyLayers):
 
         self.Gt.pos = {}
 
+        self.faces={}
+
 
         self._shseg = {}
-
-        self.faces={}
+        self._shfaces={}
         #
         # related files
         #
@@ -2010,7 +2011,7 @@ class Layout(pro.PyLayers):
             config.set("indoor", "zceil", self.zceil)
             config.set("indoor", "zfloor", self.zfloor)
             for n in self.faces:
-                face = {k:v for k,v in self.faces[n].items() if k!='p'}
+                face = {k:v for k,v in self.faces[n].items()}
                 config.set("faces", n, face)
 
         if self.typ == 'outdoor':
@@ -2213,21 +2214,13 @@ class Layout(pro.PyLayers):
         fid = 1
         for p in P:
             self.faces.update({fid:
-                                {'p':p,
-                                'vnodes':p.vnodes.tolist(),
-                                'name':'FLOOR',
-                                'z':self.zfloor
+                                {'vnodes':p.vnodes.tolist(),
+                                'name':['FLOOR','CEIL'],
+                                'z':[self.zfloor,self.zceil]
                                 }
                              })
-            fid += 1 
-            self.faces.update({fid:
-                                {'p':p,
-                                'vnodes':p.vnodes.tolist(),
-                                'name':'CEIL',
-                                'z':self.zceil
-                                }
-                             })
-            fid += 1 
+            self._shfaces[fid]=geu.Polygon(p.xy,vnodes=p.vnodes)
+            fid += 1
 
     def load(self):
         """ load a layout  from a .lay file
@@ -2545,7 +2538,7 @@ class Layout(pro.PyLayers):
                     self.faces.update({eval(k):eval(v)})
                     vn = self.faces[eval(k)]['vnodes']
                     pos = [self.Gs.pos[i] for i in vn]
-                    self.faces[eval(k)]['p']=geu.Polygon(pos,vnodes=vn)
+                    self._shfaces[eval(k)]['p']=geu.Polygon(pos,vnodes=vn)
             else:
                 self._create_faces()
 

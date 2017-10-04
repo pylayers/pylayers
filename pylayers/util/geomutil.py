@@ -576,7 +576,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             tp.append(tp[0])
             tu = tuple(tp)
             shg.Polygon.__init__(self, tu)
-
+            self.xy = p
         self.Np = np.shape(self.exterior.xy)[1] - 1
 
         if vnodes != []:
@@ -733,7 +733,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             else:
                 nseg = list(nseg)
             vnodes = vnodes + nseg
-
+        self.xy = np.array([x,y])
         # pdb.set_trace()
         # try:
         #     nseg = map(lambda x : L.numseg(x[0],x[1],first=False),seg)
