@@ -4195,10 +4195,12 @@ def plotPolygon(self, poly, fig=[], ax=[], color='r', alpha=0.2):
         fig = plt.gcf()
     if ax == []:
         ax = plt.gca()
+    if isinstance(color,str):
+        color=[color]
     try:
-        mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in poly]
+        mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate(poly)]
     except:
-        mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in [poly]]
+        mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate([poly])]
     [ax.add_patch(x) for x in mpl]
     plt.axis(self.ax)
     plt.draw()

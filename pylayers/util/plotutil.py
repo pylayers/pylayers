@@ -28,6 +28,21 @@ import pdb
 
 
 
+def random_color(i,cmap=[]):
+    """ return a list of random colors in a given cmap
+        to be used as color option in any matplotlib methos
+
+        Parameter
+        ---------
+
+        i : an integer value ( number of random values)
+    """
+    if cmap == []:
+        cmap = plt.get_cmap('jet')
+    colors = cmap(np.linspace(0, 1, i))
+    return colors
+
+
 def cformat(x,y,**kwargs):
     """ complex format
 
