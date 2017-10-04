@@ -520,7 +520,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
     """
 
-    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[], delta=0):
+    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[], L=[],delta=0):
         """ object constructor
 
         Parameters
@@ -576,6 +576,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             tp.append(tp[0])
             tu = tuple(tp)
             shg.Polygon.__init__(self, tu)
+
             self.xy = p
         self.Np = np.shape(self.exterior.xy)[1] - 1
 
@@ -587,6 +588,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
             if self.vnodes[0] > 0:
                 self.vnodes = np.roll(self.vnodes, -1)
                 print ('WARNING : Polygon.vnodes == Polygon.ndarray() modulo -1')
+        elif L!= []:
+            self.setvnodes(L)
         else:
             # create sequence
             #

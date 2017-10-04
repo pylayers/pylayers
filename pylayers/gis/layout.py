@@ -2222,6 +2222,65 @@ class Layout(pro.PyLayers):
             self._shfaces[fid]=geu.Polygon(p.xy,vnodes=p.vnodes)
             fid += 1
 
+
+    def _update_faces(self):
+
+        stbi = []
+        stbi.extend(self.name['_AIR'])
+        stbi.extend(self.name['AIR'])
+        stbi.extend(self.segboundary)
+        shseg = {k:v for k,v in self._shseg.items() if k not in stbi}
+        P= polygonize(shseg.values())
+        P =[geu.Polygon(p,L=self) for p in P]
+        lc = [p.centroid.xy for p in P]
+        lvn = [tuple(p.vnodes) for p in P]
+        ftbr = []
+        for uf,f in self._shfaces.items():
+            # polygon already exists and no vnodes have been moved
+            if f.centroid.xy in lc:
+                up = lc.index(f.centroid.xy)
+                try:
+                    P.pop(up)
+                    lc.pop(up)
+                    lvn.pop(up)
+                except:
+                    import ipdb
+                    ipdb.set_trace()
+            # vnodes of the polygon have been moved
+            elif tuple(f.vnodes) in lvn : 
+                uvn = lvn.index(tuple(f.vnodes))
+                P.pop(uvn)
+                lc.pop(up)
+                lvn.pop(up)
+            # other actual faces have been deleted
+            else:
+                ftbr.append(uf)
+        [self.faces.pop(f) for f in ftbr]
+        [self._shfaces.pop(f) for f in ftbr]
+        # Remaining Polygon in P are new polygons/faces
+        maxID = max(self.faces.keys())
+        freeID = [i for i in range(1,maxID) if i not in self.faces]
+        initID = True
+        for up,p in enumerate(P):
+            if len(freeID) !=0:
+                fid = freeID.pop(0)
+            elif initID:
+                fid = maxID +1 
+                initID = False
+
+            self.faces.update({fid:
+                                {'vnodes':p.vnodes.tolist(),
+                                'name':['FLOOR','CEIL'],
+                                'z':[self.zfloor,self.zceil]
+                                }
+                             })
+            self._shfaces[fid]=geu.Polygon(p.xy,vnodes=p.vnodes)
+            if len(freeID) ==0:
+                fid += 1
+
+
+
+
     def load(self):
         """ load a layout  from a .lay file
 
@@ -6061,10 +6120,12 @@ class Layout(pro.PyLayers):
             fig = plt.gcf()
         if ax == []:
             ax = plt.gca()
+        if isinstance(color,str):
+            color=[color]
         try:
-            mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in poly]
+            mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate(poly)]
         except:
-            mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in [poly]]
+            mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate([poly])]
         [ax.add_patch(x) for x in mpl]
         plt.axis(self.ax)
         plt.draw()
