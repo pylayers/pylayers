@@ -1854,12 +1854,7 @@ class DLink(Link):
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-<<<<<<< HEAD
-            #self.afpmes.loadmesmat(freq=15,ilink=10,fcGHz=15,BW=BW)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset)
-=======
             self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset,ext=ext,dirmeas=dirmeas)
->>>>>>> c031f3d14371815c708d7cf958dc3531cbea9100
             az = self.afpmes.azrt
             #
             # afpmes.x
