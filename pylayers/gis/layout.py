@@ -2236,8 +2236,6 @@ class Layout(pro.PyLayers):
         lvn = [tuple(p.vnodes) for p in P]
         ftbr = []
         for uf,f in self._shfaces.items():
-            import ipdb
-            ipdb.set_trace()
             # polygon already exists and no vnodes have been moved
             if f.centroid.xy in lc:
                 up = lc.index(f.centroid.xy)
@@ -2252,15 +2250,19 @@ class Layout(pro.PyLayers):
             elif tuple(f.vnodes) in lvn : 
                 uvn = lvn.index(tuple(f.vnodes))
                 P.pop(uvn)
-                lc.pop(up)
-                lvn.pop(up)
+                lc.pop(uvn)
+                lvn.pop(uvn)
+                self._shfaces[uf]=geu.Polygon(p.xy,vnodes=f.vnodes)
             # other actual faces have been deleted
             else:
                 ftbr.append(uf)
         [self.faces.pop(f) for f in ftbr]
         [self._shfaces.pop(f) for f in ftbr]
         # Remaining Polygon in P are new polygons/faces
-        maxID = max(self.faces.keys())
+        if len(self.faces) == 0:
+            maxID=1
+        else:
+            maxID = max(self.faces.keys())
         freeID = [i for i in range(1,maxID) if i not in self.faces]
         initID = True
         for up,p in enumerate(P):
