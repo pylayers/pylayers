@@ -538,6 +538,7 @@ class SelectL2(object):
                 self.L.Gs.node[s]['norm']=norm
                 self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
             self.L.g2npy()
+            self.L.updateshseg()
             self.modeIni()
             self.new_state()
 
