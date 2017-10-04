@@ -534,6 +534,7 @@ class SelectL2(object):
             self.L.Gs.pos[self.nsel]=(x,y)
             segs = self.L.Gs[self.nsel]
             for s in segs:
+                print self.L.Gs.pos[s]
                 n1,n2=self.L.Gs[s].keys()
                 p1 = np.array(self.L.Gs.pos[n1])
                 p2 = np.array(self.L.Gs.pos[n2])

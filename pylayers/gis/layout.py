@@ -2236,6 +2236,8 @@ class Layout(pro.PyLayers):
         lvn = [tuple(p.vnodes) for p in P]
         ftbr = []
         for uf,f in self._shfaces.items():
+            import ipdb
+            ipdb.set_trace()
             # polygon already exists and no vnodes have been moved
             if f.centroid.xy in lc:
                 up = lc.index(f.centroid.xy)
