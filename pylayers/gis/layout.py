@@ -4162,7 +4162,6 @@ class Layout(pro.PyLayers):
         # L2 : ,Nscreen 
 
         bo = geu.intersect3(p1, p2, Pg, U1, U2, L1, L2)
-
         ubo = np.where(bo)
 
         Nseg = len(ubo[0])

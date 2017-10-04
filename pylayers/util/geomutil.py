@@ -3388,7 +3388,7 @@ def intersect_line_seg(line, seg):
     return(k, M)
 
 
-def intersect3(a, b, pg, u1, u2, l1, l2):
+def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
     """ Intersection of a line and a 3D rectangle screen
 
     Parameters
@@ -3526,8 +3526,10 @@ def intersect3(a, b, pg, u1, u2, l1, l2):
             #print boolvalid
             #visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))
 
-
-    return visi,pinter
+    if binter:
+        return visi,pinter
+    else:
+        return visi
 
 
 def intersect(a, b, c, d):
