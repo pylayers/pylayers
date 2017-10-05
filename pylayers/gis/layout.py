@@ -2237,8 +2237,7 @@ class Layout(pro.PyLayers):
         lvn = [tuple(p.vnodes) for p in P]
         ftbr = []
         for uf,f in self._shfaces.items():
-            import ipdb
-            ipdb.set_trace()
+
             #if polygon already exist
             if tuple(f.vnodes) in lvn:
                 # if condition => no vnodes have been moved
@@ -2270,6 +2269,7 @@ class Layout(pro.PyLayers):
                 # vnodes have been added
                 # replace the _shface polygon with updated vnodes
                 up = lc.index(f.centroid.xy)
+                p=P[up]
                 P.pop(up)
                 lc.pop(up)
                 lvn.pop(up)
