@@ -990,6 +990,8 @@ class AppForm(QMainWindow):
 
     def __loaddebug(self):
         self.L = Layout('defstr.lay')
+        # [self.L.del_segment(i) for i in self.L.segboundary]
+        # self.L._create_faces()
         self.filename = self.L._filename
         self.create_main_frame()
         self.on_draw()
@@ -1013,6 +1015,7 @@ class AppForm(QMainWindow):
         if filename != '':
             _filename = pyu.getshort(str(filename))
             self.L = Layout(_filename)
+            [self.L.del_segment(i) for i in self.L.segboundary]
             self.filename = self.L._filename
             self.create_main_frame()
             self.on_draw()

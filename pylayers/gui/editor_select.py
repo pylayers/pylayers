@@ -789,6 +789,7 @@ class SelectL2(object):
             colors=plu.random_color(len(self.L._shfaces))
             self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
                                               fig=self.fig,ax=self.ax,color=colors)
+            [self.ax.annotate(str(uf),(f.centroid.xy[0][0],f.centroid.xy[1][0])) for uf,f in self.L._shfaces.items()]
 
         #print self.selected_pt2
         self.fig.canvas.draw()

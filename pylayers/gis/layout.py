@@ -183,7 +183,7 @@ from networkx.readwrite import write_gpickle, read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
-from shapely.ops import cascaded_union,polygonize
+from shapely.ops import cascaded_union,polygonize,polygonize_full
 from descartes.patch import PolygonPatch
 from numpy import array
 import PIL.Image as Image
@@ -2206,7 +2206,7 @@ class Layout(pro.PyLayers):
         stbi.extend(self.name['AIR'])
         stbi.extend(self.segboundary)
         shseg = {k:v for k,v in self._shseg.items() if k not in stbi}
-        P = polygonize(shseg.values())
+        P = polygonize(cascaded_union(shseg.values()))
         P = [geu.Polygon(p) for p in P]
         [p.setvnodes(self) for p in P]
 
@@ -2229,32 +2229,54 @@ class Layout(pro.PyLayers):
         stbi.extend(self.name['_AIR'])
         stbi.extend(self.name['AIR'])
         stbi.extend(self.segboundary)
+        shseg = self._shseg
         shseg = {k:v for k,v in self._shseg.items() if k not in stbi}
-        P= polygonize(shseg.values())
+        P = polygonize(cascaded_union(shseg.values()))
         P =[geu.Polygon(p,L=self) for p in P]
         lc = [p.centroid.xy for p in P]
         lvn = [tuple(p.vnodes) for p in P]
         ftbr = []
         for uf,f in self._shfaces.items():
-            # polygon already exists and no vnodes have been moved
-            if f.centroid.xy in lc:
-                up = lc.index(f.centroid.xy)
-                try:
+            import ipdb
+            ipdb.set_trace()
+            #if polygon already exist
+            if tuple(f.vnodes) in lvn:
+                # if condition => no vnodes have been moved
+                # exact same polygon
+                if f.centroid.xy in lc:
+                    print(uf,'vnode idem, centroid idem')
+                    # polygon of P already exists
+                    # no need for further processing
+                    up = lc.index(f.centroid.xy)
                     P.pop(up)
                     lc.pop(up)
                     lvn.pop(up)
-                except:
-                    import ipdb
-                    ipdb.set_trace()
-            # vnodes of the polygon have been moved
-            elif tuple(f.vnodes) in lvn : 
-                uvn = lvn.index(tuple(f.vnodes))
-                P.pop(uvn)
-                lc.pop(uvn)
-                lvn.pop(uvn)
+                # same vnodes but different centroid
+                # vnodes have been moved
+                else:
+                    print(uf,'vnode idem, centroid diff')
+                    # replace the _shface polygon with updated vnodes
+                    uvn = lvn.index(tuple(f.vnodes))
+                    p=P[uvn]
+                    P.pop(uvn)
+                    lc.pop(uvn)
+                    lvn.pop(uvn)
+                    self._shfaces[uf]=geu.Polygon(p.xy,vnodes=f.vnodes)
+            elif f.centroid.xy in lc:
+                print(uf,'centroid idem, vnode diff')
+
+                # polygon of P already exists
+                # but not with the same vnodes 
+                # vnodes have been added
+                # replace the _shface polygon with updated vnodes
+                up = lc.index(f.centroid.xy)
+                P.pop(up)
+                lc.pop(up)
+                lvn.pop(up)
                 self._shfaces[uf]=geu.Polygon(p.xy,vnodes=f.vnodes)
-            # other actual faces have been deleted
+
             else:
+                print(uf,'new')
                 ftbr.append(uf)
         [self.faces.pop(f) for f in ftbr]
         [self._shfaces.pop(f) for f in ftbr]
@@ -3291,6 +3313,8 @@ class Layout(pro.PyLayers):
             assert(e > 0)
             name = self.Gs.node[e]['name']
             iso = self.Gs.node[e]['iso']
+            connect = self.Gs.node[e]['connect']
+            # delete iso if required
             [self.Gs.node[i]['iso'].remove(e) for i in iso 
              if e in self.Gs.node[i]['iso']]
             del self.Gs.pos[e]  # delete edge position
@@ -3299,8 +3323,8 @@ class Layout(pro.PyLayers):
             self.Ns = self.Ns - 1
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
-            # delete iso if required
-
+            # del free node if required
+            [self.del_points(i) for i in connect if len(self.Gs[i]) == 0]
             try:
                 # remove shapely seg
                 self._shseg.pop(e)
@@ -6117,15 +6141,21 @@ class Layout(pro.PyLayers):
         plt.axis(self.ax)
         plt.draw()
 
-    def pltpoly(self, poly, fig=[], ax=[], color='r', alpha=0.2):
+    def pltpoly(self, poly, fig=[], ax=[], color='', alpha=0.2):
         """  plot a polygon with a specified color and transparency
         """
         if fig == []:
             fig = plt.gcf()
         if ax == []:
             ax = plt.gca()
+        if not isinstance(poly,list):
+            poly=[poly]
         if isinstance(color,str):
-            color=[color]
+            if color == '':
+                color = plu.random_color(len(poly))
+            else:
+                color=[color]*len(poly)
+
         try:
             mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate(poly)]
         except:
