@@ -210,7 +210,8 @@ class AFPchannel(bs.FUsignal):
         self.tx = tx 
         self.rx = rx
         self.ang_offset = 0
-        self.az = np.array([])
+        self.refinement = False
+        self.az = az
         self._filename = ''
 
     def __repr__(self):
@@ -537,7 +538,7 @@ class ADPchannel(bs.TUsignal):
                     'fig' :[],
                     'ax' : [],
                     'label':'',
-                    'agoffset':450,
+                    'ang_offset':450,
                     'orientation':-1,
                     'alpha':1,
                     'blos':True
@@ -556,7 +557,7 @@ class ADPchannel(bs.TUsignal):
         label = kwargs.pop('label')
         blos = kwargs.pop('blos')
         orientation = kwargs.pop('orientation')
-        agoffset = kwargs.pop('agoffset')
+        ang_offset = kwargs.pop('ang_offset')
 
         if fig==[]:
             fig = plt.figure()
@@ -576,8 +577,8 @@ class ADPchannel(bs.TUsignal):
 
 	im = ax.imshow(padp,extent=extent,**kwargs)
         if blos:
-            a1 = agoffset + orientation*self.angpeak_est
-            a2 = agoffset + orientation*self.anglos_geo
+            a1 = ang_offset + orientation*self.angpeak_est
+            a2 = ang_offset + orientation*self.anglos_geo
             ax.scatter(a1,self.taupeak_est,marker='*',s=70,color='k')
             ax.scatter(a2,self.taulos_geo,marker='D',s=70,color='k')
 
