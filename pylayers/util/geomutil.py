@@ -5029,6 +5029,77 @@ def mirror3b(tp, aplane, pplane):
 
     return tp
 
+def mirror3c(tp, aplane, pplane):
+    """ compute recursively the image of p wrt the list of facet 
+    
+    Parameters
+    ----------
+
+    tp     : MDA 
+        Collection of images points from screen in 3D space from set of points  
+        (3 x Nf x Npt x Nc)
+        Ns : number of screen 
+        Npt : number of points
+        (s x f x p x c ) 
+    aplane : numpy.ndarray
+        MDarray of (c)ollection of ()vector (f)aces n 3D ((s)pace 
+        (3xNfacesx2xNc)
+        (sxfxvxc) 
+    pplane : numpy.ndarray
+        array of points (3xNplanexNsig)
+
+    Returns
+    -------
+
+    tp : np.array 
+        sequence of images 
+            tp[:,-1] is the final image
+            tp[:,0] is the original point 
+
+    Examples
+    --------
+
+
+    """
+    # take last points of the sequence tp 
+    # tp :  (s x f x p x c ) 
+    # p : s x 1 x p x c 
+    #
+    p = tp[:,[-1],:,:]
+    Nplane = aplane.shape[1]# vector plane normalisation
+    # norm : 3 x Nplane 
+    norm  = np.cross(aplane[:,:,0,:],aplane[:,:,1,:],axis=0)
+    # T change basis matrix
+    # s x f x v x c 
+    # T (3 x Nplane,3)
+    T = np.concatenate((aplane,norm[:,:,None,:]),axis=2)
+    # take last transformation matrix 
+    T_ = T[:,-1,:,:]
+    # v : 3 x 1 x n 
+    v  = p-pplane[:,[-1],:][:,:,None,:]
+    # go to frame attached to reflection plane
+    #Tpmp = np.dot(T_.T,v)
+    # Tpmp : 3 x 1 x n 
+    TT = np.swapaxes(T_,0,1)
+    Tpmp = np.einsum('svm,vlnm->slnm',TT,v)
+    # apply symmetry 
+    R  = np.eye(3)
+    R[2,2] = -1 
+    R  = R[:,:,None] 
+    #RTpmp = np.dot(R,Tpmp)
+    RTpmp = np.einsum('svm,vlnm->slnm',R,Tpmp)
+    #go back to global frame 
+    #TTRTpmp = np.dot(T_,RTpmp)
+    TTRTpmp = np.einsum('svm,vlnm->slnm',T_,RTpmp)
+    # append image to list of points 
+    pim = TTRTpmp + pplane[:,[-1]][:,:,None,:]  
+    tp = np.concatenate((tp,pim),axis=1)
+    # if there are other plane enter recursion 
+    if Nplane>1:
+        tp = mirror3b(tp,aplane[:,0:-1,:,:],pplane[:,0:-1,:])
+
+    return tp
+
 def mirror3(tp, aplane, pplane):
     """ compute recursively the image of p wrt the list of facet 
     
