@@ -207,11 +207,13 @@ class AFPchannel(bs.FUsignal):
         bs.FUsignal.__init__(self,x=x,y=y,label='AFP')
         if len(self.x)!=0:
             self.fcGHz = self.x[len(self.x)/2]
+
         self.tx = tx 
         self.rx = rx
         self.ang_offset = 0
         self.az = np.array([])
         self._filename = ''
+        self.refinement = False
 
     def __repr__(self):
         cv = 180/np.pi
@@ -438,6 +440,7 @@ class ADPchannel(bs.TUsignal):
         alphapeak = np.max(np.abs(self.y))
         iphi,itau = np.where(np.abs(self.y)==alphapeak)
         taupeak = self.x[itau][0]
+
         if refinement:
             pr = np.abs(self.y)[iphi-1:iphi+2,itau].squeeze()
             azr = self.az[iphi-1:iphi+2]
@@ -445,7 +448,8 @@ class ADPchannel(bs.TUsignal):
             In  = np.sum(pr*azr)
             phipeak = In/Id
         else:
-            phipeak = self.az[iphi]        
+            phipeak = self.az[iphi]
+
         return alphapeak,taupeak,phipeak
    
     def cut(self,imin=0,imax=1000):
@@ -781,7 +785,7 @@ class ADPchannel(bs.TUsignal):
         else:
             if kwargs['raw']:
                 ax.plot(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
-            ax.plot(np.array([tau]),np.array([AttmaxdB]),color='k')
+                ax.plot(np.array([tau]),np.array([AttmaxdB]),color='k')
 
             if kwargs['desembeded']:
                 ax.plot(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax))
@@ -817,7 +821,7 @@ class ADPchannel(bs.TUsignal):
 
         if kwargs['ylabel']:
             ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
-        ax.set_title(self._filename+' '+str(PL))
+        #ax.set_title(self._filename+' '+str(PL))
         if kwargs['legend']:
             plt.legend(loc='best') 
 
@@ -4304,26 +4308,26 @@ class Tchannel(bs.FUsignal):
                 self.y = self.y*np.conj(Hcal.y)
             self.calibrated = not self.calibrated
 
-    def pdp(self,win='hamming',calibrate=True):
-        """ calculates power delay profile
+    # def pdp(self,win='hamming',calibrate=True):
+    #     """ calculates power delay profile
 
-        Parameters
-        ----------
+    #     Parameters
+    #     ----------
 
-        win : string
-            window name
-        """
-        self.win = win
-        if calibrate and not self.calibrated:
-            self.calibrate()
+    #     win : string
+    #         window name
+    #     """
+    #     self.win = win
+    #     if calibrate and not self.calibrated:
+    #         self.calibrate()
 
-        if not self.windowed:
-            self.window(win=win)
+    #     if not self.windowed:
+    #         self.window(win=win)
 
-        # inverse Fourier transform
+    #     # inverse Fourier transform
 
-        pdp = self.ift(ffts=1)
-        return pdp
+    #     pdp = self.ift(ffts=1)
+    #     return pdp
 
 class Ctilde(PyLayers):
     """ container for the 4 components of the polarimetric ray channel

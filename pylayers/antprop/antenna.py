@@ -665,7 +665,8 @@ class Pattern(PyLayers):
         stcp = np.sin(Theta)*np.cos(Phi)
         stsp = np.sin(Theta)*np.sin(Phi)
         # N & L
-        ejkrrp = np.exp(1j*k*( X*stcp + Y*stsp))        # exp(jk (r.r'))
+        ejkrrp = np.exp(1j*k*( X*stcp + Y*stsp))        # exp(jk (r.r'))*
+        
         if self.grid:
             N_theta  = np.einsum('tpnmf->tpf',Jy*ctsp*ejkrrp) # 12-12 a assuming Jx,Jz=0
             N_phi    = np.einsum('tpnmf->tpf',Jy*cp*ejkrrp)   # 12-12 b ""
