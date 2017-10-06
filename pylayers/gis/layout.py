@@ -3274,13 +3274,16 @@ class Layout(pro.PyLayers):
             self.del_segment(k)
             print('del ', k)
         # 2) delete involved points
+
         for n1 in lp:
             assert(n1 < 0)
-            nbrs = self.Gs.neighbors(n1)
-            self.Gs.remove_node(n1)
-            del self.Gs.pos[n1]
-            self.labels.pop(n1)
-            self.Np = self.Np - 1
+            # to manage case where point has already been deleted by del_seg
+            if n1 in self.Gs.nodes():
+                nbrs = self.Gs.neighbors(n1)
+                self.Gs.remove_node(n1)
+                del self.Gs.pos[n1]
+                self.labels.pop(n1)
+                self.Np = self.Np - 1
         # 3) updating structures
         self.g2npy()
 
@@ -10572,6 +10575,7 @@ class Layout(pro.PyLayers):
         else:
             return False
 
+
     def ispoint(self, pt, tol=0.05):
         """ check if pt is a point of the Layout
 
@@ -10613,6 +10617,46 @@ class Layout(pro.PyLayers):
             else:
                 mi = np.where(min(v[nup]) == v[nup])[0]
                 return(ke[nup[mi]][0])
+
+
+    def isface(self,pt):
+        """ check if pt is in a face
+
+        Parameters
+        ----------
+
+        pt  : point (2,1)
+        
+
+        f:     0 if it not exists
+           face number if point exists 
+           if several faces are superimposed, 
+           the one with mallest area is return
+
+        """
+
+        P = sh.Point(pt)
+        shfk = self._shfaces.keys()
+        shfv = self._shfaces.values()
+
+        bcheck = [P.within(l) for l in  shfv]
+        sbc = sum(bcheck)
+        if sbc == 0:
+            # point is not in a face
+            return 0
+        elif sbc == 1:
+            # point is in a face
+            u = bcheck.index(True)
+            return shfk[u]
+        else:
+            # point in several faces
+            # return the smallest one 
+            uc = np.where(bcheck)[0]
+            vsh = [shfk[i] for i in uc]
+            area = np.array([self._shfaces[i].area for i in vsh])
+            return vsh[np.argmin(area)]
+
+
 
     def onseg(self, pt, tol=0.01):
         """ segment number from point (deprecated)

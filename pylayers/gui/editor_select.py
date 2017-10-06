@@ -98,6 +98,7 @@ class SelectL2(object):
 
                 }
         self.nsel = 0
+        self.fsel = 0
         box = self.L.display['box']
         box = (box[0]-5,box[1]+5,box[2]-5,box[3]+5)
         self.ax.axis(box)
@@ -424,7 +425,9 @@ class SelectL2(object):
                     self.modeIni()
                     self.OnClick(event)
 #
-
+            if 'FS' in self.state:
+                self.fsel = self.L.isface((x,y))
+                self.modeFS()
 
         if event.button == 2 and event.inaxes:
             self.evt = 'cclic'
@@ -447,7 +450,7 @@ class SelectL2(object):
 
 
     def OnMotion(self,event):
-        if self.state !='CP' and not self.ptmove:
+        if self.state !='CP' and not self.ptmove and self.state != 'FS':
             # print 'on motion selector'
             if event.button == 1:
                 self.motion=True
@@ -596,6 +599,8 @@ class SelectL2(object):
 
 
         if self.state == 'Init':
+            self.fsel = 0
+            self.L.display['nodes']=True
             self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
             self.ax.title.set_text(self.statename[self.state])
             self.selected_edge1 = 0
@@ -786,9 +791,17 @@ class SelectL2(object):
 
         if 'FS' in self.state:
             self.L._update_faces()
-            colors=plu.random_color(len(self.L._shfaces))
+            self.L.display['nodes'] = False
+            self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+            shk = self.L._shfaces.keys()
+            if self.fsel in shk:
+                ufsel = shk.index(self.fsel)
+                color = ['b']*len(shk)
+                color[ufsel]='r'
+            else:
+                color = 'b'
             self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
-                                              fig=self.fig,ax=self.ax,color=colors)
+                                              fig=self.fig,ax=self.ax,color=color)
             [self.ax.annotate(str(uf),(f.centroid.xy[0][0],f.centroid.xy[1][0])) for uf,f in self.L._shfaces.items()]
 
         #print self.selected_pt2
@@ -1240,7 +1253,7 @@ class SelectL2(object):
     def modeFS(self):
         """ switch to FS mode
         """
-        self.state = "FS"
+        self.state = "FS"        
         self.update_state()
 
     def modetoggle(self):

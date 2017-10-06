@@ -1167,7 +1167,10 @@ class AppForm(QMainWindow):
         self.statusBar().showMessage(string)
 
 
-
+    def sfswitch(self):
+        self.selectl.modeFS()
+        string = self.selectl.help[self.selectl.state]
+        self.statusBar().showMessage(string)
 
     def on_about(self):
         msg = """ This is the PyLayers' Stand-Alone Layout Editor (Alpha)
@@ -1390,6 +1393,8 @@ class AppForm(QMainWindow):
             shortcut="F10", tip="Refresh the application")
         properties= self.create_action("&Properties", slot=self.edit_properties,
             shortcut="F3", tip="Edit Wall properties")
+        faces= self.create_action("&Segments/Faces", slot=self.sfswitch,
+            shortcut="F4", tip="Seg/Faces switch")
         # show3= self.create_action("&Properties", slot=self.edit_properties,
         #     shortcut="F9", tip="3D show")
 
@@ -1421,7 +1426,7 @@ class AppForm(QMainWindow):
             ( new_action,new_overlay,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
+            ( select_action,draw_action,properties,faces,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
         self.add_actions(self.view_menu, (view3D_action,chgoverlay_action,toggleover_action))
 
@@ -1479,7 +1484,7 @@ class AppForm(QMainWindow):
 
         # #switch faces segments
         sfswitchAction = QAction(QIcon(os.path.join(iconpath,'seg_faces.png')), 'Segments / Faces', self)
-        # sfswitchAction.triggered.connect(self.sfswitch)
+        sfswitchAction.triggered.connect(self.sfswitch)
         self.toolbar.addAction(sfswitchAction)
 
 
