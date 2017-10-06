@@ -84,7 +84,8 @@ class SelectL2(object):
                 'FS' : 'Face selection'
                 }
         self.help={'':'',
-                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments properties',
+                'Init':'Select Point(s) or Segment(s) F2: Create Segments, \
+F3: Edit Segments properties, F4 : Edit Faces (Ceil/FLoor)',
                 'CP':'Create Segments, + CTRL same x, + SHIFT same y',
                 'SP1':'Select Point. Move Selected Point maintaing Left Clic',
                 'SP2':'Click Again for Creating Segment',
@@ -94,7 +95,7 @@ class SelectL2(object):
                 'CPSS':'Create Point On Sub Segment',
                 'SMP': 'F3: Edit Involved Segment(s) Properties, Shift + select : add selected points, CTRL + select : remove selected points, t: toggle point/segment',
                 'SMS': 'F3: Edit Selected Segment(s) Properties , t: toggle point/segment',
-                'FS' : 'F4 : Edit Faces (Ceil/FLoor)'
+                'FS' : 'F3: Edit Selected Face '
 
                 }
         self.nsel = 0
@@ -1835,7 +1836,7 @@ class SelectL2(object):
             return
 
         if self.evt == 'f4' :
-            # self.setorigin(parameter='O')
+            # toggle mode
             self.modeFS()
             return
 

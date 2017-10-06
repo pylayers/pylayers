@@ -1312,7 +1312,10 @@ class AppForm(QMainWindow):
 
 
     def sfswitch(self):
-        self.selectl.modeFS()
+        if self.selectl.state == 'FS':
+            self.selectl.modeIni()
+        else:
+            self.selectl.modeFS()
         string = self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
 
