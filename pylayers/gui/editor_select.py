@@ -790,21 +790,21 @@ class SelectL2(object):
 
 
         if 'FS' in self.state:
-            self.L._update_faces()
             self.L.display['nodes'] = False
             self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
             shk = self.L._shfaces.keys()
             if self.fsel in shk:
                 ufsel = shk.index(self.fsel)
-                color = ['b']*len(shk)
-                color[ufsel]='r'
+                color = ['#abcdef']*len(shk)
+                color[ufsel]='#efaaaa'
             else:
-                color = 'b'
+                color = '#abcdef'
             self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
                                               fig=self.fig,
                                               ax=self.ax,
-                                              color=color)
-            [self.ax.annotate(str(uf),(f.centroid.xy[0][0],f.centroid.xy[1][0])) for uf,f in self.L._shfaces.items()]
+                                              color=color,
+                                              alpha=0.5)
+            # [self.ax.annotate(str(uf),(f.centroid.xy[0][0],f.centroid.xy[1][0])) for uf,f in self.L._shfaces.items()]
 
         #print self.selected_pt2
         self.fig.canvas.draw()
@@ -1255,7 +1255,8 @@ class SelectL2(object):
     def modeFS(self):
         """ switch to FS mode
         """
-        self.state = "FS"        
+        self.state = "FS"
+        self.L._update_faces()
         self.update_state()
 
     def modetoggle(self):

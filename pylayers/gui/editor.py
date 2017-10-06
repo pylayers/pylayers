@@ -339,8 +339,13 @@ class FacePropertiesWin(QDialog):
             lz.append(z)
             lname.append(name)
 
-        self.parent.L.faces[self.fid]['name']=lname
-        self.parent.L.faces[self.fid]['z']=lz
+        lz = np.array(lz)
+        lname = np.array(lname)
+        o = np.argsort(lz)
+
+
+        self.parent.L.faces[self.fid]['name']=lname[o].tolist()
+        self.parent.L.faces[self.fid]['z']=lz[o].tolist()
 
         self.close()
 
@@ -1325,6 +1330,7 @@ class AppForm(QMainWindow):
          F1 : Select mode
          F2 : New segment with current active Layer
          F3 : Edit segment properties
+         F4 : Toggle segments / faces view
 
          g : toggle grid
          ctrl+g : choose grid properties

@@ -2623,7 +2623,7 @@ class Layout(pro.PyLayers):
                     self.faces.update({eval(k):eval(v)})
                     vn = self.faces[eval(k)]['vnodes']
                     pos = [self.Gs.pos[i] for i in vn]
-                    self._shfaces[eval(k)]['p']=geu.Polygon(pos,vnodes=vn)
+                    self._shfaces[eval(k)]=geu.Polygon(pos,vnodes=vn)
             else:
                 self._create_faces()
 
