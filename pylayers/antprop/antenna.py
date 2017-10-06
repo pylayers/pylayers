@@ -626,6 +626,7 @@ class Pattern(PyLayers):
         Ny              = self.param['Ny']
         fcGHz           = self.param['fcGHz']
         GcmaxdB         = self.param['GcmaxdB']
+        
         assert(a1>b1), "a1 should be greater than b1 (see fig 13.1O(a) Balanis"
 
         lbda   = 0.3/self.fGHz

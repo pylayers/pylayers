@@ -311,7 +311,14 @@ class AFPchannel(bs.FUsignal):
 
         self.x = np.linspace(self.fmin,self.fmax,self.Nf)
         self.fcGHz = self.x[len(self.x)/2]
+
         self.y = amp*np.exp(1j*ang*np.pi/180.)*cal_trf[None,:]*window
+
+        if self.fcGHz==83.:
+            fGHz   = np.linspace(self.fmin,self.fmax,self.Nf)
+            t0     = 2 # retarder le signal de 2 ns
+            self.y = amp*np.exp(1j*ang*np.pi/180.)*np.exp(-2j*np.pi*fGHz*t0)*cal_trf[None,:]*window            
+
         if ext=='txt':
             self.azmes = (360-D[:,0])*np.pi/180.
             self.az = self.azmes + ang_offset - 2*np.pi
@@ -574,7 +581,13 @@ class ADPchannel(bs.TUsignal):
         #extent = (self.az[0]*rd2deg,
         #          self.az[-1]*rd2deg,
         #          self.x[imin],self.x[imax])
+        
+        #extent = (0,360,self.x[imin],self.x[imax])
+        # import ipdb
+        # ipdb.set_trace()
         extent = (0,360,self.x[imin],self.x[imax])
+        #extent = (45,270,self.x[imin],self.x[imax])
+
         padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
@@ -624,7 +637,7 @@ class ADPchannel(bs.TUsignal):
         
         self.y[u] = 0+0j
 
-    def pap(self,fcGHz=28,fontsize=18,figsize=(10,10),fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
+    def pap(self,fcGHz=28,fontsize=25,color='r',figsize=(10,10),fig=[],ax=[],label='',xlabel=True,ylabel=True,legend=True):
         """ Calculate Power Angular Profile 
 
         Parameters
@@ -635,11 +648,9 @@ class ADPchannel(bs.TUsignal):
         """
 
 
-        Na = self.y.shape[0]
-        # integration over frequency 
-        # adp (angle) 
-        adp = np.real(np.sum(self.y*np.conj(self.y),axis=1))
-        u  = np.where(adp==max(adp))[0]
+        # adp = np.real(np.sum(self.y*np.conj(self.y),axis=1))
+        pap = np.mean(self.y*np.conj(self.y),axis=1)
+
         if fig==[]:
             fig = plt.figure(figsize=figsize)
         else:
@@ -648,17 +659,26 @@ class ADPchannel(bs.TUsignal):
             ax  = fig.add_subplot(111)
         else:
             ax = ax
-        ax.plot(self.az*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
+
+        # import ipdb
+        # ipdb.set_trace()
+        az = np.linspace(0,360,73,dtype=int)
+        ax.plot(az,10*np.log10(np.abs(pap))-10*np.log10(np.abs(pap)).max(),label=label,color=color,linewidth=1.5)
+        #ax.plot(self.az*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
         #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
-        ax.set_ylim(-80,-60)
+
+        ll = ax.get_xticklabels()+ax.get_yticklabels()
+        for l in ll:
+            l.set_fontsize(fontsize)
         if xlabel:
-            ax.set_xlabel('Angle (degrees)',fontsize=fontsize) 
+            ax.set_xlabel('Angle [degrees]',fontsize=fontsize) 
         if ylabel:
-            ax.set_ylabel('level (dB)',fontsize=fontsize) 
+            ax.set_ylabel('Normalized level [dB]',fontsize=fontsize) 
+        ax.grid('on')
         ax.set_title(self._filename)
         if legend:
-            plt.legend(loc='best') 
-        return fig,ax
+            plt.legend(loc='best')
+        return fig,ax,pap,self.az*180/np.pi
 
     def app(self,**kwargs):
         """ Calculate Angular Power Profile
@@ -753,7 +773,7 @@ class ADPchannel(bs.TUsignal):
 
         if kwargs['semilogx']:
             if kwargs['raw']:
-                ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+                ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=1)
             #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
 
             if kwargs['desembeded']:

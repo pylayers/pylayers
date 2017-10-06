@@ -1811,7 +1811,6 @@ class DLink(Link):
         self.checkh5()
 
 
-
     def adp(self,imax=1000):
         """
         Parameters
@@ -1822,15 +1821,7 @@ class DLink(Link):
         self.adpmes.cut(imax=imax)
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)
-
-    def pdp(self):
-
-        # import ipdb
-        # ipdb.set_trace()
-
-        self.pdpmes = self.adpmes.pdp_m()
-        self.pdprt  = self.adprt.pdp_m()
-
+        
     def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',ang_offset=0.37,BW=1.6,ext='txt',dirmeas='meas',refinement=False):
         """ Evaluate angular frequency profile 
 
@@ -1845,7 +1836,7 @@ class DLink(Link):
         win : string 'rect' | 'hamming'
         _filemeas : string 
         _filecal : string 
-        ang_offset : 
+        offset : 
         BW : float 
             bandwidth
         ext : string 
@@ -1858,7 +1849,7 @@ class DLink(Link):
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,ang_offset=offset,ext=ext,dirmeas=dirmeas,refinement=refinement)
+            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,ang_offset=ang_offset,ext=ext,dirmeas=dirmeas,refinement=refinement)
             az = self.afpmes.az
             #
             # afpmes.x
@@ -1871,18 +1862,15 @@ class DLink(Link):
         # rx = b 
         # angular range (a) : phi 
         #
-
-
-        import ipdb
-        ipdb.set_trace()
-        #self.afprt.az = az
+       
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
-
+        tgain = []
         for ph in az.squeeze():
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
-            # pdb.set_trace()
             self.evalH()
+            # tgain = np.append(tgain,20*np.log10(np.abs(self.H.y[0,:]))[0][0][0])
+            # print ph*180/np.pi,20*np.log10(np.abs(self.H.y[0,:]))
             if self.H.y.shape[3]!=1:
                 S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             else:
@@ -1892,6 +1880,11 @@ class DLink(Link):
                 self.afprt.y = np.vstack((self.afprt.y,np.squeeze(S)))
             except:
                 self.afprt.y = np.squeeze(S)
+
+        # import ipdb
+        # pdb.set_trace()
+
+
         if self.H.y.shape[3]!=1:
             self.afprt.x = self.H.x
             self.afprt.fcGHz = self.afprt.x[len(self.afprt.x)/2]
