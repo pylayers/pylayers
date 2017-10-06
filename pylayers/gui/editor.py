@@ -38,7 +38,7 @@ import sys
 import pdb
 
 
-class SubSegWin(QDialog):    # any super class is okay
+class SubSegWin(QDialog):
     def __init__(self,idx,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
@@ -93,21 +93,7 @@ class SubSegWin(QDialog):    # any super class is okay
         vbox.addLayout(hboxl2)
         vbox.addLayout(hbox2)
 
-        # vbox.addWidget(self.Hline())
-        # # Indicate Floor
-        # hboxfloor = QHBoxLayout()
-        # floorlabel = QLabel('Floor')
-        # floorlabel.setStyleSheet("font: bold 14px;")
-        # hboxfloor.addWidget(floorlabel)
-        # hboxfloor.setAlignment(Qt.AlignCenter)
-        # vbox.addLayout(hboxfloor)
-
-
-
-        # validation
-        # buttono=QPushButton("Cancel")
         buttonc=QPushButton("Delete")
-        # buttono.clicked.connect(self.valide)
         buttonc.clicked.connect(self.cancel)
 
         hboxDial = QHBoxLayout()
@@ -216,7 +202,155 @@ class SubSegWin(QDialog):    # any super class is okay
         self.close()
 
 
-class PropertiesWin(QDialog):    # any super class is okay
+class FacePropertiesWidget(QDialog):
+    def __init__(self,label=[],slname=[],z=[],parent=None):
+        super(FacePropertiesWidget, self).__init__(parent)
+        #
+        self.gparent=parent.parent
+        self.parent=parent
+        self.label=label
+        self.slname=slname
+        self.z = z
+        self._init_combo()
+        self._init_layout()
+
+    def _init_combo(self):
+
+        # init combo slab for ceil
+        self.combo = QComboBox()
+        for s in self.gparent.slabname:
+            self.combo.addItem(s)
+        self.idx=self.combo.findText(self.slname)
+        self.combo.setCurrentIndex(self.idx)
+
+
+    def _init_layout(self):
+        # main layout
+
+        hbox = QHBoxLayout()
+        label = QLabel(self.label)
+        label.setStyleSheet("font: bold 14px;")
+        # ceillabel.setAlignment(Qt.AlignCenter)
+        hbox.addWidget(label)
+        hbox.addWidget(self.combo)
+
+        self.setLayout(hbox)
+
+
+class FacePropertiesWin(QDialog):
+
+
+    def __init__(self,parent=None):
+        super(FacePropertiesWin, self).__init__(parent)
+        # to imporve here. Probably something to inherit from parent App
+        self.parent=parent
+        # determine if multiple se gments are selected
+        self._init_faces_info()
+        self._init_layout()
+
+
+
+    def _init_faces_info(self):
+
+        # find selected face
+        self.fid = self.parent.selectl.fsel
+        # get faces dict
+        self.df = self.parent.L.faces[self.fid]
+        # get slab list for given face
+        self.lsl = self.df['name']
+        # get z list for given face
+        self.lz = self.df['z']
+
+
+    def _init_layout(self):
+        # main layout
+        self.mainLayout = QVBoxLayout()
+
+        # scroll area widget contents - layout
+        self.scrollLayout = QFormLayout()
+
+        # scroll area widget contents
+        self.scrollWidget = QWidget()
+        self.scrollWidget.setLayout(self.scrollLayout)
+
+        # scroll area
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setWidget(self.scrollWidget)
+
+        # main layout
+        self.mainLayout = QVBoxLayout()
+        self.mainLayout.addWidget(self.scrollArea)
+
+
+        buttono=QPushButton("OK")
+        buttonc=QPushButton("Cancel")
+        buttono.clicked.connect(self.valide)
+        buttonc.clicked.connect(self.cancel)
+
+        hboxDial = QHBoxLayout()
+        hboxDial.addWidget(buttonc)
+        hboxDial.addWidget(buttono)
+
+
+        # create Layout
+        vbox = QVBoxLayout()
+        vbox.addLayout(self.mainLayout)
+        vbox.addLayout(hboxDial)
+
+        self.setLayout(vbox)
+
+        self.dfW = {}
+        self.widx = 0
+
+        self.zo = np.argsort(self.lz)[::-1]
+
+
+        for uk,k in enumerate(self.zo):
+            if uk == 0: 
+                name = 'CEIL'
+                z = self.parent.L.zceil
+            elif uk == len(self.zo)-1:
+                name = 'FLOOR' 
+                z = self.parent.L.zfloor
+            else:
+                name = ""
+                z = self.lz[k]
+            self.addWidget(label=name, slname=self.lsl[k],z=self.lz[k])
+
+
+
+
+    def addWidget(self,label='',slname='',z=[]):
+        self.dfW.update({self.widx:FacePropertiesWidget(label=label,slname=slname,z=z,parent=self)})
+        self.scrollLayout.addRow(self.dfW[self.widx])
+        self.widx = self.widx +1
+
+
+    def valide(self):
+        """ ok click
+        """
+        lz=[]
+        lname = []
+        for w in self.dfW.values():
+            # get nodes
+            z = w.z
+            name = str(w.combo.currentText())
+            lz.append(z)
+            lname.append(name)
+
+        self.parent.L.faces[self.fid]['name']=lname
+        self.parent.L.faces[self.fid]['z']=lz
+
+        self.close()
+
+    def cancel(self):
+        """ cancel click
+        """
+        self.close()
+
+
+class PropertiesWin(QDialog):
 
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
@@ -473,7 +607,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
 
 
-class SaveQuitWin(QDialog):    # any super class is okay
+class SaveQuitWin(QDialog):
     def __init__(self,exit=False,parent=None):
         super(SaveQuitWin, self).__init__(parent)
         self.setWindowTitle('Do you want to save?')
@@ -526,7 +660,7 @@ class SaveQuitWin(QDialog):    # any super class is okay
         self.close()
 
 
-class NewLayout(QDialog):    # any super class is okay
+class NewLayout(QDialog):
     def __init__(self,parent=None,overlay={}):
         super(NewLayout, self).__init__(parent)
         self.parent=parent
@@ -892,7 +1026,7 @@ class Overset(QMainWindow):
         self.close()
 
 
-class GridSet(QDialog):    # any super class is okay
+class GridSet(QDialog):
     def __init__(self,parent=None):
         super(GridSet, self).__init__(parent)
         self.setWindowTitle('Set Grid')
@@ -1097,8 +1231,13 @@ class AppForm(QMainWindow):
             self.selectl.toggle()
             self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
-
+        elif (self.selectl.state == 'FS' ) and (self.selectl.fsel !=0 ):
+            self.prop = FacePropertiesWin(parent=self)
+            self.prop.show()
         # self.on_draw()
+
+
+
 
     def editgrid(self):
         grid = GridSet(parent=self)

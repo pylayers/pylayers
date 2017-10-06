@@ -159,7 +159,7 @@ class SelectL2(object):
             'm'  :' toggle mode (point or segment)',
             'n'  : 'toggle node label display ',
             'z'  : 'change display parameters',
-            'x'  : 'save .str2 and .ini file',
+            'x'  : 'save .str2 and .ini fi le',
             'w'  :' display all layers',
             'v'  :' flip layout w.r.t y axis',
             'f'  :' toggle points nodes display',
@@ -801,7 +801,9 @@ class SelectL2(object):
             else:
                 color = 'b'
             self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
-                                              fig=self.fig,ax=self.ax,color=color)
+                                              fig=self.fig,
+                                              ax=self.ax,
+                                              color=color)
             [self.ax.annotate(str(uf),(f.centroid.xy[0][0],f.centroid.xy[1][0])) for uf,f in self.L._shfaces.items()]
 
         #print self.selected_pt2
