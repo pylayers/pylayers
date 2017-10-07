@@ -1812,12 +1812,17 @@ class DLink(Link):
 
 
     def adp(self,imax=1000):
+        """
+        Parameters
+        ----------
+        imax : int
+        """
         self.adpmes = self.afpmes.toadp()
         self.adpmes.cut(imax=imax)
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)
         
-    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6,ext='txt',dirmeas='meas'):
+    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6,ext='txt',dirmeas='meas',refinement=False):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1844,8 +1849,8 @@ class DLink(Link):
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,offset=offset,ext=ext,dirmeas=dirmeas)
-            az = self.afpmes.azrt
+            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,ang_offset=offset,ext=ext,dirmeas=dirmeas,refinement=refinement)
+            az = self.afpmes.az
             #
             # afpmes.x
             # afpmes.y
