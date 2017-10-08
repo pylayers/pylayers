@@ -7,8 +7,10 @@ import numpy as np
 from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
-
+from shapely.ops import polygonize
+import shapely.geometry as shg
 import matplotlib.pyplot as plt
+
 from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
 import shapely.geometry as sh
@@ -78,10 +80,12 @@ class SelectL2(object):
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
                 'SMP': 'Multiple Points Selection',
-                'SMS': 'Multiple Segments Selection'
+                'SMS': 'Multiple Segments Selection',
+                'FS' : 'Face selection'
                 }
         self.help={'':'',
-                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments properties',
+                'Init':'Select Point(s) or Segment(s) F2: Create Segments, \
+F3: Edit Segments properties, F4 : Edit Faces (Ceil/FLoor)',
                 'CP':'Create Segments, + CTRL same x, + SHIFT same y',
                 'SP1':'Select Point. Move Selected Point maintaing Left Clic',
                 'SP2':'Click Again for Creating Segment',
@@ -90,9 +94,12 @@ class SelectL2(object):
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
                 'SMP': 'F3: Edit Involved Segment(s) Properties, Shift + select : add selected points, CTRL + select : remove selected points, t: toggle point/segment',
-                'SMS': 'F3: Edit Selected Segment(s) Properties , t: toggle point/segment'
+                'SMS': 'F3: Edit Selected Segment(s) Properties , t: toggle point/segment',
+                'FS' : 'F3: Edit Selected Face '
+
                 }
         self.nsel = 0
+        self.fsel = 0
         box = self.L.display['box']
         box = (box[0]-5,box[1]+5,box[2]-5,box[3]+5)
         self.ax.axis(box)
@@ -153,7 +160,7 @@ class SelectL2(object):
             'm'  :' toggle mode (point or segment)',
             'n'  : 'toggle node label display ',
             'z'  : 'change display parameters',
-            'x'  : 'save .str2 and .ini file',
+            'x'  : 'save .str2 and .ini fi le',
             'w'  :' display all layers',
             'v'  :' flip layout w.r.t y axis',
             'f'  :' toggle points nodes display',
@@ -189,7 +196,6 @@ class SelectL2(object):
             self.setgrid()
         else:
             self.ax.grid(which='major',visible=False)
-
         return(self.fig,self.ax)
 
 
@@ -420,7 +426,9 @@ class SelectL2(object):
                     self.modeIni()
                     self.OnClick(event)
 #
-
+            if 'FS' in self.state:
+                self.fsel = self.L.isface((x,y))
+                self.modeFS()
 
         if event.button == 2 and event.inaxes:
             self.evt = 'cclic'
@@ -443,7 +451,7 @@ class SelectL2(object):
 
 
     def OnMotion(self,event):
-        if self.state !='CP' and not self.ptmove:
+        if self.state !='CP' and not self.ptmove and self.state != 'FS':
             # print 'on motion selector'
             if event.button == 1:
                 self.motion=True
@@ -530,6 +538,7 @@ class SelectL2(object):
             self.L.Gs.pos[self.nsel]=(x,y)
             segs = self.L.Gs[self.nsel]
             for s in segs:
+                print self.L.Gs.pos[s]
                 n1,n2=self.L.Gs[s].keys()
                 p1 = np.array(self.L.Gs.pos[n1])
                 p2 = np.array(self.L.Gs.pos[n2])
@@ -539,6 +548,7 @@ class SelectL2(object):
                 self.L.Gs.node[s]['norm']=norm
                 self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
                 self.L._shseg[s]=sh.LineString((p1,p2))
+
             self.L.g2npy()
             self.modeIni()
             self.new_state()
@@ -590,6 +600,8 @@ class SelectL2(object):
 
 
         if self.state == 'Init':
+            self.fsel = 0
+            self.L.display['nodes']=True
             self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
             self.ax.title.set_text(self.statename[self.state])
             self.selected_edge1 = 0
@@ -776,6 +788,24 @@ class SelectL2(object):
         #print self.state
         #print self.nsel
         #print self.selected_pt1
+
+
+        if 'FS' in self.state:
+            self.L.display['nodes'] = False
+            self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+            shk = self.L._shfaces.keys()
+            if self.fsel in shk:
+                ufsel = shk.index(self.fsel)
+                color = ['#abcdef']*len(shk)
+                color[ufsel]='#efaaaa'
+            else:
+                color = '#abcdef'
+            self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
+                                              fig=self.fig,
+                                              ax=self.ax,
+                                              color=color,
+                                              alpha=0.5)
+            # [self.ax.annotate(str(uf),(f.centroid.xy[0][0],f.centroid.xy[1][0])) for uf,f in self.L._shfaces.items()]
 
         #print self.selected_pt2
         self.fig.canvas.draw()
@@ -1161,6 +1191,7 @@ class SelectL2(object):
         #plt.axis('tight')
         plt.axis(self.L.display['box'])
         self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+
         self.state = 'Init'
         self.update_state()
 
@@ -1220,6 +1251,13 @@ class SelectL2(object):
         """ switch to SMS mode
         """
         self.state = "SMP"
+        self.update_state()
+
+    def modeFS(self):
+        """ switch to FS mode
+        """
+        self.state = "FS"
+        self.L._update_faces()
         self.update_state()
 
     def modetoggle(self):
@@ -1798,7 +1836,8 @@ class SelectL2(object):
             return
 
         if self.evt == 'f4' :
-            self.setorigin(parameter='O')
+            # toggle mode
+            self.modeFS()
             return
 
 

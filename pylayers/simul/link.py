@@ -2324,16 +2324,18 @@ class DLink(Link):
 
         defaults = {'fig':[],
                     'ax': [],
-                     'BWGHz':5,
-                    'Nf':1000,
+                    'BWGHz':5,
                     'rays':True,
                     'fspl':True,
                     }
+
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
+        taumax = max(self.H.taud)
+        Nf = kwargs['BWGHz']*taumax
         if kwargs['fig'] == []:
             fig = plt.gcf()
         else:
@@ -2342,20 +2344,6 @@ class DLink(Link):
             ax = plt.gca()
         else:
             ax = kwargs['ax']
-
-        # getcir is a Tchannel method 
-        ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
-        ir.plot(fig=fig,ax=ax)
-        delay = ir.x 
-        dist = delay*0.3
-        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
-        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
-        if kwargs['fspl']:
-            # Free space path loss
-            ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
-            # Free space path loss + gain
-            ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
-
 
         if kwargs['rays'] : 
             # energy of each ray
@@ -2367,6 +2355,22 @@ class DLink(Link):
             # most important rays , it=0 ir=0 , if =0 
             ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap='hot')
             ax.set_xlim([min(self.H.taud)-10,max(self.H.taud)+10])
+
+
+        # getcir is a Tchannel method 
+        ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=Nf)
+        ir.plot(fig=fig,ax=ax,fontsize=22)
+        delay = ir.x 
+        dist = delay*0.3
+        FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
+        FSPLG = FSPL0 + self.Aa.GdBmax[0] + self.Ab.GdBmax[0] 
+
+        if kwargs['fspl']:
+            # Free space path loss
+            ax.plot(delay,FSPL0,linewidth=2,color='b',label='FSPL')
+            # Free space path loss + gain
+            ax.plot(delay,FSPLG,linewidth=3,color='k',label='FSPL+Gtmax+Grmax')
+
 
         ax.legend()
         return fig,ax,ir

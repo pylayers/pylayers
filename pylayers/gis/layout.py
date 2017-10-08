@@ -183,7 +183,7 @@ from networkx.readwrite import write_gpickle, read_gpickle
 from mpl_toolkits.basemap import Basemap
 import shapely.geometry as sh
 import shapefile as shp
-from shapely.ops import cascaded_union
+from shapely.ops import cascaded_union,polygonize,polygonize_full
 from descartes.patch import PolygonPatch
 from numpy import array
 import PIL.Image as Image
@@ -439,8 +439,11 @@ class Layout(pro.PyLayers):
 
         self.Gt.pos = {}
 
+        self.faces={}
+
 
         self._shseg = {}
+        self._shfaces={}
         #
         # related files
         #
@@ -1979,7 +1982,7 @@ class Layout(pro.PyLayers):
         """ save Layout structure in a .lay file
 
         """
-        current_version = 1.3
+        current_version = 1.4
         if os.path.splitext(self._filename)[1]=='.ini':
             self._filename = self._filename.replace('.ini','.lay')
         #
@@ -1990,6 +1993,7 @@ class Layout(pro.PyLayers):
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
+        config.add_section("faces")
         config.add_section("files")
         config.add_section("slabs")
         config.add_section("materials")
@@ -2006,6 +2010,9 @@ class Layout(pro.PyLayers):
             config.add_section("indoor")
             config.set("indoor", "zceil", self.zceil)
             config.set("indoor", "zfloor", self.zfloor)
+            for n in self.faces:
+                face = {k:v for k,v in self.faces[n].items()}
+                config.set("faces", n, face)
 
         if self.typ == 'outdoor':
             config.add_section("outdoor")
@@ -2190,6 +2197,116 @@ class Layout(pro.PyLayers):
         # self.g2npy()
         self._hash = hashlib.md5(open(filelay, 'rb').read()).hexdigest()
 
+    def _create_faces(self):
+        '''
+        '''
+        # segments to be ignored
+        stbi = []
+        stbi.extend(self.name['_AIR'])
+        stbi.extend(self.name['AIR'])
+        stbi.extend(self.segboundary)
+        shseg = {k:v for k,v in self._shseg.items() if k not in stbi}
+        P = polygonize(cascaded_union(shseg.values()))
+        P = [geu.Polygon(p) for p in P]
+        [p.setvnodes(self) for p in P]
+
+        self.faces={}
+        fid = 1
+        for p in P:
+            self.faces.update({fid:
+                                {'vnodes':p.vnodes.tolist(),
+                                'name':['FLOOR','CEIL'],
+                                'z':[self.zfloor,self.zceil]
+                                }
+                             })
+            self._shfaces[fid]=geu.Polygon(p.xy,vnodes=p.vnodes)
+            fid += 1
+
+
+    def _update_faces(self):
+
+        stbi = []
+        stbi.extend(self.name['_AIR'])
+        stbi.extend(self.name['AIR'])
+        stbi.extend(self.segboundary)
+        shseg = self._shseg
+        shseg = {k:v for k,v in self._shseg.items() if k not in stbi}
+        P = polygonize(cascaded_union(shseg.values()))
+        P =[geu.Polygon(p,L=self) for p in P]
+        lc = [p.centroid.xy for p in P]
+        lvn = [tuple(p.vnodes) for p in P]
+        ftbr = []
+        for uf,f in self._shfaces.items():
+
+            #if polygon already exist
+            if tuple(f.vnodes) in lvn:
+                # if condition => no vnodes have been moved
+                # exact same polygon
+                if f.centroid.xy in lc:
+                    print(uf,'vnode idem, centroid idem')
+                    # polygon of P already exists
+                    # no need for further processing
+                    up = lc.index(f.centroid.xy)
+                    P.pop(up)
+                    lc.pop(up)
+                    lvn.pop(up)
+                # same vnodes but different centroid
+                # vnodes have been moved
+                else:
+                    print(uf,'vnode idem, centroid diff')
+                    # replace the _shface polygon with updated vnodes
+                    uvn = lvn.index(tuple(f.vnodes))
+                    p=P[uvn]
+                    P.pop(uvn)
+                    lc.pop(uvn)
+                    lvn.pop(uvn)
+                    self._shfaces[uf]=geu.Polygon(p.xy,vnodes=f.vnodes)
+            elif f.centroid.xy in lc:
+                print(uf,'centroid idem, vnode diff')
+
+                # polygon of P already exists
+                # but not with the same vnodes 
+                # vnodes have been added
+                # replace the _shface polygon with updated vnodes
+                up = lc.index(f.centroid.xy)
+                p=P[up]
+                P.pop(up)
+                lc.pop(up)
+                lvn.pop(up)
+                self._shfaces[uf]=geu.Polygon(p.xy,vnodes=f.vnodes)
+
+            else:
+                print(uf,'new')
+                ftbr.append(uf)
+        [self.faces.pop(f) for f in ftbr]
+        [self._shfaces.pop(f) for f in ftbr]
+        # Remaining Polygon in P are new polygons/faces
+        if len(self.faces) == 0:
+            maxID=1
+        else:
+            maxID = max(self.faces.keys())
+        freeID = [i for i in range(1,maxID) if i not in self.faces]
+        initID = True
+        for up,p in enumerate(P):
+            if len(freeID) !=0:
+                fid = freeID.pop(0)
+            elif initID:
+                fid = maxID +1 
+                initID = False
+
+            self.faces.update({fid:
+                                {'vnodes':p.vnodes.tolist(),
+                                'name':['FLOOR','CEIL'],
+                                'z':[self.zfloor,self.zceil]
+                                }
+                             })
+            self._shfaces[fid]=geu.Polygon(p.xy,vnodes=p.vnodes)
+            if len(freeID) ==0:
+                fid += 1
+
+
+
+
     def load(self):
         """ load a layout  from a .lay file
 
@@ -2275,6 +2392,7 @@ class Layout(pro.PyLayers):
         if self.typ == 'indoor':
             self.zceil = eval(di['indoor']['zceil'])
             self.zfloor = eval(di['indoor']['zfloor'])
+
 
         # old format 
         if self.typ == 'floorplan':
@@ -2496,6 +2614,20 @@ class Layout(pro.PyLayers):
             self.display['overlay_flip'] = ""
             self.display.pop('inverse')
             self.save()
+
+
+
+        if self.typ == 'indoor':
+            if self.version >= '1.4' :
+                for k,v in di['faces'].items():
+                    self.faces.update({eval(k):eval(v)})
+                    vn = self.faces[eval(k)]['vnodes']
+                    pos = [self.Gs.pos[i] for i in vn]
+                    self._shfaces[eval(k)]=geu.Polygon(pos,vnodes=vn)
+            else:
+                self._create_faces()
+
+
 
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
@@ -3142,13 +3274,16 @@ class Layout(pro.PyLayers):
             self.del_segment(k)
             print('del ', k)
         # 2) delete involved points
+
         for n1 in lp:
             assert(n1 < 0)
-            nbrs = self.Gs.neighbors(n1)
-            self.Gs.remove_node(n1)
-            del self.Gs.pos[n1]
-            self.labels.pop(n1)
-            self.Np = self.Np - 1
+            # to manage case where point has already been deleted by del_seg
+            if n1 in self.Gs.nodes():
+                nbrs = self.Gs.neighbors(n1)
+                self.Gs.remove_node(n1)
+                del self.Gs.pos[n1]
+                self.labels.pop(n1)
+                self.Np = self.Np - 1
         # 3) updating structures
         self.g2npy()
 
@@ -3181,6 +3316,8 @@ class Layout(pro.PyLayers):
             assert(e > 0)
             name = self.Gs.node[e]['name']
             iso = self.Gs.node[e]['iso']
+            connect = self.Gs.node[e]['connect']
+            # delete iso if required
             [self.Gs.node[i]['iso'].remove(e) for i in iso 
              if e in self.Gs.node[i]['iso']]
             del self.Gs.pos[e]  # delete edge position
@@ -3189,8 +3326,8 @@ class Layout(pro.PyLayers):
             self.Ns = self.Ns - 1
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
-            # delete iso if required
-
+            # del free node if required
+            [self.del_points(i) for i in connect if len(self.Gs[i]) == 0]
             try:
                 # remove shapely seg
                 self._shseg.pop(e)
@@ -6006,17 +6143,25 @@ class Layout(pro.PyLayers):
         plt.axis(self.ax)
         plt.draw()
 
-    def pltpoly(self, poly, fig=[], ax=[], color='r', alpha=0.2):
+    def pltpoly(self, poly, fig=[], ax=[], color='', alpha=0.2):
         """  plot a polygon with a specified color and transparency
         """
         if fig == []:
             fig = plt.gcf()
         if ax == []:
             ax = plt.gca()
+        if not isinstance(poly,list):
+            poly=[poly]
+        if isinstance(color,str):
+            if color == '':
+                color = plu.random_color(len(poly))
+            else:
+                color=[color]*len(poly)
+
         try:
-            mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in poly]
+            mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate(poly)]
         except:
-            mpl = [PolygonPatch(x, alpha=alpha, color=color) for x in [poly]]
+            mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate([poly])]
         [ax.add_patch(x) for x in mpl]
         plt.axis(self.ax)
         plt.draw()
@@ -10429,6 +10574,7 @@ class Layout(pro.PyLayers):
         else:
             return False
 
+
     def ispoint(self, pt, tol=0.05):
         """ check if pt is a point of the Layout
 
@@ -10470,6 +10616,46 @@ class Layout(pro.PyLayers):
             else:
                 mi = np.where(min(v[nup]) == v[nup])[0]
                 return(ke[nup[mi]][0])
+
+
+    def isface(self,pt):
+        """ check if pt is in a face
+
+        Parameters
+        ----------
+
+        pt  : point (2,1)
+        
+
+        f:     0 if it not exists
+           face number if point exists 
+           if several faces are superimposed, 
+           the one with mallest area is return
+
+        """
+
+        P = sh.Point(pt)
+        shfk = self._shfaces.keys()
+        shfv = self._shfaces.values()
+
+        bcheck = [P.within(l) for l in  shfv]
+        sbc = sum(bcheck)
+        if sbc == 0:
+            # point is not in a face
+            return 0
+        elif sbc == 1:
+            # point is in a face
+            u = bcheck.index(True)
+            return shfk[u]
+        else:
+            # point in several faces
+            # return the smallest one 
+            uc = np.where(bcheck)[0]
+            vsh = [shfk[i] for i in uc]
+            area = np.array([self._shfaces[i].area for i in vsh])
+            return vsh[np.argmin(area)]
+
+
 
     def onseg(self, pt, tol=0.01):
         """ segment number from point (deprecated)

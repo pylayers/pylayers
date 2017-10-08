@@ -520,7 +520,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
     """
 
-    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[], delta=0):
+    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[], L=[],delta=0):
         """ object constructor
 
         Parameters
@@ -577,6 +577,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             tu = tuple(tp)
             shg.Polygon.__init__(self, tu)
 
+            self.xy = p
         self.Np = np.shape(self.exterior.xy)[1] - 1
 
         if vnodes != []:
@@ -587,6 +588,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
             if self.vnodes[0] > 0:
                 self.vnodes = np.roll(self.vnodes, -1)
                 print ('WARNING : Polygon.vnodes == Polygon.ndarray() modulo -1')
+        elif L!= []:
+            self.setvnodes(L)
         else:
             # create sequence
             #
@@ -733,7 +736,7 @@ class Polygon(pro.PyLayers, shg.Polygon):
             else:
                 nseg = list(nseg)
             vnodes = vnodes + nseg
-
+        self.xy = np.array([x,y])
         # pdb.set_trace()
         # try:
         #     nseg = map(lambda x : L.numseg(x[0],x[1],first=False),seg)
@@ -4186,26 +4189,26 @@ def v_color(ob):
 
 
 # def createPolygons(
-def plotPolygon(poly, color="#abcdef", alpha=0.8):
-    """ plot a shapely Polygon
 
-    Parameters
-    ----------
-
-    poly  : shapely polygon
-    color : default "#abcdef"
-    alpha : float
-           transparency   (default 0.8)
+def plotPolygon(poly, fig=[], ax=[], color='r', alpha=0.2):
+    """  plot a shapely polygon with a specified color and transparency
     """
-    fig = plt.gcf()
-    gax = fig.get_axes()
-    if len(gax) != 0:
-        ax = gax[0]
-    else:
-        ax = fig.add_subplot(111)
-    patch = PolygonPatch(poly, facecolor=color, alpha=alpha)
-    ax.add_patch(patch)
-    plt.show()
+    if fig == []:
+        fig = plt.gcf()
+    if ax == []:
+        ax = plt.gca()
+    if not isinstance(poly,list):
+        poly = [poly]
+    if isinstance(color,str):
+        color=[color]*len(poly)
+    try:
+        mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate(poly)]
+    except:
+        mpl = [PolygonPatch(x, alpha=alpha, color=color[ux]) for ux,x in enumerate([poly])]
+    [ax.add_patch(x) for x in mpl]
+    # plt.axis(ax)
+    plt.draw()
+    return fig,ax
 
 
 def shrinkPolygon(poly, d=0.1):

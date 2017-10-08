@@ -25,6 +25,8 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+from shapely.ops import polygonize
+import shapely as sh
 
 
 from pylayers.gis.layout import *
@@ -36,7 +38,7 @@ import sys
 import pdb
 
 
-class SubSegWin(QDialog):    # any super class is okay
+class SubSegWin(QDialog):
     def __init__(self,idx,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
@@ -91,21 +93,7 @@ class SubSegWin(QDialog):    # any super class is okay
         vbox.addLayout(hboxl2)
         vbox.addLayout(hbox2)
 
-        # vbox.addWidget(self.Hline())
-        # # Indicate Floor
-        # hboxfloor = QHBoxLayout()
-        # floorlabel = QLabel('Floor')
-        # floorlabel.setStyleSheet("font: bold 14px;")
-        # hboxfloor.addWidget(floorlabel)
-        # hboxfloor.setAlignment(Qt.AlignCenter)
-        # vbox.addLayout(hboxfloor)
-
-
-
-        # validation
-        # buttono=QPushButton("Cancel")
         buttonc=QPushButton("Delete")
-        # buttono.clicked.connect(self.valide)
         buttonc.clicked.connect(self.cancel)
 
         hboxDial = QHBoxLayout()
@@ -214,7 +202,160 @@ class SubSegWin(QDialog):    # any super class is okay
         self.close()
 
 
-class PropertiesWin(QDialog):    # any super class is okay
+class FacePropertiesWidget(QDialog):
+    def __init__(self,label=[],slname=[],z=[],parent=None):
+        super(FacePropertiesWidget, self).__init__(parent)
+        #
+        self.gparent=parent.parent
+        self.parent=parent
+        self.label=label
+        self.slname=slname
+        self.z = z
+        self._init_combo()
+        self._init_layout()
+
+    def _init_combo(self):
+
+        # init combo slab for ceil
+        self.combo = QComboBox()
+        for s in self.gparent.slabname:
+            self.combo.addItem(s)
+        self.idx=self.combo.findText(self.slname)
+        self.combo.setCurrentIndex(self.idx)
+
+
+    def _init_layout(self):
+        # main layout
+
+        hbox = QHBoxLayout()
+        label = QLabel(self.label)
+        label.setStyleSheet("font: bold 14px;")
+        # ceillabel.setAlignment(Qt.AlignCenter)
+        hbox.addWidget(label)
+        hbox.addWidget(self.combo)
+
+        self.setLayout(hbox)
+
+
+class FacePropertiesWin(QDialog):
+
+
+    def __init__(self,parent=None):
+        super(FacePropertiesWin, self).__init__(parent)
+        # to imporve here. Probably something to inherit from parent App
+        self.parent=parent
+        # determine if multiple se gments are selected
+        self._init_faces_info()
+        self._init_layout()
+
+
+
+    def _init_faces_info(self):
+
+        # find selected face
+        self.fid = self.parent.selectl.fsel
+        # get faces dict
+        self.df = self.parent.L.faces[self.fid]
+        # get slab list for given face
+        self.lsl = self.df['name']
+        # get z list for given face
+        self.lz = self.df['z']
+
+
+    def _init_layout(self):
+        # main layout
+        self.mainLayout = QVBoxLayout()
+
+        # scroll area widget contents - layout
+        self.scrollLayout = QFormLayout()
+
+        # scroll area widget contents
+        self.scrollWidget = QWidget()
+        self.scrollWidget.setLayout(self.scrollLayout)
+
+        # scroll area
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setWidget(self.scrollWidget)
+
+        # main layout
+        self.mainLayout = QVBoxLayout()
+        self.mainLayout.addWidget(self.scrollArea)
+
+
+        buttono=QPushButton("OK")
+        buttonc=QPushButton("Cancel")
+        buttono.clicked.connect(self.valide)
+        buttonc.clicked.connect(self.cancel)
+
+        hboxDial = QHBoxLayout()
+        hboxDial.addWidget(buttonc)
+        hboxDial.addWidget(buttono)
+
+
+        # create Layout
+        vbox = QVBoxLayout()
+        vbox.addLayout(self.mainLayout)
+        vbox.addLayout(hboxDial)
+
+        self.setLayout(vbox)
+
+        self.dfW = {}
+        self.widx = 0
+
+        self.zo = np.argsort(self.lz)[::-1]
+
+
+        for uk,k in enumerate(self.zo):
+            if uk == 0: 
+                name = 'CEIL'
+                z = self.parent.L.zceil
+            elif uk == len(self.zo)-1:
+                name = 'FLOOR' 
+                z = self.parent.L.zfloor
+            else:
+                name = ""
+                z = self.lz[k]
+            self.addWidget(label=name, slname=self.lsl[k],z=self.lz[k])
+
+
+
+
+    def addWidget(self,label='',slname='',z=[]):
+        self.dfW.update({self.widx:FacePropertiesWidget(label=label,slname=slname,z=z,parent=self)})
+        self.scrollLayout.addRow(self.dfW[self.widx])
+        self.widx = self.widx +1
+
+
+    def valide(self):
+        """ ok click
+        """
+        lz=[]
+        lname = []
+        for w in self.dfW.values():
+            # get nodes
+            z = w.z
+            name = str(w.combo.currentText())
+            lz.append(z)
+            lname.append(name)
+
+        lz = np.array(lz)
+        lname = np.array(lname)
+        o = np.argsort(lz)
+
+
+        self.parent.L.faces[self.fid]['name']=lname[o].tolist()
+        self.parent.L.faces[self.fid]['z']=lz[o].tolist()
+
+        self.close()
+
+    def cancel(self):
+        """ cancel click
+        """
+        self.close()
+
+
+class PropertiesWin(QDialog):
 
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
@@ -471,7 +612,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
 
 
-class SaveQuitWin(QDialog):    # any super class is okay
+class SaveQuitWin(QDialog):
     def __init__(self,exit=False,parent=None):
         super(SaveQuitWin, self).__init__(parent)
         self.setWindowTitle('Do you want to save?')
@@ -524,7 +665,7 @@ class SaveQuitWin(QDialog):    # any super class is okay
         self.close()
 
 
-class NewLayout(QDialog):    # any super class is okay
+class NewLayout(QDialog):
     def __init__(self,parent=None,overlay={}):
         super(NewLayout, self).__init__(parent)
         self.parent=parent
@@ -890,7 +1031,7 @@ class Overset(QMainWindow):
         self.close()
 
 
-class GridSet(QDialog):    # any super class is okay
+class GridSet(QDialog):
     def __init__(self,parent=None):
         super(GridSet, self).__init__(parent)
         self.setWindowTitle('Set Grid')
@@ -988,6 +1129,8 @@ class AppForm(QMainWindow):
 
     def __loaddebug(self):
         self.L = Layout('defstr.lay')
+        # [self.L.del_segment(i) for i in self.L.segboundary]
+        # self.L._create_faces()
         self.filename = self.L._filename
         self.create_main_frame()
         self.on_draw()
@@ -1011,6 +1154,7 @@ class AppForm(QMainWindow):
         if filename != '':
             _filename = pyu.getshort(str(filename))
             self.L = Layout(_filename)
+            [self.L.del_segment(i) for i in self.L.segboundary]
             self.filename = self.L._filename
             self.create_main_frame()
             self.on_draw()
@@ -1092,8 +1236,13 @@ class AppForm(QMainWindow):
             self.selectl.toggle()
             self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
-
+        elif (self.selectl.state == 'FS' ) and (self.selectl.fsel !=0 ):
+            self.prop = FacePropertiesWin(parent=self)
+            self.prop.show()
         # self.on_draw()
+
+
+
 
     def editgrid(self):
         grid = GridSet(parent=self)
@@ -1152,7 +1301,6 @@ class AppForm(QMainWindow):
         QApplication.setOverrideCursor(QCursor(Qt.CrossCursor))
         self.L.display['activelayer']=str(self.layerselector.currentText())
         self.selectl.current_layer=self.L.display['activelayer']
-
         slname={}
         slname['name']=str(self.layerselector.currentText())
         if not slname['name'] in self.L.name:
@@ -1164,7 +1312,13 @@ class AppForm(QMainWindow):
         self.statusBar().showMessage(string)
 
 
-
+    def sfswitch(self):
+        if self.selectl.state == 'FS':
+            self.selectl.modeIni()
+        else:
+            self.selectl.modeFS()
+        string = self.selectl.help[self.selectl.state]
+        self.statusBar().showMessage(string)
 
     def on_about(self):
         msg = """ This is the PyLayers' Stand-Alone Layout Editor (Alpha)
@@ -1180,6 +1334,7 @@ class AppForm(QMainWindow):
          F1 : Select mode
          F2 : New segment with current active Layer
          F3 : Edit segment properties
+         F4 : Toggle segments / faces view
 
          g : toggle grid
          ctrl+g : choose grid properties
@@ -1387,6 +1542,8 @@ class AppForm(QMainWindow):
             shortcut="F10", tip="Refresh the application")
         properties= self.create_action("&Properties", slot=self.edit_properties,
             shortcut="F3", tip="Edit Wall properties")
+        faces= self.create_action("&Segments/Faces", slot=self.sfswitch,
+            shortcut="F4", tip="Seg/Faces switch")
         # show3= self.create_action("&Properties", slot=self.edit_properties,
         #     shortcut="F9", tip="3D show")
 
@@ -1418,7 +1575,7 @@ class AppForm(QMainWindow):
             ( new_action,new_overlay,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
+            ( select_action,draw_action,properties,faces,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
         self.add_actions(self.view_menu, (view3D_action,chgoverlay_action,toggleover_action))
 
@@ -1473,6 +1630,12 @@ class AppForm(QMainWindow):
         editAction = QAction(QIcon(os.path.join(iconpath,'gnome_accessories_text_editor.png')), 'Edit Segments', self)
         editAction.triggered.connect(self.edit_properties)
         self.toolbar.addAction(editAction)
+
+        # #switch faces segments
+        sfswitchAction = QAction(QIcon(os.path.join(iconpath,'seg_faces.png')), 'Segments / Faces', self)
+        sfswitchAction.triggered.connect(self.sfswitch)
+        self.toolbar.addAction(sfswitchAction)
+
 
         self.toolbar.addSeparator()
 
