@@ -5072,32 +5072,88 @@ def mirror3c(tp, aplane, pplane):
     # T (3 x Nplane,3)
     T = np.concatenate((aplane,norm[:,:,None,:]),axis=2)
     # take last transformation matrix 
+    # T_ : s x v x c 
     T_ = T[:,-1,:,:]
-    # v : 3 x 1 x n 
+    # pplane            : s x f x c 
+    # pplane[:,[-1],:]  : s x 1 x c 
+    # p                 : s x 1 x p x c 
+    # v                 : s x 1 x p x c 
     v  = p-pplane[:,[-1],:][:,:,None,:]
     # go to frame attached to reflection plane
-    #Tpmp = np.dot(T_.T,v)
-    # Tpmp : 3 x 1 x n 
-    TT = np.swapaxes(T_,0,1)
-    Tpmp = np.einsum('svm,vlnm->slnm',TT,v)
+    # TT : v x s x c 
+    #TT = np.swapaxes(T_,0,1)
+    # TT  
+    # Tpmp = np.einsum('svm,vlnm->slnm',TT,v)
+    #Tpmp = np.einsum('vsc,sfpc->vfpc',TT,v)
+    Tpmp = np.einsum('svc,sfpc->vfpc',T_,v)
     # apply symmetry 
     R  = np.eye(3)
     R[2,2] = -1 
     R  = R[:,:,None] 
     #RTpmp = np.dot(R,Tpmp)
-    RTpmp = np.einsum('svm,vlnm->slnm',R,Tpmp)
+    #RTpmp = np.einsum('svm,vlnm->slnm',R,Tpmp)
+    RTpmp = np.einsum('svc,vfpc->sfpc',R,Tpmp)
     #go back to global frame 
     #TTRTpmp = np.dot(T_,RTpmp)
-    TTRTpmp = np.einsum('svm,vlnm->slnm',T_,RTpmp)
+    #TTRTpmp = np.einsum('svm,vlnm->slnm',T_,RTpmp)
+    TTRTpmp = np.einsum('vsc,sfpc->vfpc',T_,RTpmp)
     # append image to list of points 
     pim = TTRTpmp + pplane[:,[-1]][:,:,None,:]  
     tp = np.concatenate((tp,pim),axis=1)
     # if there are other plane enter recursion 
     if Nplane>1:
-        tp = mirror3b(tp,aplane[:,0:-1,:,:],pplane[:,0:-1,:])
+        tp = mirror3c(tp,aplane[:,0:-1,:,:],pplane[:,0:-1,:])
 
     return tp
 
+def intersect3c(tp, ti, aplane, pplane):
+    # take last points of the sequence tp 
+    # tp :  (s x f x p x c ) 
+    # p : s x 1 x p x c 
+    #
+    p0 = tp[:,[-1],:,:]
+    p1 = ti[:,[-1],:,:]
+    Nplane = aplane.shape[1]# vector plane normalisation
+    # norm : 3 x Nplane 
+    norm  = np.cross(aplane[:,:,0,:],aplane[:,:,1,:],axis=0)
+    # T change basis matrix
+    # s x f x v x c 
+    # T (3 x Nplane,3)
+    T = np.concatenate((aplane,norm[:,:,None,:]),axis=2)
+    # take last transformation matrix 
+    # T_ : s x v x c 
+    T_ = T[:,-1,:,:]
+    # pplane            : s x f x c 
+    # pplane[:,[-1],:]  : s x 1 x c 
+    # p                 : s x 1 x p x c 
+    # v                 : s x 1 x p x c 
+    v  = p-pplane[:,[-1],:][:,:,None,:]
+    # go to frame attached to reflection plane
+    # TT : v x s x c 
+    #TT = np.swapaxes(T_,0,1)
+    # TT  
+    # Tpmp = np.einsum('svm,vlnm->slnm',TT,v)
+    #Tpmp = np.einsum('vsc,sfpc->vfpc',TT,v)
+    Tpmp = np.einsum('svc,sfpc->vfpc',T_,v)
+    # apply symmetry 
+    R  = np.eye(3)
+    R[2,2] = -1 
+    R  = R[:,:,None] 
+    #RTpmp = np.dot(R,Tpmp)
+    #RTpmp = np.einsum('svm,vlnm->slnm',R,Tpmp)
+    RTpmp = np.einsum('svc,vfpc->sfpc',R,Tpmp)
+    #go back to global frame 
+    #TTRTpmp = np.dot(T_,RTpmp)
+    #TTRTpmp = np.einsum('svm,vlnm->slnm',T_,RTpmp)
+    TTRTpmp = np.einsum('vsc,sfpc->vfpc',T_,RTpmp)
+    # append image to list of points 
+    pim = TTRTpmp + pplane[:,[-1]][:,:,None,:]  
+    tp = np.concatenate((tp,pim),axis=1)
+    # if there are other plane enter recursion 
+    if Nplane>1:
+        tp = intersect3c(tp,aplane[:,0:-1,:,:],pplane[:,0:-1,:])
+
+    return tp
 def mirror3(tp, aplane, pplane):
     """ compute recursively the image of p wrt the list of facet 
     
