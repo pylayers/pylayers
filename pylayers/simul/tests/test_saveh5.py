@@ -17,7 +17,7 @@ from mayavi.scripts import mayavi2
 
 S = Simul()
 filestr = 'TA-Office'
-S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
+S.layout(filestr+'.lay','matDB.ini','slabDB.ini')
 try:
     S.L.dumpr()
 except:
