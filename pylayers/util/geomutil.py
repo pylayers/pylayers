@@ -5110,6 +5110,20 @@ def mirror3c(tp, aplane, pplane):
     return tp
 
 def intersect3c(tp, ti, aplane, pplane):
+    """ get ray3d interaction points from images 
+
+    tp : np.array
+        sequence of ray intercation from Rx to Tx 
+    ti : np.array 
+        sequence of images 
+    aplane : np.array 
+        faces vectors  
+    pplane : 
+        faces points 
+    lplane : 
+        faces length 
+
+    """
     # take last points of the sequence tp 
     # tp :  (s x f x p x c ) 
     # p : s x 1 x p x c 
