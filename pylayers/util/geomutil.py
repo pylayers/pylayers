@@ -232,6 +232,12 @@ def ispoint(tpts, pt, tol=0.05):
                 mi = np.where(min(v[nup]) == v[nup])[0]
                 return(ke[nup[mi]][0])
 
+
+def convexify(poly):
+    """
+    turn a polygon into a list of convex polygons
+    """
+
 def isconvex(poly, tol=1e-2):
     """ Determine if a polygon is convex
 

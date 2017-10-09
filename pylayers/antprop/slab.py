@@ -1814,7 +1814,7 @@ class SlabDB(dict):
         st = 'List of Slabs\n'
         st = st + '-----------------------------'+'\n'+'\n'
         for i in self.keys():
-            st = st + self[i].__repr__()
+            st = st + self[i].__init__repr__()
         #    S.info()
         #st =      "Slab file name     : " + self.fileslab+ '\n'
         #st = st + "Material file name : " +  self.mat.fileini+'\n'

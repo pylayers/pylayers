@@ -2312,7 +2312,7 @@ class Layout(pro.PyLayers):
 
         The filename is in self._filename
 
-        Format version 1.3
+        Format version 1.4
         ------------------
 
         [info]
@@ -2325,6 +2325,9 @@ class Layout(pro.PyLayers):
 
         [segments]
         1 = {'slab':'',transition:boolean,'connect:[-1,-2],'z':(0,3)}
+
+        [faces]
+        1 = {'vnodes':[],'z':[],'name'=[]}
 
         [slabs]
         WALL = {'lthick':[,],'lmat':[,],'color:'','linewidth':float}
@@ -6387,7 +6390,6 @@ class Layout(pro.PyLayers):
 
         # mapping between Gs graph segments and triangle segments
         segments = sorter[np.searchsorted(map_vertices, seg, sorter=sorter)]
-
         if holes == []:
             C = {'vertices': vertices, 'segments': segments}
         else:
@@ -6400,6 +6402,59 @@ class Layout(pro.PyLayers):
         # plot.plot(ax,**T)
         # plt.show()
         return T, map_vertices
+
+    def _convexify_faces(self):
+
+        pGt = []
+        # loop over shaeply faces' polygons
+        for k,f in self._shfaces.items():
+            # nothing mode to do thanconnecting polygon
+            if f.isconvex():
+                pGt.append(f)
+            else:
+
+                # 1 triangulate
+                seg = [nx.neighbors(self.Gs, x) for x in f.vnodes if x>0]
+                pts = f.vnodes[f.vnodes<0]
+                ivertices = np.array([(x, self.Gs.pos[x][0], self.Gs.pos[x][1]) for x in pts])
+                map_vertices = ivertices[:, 0]
+                vertices = ivertices[:, 1:]
+                sorter = np.argsort(map_vertices)
+                # mapping between Gs graph segments and triangle segments
+                segments = sorter[np.searchsorted(map_vertices, seg, sorter=sorter)]
+                C = {'vertices': vertices, 'segments': segments}
+                T = triangle.triangulate(C, 'pa')
+                # create minimal polygons from triangle
+                map_vertices = map_vertices.astype(int)
+                ptri = T['vertices'][T['triangles']]
+                lTP = [geu.Polygon(x) for x in ptri]
+                mP = []
+                P=lTP
+                i=1
+                while len(P)>1 :
+                    if i>= len(P):
+                        mP.append(P.pop(0))
+                        i=1
+                    p0=P[0]
+                    p1=P[i]
+                    try:
+                        pm = p0 + p1
+                    except:
+                        pm = None
+                    if pm != None:
+                        if pm.isconvex():
+                            P.remove(p0)
+                            P.remove(p1)
+                            P.insert(0,pm)
+                            i=1
+                        else:
+                            i+=1
+                    else:
+                        i+=1
+                mP.append(P.pop(0))
+                pGt.extend(mP)
+        return pGt
+
 
     def buildGt(self, check=True,difftol=0.01,verbose=False,tqdmpos=0):
         """ build graph of convex cycle 
@@ -6475,7 +6530,7 @@ class Layout(pro.PyLayers):
         # luaw  : list of tuples
         # ( polygon , array of _AIR segments)
         pbartmp = pbar(verbose,total=100., 
-                        desc ='Buiild list of airwalls',
+                        desc ='Build list of airwalls',
                         leave=True,
                         position=tqdmpos+1)
         luaw = [(p, np.where(p.vnodes == 0)[0]) for p in lTP]
