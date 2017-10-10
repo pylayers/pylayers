@@ -1684,13 +1684,15 @@ class AppForm(QMainWindow):
             self.slabname= self.slabDB.keys()
             self.slabname.sort()
             for s in self.slabname:
-                self.layerselector.addItem(s)
+                if s != '_AIR':
+                    self.layerselector.addItem(s)
             self.toolbar.addWidget(self.layerselector)
         except:
             pass
         if 'PARTITION' in self.slabname:
             idx=self.layerselector.findText('PARTITION')
             self.layerselector.setCurrentIndex(idx)
+
         self.layerselector.activated.connect(self.updatelayerselector)
 
 
