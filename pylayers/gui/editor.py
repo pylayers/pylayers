@@ -1306,6 +1306,7 @@ class AppForm(QMainWindow):
         if not slname['name'] in self.L.name:
             slab = self.slabDB[slname['name']]
             self.L.sl + slab
+
         self.selectl.modeCP()
         string = self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
