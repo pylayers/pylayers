@@ -7016,19 +7016,19 @@ class Layout(pro.PyLayers):
         self.Gt.pos = {}
         self.Gt.pos = {nl[n]: pos[n] for n in nl}
 
-        Gtn = self.Gt.nodes()
-        pGt = np.array([self.Gt.pos[n] for n in Gtn])
-        for fk in self.faces.keys():
-            pf = self.faces[fk]['poly']
-            # xym = np.min(pf.xy,axis=1)
-            # xyM = np.max(pf.xy,axis=1)
-            # uclip = (pGt[:,0]<xyM[0]) & (pGt[:,0]>xym[0]) & (pGt[:,1]<xyM[1]) & (pGt[:,1]>xym[1])
-            # [self.Gt.node[c]['polyg'].within(pf) for c in Gtn if uclip[c]]
-            for c in self.Gt.nodes():
-                if self.Gt.node[c]['polyg'].within(pf):
-                    self.Gt.node[c]['name']=self.faces[fk]['name']
-                    self.Gt.node[c]['z']=self.faces[fk]['z']
-                    break
+        # Gtn = self.Gt.nodes()
+        # pGt = np.array([self.Gt.pos[n] for n in Gtn])
+        # for fk in self.faces.keys():
+        #     pf = self.faces[fk]['poly']
+        #     # xym = np.min(pf.xy,axis=1)
+        #     # xyM = np.max(pf.xy,axis=1)
+        #     # uclip = (pGt[:,0]<xyM[0]) & (pGt[:,0]>xym[0]) & (pGt[:,1]<xyM[1]) & (pGt[:,1]>xym[1])
+        #     # [self.Gt.node[c]['polyg'].within(pf) for c in Gtn if uclip[c]]
+        #     for c in self.Gt.nodes():
+        #         if self.Gt.node[c]['polyg'].within(pf):
+        #             self.Gt.node[c]['name']=self.faces[fk]['name']
+        #             self.Gt.node[c]['z']=self.faces[fk]['z']
+        #             break
 
 
         self._updGsncy()
