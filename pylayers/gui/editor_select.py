@@ -793,14 +793,15 @@ F3: Edit Segments properties, F4 : Edit Faces (Ceil/FLoor)',
         if 'FS' in self.state:
             self.L.display['nodes'] = False
             self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-            shk = self.L._shfaces.keys()
+            shk = self.L.faces.keys()
             if self.fsel in shk:
                 ufsel = shk.index(self.fsel)
                 color = ['#abcdef']*len(shk)
                 color[ufsel]='#efaaaa'
             else:
                 color = '#abcdef'
-            self.fig,self.ax = geu.plotPolygon(self.L._shfaces.values(),
+            shfaces = [self.L.faces[f]['poly'] for f in shk]
+            self.fig,self.ax = geu.plotPolygon(shfaces,
                                               fig=self.fig,
                                               ax=self.ax,
                                               color=color,
