@@ -2212,6 +2212,7 @@ class Layout(pro.PyLayers):
 
         self.faces={}
         fid = 1
+        mP = []
         for p in P:
             self.faces.update({fid:
                                 {'vnodes':p.vnodes.tolist(),
@@ -2221,12 +2222,17 @@ class Layout(pro.PyLayers):
                                 }
                              })
             fid += 1
+            mP.extend(P)
+
+
+        
+
 
 
     def _update_faces(self):
 
         stbi = []
-        stbi.extend(self.name['_AIR'])
+        # stbi.extend(self.name['_AIR'])
         stbi.extend(self.name['AIR'])
         stbi.extend(self.segboundary)
         shseg = self._shseg
@@ -6510,6 +6516,24 @@ class Layout(pro.PyLayers):
         import ipdb
         ipdb.set_trace()
 
+        mP = nx.get_node_attributes(self.Gt,'polyg').values()
+        mP = cascaded_union(mP)
+
+        shseg = {k:v for k,v in self._shseg.items() if k in self.segboundary}
+        P = polygonize(cascaded_union(shseg.values()))
+        lmask = [p.difference(mP) for p in P]
+        
+        import ipdb
+        ipdb.set_trace()
+        for p in lmask:
+            self.faces.update({fid:
+                                {'vnodes':p.vnodes.tolist(),
+                                'name':['FLOOR','CEIL'],
+                                'z':[self.zfloor,self.zceil],
+                                'poly':geu.Polygon(p.xy,vnodes=p.vnodes)
+                                }
+                             })
+            fid += 1
 
 
         # update Gt.pos
@@ -6991,6 +7015,21 @@ class Layout(pro.PyLayers):
         self.Gt = nx.relabel_nodes(self.Gt, nl)
         self.Gt.pos = {}
         self.Gt.pos = {nl[n]: pos[n] for n in nl}
+
+        Gtn = self.Gt.nodes()
+        pGt = np.array([self.Gt.pos[n] for n in Gtn])
+        for fk in self.faces.keys():
+            pf = self.faces[fk]['poly']
+            # xym = np.min(pf.xy,axis=1)
+            # xyM = np.max(pf.xy,axis=1)
+            # uclip = (pGt[:,0]<xyM[0]) & (pGt[:,0]>xym[0]) & (pGt[:,1]<xyM[1]) & (pGt[:,1]>xym[1])
+            # [self.Gt.node[c]['polyg'].within(pf) for c in Gtn if uclip[c]]
+            for c in self.Gt.nodes():
+                if self.Gt.node[c]['polyg'].within(pf):
+                    self.Gt.node[c]['name']=self.faces[fk]['name']
+                    self.Gt.node[c]['z']=self.faces[fk]['z']
+                    break
+
 
         self._updGsncy()
         if verbose:
