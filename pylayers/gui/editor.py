@@ -1170,10 +1170,11 @@ class AppForm(QMainWindow):
             _filename,ext = os.path.splitext(_filename)
             if ext == '':
                 _filename = _filename + '.lay'
-            self.L._filename = _filename
+            self.L._filename = _filename + ext
         else :
             _filename=self.L._filename
-
+        import ipdb
+        ipdb.set_trace()
         oldCursor = QCursor()
         QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
         self.filename=self.L._filename
