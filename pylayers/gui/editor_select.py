@@ -199,7 +199,7 @@ F3: Edit Segments properties, F4 : Edit Faces (Ceil/FLoor)',
         return(self.fig,self.ax)
 
 
-    def plotselptseg(self,pt,color='y',alpha=0.4,ms=10):
+    def plotselptseg(self,pt,color='r',alpha=0.4,ms=10):
         """ plot selected point or segments
 
         Parameters
@@ -653,8 +653,8 @@ F3: Edit Segments properties, F4 : Edit Faces (Ceil/FLoor)',
             self.pt1 = np.array(self.L.Gs.pos[self.nsel]).reshape(2, 1)
             self.pt_previous = self.pt1
             self.p1 = self.ax.plot([self.pt1[0]], [self.pt1[1]], 'o', visible=True)
-            self.p1[0].set_color('yellow')
-            self.p1[0].set_ms(10)
+            self.p1[0].set_color('blue')
+            self.p1[0].set_ms(15)
             self.p1[0].set_alpha(0.4)
             try:
                 self.p2.set_visible(False)
@@ -671,7 +671,7 @@ F3: Edit Segments properties, F4 : Edit Faces (Ceil/FLoor)',
             self.pt_previous = self.pt2
             self.p2 = self.ax.plot([self.pt2[0]], [self.pt2[1]], 'o', visible=True)
             self.p2[0].set_color('green')
-            self.p2[0].set_ms(10)
+            self.p2[0].set_ms(15)
             self.p2[0].set_alpha(0.4)
             #ax.title.set_text('SP2')
 
