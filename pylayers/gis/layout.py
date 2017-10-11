@@ -2011,6 +2011,7 @@ class Layout(pro.PyLayers):
             config.set("indoor", "zfloor", self.zfloor)
             for n in self.faces:
                 face = {k:v for k,v in self.faces[n].items()}
+                face.pop('poly')
                 config.set("faces", n, face)
 
         if self.typ == 'outdoor':
