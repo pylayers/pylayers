@@ -148,7 +148,10 @@ import pdb
 import sys
 if sys.version_info.major==2:
     import PIL.Image as Image
-    import mayavi.mlab as mlab
+    try:
+        import mayavi.mlab as mlab
+    except:
+        pass
 else:
     import image
 import numpy as np
