@@ -1173,8 +1173,6 @@ class AppForm(QMainWindow):
             self.L._filename = _filename + ext
         else :
             _filename=self.L._filename
-        import ipdb
-        ipdb.set_trace()
         oldCursor = QCursor()
         QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
         self.filename=self.L._filename
