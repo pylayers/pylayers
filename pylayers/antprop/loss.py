@@ -972,7 +972,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
         #
         # calculate Excess delay for slab CEIL
         #
-        dfo , dfp  = L.sl['CEIL'].excess_grdelay(theta=alphas)
+        dfo , dfp  = L.sl['FLOOR'].excess_grdelay(theta=alphas)
 
 
 
