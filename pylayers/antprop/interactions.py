@@ -396,7 +396,7 @@ class Interactions(Inter,dict):
         self.fGHz = fGHz
         self.nf = len(fGHz)
 
-        self.I = np.zeros((self.nf, self.nimax, 2, 2), dtype=complex)
+        self.I = np.zeros((self.nf, self.nimax, 3, 3), dtype=complex)
         self.sout = np.zeros((self.nimax))
         self.si0 = np.zeros((self.nimax))
         self.alpha = np.ones((self.nimax), dtype=complex)
@@ -537,7 +537,7 @@ class IntB(Inter):
         self.sinsout()
         if len(self.data) != 0:
             lidx = len(self.idx)
-            data = self.data.reshape(lidx, 2, 2)
+            data = self.data.reshape(lidx, 3, 3)
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
             return(np.ones((len(fGHz),1,1,1))*data[None, :, :, :])
         else:
@@ -703,7 +703,7 @@ class IntR(Inter):
 
         # A : f ri 2 2
 
-        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
+        self.A = np.zeros((self.nf, len(self.idx), 3, 3), dtype=complex)
 
         if np.shape(self.data)[0]!=len(self.idx):
             self.data=self.data.T
@@ -728,7 +728,7 @@ class IntR(Inter):
                         mapp.extend(self.dusl[m])
 
             # replace in correct order the reflexion coeff
-            self.A[:, np.array((mapp)), :, :] = R
+            self.A[:, np.array((mapp)), 1:, 1:] = R
             self.alpha = np.array(self.alpha*len(self.idx), dtype=complex)
             self.gamma = np.array(self.gamma*len(self.idx), dtype=complex)
             return(self.A)
@@ -813,7 +813,7 @@ class IntT(Inter):
         self.fGHz=fGHz
         self.nf=len(fGHz)
 
-        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
+        self.A = np.zeros((self.nf, len(self.idx), 3, 3), dtype=complex)
         self.alpha = np.zeros((len(self.idx)), dtype=complex)
         self.gamma = np.zeros((len(self.idx)), dtype=complex)
         self.sm = np.zeros((len(self.idx)), dtype=complex)
@@ -853,7 +853,7 @@ class IntT(Inter):
                         T = self.slab[m].T
                         mapp.extend(self.dusl[m])
             # replace in proper order the Transmission coeff
-            self.A[:, np.array((mapp)), :, :] = T
+            self.A[:, np.array((mapp)), 1:, 1:] = T
             self.alpha[np.array((mapp))] = alpha
             self.gamma[np.array((mapp))] = gamma
 #            self.sm[np.array((mapp))]=sm
@@ -889,7 +889,7 @@ class IntD(Inter):
     
         self.fGHz=fGHz
         self.nf=len(fGHz)
-        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
+        self.A = np.zeros((self.nf, len(self.idx), 3, 3), dtype=complex)
 
         if len(self.data) != 0 :
             self.phi0 = self.data[:,0]
@@ -929,7 +929,7 @@ class IntD(Inter):
                 #     D[:,:,0,0]=Ds
                 #     D[:,:,1,1]=Dh
                 #     mapp.extend(self.dusl[m])
-            self.A[:, np.array((mapp)), :, :] = D[:,mapp,:,:]
+            self.A[:, np.array((mapp)), 1:, 1:] = D[:,mapp,:,:]
             return(self.A)
         else :
             self.A = self.data[:, None, None, None]

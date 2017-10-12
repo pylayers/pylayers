@@ -1556,13 +1556,12 @@ class Rays(PyLayers, dict):
                                 np.cos(phd),
                                 np.zeros(len(phd))])
 
-                # Bo0 : 3 x 2 x r
-                Bo0 = np.concatenate((eth[:, None, :],
+                # Bo0 : 3 x 3 x r
+                Bo0 = np.concatenate((si[:, 0, None, :],
+                                      eth[:, None, :],
                                       eph[:, None, :]), axis=1)
 
-                self[k]['Bo0'] = np.concatenate((si[:, 0, None, :],
-                                                 eth[:, None, :],
-                                                 eph[:, None, :]), axis=1)
+                self[k]['Bo0'] = Bo0
 
                 #
                 # scalar product si . norm
@@ -1630,10 +1629,10 @@ class Rays(PyLayers, dict):
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
-                #  Bi 3 x 2 x i x r
-                Bi = np.concatenate((ew, ev), axis=1)
+                #  Bi 3 x 3 x i x r
+                Bi = np.concatenate((es_in,ew,ev),axis=1)
                 #  self[k]['Bi'] 3 x 3 x i x r
-                self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+                self[k]['Bi'] = Bi  
                 ################################
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
@@ -1648,11 +1647,11 @@ class Rays(PyLayers, dict):
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
-                #  Bi 3 x 2 x i x r
-                Bo = np.concatenate((ew, ev), axis=1)
+                #  Bi 3 x 3 x i x r
+                Bo = np.concatenate((es_out,ew,ev),axis=1)
 
                  # self[k]['Bo'] 3 x 3 x i x r 
-                self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
+                self[k]['Bo'] = Bo
                 #
                 # AOA (rad)
                 #
@@ -1674,13 +1673,13 @@ class Rays(PyLayers, dict):
                 eph = np.array([-np.sin(pha),
                                 np.cos(pha),
                                 np.zeros(len(pha))])
-                # Bo0 : 3 x 2 x r
-                BiN = np.concatenate((eth[:, None, :],
+                # Bo0 : 3 x 3 x r
+                BiN = np.concatenate((si[:,-1,None,:],
+                                      eth[:, None, :],
                                       eph[:, None, :]), axis=1)
 
 
-                self[k]['BiN'] = np.concatenate((si[:,-1,None,:],eth[:,None,:],
-                                                   eph[:,None,:]),axis=1)
+                self[k]['BiN'] = BiN
                 #self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                 #                                   eph[:,np.newaxis,:]),axis=1)
 
@@ -1871,8 +1870,8 @@ class Rays(PyLayers, dict):
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
 
-                    #  Bid 3 x 2 x (i,r)diff
-                    Bid = np.concatenate((ev, ew), axis=1)
+                    #  Bid 3 x 3 x (i,r)diff
+                    Bid = np.concatenate((e_sid,ev, ew), axis=1)
 
                     #update Bi for diffracted rays
                     Bi[:,:,udiff[0],udiff[1]] = Bid
@@ -1904,7 +1903,7 @@ class Rays(PyLayers, dict):
                 # pasting (Bo0,B,BiN)
                 #
 
-                # B : 3 x 2 x i x r
+                # B : 3 x 3 x i x r
 
                 Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
                 Bi = np.concatenate((Bi, BiN[:, :, np.newaxis, :]), axis=2)
@@ -1998,7 +1997,6 @@ class Rays(PyLayers, dict):
         D = IntD(slab=L.sl)
 
         idx = np.array(())
-
         if self.los:
             idxts = 1
             nbrayt = 1
@@ -2140,14 +2138,14 @@ class Rays(PyLayers, dict):
                 # 2x2,(i+1)xr
 
                 #
-                # self[k]['B'] 2 x 2 x i x r
+                # self[k]['B'] 3 x 3 x i x r
                 #
-                # first unitary matrix (2x2xr)
+                # first unitary matrix (3x3xr)
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
                 try:
-                    b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                    b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
                 except:
                     pdb.set_trace()
 
@@ -2322,7 +2320,7 @@ class Rays(PyLayers, dict):
         B0 = self.B0.data[np.newaxis,...]
 
         # Ct : f x r x 2 x 2
-        Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+        Ct = np.zeros((self.I.nf, self.nray, 3, 3), dtype=complex)
 
         # delays : ,r
         self.delays = np.zeros((self.nray))
@@ -2357,11 +2355,11 @@ class Rays(PyLayers, dict):
                 # reshape error can be tricky to debug.
                 #
                 # f , r , l , 2 , 2
-                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 3, 3)
                 # get the corresponding unitary matrix B
                 # 1 , r , l , 2 , 2
                 #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
+                Bl = B[:, rrl, :, :].reshape(1, r, l, 3, 3)
                 # get the first unitary matrix B0l
                 B0l = B0[:,ir,:, :]
                 # get alpha
@@ -2469,7 +2467,7 @@ class Rays(PyLayers, dict):
         # true LOS when no interaction
         #
         if self.los:
-            Ct[:,0, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
+            Ct[:,0, :, :]= np.eye(3,3)[np.newaxis,np.newaxis,:,:]
             #self[0]['dis'] = self[0]['si'][0]
             # Fris
             Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
@@ -2480,10 +2478,15 @@ class Rays(PyLayers, dict):
         # To be corrected in a future version
         Ct = np.swapaxes(Ct, 1, 0)
 
-        c11 = Ct[:,:,0,0]
-        c12 = Ct[:,:,0,1]
-        c21 = Ct[:,:,1,0]
-        c22 = Ct[:,:,1,1]
+        #c11 = Ct[:,:,0,0]
+        #c12 = Ct[:,:,0,1]
+        #c21 = Ct[:,:,1,0]
+        #c22 = Ct[:,:,1,1]
+        
+        c11 = Ct[:,:,1,1]
+        c12 = Ct[:,:,1,2]
+        c21 = Ct[:,:,2,1]
+        c22 = Ct[:,:,2,2]
 
 
         #
