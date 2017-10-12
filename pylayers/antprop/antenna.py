@@ -1934,16 +1934,16 @@ class Pattern(PyLayers):
             # actual plotting
             rad2deg = 180/np.pi
             if len(lfreq)>1: 
-                # ax.plot(angle*rad2deg, r, color=col[cpt], lw=2, label=chaine)
+                ax.plot(angle*rad2deg, r, color=col[cpt], lw=2, label=chaine)
                 # plt.grid()
-                ax.plot(angle*rad2deg, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
-                plt.axhline(-3,0,color='g')
+                # ax.plot(angle*rad2deg, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
+                # plt.axhline(-3,0,color='g')
                 plt.grid('on')
             else:
-                # ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
-                # plt.grid()
-                ax.plot(angle*rad2deg, r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
-                plt.axhline(-3,0,color='g')
+                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
+                plt.grid()
+                # ax.plot(angle*rad2deg, r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
+                # plt.axhline(-3,0,color='g')
                 plt.grid('on')
             cpt = cpt + 1
 
