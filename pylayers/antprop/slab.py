@@ -225,14 +225,15 @@ class Interface(PyLayers):
         if 'T' in RT:
             self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-
+        
         if 'R' in RT:
-            self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+            self.R[:, :, 0, 0] = -self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
             self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
 
         if not metalic and 'T' in RT:
             self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
             self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
+
 
 
     def pcolor(self, dB=False):
@@ -1538,9 +1539,10 @@ class Slab(Interface,dict):
 
         self.Io = Co
         # attempt to fix bug 
-        #self.Ip = Cp
-        self.Ip = -Cp
-
+        self.Ip = Cp
+        #self.Ip = -Cp
+        
+        # evaluate reflection and transmission matrix
         self.RT(metalic,RT=RT)
 # if compensate:
 # fGHz = fGHz.reshape(nf,1,1,1)

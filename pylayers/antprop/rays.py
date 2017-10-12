@@ -707,6 +707,7 @@ class Rays(PyLayers, dict):
 
                 # raynb = (nr[1,unr[i]]).astype(int)
                 # nbr=len(raynb)
+                
                 # ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
                 # # current number of interactions
                 # cnbi = i + 2
@@ -1387,6 +1388,10 @@ class Rays(PyLayers, dict):
 
         L : Layout
 
+
+        Notes
+        -----
+
        
 
         """
@@ -1486,6 +1491,7 @@ class Rays(PyLayers, dict):
                 # For the diffraction case the normal is replaced by the unit
                 # vector along the wedge directed upward.
                 #
+
                 self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
@@ -1551,12 +1557,12 @@ class Rays(PyLayers, dict):
                                 np.zeros(len(phd))])
 
                 # Bo0 : 3 x 2 x r
-                Bo0 = np.concatenate((eth[:, np.newaxis, :],
-                                      eph[:, np.newaxis, :]), axis=1)
+                Bo0 = np.concatenate((eth[:, None, :],
+                                      eph[:, None, :]), axis=1)
 
-                self[k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :],
-                                                 eth[:, np.newaxis, :],
-                                                 eph[:, np.newaxis, :]), axis=1)
+                self[k]['Bo0'] = np.concatenate((si[:, 0, None, :],
+                                                 eth[:, None, :],
+                                                 eph[:, None, :]), axis=1)
 
                 #
                 # scalar product si . norm
@@ -1654,11 +1660,11 @@ class Rays(PyLayers, dict):
                 # th : ,r
                 # fix doa/dod reciprocity
                 #th = np.arccos(si[2, -1, :])
-                tha = np.arccos(-si[2, -1, :])
+                tha = np.arccos(si[2, -1, :])
 
                 # th : ,r
                 #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
-                pha = np.arctan2(-si[1, -1, :], -si[0, -1, :])
+                pha = np.arctan2(si[1, -1, :], si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
                 self[k]['aoa'] = np.vstack((tha, pha))
@@ -1669,12 +1675,14 @@ class Rays(PyLayers, dict):
                                 np.cos(pha),
                                 np.zeros(len(pha))])
                 # Bo0 : 3 x 2 x r
-                BiN = np.concatenate((eth[:, np.newaxis, :],
-                                      eph[:, np.newaxis, :]), axis=1)
+                BiN = np.concatenate((eth[:, None, :],
+                                      eph[:, None, :]), axis=1)
 
 
-                self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
-                                                   eph[:,np.newaxis,:]),axis=1)
+                self[k]['BiN'] = np.concatenate((si[:,-1,None,:],eth[:,None,:],
+                                                   eph[:,None,:]),axis=1)
+                #self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+                #                                   eph[:,np.newaxis,:]),axis=1)
 
                 # Creation of B from Bi and Bo
                 # is done after the potential diffraction 
