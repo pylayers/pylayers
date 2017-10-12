@@ -1026,7 +1026,7 @@ class AppForm(QMainWindow):
             _filename,ext = os.path.splitext(_filename)
             if ext == '':
                 _filename = _filename + '.lay'
-            self.L._filename = _filename
+            self.L._filename = _filename + ext
         else :
             _filename=self.L._filename
 
