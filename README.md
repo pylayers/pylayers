@@ -41,7 +41,7 @@ See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.
 
 ```python
 >>> from pylayers.simul.link import *
->>> DL = DLink()
+>>> DL = DLink(L='defstr.lay')
 >>> DL.eval()
 >>> DL._show3()
 ```
