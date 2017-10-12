@@ -6558,6 +6558,34 @@ class Layout(pro.PyLayers):
         self.Gt.pos = {}
         self.Gt.pos = {nl[n]: pos[n] for n in nl}
 
+<<<<<<< HEAD
+=======
+        Gtn = self.Gt.nodes()
+        fID = max(self.Gs.nodes()) + 1
+        pGt = np.array([self.Gt.pos[n] for n in Gtn])
+        for fk in self.faces.keys():
+            # trick to seach only Gt nodes candidates
+            # in the neighborhood of the polygon pf
+            pf = self.faces[fk]['poly']
+            xym = np.min(pf.xy,axis=1)
+            xyM = np.max(pf.xy,axis=1)
+            uclip = (pGt[:,0]<=xyM[0]) & \
+                    (pGt[:,0]>=xym[0]) & \
+                    (pGt[:,1]<=xyM[1]) & \
+                    (pGt[:,1]>=xym[1])
+
+            lnodes = np.array(self.Gt.nodes())[uclip]
+            for c in lnodes:
+                if self.Gt.node[c]['polyg'].within(pf):
+                    self.Gt.node[c]['name']=self.faces[fk]['name']
+                    self.Gt.node[c]['z']=self.faces[fk]['z']
+                    # self.Gs.add_node(fID)
+                    vn = self.Gt.node[c]['polyg'].vnodes[self.Gt.node[c]['polyg'].vnodes>0]
+                    self.Gs.add_edges_from(zip([fID]*len(vn),vn))
+                    self.Gs.pos[fID] = np.array(self.Gt.node[c]['polyg'].centroid.xy).squeeze()
+                    fID += 1
+
+>>>>>>> 962aa50... Layout: fix ceil color issue in _show3()
         self._updGsncy()
         if verbose:
             pbartmp.update(100.)
@@ -11030,15 +11058,29 @@ class Layout(pro.PyLayers):
                     nbpt = len(dt['vertices'])
                     pt = np.vstack((dt['vertices'].T, [h] * nbpt))
                     box = dt['triangles']
+
+                    # if u == 114:
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     box = np.roll(box,1,1)
                     ptc = np.hstack((ptc, pt))
                     boxc = np.vstack((boxc, box + cpt))
                     cpt = cpt + nbpt
+                    # if box.shape[0] == 2 :
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     print(cpt,nbpt)
+                    #     print(box)
+                    #     print(pt)
+                    #     break
 
                 # manage Ceil color
+
                 colname = sl['CEIL']['color']
                 colhex = cold[colname]
-                colf = np.repeat((pyu.rgb(colhex))[np.newaxis, :], 4, axis=0)
-                color = np.vstack((color, colf))
+                colf = np.repeat((pyu.rgb(colhex))[np.newaxis, :], cpt, axis=0)
+                # color = np.vstack((color, colf))
+                color=colf
 
                 # trick for correcting  color assignement
 
