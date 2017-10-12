@@ -490,7 +490,6 @@ class IntB(Inter):
     """
     def __init__(self, data=np.array(()), idx=[],slab={}):
         Inter.__init__(self, data=data, idx=idx, typ=-1,slab=slab)
-
     def __repr__(self):
         s = 'number of B basis :' + str(np.shape(self.data)[0])
         return s    
@@ -704,6 +703,7 @@ class IntR(Inter):
         # A : f ri 2 2
 
         self.A = np.zeros((self.nf, len(self.idx), 3, 3), dtype=complex)
+        self.A[:,:,0,0]=1
 
         if np.shape(self.data)[0]!=len(self.idx):
             self.data=self.data.T
@@ -814,6 +814,8 @@ class IntT(Inter):
         self.nf=len(fGHz)
 
         self.A = np.zeros((self.nf, len(self.idx), 3, 3), dtype=complex)
+        self.A[:,:,0,0] = 1
+
         self.alpha = np.zeros((len(self.idx)), dtype=complex)
         self.gamma = np.zeros((len(self.idx)), dtype=complex)
         self.sm = np.zeros((len(self.idx)), dtype=complex)
@@ -890,6 +892,7 @@ class IntD(Inter):
         self.fGHz=fGHz
         self.nf=len(fGHz)
         self.A = np.zeros((self.nf, len(self.idx), 3, 3), dtype=complex)
+        self.A[:,:,0,0]=1
 
         if len(self.data) != 0 :
             self.phi0 = self.data[:,0]

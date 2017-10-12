@@ -1889,8 +1889,8 @@ class Rays(PyLayers, dict):
                     e_sod = np.expand_dims(sod, axis=1)
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
-                    #  Bod 3 x 2 x (i,r)diff
-                    Bod = np.concatenate((ev, ew), axis=1)
+                    #  Bod 3 x 3 x (i,r)diff
+                    Bod = np.concatenate((e_sod,ev, ew), axis=1)
 
                     #update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
@@ -1908,9 +1908,10 @@ class Rays(PyLayers, dict):
                 Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
                 Bi = np.concatenate((Bi, BiN[:, :, np.newaxis, :]), axis=2)
 
-                # B : 2 x 2 x i x r
+                # B : 3 x 3 x i x r
 
                 self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
+                #self[k]['B'] = np.einsum('vx...,xw...->vw...', Bi, Bo)
 
                 #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
                 #self[k]['BiN']=BiN
@@ -2213,10 +2214,11 @@ class Rays(PyLayers, dict):
                 # -------
                 # B.idx refers to an interaction index
                 # whereas B0.idx refers to a ray number
+                # B.stack(data=b.T, idx=idxf)
+                # B0.stack(data=b0.T,idx=self[k]['rayidx'])
 
                 B.stack(data=b.T, idx=idxf)
                 B0.stack(data=b0.T,idx=self[k]['rayidx'])
-
                 ### Reflexion
                 ############
                 ### wall reflexion
@@ -2268,8 +2270,8 @@ class Rays(PyLayers, dict):
                 #self[k]['rayidx'] = ze
                 #self.raypt = 1
                 #self._ray2nbi=ze
-                B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
-                B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
+                B.stack(data=np.eye(3)[np.newaxis,:,:], idx=ze)
+                B0.stack(data=np.eye(3)[np.newaxis,:,:],idx=ze)
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
@@ -2314,12 +2316,14 @@ class Rays(PyLayers, dict):
         # just an axis extension (np.newaxis)
         #pdb.set_trace()
 
-        # 1 x i x 2 x 2
+        # 1 x i x 3 x 3
         B  = self.B.data[np.newaxis,...]
-        # 1 x r x 2 x 2
+        B  = B.swapaxes(2,3)
+        # 1 x r x 3 x 3
         B0 = self.B0.data[np.newaxis,...]
+        B0  = B0.swapaxes(2,3)
 
-        # Ct : f x r x 2 x 2
+        # Ct : f x r x 3 x 3
         Ct = np.zeros((self.I.nf, self.nray, 3, 3), dtype=complex)
 
         # delays : ,r
@@ -2946,7 +2950,7 @@ class Rays(PyLayers, dict):
                     addr = self.ir2a(ir)
                     Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]] 
                     Bi1 = self[addr[0]]['Bi'][:,:,0,addr[1]] 
-                    U  = np.dot(Bi1[:,1:3].T,Bo0[:,1:3])
+                    U  = np.dot(Bi1.T,Bo0)
                     assert np.allclose(B0,U) 
                     lmat.append(B0)
                     ltran.append(B0)
@@ -2965,18 +2969,18 @@ class Rays(PyLayers, dict):
                         lmat.append(B)
                         ltran.append(B)
                 # evaluate matrix product
-                PM0=np.eye(2)
-                PM1=np.eye(2)
+                PM0=np.eye(3)
+                PM1=np.eye(3)
                 for m in lmat[::-1]:
                     PM0=np.dot(PM0,m)
                 for m in ltran[::-1]:
                     PM1=np.dot(PM1,m)
                 print("matrix product with interactions (dB)")
-                print(20*np.log10(np.abs(PM0[0,0])),'  ',20*np.log10(np.abs(PM0[0,1])))
-                print(20*np.log10(np.abs(PM0[1,0])),'  ',20*np.log10(np.abs(PM0[1,1])))
+                print(20*np.log10(np.abs(PM0[1,1])),'  ',20*np.log10(np.abs(PM0[1,2])))
+                print(20*np.log10(np.abs(PM0[2,1])),'  ',20*np.log10(np.abs(PM0[2,2])))
                 print("matrix product without interactions (dB)")
-                print(20*np.log10(np.abs(PM1[0,0])),'  ',20*np.log10(np.abs(PM1[0,1])))
-                print(20*np.log10(np.abs(PM1[1,0])),'  ',20*np.log10(np.abs(PM1[1,1])))
+                print(20*np.log10(np.abs(PM1[1,1])),'  ',20*np.log10(np.abs(PM1[1,2])))
+                print(20*np.log10(np.abs(PM1[2,1])),'  ',20*np.log10(np.abs(PM1[2,2])))
                 return(PM0)
 
             else:
