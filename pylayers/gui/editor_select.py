@@ -1251,15 +1251,13 @@ class SelectL2(object):
         """ ctrl+s
         """
         racine, ext = os.path.splitext(self.L.filename)
-        filename = racine + '.str2'
-        fileini = racine + '.ini'
+        filelay = racine + '.lay'
 
         # Commented because ss_ce not updated
         #self.L.savestr2(filename)
 
-        self.L.saveini(fileini)
-        print "structure saved in ", filename
-        print "structure saved in ", fileini
+        self.L.save(filelay)
+        print "structure saved in ", filelay
 
     # def disalllay(self):
     #     """ display all layers

@@ -11030,15 +11030,29 @@ class Layout(pro.PyLayers):
                     nbpt = len(dt['vertices'])
                     pt = np.vstack((dt['vertices'].T, [h] * nbpt))
                     box = dt['triangles']
+
+                    # if u == 114:
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     box = np.roll(box,1,1)
                     ptc = np.hstack((ptc, pt))
                     boxc = np.vstack((boxc, box + cpt))
                     cpt = cpt + nbpt
+                    # if box.shape[0] == 2 :
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     print(cpt,nbpt)
+                    #     print(box)
+                    #     print(pt)
+                    #     break
 
                 # manage Ceil color
+
                 colname = sl['CEIL']['color']
                 colhex = cold[colname]
-                colf = np.repeat((pyu.rgb(colhex))[np.newaxis, :], 4, axis=0)
-                color = np.vstack((color, colf))
+                colf = np.repeat((pyu.rgb(colhex))[np.newaxis, :], cpt, axis=0)
+                # color = np.vstack((color, colf))
+                color=colf
 
                 # trick for correcting  color assignement
 
