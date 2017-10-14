@@ -227,12 +227,16 @@ class Interface(PyLayers):
 
         
         if 'R' in RT:
-            self.R[:, :, 0, 0] = -self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
-            self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
+            #self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+            #self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
+            self.R[:, :, 1, 1] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+            self.R[:, :, 0, 0] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
 
         if not metalic and 'T' in RT:
-            self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
-            self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
+            #self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
+            #self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
+            self.T[:, :, 1, 1] = 1.0 / self.Io[:, :, 0, 0]
+            self.T[:, :, 0, 0] = 1.0 / self.Ip[:, :, 0, 0]
 
 
 

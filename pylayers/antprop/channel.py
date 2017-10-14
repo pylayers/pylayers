@@ -2869,7 +2869,8 @@ class Tchannel(bs.FUsignal):
 
 
     def getcir(self,BWGHz=1,Nf=40000,fftshift=False):
-        """
+        """ get the channel impulse response
+
         Parameters
         ----------
 
