@@ -1822,7 +1822,7 @@ class DLink(Link):
         self.adprt = self.afprt.toadp()
         self.adprt.cut(imax=imax)
         
-    def afp(self,fGHz,az=0,tilt=0,polar='V',win='rect',_filemeas='',_filecal='',offset=0.37,BW=1.6,ext='txt',dirmeas='meas',refinement=False):
+    def afp(self,**kwargs):
         """ Evaluate angular frequency profile 
 
         Parameters
@@ -1836,7 +1836,7 @@ class DLink(Link):
         win : string 'rect' | 'hamming'
         _filemeas : string 
         _filecal : string 
-        offset : 
+        ang_offset : 
         BW : float 
             bandwidth
         ext : string 
@@ -1844,12 +1844,56 @@ class DLink(Link):
         dirmeas : string 
             directory of the data in the project path 
 
+        Notes
+        -----
+
+        If a measurement file is given the angular range is obtained from the measurement
+        otherwise the variable az is used. 
+
         """
+        defaults = {'fGHz':32.6,
+                     'az': 0,
+                     'tilt':0,
+                     'polar':'V',
+                     'win':'rect',
+                     '_filemeas':'',
+                     '_filecal':'',
+                     'ang_offset' : 0.37,
+                     'BW': 1.6,
+                     'ext':'txt',
+                     'dirmeas':'meas',
+                     'refinement':False
+                    }
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k] 
+
+        fGHz = kwargs.pop('fGHz')
+        az   = kwargs.pop('az')
+        tilt = kwargs.pop('tilt')
+        polar = kwargs.pop('polar')
+        win = kwargs.pop('win')               # argument for loadmes
+        _filemeas = kwargs.pop('_filemeas')   # argument for loadmes
+        _filecal = kwargs.pop('_filecal')     # argument for loadmes
+        dirmeas = kwargs.pop('dirmeas')      # argument for loadmes
+        ang_offset = kwargs.pop('ang_offset') # argument for loadmes
+        BW = kwargs.pop('BW')                 # argument for loadmes
+        ext = kwargs.pop('ext')               # argument for loadmes
+        refinement = kwargs.pop('refinement')  # argument for loadmes
+
         # read measurement if available
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,ang_offset=offset,ext=ext,dirmeas=dirmeas,refinement=refinement)
+            self.afpmes.loadmes(_filemeas,
+                                _filecal,
+                                 fcGHz=fcGHz,
+                                 BW=BW,
+                                 win=win,
+                                 ang_offset=ang_offset,
+                                 ext=ext,
+                                 dirmeas=dirmeas,
+                                 refinement=refinement)
             az = self.afpmes.az
             #
             # afpmes.x
@@ -2342,9 +2386,13 @@ class DLink(Link):
             ax = plt.gca()
         else:
             ax = kwargs['ax']
+        
+        taumax = self.H.taud.max()
+        BWGHz = kwargs['BWGHz']
 
+        Nf = np.maximum(kwargs['Nf'],taumax*BWGHz).astype(int)
         # getcir is a Tchannel method 
-        ir = self.H.getcir(BWGHz = kwargs['BWGHz'],Nf=kwargs['Nf'])
+        ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
         ir.plot(fig=fig,ax=ax)
         delay = ir.x 
         dist = delay*0.3
