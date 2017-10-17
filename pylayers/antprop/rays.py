@@ -707,6 +707,7 @@ class Rays(PyLayers, dict):
 
                 # raynb = (nr[1,unr[i]]).astype(int)
                 # nbr=len(raynb)
+                
                 # ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
                 # # current number of interactions
                 # cnbi = i + 2
@@ -1387,6 +1388,10 @@ class Rays(PyLayers, dict):
 
         L : Layout
 
+
+        Notes
+        -----
+
        
 
         """
@@ -1486,6 +1491,7 @@ class Rays(PyLayers, dict):
                 # For the diffraction case the normal is replaced by the unit
                 # vector along the wedge directed upward.
                 #
+
                 self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
@@ -1550,13 +1556,12 @@ class Rays(PyLayers, dict):
                                 np.cos(phd),
                                 np.zeros(len(phd))])
 
-                # Bo0 : 3 x 2 x r
-                Bo0 = np.concatenate((eth[:, np.newaxis, :],
-                                      eph[:, np.newaxis, :]), axis=1)
+                # Bo0 : 3 x 3 x r
+                Bo0 = np.concatenate((si[:, 0, None, :],
+                                      eth[:, None, :],
+                                      eph[:, None, :]), axis=1)
 
-                self[k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :],
-                                                 eth[:, np.newaxis, :],
-                                                 eph[:, np.newaxis, :]), axis=1)
+                self[k]['Bo0'] = Bo0
 
                 #
                 # scalar product si . norm
@@ -1624,10 +1629,10 @@ class Rays(PyLayers, dict):
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
-                #  Bi 3 x 2 x i x r
-                Bi = np.concatenate((ew, ev), axis=1)
+                #  Bi 3 x 3 x i x r
+                Bi = np.concatenate((es_in,ew,ev),axis=1)
                 #  self[k]['Bi'] 3 x 3 x i x r
-                self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+                self[k]['Bi'] = Bi  
                 ################################
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
@@ -1642,11 +1647,11 @@ class Rays(PyLayers, dict):
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
-                #  Bi 3 x 2 x i x r
-                Bo = np.concatenate((ew, ev), axis=1)
+                #  Bi 3 x 3 x i x r
+                Bo = np.concatenate((es_out,ew,ev),axis=1)
 
                  # self[k]['Bo'] 3 x 3 x i x r 
-                self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
+                self[k]['Bo'] = Bo
                 #
                 # AOA (rad)
                 #
@@ -1654,11 +1659,11 @@ class Rays(PyLayers, dict):
                 # th : ,r
                 # fix doa/dod reciprocity
                 #th = np.arccos(si[2, -1, :])
-                tha = np.arccos(-si[2, -1, :])
+                tha = np.arccos(si[2, -1, :])
 
                 # th : ,r
                 #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
-                pha = np.arctan2(-si[1, -1, :], -si[0, -1, :])
+                pha = np.arctan2(si[1, -1, :], si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
                 self[k]['aoa'] = np.vstack((tha, pha))
@@ -1668,13 +1673,15 @@ class Rays(PyLayers, dict):
                 eph = np.array([-np.sin(pha),
                                 np.cos(pha),
                                 np.zeros(len(pha))])
-                # Bo0 : 3 x 2 x r
-                BiN = np.concatenate((eth[:, np.newaxis, :],
-                                      eph[:, np.newaxis, :]), axis=1)
+                # Bo0 : 3 x 3 x r
+                BiN = np.concatenate((si[:,-1,None,:],
+                                      eth[:, None, :],
+                                      eph[:, None, :]), axis=1)
 
 
-                self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
-                                                   eph[:,np.newaxis,:]),axis=1)
+                self[k]['BiN'] = BiN
+                #self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+                #                                   eph[:,np.newaxis,:]),axis=1)
 
                 # Creation of B from Bi and Bo
                 # is done after the potential diffraction 
@@ -1863,8 +1870,8 @@ class Rays(PyLayers, dict):
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
 
-                    #  Bid 3 x 2 x (i,r)diff
-                    Bid = np.concatenate((ev, ew), axis=1)
+                    #  Bid 3 x 3 x (i,r)diff
+                    Bid = np.concatenate((e_sid,ev, ew), axis=1)
 
                     #update Bi for diffracted rays
                     Bi[:,:,udiff[0],udiff[1]] = Bid
@@ -1882,8 +1889,8 @@ class Rays(PyLayers, dict):
                     e_sod = np.expand_dims(sod, axis=1)
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
-                    #  Bod 3 x 2 x (i,r)diff
-                    Bod = np.concatenate((ev, ew), axis=1)
+                    #  Bod 3 x 3 x (i,r)diff
+                    Bod = np.concatenate((e_sod,ev, ew), axis=1)
 
                     #update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
@@ -1896,14 +1903,15 @@ class Rays(PyLayers, dict):
                 # pasting (Bo0,B,BiN)
                 #
 
-                # B : 3 x 2 x i x r
+                # B : 3 x 3 x i x r
 
                 Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
                 Bi = np.concatenate((Bi, BiN[:, :, np.newaxis, :]), axis=2)
 
-                # B : 2 x 2 x i x r
+                # B : 3 x 3 x i x r
 
                 self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
+                #self[k]['B'] = np.einsum('vx...,xw...->vw...', Bi, Bo)
 
                 #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
                 #self[k]['BiN']=BiN
@@ -1936,7 +1944,8 @@ class Rays(PyLayers, dict):
                 #  tha = pi - thd
                 #  pha = phd - pi
                 #
-                self[k]['aoa'] =  np.vstack((np.pi-thd, phd-np.pi))
+                #self[k]['aoa'] =  np.vstack((np.pi-thd, phd-np.pi))
+                self[k]['aoa'] =  np.vstack((thd,phd))
                 E = np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
                 ze = np.array([0])
@@ -1990,7 +1999,6 @@ class Rays(PyLayers, dict):
         D = IntD(slab=L.sl)
 
         idx = np.array(())
-
         if self.los:
             idxts = 1
             nbrayt = 1
@@ -2132,14 +2140,14 @@ class Rays(PyLayers, dict):
                 # 2x2,(i+1)xr
 
                 #
-                # self[k]['B'] 2 x 2 x i x r
+                # self[k]['B'] 3 x 3 x i x r
                 #
-                # first unitary matrix (2x2xr)
+                # first unitary matrix (3x3xr)
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
                 # dimension i and r are merged
                 try:
-                    b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                    b  = self[k]['B'][:,:,1:,:].reshape(3, 3, size2-nbray,order='F')
                 except:
                     pdb.set_trace()
 
@@ -2207,10 +2215,11 @@ class Rays(PyLayers, dict):
                 # -------
                 # B.idx refers to an interaction index
                 # whereas B0.idx refers to a ray number
+                # B.stack(data=b.T, idx=idxf)
+                # B0.stack(data=b0.T,idx=self[k]['rayidx'])
 
                 B.stack(data=b.T, idx=idxf)
                 B0.stack(data=b0.T,idx=self[k]['rayidx'])
-
                 ### Reflexion
                 ############
                 ### wall reflexion
@@ -2262,8 +2271,8 @@ class Rays(PyLayers, dict):
                 #self[k]['rayidx'] = ze
                 #self.raypt = 1
                 #self._ray2nbi=ze
-                B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
-                B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
+                B.stack(data=np.eye(3)[np.newaxis,:,:], idx=ze)
+                B0.stack(data=np.eye(3)[np.newaxis,:,:],idx=ze)
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
@@ -2308,13 +2317,15 @@ class Rays(PyLayers, dict):
         # just an axis extension (np.newaxis)
         #pdb.set_trace()
 
-        # 1 x i x 2 x 2
+        # 1 x i x 3 x 3
         B  = self.B.data[np.newaxis,...]
-        # 1 x r x 2 x 2
+        B  = B.swapaxes(2,3)
+        # 1 x r x 3 x 3
         B0 = self.B0.data[np.newaxis,...]
+        B0  = B0.swapaxes(2,3)
 
-        # Ct : f x r x 2 x 2
-        Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+        # Ct : f x r x 3 x 3
+        Ct = np.zeros((self.I.nf, self.nray, 3, 3), dtype=complex)
 
         # delays : ,r
         self.delays = np.zeros((self.nray))
@@ -2349,11 +2360,11 @@ class Rays(PyLayers, dict):
                 # reshape error can be tricky to debug.
                 #
                 # f , r , l , 2 , 2
-                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 3, 3)
                 # get the corresponding unitary matrix B
                 # 1 , r , l , 2 , 2
                 #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
+                Bl = B[:, rrl, :, :].reshape(1, r, l, 3, 3)
                 # get the first unitary matrix B0l
                 B0l = B0[:,ir,:, :]
                 # get alpha
@@ -2461,21 +2472,33 @@ class Rays(PyLayers, dict):
         # true LOS when no interaction
         #
         if self.los:
-            Ct[:,0, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
+            Ct[:,0, :, :]= np.eye(3,3)[None,None,:,:]
             #self[0]['dis'] = self[0]['si'][0]
             # Fris
-            Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+            Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][None, :, None, None])
             self.delays[0] = self[0]['dis']/0.3
             self.dis[0] = self[0]['dis']
 
 
         # To be corrected in a future version
+        #
+        #  Ct : nf , Nray , theta , phi 
+        #
+        #  to 
+        #
+        #  Ct : Nray x nf , theta , phi 
+        #
         Ct = np.swapaxes(Ct, 1, 0)
 
-        c11 = Ct[:,:,0,0]
-        c12 = Ct[:,:,0,1]
-        c21 = Ct[:,:,1,0]
-        c22 = Ct[:,:,1,1]
+        #c11 = Ct[:,:,0,0]
+        #c12 = Ct[:,:,0,1]
+        #c21 = Ct[:,:,1,0]
+        #c22 = Ct[:,:,1,1]
+        
+        c11 = Ct[:,:,1,1]
+        c12 = Ct[:,:,1,2]
+        c21 = Ct[:,:,2,1]
+        c22 = Ct[:,:,2,2]
 
 
         #
@@ -2500,8 +2523,11 @@ class Rays(PyLayers, dict):
         Cn.tang = aod.T
         Cn.tangl = aod.T
         # r x 2
-        Cn.rang = aoa.T
-        Cn.rangl = aoa.T
+        #
+        # recover angle of arrival convention 
+        #
+        Cn.rang  = np.hstack([np.pi-aoa.T[:,[0]],aoa.T[:,[1]]-np.pi]) 
+        Cn.rangl = np.hstack([np.pi-aoa.T[:,[0]],aoa.T[:,[1]]-np.pi])
         # add aoa and aod
 
         self.evaluated = True
@@ -2935,7 +2961,7 @@ class Rays(PyLayers, dict):
                     addr = self.ir2a(ir)
                     Bo0 = self[addr[0]]['Bo0'][:,:,addr[1]] 
                     Bi1 = self[addr[0]]['Bi'][:,:,0,addr[1]] 
-                    U  = np.dot(Bi1[:,1:3].T,Bo0[:,1:3])
+                    U  = np.dot(Bi1.T,Bo0)
                     assert np.allclose(B0,U) 
                     lmat.append(B0)
                     ltran.append(B0)
@@ -2954,18 +2980,18 @@ class Rays(PyLayers, dict):
                         lmat.append(B)
                         ltran.append(B)
                 # evaluate matrix product
-                PM0=np.eye(2)
-                PM1=np.eye(2)
+                PM0=np.eye(3)
+                PM1=np.eye(3)
                 for m in lmat[::-1]:
                     PM0=np.dot(PM0,m)
                 for m in ltran[::-1]:
                     PM1=np.dot(PM1,m)
                 print("matrix product with interactions (dB)")
-                print(20*np.log10(np.abs(PM0[0,0])),'  ',20*np.log10(np.abs(PM0[0,1])))
-                print(20*np.log10(np.abs(PM0[1,0])),'  ',20*np.log10(np.abs(PM0[1,1])))
+                print(20*np.log10(np.abs(PM0[1,1])),'  ',20*np.log10(np.abs(PM0[1,2])))
+                print(20*np.log10(np.abs(PM0[2,1])),'  ',20*np.log10(np.abs(PM0[2,2])))
                 print("matrix product without interactions (dB)")
-                print(20*np.log10(np.abs(PM1[0,0])),'  ',20*np.log10(np.abs(PM1[0,1])))
-                print(20*np.log10(np.abs(PM1[1,0])),'  ',20*np.log10(np.abs(PM1[1,1])))
+                print(20*np.log10(np.abs(PM1[1,1])),'  ',20*np.log10(np.abs(PM1[1,2])))
+                print(20*np.log10(np.abs(PM1[2,1])),'  ',20*np.log10(np.abs(PM1[2,2])))
                 return(PM0)
 
             else:

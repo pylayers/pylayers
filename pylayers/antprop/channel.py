@@ -319,6 +319,11 @@ class AFPchannel(bs.FUsignal):
             t0     = 2 # retarder le signal de 2 ns
             self.y = amp*np.exp(1j*ang*np.pi/180.)*np.exp(-2j*np.pi*fGHz*t0)*cal_trf[None,:]*window            
 
+        #
+        # if extension is txt file comes from ESPOO measurement
+        #
+        # self.az : 5.86 -> 1.94   
+
         if ext=='txt':
             self.azmes = (360-D[:,0])*np.pi/180.
             self.az = self.azmes + ang_offset - 2*np.pi
@@ -585,14 +590,12 @@ class ADPchannel(bs.TUsignal):
         #          self.x[imin],self.x[imax])
         #extent = (self.az[0]*rd2deg,
         #          self.az[-1]*rd2deg,
-        #          self.x[imin],self.x[imax])
-        
+        #          self.x[imin],self.x[imax])      
         #extent = (0,360,self.x[imin],self.x[imax])
         # import ipdb
         # ipdb.set_trace()
         #extent = (0,360,self.x[imin],self.x[imax])
         extent = (45,270,self.x[imin],self.x[imax])
-
         padp = np.abs(self.y)[:,imin:imax].T
         if dB:
             padp  = 20*np.log10(padp)
@@ -2927,7 +2930,8 @@ class Tchannel(bs.FUsignal):
 
 
     def getcir(self,BWGHz=1,Nf=40000,fftshift=False):
-        """
+        """ get the channel impulse response
+
         Parameters
         ----------
 
@@ -5116,7 +5120,7 @@ class Ctilde(PyLayers):
         This method update the ray propagation channel in either local or global frame
         self.Ta and self.Tb are updated with input parameters Ta an Tb 
 
-        C : ray propagtion channel (2x2xrxf) complex 
+        C : ray propagation channel (2x2xrxf) complex 
             either local or global depends on self.islocal boolean value
 
         Examples
@@ -5566,6 +5570,7 @@ class Ctilde(PyLayers):
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
+        #b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
         b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)

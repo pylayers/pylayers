@@ -225,14 +225,19 @@ class Interface(PyLayers):
         if 'T' in RT:
             self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-
+        
         if 'R' in RT:
-            self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
-            self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
+            #self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+            #self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
+            self.R[:, :, 1, 1] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+            self.R[:, :, 0, 0] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
 
         if not metalic and 'T' in RT:
-            self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
-            self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
+            #self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
+            #self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
+            self.T[:, :, 1, 1] = 1.0 / self.Io[:, :, 0, 0]
+            self.T[:, :, 0, 0] = 1.0 / self.Ip[:, :, 0, 0]
+
 
 
     def pcolor(self, dB=False):
@@ -1215,10 +1220,10 @@ class Slab(Interface,dict):
     Summary
     -------
 
-    A Slab is a sequence of layers which each has
+    A Slab is a sequence of layers which have
 
     - a given width
-    - an integer index refering a given material in the material DB
+    - a given material from the material DB
 
 
     Attributes
@@ -1251,7 +1256,8 @@ class Slab(Interface,dict):
 
         name : string
             slab name
-        matDB : matdb
+        matDB : MatDB
+            material database
         ds  : dict 
 
         """
@@ -1275,7 +1281,8 @@ class Slab(Interface,dict):
             self['linewidth'] = ds['linewidth']
 
         self['evaluated'] = False
-        self.conv(matDB)
+        if matDB!=[]:
+            self.conv(matDB)
 
     def __setitem__(self,key,value):
         """ dictionnary setter
@@ -1307,15 +1314,21 @@ class Slab(Interface,dict):
     def __add__(self,u):
         """ This function makes the addition between 2 Slabs
 
+        Parameters
+        ----------
+
+        u : Slab 
+
         """
         name = self['name']+u['name']
-        U = Slab(name,MatDB)
+        U = Slab(name,[])
         # lmatname should be modified before lthick
         U['lmatname'] = self['lmatname']+u['lmatname']
         U['lthick']   = self['lthick']+u['lthick']
-        for i in range(len(U['lmatname'])):
-            namem = U['lmatname'][i]
-        U.conv(MatDB)
+        U['lmat'] = self['lmat']+u['lmat'] 
+        #for i in range(len(U['lmatname'])):
+        #    namem = U['lmatname'][i]
+        #U.conv(matDB)
         return(U)
 
     def __repr__(self):
@@ -1323,6 +1336,9 @@ class Slab(Interface,dict):
         st = st + reduce(lambda x,y: x+' | '+y,self['lmatname'])+ ' | '
         st = st + str(self['lthick'])+'\n'
         st = st + '       ' + str(self['color'])+' '+str(self['linewidth'])+'\n'
+        for  k in self['lmat']:
+            st = st + '       epr :' + str(k['epr']) + '    sigma : ' + str(k['sigma'])+'\n'
+
         if self['evaluated']:
             nf = len(self.fGHz)
             nt = len(self.theta)
@@ -1391,7 +1407,7 @@ class Slab(Interface,dict):
                     print("th (rad) : ", self.theta[0])
 
     def conv(self,matDB):
-        """ build lmat 
+        """ build the Slab list of materials lmat
 
         """
         self['lmat'] = []
@@ -1527,9 +1543,10 @@ class Slab(Interface,dict):
 
         self.Io = Co
         # attempt to fix bug 
-        #self.Ip = Cp
-        self.Ip = -Cp
-
+        self.Ip = Cp
+        #self.Ip = -Cp
+        
+        # evaluate reflection and transmission matrix
         self.RT(metalic,RT=RT)
 # if compensate:
 # fGHz = fGHz.reshape(nf,1,1,1)
@@ -1777,7 +1794,9 @@ class SlabDB(dict):
 
         Notes
         -----
-        There are two way tp initialize a SlabDB either from dict ds and dm usually read in  the 
+
+        There are two ways to initialize a SlabDB either from dict ds and dm usually read 
+        in  the 
         Layout file .ini or from 2 specified file
 
         """
@@ -2230,8 +2249,71 @@ def calsig(cval, fGHz, typ='epsr'):
 
     return(epr1, sigma, delta)
 
+def calRT_homogeneous_model(x,epsr,d,fGHz,theta):
+    
+    """ calculate R and T for an homogeneous Slab
+
+    Parameters 
+    ----------
+
+    x : np.array()
+        conductivity 
+    epsr : complex 
+        permittivity 
+    d : thickness 
+
+    The model is a slab of thickness d with a known epsr and variable conductivity sigma 
+
+    Returns
+    -------
+    Rpara , Rortho , Tpara , Tortho 
+    """ 
+    dm ={}
+    dm['ukn']={'epr':epsr,'mur':1,'sigma':x[0],'roughness':0}
+    ds = {'lthick':[d],'lmatname':['ukn'],'color':'black','linewidth':2}
+    S=Slab('void',MatDB(dm=dm),ds=ds)
+    S.eval(fGHz=fGHz,theta=ang)
+    Rpara  = np.abs(S.R[:,:,0,0])
+    Rortho = np.abs(S.R[:,:,1,1])
+    Tpara  = np.abs(S.T[:,:,0,0])
+    Tortho  = np.abs(S.T[:,:,0,0])
+    return Rpara,Rortho,Tpara,Tortho
 
 
+def calRT_3layers_model(x,epsr,d,fGHz,theta):
+
+    """ calculate R and T for an homogeneous Slab
+
+    Parameters 
+    ----------
+
+    x : np.array()
+        conductivity (S/m) 
+        delta (m) 
+    epsr : complex 
+        permittivity 
+    d : thickness 
+
+    The model is a 3 layer slab of thickness d 
+        d - delta/2    epsr , sigma 
+        delta          epsr = 1 sigma = 0 (AIR) 
+        d - delta/2    epsr , sigma 
+
+    Returns
+    -------
+    Rpara , Rortho , Tpara , Tortho 
+
+    """ 
+    dm ={}
+    dm['ukn']={'epr':epsr,'mur':1,'sigma':x[0],'roughness':0}
+    ds = {'lthick':[d-x[1]/2.,x[1],d-x[1]/2.],'lmatname':['ukn','AIR','ukn'],'color':'black','linewidth':2}
+    S=Slab('void',MatDB(dm=dm),ds=ds)
+    S.eval(fGHz=fGHz,theta=ang)
+    Rpara  = np.abs(S.R[:,:,0,0])
+    Rortho = np.abs(S.R[:,:,1,1])
+    Tpara  = np.abs(S.T[:,:,0,0])
+    Tortho  = np.abs(S.T[:,:,0,0])
+    return Rpara,Rortho,Tpara,Tortho
 
 if (__name__ == "__main__"):
     #plt.ion()
