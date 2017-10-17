@@ -540,11 +540,17 @@ class Signatures(PyLayers,dict):
     def compl(self,lint,L):
         """ completion from lint 
 
-        Paramaters
+        Parameters
         ----------
 
         lint : list 
             list of interactions
+
+        Examples
+        --------
+
+        >>> Si.compl([(6220,3),(6262,3),(6241,3)],DL.L)
+
 
         """
         # all group of interactions
@@ -1322,10 +1328,14 @@ class Signatures(PyLayers,dict):
                 # next interaction child
                 interaction = next(iter_on_interactions, None)
                 #print visited
-                #if ((visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]) and interaction==(44,2,7)):
+                #if ((visited ==[(6236,74,91),(-213,)]) and (interaction==(-1002,))):
+                #    print interaction 
+                #    pdb.set_trace()
+                #if (visited ==[(6236,74,91),(-213,),(6248,99,111)]):
+                #if (visited ==[(6236,74,91),(-213,),(6248,99,111),(6287,111,118)]):
+                    #pdb.set_trace()
                 #    import ipdb
-                #    ipdb.set_trace()
-                # cond1 : there is more interactions
+                # cond1 : there is no more interactions
                 # continue if True
                 cond1 = not(interaction is None)
                 # cond2 : enable reverberation
@@ -1341,11 +1351,20 @@ class Signatures(PyLayers,dict):
                 uD = [ k for k in range(len(visited)) if len(visited[k])==1 ]
                 uR = [ k for k in range(len(visited)) if len(visited[k])==2 ]
                 uT = [ k for k in range(len(visited)) if len(visited[k])==3 ]
-                condD = not(len(uD)>nD-1)
-                condR = not(len(uR)>nR-1)
-                condT = not(len(uT)>nT-1)
-                #print cond1,cond2,cond3
-                #print "vis :",visited,interaction
+                if cond1:
+                    condD = True
+                    condR = True 
+                    condT = True 
+                    if ((len(interaction)==1) and (len(uD)==nD)):
+                        condD = False 
+                    if ((len(interaction)==2) and (len(uR)==nR)):
+                        condR = False 
+                    if ((len(interaction)==3) and (len(uT)==nT)):
+                        condT = False 
+
+                #
+                #  animation 
+                #
                 if animation :
                     cpt = cpt+1
                     edge=zip(visited[:-1],visited[1:])
@@ -1366,383 +1385,389 @@ class Signatures(PyLayers,dict):
                     except:
                         pass
 
-                if (cond1 and cond2 and cond3 and condD and condR and condT):
-                    visited.append(interaction)
-                    #print(visited)
-                    # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
-                    # if visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]:
-                    #     import ipdb
-                    #     ipdb.set_trace()
+                if (cond1 and cond2 and cond3):
+                    if (condD and condR and condT):
+                        visited.append(interaction)
 
-
-                    # update list of airwalls
-                    if interaction[0] in lair:
-                        lawp.append(1)
-                    else:
-                        lawp.append(0)
-
-                    # update number of useful segments
-                    # if there is airwall in visited
-                    nstr = interaction[0]
-                    #
-                    #
-                    #
-                    # Testing the type of interaction at rank -2 
-                    # R is a list which contains a rotation matrix 
-                    # and a translation vector for doing the mirroring 
-                    # operation
-
-                    # diffraction (retrieve a point)
-                    if len(visited[-2]) == 1:
-                        #th = self.L.Gs.pos[nstr]
-                        R.append((np.eye(2),np.array([0,0])))
-                    elif len(visited[-2])==2:
-                        # 
-                        # Avant dernier poitnt est une reflection 
-                        #
-                        nseg_points = self.L.Gs[visited[-2][0]].keys()
-                        ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
-                        he_seg = np.array(self.L.Gs.pos[nseg_points[1]])
-                        #
-                        # get reflection matrix from segment visited[-2]  
-                        #
-                        R.append(geu.axmat(ta_seg,he_seg))
-                        # direct order
-                        #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
-                    # transmission do nothing 
-                    else : 
-                        pass
-                    # current interaction is of segment type
-                    if (nstr>0):
-                        nseg_points = self.L.Gs[nstr].keys()
-                        th = np.array([self.L.Gs.pos[nseg_points[0]],
-                                       self.L.Gs.pos[nseg_points[1]]])
-                    else:
-                        th = self.L.Gs.pos[nstr]
-                        th = np.array([th,th])
-
-                    # current interaction is of point type (diffraction)
-                    # apply current chain of symmetries
-                    #
-                    # th   is the current segment tail-head coordinates
-                    # tahe is a list of well mirrored tail-head coordinates
-                    
-                        #tahe.append(a)
-                    #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                    #    print("th (avant mirror)",th)
-                    ik = 1
-                    r = R[-ik]
-                    #
-                    # mirroring th until the previous point  
-                    # 
-                    th_mirror = copy.copy(th)
-                    while np.any(r[0]!=np.eye(2)):     
-                        th_mirror = np.einsum('ki,ij->kj',th_mirror,r[0])+r[1]
-                        ik = ik + 1
-                        r  = R[-ik]
-
-                    # if at least 2 interactions
-                    # or previous point is a diffraction 
-
-                    if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
-                        ratio = 1.0 
-                    else:
-                        # Determine the origin of the cone 
-                        # either the transmitter (ilast =0) 
-                        # or the last diffraction point (ilast=udiff[-1] ) 
-                        udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
-                        if udiff==[]:
-                            ilast = 0
-                        else:
-                            ilast=udiff[-1]
-
-                        pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
-                        phe0 = tahe[ilast][1]   # head first segment
-
-                        pta_ = tahe[-1][0]  # tail last segment
-                        phe_ = tahe[-1][1]  # head last segment 
-
-                        #
-                        # Calculates the left and right vector of the cone 
-                        #
-                        #  vl left vector 
-                        #  vr right vector 
-                        #
-                        #
-                        # Detect situations of connected segments
-                        #
-                        # [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]
-                        # if visited == [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]:
-                        #     print '\n',visited
+                        #print(visited)
+                        # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
+                        # if visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]:
                         #     import ipdb
                         #     ipdb.set_trace()
 
-                        connected = False
-                        if (pta0==pta_).all():
-                            apex = pta0
-                            connected = True
-                            v0=phe0-apex
-                            v_=phe_-apex
-                        elif (pta0==phe_).all():
-                            apex = pta0
-                            connected = True
-                            v0=phe0-apex
-                            v_=pta_-apex
-                        elif (phe0==pta_).all():
-                            apex = phe0
-                            connected = True
-                            v0=pta0-apex
-                            v_=phe_-apex
-                        elif (phe0==phe_).all():
-                            apex = phe0    
-                            connected = True
-                            v0=pta0-apex
-                            v_=pta_-apex
 
-                        if not connected:
-                            if not (geu.ccw(pta0,phe0,phe_) ^
-                                    geu.ccw(phe0,phe_,pta_) ):
-                                vr = (pta0,phe_)
-                                vl = (phe0,pta_)
-                            else:  # twisted case
-                                vr = (pta0,pta_)
-                                vl = (phe0,phe_)
-
-                            # cone dot product 
-                            # print vr
-                            # print vl
-                            vr_n = (vr[1]-vr[0])/np.linalg.norm(vr[1]-vr[0])
-                            vl_n = (vl[1]-vl[0])/np.linalg.norm(vl[1]-vl[0])
-                            
-                        
-                            vrdotvl = np.dot(vr_n,vl_n)
-                            # cone angle 
-                            angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.0))
-                            #angle_cone = np.arccos(vrdotvl)
-                            # prepare lines and seg argument for intersection checking
-                            if angle_cone!=0:
-                                linel = (vl[0],vl[1]-vl[0])
-                                liner = (vr[0],vr[1]-vr[0])
-                                # from origin mirrored segment to be tested 
-                                seg   = (th_mirror[0],th_mirror[1])
-
-                                # apex calculation 
-                                a0u = np.dot(pta0,vr_n)
-                                a0v = np.dot(pta0,vl_n)
-                                b0u = np.dot(phe0,vr_n)
-                                b0v = np.dot(phe0,vl_n)
-                                #import warnings
-                                #warnings.filterwarnings("error")
-                                try:
-                                    kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
-                                except:
-                                    pdb.set_trace()
-                                apex = phe0 + kb*vl_n
-
-                            #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                            #    print(visited)
-                            #    print("th",th)
-                            #    print("tahe",tahe)
-                            #    print("ta_,he_",pta_,phe_)
-                            #    print("vr,vl",vr_n,vl_n)
-                            #    print('angle cone',angle_cone)
-                            #    print(apex)
-
+                        # update list of airwalls
+                        if interaction[0] in lair:
+                            lawp.append(1)
                         else:
+                            lawp.append(0)
 
-                            v0n  = v0/np.linalg.norm(v0)
-                            v_n  = v_/np.linalg.norm(v_)
-
-                            # import ipdb
-                            # ipdb.set_trace()
-                            sign = np.sign(np.cross(v_n,v0n))
-                            if sign>0:    
-                                vr_n = -v0n
-                                vl_n = v_n
-                            else:
-                                vr_n = v_n
-                                vl_n = -v0n
-                            # vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
-                            # vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
-                            vrdotvl = np.dot(vr_n,vl_n)
-                            # cone angle 
-                            angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.))
-                            
-
-                        al = np.arctan2(vl_n[1],vl_n[0])
-                        ar = np.arctan2(vr_n[1],vr_n[0])
-
+                        # update number of useful segments
+                        # if there is airwall in visited
+                        nstr = interaction[0]
                         #
-                        # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
                         #
-                        # Dans certaines circonstances par example un cone emanant d'un point colinéaire 
-                        # avec le segment d'arrivé" (-4) (6,4) le point -4 est aligné avec le segment 6
-                        # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
-                        # la visibilité (-4) (6,4) 
+                        #
+                        # Testing the type of interaction at rank -2 
+                        # R is a list which contains a rotation matrix 
+                        # and a translation vector for doing the mirroring 
+                        # operation
+
+                        # diffraction (retrieve a point)
+                        if len(visited[-2]) == 1:
+                            #th = self.L.Gs.pos[nstr]
+                            R.append((np.eye(2),np.array([0,0])))
+                        elif len(visited[-2])==2:
+                            # 
+                            # Avant dernier poitnt est une reflection 
+                            #
+                            nseg_points = self.L.Gs[visited[-2][0]].keys()
+                            ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
+                            he_seg = np.array(self.L.Gs.pos[nseg_points[1]])
+                            #
+                            # get reflection matrix from segment visited[-2]  
+                            #
+                            R.append(geu.axmat(ta_seg,he_seg))
+                            # direct order
+                            #R.append(geu.axmat(tahe[-1][0],tahe[-1][1]))
+                        # transmission do nothing 
+                        else : 
+                            pass
+                        # current interaction is of segment type
+                        if (nstr>0):
+                            nseg_points = self.L.Gs[nstr].keys()
+                            th = np.array([self.L.Gs.pos[nseg_points[0]],
+                                           self.L.Gs.pos[nseg_points[1]]])
+                        else:
+                            th = self.L.Gs.pos[nstr]
+                            th = np.array([th,th])
+
+                        # current interaction is of point type (diffraction)
+                        # apply current chain of symmetries
+                        #
+                        # th   is the current segment tail-head coordinates
+                        # tahe is a list of well mirrored tail-head coordinates
+                        
+                            #tahe.append(a)
+                        #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                        #    print("th (avant mirror)",th)
+                        ik = 1
+                        r = R[-ik]
+                        #
+                        # mirroring th until the previous point  
                         # 
-                        if angle_cone ==0:
-                            ratio = 0
-                        else:    
-                            if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
-                                ratio = 1.
-                            else:
-                                wseg0 = th_mirror[0] - apex
-                                wseg1 = th_mirror[1] - apex
-                                mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
-                                mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+                        th_mirror = copy.copy(th)
+                        while np.any(r[0]!=np.eye(2)):     
+                            th_mirror = np.einsum('ki,ij->kj',th_mirror,r[0])+r[1]
+                            ik = ik + 1
+                            r  = R[-ik]
 
-                                if np.isclose(mod_wseg0,0):
-                                    #bvisu = True 
-                                    #pdb.set_trace()#
-                                    pass
-                                if np.isclose(mod_wseg1,0):
-                                    #bvisu = True 
-                                    #pdb.set_trace()#
-                                    pass
-                                #wseg0_n = wseg0/mod_wseg0
-                                #wseg1_n = wseg1/mod_wseg1
-                                wseg0_n = wseg0/np.linalg.norm(wseg0)
-                                wseg1_n = wseg1/np.linalg.norm(wseg1)
-                                aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
-                                aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+                        # if at least 2 interactions
+                        # or previous point is a diffraction 
+
+                        if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
+                            ratio = 1.0 
+                        else:
+                            # Determine the origin of the cone 
+                            # either the transmitter (ilast =0) 
+                            # or the last diffraction point (ilast=udiff[-1] ) 
+                            udiff = [ k for k in range(len(visited)) if len(visited[k])==1 ]
+                            if udiff==[]:
+                                ilast = 0
+                            else:
+                                ilast=udiff[-1]
+
+                            pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
+                            phe0 = tahe[ilast][1]   # head first segment
+
+                            pta_ = tahe[-1][0]  # tail last segment
+                            phe_ = tahe[-1][1]  # head last segment 
+
+                            #
+                            # Calculates the left and right vector of the cone 
+                            #
+                            #  vl left vector 
+                            #  vr right vector 
+                            #
+                            #
+                            # Detect situations of connected segments
+                            #
+                            # [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]
+                            # if visited == [(60, 2, 8), (61, 8, 11), (15, 11), (61, 11, 8), (60 ,8, 2), (44, 2, 7)]:
+                            #     print '\n',visited
+                            #     import ipdb
+                            #     ipdb.set_trace()
+
+                            connected = False
+                            if (pta0==pta_).all():
+                                apex = pta0
+                                connected = True
+                                v0=phe0-apex
+                                v_=phe_-apex
+                            elif (pta0==phe_).all():
+                                apex = pta0
+                                connected = True
+                                v0=phe0-apex
+                                v_=pta_-apex
+                            elif (phe0==pta_).all():
+                                apex = phe0
+                                connected = True
+                                v0=pta0-apex
+                                v_=phe_-apex
+                            elif (phe0==phe_).all():
+                                apex = phe0    
+                                connected = True
+                                v0=pta0-apex
+                                v_=pta_-apex
+
+                            if not connected:
+                                if not (geu.ccw(pta0,phe0,phe_) ^
+                                        geu.ccw(phe0,phe_,pta_) ):
+                                    vr = (pta0,phe_)
+                                    vl = (phe0,pta_)
+                                else:  # twisted case
+                                    vr = (pta0,pta_)
+                                    vl = (phe0,phe_)
+
+                                # cone dot product 
+                                # print vr
+                                # print vl
+                                vr_n = (vr[1]-vr[0])/np.linalg.norm(vr[1]-vr[0])
+                                vl_n = (vl[1]-vl[0])/np.linalg.norm(vl[1]-vl[0])
                                 
-                                # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
-                                #     ratio = 1
-                                    #print "toto"
-                                # else:
-                                I = geu.angle_intersection2(al,ar,aseg0,aseg1)
-                                ratio = I/angle_cone
-                                #if ratio>=1:
-                                #    pdb.set_trace()
-
-                            # if connected:
-                            #     print "ratio :",ratio
                             
+                                vrdotvl = np.dot(vr_n,vl_n)
+                                # cone angle 
+                                angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.0))
+                                #angle_cone = np.arccos(vrdotvl)
+                                # prepare lines and seg argument for intersection checking
+                                if angle_cone!=0:
+                                    linel = (vl[0],vl[1]-vl[0])
+                                    liner = (vr[0],vr[1]-vr[0])
+                                    # from origin mirrored segment to be tested 
+                                    seg   = (th_mirror[0],th_mirror[1])
 
-                        #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                        if (bvisu):
-                            fig ,ax = self.L.showG('s',aw=1,labels=0)
-                            #
-                            # magenta : start of the cone
-                            # cyan    :
-                            # yellow  : last interaction
-                            #
-                            ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                            ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
-                            ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color='yellow',linewidth=4)
-                            # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                            # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                            ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                            ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color='green',linewidth=3)
-                            nx.draw_networkx_labels(self.L.Gi,
-                                    self.L.Gi.pos,labels={x:str(x) for x in visited},
-                                    ax=ax,fontsize=18)
-                            plt.title(str(visited)+'  '+str(ratio))
-                            ax.plot(apex[0],apex[1],'or')
-                            plt.axis('auto')
-                            pdb.set_trace()
-                        #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
-                        # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
-                        if (1==0):
-                            fig ,ax = self.L.showG('s',aw=1,labels=0)
-                            ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
-                            ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+                                    # apex calculation 
+                                    a0u = np.dot(pta0,vr_n)
+                                    a0v = np.dot(pta0,vl_n)
+                                    b0u = np.dot(phe0,vr_n)
+                                    b0v = np.dot(phe0,vl_n)
+                                    #import warnings
+                                    #warnings.filterwarnings("error")
+                                    try:
+                                        kb  = ((b0v-a0v)-vrdotvl*(b0u-a0u))/(vrdotvl*vrdotvl-1)
+                                    except:
+                                        pdb.set_trace()
+                                    apex = phe0 + kb*vl_n
 
-                            ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
-                            ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
-                            ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
-                            #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
-                            ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
-                            plt.title(str(visited)+'  '+str(ratio))
-                            ax.plot(apex[0],apex[1],'or')
-                            plt.axis('auto')
-                            plt.show()
-                #else:
-                #    th = self.L.Gs.pos[nstr]
-                #    th = np.array([th,th])
-                #    ratio = 1
-                    if ratio > self.threshold:
-                        #
-                        # Update sequence of mirrored points
-                        if nstr<0:
-                            tahe.append(th)
+                                #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
+                                #    print(visited)
+                                #    print("th",th)
+                                #    print("tahe",tahe)
+                                #    print("ta_,he_",pta_,phe_)
+                                #    print("vr,vl",vr_n,vl_n)
+                                #    print('angle cone',angle_cone)
+                                #    print(apex)
+
+                            else:
+
+                                v0n  = v0/np.linalg.norm(v0)
+                                v_n  = v_/np.linalg.norm(v_)
+
+                                # import ipdb
+                                # ipdb.set_trace()
+                                sign = np.sign(np.cross(v_n,v0n))
+                                if sign>0:    
+                                    vr_n = -v0n
+                                    vl_n = v_n
+                                else:
+                                    vr_n = v_n
+                                    vl_n = -v0n
+                                # vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
+                                # vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                                vrdotvl = np.dot(vr_n,vl_n)
+                                # cone angle 
+                                angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.))
+                                
+
+                            al = np.arctan2(vl_n[1],vl_n[0])
+                            ar = np.arctan2(vr_n[1],vr_n[0])
+
+                            #
+                            # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
+                            #
+                            # Dans certaines circonstances par example un cone emanant d'un point colinéaire 
+                            # avec le segment d'arrivé" (-4) (6,4) le point -4 est aligné avec le segment 6
+                            # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
+                            # la visibilité (-4) (6,4) 
+                            # 
+                            if angle_cone ==0:
+                                ratio = 0
+                            else:    
+                                if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
+                                    ratio = 1.
+                                else:
+                                    wseg0 = th_mirror[0] - apex
+                                    wseg1 = th_mirror[1] - apex
+                                    mod_wseg0 = np.sqrt(np.sum(wseg0*wseg0,axis=0))
+                                    mod_wseg1 = np.sqrt(np.sum(wseg1*wseg1,axis=0))
+
+                                    if np.isclose(mod_wseg0,0):
+                                        #bvisu = True 
+                                        #pdb.set_trace()#
+                                        pass
+                                    if np.isclose(mod_wseg1,0):
+                                        #bvisu = True 
+                                        #pdb.set_trace()#
+                                        pass
+                                    #wseg0_n = wseg0/mod_wseg0
+                                    #wseg1_n = wseg1/mod_wseg1
+                                    wseg0_n = wseg0/np.linalg.norm(wseg0)
+                                    wseg1_n = wseg1/np.linalg.norm(wseg1)
+                                    aseg0 = np.arctan2(wseg0_n[1],wseg0_n[0])
+                                    aseg1 = np.arctan2(wseg1_n[1],wseg1_n[0])
+                                    
+                                    # if al==aseg0 or al==aseg1 or ar==aseg0 or ar==aseg1:
+                                    #     ratio = 1
+                                        #print "toto"
+                                    # else:
+                                    I = geu.angle_intersection2(al,ar,aseg0,aseg1)
+                                    ratio = I/angle_cone
+                                    #if ratio>=1:
+                                    #    pdb.set_trace()
+
+                                # if connected:
+                                #     print "ratio :",ratio
+                                
+
+                            #if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+                            if (bvisu):
+                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                #
+                                # magenta : start of the cone
+                                # cyan    :
+                                # yellow  : last interaction
+                                #
+                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[nseg_points[0]]),np.array(self.L.Gs.pos[nseg_points[1]]),al=1,color='yellow',linewidth=4)
+                                # ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                # ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th_mirror[0,:],th_mirror[1,:],al=1,color='green',linewidth=3)
+                                nx.draw_networkx_labels(self.L.Gi,
+                                        self.L.Gi.pos,labels={x:str(x) for x in visited},
+                                        ax=ax,fontsize=18)
+                                plt.title(str(visited)+'  '+str(ratio))
+                                ax.plot(apex[0],apex[1],'or')
+                                plt.axis('auto')
+                                pdb.set_trace()
+                            #if visited == [(104, 23, 17), (1, 17), (53, 17), (108, 17, 18)]:
+                            # if visited == [(104, 23, 17), (1, 17), (53, 17)]:
+                            if (1==0):
+                                fig ,ax = self.L.showG('s',aw=1,labels=0)
+                                ax = geu.linet(ax,pta0,phe0,al=1,color='magenta',linewidth=3)
+                                ax = geu.linet(ax,pta_,phe_,al=1,color='cyan',linewidth=3)
+
+                                ax = geu.linet(ax,np.array(self.L.Gs.pos[pts[0]]),np.array(self.L.Gs.pos[pts[1]]),al=1,color='yellow',linewidth=4)
+                                ax = geu.linet(ax,vr[0],vr[1],al=1,color='red',linewidth=3)
+                                ax = geu.linet(ax,vl[0],vl[1],al=1,color='blue',linewidth=3)
+                                #ax = geu.linet(ax,seg[0],seg[1],al=1,color='k',linewidth=3)
+                                ax = geu.linet(ax,th[0,:],th[1,:],al=1,color='green',linewidth=3)
+                                plt.title(str(visited)+'  '+str(ratio))
+                                ax.plot(apex[0],apex[1],'or')
+                                plt.axis('auto')
+                                plt.show()
+                    #else:
+                    #    th = self.L.Gs.pos[nstr]
+                    #    th = np.array([th,th])
+                    #    ratio = 1
+                        if ratio > self.threshold:
+                            #
+                            # Update sequence of mirrored points
+                            if nstr<0:
+                                tahe.append(th)
+                            else:
+                                tahe.append(th_mirror)
+                            
+                            # 
+                            # Check if the target has been reached
+                            # sequence is valid and last interaction is in the list of targets   
+                            #if (interaction in lit) or (interaction[-1]==self.target):
+                            if (interaction in lit):
+                                # idea here is to produce signature without any airwalls
+                                # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
+                                # anstr does not contains airwalls
+                                # lawp_tmp = [0]+lawp
+                                # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
+                                # print([self.L.Gs.node[x]['name'] for x in lll])
+                            
+                                #anstr = np.array([x[0] for ix,x in enumerate(visited) 
+                                #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
+                                #typ  = np.array([len(x) for ix,x in enumerate(visited) 
+                                #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
+                                #sig = np.array([anstr,typ])
+                                #sighash = hash(str(sig))
+                                
+
+                                # if len(anstr) == 2:
+                                #     if (anstr == np.array([323,351])).all():
+                                #         import ipdb
+                                #         ipdb.set_trace()
+                                anstr = np.array([x[0] for x in visited ])
+                                typ  = np.array([len(x) for x in visited])
+                                sig = np.array([anstr,typ])
+                                sighash = hash(str(sig))
+                                if sighash not in lhash:
+                                    lhash.append(sighash)
+                                    try:
+                                        self[len(typ)] = np.vstack((self[len(typ)],sig))
+                                        self.ratio[len(typ)] = np.append(self.ratio[len(typ)],ratio)
+                                    except:
+                                        self[len(typ)] = np.vstack((sig))
+                                        self.ratio[len(typ)] = np.array([ratio])
+                                # print ('added',visited)
+                                    cptsig +=1
+
+                                if animation:
+                                    Nf = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
+                                            nodelist=visited,labels={},
+                                            node_color='b',
+                                            node_size=40,
+                                            ax=ax,fig=fig)
+                                    Ef = nx.draw_networkx_edges(Gi,pos=Gi.pos,
+                                            edgelist=edge,labels={},
+                                            width=0.1,arrows=False,
+                                            ax=ax,fig=fig)
+                                    cpt=cpt+1
+                                    plt.savefig('./figure/' +str(us) +'_' + str(cpt) +'.png')
+                                    try:
+                                        ax.collections.remove(Nf)
+                                    except:
+                                        pass
+                                    try:
+                                        ax.collections.remove(Ef)
+                                    except:
+                                        pass
+
+                            outint = Gi[visited[-2]][interaction]['output'].keys()
+                            #
+                            # proint not used 
+                            #
+                            proint = Gi[visited[-2]][interaction]['output'].values()
+                            nexti  = [it for it in outint ]
+                            stack.append(iter(nexti))
+                        # 1590 ratio <= threshold
                         else:
-                            tahe.append(th_mirror)
-                        
-                        # 
-                        # Check if the target has been reached
-                        # sequence is valid and last interaction is in the list of targets   
-                        if (interaction in lit) or (interaction[-1]==self.target):
-                            # idea here is to produce signature without any airwalls
-                            # lawp_tmp is a mask where 0 mean no air wall and 1 = airwall
-                            # anstr does not contains airwalls
-                            # lawp_tmp = [0]+lawp
-                            # lll = [x[0] for ix,x in enumerate(visited) if lawp_tmp[ix]==1]
-                            # print([self.L.Gs.node[x]['name'] for x in lll])
-                        
-                            #anstr = np.array([x[0] for ix,x in enumerate(visited) 
-                            #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
-                            #typ  = np.array([len(x) for ix,x in enumerate(visited) 
-                            #                                  if ((lawp[ix]!=1) or (x[0] in self.L.name['AIR']) or (x in (lit+lis)))] )
-                            #sig = np.array([anstr,typ])
-                            #sighash = hash(str(sig))
-                            
-
-                            # if len(anstr) == 2:
-                            #     if (anstr == np.array([323,351])).all():
-                            #         import ipdb
-                            #         ipdb.set_trace()
-                            anstr = np.array([x[0] for x in visited ])
-                            typ  = np.array([len(x) for x in visited])
-                            sig = np.array([anstr,typ])
-                            sighash = hash(str(sig))
-                            if sighash not in lhash:
-                                lhash.append(sighash)
-                                try:
-                                    self[len(typ)] = np.vstack((self[len(typ)],sig))
-                                    self.ratio[len(typ)] = np.append(self.ratio[len(typ)],ratio)
-                                except:
-                                    self[len(typ)] = np.vstack((sig))
-                                    self.ratio[len(typ)] = np.array([ratio])
-                            # print ('added',visited)
-                                cptsig +=1
-
-                            if animation:
-                                Nf = nx.draw_networkx_nodes(Gi,pos=Gi.pos,
-                                        nodelist=visited,labels={},
-                                        node_color='b',
-                                        node_size=40,
-                                        ax=ax,fig=fig)
-                                Ef = nx.draw_networkx_edges(Gi,pos=Gi.pos,
-                                        edgelist=edge,labels={},
-                                        width=0.1,arrows=False,
-                                        ax=ax,fig=fig)
-                                cpt=cpt+1
-                                plt.savefig('./figure/' +str(us) +'_' + str(cpt) +'.png')
-                                try:
-                                    ax.collections.remove(Nf)
-                                except:
-                                    pass
-                                try:
-                                    ax.collections.remove(Ef)
-                                except:
-                                    pass
-
-                        outint = Gi[visited[-2]][interaction]['output'].keys()
-                        #
-                        # proint not used 
-                        #
-                        proint = Gi[visited[-2]][interaction]['output'].values()
-                        nexti  = [it for it in outint ]
-                        stack.append(iter(nexti))
-                    # 1590 ratio <= threshold
+                            if len(visited)>1:
+                                if ((len(visited[-2])==2) or len(visited[-2])==1):
+                                    R.pop()
+                            last = visited.pop()
+                            lawp.pop()
+                    # 1389 condR and condT and condD
                     else:
-                        if len(visited)>1:
-                            if ((len(visited[-2])==2) or len(visited[-2])==1):
-                                R.pop()
-                        last = visited.pop()
-                        lawp.pop()
-                # 1295 cond1 and cond2 and cond3 and cond4 
+                        pass
+                # 1388 cond1 and cond2 and cond3  
                 else:
                     # if at least 2 interactions 
                     # and antepenultiem is a reflexion  
@@ -1761,6 +1786,7 @@ class Signatures(PyLayers,dict):
                     except:
                         pass
                     stack.pop()
+                    #stack.pop()
 
 
             

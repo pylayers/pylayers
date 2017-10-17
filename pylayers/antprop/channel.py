@@ -5514,7 +5514,7 @@ class Ctilde(PyLayers):
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         #b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        b.eval(th=np.pi-self.rangl[:, 0], ph=self.rangl[:, 1]-np.pi, grid=False)
+        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
         Fbt = bs.FUsignal(b.fGHz, b.Ft)
         Fbp = bs.FUsignal(b.fGHz, b.Fp)
 

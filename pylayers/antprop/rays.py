@@ -2472,15 +2472,22 @@ class Rays(PyLayers, dict):
         # true LOS when no interaction
         #
         if self.los:
-            Ct[:,0, :, :]= np.eye(3,3)[np.newaxis,np.newaxis,:,:]
+            Ct[:,0, :, :]= np.eye(3,3)[None,None,:,:]
             #self[0]['dis'] = self[0]['si'][0]
             # Fris
-            Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+            Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][None, :, None, None])
             self.delays[0] = self[0]['dis']/0.3
             self.dis[0] = self[0]['dis']
 
 
         # To be corrected in a future version
+        #
+        #  Ct : nf , Nray , theta , phi 
+        #
+        #  to 
+        #
+        #  Ct : Nray x nf , theta , phi 
+        #
         Ct = np.swapaxes(Ct, 1, 0)
 
         #c11 = Ct[:,:,0,0]
@@ -2516,8 +2523,11 @@ class Rays(PyLayers, dict):
         Cn.tang = aod.T
         Cn.tangl = aod.T
         # r x 2
-        Cn.rang = aoa.T
-        Cn.rangl = aoa.T
+        #
+        # recover angle of arrival convention 
+        #
+        Cn.rang  = np.hstack([np.pi-aoa.T[:,[0]],aoa.T[:,[1]]-np.pi]) 
+        Cn.rangl = np.hstack([np.pi-aoa.T[:,[0]],aoa.T[:,[1]]-np.pi])
         # add aoa and aod
 
         self.evaluated = True
