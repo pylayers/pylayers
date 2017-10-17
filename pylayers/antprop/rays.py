@@ -1944,7 +1944,8 @@ class Rays(PyLayers, dict):
                 #  tha = pi - thd
                 #  pha = phd - pi
                 #
-                self[k]['aoa'] =  np.vstack((np.pi-thd, phd-np.pi))
+                #self[k]['aoa'] =  np.vstack((np.pi-thd, phd-np.pi))
+                self[k]['aoa'] =  np.vstack((thd,phd))
                 E = np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
                 ze = np.array([0])

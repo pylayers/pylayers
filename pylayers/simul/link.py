@@ -1844,19 +1844,25 @@ class DLink(Link):
         dirmeas : string 
             directory of the data in the project path 
 
+        Notes
+        -----
+
+        If a measurement file is given the angular range is obtained from the measurement
+        otherwise the variable az is used. 
+
         """
-        defaults = {'fGHz':,
-                     az : 0,
-                     tilt :0,
-                     polar :'V',
-                     win :'rect',
-                     _filemeas:'',
-                     _filecal:'',
-                     ang_offset : 0.37,
-                     BW : 1.6,
-                     ext :'txt',
-                     dirmeas :'meas',
-                     refinement :False
+        defaults = {'fGHz':32.6,
+                     'az': 0,
+                     'tilt':0,
+                     'polar':'V',
+                     'win':'rect',
+                     '_filemeas':'',
+                     '_filecal':'',
+                     'ang_offset' : 0.37,
+                     'BW': 1.6,
+                     'ext':'txt',
+                     'dirmeas':'meas',
+                     'refinement':False
                     }
         for k in defaults:
             if k not in kwargs:
@@ -1866,20 +1872,28 @@ class DLink(Link):
         az   = kwargs.pop('az')
         tilt = kwargs.pop('tilt')
         polar = kwargs.pop('polar')
-        win = kwargs.pop('win')
-        _filemeas = kwargs.pop('_filemeas')
-        _filecal = kwargs.pop('_filecal')
-        diremeas = kwargs.pop('dirmeas')
-        ang_offset = kwargs.pop('ang_offset')
-        BW = kwargs.pop('BW')
-        ext = kwargs.pop('ext')
-        refiement = kwargs.pop('refinement')
+        win = kwargs.pop('win')               # argument for loadmes
+        _filemeas = kwargs.pop('_filemeas')   # argument for loadmes
+        _filecal = kwargs.pop('_filecal')     # argument for loadmes
+        dirmeas = kwargs.pop('dirmeas')      # argument for loadmes
+        ang_offset = kwargs.pop('ang_offset') # argument for loadmes
+        BW = kwargs.pop('BW')                 # argument for loadmes
+        ext = kwargs.pop('ext')               # argument for loadmes
+        refinement = kwargs.pop('refinement')  # argument for loadmes
 
         # read measurement if available
         if _filemeas!='':
             fcGHz = self.fGHz[0]
             self.afpmes = AFPchannel(tx=self.a,rx=self.b)
-            self.afpmes.loadmes(_filemeas,_filecal,fcGHz=fcGHz,BW=BW,win=win,ang_offset=ang_offset,ext=ext,dirmeas=dirmeas,refinement=refinement)
+            self.afpmes.loadmes(_filemeas,
+                                _filecal,
+                                 fcGHz=fcGHz,
+                                 BW=BW,
+                                 win=win,
+                                 ang_offset=ang_offset,
+                                 ext=ext,
+                                 dirmeas=dirmeas,
+                                 refinement=refinement)
             az = self.afpmes.az
             #
             # afpmes.x
