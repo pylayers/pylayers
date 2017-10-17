@@ -330,7 +330,7 @@ class AFPchannel(bs.FUsignal):
             u = np.where(self.az<0)
             self.az[u] = self.az[u] + 2*np.pi
 
-    def toadp(self,imax=-1,win='han'):
+    def toadp(self,imax=-1,win='rect'):
         """ convert afp into adp (frequency->delay) 
 
         """
@@ -865,10 +865,10 @@ class ADPchannel(bs.TUsignal):
             l.set_fontsize(kwargs['fontsize'])
 
         if kwargs['ylabel']:
-            ax.set_ylabel('level [dB]',fontsize=kwargs['fontsize']) 
+            ax.set_ylabel('PDP [dB]',fontsize=kwargs['fontsize']) 
 
         if kwargs['xlabel']:
-            ax.set_ylabel('Propagation Delay [ns]',fontsize=kwargs['fontsize']) 
+            ax.set_xlabel('Propagation Delay [ns]',fontsize=kwargs['fontsize']) 
         #ax.set_title(self._filename+' '+str(PL))
         if kwargs['legend']:
             plt.legend(loc='best',fontsize=kwargs['fontsize']) 
