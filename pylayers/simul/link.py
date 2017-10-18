@@ -2358,6 +2358,8 @@ class DLink(Link):
         fftshift : boolean 
         rays : boolean
             display rays contributors
+        fspl : boolean
+            display free space path loss
         
         See Also
         --------

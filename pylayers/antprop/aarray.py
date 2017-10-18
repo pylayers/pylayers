@@ -100,8 +100,8 @@ class Array(ant.Pattern):
 
     def __repr__(self):
         st = ''
-        st = st + 'points :' + str(self.p) + '\n'
-        st = st + 'weights :' + str(self.w) + '\n'
+        #st = st + 'points :' + str(self.p) + '\n'
+        #st = st + 'weights :' + str(self.w) + '\n'
         return(st)
 
     def show(self):
@@ -379,11 +379,11 @@ class AntArray(Array, ant.Antenna):
         st = st + 'N              : '+str(self.N)+'\n'
         st = st + 'dm             : '+str(self.dm)+'\n\n'
         st = st + "Ant Id         : x  ,    y   ,  z\n"
-        for n in range(N):
-            st = st + str(n) +  ' : ' + str(self.p[0, ix[n]]) + ' , ' + str(self.p[1, iy[n]])+' , '+str(self.p[2, iz[n]])+'\n'
+        #for n in range(N):
+        #    st = st + str(n) +  ' : ' + str(self.p[0, ix[n]]) + ' , ' + str(self.p[1, iy[n]])+' , '+str(self.p[2, iz[n]])+'\n'
         #st = st + "\nweight : Coupling matrix @ f = "+str(self.fGHz[0]) + ' fGHz'+'\n'
-        for n in range(N):
-            st = st + str(self.w[n]) + ' : ' + str(self.Sc[n,:, 0])+'\n'
+        #for n in range(N):
+        #    st = st + str(self.w[n]) + ' : ' + str(self.Sc[n,:, 0])+'\n'
         return(st)
 
 
