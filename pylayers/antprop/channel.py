@@ -772,6 +772,7 @@ class ADPchannel(bs.TUsignal):
         pdp_min = 10*np.log10(pdp)-Gmax-3
         pdp_max = 10*np.log10(pdp)-Gmin-3
         pdp_typ = 10*np.log10(pdp)-Gtyp-3
+
         umin = np.where(pdp_min>-118)
         pdp_min_thr = pdp_min[umin] 
         umax = np.where(pdp_max>-118)

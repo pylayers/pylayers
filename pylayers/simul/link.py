@@ -1812,7 +1812,8 @@ class DLink(Link):
 
 
     def adp(self,imax=1000):
-        """
+        """ construct the angular delay profile
+
         Parameters
         ----------
         imax : int
@@ -1910,12 +1911,18 @@ class DLink(Link):
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
         tgain = []
 
-        for ph in az.squeeze():
+        for k,ph in enumerate(az.squeeze()):
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
             self.evalH()
             # tgain = np.append(tgain,20*np.log10(np.abs(self.H.y[0,:]))[0][0][0])
             # print ph*180/np.pi,20*np.log10(np.abs(self.H.y[0,:]))
+            E = self.H.energy()
+            if k==0:
+                self.dpadp = E[None,...] 
+            else:
+                self.dpadp = np.concatenate((self.dpadp,E[None,...]),axis=0)
+
             if self.H.y.shape[3]!=1:
                 S = np.sum(self.H.y*np.exp(-2*1j*np.pi*self.H.x[None,None,None,:]*self.H.taud[:,None,None,None]),axis=0)
             else:
@@ -1936,7 +1943,9 @@ class DLink(Link):
         else:
             self.afprt.x = fGHz
             self.afprt.fcGHz = fGHz[len(fGHz)/2]
-
+        
+        self.dpdp = np.sum(self.dpadp,axis=0)
+        self.dpap = np.sum(self.dpadp,axis=1)
         #return(afp)
 
 
@@ -2366,6 +2375,8 @@ class DLink(Link):
         fftshift : boolean 
         rays : boolean
             display rays contributors
+        fspl : boolean
+            display free space path loss
         
         See Also
         --------
