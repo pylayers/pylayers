@@ -733,9 +733,9 @@ class ADPchannel(bs.TUsignal):
         #
         # The -3dB is specific to the Aalto measurement and desembeding (1/2)
         #
-        pdp_min = 10*np.log10(pdp)-Gmax-3
-        pdp_max = 10*np.log10(pdp)-Gmin-3
-        pdp_typ = 10*np.log10(pdp)-Gtyp-3
+        pdp_min = 10*np.log10(pdp)-Gmax-1
+        pdp_max = 10*np.log10(pdp)-Gmin-1
+        pdp_typ = 10*np.log10(pdp)-Gtyp-1
         umin = np.where(pdp_min>-118)
         pdp_min_thr = pdp_min[umin] 
         umax = np.where(pdp_max>-118)

@@ -74,7 +74,7 @@ class Array(ant.Pattern):
         ----------
 
         p  : set of 3D points (3xNp)   or  3 x Nx x Ny x Nz
-        w  : set of weight Np x Nf
+        w  : set of weights Np x Nf
                        or  Nx x Ny x Nz x Nf
 
         """
@@ -386,6 +386,70 @@ class AntArray(Array, ant.Antenna):
         #    st = st + str(self.w[n]) + ' : ' + str(self.Sc[n,:, 0])+'\n'
         return(st)
 
+class Precoder(AntArray):
+    def __init__(self,Fhs,Fbh,Fht):
+        """ Precoder from IQ stream to transmit antennas
+
+        Fhs : Nrfchain (h)  x Nstream (s) x f  (stream -> rfchain) 
+        Fbh : Nbeam (b)  x Nrfchain (h)   x f  (rfchain -> beams)
+        Ftb : Nt (t)  x Nbeam (b)         x f  (beams -> transmit antennas)  
+
+        """
+        # check dimensions validity 
+        assert(Fhs.shape[0]==Fbh.shape[1])
+        assert(Fbh.shape[0]==Ftb.shape[1])
+        assert(Ftb.shape[0]==self.p[1])
+        #
+        #  s : stream axis 
+        #  h : rfchain axis
+        #  b : beam axis
+        #  t : antenna axis 
+        #  f : frequency axis 
+        #
+        # Fbb : h x s x f 
+        self.Fhs = Fhs
+        # Fbe : b x h x f 
+        self.Fbh = Fbh
+        # Frf : t x b x f 
+        self.Ftb = Ftb 
+
+        # from IQ stream to beams 
+        self.Fbs = np.einsum('bhf,hsf->bsf',Fbh,Fhs)
+
+
+class Combiner(AntArray) 
+    def __init__(self,Wbr,Whb,Wsh):
+        """ Combiner from receive antennas to IQ streams
+
+        Wbr : Nbeam (b) x Nr (r)        (receive antennas - beams )  
+        Whb : Nrfchain (h) x Nbeam (b)  (beams -> rfchain ) 
+        Wsh : Nstream (s) x Nrfchain (rfchain -> stream )  
+
+        """
+        # check dimensions validity 
+        assert(Wbr.shape[1]==self.p[1])
+        assert(Wbr.shape[0]==Whb.shape[1])
+        assert(Whb.shape[0]==Wsh.shape[1])
+        #
+        #  r : receive antenna axis 
+        #  b : beam axis
+        #  h : rfchain axis
+        #  s : stream axis 
+        # 
+
+        # Wbr : b x r x f 
+        self.Wbr = Wbr
+        # Whb : h x b x f 
+        self.Whb = Whb 
+        # Wsh : s x h x f 
+        self.Wsh = Wsh 
+        
+        # from receive antennas to Rf chains
+        # h x r x f 
+        self.Whr = np.einsum('hbf,brf->hrf',Whb,Wbr)
+        # from receive antennas to IQ streams (bb)  
+        # s x r x f 
+        self.Wsr = np.einsum('shf,hrf->srf',Wsh,self.Whr)
 
 def k2xyz(ik, sh):
     """
