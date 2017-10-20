@@ -1909,6 +1909,7 @@ class DLink(Link):
        
         self.afprt = AFPchannel(tx=self.a,rx=self.b,az=az)
         tgain = []
+
         for ph in az.squeeze():
             self.Tb = geu.MATP(self.Ab.sl,self.Ab.el,ph,tilt,polar)
             # self._update_show3(ant='b')
