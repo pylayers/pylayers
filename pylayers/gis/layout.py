@@ -5704,7 +5704,6 @@ class Layout(pro.PyLayers):
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
             if not multi:
-                pdb.set_trace()
                 self.outputGi(verbose=verbose,tqdmpos=1)
             else:
                 self.outputGi_mp()
@@ -8218,8 +8217,6 @@ class Layout(pro.PyLayers):
                     if len(i1) == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
-                        if ((nstr0==6236) and (nstr1==141)):
-                            pdb.set_trace()
                         typ, prob = cn.belong_seg(Mpta, Mphe)
                         # printi0,i1
                         # if ((i0 == (6, 0)) & (i1 == (7, 0))):

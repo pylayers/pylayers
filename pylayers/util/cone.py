@@ -148,8 +148,8 @@ class Cone(PyLayers):
         dtaw = np.sum(ptama*w,axis=0)
         dhew = np.sum(phema*w,axis=0)
 
-        blta = (dtaw>=0) | np.isclose(dtaw,0)
-        blhe = (dhew>=0) | np.isclose(dhew,0)
+        blta = (dtaw>=0)|(np.isclose(dtaw,0.))
+        blhe = (dhew>=0)|(np.isclose(dhew,0.))
         #if 'seg1' in self.__dict__:
         #    pa =  self.seg1[:,0].reshape(2,1)
         #    pb = (self.seg1[:,0]+w).reshape(2,1)
