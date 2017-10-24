@@ -1749,6 +1749,7 @@ class Pattern(PyLayers):
                     'polar':True,
                     'topos':False,
                     'source':'satimo',
+                    'figsize':(8, 8),
                     'show':True,
                     'mode':'index',
                     'color':'black',
@@ -1765,7 +1766,7 @@ class Pattern(PyLayers):
                 args[k] = kwargs[k]
 
         if 'fig' not in kwargs:
-            fig = plt.figure(figsize=(8, 8))
+            fig = plt.figure(figsize=kwargs['figsize'])
         else:
             fig = kwargs['fig']
 
@@ -1936,17 +1937,20 @@ class Pattern(PyLayers):
                 plt.title(u'$\\phi$ plane ')
             # actual plotting
             rad2deg = 180/np.pi
+
+
+
             if len(lfreq)>1: 
-                ax.plot(angle*rad2deg, r, color=col[cpt], lw=2, label=chaine)
+                #ax.plot(angle*rad2deg, r, color=col[cpt], lw=2, label=chaine)
                 # plt.grid()
-                # ax.plot(angle*rad2deg, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
-                # plt.axhline(-3,0,color='g')
+                ax.plot(angle*rad2deg, r - self.GdBmax, color=col[cpt], lw=2, label=chaine)
+                plt.axhline(-3,0,color='g',linewidth=3)
                 plt.grid('on')
             else:
-                ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
-                plt.grid()
-                # ax.plot(angle*rad2deg, r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
-                # plt.axhline(-3,0,color='g')
+                #ax.plot(angle, r, color=kwargs['color'], lw=2, label=chaine)
+                #plt.grid()
+                ax.plot(angle*rad2deg, r - self.GdBmax, color=kwargs['color'], lw=2, label=chaine)
+                plt.axhline(-3,0,color='g',linewidth=3)
                 plt.grid('on')
             cpt = cpt + 1
 
@@ -1955,7 +1959,7 @@ class Pattern(PyLayers):
             #ax.set_rmax(t1[-1])
             #ax.set_rmin(t1[0])
         if kwargs['legend']:
-            ax.legend()
+            ax.legend(loc='best',fontsize=70)
         if kwargs['show']:
             plt.ion()
             plt.show()

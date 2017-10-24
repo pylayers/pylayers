@@ -1918,6 +1918,10 @@ class DLink(Link):
             # tgain = np.append(tgain,20*np.log10(np.abs(self.H.y[0,:]))[0][0][0])
             # print ph*180/np.pi,20*np.log10(np.abs(self.H.y[0,:]))
             E = self.H.energy()
+
+            # import ipdb
+            # ipdb.set_trace()
+            
             if k==0:
                 self.dpadp = E[None,...] 
             else:

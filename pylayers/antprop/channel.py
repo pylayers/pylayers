@@ -594,7 +594,7 @@ class ADPchannel(bs.TUsignal):
         #extent = (0,360,self.x[imin],self.x[imax])
         # import ipdb
         # ipdb.set_trace()
-        #extent = (0,360,self.x[imin],self.x[imax])
+        # extent = (0,360,self.x[imin],self.x[imax])
         extent = (45,270,self.x[imin],self.x[imax])
         padp = np.abs(self.y)[:,imin:imax].T
         if dB:
