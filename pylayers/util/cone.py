@@ -97,7 +97,6 @@ class Cone(PyLayers):
     def belong_seg(self,pta,phe,prob=True,visu=False):
         """ test if segment belong to cone
 
-
         Parameters
         ----------
 
@@ -149,8 +148,8 @@ class Cone(PyLayers):
         dtaw = np.sum(ptama*w,axis=0)
         dhew = np.sum(phema*w,axis=0)
 
-        blta = (dtaw>=0)
-        blhe = (dhew>=0)
+        blta = (dtaw>=0) | np.isclose(dtaw,0)
+        blhe = (dhew>=0) | np.isclose(dhew,0)
         #if 'seg1' in self.__dict__:
         #    pa =  self.seg1[:,0].reshape(2,1)
         #    pb = (self.seg1[:,0]+w).reshape(2,1)
@@ -200,7 +199,7 @@ class Cone(PyLayers):
             proba[btalhein] = pr2
         typ[btalhein] = 2
 
-        #(tai-apex).v
+        #(ta-apex).v
         bheltain  = (bheol & ~btaol & ~btaor)&boup
         if (prob and not (bheltain==False).all()):
             v3  = pta[:,bheltain]-self.apex.reshape(2,1)

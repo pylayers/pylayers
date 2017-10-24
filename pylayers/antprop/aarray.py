@@ -74,8 +74,11 @@ class Array(ant.Pattern):
         ----------
 
         p  : set of 3D points (3xNp)   or  3 x Nx x Ny x Nz
-        w  : set of weights Np x Nf
+        w  : set of weights Nb x Np x Nf
                        or  Nx x Ny x Nz x Nf
+
+        Nf : number of frequency points
+        Nb : Number of beams  
 
         """
         assert type(p) == np.ndarray, " Array not an array"
@@ -86,8 +89,8 @@ class Array(ant.Pattern):
             self.Np = p.shape[1]
         shp = np.shape(p)
 
-        # If no excitation choose uniform excitation
-        # Np x Nf
+        # If no excitation choose 1 beam of uniform weights 
+        # Nb x Np x Nf
         if w == []:
             w = np.ones((shp[1:]))[..., None]
         self.w = w
@@ -365,7 +368,7 @@ class AntArray(Array, ant.Antenna):
         # s : space (3)
         # a : antennas
         # d : directions
-        # (space,antenna) (space,diections) -> (antenna,directions)
+        # (space,antenna) (space,directions) -> (antenna,directions)
         up = np.einsum('sa,sd->ad',self.p,u)
         W  = np.exp(1j*k[None,None,:]*up[...,None])
         return(W)
@@ -394,6 +397,20 @@ class Precoder(AntArray):
         Fbh : Nbeam (b)  x Nrfchain (h)   x f  (rfchain -> beams)
         Ftb : Nt (t)  x Nbeam (b)         x f  (beams -> transmit antennas)  
 
+        Examples
+        --------
+
+        >>> Ns = 4
+        >>> Nh = 4 
+        >>> Nb = 4
+        >>> Nt = 4
+        >>> Fhs = np.zeros((Nh,Ns)).astype('complex')
+        >>> uh = np.random.randint(0,Nh,Ns)
+        >>> Fhs[uh,np.arange(Ns)]=1
+        >>> Fbh = np.zeros((Nb,Nh)).astype('complex')
+        >>> ub = np.random.randint(0,Nb,Nh)
+        >>> Fbh[ub,np.arange(Nh)]=1
+
         """
         # check dimensions validity 
         assert(Fhs.shape[0]==Fbh.shape[1])
@@ -413,11 +430,13 @@ class Precoder(AntArray):
         # Frf : t x b x f 
         self.Ftb = Ftb 
 
-        # from IQ stream to beams 
+        # from IQ streams to beams 
         self.Fbs = np.einsum('bhf,hsf->bsf',Fbh,Fhs)
+        # from IQ streams to antennas 
+        self.Fts = np.einsum('tbf,bsf->tsf',Ftb,self.Fbs)
 
 
-class Combiner(AntArray) 
+class Combiner(AntArray):
     def __init__(self,Wbr,Whb,Wsh):
         """ Combiner from receive antennas to IQ streams
 

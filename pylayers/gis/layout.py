@@ -5703,8 +5703,8 @@ class Layout(pro.PyLayers):
             Buildpbar.update(1)
         if 'i' in graph:
             self.buildGi(verbose=verbose,tqdmpos=1)
-            #pdb.set_trace()
             if not multi:
+                pdb.set_trace()
                 self.outputGi(verbose=verbose,tqdmpos=1)
             else:
                 self.outputGi_mp()
@@ -7951,11 +7951,11 @@ class Layout(pro.PyLayers):
                                 #if iprint:
                                 #     print("li1",li1)
                                 #     print("li2",li2)
+                                #if cy == 91:
+                                #    print("     ",li2)
                                 
                                 for i1 in li1:
-                                    # printli1
                                     for i2 in li2:
-                                        # printli2
                                         if (i1[0] != i2[0]):
                                             if ((len(i1) == 2) & (len(i2) == 2)):
                                                 # print"RR"
@@ -8193,8 +8193,7 @@ class Layout(pro.PyLayers):
                     # it should be the case in 99% of cases
 
                     if len(ipoints) > 0:
-                        isegments = np.hstack(
-                            (isegments, np.array(ipoints)[:, 0]))
+                        isegments = np.hstack((isegments, np.array(ipoints)[:, 0]))
                         pta = np.hstack((pta, pipoints))
                         phe = np.hstack((phe, pipoints))
 
@@ -8219,6 +8218,8 @@ class Layout(pro.PyLayers):
                     if len(i1) == 2:
                         Mpta = geu.mirror(pta, pseg1[:, 0], pseg1[:, 1])
                         Mphe = geu.mirror(phe, pseg1[:, 0], pseg1[:, 1])
+                        if ((nstr0==6236) and (nstr1==141)):
+                            pdb.set_trace()
                         typ, prob = cn.belong_seg(Mpta, Mphe)
                         # printi0,i1
                         # if ((i0 == (6, 0)) & (i1 == (7, 0))):
@@ -8230,7 +8231,7 @@ class Layout(pro.PyLayers):
                         #    plt.show()
                         #    pdb.set_trace())
                     ########
-                    # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+                    # SOMETIMES PROBA IS 0 WHEReAS SEG IS SEEN
                     ###########
                     # # keep segment with prob above a threshold
                     # isegkeep = isegments[prob>0]

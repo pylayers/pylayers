@@ -1391,9 +1391,9 @@ class Signatures(PyLayers,dict):
 
                         #print(visited)
                         # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
-                        # if visited ==[(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]:
-                        #     import ipdb
-                        #     ipdb.set_trace()
+                        if visited ==[(6236,74,91),(141,91)]:
+                            import ipdb
+                            ipdb.set_trace()
 
 
                         # update list of airwalls
