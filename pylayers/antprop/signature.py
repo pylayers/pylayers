@@ -1176,7 +1176,7 @@ class Signatures(PyLayers,dict):
                     'diffraction' : True,
                     'animation' : False
                     }
-        
+        selv.cpt = 0 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k] 
@@ -1388,7 +1388,7 @@ class Signatures(PyLayers,dict):
                 if (cond1 and cond2 and cond3):
                     if (condD and condR and condT):
                         visited.append(interaction)
-
+                        self.cpt+=1
                         #print(visited)
                         # [(44,2,7),(62,7,15),(21,15),(62,15,7),(44,7,2),(16,2)]
                         # if visited ==[(6236,74,91),(141,91)]:
