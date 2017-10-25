@@ -584,6 +584,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1">#</span>
         <span class="c1"># related files</span>
         <span class="c1">#</span>
@@ -618,7 +620,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;ednodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;subseg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;subsegnb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;isonb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;transition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;visu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;thin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
@@ -638,7 +640,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;box&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">maxheight</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxheight</span> <span class="o">=</span> <span class="mf">3.</span>
 
         <span class="n">newfile</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">loadlay</span> <span class="o">=</span> <span class="bp">False</span>
@@ -668,6 +670,9 @@
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># No argument</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="s1">&#39;newfile.lay&#39;</span>
             <span class="n">newfile</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sl</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">SlabDB</span><span class="p">(</span><span class="n">fileslab</span><span class="o">=</span><span class="n">_fileslabini</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="n">_filematini</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zfloor</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zceil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxheight</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">newfile</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">loadlay</span><span class="p">:</span>
@@ -2191,7 +2196,7 @@
                 <span class="c1"># AIR segment reaching zfloor are not stored (cond5) </span>
                 <span class="c1">#</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">cond1</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond5</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cond6</span><span class="p">))</span> <span class="ow">or</span> <span class="n">cond7</span><span class="p">:</span> 
-                    <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
                     <span class="n">d</span><span class="p">[</span><span class="s1">&#39;connect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;transition&#39;</span><span class="p">]:</span>
@@ -2999,8 +3004,10 @@
         <span class="c1"># update iso of the 2 segments </span>
         <span class="c1">#</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">same_seg</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">num</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># Segment punctual position is in the middle of segment</span>
@@ -3029,6 +3036,10 @@
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># update shseg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">num</span><span class="p">:</span><span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">]))})</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">num</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Layout.wedge2"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.wedge2.html#pylayers.gis.layout.Layout.wedge2">[docs]</a>    <span class="k">def</span> <span class="nf">wedge2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">apnt</span><span class="p">):</span>
@@ -3314,19 +3325,114 @@
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">le</span><span class="p">:</span>
             <span class="k">assert</span><span class="p">(</span><span class="n">e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">iso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iso</span> 
+             <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">]]</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>  <span class="c1"># delete edge position</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">-</span> <span class="mi">1</span>
             <span class="c1"># update slab name &lt;-&gt; edge number dictionnary</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-            <span class="c1"># delete subseg if required</span>
+            <span class="c1"># delete iso if required</span>
+
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">_shseg</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="c1"># remove shapely seg</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
         <span class="k">if</span> <span class="n">g2npy</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">point_touches_seg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pt</span><span class="p">,</span><span class="n">lseg</span><span class="o">=</span><span class="p">[],</span><span class="n">segtol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span><span class="n">tahetol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; determine if a point is touching a segment</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+
+<span class="sd">            pt : a point (2,)</span>
+<span class="sd">            seg : a list of segments to test. </span>
+<span class="sd">                 if [] =&gt; all Gs segments are tested</span>
+
+<span class="sd">            segdtol : distance tolerance point to segment</span>
+<span class="sd">            tahetol : distance tolerance point to segment extremeties</span>
+<span class="sd">                        =&gt; a point on segment extremeties is considered</span>
+<span class="sd">                           not touching the segseg</span>
+
+
+
+<span class="sd">            Return</span>
+<span class="sd">            ------</span>
+
+<span class="sd">            ltseg : lsit of touched segments (by the point)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">lseg</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">lseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+
+        <span class="n">ltseg</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">allnodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lseg</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">allnodes</span><span class="p">:</span>
+                <span class="n">n0</span><span class="p">,</span><span class="n">n1</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;connect&#39;</span><span class="p">]</span>
+                <span class="n">dta</span><span class="p">,</span><span class="n">dhe</span><span class="p">,</span><span class="n">h</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">dptseg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pt</span><span class="p">)[:,</span><span class="bp">None</span><span class="p">],</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n0</span><span class="p">])[:,</span><span class="bp">None</span><span class="p">],</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])[:,</span><span class="bp">None</span><span class="p">])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;=</span> <span class="n">segtol</span><span class="p">)</span> <span class="ow">and</span> <span class="p">((</span><span class="n">dta</span> <span class="o">&gt;</span> <span class="n">tahetol</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dhe</span> <span class="o">&gt;</span> <span class="n">tahetol</span><span class="p">)):</span>
+                    <span class="n">ltseg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ltseg</span>
+
+
+
+    <span class="k">def</span> <span class="nf">seg_intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            determine if a segment intersects any other segment of the layout</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+
+<span class="sd">            shLine : a shapely LineString</span>
+<span class="sd">            OR</span>
+<span class="sd">            ta,he : tail/head coordinates of a segment</span>
+
+<span class="sd">            Return</span>
+<span class="sd">            ------</span>
+<span class="sd">            </span>
+<span class="sd">            llay_seg : list of layout&#39;s segments intersected</span>
+<span class="sd">            lshP : list of shapely points of intersections.</span>
+<span class="sd">            </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;ta&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;he&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">seg</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ta&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;he&#39;</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="s1">&#39;shLine&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">seg</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;shLine&#39;</span><span class="p">]</span>
+
+        <span class="c1"># WARNING : use crosses instead of interesects</span>
+        <span class="c1"># otherwise 2 segment connected to a same node</span>
+        <span class="c1"># are considered as intersecting</span>
+        <span class="n">binter</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span><span class="o">.</span><span class="n">crosses</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">binter</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">uinter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">binter</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">llay_seg</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">lshP</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">uinter</span><span class="p">:</span>
+                <span class="c1"># layout segment </span>
+                <span class="n">llay_seg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">lay_shseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shseg</span><span class="p">[</span><span class="n">llay_seg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="c1"># intersection shapely point</span>
+                <span class="n">lshP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">lay_shseg</span><span class="p">))</span>
+
+            <span class="k">return</span><span class="p">(</span><span class="n">llay_seg</span><span class="p">,</span><span class="n">lshP</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">([],[])</span>
+
+
+
+
 
 <div class="viewcode-block" id="Layout.mask"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.mask.html#pylayers.gis.layout.Layout.mask">[docs]</a>    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  returns the polygonal mask of the building</span>
@@ -3740,7 +3846,10 @@
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">=</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
@@ -4198,7 +4307,6 @@
         <span class="c1"># L2 : ,Nscreen </span>
 
         <span class="n">bo</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect3</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Pg</span><span class="p">,</span> <span class="n">U1</span><span class="p">,</span> <span class="n">U2</span><span class="p">,</span> <span class="n">L1</span><span class="p">,</span> <span class="n">L2</span><span class="p">)</span>
-
         <span class="n">ubo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bo</span><span class="p">)</span>
 
         <span class="n">Nseg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ubo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -4219,6 +4327,7 @@
         <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">unn</span><span class="p">)</span>
 
         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">angle</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Layout.angleonlink"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.angleonlink.html#pylayers.gis.layout.Layout.angleonlink">[docs]</a>    <span class="k">def</span> <span class="nf">angleonlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">p2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">])):</span>
@@ -5042,9 +5151,11 @@
         <span class="c1">#    ndlist  = self.Gs.node.keys()</span>
 
         <span class="c1"># printndlist</span>
+
         <span class="n">Z</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                                    <span class="n">node_size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
                                    <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">figure</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">axes</span>
@@ -5159,7 +5270,8 @@
         <span class="n">ecmap</span> <span class="o">=</span> <span class="n">clr</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">clrlist</span><span class="p">)</span>
 
         <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edlist&#39;</span><span class="p">])</span>
-        <span class="n">ue</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edlist&#39;</span><span class="p">])))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="c1"># ue = (np.ones(2 * len(kwargs[&#39;edlist&#39;]))).astype(&#39;int&#39;).tolist()</span>
+        <span class="n">ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">U</span><span class="p">,</span>
                                        <span class="n">edge_color</span><span class="o">=</span><span class="n">ue</span><span class="p">,</span> <span class="n">edge_cmap</span><span class="o">=</span><span class="n">ecmap</span><span class="p">,</span>
@@ -5584,14 +5696,22 @@
             <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span>
                 <span class="n">ndlist</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span> <span class="n">node_shape</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
-        <span class="c1"># if self.display[&#39;subsegnb&#39;]:</span>
-        <span class="c1">#     if hasattr(self,&#39;lsss&#39;):</span>
-        <span class="c1">#         seg = self.lsss</span>
-        <span class="c1">#         psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])</span>
-        <span class="c1">#         nbsseg = np.array([len(self.Gs.node[x][&#39;ss_name&#39;]) for x in seg],dtype=&#39;int&#39;)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;isonb&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;lsss&#39;</span><span class="p">):</span>
+                <span class="n">seg</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])</span>
+                <span class="c1"># nbsseg = np.array([len(self.Gs.node[x][&#39;iso&#39;]) for x in seg],dtype=&#39;int&#39;)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">psseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg</span> 
+                                   <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;iso&#39;</span><span class="p">])</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">])</span>  
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="kn">import</span> <span class="nn">ipdb</span>
+                    <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
         <span class="c1">#         [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),</span>
         <span class="c1"># fontdict={&#39;size&#39;:8},ha=&#39;center&#39;) for x in range(len(seg))]</span>
+                <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">psseg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span><span class="n">psseg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+                <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span><span class="mi">8</span><span class="p">},</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">psseg</span><span class="p">))]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s1">&#39;transition&#39;</span><span class="p">]:</span>
             <span class="k">try</span><span class="p">:</span>
@@ -5728,7 +5848,6 @@
             <span class="n">Buildpbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;i&#39;</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buildGi</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span><span class="n">tqdmpos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="c1">#pdb.set_trace()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">multi</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputGi</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span><span class="n">tqdmpos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -7976,11 +8095,11 @@
                                 <span class="c1">#if iprint:</span>
                                 <span class="c1">#     print(&quot;li1&quot;,li1)</span>
                                 <span class="c1">#     print(&quot;li2&quot;,li2)</span>
+                                <span class="c1">#if cy == 91:</span>
+                                <span class="c1">#    print(&quot;     &quot;,li2)</span>
                                 
                                 <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="n">li1</span><span class="p">:</span>
-                                    <span class="c1"># printli1</span>
                                     <span class="k">for</span> <span class="n">i2</span> <span class="ow">in</span> <span class="n">li2</span><span class="p">:</span>
-                                        <span class="c1"># printli2</span>
                                         <span class="k">if</span> <span class="p">(</span><span class="n">i1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">i2</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                                             <span class="k">if</span> <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)):</span>
                                                 <span class="c1"># print&quot;RR&quot;</span>
@@ -8218,8 +8337,7 @@
                     <span class="c1"># it should be the case in 99% of cases</span>
 
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ipoints</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">isegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
-                            <span class="p">(</span><span class="n">isegments</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ipoints</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]))</span>
+                        <span class="n">isegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">isegments</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ipoints</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]))</span>
                         <span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">pta</span><span class="p">,</span> <span class="n">pipoints</span><span class="p">))</span>
                         <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">phe</span><span class="p">,</span> <span class="n">pipoints</span><span class="p">))</span>
 
@@ -8255,7 +8373,7 @@
                         <span class="c1">#    plt.show()</span>
                         <span class="c1">#    pdb.set_trace())</span>
                     <span class="c1">########</span>
-                    <span class="c1"># SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN</span>
+                    <span class="c1"># SOMETIMES PROBA IS 0 WHEReAS SEG IS SEEN</span>
                     <span class="c1">###########</span>
                     <span class="c1"># # keep segment with prob above a threshold</span>
                     <span class="c1"># isegkeep = isegments[prob&gt;0]</span>
@@ -10441,8 +10559,12 @@
         <span class="c1"># transpose point numbering</span>
 
         <span class="n">upnt</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
-        <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">upnt</span><span class="p">)</span> <span class="o">==</span> <span class="n">ta</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">he</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">upnt</span><span class="p">)</span> <span class="o">==</span> <span class="n">he</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">upnt</span><span class="p">)</span> <span class="o">==</span> <span class="n">ta</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">he</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">upnt</span><span class="p">)</span> <span class="o">==</span> <span class="n">he</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">ipdb</span>
+            <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ta</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">he</span><span class="p">))</span>
                                 <span class="o">|</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">he</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">ta</span><span class="p">))),</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -11051,15 +11173,29 @@
                     <span class="n">nbpt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">])</span>
                     <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">dt</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="n">h</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbpt</span><span class="p">))</span>
                     <span class="n">box</span> <span class="o">=</span> <span class="n">dt</span><span class="p">[</span><span class="s1">&#39;triangles&#39;</span><span class="p">]</span>
+
+                    <span class="c1"># if u == 114:</span>
+                    <span class="c1">#     import ipdb</span>
+                    <span class="c1">#     ipdb.set_trace()</span>
+                    <span class="c1">#     box = np.roll(box,1,1)</span>
                     <span class="n">ptc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ptc</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span>
                     <span class="n">boxc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">boxc</span><span class="p">,</span> <span class="n">box</span> <span class="o">+</span> <span class="n">cpt</span><span class="p">))</span>
                     <span class="n">cpt</span> <span class="o">=</span> <span class="n">cpt</span> <span class="o">+</span> <span class="n">nbpt</span>
+                    <span class="c1"># if box.shape[0] == 2 :</span>
+                    <span class="c1">#     import ipdb</span>
+                    <span class="c1">#     ipdb.set_trace()</span>
+                    <span class="c1">#     print(cpt,nbpt)</span>
+                    <span class="c1">#     print(box)</span>
+                    <span class="c1">#     print(pt)</span>
+                    <span class="c1">#     break</span>
 
                 <span class="c1"># manage Ceil color</span>
+
                 <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s1">&#39;CEIL&#39;</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
                 <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
-                <span class="n">colf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="mi">4</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">color</span><span class="p">,</span> <span class="n">colf</span><span class="p">))</span>
+                <span class="n">colf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="n">cpt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c1"># color = np.vstack((color, colf))</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">colf</span>
 
                 <span class="c1"># trick for correcting  color assignement</span>
 
@@ -11846,7 +11982,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
+      Last updated on Oct 25, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

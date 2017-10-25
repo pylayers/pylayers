@@ -168,7 +168,7 @@
 <span class="sd">    cost231</span>
 <span class="sd">    cost259</span>
 <span class="sd">    cost2100</span>
-<span class="sd">    Dgrid_points</span>
+<span class="sd">    Dgrid_points&lt;</span>
 <span class="sd">    Dgrid_zone</span>
 <span class="sd">    calnu</span>
 <span class="sd">    visuPts</span>
@@ -181,7 +181,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pylayers.simul.simulem</span>
 <span class="kn">import</span> <span class="nn">pylayers.measures.mesuwb</span>
 <span class="kn">import</span> <span class="nn">pylayers.gis.gisutil</span> <span class="kn">as</span> <span class="nn">gu</span>
 <span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
@@ -944,7 +943,6 @@
 <span class="sd">        :include-source:</span>
 
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
 <span class="sd">        &gt;&gt;&gt; from pylayers.measures.mesuwb import *</span>
 <span class="sd">        &gt;&gt;&gt; from pylayers.antprop.loss import *</span>
 <span class="sd">        &gt;&gt;&gt; S = Simul()</span>
@@ -968,7 +966,7 @@
 <span class="sd">    pylayers.slab.Interface.losst</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">):</span>
         <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fGHz</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
@@ -991,6 +989,11 @@
     <span class="c1"># as many slabs as segments and subsegments</span>
     <span class="n">us</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> 
     <span class="n">slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">us</span> <span class="p">])</span>
+
+
+
+
+
     <span class="c1">#slabs = L.sla[us]</span>
     <span class="n">check</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slabs</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
@@ -1045,6 +1048,85 @@
 
         <span class="n">EdWallo</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">=</span> <span class="n">EdWallo</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">+</span> <span class="n">Edo</span>
         <span class="n">EdWallp</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">=</span> <span class="n">EdWallp</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">+</span> <span class="n">Edp</span>
+
+
+    <span class="c1"># Managing Ceil / Floor transmission</span>
+
+
+    <span class="c1"># check crossing ceil</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span><span class="o">&gt;</span> <span class="n">L</span><span class="o">.</span><span class="n">zceil</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">or</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span><span class="o">&gt;</span> <span class="n">L</span><span class="o">.</span><span class="n">zceil</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+
+        <span class="c1"># WARNING : this test sohould be done individually</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">v0</span> <span class="o">=</span> <span class="n">p1</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">p2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v0</span> <span class="o">=</span> <span class="n">p2</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">p1</span>
+
+        <span class="n">uu</span> <span class="o">=</span> <span class="n">v0</span> <span class="o">-</span> <span class="n">v1</span>
+        <span class="c1"># 1 x N</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">uu</span> <span class="o">*</span> <span class="n">uu</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># 3 x N</span>
+        <span class="n">un</span> <span class="o">=</span> <span class="n">uu</span> <span class="o">/</span> <span class="n">nu</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">dotp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,i-&gt;j&#39;</span><span class="p">,</span><span class="n">un</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">dotp</span><span class="p">)</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># calculate Loss for slab CEIL</span>
+        <span class="c1">#</span>
+        <span class="n">lkco</span><span class="p">,</span><span class="n">lkcp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;CEIL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">alphas</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="c1"># calculate Excess delay for slab CEIL</span>
+        <span class="c1">#</span>
+        <span class="n">dco</span> <span class="p">,</span> <span class="n">dcp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;CEIL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">excess_grdelay</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">alphas</span><span class="p">)</span>
+
+
+
+        <span class="n">LossWallo</span> <span class="o">=</span> <span class="n">LossWallo</span> <span class="o">+</span> <span class="n">lkco</span>
+        <span class="n">LossWallp</span> <span class="o">=</span> <span class="n">LossWallp</span> <span class="o">+</span> <span class="n">lkcp</span>
+
+        <span class="n">EdWallo</span> <span class="o">=</span> <span class="n">EdWallo</span> <span class="o">+</span> <span class="n">dco</span>
+        <span class="n">EdWallp</span> <span class="o">=</span> <span class="n">EdWallp</span> <span class="o">+</span> <span class="n">dcp</span>
+
+
+    <span class="c1"># check crossing floor</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span><span class="o">&lt;</span> <span class="n">L</span><span class="o">.</span><span class="n">zfloor</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">or</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span><span class="o">&lt;</span> <span class="n">L</span><span class="o">.</span><span class="n">zfloor</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+
+
+        <span class="c1"># WARNING : this test sohould be done individually</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">v0</span> <span class="o">=</span> <span class="n">p1</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">p2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v0</span> <span class="o">=</span> <span class="n">p2</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">p1</span>
+
+        <span class="n">uu</span> <span class="o">=</span> <span class="n">v0</span> <span class="o">-</span> <span class="n">v1</span>
+        <span class="c1"># 1 x N</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">uu</span> <span class="o">*</span> <span class="n">uu</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># 3 x N</span>
+        <span class="n">un</span> <span class="o">=</span> <span class="n">uu</span> <span class="o">/</span> <span class="n">nu</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">dotp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,i-&gt;j&#39;</span><span class="p">,</span><span class="n">un</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">dotp</span><span class="p">)</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># calculate Loss for slab CEIL</span>
+        <span class="c1">#</span>
+        <span class="n">lkfo</span><span class="p">,</span><span class="n">lkfp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;FLOOR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">alphas</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="c1"># calculate Excess delay for slab CEIL</span>
+        <span class="c1">#</span>
+        <span class="n">dfo</span> <span class="p">,</span> <span class="n">dfp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;FLOOR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">excess_grdelay</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">alphas</span><span class="p">)</span>
+
+
+
+        <span class="n">LossWallo</span> <span class="o">=</span> <span class="n">LossWallo</span> <span class="o">+</span> <span class="n">lkfo</span>
+        <span class="n">LossWallp</span> <span class="o">=</span> <span class="n">LossWallp</span> <span class="o">+</span> <span class="n">lkfp</span>
+
+        <span class="n">EdWallo</span> <span class="o">=</span> <span class="n">EdWallo</span> <span class="o">+</span> <span class="n">dfo</span>
+        <span class="n">EdWallp</span> <span class="o">=</span> <span class="n">EdWallp</span> <span class="o">+</span> <span class="n">dfp</span>
+
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
         <span class="n">LossWallo</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">LossWallo</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
@@ -1942,7 +2024,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
+      Last updated on Oct 25, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

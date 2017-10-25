@@ -3497,6 +3497,97 @@
     <span class="k">return</span><span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">&gt;</span>
            <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span></div>
 
+<span class="k">def</span> <span class="nf">intersect_cone_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span><span class="n">line1</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span><span class="n">bvis</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    
+    <span class="n">x0</span><span class="p">,</span><span class="n">p0</span> <span class="o">=</span> <span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">,</span><span class="n">p1</span> <span class="o">=</span> <span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
+    <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">p0</span>
+    <span class="n">nv2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">nv2</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># a above</span>
+        <span class="c1"># b below </span>
+        <span class="c1"># i in</span>
+        <span class="n">bx0a</span> <span class="o">=</span> <span class="n">x0</span><span class="o">&gt;</span><span class="mi">1</span>
+        <span class="n">bx0b</span> <span class="o">=</span> <span class="n">x0</span><span class="o">&lt;</span><span class="mi">0</span>
+        <span class="n">bx0i</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx0a</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx0b</span><span class="p">)</span> 
+        <span class="n">bx1a</span> <span class="o">=</span> <span class="n">x1</span><span class="o">&gt;</span><span class="mi">1</span>
+        <span class="n">bx1b</span> <span class="o">=</span> <span class="n">x1</span><span class="o">&lt;</span><span class="mi">0</span>
+        <span class="n">bx1i</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx1a</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx1b</span><span class="p">)</span>
+
+        <span class="n">baa</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1a</span> <span class="c1"># </span>
+        <span class="n">bab</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1b</span> <span class="c1">#</span>
+        <span class="n">bai</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1i</span> 
+        <span class="n">bba</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1a</span> <span class="c1">#</span>
+        <span class="n">bbb</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1b</span> <span class="c1"># </span>
+        <span class="n">bbi</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1i</span> 
+        <span class="n">bia</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1a</span> 
+
+        <span class="n">bib</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1b</span> 
+        <span class="n">bii</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1i</span> <span class="c1">#</span>
+        
+        <span class="k">if</span> <span class="n">baa</span> <span class="ow">or</span> <span class="n">bbb</span><span class="p">:</span>  <span class="c1"># above and or below and below -&gt;segment is out </span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1">#print &quot;baa or bbb&quot; </span>
+        <span class="k">elif</span> <span class="n">bab</span> <span class="ow">or</span> <span class="n">bba</span><span class="p">:</span>  <span class="c1"># segement is fully inside the cone take seg        </span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
+            <span class="c1">#print &quot;bab or bba&quot; </span>
+        <span class="k">elif</span> <span class="n">bii</span><span class="p">:</span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">]</span> 
+            <span class="c1">#print &quot;bii&quot; </span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p0seg0</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">p0</span>
+            <span class="n">dp0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">p0seg0</span><span class="p">)</span><span class="o">/</span><span class="n">nv2</span>
+            <span class="n">bdp0o</span> <span class="o">=</span> <span class="p">(</span><span class="n">dp0</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dp0</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">bdb0i</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">bdp0o</span>
+            
+            <span class="k">if</span> <span class="n">bai</span> <span class="ow">or</span> <span class="n">bbi</span> <span class="p">:</span>
+                <span class="c1">#print &quot;bai or bbi&quot;</span>
+                <span class="k">if</span> <span class="n">bdb0i</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span> 
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                       <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                       <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">bia</span> <span class="ow">or</span> <span class="n">bib</span><span class="p">:</span>   
+                <span class="c1">#print &quot;bia or bib&quot;</span>
+                <span class="k">if</span> <span class="n">bdb0i</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">nw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">nw</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nv2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>   
+    
+    <span class="k">if</span> <span class="n">bvis</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">apex</span><span class="o">+</span><span class="n">vl_n</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">apex</span><span class="o">+</span><span class="n">vr_n</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    
+
+
+
+    <span class="k">return</span><span class="p">(</span><span class="n">tahe</span><span class="p">,</span><span class="n">ratio</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">intersect_line_seg</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">seg</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; intersect a line and a segment</span>
@@ -3511,29 +3602,43 @@
 <span class="sd">    -------</span>
 
 <span class="sd">    k : intersection parameter (0&lt;k&lt;1 if intersection)</span>
-<span class="sd">    M : intersection point M = pta + k vseg</span>
+<span class="sd">    P : intersection point P = pta + k vseg</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pt</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">line</span>
+    <span class="n">ptO</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">line</span>
     <span class="n">pta</span><span class="p">,</span> <span class="n">phe</span> <span class="o">=</span> <span class="n">seg</span>
-    <span class="n">vseg</span> <span class="o">=</span> <span class="n">phe</span> <span class="o">-</span> <span class="n">pta</span>
-    <span class="n">xht</span> <span class="o">=</span> <span class="n">phe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">yth</span> <span class="o">=</span> <span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">num</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">den</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">xht</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">yth</span><span class="p">)</span>
+    <span class="n">v</span>  <span class="o">=</span> <span class="n">phe</span><span class="o">-</span><span class="n">pta</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">den</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">vseg</span>
+    <span class="n">u</span>  <span class="o">=</span> <span class="n">u</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                   <span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+    <span class="n">b</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">ptO</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                  <span class="p">[</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ptO</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+    <span class="n">detA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">detA</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
+        <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">P</span>  <span class="o">=</span> <span class="n">pta</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">v</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">si</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">vseg</span><span class="p">))</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="o">*</span> <span class="n">si</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">pta</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">vseg</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+    <span class="c1"># xht = phe[0] - pta[0]-v[]</span>
+    <span class="c1"># yth = pta[1] - phe[1]</span>
+    <span class="c1"># num = -(v[1] * (pta[0] - pt[0]) + v[0] * (pt[1] - pta[1]))</span>
+    <span class="c1"># den = (v[1] * xht + v[0] * yth)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+    <span class="c1"># if (abs(den) &gt; 0):</span>
+    <span class="c1">#     k = num / den::</span>
+    <span class="c1">#     M = pta + k * vseg</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     si = np.sign(np.dot(v, vseg))</span>
+    <span class="c1">#     k = np.inf * si</span>
+    <span class="c1">#     M = pta + 2 * vseg</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">intersect3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">pg</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">intersect3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">pg</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span><span class="n">binter</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Intersection of a line and a 3D rectangle screen</span>
 
 <span class="sd">    Parameters</span>
@@ -3610,15 +3715,23 @@
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Ue</span><span class="p">,</span> <span class="o">-</span><span class="n">U1e</span><span class="p">,</span> <span class="o">-</span><span class="n">U2e</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
     <span class="c1"># visi : Nseg,Nscreen</span>
     <span class="n">visi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">pinter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Nseg</span><span class="p">,</span><span class="n">Nscreen</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
     <span class="c1"># check non singularity </span>
     <span class="c1"># detA (Nseg,Nscreen) </span>
     <span class="n">detA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
     <span class="c1"># matrix A (Nseg,Nscreen,3,3) is valid if not singular </span>
     <span class="n">boolvalid</span> <span class="o">=</span> <span class="o">~</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">detA</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">:]</span>
-
+    <span class="c1"># ba (3,Nseg) </span>
+    <span class="c1"># ba.T (Nseg,3) </span>
+    <span class="c1"># ba.T[:,None,:] (Nseg,1,3)</span>
+    <span class="c1"># x (Nseg,Nscreen,3)</span>
+    <span class="c1"># pinter (Nseg,Nscreen,3)</span>
     <span class="k">if</span> <span class="n">boolvalid</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
         <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+        <span class="c1"># calculate intersection points</span>
+        <span class="n">pinter</span> <span class="o">=</span> <span class="n">ba</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]</span> 
+
         <span class="n">condseg</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">))</span>
         <span class="n">cond1</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">l1</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">+</span>
                 <span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">l1</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">))</span>
@@ -3626,6 +3739,7 @@
                 <span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">l2</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">))</span>
 
         <span class="n">visi</span> <span class="o">=</span> <span class="o">~</span><span class="p">(((</span><span class="n">condseg</span> <span class="o">+</span> <span class="n">cond1</span> <span class="o">+</span> <span class="n">cond2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+
         <span class="c1">#i0 = np.kron(np.arange(A.shape[0],dtype=int),np.ones(A.shape[1],dtype=int))</span>
         <span class="c1">#i1 = np.kron(np.ones(A.shape[0],dtype=int),np.arange(A.shape[1],dtype=int))</span>
         <span class="c1">#ui = (i0,i1)</span>
@@ -3649,6 +3763,7 @@
     <span class="c1"># x : Nseg x Nscreen</span>
         <span class="k">if</span> <span class="n">Am</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">cm</span><span class="p">)</span>
+            <span class="n">pinter</span> <span class="o">=</span> <span class="n">ba</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">ui</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">ui</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">None</span><span class="p">,:]</span>
         <span class="c1"># condition of occultation</span>
 
             <span class="n">condseg</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">))</span>
@@ -3661,7 +3776,10 @@
             <span class="c1">#print boolvalid</span>
             <span class="c1">#visi[boolvalid] = ~(((condseg + cond1 + cond2) % 2).astype(bool))</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">visi</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">binter</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">visi</span><span class="p">,</span><span class="n">pinter</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">visi</span>
 
 
 <div class="viewcode-block" id="intersect"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.intersect.html#pylayers.util.geomutil.intersect">[docs]</a><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
@@ -4033,7 +4151,6 @@
     <span class="n">sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span> 
                     <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span> 
                     <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])))</span><span class="o">.</span><span class="n">T</span>
-
     <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">tha</span><span class="p">,</span> <span class="n">pha</span><span class="p">,</span> <span class="n">sa</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">M</span></div>
@@ -4167,15 +4284,21 @@
 <span class="sd">        Rotation matrix in the wave plane   </span>
 <span class="sd">    a_l : np.array (Nx2) </span>
 <span class="sd">        angle in local frame</span>
+<span class="sd">    </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
 
+<span class="sd">    SphericalBasis</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># 3 x 3 x r </span>
     <span class="n">G</span> <span class="o">=</span> <span class="n">SphericalBasis</span><span class="p">(</span><span class="n">a_g</span><span class="p">)</span>
-
-    <span class="n">th_g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-    <span class="n">ph_g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="c1"># old version of SphericalBasis</span>
+    <span class="c1">#th_g = G[0, :, :]</span>
+    <span class="c1">#ph_g = G[1, :, :]</span>
+    <span class="n">th_g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">ph_g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
     
     <span class="c1">#</span>
     <span class="c1"># 2 x 3 x r </span>
@@ -4186,7 +4309,8 @@
     <span class="c1"># s = G[2,:,:]   3 x N </span>
     <span class="c1"># s_l : N x 3 </span>
     <span class="c1">#</span>
-    <span class="n">s_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span><span class="o">.</span><span class="n">T</span>
+    <span class="c1">#s_l = np.dot(T.T, G[2, :, :]).T</span>
+    <span class="n">s_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">T</span>
     
     <span class="c1"># get the N couples of angles in local frame </span>
 
@@ -4194,8 +4318,11 @@
     <span class="n">a_l</span> <span class="o">=</span> <span class="n">angledir</span><span class="p">(</span><span class="n">s_l</span><span class="p">)</span>
 
     <span class="n">L</span> <span class="o">=</span> <span class="n">SphericalBasis</span><span class="p">(</span><span class="n">a_l</span><span class="p">)</span>
-    <span class="n">th_l</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-    <span class="n">ph_l</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="c1"># old version of SphericalBasis</span>
+    <span class="c1">#th_l = L[0, :, :]</span>
+    <span class="c1">#ph_l = L[1, :, :]</span>
+    <span class="n">th_l</span> <span class="o">=</span> <span class="n">L</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">ph_l</span> <span class="o">=</span> <span class="n">L</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
     <span class="c1">#</span>
     <span class="c1"># B_l : 3 x 2 x r </span>
     <span class="c1">#</span>
@@ -5083,6 +5210,262 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">psh</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">psh</span><span class="o">.</span><span class="n">y</span><span class="p">]])</span></div>
 
 
+<span class="k">def</span> <span class="nf">mirror3b</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">aplane</span><span class="p">,</span> <span class="n">pplane</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; compute recursively the image of p wrt the list of facet </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    tp     : numpy.ndarray (3 x Ns x Npt)</span>
+<span class="sd">        Ns : number of screen </span>
+<span class="sd">        Npt : number of points</span>
+<span class="sd">    aplane : numpy.ndarray</span>
+<span class="sd">        array of planes (3xNplanex2))</span>
+<span class="sd">    pplane : numpy.ndarray</span>
+<span class="sd">        array of points (3xNplane)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    tp : np.array </span>
+<span class="sd">        sequence of images </span>
+<span class="sd">            tp[:,-1] is the final image</span>
+<span class="sd">            tp[:,0] is the original point </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; tp = np.array([[1,1,1]]).T</span>
+<span class="sd">    &gt;&gt;&gt; p1 = np.array([[0,0] ,[1,0],[0,1]])  #yz</span>
+<span class="sd">    &gt;&gt;&gt; p2 = np.array([[1,0] ,[0,0],[0,1]])  #yz</span>
+<span class="sd">    &gt;&gt;&gt; p3 = np.array([[1,0] ,[0,1],[0,0]])  #xy</span>
+<span class="sd">    &gt;&gt;&gt; aplane = np.hstack((p1,p2,p3))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># take last points of the sequence </span>
+    <span class="c1"># p : 3 x 1 x n</span>
+    <span class="c1">#</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">tp</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">],:]</span>
+    <span class="n">Nplane</span> <span class="o">=</span> <span class="n">aplane</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1"># vector plane normalisation</span>
+    <span class="c1"># norm : 3 x Nplane </span>
+    <span class="n">norm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># T change basis matrix</span>
+    <span class="c1"># T (3 x Nplane,3)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">aplane</span><span class="p">,</span><span class="n">norm</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]))</span>
+    <span class="c1"># take last transformation matrix </span>
+    <span class="n">T_</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
+    <span class="c1"># v : 3 x 1 x n </span>
+    <span class="n">v</span>  <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][:,:,</span><span class="bp">None</span><span class="p">]</span>
+    <span class="c1"># go to frame attached to reflection plane</span>
+    <span class="c1">#Tpmp = np.dot(T_.T,v)</span>
+    <span class="c1"># Tpmp : 3 x 1 x n </span>
+    <span class="n">Tpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;sv,vln-&gt;sln&#39;</span><span class="p">,</span><span class="n">T_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="c1"># apply symmetry </span>
+    <span class="n">R</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="c1">#RTpmp = np.dot(R,Tpmp)</span>
+    <span class="n">RTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;sv,vln-&gt;sln&#39;</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">Tpmp</span><span class="p">)</span>
+    <span class="c1">#go back to global frame </span>
+    <span class="c1">#TTRTpmp = np.dot(T_,RTpmp)</span>
+    <span class="n">TTRTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;sv,vln-&gt;sln&#39;</span><span class="p">,</span><span class="n">T_</span><span class="p">,</span><span class="n">RTpmp</span><span class="p">)</span>
+    <span class="c1"># append image to list of points </span>
+    <span class="n">pim</span> <span class="o">=</span> <span class="n">TTRTpmp</span> <span class="o">+</span> <span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][:,:,</span><span class="bp">None</span><span class="p">]</span>  
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">tp</span><span class="p">,</span><span class="n">pim</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># if there are other plane enter recursion </span>
+    <span class="k">if</span> <span class="n">Nplane</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">mirror3b</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="n">aplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:],</span><span class="n">pplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">tp</span>
+
+<span class="k">def</span> <span class="nf">mirror3c</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">aplane</span><span class="p">,</span> <span class="n">pplane</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; compute recursively the image of p wrt the list of facet </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    tp     : MDA </span>
+<span class="sd">        Collection of images points from screen in 3D space from set of points  </span>
+<span class="sd">        (3 x Nf x Npt x Nc)</span>
+<span class="sd">        Ns : number of screen </span>
+<span class="sd">        Npt : number of points</span>
+<span class="sd">        (s x f x p x c ) </span>
+<span class="sd">    aplane : numpy.ndarray</span>
+<span class="sd">        MDarray of (c)ollection of ()vector (f)aces n 3D ((s)pace </span>
+<span class="sd">        (3xNfacesx2xNc)</span>
+<span class="sd">        (sxfxvxc) </span>
+<span class="sd">    pplane : numpy.ndarray</span>
+<span class="sd">        array of points (3xNplanexNsig)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    tp : np.array </span>
+<span class="sd">        sequence of images </span>
+<span class="sd">            tp[:,-1] is the final image</span>
+<span class="sd">            tp[:,0] is the original point </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># take last points of the sequence tp </span>
+    <span class="c1"># tp :  (s x f x p x c ) </span>
+    <span class="c1"># p : s x 1 x p x c </span>
+    <span class="c1">#</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">tp</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">],:,:]</span>
+    <span class="n">Nplane</span> <span class="o">=</span> <span class="n">aplane</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1"># vector plane normalisation</span>
+    <span class="c1"># norm : 3 x Nplane </span>
+    <span class="n">norm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,:],</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># T change basis matrix</span>
+    <span class="c1"># s x f x v x c </span>
+    <span class="c1"># T (3 x Nplane,3)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">aplane</span><span class="p">,</span><span class="n">norm</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># take last transformation matrix </span>
+    <span class="c1"># T_ : s x v x c </span>
+    <span class="n">T_</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:]</span>
+    <span class="c1"># pplane            : s x f x c </span>
+    <span class="c1"># pplane[:,[-1],:]  : s x 1 x c </span>
+    <span class="c1"># p                 : s x 1 x p x c </span>
+    <span class="c1"># v                 : s x 1 x p x c </span>
+    <span class="n">v</span>  <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">],:][:,:,</span><span class="bp">None</span><span class="p">,:]</span>
+    <span class="c1"># go to frame attached to reflection plane</span>
+    <span class="c1"># TT : v x s x c </span>
+    <span class="c1">#TT = np.swapaxes(T_,0,1)</span>
+    <span class="c1"># TT  </span>
+    <span class="c1"># Tpmp = np.einsum(&#39;svm,vlnm-&gt;slnm&#39;,TT,v)</span>
+    <span class="c1">#Tpmp = np.einsum(&#39;vsc,sfpc-&gt;vfpc&#39;,TT,v)</span>
+    <span class="n">Tpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;svc,sfpc-&gt;vfpc&#39;</span><span class="p">,</span><span class="n">T_</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="c1"># apply symmetry </span>
+    <span class="n">R</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="n">R</span>  <span class="o">=</span> <span class="n">R</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span> 
+    <span class="c1">#RTpmp = np.dot(R,Tpmp)</span>
+    <span class="c1">#RTpmp = np.einsum(&#39;svm,vlnm-&gt;slnm&#39;,R,Tpmp)</span>
+    <span class="n">RTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;svc,vfpc-&gt;sfpc&#39;</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">Tpmp</span><span class="p">)</span>
+    <span class="c1">#go back to global frame </span>
+    <span class="c1">#TTRTpmp = np.dot(T_,RTpmp)</span>
+    <span class="c1">#TTRTpmp = np.einsum(&#39;svm,vlnm-&gt;slnm&#39;,T_,RTpmp)</span>
+    <span class="n">TTRTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;vsc,sfpc-&gt;vfpc&#39;</span><span class="p">,</span><span class="n">T_</span><span class="p">,</span><span class="n">RTpmp</span><span class="p">)</span>
+    <span class="c1"># append image to list of points </span>
+    <span class="n">pim</span> <span class="o">=</span> <span class="n">TTRTpmp</span> <span class="o">+</span> <span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][:,:,</span><span class="bp">None</span><span class="p">,:]</span>  
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">tp</span><span class="p">,</span><span class="n">pim</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># if there are other plane enter recursion </span>
+    <span class="k">if</span> <span class="n">Nplane</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">mirror3c</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="n">aplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:],</span><span class="n">pplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+
+    <span class="k">return</span> <span class="n">tp</span>
+
+<span class="k">def</span> <span class="nf">intersect3c</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">aplane</span><span class="p">,</span> <span class="n">pplane</span><span class="p">):</span>
+    <span class="c1"># take last points of the sequence tp </span>
+    <span class="c1"># tp :  (s x f x p x c ) </span>
+    <span class="c1"># p : s x 1 x p x c </span>
+    <span class="c1">#</span>
+    <span class="n">p0</span> <span class="o">=</span> <span class="n">tp</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">],:,:]</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">ti</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">],:,:]</span>
+    <span class="n">Nplane</span> <span class="o">=</span> <span class="n">aplane</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1"># vector plane normalisation</span>
+    <span class="c1"># norm : 3 x Nplane </span>
+    <span class="n">norm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,:],</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># T change basis matrix</span>
+    <span class="c1"># s x f x v x c </span>
+    <span class="c1"># T (3 x Nplane,3)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">aplane</span><span class="p">,</span><span class="n">norm</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># take last transformation matrix </span>
+    <span class="c1"># T_ : s x v x c </span>
+    <span class="n">T_</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:]</span>
+    <span class="c1"># pplane            : s x f x c </span>
+    <span class="c1"># pplane[:,[-1],:]  : s x 1 x c </span>
+    <span class="c1"># p                 : s x 1 x p x c </span>
+    <span class="c1"># v                 : s x 1 x p x c </span>
+    <span class="n">v</span>  <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">],:][:,:,</span><span class="bp">None</span><span class="p">,:]</span>
+    <span class="c1"># go to frame attached to reflection plane</span>
+    <span class="c1"># TT : v x s x c </span>
+    <span class="c1">#TT = np.swapaxes(T_,0,1)</span>
+    <span class="c1"># TT  </span>
+    <span class="c1"># Tpmp = np.einsum(&#39;svm,vlnm-&gt;slnm&#39;,TT,v)</span>
+    <span class="c1">#Tpmp = np.einsum(&#39;vsc,sfpc-&gt;vfpc&#39;,TT,v)</span>
+    <span class="n">Tpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;svc,sfpc-&gt;vfpc&#39;</span><span class="p">,</span><span class="n">T_</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="c1"># apply symmetry </span>
+    <span class="n">R</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="n">R</span>  <span class="o">=</span> <span class="n">R</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span> 
+    <span class="c1">#RTpmp = np.dot(R,Tpmp)</span>
+    <span class="c1">#RTpmp = np.einsum(&#39;svm,vlnm-&gt;slnm&#39;,R,Tpmp)</span>
+    <span class="n">RTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;svc,vfpc-&gt;sfpc&#39;</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">Tpmp</span><span class="p">)</span>
+    <span class="c1">#go back to global frame </span>
+    <span class="c1">#TTRTpmp = np.dot(T_,RTpmp)</span>
+    <span class="c1">#TTRTpmp = np.einsum(&#39;svm,vlnm-&gt;slnm&#39;,T_,RTpmp)</span>
+    <span class="n">TTRTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;vsc,sfpc-&gt;vfpc&#39;</span><span class="p">,</span><span class="n">T_</span><span class="p">,</span><span class="n">RTpmp</span><span class="p">)</span>
+    <span class="c1"># append image to list of points </span>
+    <span class="n">pim</span> <span class="o">=</span> <span class="n">TTRTpmp</span> <span class="o">+</span> <span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][:,:,</span><span class="bp">None</span><span class="p">,:]</span>  
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">tp</span><span class="p">,</span><span class="n">pim</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># if there are other plane enter recursion </span>
+    <span class="k">if</span> <span class="n">Nplane</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">intersect3c</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="n">aplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:],</span><span class="n">pplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+
+    <span class="k">return</span> <span class="n">tp</span>
+<span class="k">def</span> <span class="nf">mirror3</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">aplane</span><span class="p">,</span> <span class="n">pplane</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; compute recursively the image of p wrt the list of facet </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    tp     : numpy.ndarray (3 x Ns )</span>
+<span class="sd">        Ns : number of screen </span>
+<span class="sd">        Npt : number of points</span>
+<span class="sd">    aplane : numpy.ndarray</span>
+<span class="sd">        array of planes (3xNplanex2))</span>
+<span class="sd">    pplane : numpy.ndarray</span>
+<span class="sd">        array of points (3xNplane)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    tp : np.array </span>
+<span class="sd">        sequence of images </span>
+<span class="sd">            tp[:,-1] is the final image</span>
+<span class="sd">            tp[:,0] is the original point </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; tp = np.array([[1,1,1]]).T</span>
+<span class="sd">    &gt;&gt;&gt; p1 = np.array([[0,0] ,[1,0],[0,1]])  #yz</span>
+<span class="sd">    &gt;&gt;&gt; p2 = np.array([[1,0] ,[0,0],[0,1]])  #yz</span>
+<span class="sd">    &gt;&gt;&gt; p3 = np.array([[1,0] ,[0,1],[0,0]])  #xy</span>
+<span class="sd">    &gt;&gt;&gt; aplane = np.hstack((p1,p2,p3))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># take last point of the sequence </span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">tp</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">Nplane</span> <span class="o">=</span> <span class="n">aplane</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1"># vector plane normalisation</span>
+    <span class="c1"># norm : 3 x Nplane </span>
+    <span class="n">norm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">aplane</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># T change basis matrix</span>
+    <span class="c1"># T (3 x Nplane,3)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">aplane</span><span class="p">,</span><span class="n">norm</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]))</span>
+    <span class="c1"># take last transformation matrix </span>
+    <span class="n">T_</span> <span class="o">=</span> <span class="n">T</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
+    <span class="c1"># go to frame attached to reflection plane</span>
+    <span class="n">Tpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">T_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">p</span><span class="o">-</span><span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="c1"># apply symmetry </span>
+    <span class="n">R</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="n">RTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">Tpmp</span><span class="p">)</span>
+    <span class="c1">#go back to global frame </span>
+    <span class="n">TTRTpmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">T_</span><span class="p">,</span><span class="n">RTpmp</span><span class="p">)</span>
+    <span class="c1"># append image to list of points </span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tp</span><span class="p">,</span><span class="n">TTRTpmp</span> <span class="o">+</span> <span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">TTRTpmp</span> <span class="o">+</span> <span class="n">pplane</span><span class="p">[:,[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> 
+    <span class="c1"># if there are other plane enter recursion </span>
+    <span class="k">if</span> <span class="n">Nplane</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">mirror3</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="n">aplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:],</span><span class="n">pplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">tp</span>
+
+
 <div class="viewcode-block" id="mirror"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.mirror.html#pylayers.util.geomutil.mirror">[docs]</a><span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">pa</span><span class="p">,</span> <span class="n">pb</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; compute the image of p wrt the segment (pa,pb)</span>
 
@@ -5656,7 +6039,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
+      Last updated on Oct 25, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

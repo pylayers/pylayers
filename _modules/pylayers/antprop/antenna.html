@@ -293,7 +293,10 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">PIL.Image</span> <span class="kn">as</span> <span class="nn">Image</span>
-    <span class="kn">import</span> <span class="nn">mayavi.mlab</span> <span class="kn">as</span> <span class="nn">mlab</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">mayavi.mlab</span> <span class="kn">as</span> <span class="nn">mlab</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">image</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -1607,8 +1610,9 @@
 <span class="sd">        -----</span>
 
 <span class="sd">        Nd : Number of directions</span>
-<span class="sd">        Np : Number of points</span>
+<span class="sd">        Np : Number of points (antenna elements)</span>
 <span class="sd">        Nf : Number of frequency</span>
+<span class="sd">        Nb : Number of beams</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1654,6 +1658,10 @@
             <span class="c1">#Sc2 = np.random.rand(Np,Np)[...,None]</span>
             <span class="c1">#pdb.set_trace()</span>
 
+        <span class="c1">#</span>
+        <span class="c1"># Get the weights </span>
+        <span class="c1">#</span>
+        <span class="c1">#   w :  b x a x f </span>
         <span class="n">lshw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lshw</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
             <span class="n">Np2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">lshw</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -1694,8 +1702,8 @@
         <span class="c1">#</span>
         <span class="c1"># Nf : frequency</span>
         <span class="c1"># Nd : direction</span>
-        <span class="c1"># Np : points or array element position</span>
-        <span class="c1"># Nu : users # Not iumplemented</span>
+        <span class="c1"># Np : points or array antenna element position</span>
+        <span class="c1"># Nb : number of beams  </span>
         <span class="c1">#</span>
         <span class="c1"># w  : Np x Nf</span>
         <span class="c1"># Sc : Np x Np x Nf</span>
@@ -5699,7 +5707,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
+      Last updated on Oct 25, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

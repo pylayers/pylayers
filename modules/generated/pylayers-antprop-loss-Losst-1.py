@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from pylayers.simul.simulem import *
 from pylayers.measures.mesuwb import *
 from pylayers.antprop.loss import *
 S = Simul()

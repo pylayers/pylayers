@@ -152,23 +152,23 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">     Simul.__init__</span>
-<span class="sd">     Simul.__repr__</span>
-<span class="sd">     Simul.create_layout</span>
-<span class="sd">     Simul.create_agent</span>
-<span class="sd">     Simul.create_EMS</span>
-<span class="sd">     Simul.create_network</span>
-<span class="sd">     Simul.create_visual</span>
-<span class="sd">     Simul.create</span>
-<span class="sd">     Simul.create_show</span>
-<span class="sd">     Simul.runsimul</span>
+<span class="sd">    Simul.__init__</span>
+<span class="sd">    Simul.__repr__</span>
+<span class="sd">    Simul.create_layout</span>
+<span class="sd">    Simul.create_agent</span>
+<span class="sd">    Simul.create_EMS</span>
+<span class="sd">    Simul.create_network</span>
+<span class="sd">    Simul.create_visual</span>
+<span class="sd">    Simul.create</span>
+<span class="sd">    Simul.create_show</span>
+<span class="sd">    Simul.runsimul</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1">#####################################################################</span>
-<span class="c1">#authors :</span>
-<span class="c1">#Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr</span>
-<span class="c1">#Bernard UGUEN        : bernard.uguen@univ-rennes1.fr</span>
+<span class="c1"># authors :</span>
+<span class="c1"># Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr</span>
+<span class="c1"># Bernard UGUEN        : bernard.uguen@univ-rennes1.fr</span>
 <span class="c1">#####################################################################</span>
 
 <span class="kn">import</span> <span class="nn">pkgutil</span>
@@ -177,7 +177,7 @@
 
 <span class="c1">#import SimPy.Simulation</span>
 <span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">SimulationRT</span><span class="p">,</span> <span class="n">Process</span><span class="p">,</span> <span class="n">hold</span>
-<span class="c1">#import simpy # simpy 3</span>
+<span class="c1"># import simpy # simpy 3</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
@@ -206,11 +206,11 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.save</span> <span class="kn">import</span> <span class="o">*</span>
 
 
-
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="n">SimulationRT</span><span class="p">):</span> <span class="c1"># Sympy 2</span>
+
+<span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="n">SimulationRT</span><span class="p">):</span>  <span class="c1"># Sympy 2</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Attributes</span>
@@ -235,22 +235,22 @@
 <span class="sd">    self.L : Layout</span>
 <span class="sd">        Layout used in simulation</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
 
 <span class="sd">    All the previous dictionnary are obtained from the chosen simulnet.ini file</span>
 <span class="sd">    in the project directory</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Simul.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.__init__.html#pylayers.simul.simulnet.Simul.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="n">SimulationRT</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1">#Sympy 2</span>
-        <span class="c1">#sympy.RealtimeEnvironment.__init__(self)  #simpy 3</span>
+        <span class="n">SimulationRT</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># Sympy 2</span>
+        <span class="c1"># sympy.RealtimeEnvironment.__init__(self)  #simpy 3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
 
-
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s1">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s1">&#39;simulnet.ini&#39;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Simulation&#39;</span><span class="p">))</span>
@@ -262,12 +262,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;Mysql&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;seed&#39;</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectories</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;ipython_nb_show&#39;</span><span class="p">]):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roomlist</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roomlist</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">()</span></div>
@@ -281,26 +281,28 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Save simulation: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;savep&#39;</span><span class="p">]</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Update times&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-------------&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mechanical update: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mechanical update: &#39;</span> <span class="o">+</span> \
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">])</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Network update: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;network_update_time&#39;</span><span class="p">])</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Localization update: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;communication_mode&#39;</span><span class="p">]</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Agents =&gt; self.lAg[i]&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">------&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Number of agents :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Agents IDs: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ID</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))])</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Agents names: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))])</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Destination of chosen agents: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;choose_destination&#39;</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Agents IDs: &#39;</span> <span class="o">+</span> \
+            <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ID</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Agents names: &#39;</span> <span class="o">+</span> \
+            <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Destination of chosen agents: &#39;</span> <span class="o">+</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;choose_destination&#39;</span><span class="p">]</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Network&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-------&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Nodes per wstd: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">wstd</span><span class="p">)</span>
 
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Localization&#39;</span>  <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">------------&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Localization&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">------------&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Localization enable: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;localization&#39;</span><span class="p">]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Postion estimation methods: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]</span>
 
-
         <span class="k">return</span> <span class="n">s</span></div>
-
 
 <div class="viewcode-block" id="Simul.create_layout"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_layout.html#pylayers.simul.simulnet.Simul.create_layout">[docs]</a>    <span class="k">def</span> <span class="nf">create_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create Layout in Simpy the_world thanks to Tk backend</span>
@@ -310,15 +312,18 @@
         <span class="n">_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">buildGr</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">buildGw</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span> <span class="o">=</span> <span class="n">world</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-            <span class="k">print</span> <span class="s1">&#39;Layout graphs are loaded from &#39;</span><span class="o">+</span><span class="n">basename</span><span class="o">+</span><span class="s1">&#39;/struc/ini&#39;</span>
+            <span class="k">print</span> <span class="s1">&#39;Layout graphs are loaded from &#39;</span> <span class="o">+</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;/struc/ini&#39;</span>
         <span class="k">except</span><span class="p">:</span>
-        <span class="c1">#self.L.sl = sl</span>
-        <span class="c1">#self.L.loadGr(G1)</span>
+            <span class="c1">#self.L.sl = sl</span>
+            <span class="c1"># self.L.loadGr(G1)</span>
             <span class="k">print</span> <span class="s1">&#39;This is the first time the layout file is used</span><span class="se">\</span>
 <span class="s1">            Layout graphs are curently being built, it may take few minutes.&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
@@ -339,45 +344,49 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-
         <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">agents</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">Cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">Cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s1">&#39;agent.ini&#39;</span><span class="p">,</span><span class="s1">&#39;ini&#39;</span><span class="p">))</span>
-        <span class="n">agents</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;used_agent&#39;</span><span class="p">))[</span><span class="s1">&#39;list&#39;</span><span class="p">])</span>
+        <span class="n">Cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s1">&#39;agent.ini&#39;</span><span class="p">,</span> <span class="s1">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="n">agents</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;used_agent&#39;</span><span class="p">))[</span><span class="s1">&#39;list&#39;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">agents</span><span class="p">):</span>
             <span class="n">ag_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">ag</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Agent</span><span class="p">(</span>
-                            <span class="n">ID</span><span class="o">=</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
-                            <span class="n">name</span><span class="o">=</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
-                            <span class="n">typ</span><span class="o">=</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">],</span>
-                            <span class="n">color</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]),</span>
-                            <span class="n">pdshow</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;pdshow&#39;</span><span class="p">]),</span>
-                            <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])),</span>
-                            <span class="n">roomId</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;roomid&#39;</span><span class="p">]),</span>
-                            <span class="n">froom</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;froom&#39;</span><span class="p">]),</span>
-                            <span class="n">meca_updt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">]),</span>
-                            <span class="n">wait</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wait&#39;</span><span class="p">]),</span>
-                            <span class="n">cdest</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;choose_destination&#39;</span><span class="p">]),</span>
-                            <span class="n">loc</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;localization&#39;</span><span class="p">]),</span>
-                            <span class="n">loc_updt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;localization_update_time&#39;</span><span class="p">]),</span>
-                            <span class="n">loc_method</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]),</span>
-                            <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
-                            <span class="n">network</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]),</span>
-                            <span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
-                            <span class="n">epwr</span><span class="o">=</span><span class="nb">dict</span><span class="p">([(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">],</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;epwr&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">])</span> <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))))]),</span>
-                            <span class="n">sens</span><span class="o">=</span><span class="nb">dict</span><span class="p">([(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">],</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;sensitivity&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">])</span> <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))))]),</span>
-                            <span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="p">,</span>
-                            <span class="n">wstd</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]),</span>
-                            <span class="n">save</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]),</span>
-                            <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span>
-                            <span class="n">comm_mode</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;communication_mode&#39;</span><span class="p">]),</span>
-                            <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-                            <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">))</span></div>
-
+            <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Agent</span><span class="p">(</span>
+                    <span class="n">ID</span><span class="o">=</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                    <span class="n">typ</span><span class="o">=</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">],</span>
+                    <span class="n">color</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]),</span>
+                    <span class="n">pdshow</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;pdshow&#39;</span><span class="p">]),</span>
+                    <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])),</span>
+                    <span class="n">roomId</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;roomid&#39;</span><span class="p">]),</span>
+                    <span class="n">froom</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;froom&#39;</span><span class="p">]),</span>
+                    <span class="n">meca_updt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;mecanic_update_time&#39;</span><span class="p">]),</span>
+                    <span class="n">wait</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wait&#39;</span><span class="p">]),</span>
+                    <span class="n">cdest</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s1">&#39;choose_destination&#39;</span><span class="p">]),</span>
+                    <span class="n">loc</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;localization&#39;</span><span class="p">]),</span>
+                    <span class="n">loc_updt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;localization_update_time&#39;</span><span class="p">]),</span>
+                    <span class="n">loc_method</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">]),</span>
+                    <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
+                    <span class="n">network</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]),</span>
+                    <span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
+                    <span class="n">epwr</span><span class="o">=</span><span class="nb">dict</span><span class="p">([(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">],</span> 
+                                <span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;epwr&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">])</span> 
+                                <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))))]),</span>
+                    <span class="n">sens</span><span class="o">=</span><span class="nb">dict</span><span class="p">([(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">],</span>
+                                <span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;sensitivity&#39;</span><span class="p">]))[</span><span class="n">ep</span><span class="p">])</span> 
+                                <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">((</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]))))]),</span>
+                    <span class="n">world</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="p">,</span>
+                    <span class="n">wstd</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ag_opt</span><span class="p">[</span><span class="s1">&#39;wstd&#39;</span><span class="p">]),</span>
+                    <span class="n">save</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]),</span>
+                    <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span>
+                    <span class="n">comm_mode</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;communication_mode&#39;</span><span class="p">]),</span>
+                    <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Simul.create_EMS"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_EMS.html#pylayers.simul.simulnet.Simul.create_EMS">[docs]</a>    <span class="k">def</span> <span class="nf">create_EMS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; electromagnetic Solver object</span>
+        <span class="sd">&quot;&quot;&quot; create electromagnetic Solver object</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">EMS</span> <span class="o">=</span> <span class="n">EMSolver</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span></div>
 
@@ -386,7 +395,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">EMS</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EMS</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">=</span><span class="n">Gcom</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span> <span class="o">=</span> <span class="n">Gcom</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">create_agent</span><span class="p">()</span>
         <span class="c1"># create network</span>
@@ -399,10 +408,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_get_SubNet</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-
            <span class="c1"># create Process Network</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Pnet</span> <span class="o">=</span> <span class="n">PNetwork</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
-                                 <span class="n">net_updt_time</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;network_update_time&#39;</span><span class="p">]),</span>
+                                 <span class="n">net_updt_time</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;network_update_time&#39;</span><span class="p">]),</span>
                                  <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
                                  <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
                                  <span class="n">show_sg</span><span class="o">=</span><span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;show_sg&#39;</span><span class="p">]),</span>
@@ -426,24 +435,23 @@
         <span class="c1"># this is to redump the database at each simulation</span>
         <span class="k">if</span> <span class="s1">&#39;mysql&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;dumpdb&#39;</span><span class="p">]):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;mysql -u &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; -p &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;dbname&#39;</span><span class="p">]</span> <span class="o">+</span>\
-                <span class="s1">&#39;&lt; /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql&#39;</span> <span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;mysql -u &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; -p &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s1">&#39;dbname&#39;</span><span class="p">]</span> <span class="o">+</span>
+                         <span class="s1">&#39;&lt; /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql&#39;</span><span class="p">)</span>
 
-        <span class="c1">## TODO remove the hard reference</span>
+        <span class="c1"># TODO remove the hard reference</span>
         <span class="k">if</span> <span class="s1">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;save&#39;</span><span class="p">]:</span>
             <span class="n">pyu</span><span class="o">.</span><span class="n">writeDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;output&#39;</span><span class="p">,</span><span class="s1">&#39;Nodes.txt&#39;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="s1">&#39;Nodes.txt&#39;</span><span class="p">)):</span>
                 <span class="k">print</span> <span class="s1">&#39;would you like to erase previous txt files ?&#39;</span>
-                <span class="n">A</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">()</span>
+                <span class="n">A</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">A</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;output&#39;</span><span class="p">)):</span>
+                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)):</span>
                         <span class="k">try</span><span class="p">:</span>
-                            <span class="n">fi</span><span class="p">,</span><span class="n">ext</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                            <span class="n">fi</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
                             <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;txt&#39;</span><span class="p">:</span>
-                                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s1">&#39;output&#39;</span><span class="o">+</span><span class="n">f</span><span class="p">))</span>
+                                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span> <span class="o">+</span> <span class="n">f</span><span class="p">))</span>
                         <span class="k">except</span><span class="p">:</span>
                             <span class="k">pass</span>
-
 
         <span class="c1"># Layout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_layout</span><span class="p">()</span>
@@ -457,8 +465,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">create_show</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;savep&#39;</span><span class="p">]):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="n">Save</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span><span class="mf">0.0</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="n">Save</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Simul.create_show"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.create_show.html#pylayers.simul.simulnet.Simul.create_show">[docs]</a>    <span class="k">def</span> <span class="nf">create_show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a vizualization</span>
@@ -470,38 +478,44 @@
 
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;show&#39;</span><span class="p">]):</span>
             <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;ipython_nb_show&#39;</span><span class="p">]):</span>
-                <span class="n">notebook</span><span class="o">=</span><span class="bp">True</span>
+                <span class="n">notebook</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">notebook</span> <span class="o">=</span><span class="bp">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">ShowNet</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="n">fig_net</span><span class="p">,</span><span class="n">notebook</span><span class="o">=</span><span class="n">notebook</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span><span class="mf">1.0</span><span class="p">)</span>
+                <span class="n">notebook</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">ShowNet</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                              <span class="n">fname</span><span class="o">=</span><span class="n">fig_net</span><span class="p">,</span> <span class="n">notebook</span><span class="o">=</span><span class="n">notebook</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s1">&#39;show_table&#39;</span><span class="p">]):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sht</span> <span class="o">=</span> <span class="n">ShowTable</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="n">lAg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="n">fig_table</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span><span class="mf">1.0</span><span class="p">)</span></div>
-
+            <span class="bp">self</span><span class="o">.</span><span class="n">sht</span> <span class="o">=</span> <span class="n">ShowTable</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">lAg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">,</span>
+                                 <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">fig_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">savepandas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save mechanics in pandas hdf5 format</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]),</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRNETSAVE&#39;</span><span class="p">])</span>
-        <span class="n">layfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">layfile</span><span class="o">+</span><span class="s1">&#39;.h5&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span> <span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span>
+            <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]),</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRNETSAVE&#39;</span><span class="p">])</span>
+        <span class="n">layfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">layfile</span> <span class="o">+</span> <span class="s1">&#39;.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">:</span>
 
             <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s1">&#39;ap&#39;</span><span class="p">:</span>
-                <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">convert_objects</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">convert_objects</span><span class="p">())</span>
 
-            <span class="k">else</span> <span class="p">:</span> <span class="c1"># if agent acces point, its position is saved</span>
-                <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">posdf</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># if agent acces point, its position is saved</span>
+                <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">posdf</span><span class="p">)</span>
 
             <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">typ</span>
             <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">name</span>
             <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span>
-            <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
-        <span class="c1">#saving metadata</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span>
+        <span class="c1"># saving metadata</span>
+        <span class="n">store</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_v_attrs</span><span class="o">.</span><span class="n">attributes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span>
         <span class="n">store</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">loadh5</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">layfile</span><span class="o">+</span><span class="s1">&#39;.h5&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">loadh5</span><span class="p">(</span>
+            <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">layfile</span> <span class="o">+</span> <span class="s1">&#39;.h5&#39;</span><span class="p">)</span>
+
+
 
 
 
@@ -509,25 +523,23 @@
         <span class="sd">&quot;&quot;&quot; run simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">:</span>
             <span class="c1"># random number seed</span>
             <span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">until</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]),</span>
                           <span class="n">real_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                           <span class="n">rel_speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s1">&#39;speedratio&#39;</span><span class="p">]))</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">_boids</span><span class="o">=</span><span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">_boids</span> <span class="o">=</span> <span class="p">{}</span>
 
-
-            <span class="c1">#if str2bool(self.save_opt[&#39;savep&#39;]):</span>
-                <span class="c1">#print &#39;Processing save results, please wait&#39;</span>
-                <span class="c1">#self.save.mat_export()</span>
-
+            <span class="c1"># if str2bool(self.save_opt[&#39;savep&#39;]):</span>
+            <span class="c1"># print &#39;Processing save results, please wait&#39;</span>
+            <span class="c1"># self.save.mat_export()</span>
 
             <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s1">&#39;savepd&#39;</span><span class="p">]):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">savepandas</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="k">else</span> <span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Reinstantiate a new simul object to run again&#39;</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -546,7 +558,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
+      Last updated on Oct 25, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

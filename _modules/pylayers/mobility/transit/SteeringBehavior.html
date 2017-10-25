@@ -643,12 +643,13 @@
             <span class="n">sf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">front_distance</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mf">1e-9</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">front_direction</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span>
-                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
-                <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">vec3</span><span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> 
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
-                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">vec3</span><span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="p">)</span>
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">vec3</span><span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="p">)</span>
                 <span class="c1"># acceleration += boid.localx.scale(sr) </span>
         <span class="c1"># if left_intersect:</span>
         <span class="c1">#     sl = 1 / max(sqrt(left_distance),1e-9)</span>
@@ -891,7 +892,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Sep 21, 2017.
+      Last updated on Oct 25, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
