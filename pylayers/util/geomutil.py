@@ -3354,6 +3354,34 @@ def ccw(a, b, c):
     return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) >
            (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
+def intersect_cone_seg(line0,line1, seg):
+    
+    x0,p0 = intersect_line_seg(line0, seg)
+    x1,p1 = intersect_line_seg(line1, seg)
+    tahe = []
+    v = p1-p0
+    nv2 = np.dot(v,v)
+    p0seg0 = seg[0]-p0
+    p0seg1 = seg[1]-p0
+    dp0 = np.dot(v,p0seg0)/nv2
+    dp1 = np.dot(v,p0seg1)/nv2
+    
+    if (x0>0) and (x0<1):
+        tahe.append(p0)
+    if (x1>0) and (x1<1):
+        tahe.append(p1)
+    if (dp0>0) and (dp0<1): 
+        tahe.append(seg[0])
+    if (dp1>0) and (dp1<1): 
+        tahe.append(seg[1])
+
+    if len(tahe)==2:
+        w = tahe[1]-tahe[0]
+        nw = np.linalg.norm(w)
+        ratio = nw/np.sqrt(nv2)
+    else:
+        ratio = 0     
+    return(tahe,ratio)
 
 def intersect_line_seg(line, seg):
     """ intersect a line and a segment
@@ -3368,26 +3396,40 @@ def intersect_line_seg(line, seg):
     -------
 
     k : intersection parameter (0<k<1 if intersection)
-    M : intersection point M = pta + k vseg
+    P : intersection point P = pta + k vseg
 
     """
-    pt, v = line
+    ptO, u = line
     pta, phe = seg
-    vseg = phe - pta
-    xht = phe[0] - pta[0]
-    yth = pta[1] - phe[1]
-    num = -(v[1] * (pta[0] - pt[0]) + v[0] * (pt[1] - pta[1]))
-    den = (v[1] * xht + v[0] * yth)
+    v  = phe-pta
 
-    if (abs(den) > 0):
-        k = num / den
-        M = pta + k * vseg
+    u  = u/np.linalg.norm(u)
+    
+    A = np.array([[u[0],-v[0]],
+                   [u[1],-v[1]]])
+    b  = np.array([[pta[0]-ptO[0]],
+                  [pta[1]-ptO[1]]])
+    detA = np.linalg.det(A)
+    if not (np.isclose(detA,0)):
+        x  = np.linalg.solve(A,b)
+        P  = pta + x[1]*v
     else:
-        si = np.sign(np.dot(v, vseg))
-        k = np.inf * si
-        M = pta + 2 * vseg
+        x = [None,-np.inf]
+        P = seg[0] 
+    # xht = phe[0] - pta[0]-v[]
+    # yth = pta[1] - phe[1]
+    # num = -(v[1] * (pta[0] - pt[0]) + v[0] * (pt[1] - pta[1]))
+    # den = (v[1] * xht + v[0] * yth)
 
-    return(k, M)
+    # if (abs(den) > 0):
+    #     k = num / den::
+    #     M = pta + k * vseg
+    # else:
+    #     si = np.sign(np.dot(v, vseg))
+    #     k = np.inf * si
+    #     M = pta + 2 * vseg
+
+    return(x[1], P)
 
 
 def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):

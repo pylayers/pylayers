@@ -1,6 +1,7 @@
 from pylayers.simul.link import *
 import pylayers.signal.waveform as wvf
 from pylayers.antprop.aarray import *
+import matplotlib.animation as animation 
 import pdb
 import warnings 
 
@@ -62,3 +63,21 @@ APSphd=np.sum(dod[:,1]*E)/np.sum(E)
 APStha=np.sum(doa[:,0]*E)/np.sum(E)
 APSpha=np.sum(doa[:,1]*E)/np.sum(E)
 
+H = DL.H.baseband(fcGHz=fcGHz,WMHz=200,Nf=128)
+fig = plt.figure()
+k = 0 
+im = plt.imshow(np.log10(np.abs(H.y[:,:,k])),animated=True,interpolation='nearest',cmap='jet')
+tit=plt.title('f ='+str(fcGHz+H.x[k]/1000.)+ ' GHz',fontsize=24)
+plt.colorbar(im)
+
+def updatefig(*args):
+    global k 
+    k = k+ 1
+    im.set_array(np.log10(np.abs(H.y[:,:,k%128])))
+    tit.set_label('f =' + str(fcGHz+H.x[k%128]/1000.)+' GHz')
+    return im,tit,
+
+ani = animation.FuncAnimation(fig,updatefig,128,interval=0.5,blit=True) 
+writer = animation.writers['ffmpeg'](fps=30)
+ani.save('MIMO.mp4',writer=writer,dpi=100)
+plt.show()

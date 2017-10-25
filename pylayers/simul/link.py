@@ -2136,6 +2136,7 @@ class DLink(Link):
             for addr in kwargs['laddr']: 
                 seq = self.Si[addr[0]][2*addr[1]:2*addr[1]+2,:]
                 Si = Signature(seq)
+                isvalid,r,u = Si.sig2ray(self.L,self.a[0:2],self.b[0:2])
                 fig,ax = Si.show(self.L,self.a[0:2],self.b[0:2],fig=fig,ax=ax)
 
         return fig,ax

@@ -1467,8 +1467,9 @@ class Pattern(PyLayers):
         -----
 
         Nd : Number of directions
-        Np : Number of points
+        Np : Number of points (antenna elements)
         Nf : Number of frequency
+        Nb : Number of beams
 
         """
 
@@ -1514,6 +1515,10 @@ class Pattern(PyLayers):
             #Sc2 = np.random.rand(Np,Np)[...,None]
             #pdb.set_trace()
 
+        #
+        # Get the weights 
+        #
+        #   w :  b x a x f 
         lshw = np.array(self.w.shape)
         if len(lshw)>2:
             Np2 = np.prod(lshw[0:-1])
@@ -1554,8 +1559,8 @@ class Pattern(PyLayers):
         #
         # Nf : frequency
         # Nd : direction
-        # Np : points or array element position
-        # Nu : users # Not iumplemented
+        # Np : points or array antenna element position
+        # Nb : number of beams  
         #
         # w  : Np x Nf
         # Sc : Np x Np x Nf
