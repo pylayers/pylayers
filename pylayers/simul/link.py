@@ -373,6 +373,7 @@ class DLink(Link):
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'threshold':0.8,
+                   'delay_excess_max_ns':500,
                    'save_opt':['sig','ray2','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
@@ -553,6 +554,10 @@ class DLink(Link):
     @property
     def cutoff(self):
         return self._cutoff
+
+    @property
+    def delay_excess_max_ns(self):
+        return self._delay_excess_max_ns
 
     @property
     def threshold(self):
@@ -752,6 +757,17 @@ class DLink(Link):
         if hasattr(self,'ca') and hasattr(self,'cb'):
             self.checkh5()
 
+    @delay_excess_max_ns.setter
+    def delay_excess_max_ns(self,delay_excess_max_ns):
+
+        delay_excess_max_ns = max(delay_excess_max_ns,0.)
+       
+        self._delay_excess_max_ns = delay_excess_max_ns
+
+        if hasattr(self,'ca') and hasattr(self,'cb'):
+            self.checkh5
+
+
     @fGHz.setter
     def fGHz(self,freq):
         if not isinstance(freq,np.ndarray):
@@ -856,6 +872,8 @@ class DLink(Link):
             s = s + '----------------------------- \n'
             s = s + 'cutoff : '+ str(self.cutoff)+'\n'
             s = s + 'threshold :'+ str(self.threshold)+'\n'
+            s = s + 'delay_excess_max : '+ str(self.delay_excess_max_ns)+' ns \n'
+            s = s + 'dist_excess_max : '+ str(self.delay_excess_max_ns*0.3)+' m \n'
         else:
             s = 'No Layout specified'
         return s
@@ -1582,6 +1600,11 @@ class DLink(Link):
             if key not in kwargs:
                 kwargs[key] = value
 
+        if 'delay_excess_max_ns' not in kwargs:
+            kwargs['delay_excess_max_ns'] = self.delay_excess_max_ns
+        else:
+            self.delay_excess_max_ns = kwargs['delay_excess_max_ns']
+
         if 'cutoff' not in kwargs:
             kwargs['cutoff'] = self.cutoff
         else:
@@ -1641,9 +1664,11 @@ class DLink(Link):
         else :
             ## 1 is the default signature determination algorithm
             if kwargs['alg']==1:
+                
                 Si.run(cutoff = kwargs['cutoff'],
                         diffraction = kwargs['diffraction'],
                         threshold = kwargs['threshold'],
+                        delay_excess_max_ns = kwargs['delay_excess_max_ns'],
                         nD = kwargs['nD'],
                         nR = kwargs['nR'],
                         nT = kwargs['nT'],
@@ -2019,8 +2044,8 @@ class DLink(Link):
                    'ls':-1,
                    'figsize':(20,10),
                    'fontsize':20,
-                   'rays':False,
-                   'bsig':True,
+                   'rays':True,
+                   'bsig':False,
                    'laddr':[(1,0)],
                    'cmap':plt.cm.hot,
                    'pol':'tot',
@@ -2040,7 +2065,13 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'],aw=kwargs['aw'],axis=kwargs['axis'])
+       
+        fig,ax = self.L.showG('s',
+                              nodes=False,
+                              figsize=kwargs['figsize'],
+                              labels=kwargs['labels'],
+                              aw=kwargs['aw'],
+                              axis=kwargs['axis'])
         #
         # Point A
         #
