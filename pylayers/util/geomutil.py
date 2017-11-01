@@ -3491,7 +3491,10 @@ def are_points_inside_cone(points,apex,v,radius=np.inf):
     brad = np.linalg.norm(w[bhs,:],axis=1) < radius
 
     w_vec = w[bhs,:][brad,:] 
-    x = np.linalg.solve(v_n,w_vec.T)
+    try:
+        x = np.linalg.solve(v_n,w_vec.T)
+    except:
+        pdb.set_trace()
     bx = x>0
 
     bcone = np.prod(bx,axis=0)
@@ -3502,6 +3505,85 @@ def are_points_inside_cone(points,apex,v,radius=np.inf):
     return bcone__ 
 
 def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
+    """
+    Parameters
+    ----------
+
+    line0
+    line1
+    seg
+    bvis 
+
+    """
+    tahe = []
+    ratio = 0 
+    points = np.vstack((seg[0],seg[1]))
+    apex = line0[0]
+    if ( (line0[1][0]==line1[1][0]) and
+         (line0[1][1]==line1[1][1])   ):
+         pdb.set_trace() 
+    v = np.vstack((line0[1],line1[1])).T
+
+    bb = are_points_inside_cone(seg,apex,v,radius=np.inf)
+    x0,p0 = intersect_halfline_seg(line0, seg)
+    x1,p1 = intersect_halfline_seg(line1, seg)
+
+    if bb[0] & bb[1]: # termination of segment fully inside the cone
+        tahe = seg
+        if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf):
+            ratio = np.linalg.norm(seg[1]-seg[0])/np.linalg.norm(p1-p0)
+        else:
+            ratio = 1
+
+    if ~bb[0] & ~bb[1]: # termination segment fully outside the cone 
+        if (( ( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ) and 
+            ( ( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ) ):
+            tahe = [p0,p1]
+            ratio = 1
+        else:
+            tahe = [] 
+            ratio = 0
+
+    if bb[0] & ~bb[1]: # seg0 inside seg1 outside 
+        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ): 
+            tahe = [seg[0],p1]
+        if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ): 
+            tahe = [seg[0],p0] 
+        if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf):
+            ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+        else:
+            ratio = 1
+
+    if ~bb[0] & bb[1]: # seg0 outside seg1 inside 
+        if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ):
+            tahe = [seg[1],p0]
+        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ): 
+            tahe = [seg[1],p1]
+        if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf ):
+            ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+        else:
+            ratio = 1
+
+    if bvis:
+        ax = plt.gca()
+        linet(ax,line0[0],line0[0]+10*line0[1],color='blue',al=1)
+        linet(ax,line1[0],line1[0]+10*line1[1],color='blue',al=1)
+        linet(ax,seg[0],seg[1],color='red',al=1)
+        #if bdp0i:
+        #    ax.scatter(seg[0][0],seg[0][1],s=100,color='green')
+        #else:
+        #    ax.scatter(seg[0][0],seg[0][1],s=100,color='red')
+        #if bdp1i:
+        #    ax.scatter(seg[1][0],seg[1][1],s=100,color='green')
+        #else:
+        #    ax.scatter(seg[1][0],seg[1][1],s=100,color='red')
+        #if len(tahe)==2:
+        #    linet(ax,tahe[0],tahe[1],color='green',al=1,linewidth=2)
+        #plt.show()    
+
+    return(tahe,ratio)
+
+def intersect_cone_seg_old(line0,line1,seg,bvis=False,bbool=False):
     """
     Parameters
     ----------
