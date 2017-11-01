@@ -451,8 +451,11 @@ class Layout(pro.PyLayers):
 
         self.hasboundary = False
         self.coordinates = 'cart'
-        self.version = '1.1'
-        self.typ = typ
+        self.version = '1.3'
+        if typ in ['indoor','outdoor','floorplan']:
+            self.typ = typ
+        else:
+            print("Layout : unknown Layout typ")
         # boolean 
 
         self.isbuilt = False
@@ -1714,7 +1717,10 @@ class Layout(pro.PyLayers):
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
             fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
+            #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
+            # typ outdoor parse ways.buildings 
+            # typ indoor parse ways.ways 
+            coords, nodes, ways, relations, m = osm.osmparse(fileosm)
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'lay')
         
@@ -1879,7 +1885,6 @@ class Layout(pro.PyLayers):
                 self.name[k] = []
 
         # convert graph Gs to numpy arrays for speed up post processing
-        #pdb.set_trace()
         self.g2npy()
 
         #
@@ -2242,7 +2247,7 @@ class Layout(pro.PyLayers):
                     di[section][option] = config.get(section, option)
                 except:
                     print(section, option)
-
+        
         self.Np = len(di['points'])
         self.Ns = len(di['segments'])
         self.Gs = nx.Graph()
@@ -2448,7 +2453,6 @@ class Layout(pro.PyLayers):
         self.boundary()
         
         # compliant with config file without  material/slab information
-
         #
         # {latlon] 
         #
