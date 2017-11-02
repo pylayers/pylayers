@@ -2042,6 +2042,8 @@ class DLink(Link):
                    'axis':True,
                    'lr':-1,
                    'ls':-1,
+                   'fig':[],
+                   'ax':[],
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':True,
@@ -2062,13 +2064,24 @@ class DLink(Link):
             if key not in kwargs:
                 kwargs[key]=defaults[key]
 
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else:
+            fig = kwargs['fig'] 
+
+        if kwargs['ax']==[]:
+            ax = plt.gca()
+        else:
+            ax=kwargs['ax']
+
         #
         # Layout
         #
        
         fig,ax = self.L.showG('s',
                               nodes=False,
-                              figsize=kwargs['figsize'],
+                              fig = fig,
+                              ax = ax,
                               labels=kwargs['labels'],
                               aw=kwargs['aw'],
                               axis=kwargs['axis'])
@@ -2090,21 +2103,22 @@ class DLink(Link):
         # Plot Rays
         #
         if kwargs['rays']:
-            ECtt,ECpp,ECtp,ECpt = self.C.energy()
-            if kwargs['pol']=='tt':
-                val = ECtt
-            if kwargs['pol']=='pp':
-                val = ECpp
-            if kwargs['pol']=='tp':
-                val = ECtp
-            if kwargs['pol']=='pt':
-                val = ECpt
-            if kwargs['pol']=='tot':
-                val = ECtt+ECpp+ECpt+ECtp
-            if kwargs['pol']=='co':
-                val = ECtt+ECpp
-            if kwargs['pol']=='cross':
-                val = ECtp+ECpt
+            #ECtt,ECpp,ECtp,ECpt = self.C.energy()
+            #if kwargs['pol']=='tt':
+            #    val = ECtt
+            #if kwargs['pol']=='pp':
+            #    val = ECpp
+            #if kwargs['pol']=='tp':
+            #    val = ECtp
+            #if kwargs['pol']=='pt':
+            #    val = ECpt
+            #if kwargs['pol']=='tot':
+            #    val = ECtt+ECpp+ECpt+ECtp
+            #if kwargs['pol']=='co':
+            #    val = ECtt+ECpp
+            #if kwargs['pol']=='cross':
+            #"    val = ECtp+ECpt
+            val = self.H.energy()[:,0,0] 
 
             clm = kwargs['cmap']
             #
@@ -2118,18 +2132,27 @@ class DLink(Link):
             vmin = val.min()
             vmax = val.max() 
             if kwargs['dB']:
-                vmin = 20*np.log10(vmin)
-                vmax = 20*np.log10(vmax)
+                vmin = 10*np.log10(vmin)
+                vmax = 10*np.log10(vmax)
+            
+            
+            #
+            # limitation of the vizualization zone around the center of the link 
+            #
+            pm = (self.a+self.b)/2.
+            ax.set_xlim(pm[0]-90,pm[0]+90)
+            ax.set_ylim(pm[1]-90,pm[1]+90)
 
             for ir  in lr:
                 if kwargs['dB']:
-                    RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    RayEnergy=max((10*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
                 else:
                     RayEnergy=val[ir]/val.max()
 
                 if kwargs['col']=='cmap':
                     col = clm(RayEnergy)
-                    width = 3*RayEnergy
+                    #width = 10*RayEnergy
+                    width = kwargs['width'] 
                     alpha = 1
                 else:
                     col = kwargs['col']
@@ -2149,7 +2172,7 @@ class DLink(Link):
                 sm._A = []
                 plt.colorbar(sm)
         #
-        # Plot Rays
+        # Plot signature
         #
         if kwargs['bsig']:
             for addr in kwargs['laddr']: 

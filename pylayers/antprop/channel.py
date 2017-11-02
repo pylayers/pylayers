@@ -634,7 +634,19 @@ class ADPchannel(bs.TUsignal):
         
         self.y[u] = 0+0j
 
-    def pap(self,fcGHz=28,fontsize=18,figsize=(10,10),label='',color='k',fig=[],ax=[],xlabel=True,ylabel=True,legend=True):
+    def pap(self,
+            fcGHz=28,
+            fontsize=18,
+            figsize=(10,10),
+            Gmax=22.68,
+            Gmin=19,
+            label='',
+            color='k',
+            fig=[],
+            ax=[],
+            xlabel=True,
+            ylabel=True,
+            legend=True):
         """ Calculate Power Angular Profile 
 
         Parameters
@@ -660,8 +672,17 @@ class ADPchannel(bs.TUsignal):
         Na = self.y.shape[0]
         # integration over frequency 
         # adp (angle) 
-        adp = np.real(np.sum(self.y*np.conj(self.y),axis=1))
-        u  = np.where(adp==max(adp))[0]
+        Gtyp = (Gmax+Gmin)/2.
+        Py   = np.real(self.y*np.conj(self.y))
+        pdp0 = np.sum(Py,axis=0)
+        pdp0dB = 10*np.log10(pdp0)
+        u    = pdp0dB>-95
+        adp  = np.sum(Py[:,u],axis=1)
+        #mPya = np.median(Py,axis=0)
+        #mPya = np.mean(Py,axis=0)
+        #sPy = Py-mPya[None,:]
+        #adp = np.sum(Pyz,axis=1)
+        u = np.where(adp==max(adp))[0]
         if fig==[]:
             fig = plt.figure(figsize=figsize)
         else:
@@ -671,15 +692,21 @@ class ADPchannel(bs.TUsignal):
         else:
             ax = ax
         #ax.plot(self.az*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
-        ax.plot(self.az*180/np.pi,10*np.log10(adp),color=color,label=label,linewidth=1.5)
+        ag = np.linspace(45,260,len(adp))
+        ax.plot(ag, #360self.az*180/np.pi,
+                10*np.log10(adp)-Gtyp,
+                color=color,
+                label=label,
+                linewidth=1.5)
         #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
-        ax.set_ylim(-80,-60)
+        ax.hlines(-120,xmin=45,xmax=260,linestyles='dashed',color='black')
+        #ax.set_ylim(-80,-60)
         if xlabel:
-            ax.set_xlabel('Angle (degrees)',fontsize=fontsize) 
+            ax.set_xlabel('Angle [deg]',fontsize=fontsize) 
         if ylabel:
             ax.set_ylabel('level (dB)',fontsize=fontsize) 
 
-        ax.set_title(self._filename,fontsize=fontsize)
+        #ax.set_title(self._filename,fontsize=fontsize)
         if legend:
             plt.legend(loc='best') 
         return fig,ax
@@ -722,6 +749,7 @@ class ADPchannel(bs.TUsignal):
                      'losdelay': True,
                      'freespace': True,
                      'desembeded': False,
+                     'noisefloor': False,
                      'typic':True,
                      'semilogx':True,
                      'bcir':False,
@@ -766,6 +794,8 @@ class ADPchannel(bs.TUsignal):
         pdp_min = 10*np.log10(pdp)-Gmax-1
         pdp_max = 10*np.log10(pdp)-Gmin-1
         pdp_typ = 10*np.log10(pdp)-Gtyp-1
+        uflashing = np.where(pdp_typ>FS)
+
         umin = np.where(pdp_min>-118)
         pdp_min_thr = pdp_min[umin] 
         umax = np.where(pdp_max>-118)
@@ -792,6 +822,7 @@ class ADPchannel(bs.TUsignal):
 
             if kwargs['typic']:
                 ax.semilogy(pdp_typ,x,label=kwargs['label'],color=kwargs['color'],linewidth=kwargs['linewidth'])
+                ax.semilogy(pdp_typ[uflashing],x[uflashing],label=kwargs['label'],color='red',linewidth=kwargs['linewidth'])
 
             if kwargs['freespace']:
                 if kwargs['typic']:
@@ -802,6 +833,9 @@ class ADPchannel(bs.TUsignal):
             if kwargs['losdelay']:
                 ax.hlines(self.taupeak_est,xmin=-130,xmax=-40,linestyles='dashed',color='blue')
                 ax.hlines(self.taulos_geo,xmin=-130,xmax=-40,linestyles='dashed',color='red')
+
+            if kwargs['noisefloor']:
+                ax.vlines(-120,ymin=0,ymax=x[-1],linestyles='dashed',color='black')
 
             #ax.set_xlim(10,1000)
             if kwargs['xlabel']:
@@ -824,10 +858,13 @@ class ADPchannel(bs.TUsignal):
 
             if kwargs['typic']:
                 ax.plot(pdp_typ,x,label=kwargs['label'],color=kwargs['color'])
+                ax.scatter(pdp_typ[uflashing],x[uflashing],s=80,c='red')
 
             if kwargs['freespace']:
                 if kwargs['typic']:
                     ax.plot(FS,x,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
+                    ax.plot(FS-(Gmax-Gmin)/2,x,color='blue',linewidth=0.5,label='Free Space path profile')
+                    ax.plot(FS+(Gmax-Gmin)/2,x,color='blue',linewidth=0.5,label='Free Space path profile')
                 else:
                     ax.plot(FS,x,color='k',linewidth=2,label='Free Space path profile')
 
@@ -848,7 +885,7 @@ class ADPchannel(bs.TUsignal):
 
         if kwargs['ylabel']:
             ax.set_xlabel('level (dB)',fontsize=kwargs['fontsize']) 
-        ax.set_title(self._filename+' '+str(PL))
+        #ax.set_title(self._filename+' '+str(PL))
         if kwargs['legend']:
             plt.legend(loc='best') 
 

@@ -54,6 +54,7 @@ import networkx as nx
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm 
 import struct as stru
 import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
@@ -605,6 +606,7 @@ class Rays(PyLayers, dict):
             True
         points : boolean
             True
+        ER : ray energy 
 
         """
         defaults = {'rlist':[],
@@ -619,16 +621,20 @@ class Rays(PyLayers, dict):
                     'ms':5,
                     'layout':True,
                     'points':True,
-                    'labels':True
+                    'labels':False
                    }
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
-        #if kwargs['fig'] ==[]:
-        #    fig = plt.figure()
-        #if kwargs['ax'] ==[]:
-        #    ax = fig.add_subplot(111)
+        if kwargs['fig'] ==[]:
+            fig = plt.figure()
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        
+        #
+        # display the Layout 
+        #
         if kwargs['layout'] == True:
             if kwargs['L'] != []:
                 fig,ax = kwargs['L'].showG(**kwargs)
@@ -645,27 +651,55 @@ class Rays(PyLayers, dict):
             ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
         # i=-1 all rays
         # else block of interactions i
-
+        
+        # plot all rays 
         if kwargs['rlist'] == []:
 
+            # list of group of interactions
             lgrint = self.keys()
 
             for i in lgrint:
+                # list of rays 
                 lray = range(len(self[i]['pt'][0, 0, :]))
+
                 if self.filled :
                     ax.set_title('rays index :'+ str(self[i]['rayidx']))
+
                 for j in lray:
+
+                    addr_ray = (i,j)
+                    index_ray = self.a2ir(addr_ray)
+
                     ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
                                      np.hstack((self[i]['pt'][0:2, :, j],
                                      self.pRx[0:2].reshape((2, 1))))
                                      ))
-                    ax.plot(ray[0, :], ray[1, :],
-                            alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+
+                    if 'ER' not in kwargs:
+                        ax.plot(ray[0, :], ray[1, :],
+                            alpha = kwargs['alpharay'],
+                            color = kwargs['colray'],
+                            linewidth=kwargs['widthray'])
+                    else:
+                        EdB = 10*np.log10(ER[index_ray])
+                        ERdB = 10*np.log10(E)
+                        vscale  = 1.-(max(ERdB)-EdB)/(max(ERdB)-min(ERdB))
+                        widthray = 3*vscale
+                        alpharay = vscale
+                        pdb.set_trace()
+                        cmap = cm.hot 
+                        colorray = cmap(vscale)
+                        ax.plot(ray[0, :], ray[1, :],
+                                alpha = alpharay,
+                                color = colorray,
+                                linewidth = widthray)
+
                     ax.axis('off')
                     if self.filled :
                         ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         else:
             rlist = kwargs['rlist']
+            # 3D ray 
             if self.is3D:
                 nbi = self._ray2nbi[rlist]
                 nr = np.array((nbi,rlist))
@@ -674,7 +708,7 @@ class Rays(PyLayers, dict):
 
                 for i in unb:
                     raynb = (nr[1,unr[i]]).astype(int)
-                    nbr=len(raynb)
+                    nbr = len(raynb)
                     ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
                     for j in ptidx:
 
@@ -683,8 +717,11 @@ class Rays(PyLayers, dict):
                                          self.pRx[0:2].reshape((2, 1))))
                                          ))
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+                                alpha = kwargs['alpharay'],
+                                color = kwargs['colray'],
+                                linewidth = kwargs['widthray'])
                         ax.axis('off')
+            # 2D ray 
             else:
 
                 for i in rlist:
@@ -697,8 +734,11 @@ class Rays(PyLayers, dict):
                                          self.pRx[0:2].reshape((2, 1))))
                                          ))
                         ax.plot(ray[0, :], ray[1, :],
-                                alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+                                alpha=kwargs['alpharay'],
+                                color=kwargs['colray'],
+                                linewidth=kwargs['widthray'])
                         ax.axis('off')
+
                         if self.filled :
                             ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
 
@@ -2636,12 +2676,12 @@ class Rays(PyLayers, dict):
         Parameters
         ----------
         t = (ni,ux) : tuple address (group of interactions, index)
-            address ray 
+            ray address  
         
         Returns
         -------
         ir : integer
-            index ray 
+            ray index  
 
         """
         assert t[0] in self.keys(), "wrong number of interactions"
@@ -2664,7 +2704,7 @@ class Rays(PyLayers, dict):
             interaction block number
         """
         i = self._ray2nbi[r]
-        return 
+        return i 
 
     def ray2iidx(self,ir):
         """ Get interactions index of a given ray
