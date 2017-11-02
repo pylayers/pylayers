@@ -640,6 +640,7 @@ class ADPchannel(bs.TUsignal):
             figsize=(10,10),
             Gmax=22.68,
             Gmin=19,
+            threshdB=-95,
             label='',
             color='k',
             fig=[],
@@ -676,7 +677,7 @@ class ADPchannel(bs.TUsignal):
         Py   = np.real(self.y*np.conj(self.y))
         pdp0 = np.sum(Py,axis=0)
         pdp0dB = 10*np.log10(pdp0)
-        u    = pdp0dB>-95
+        u    = pdp0dB>threshdB
         adp  = np.sum(Py[:,u],axis=1)
         #mPya = np.median(Py,axis=0)
         #mPya = np.mean(Py,axis=0)
@@ -756,6 +757,7 @@ class ADPchannel(bs.TUsignal):
                      'raw': False,
                      'Gmax':22.68,
                      'Gmin':19,
+                     'threshdB':-82.5,
                      'imax':-1,
                      'Tilt':10,
                      'HPBW':10,
@@ -773,12 +775,17 @@ class ADPchannel(bs.TUsignal):
         Gmax = kwargs.pop('Gmax')
         Gmin = kwargs.pop('Gmin')
         imax = kwargs.pop('imax')
+        threshdB = kwargs.pop('threshdB')
         Gtyp = (Gmax+Gmin)/2.
         # get peak value of the PADP
         alpha,tau,phi = self.peak()
         Na = self.y.shape[0]
         # pdp : power delay profie 
-        pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
+        Py = np.real(self.y*np.conj(self.y))
+        pap0 = np.sum(Py,axis=1)
+        pap0dB = 10*np.log10(pap0)
+        u = pap0dB>threshdB
+        pdp = np.sum(Py[u,:],axis=0)
         pdp = pdp[0:imax]
         x = self.x[0:imax]
         # spdp : square root of power delay profie 
