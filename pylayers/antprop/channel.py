@@ -555,6 +555,92 @@ class ADPchannel(bs.TUsignal):
                     'imin':0,
                     'imax':-1,
                     'dB' : True,
+                    'fonts':18,
+                    'colorbar':False,
+                    'fig' :[],
+                    'ax' : [],
+                    'label':'',
+                    'ang_offset':450,
+                    'orientation':-1,
+                    'alpha':1,
+                    'blos':True
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k] 
+
+        imin = kwargs.pop('imin')
+        imax = kwargs.pop('imax')
+        dB   = kwargs.pop('dB')
+        fig  = kwargs.pop('fig')
+        ax   = kwargs.pop('ax')
+        fonts = kwargs.pop('fonts')
+        label = kwargs.pop('label')
+        blos = kwargs.pop('blos')
+        orientation = kwargs.pop('orientation')
+        bcolorbar = kwargs.pop('colorbar')
+        ang_offset = kwargs.pop('ang_offset')
+
+        if fig==[]:
+            fig = plt.figure()
+        if ax==[]:
+            ax = fig.add_subplot(111)
+        rd2deg = 180/np.pi
+        #extent = (self.az[-1]*rd2deg+agoffset,
+        #          self.az[0]*rd2deg+agoffset,
+        #          self.x[imin],self.x[imax])
+        #extent = (self.az[0]*rd2deg,
+        #          self.az[-1]*rd2deg,
+        #          self.x[imin],self.x[imax])
+
+        extent = (45,270,self.x[imin],self.x[imax])
+        padp = np.abs(self.y)[:,imin:imax].T
+        if dB:
+            padp  = 20*np.log10(padp)
+            im = ax.imshow(padp,extent=extent,aspect='auto',**kwargs)
+            plt.axis('equal')
+
+        if blos:
+            a1 = ang_offset + orientation*self.angpeak_est
+            a2 = ang_offset + orientation*self.anglos_geo
+            ax.scatter(a1,self.taupeak_est,marker='*',s=70,color='k')
+            ax.scatter(a2,self.taulos_geo,marker='D',s=70,color='k')
+
+        if bcolorbar:
+            cbar = plt.colorbar(im)
+
+            if dB:
+                cbar.set_label(label+' dB',fontsize=fonts)
+            else:
+                cbar.set_label(label+' linear',fontsize=fonts)
+
+            for t in cbar.ax.get_yticklabels():
+                t.set_fontsize(fonts)
+
+        ax.set_ylabel('Propagation delay [ns]',fontsize=fonts)
+        ax.set_xlabel('Angle[deg]',fontsize=fonts)
+
+    #ax.title('PADP',fontsize=fonts)
+    
+        for tick in ax.xaxis.get_major_ticks():
+            tick.label.set_fontsize(fonts) 
+        for tick in ax.yaxis.get_major_ticks():
+            tick.label.set_fontsize(fonts) 
+
+        return fig,ax
+
+
+    def imshow_mamadou(self,**kwargs):
+        """ show Angular Delay Profile
+        """
+        defaults = {'origin':'lower',
+                    'vmax' : -65,
+                    'vmin' : -120,
+                    'interpolation' : 'nearest',
+                    'imin':0,
+                    'imax':-1,
+                    'dB' : True,
                     'fontsize':18,
                     'fig' :[],
                     'ax' : [],
@@ -645,7 +731,85 @@ class ADPchannel(bs.TUsignal):
         
         self.y[u] = 0+0j
 
-    def pap(self,fcGHz=28,fontsize=25,color='r',figsize=(10,10),fig=[],ax=[],label='',xlabel=True,ylabel=True,legend=True):
+    def pap(self,
+            fcGHz=28,
+            fontsize=18,
+            figsize=(10,10),
+            Gmax=22.68,
+            Gmin=19,
+            threshdB=-95,
+            label='',
+            color='k',
+            fig=[],
+            ax=[],
+            xlabel=True,
+            ylabel=True,
+            legend=True):
+        """ Calculate Power Angular Profile 
+
+        Parameters
+        ----------
+
+        fcGHz : float
+        fontsize : int 
+        figsize : tuple
+        fig : 
+        ax  : 
+        xlabel : boolean  
+        ylabel : boolean 
+        legen : boolean
+
+        Returns
+        -------
+
+        fig,ax
+
+        """
+
+
+        Na = self.y.shape[0]
+        # integration over frequency 
+        # adp (angle) 
+        Gtyp = (Gmax+Gmin)/2.
+        Py   = np.real(self.y*np.conj(self.y))
+        pdp0 = np.sum(Py,axis=0)
+        pdp0dB = 10*np.log10(pdp0)
+        u    = pdp0dB>threshdB
+        adp  = np.sum(Py[:,u],axis=1)
+        #mPya = np.median(Py,axis=0)
+        #mPya = np.mean(Py,axis=0)
+        #sPy = Py-mPya[None,:]
+        #adp = np.sum(Pyz,axis=1)
+        u = np.where(adp==max(adp))[0]
+        if fig==[]:
+            fig = plt.figure(figsize=figsize)
+        else:
+            fig = fig
+        if ax == []:
+            ax  = fig.add_subplot(111)
+        else:
+            ax = ax
+        #ax.plot(self.az*180/np.pi,10*np.log10(adp),color='r',label=r'$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$',linewidth=1.5)
+        ag = np.linspace(45,260,len(adp))
+        ax.plot(ag, #360self.az*180/np.pi,
+                10*np.log10(adp)-Gtyp,
+                color=color,
+                label=label,
+                linewidth=1.5)
+        #ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+        ax.hlines(-120,xmin=45,xmax=260,linestyles='dashed',color='black')
+        #ax.set_ylim(-80,-60)
+        if xlabel:
+            ax.set_xlabel('Angle [deg]',fontsize=fontsize) 
+        if ylabel:
+            ax.set_ylabel('level (dB)',fontsize=fontsize) 
+
+        #ax.set_title(self._filename,fontsize=fontsize)
+        if legend:
+            plt.legend(loc='best') 
+        return fig,ax
+
+    def pap_mamadou(self,fcGHz=28,fontsize=25,color='r',figsize=(10,10),fig=[],ax=[],label='',xlabel=True,ylabel=True,legend=True):
         """ Calculate Power Angular Profile 
 
         Parameters
@@ -711,6 +875,153 @@ class ADPchannel(bs.TUsignal):
         return fig,ax,u
 
     def pdp(self,**kwargs):
+        """ Calculate and plot Power Delay Profile
+
+        Parameters
+        ----------
+
+        fcGHz : float
+
+        """
+
+        defaults = { 'figsize':(10,10),
+                     'fontsize':18,
+                     'fig' : [],
+                     'ax': [],
+                     'xlabel': True,
+                     'ylabel': True,
+                     'legend': True,
+                     'losdelay': True,
+                     'freespace': True,
+                     'desembeded': False,
+                     'typic':True,
+                     'semilogx':True,
+                     'bcir':False,
+                     'raw': False,
+                     'Gmax':22.68,
+                     'Gmin':19,
+                     'Tilt':10,
+                     'HPBW':10,
+                     'dphi':5,
+                     'marker':'*',
+                     'color':'k',
+                     'label':'',
+                     'linewidth':1
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+        
+        Gmax = kwargs.pop('Gmax')
+        Gmin = kwargs.pop('Gmin')
+        Gtyp = (Gmax+Gmin)/2.
+        # get peak value of the PADP
+        alpha,tau,phi = self.peak()
+        Na = self.y.shape[0]
+        # pdp : power delay profie 
+        pdp = np.real(np.sum(self.y*np.conj(self.y),axis=0))
+        # spdp : square root of power delay profie 
+        spdp = TUchannel(x=self.x,y=np.sqrt(pdp))
+        u  = np.where(pdp==max(pdp))[0]
+        FS = -(32.4+20*np.log10(self.x*0.3)+20*np.log10(self.fcGHz))
+        AttmaxdB = 20*np.log10(alpha)
+        #Gmax = AttmaxdB-FS[u] 
+        #Gmax_r = np.round(Gmax[0]*100)/100.
+        #
+        # The -3dB is specific to the Aalto measurement and desembeding (1/2)
+        #
+        pdp_min = 10*np.log10(pdp)-Gmax-1
+        pdp_max = 10*np.log10(pdp)-Gmin-1
+        pdp_typ = 10*np.log10(pdp)-Gtyp-1
+        umin = np.where(pdp_min>-118)
+        pdp_min_thr = pdp_min[umin] 
+        umax = np.where(pdp_max>-118)
+        pdp_max_thr = pdp_max[umax] 
+        PL = -10*np.log10(np.sum(10**(pdp_min_thr/10.)))
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else:
+            fig = kwargs['fig'] 
+        if kwargs['ax'] == []:
+            ax  = fig.add_subplot(111)
+        else:
+            ax = kwargs['ax']
+
+        if kwargs['semilogx']:
+            if kwargs['raw']:
+                ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+            #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
+
+            if kwargs['desembeded']:
+                ax.semilogx(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax),color='green')
+                ax.semilogx(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin),color='red')
+
+            if kwargs['typic']:
+                ax.semilogx(self.x,pdp_typ,label=kwargs['label'],color=kwargs['color'],linewidth=kwargs['linewidth'])
+
+            if kwargs['freespace']:
+                if kwargs['typic']:
+                    ax.semilogx(self.x,FS,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
+                else:
+                    ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+
+            if kwargs['losdelay']:
+                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles='dashed',color='red')
+
+            #ax.set_xlim(10,1000)
+            if kwargs['xlabel']:
+                ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
+            
+            if kwargs['bcir']:
+                phi = self.angpeak_est*np.pi/180.
+                dang = np.abs(self.az - phi)
+                u = np.where(dang==np.min(dang))[0][0]
+                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color='r')
+                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color='g')
+        else:
+            if kwargs['raw']:
+                ax.plot(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)
+            ax.plot(np.array([tau]),np.array([AttmaxdB]),color='k')
+
+            if kwargs['desembeded']:
+                ax.plot(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax))
+                ax.plot(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin))
+
+            if kwargs['typic']:
+                ax.plot(self.x,pdp_typ,label=kwargs['label'],color=kwargs['color'])
+
+            if kwargs['freespace']:
+                if kwargs['typic']:
+                    ax.plot(self.x,FS,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
+                else:
+                    ax.plot(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+
+            if kwargs['losdelay']:
+                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles='dashed',color='red')
+
+            #ax.set_xlim(0,1000)
+            if kwargs['xlabel']:
+                ax.set_xlabel('Delay (ns)',fontsize=kwargs['fontsize']) 
+            
+            if kwargs['bcir']:
+                phi = self.angpeak_est*np.pi/180.
+                dang = np.abs(self.az - phi)
+                u = np.where(dang==np.min(dang))[0][0]
+                ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,'r')
+                ax.plot(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,'g')
+
+        if kwargs['ylabel']:
+            ax.set_ylabel('level (dB)',fontsize=kwargs['fontsize']) 
+        ax.set_title(self._filename+' '+str(PL))
+        if kwargs['legend']:
+            plt.legend(loc='best') 
+
+        return fig,ax
+    def pdp_mamadou(self,**kwargs):
         """ Calculate and plot Power Delay Profile
 
         Parameters
@@ -799,38 +1110,38 @@ class ADPchannel(bs.TUsignal):
             u = np.where(dang==np.min(dang))[0][0]
             ax.plot(self.x,20*np.log10(np.abs(self.y[u,:])),color=kwargs['color'],label=kwargs['label'])
 
-        # if kwargs['semilogx']:
-        #     if kwargs['raw']:
-        #         ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=1)
-        #     #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
+        if kwargs['semilogx']:
+            if kwargs['raw']:
+                ax.semilogx(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=1)
+            #ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color='k')
 
-        #     if kwargs['desembeded']:
-        #         ax.semilogx(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax),color='green')
-        #         ax.semilogx(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin),color='red')
+            if kwargs['desembeded']:
+                ax.semilogx(self.x,pdp_min,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmax),color='green')
+                ax.semilogx(self.x,pdp_max,label=r'$10\log_{10}(\sum_{\phi} PADP(\phi)) - $'+str(Gmin),color='red')
 
-        #     if kwargs['typic']:
-        #         ax.semilogx(self.x,pdp_typ,label=kwargs['label'],color=kwargs['color'],linewidth=kwargs['linewidth'])
+            if kwargs['typic']:
+                ax.semilogx(self.x,pdp_typ,label=kwargs['label'],color=kwargs['color'],linewidth=kwargs['linewidth'])
 
-        #     if kwargs['freespace']:
-        #         if kwargs['typic']:
-        #             ax.semilogx(self.x,FS,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
-        #         else:
-        #             ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
+            if kwargs['freespace']:
+                if kwargs['typic']:
+                    ax.semilogx(self.x,FS,color=kwargs['color'],linewidth=kwargs['linewidth']+1,label='Free Space path profile')
+                else:
+                    ax.semilogx(self.x,FS,color='k',linewidth=2,label='Free Space path profile')
 
-        #     if kwargs['losdelay']:
-        #         ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
-        #         ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles='dashed',color='red')
+            if kwargs['losdelay']:
+                ax.vlines(self.taupeak_est,ymin=-130,ymax=-40,linestyles='dashed',color='blue')
+                ax.vlines(self.taulos_geo,ymin=-130,ymax=-40,linestyles='dashed',color='red')
 
-        #     #ax.set_xlim(10,1000)
-        #     if kwargs['xlabel']:
-        #         ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
+            #ax.set_xlim(10,1000)
+            if kwargs['xlabel']:
+                ax.set_xlabel('Delay (ns) log scale',fontsize=kwargs['fontsize']) 
             
-        #     if kwargs['bcir']:
-        #         phi = self.angpeak_est*np.pi/180.
-        #         dang = np.abs(self.az - phi)
-        #         u = np.where(dang==np.min(dang))[0][0]
-        #         ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color='r')
-        #         ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color='g')
+            if kwargs['bcir']:
+                phi = self.angpeak_est*np.pi/180.
+                dang = np.abs(self.az - phi)
+                u = np.where(dang==np.min(dang))[0][0]
+                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmax,color='r')
+                ax.semilogx(self.x,20*np.log10(np.abs(self.y[u,:]))-Gmin,color='g')
         # else:
         #     if kwargs['raw']:
         #         ax.plot(self.x,10*np.log10(pdp),color='r',label=r'$10\log_{10}(\sum_{\phi} PADP(\phi))$',linewidth=0.5)

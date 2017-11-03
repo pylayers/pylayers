@@ -1176,7 +1176,7 @@ class Signatures(PyLayers,dict):
                     'diffraction' : True,
                     'animation' : False
                     }
-        selv.cpt = 0 
+        self.cpt = 0 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k] 

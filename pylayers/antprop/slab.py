@@ -511,7 +511,8 @@ class Interface(PyLayers):
         # Reflexion
         if 'R' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
-                args['titles'].append(u'$R_{\perp}$')
+                #args['titles'].append(u'$R_{\perp}$')
+                args['titles'].append(u'$R_{//}$')
                 if var=='f': # wrt frequency
                     Ro = self.R[:, kv, 0, 0]
                     y = Ro
@@ -519,7 +520,8 @@ class Interface(PyLayers):
                     Ro = self.R[kv, :, 0, 0]
                     y = Ro
             if 'p' in kwargs['polar']:
-                args['titles'].append(u'$R_{//}$')
+                #args['titles'].append(u'$R_{//}$')
+                args['titles'].append(u'$R_{\perp}$')
                 if var=='f': # wrt frequency
                     Rp = self.R[:, kv, 1, 1]
                     try:
@@ -535,7 +537,8 @@ class Interface(PyLayers):
         # Transmission
         if 'T' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
-                args['titles'].append(u'$T_{\perp}$')
+                #args['titles'].append(u'$T_{\perp}$')
+                args['titles'].append(u'$T_{//}$')
                 if var=='f': # wrt frequency
                     To = self.T[:, kv, 0, 0]
                     try:
@@ -549,7 +552,8 @@ class Interface(PyLayers):
                     except:
                         y = To
             if 'p' in kwargs['polar']:
-                args['titles'].append(u'$T_{//}$')
+                #args['titles'].append(u'$T_{//}$')
+                args['titles'].append(u'$T_{\perp}$')
                 if var=='f': # wrt frequency
                     Tp = self.T[:, kv, 1, 1]
                     try:
