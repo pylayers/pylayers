@@ -428,10 +428,10 @@ class Layout(pro.PyLayers):
         # Initializing graphs
         #
 
-        self.Gs = nx.Graph()
-        self.Gr = nx.Graph()
-        self.Gt = nx.Graph()
-        self.Gm = nx.Graph()
+        self.Gs = nx.Graph(name='Gs')
+        self.Gr = nx.Graph(name='Gr')
+        self.Gt = nx.Graph(name='Gt')
+        self.Gm = nx.Graph(name='Gm')
 
         self.Gs.pos = {}
         self.tahe = np.zeros(([2, 0]), dtype=int)
@@ -451,8 +451,11 @@ class Layout(pro.PyLayers):
 
         self.hasboundary = False
         self.coordinates = 'cart'
-        self.version = '1.1'
-        self.typ = typ
+        self.version = '1.3'
+        if typ in ['indoor','outdoor','floorplan']:
+            self.typ = typ
+        else:
+            print("Layout : unknown Layout typ")
         # boolean 
 
         self.isbuilt = False
@@ -1714,7 +1717,10 @@ class Layout(pro.PyLayers):
                     str(lon).replace('.', '_') + '.ini'
         else:  # by reading an osm file
             fileosm = pyu.getlong(kwargs['_fileosm'], os.path.join('struc', 'osm'))
-            coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
+            #coords, nodes, ways, relations, m = osm.osmparse(fileosm, typ=self.typ)
+            # typ outdoor parse ways.buildings 
+            # typ indoor parse ways.ways 
+            coords, nodes, ways, relations, m = osm.osmparse(fileosm)
             self.coordinates = 'latlon'
             self._filename = kwargs['_fileosm'].replace('osm', 'lay')
         
@@ -1839,7 +1845,6 @@ class Layout(pro.PyLayers):
         # lon_0 = (bd[0] + bd[2]) / 2.
         # lat_0 = (bd[1] + bd[3]) / 2.
 
-        # pdb.set_trace()
         # self.m = Basemap(llcrnrlon=bd[0], llcrnrlat=bd[1],
         #                  urcrnrlon=bd[2], urcrnrlat=bd[3],
         #                  resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
@@ -1879,7 +1884,6 @@ class Layout(pro.PyLayers):
                 self.name[k] = []
 
         # convert graph Gs to numpy arrays for speed up post processing
-        pdb.set_trace()
         self.g2npy()
 
         #
@@ -2019,8 +2023,8 @@ class Layout(pro.PyLayers):
             config.set("latlon","llcrnrlat",self.m.llcrnrlat)
             config.set("latlon","urcrnrlon",self.m.urcrnrlon)
             config.set("latlon","urcrnrlat",self.m.urcrnrlat)
+            config.set("latlon","projection",self.m.projection)
 
-        # config.set("info",'Npoints',self.Np)
         # config.set("info",'Nsegments',self.Ns)
         # config.set("info",'Nsubsegments',self.Nss)
 
@@ -2242,10 +2246,10 @@ class Layout(pro.PyLayers):
                     di[section][option] = config.get(section, option)
                 except:
                     print(section, option)
-
+        
         self.Np = len(di['points'])
         self.Ns = len(di['segments'])
-        self.Gs = nx.Graph()
+        self.Gs = nx.Graph(name='Gs')
         self.Gs.pos = {}
         self.labels = {}
 
@@ -2448,7 +2452,6 @@ class Layout(pro.PyLayers):
         self.boundary()
         
         # compliant with config file without  material/slab information
-
         #
         # {latlon] 
         #
@@ -2457,13 +2460,19 @@ class Layout(pro.PyLayers):
             llcrnrlat = eval(config.get('latlon', 'llcrnrlat'))
             urcrnrlon = eval(config.get('latlon', 'urcrnrlon'))
             urcrnrlat = eval(config.get('latlon', 'urcrnrlat'))
+            projection = config.get('latlon','projection')
             lon_0 = (llcrnrlon+urcrnrlon)/2.
             lat_0 = (llcrnrlat+urcrnrlat)/2.
 
             # Construction of Basemap for coordinates transformation
-            self.m = Basemap(llcrnrlon=llcrnrlon, llcrnrlat=llcrnrlat,
-                    urcrnrlon=urcrnrlon, urcrnrlat=urcrnrlat,
-                resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
+            self.m = Basemap(llcrnrlon=llcrnrlon, 
+                             llcrnrlat=llcrnrlat,
+                             urcrnrlon=urcrnrlon, 
+                             urcrnrlat=urcrnrlat,
+                             resolution='i', 
+                             projection=projection, 
+                             lon_0=lon_0, 
+                             lat_0=lat_0)
             
 
         if config.has_section('files'):
@@ -6255,7 +6264,7 @@ class Layout(pro.PyLayers):
         return T, map_vertices
 
     def buildGt(self, check=True,difftol=0.01,verbose=False,tqdmpos=0):
-        """ build graph of convex cycle 
+        """ build graph of convex cycle
 
         Parameters
         ----------
@@ -6428,7 +6437,7 @@ class Layout(pro.PyLayers):
         # pdb.set_trace()
 
         # create graph Gt
-        self.Gt = nx.Graph()
+        self.Gt = nx.Graph(name='Gt')
         self.Gt.add_edges_from(uE)
         self.Gt = nx.relabel_nodes(self.Gt, lambda x: -x)
 
@@ -6701,57 +6710,57 @@ class Layout(pro.PyLayers):
 
         self.g2npy()
 
-    def _visual_check(self):
+    def _visual_check(self,fontsize=18):
         """ visual checking of graphs
-        """
-        fig, axs = plt.subplots(2, 2)
 
-        try:
+        Parameters
+        ----------
+
+        fontsize : int 
+
+        """
+        fig, axs = plt.subplots(2, 2,figsize=(10,10))
+        plt.subplots_adjust(left = 0 ,
+                            right = 1.0, 
+                            bottom = 0 ,
+                            top = 1 ,
+                            wspace = 0 , 
+                            hspace =0)
+
+
+        if hasattr(self,'Gs') and hasattr(self,'Gt'):
             ax = axs[0, 0]
+
             self.showG('s', aw=1, ax=ax, fig=fig)
+
             indoor = [self.Gt.node[p]['polyg']
                       for p in self.Gt.nodes() if p != 0 and self.Gt.node[p]['indoor']]
-            outdoor = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes(
-            ) if p != 0 and not self.Gt.node[p]['indoor']]
+            outdoor = [self.Gt.node[p]['polyg'] 
+                      for p in self.Gt.nodes()  if p != 0 and not self.Gt.node[p]['indoor']]
+
             self.pltpoly(indoor, color='r', ax=ax, fig=fig)
             self.pltpoly(outdoor, color='g', ax=ax, fig=fig)
-            ax.set_title('indoor red,outdoor green')
-        except:
-            print('error with polyg in Gt or indoor parameter')
 
-        # try:
-
-        #     ax = axs[0,1]
-        #     f,ax=self.showG('s',aw=1,ax=ax,fig=fig)
-        #     isopen = [self.Gt.node[p]['polyg'] for p in self.Gt.nodes() if p !=0 and self.Gt.node[p]['isopen'] ]
-        #     self.pltpoly(isopen,ax=ax,fig=fig)
-        #     ax.set_title('isopen red')
-        # except:
-        #     print('error with isopen parameter in Gt')
-
-        try:
             ax = axs[0, 1]
             f, ax = self.showG('s', aw=1, ax=ax, fig=fig)
             diffpos = np.array([self.Gs.pos[x] for x in self.ddiff.keys()])
-            ax.scatter(diffpos[:, 0], diffpos[:, 1])
-            ax.set_title('diffraction points')
-        except:
-            print('no diffraction found. Yet computed ?')
+            ax.scatter(diffpos[:, 0], diffpos[:, 1],s=130)
+            #ax.set_title('Diffraction points')
 
-        try:
             ax = axs[1, 0]
-            f, ax = self.showG('st', labels='t', aw=1, ax=ax, fig=fig)
-            ax.set_title('Gt')
-        except:
-            print('no Gt found. Yet computed ?')
+            f, ax = self.showG('st', aw=1, ax=ax, fig=fig)
+            #ax.set_title('$\mathcal{G}_t$',fontsize=fontsize)
+            ax.set_axis_off
 
-        try:
+        if hasattr(self,'Gv'):
             ax = axs[1, 1]
             f, ax = self.showG('sv', aw=1, ax=ax, fig=fig)
-            ax.set_title('Gv')
-        except:
+            #ax.set_title('$\mathcal{G}_v$',fontsize=fontsize)
+            ax.set_axis_off
+        else:
             print('no Gv found. Yet computed ?')
-        plt.tight_layout()
+        plt.savefig('visual_check.pdf')
+        #plt.tight_layout()
         # axs[2,1].remove()
 
     def _delaunay(self, poly, polyholes=[]):
@@ -7588,7 +7597,7 @@ class Layout(pro.PyLayers):
             self.ddiff={}
         Gvpbar = pbar(verbose,total=100., desc ='build Gv',position=tqdmpos)
 
-        self.Gv = nx.Graph()
+        self.Gv = nx.Graph(name='Gv')
         #
         # loop over convex cycles (nodes of Gt)
         #
@@ -7659,7 +7668,7 @@ class Layout(pro.PyLayers):
                 # Create a graph
                 #
 
-                Gv = nx.Graph()
+                Gv = nx.Graph(name='Gv')
                 #
                 # in convex case :
                 #
@@ -7778,7 +7787,7 @@ class Layout(pro.PyLayers):
         if verbose:
             Gipbar.update(0.)
 
-        self.Gi = nx.DiGraph()
+        self.Gi = nx.DiGraph(name='Gi')
         self.Gi.pos = {}
         
         #
@@ -10076,7 +10085,7 @@ class Layout(pro.PyLayers):
 
         """
 
-        self.Gw = nx.Graph()
+        self.Gw = nx.Graph(name='Gw')
         self.Gw.pos = {}
 
         d_id = max(self.Gr.nodes())  # for numerotation of Gw nodes

@@ -669,6 +669,7 @@ def getosm(address='Rennes',latlon=0,dist_m=400,cart=False):
     coords = Coords()
     coords.clean()
     coords.from_nodes(nodes)
+
     m = coords.cartesian(cart=cart)
 
     ways = Ways()

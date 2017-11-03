@@ -139,10 +139,10 @@ def draw(G,**kwargs):
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
     # remove airwalls
-    try:
         #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
-        pno = filter(lambda x : x>0,nodelist)
-        # node == air
+    pno = filter(lambda x : x>0,nodelist)
+    # node == air
+    try:
         na1 = filter(lambda x : G.node[x]['name']=='AIR',pno)
         na2 = filter(lambda x : G.node[x]['name']=='_AIR',pno)
         na = na1 + na2
@@ -186,8 +186,9 @@ def draw(G,**kwargs):
                                width = kwargs['width'],
                                arrows= kwargs['arrows'],
                                alpha = kwargs['alphae'],ax=ax)
-        if kwargs['airwalls']:
-            nx.draw_networkx_edges(G, G.pos,
+        if G.name=='Gs':
+            if kwargs['airwalls']:
+                nx.draw_networkx_edges(G, G.pos,
                                    edgelist = edgelista,
                                    edge_color = kwargs['edge_color'],
                                    width = kwargs['width'],
@@ -195,11 +196,11 @@ def draw(G,**kwargs):
                                    alpha = kwargs['alphae'],
                                    style='dotted',
                                    ax=ax)
-            if kwargs['labels']:
-                nx.draw_networkx_labels(G, G.pos,
-                                            labels={n:n for n in nodelista},
-                                            font_color=kwargs['posnode_color'],
-                                            font_size=kwargs['font_size'],ax=ax)
+                if kwargs['labels']:
+                    nx.draw_networkx_labels(G, G.pos,
+                                                labels={n:n for n in nodelista},
+                                                font_color=kwargs['posnode_color'],
+                                                font_size=kwargs['font_size'],ax=ax)
             
     if kwargs['show']:
         plt.show()

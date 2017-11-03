@@ -1168,6 +1168,7 @@ class Signatures(PyLayers,dict):
         """
         defaults = {'cutoff' : 2, 
                     'threshold':0.1,
+                    'delay_excess_max_ns':400,
                     'nD':1,
                     'nR':10,
                     'nT':10,
@@ -1176,7 +1177,9 @@ class Signatures(PyLayers,dict):
                     'diffraction' : True,
                     'animation' : False
                     }
-        self.cpt = 0 
+
+        self.cpt = 0
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k] 
@@ -1194,6 +1197,10 @@ class Signatures(PyLayers,dict):
         progress = kwargs['progress'] 
         diffraction = kwargs['diffraction']
         animation = kwargs['animation'] 
+        delay_excess_max_ns = kwargs['delay_excess_max_ns']
+        dist_excess_max = delay_excess_max_ns*0.3
+        
+
 
         self.filename = self.L._filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
         #
@@ -1216,8 +1223,10 @@ class Signatures(PyLayers,dict):
         else:
            lit  = litT + litR
 
-
-        #pdb.set_trace()
+        pt_source = np.array(self.L.Gt.node[self.source]['polyg'].centroid.coords.xy)
+        pt_target = np.array(self.L.Gt.node[self.target]['polyg'].centroid.coords.xy)
+        d_source_target = np.linalg.norm(pt_source - pt_target)
+        
         #print "source,lis :",self.source,lis
         #print "target,lit :",self.target,lit
         # for u in lit: 
@@ -1267,10 +1276,11 @@ class Signatures(PyLayers,dict):
             if progress:
                 pbar.update(100./(1.*len(lis)))
 
-
+            # start from a segment     
             if s[0]>0:
                 pts = self.L.Gs[s[0]].keys()
                 tahe = [np.array([self.L.Gs.pos[pts[0]],self.L.Gs.pos[pts[1]]])]
+            # start from a point 
             else:
                 tahe = [np.array([self.L.Gs.pos[s[0]],self.L.Gs.pos[s[0]]])]
 
@@ -1419,7 +1429,7 @@ class Signatures(PyLayers,dict):
                             R.append((np.eye(2),np.array([0,0])))
                         elif len(visited[-2])==2:
                             # 
-                            # Avant dernier poitnt est une reflection 
+                            # l'avant dernier point est une reflection 
                             #
                             nseg_points = self.L.Gs[visited[-2][0]].keys()
                             ta_seg = np.array(self.L.Gs.pos[nseg_points[0]])
@@ -1454,6 +1464,12 @@ class Signatures(PyLayers,dict):
                         ik = 1
                         r = R[-ik]
                         #
+                        # dtarget :  distance between th and target
+                        #
+                        pt_th = np.sum(th,axis=0)/2.
+                        d_target = np.linalg.norm(pt_target-pt_th)
+                        
+                        #
                         # mirroring th until the previous point  
                         # 
                         th_mirror = copy.copy(th)
@@ -1462,11 +1478,15 @@ class Signatures(PyLayers,dict):
                             ik = ik + 1
                             r  = R[-ik]
 
+                        pt_mirror = np.sum(th_mirror,axis=0)/2.
+                        d_source = np.linalg.norm(pt_source-pt_mirror)
+                        d_excess = d_source + d_target - d_source_target
                         # if at least 2 interactions
                         # or previous point is a diffraction 
 
                         if (len(tahe)<2) or (len(visited[-2])==1) or (len(visited[-1])==1):
-                            ratio = 1.0 
+                            ratio = 1.0
+                            ratio2 = 1.0 
                         else:
                             # Determine the origin of the cone 
                             # either the transmitter (ilast =0) 
@@ -1480,6 +1500,10 @@ class Signatures(PyLayers,dict):
                             pta0 = tahe[ilast][0]   # tail first segment  (last difraction)
                             phe0 = tahe[ilast][1]   # head first segment
 
+                            #
+                            # TODO : it would be better to replace pta_ and phe_ with the intersection 
+                            # of the previous cone with tahe[-1]
+                            #
                             pta_ = tahe[-1][0]  # tail last segment
                             phe_ = tahe[-1][1]  # head last segment 
 
@@ -1520,6 +1544,10 @@ class Signatures(PyLayers,dict):
                                 v0=pta0-apex
                                 v_=pta_-apex
 
+                            #
+                            # Does the cone is built from 2 connected segments or 
+                            # 2 unconnected segments
+                            #     
                             if not connected:
                                 if not (geu.ccw(pta0,phe0,phe_) ^
                                         geu.ccw(phe0,phe_,pta_) ):
@@ -1560,16 +1588,9 @@ class Signatures(PyLayers,dict):
                                         pdb.set_trace()
                                     apex = phe0 + kb*vl_n
 
-                                #if ((visited[0]==(104,23,17)) and (visited[1]==(1,17))):
-                                #    print(visited)
-                                #    print("th",th)
-                                #    print("tahe",tahe)
-                                #    print("ta_,he_",pta_,phe_)
-                                #    print("vr,vl",vr_n,vl_n)
-                                #    print('angle cone',angle_cone)
-                                #    print(apex)
+        
 
-                            else:
+                            else: # cone from connected segments 
 
                                 v0n  = v0/np.linalg.norm(v0)
                                 v_n  = v_/np.linalg.norm(v_)
@@ -1583,24 +1604,41 @@ class Signatures(PyLayers,dict):
                                 else:
                                     vr_n = v_n
                                     vl_n = -v0n
-                                # vr_n = (vr[1]-vr[0])/np.sqrt(np.sum((vr[1]-vr[0])*(vr[1]-vr[0]),axis=0))
-                                # vl_n = (vl[1]-vl[0])/np.sqrt(np.sum((vl[1]-vl[0])*(vl[1]-vl[0]),axis=0))
+                               
                                 vrdotvl = np.dot(vr_n,vl_n)
                                 # cone angle 
                                 angle_cone = np.arccos(np.maximum(np.minimum(vrdotvl,1.0),-1.))
-                                
+                           
+                        
+                            #   
+                            # the illuminating cone is defined
+                            # the th_mirror to be tested with this cone are known 
+                            # 
+                            if ( (not np.isclose(angle_cone,0) )
+                             and ( not np.isclose(angle_cone,np.pi)) ) : 
+                                seg,ratio2 = geu.intersect_cone_seg((apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1]),bvis=False)
+                            elif ( not np.isclose(angle_cone,0) ):
+                                ratio2 = 1           
+                            else:
+                                ratio2 = 0 
+                            #print ratio
+                            if len(seg)==2:
+                                th_mirror=np.vstack((seg[0],seg[1]))
+                            else:
+                                pass
 
                             al = np.arctan2(vl_n[1],vl_n[0])
                             ar = np.arctan2(vr_n[1],vr_n[0])
-
-                            #
+                            if np.allclose(th_mirror[0],apex) or np.allclose(th_mirror[1],apex):
+                                ratio2 = 1.
+                            
                             # On connecte l'apex du cone courant aux extrémités du segment courant mirroré
-                            #
+                            
                             # Dans certaines circonstances par example un cone emanant d'un point colinéaire 
                             # avec le segment d'arrivé" (-4) (6,4) le point -4 est aligné avec le segment 6
                             # l'ouverture du cone est nul => arret. Cela pourrait être géré dans Gi en interdisant 
                             # la visibilité (-4) (6,4) 
-                            # 
+                            
                             if angle_cone ==0:
                                 ratio = 0
                             else:    
@@ -1682,9 +1720,16 @@ class Signatures(PyLayers,dict):
                     #    th = self.L.Gs.pos[nstr]
                     #    th = np.array([th,th])
                     #    ratio = 1
-                        if ratio > self.threshold:
+                        #print self.cpt,ratio,ratio2
+                        if (ratio>0.1) and (ratio2==0):
+                             pdb.set_trace()
+                        #print d_excess,dist_excess_max
+                        #if (ratio2 > self.threshold) and (d_excess<dist_excess_max):
+                        if (ratio > self.threshold) and (d_excess<dist_excess_max):
+                        #if (ratio > self.threshold):
                             #
                             # Update sequence of mirrored points
+                            #
                             if nstr<0:
                                 tahe.append(th)
                             else:
@@ -3541,15 +3586,6 @@ class Signature(object):
                 xk = la.solve(T, yk)
                 pkm1 = xk[0:2].reshape(2, 1)
                 gk = xk[2::]
-                alpha = gk[0]
-                beta = gk[1]
-                #print k,alpha,beta
-                Y = np.hstack((Y, pkm1))
-            else:
-                alpha = 0.5 # dummy necessary for the test below
-                # fixing #210
-                #Y = np.hstack((Y, pa[:, k].reshape((2, 1))))
-                #pkm1 = pa[:, k].reshape((2, 1))
                 Y = np.hstack((Y, pa[:, N-(k+1)].reshape((2, 1))))
                 pkm1 = pa[:, N-(k+1)].reshape((2, 1))
             k = k + 1

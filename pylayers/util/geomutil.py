@@ -266,11 +266,10 @@ def isconvex(poly, tol=1e-2):
 def ptconvex(poly):
     """ Determine convex / concave points in the Polygon
 
-
     Parameters
     ----------
 
-        poly : shaeply.Polygon
+        poly : shapely.Polygon
 
     """
 
@@ -3354,37 +3353,399 @@ def ccw(a, b, c):
     return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) >
            (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
-def intersect_cone_seg(line0,line1, seg):
-    
-    x0,p0 = intersect_line_seg(line0, seg)
-    x1,p1 = intersect_line_seg(line1, seg)
-    tahe = []
-    v = p1-p0
-    nv2 = np.dot(v,v)
-    p0seg0 = seg[0]-p0
-    p0seg1 = seg[1]-p0
-    dp0 = np.dot(v,p0seg0)/nv2
-    dp1 = np.dot(v,p0seg1)/nv2
-    
-    if (x0>0) and (x0<1):
-        tahe.append(p0)
-    if (x1>0) and (x1<1):
-        tahe.append(p1)
-    if (dp0>0) and (dp0<1): 
-        tahe.append(seg[0])
-    if (dp1>0) and (dp1<1): 
-        tahe.append(seg[1])
+def are_points_inside_cone_old(points,apex,v,radius=np.inf):
+    """ determine if a set of points are inside a cone 
 
-    if len(tahe)==2:
-        w = tahe[1]-tahe[0]
-        nw = np.linalg.norm(w)
-        ratio = nw/np.sqrt(nv2)
+    Parameters 
+    ----------
+
+    points : np.array (Noints x Ndim ) 
+    apex : (Ndim x 1)
+    v    : (Ndim x Nvec)
+    radius : float
+
+    """
+    # points (N,2) 
+    # apex   (,2)
+    w = points - apex[None,:]  
+    Nvec = v.shape[1]
+    # vcone  : cone axis 
+    vcone = np.mean(v/np.linalg.norm(v,axis=0),axis=1)
+    # cliping half space 
+    bhs = np.dot(w,vcone)>0
+    # cliping distance 
+    brad = np.linalg.norm(w[bhs,:],axis=1) < radius
+
+    Npoints = np.sum(brad)
+    Ndim = points.shape[1]
+
+    if Ndim>2:
+        cw = np.empty((Nvec,Npoints,Ndim))
+        for k in range(Nvec):
+            cw[k,...] = np.cross(w[bhs,:][brad,:],v[:,k])
+        pcw = np.sum(np.prod(cw,axis=0),axis=1)
+        bcone  = (pcw<0) 
     else:
-        ratio = 0     
+        cw = np.empty((Nvec,Npoints))
+        for k in range(Nvec):
+            cw[k,...] = np.cross(w[bhs,:][brad,:],v[:,k])
+        pcw = np.prod(cw,axis=0)
+        #bcone = (cw[0,:]<0) & (cw[1,:]>0) 
+    #cwv = np.cross(w,v)
+    #bb  = (cwu<0) & (cwv>0) & (rad<radius)
+    #"brad_ = np.zeros(len(bhs),dtype=bool)
+    #brad_[bhs] = brad 
+    #
+    # be careful the unbitable part is below (avoid np.where) 
+    #
+    bcone_ = np.zeros(len(brad),dtype=bool)
+    bcone__ = np.zeros(len(bhs),dtype=bool)
+    bcone_[brad] = bcone
+    bcone__[bhs] = bcone_
+    return bcone__ 
+
+
+def are_points_inside_cone1(points,apex,v,radius=np.inf):
+    """ determine if a set of points are inside a cone 
+
+    Parameters 
+    ----------
+
+    points : np.array (Noints x Ndim ) 
+    apex : (Ndim x 1)
+    v    : (Ndim x Nvec)
+    radius : float
+
+    """
+    # points (N,2) 
+    # apex   (,2)
+    w = points - apex[None,:]  
+    Nvec = v.shape[1]
+    # vcone  : cone axis 
+    v_n   = v/np.linalg.norm(v,axis=0)
+    vcone = np.mean(v_n,axis=1)
+    # cliping half space 
+    bhs = np.dot(w,vcone)>0
+    #return(bhs)
+    # cliping distance 
+    brad = np.linalg.norm(w[bhs,:],axis=1) < radius
+
+    Npoints = np.sum(brad)
+    Ndim = points.shape[1]
+
+    # desactivate clipping (to be commented)
+    #bhs  = np.ones(len(bhs),dtype=bool)
+    #brad = np.ones(len(brad),dtype=bool)
+
+    tk = [ c for c in combinations(range(Nvec),2) ] 
+    bcw = np.empty((len(tk),Npoints),dtype=bool)
+    #print "w : ",w 
+    #print "v :",v
+    w_vec = w[bhs,:][brad,:] 
+    for k, (k1,k2) in enumerate(tk):
+        if Ndim>2:
+            zk1k2 = np.cross(v_n[:,k1],v_n[:,k2])
+            zk1k2_n = zk1k2/np.linalg.norm(zk1k2)
+            w_proj = w_vec - np.dot(w_vec,zk1k2_n)[:,None]*zk1k2_n[None,:] 
+            #w_proj = w_proj/np.linalg.norm(w_proj,axis=1)[:,None]
+        else:
+            w_proj = w_vec
+        pvec1 = np.cross(w_proj,v_n[:,k1])
+        pvec2 = np.cross(w_proj,v_n[:,k2])
+        if Ndim>2:
+            u1 = np.sum(pvec1*zk1k2_n[None,:],axis=1)
+            u2 = np.sum(pvec2*zk1k2_n[None,:],axis=1)
+            dp1p2 = u1*u2
+        else:
+            dp1p2 =  pvec1*pvec2
+        bcw[k,...] = dp1p2 < 0 
+    #
+    # be careful the unbitable part is below (avoid np.where) 
+    #
+    bcone = np.prod(bcw,axis=0)
+    bcone_ = np.zeros(len(brad),dtype=bool)
+    bcone__ = np.zeros(len(bhs),dtype=bool)
+    bcone_[brad] = bcone
+    bcone__[bhs] = bcone_
+    return bcone__ 
+
+def are_points_inside_cone(points,apex,v,radius=np.inf):
+    """ determine if a set of points are inside a cone 
+
+    Parameters 
+    ----------
+
+    points : np.array (Noints x Ndim ) 
+    apex : (Ndim x 1)
+    v    : (Ndim x Nvec)
+    radius : float
+
+    """
+
+    w = points - apex[None,:]  
+    Nvec = v.shape[1]
+    # vcone  : cone axis 
+    v_n  = v/np.linalg.norm(v,axis=0)
+    vcone = np.mean(v_n,axis=1)
+    # cliping half space 
+    bhs = np.dot(w,vcone)>0
+    # cliping distance 
+    brad = np.linalg.norm(w[bhs,:],axis=1) < radius
+
+    w_vec = w[bhs,:][brad,:] 
+    try:
+        x = np.linalg.solve(v_n,w_vec.T)
+    except:
+        pdb.set_trace()
+    bx = x>0
+
+    bcone = np.prod(bx,axis=0)
+    bcone_ = np.zeros(len(brad),dtype=bool)
+    bcone__ = np.zeros(len(bhs),dtype=bool)
+    bcone_[brad] = bcone
+    bcone__[bhs] = bcone_
+    return bcone__ 
+
+def intersect_cone_seg(line0,line1,seg,bvis=False,bbool=False):
+    """
+    Parameters
+    ----------
+
+    line0
+    line1
+    seg
+    bvis 
+
+    """
+    tahe = []
+    ratio = 0 
+    points = np.vstack((seg[0],seg[1]))
+    apex = line0[0]
+    if ( (line0[1][0]==line1[1][0]) and
+         (line0[1][1]==line1[1][1])   ):
+         pdb.set_trace() 
+    v = np.vstack((line0[1],line1[1])).T
+
+    bb = are_points_inside_cone(seg,apex,v,radius=np.inf)
+    x0,p0 = intersect_halfline_seg(line0, seg)
+    x1,p1 = intersect_halfline_seg(line1, seg)
+
+    if bb[0] & bb[1]: # termination of segment fully inside the cone
+        tahe = seg
+        if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf):
+            ratio = np.linalg.norm(seg[1]-seg[0])/np.linalg.norm(p1-p0)
+        else:
+            ratio = 1
+
+    if ~bb[0] & ~bb[1]: # termination segment fully outside the cone 
+        if (( ( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ) and 
+            ( ( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ) ):
+            tahe = [p0,p1]
+            ratio = 1
+        else:
+            tahe = [] 
+            ratio = 0
+
+    if bb[0] & ~bb[1]: # seg0 inside seg1 outside 
+        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ): 
+            tahe = [seg[0],p1]
+        if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ): 
+            tahe = [seg[0],p0] 
+        if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf):
+            ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+        else:
+            ratio = 1
+
+    if ~bb[0] & bb[1]: # seg0 outside seg1 inside 
+        if (( (x0>0) or np.isclose(x0,0)) & ((x0<1) or np.isclose(x0,1)) ):
+            tahe = [seg[1],p0]
+        if (( (x1>0) or np.isclose(x1,0)) & ((x1<1) or np.isclose(x1,1)) ): 
+            tahe = [seg[1],p1]
+        if (np.abs(x0)!=np.inf) and (np.abs(x1)!=np.inf ):
+            ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
+        else:
+            ratio = 1
+
+    if bvis:
+        ax = plt.gca()
+        linet(ax,line0[0],line0[0]+10*line0[1],color='blue',al=1)
+        linet(ax,line1[0],line1[0]+10*line1[1],color='blue',al=1)
+        linet(ax,seg[0],seg[1],color='red',al=1)
+        #if bdp0i:
+        #    ax.scatter(seg[0][0],seg[0][1],s=100,color='green')
+        #else:
+        #    ax.scatter(seg[0][0],seg[0][1],s=100,color='red')
+        #if bdp1i:
+        #    ax.scatter(seg[1][0],seg[1][1],s=100,color='green')
+        #else:
+        #    ax.scatter(seg[1][0],seg[1][1],s=100,color='red')
+        #if len(tahe)==2:
+        #    linet(ax,tahe[0],tahe[1],color='green',al=1,linewidth=2)
+        #plt.show()    
+
     return(tahe,ratio)
 
-def intersect_line_seg(line, seg):
-    """ intersect a line and a segment
+def intersect_cone_seg_old(line0,line1,seg,bvis=False,bbool=False):
+    """
+    Parameters
+    ----------
+
+    line0
+    line1
+    seg
+    bvis 
+
+    """
+
+     
+    x0,p0 = intersect_halfline_seg(line0, seg)
+    x1,p1 = intersect_halfline_seg(line1, seg)
+    tahe = []
+    # non degenerated case
+    if ((np.abs(x0)!=np.inf)  and (np.abs(x1)!=np.inf)):
+        v = p1-p0
+        nv2 = np.dot(v,v)
+
+        if not(nv2==0):
+            # a above
+            # b below 
+            # i in
+            bx0a = x0>1
+            bx0b = x0<0
+            bx0i = (not bx0a) and (not bx0b) 
+            bx1a = x1>1
+            bx1b = x1<0
+            bx1i = (not bx1a) and (not bx1b)
+
+            baa = bx0a and bx1a # 
+            bab = bx0a and bx1b #
+            bai = bx0a and bx1i 
+            bba = bx0b and bx1a #
+            bbb = bx0b and bx1b # 
+            bbi = bx0b and bx1i 
+            bia = bx0i and bx1a 
+            bib = bx0i and bx1b 
+            bii = bx0i and bx1i #
+            
+            if bbool:
+                print "baa ",baa
+                print "bab ",bab
+                print "bai ",bai
+                print "bba ",bba
+                print "bbb ",bbb
+                print "bbi ",bbi
+                print "bia ",bia
+                print "bib ",bib
+                print "bii ",bii
+            if baa or bbb:  # above and above or below and below ->segment is out 
+                tahe = []
+                bdp0i = False
+                bdp1i = False
+                #print "baa or bbb" 
+            elif bab or bba:  # segment is fully inside the cone take seg        
+                tahe = seg
+                bdp0i = True 
+                bdp1i = True
+                #print "bab or bba" 
+            elif bii:
+                tahe = [p0,p1] 
+                bdp0i = False
+                bdp1i = False
+                #print "bii" 
+            else:
+                # reference point is chosen
+                # as the point p0 or p1 which is
+                # the farest from both segment termination 
+                # this is to avoid having null vector 
+                d0seg = np.minimum(np.linalg.norm(p0-seg[0]),np.linalg.norm(p0-seg[1]))
+                d1seg = np.minimum(np.linalg.norm(p1-seg[0]),np.linalg.norm(p1-seg[1]))
+                if d0seg>d1seg:
+                    pref = p0
+                else:
+                    v = -v 
+                    pref = p1
+
+                pseg0 = seg[0]-pref
+                dp0 = np.dot(v,pseg0)/nv2
+                # seg0 is out cone
+                bdp0o = (dp0>1) or (dp0<0)
+                # seg0 is in cone 
+                bdp0i = not bdp0o
+                pseg1 = seg[1]-pref
+                dp1 = np.dot(v,pseg1)/nv2
+                # seg0 is out 
+                bdp1o = (dp1>1) or (dp1<0)
+                # seg0 is in  
+                bdp1i = not bdp1o
+                if bbool:
+                    print "bdp0i :",bdp0i
+                    print "bdp1i :",bdp1i
+                
+                if bai or bbi :
+                    #print "bai or bbi"
+                    if bdp0i:
+                        if not np.isclose(p1-seg[0],0).all():
+                            tahe = [p1, seg[0]]
+                        else:
+                            tahe = [p1] 
+                    if bdp1i:
+                        if not np.isclose(p1-seg[1],0).all():
+                           tahe = [p1, seg[1]]
+                        elif (len(tahe)<2):
+                           tahe = [p1]
+                elif bia or bib:   
+                    #print "bia or bib"
+                    if bdp0i:
+                        if not np.isclose(p0-seg[0],0).all():
+                            tahe = [p0, seg[0]]
+                        else:
+                            tahe = [p0]
+                    if bdp1i:
+                        if not np.isclose(p0-seg[1],0).all():
+                            tahe = [p0, seg[1]]
+                        elif (len(tahe)<2):
+                            tahe = [p0]
+
+            if len(tahe)>1:
+                w = tahe[1]-tahe[0]
+                nw = np.linalg.norm(w)
+                ratio = nw/np.sqrt(nv2)
+            else:
+                ratio = 0
+        else:
+            tahe = seg
+            ratio = 1   
+    else:
+        pt = seg[0]-line0[0]
+        pt = pt/np.linalg.norm(pt)
+        ph = seg[1]-line0[0]
+        ph = ph/np.linalg.norm(ph)
+        tahe = seg
+        ratio = 1.
+    
+    if bvis:
+        ax = plt.gca()
+        linet(ax,line0[0],line0[0]+10*line0[1],color='blue',al=1)
+        linet(ax,line1[0],line1[0]+10*line1[1],color='blue',al=1)
+        linet(ax,seg[0],seg[1],color='red',al=1)
+        if bdp0i:
+            ax.scatter(seg[0][0],seg[0][1],s=100,color='green')
+        else:
+            ax.scatter(seg[0][0],seg[0][1],s=100,color='red')
+        if bdp1i:
+            ax.scatter(seg[1][0],seg[1][1],s=100,color='green')
+        else:
+            ax.scatter(seg[1][0],seg[1][1],s=100,color='red')
+        if len(tahe)==2:
+            linet(ax,tahe[0],tahe[1],color='green',al=1,linewidth=2)
+        plt.show()    
+
+
+
+    return(tahe,ratio)
+
+def intersect_halfline_seg(line, seg):
+    """ intersect a half line and a segment
 
     Parameters 
     ----------
@@ -3412,9 +3773,13 @@ def intersect_line_seg(line, seg):
     detA = np.linalg.det(A)
     if not (np.isclose(detA,0)):
         x  = np.linalg.solve(A,b)
-        P  = pta + x[1]*v
+        if x[0]>0:
+            P  = pta + x[1]*v
+        else:
+            x = np.array([[None],[+np.inf]])
+            P = seg[0] 
     else:
-        x = [None,-np.inf]
+        x = np.array([[None],[-np.inf]])
         P = seg[0] 
     # xht = phe[0] - pta[0]-v[]
     # yth = pta[1] - phe[1]
@@ -3429,7 +3794,7 @@ def intersect_line_seg(line, seg):
     #     k = np.inf * si
     #     M = pta + 2 * vseg
 
-    return(x[1], P)
+    return(x[1][0], P)
 
 
 def intersect3(a, b, pg, u1, u2, l1, l2,binter=False):
@@ -4556,9 +4921,10 @@ def valid_wedge(ps, pw, p1, p2, grazing):
     1.0
 
 
-    Authors
+    Author
     -------
     Bernard.uguen@univ-rennes1.fr
+
     """
 
     x1 = p1[:, 0] - pw[:, 0]
@@ -5198,6 +5564,8 @@ def intersect3c(tp, ti, aplane, pplane):
         tp = intersect3c(tp,aplane[:,0:-1,:,:],pplane[:,0:-1,:])
 
     return tp
+
+
 def mirror3(tp, aplane, pplane):
     """ compute recursively the image of p wrt the list of facet 
     

@@ -514,22 +514,22 @@ class Interface(PyLayers):
                 #args['titles'].append(u'$R_{\perp}$')
                 args['titles'].append(u'$R_{//}$')
                 if var=='f': # wrt frequency
-                    Ro = self.R[:, kv, 0, 0]
+                    Ro = self.R[:, kv, 1, 1]
                     y = Ro
                 if var=='a': # wrt angle
-                    Ro = self.R[kv, :, 0, 0]
+                    Ro = self.R[kv, :, 1, 1]
                     y = Ro
             if 'p' in kwargs['polar']:
                 #args['titles'].append(u'$R_{//}$')
                 args['titles'].append(u'$R_{\perp}$')
                 if var=='f': # wrt frequency
-                    Rp = self.R[:, kv, 1, 1]
+                    Rp = self.R[:, kv, 0, 0]
                     try:
                         y = np.vstack((y,Rp))
                     except:
                         y = Rp
                 if var =='a': # wrt angle
-                    Rp = self.R[kv, :, 1, 1]
+                    Rp = self.R[kv, :, 0, 0]
                     try:
                         y = np.vstack((y,Rp))
                     except:
@@ -540,13 +540,13 @@ class Interface(PyLayers):
                 #args['titles'].append(u'$T_{\perp}$')
                 args['titles'].append(u'$T_{//}$')
                 if var=='f': # wrt frequency
-                    To = self.T[:, kv, 0, 0]
+                    To = self.T[:, kv, 1, 1]
                     try:
                         y = np.vstack((y,To))
                     except:
                         y = To
                 if var =='a': # wrt angle
-                    To = self.T[kv, :, 0, 0]
+                    To = self.T[kv, :, 1, 1]
                     try:
                         y = np.vstack((y,To))
                     except:
@@ -555,13 +555,13 @@ class Interface(PyLayers):
                 #args['titles'].append(u'$T_{//}$')
                 args['titles'].append(u'$T_{\perp}$')
                 if var=='f': # wrt frequency
-                    Tp = self.T[:, kv, 1, 1]
+                    Tp = self.T[:, kv, 0, 0]
                     try:
                         y = np.vstack((y,Tp))
                     except:
                         y = To
                 if var =='a': # wrt angle
-                    Tp = self.T[kv, :, 1, 1]
+                    Tp = self.T[kv, :, 0, 0]
                     try:
                         y = np.vstack((y,Tp))
                     except:
