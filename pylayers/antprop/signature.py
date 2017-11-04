@@ -10,6 +10,7 @@ Class Signatures
     Signatures.__repr__
     Signatures.__len__
     Signatures.num
+    Signatures.compl
     Signatures.info
     Signatures.saveh5
     Signatures.loadh5
@@ -1136,7 +1137,7 @@ class Signatures(PyLayers,dict):
 
 
     def run(self,**kwargs):
-        """ get signatures (in one list of arrays) between tx and rx
+        """ evaluate signatures between cycle of tx and cycle of rx
 
         Parameters
         ----------
@@ -1151,19 +1152,19 @@ class Signatures(PyLayers,dict):
             activate diffraction 
         threshold : float 
             for reducing calculation time
+        animations :  boolean 
+        nD : int 
+            maximum number of diffraction 
+        nR : int 
+            maximum number of reflection  
+        nT : int 
+            maximum number of transmission   
 
-
-        Returns
-        -------
-
-        siglist :  numpy.ndarray
 
         See Also
         --------
 
         pylayers.simul.link.Dlink.eval
-        pylayers.antprop.signature.Signatures.propath2
-        pylayers.antprop.signature.Signatures.procone2
 
         """
         defaults = {'cutoff' : 2, 

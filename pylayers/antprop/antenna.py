@@ -35,6 +35,7 @@ Pattern Class
     Pattern.eval
     Pattern.gain
     Pattern.radF
+    Pattern._pdipole
 
 Pattern Functions
 =================
@@ -352,6 +353,38 @@ class Pattern(PyLayers):
     def ssh(self,L=89,dsf=1):
         if self.evaluated:
             ssh(self,L,dsf)
+
+    def __pdipole(self,**kwargs):
+        """ dipole antenna along z axis 
+
+        From Balanis (Formula 4.62(a)) 
+        
+        .. math:: F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] 
+
+        """
+        defaults = { 'param' : { 'l' : 0.25 } }
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+        
+        l = kwargs['param']['l']
+        if self.grid:
+            # Nth x Nphx Nf
+            k = 2*np.pi*self.fGHz[None,None,:]/0.3
+            usmall = self.theta<=1e-1
+            Ft  = (np.cos((k*l/2)*np.ones(len(self.phi))[None,:,None]*np.cos(self.theta[:,None,None]))-np.cos(k*l/2))/np.sin(self.theta[:,None,None])
+            Ft[usmall,:,:]   = -(k*l/4)*self.theta[usmall][:,None,None]*np.sin(k*l/2)
+            self.evaluated = True
+        else:
+            k = 2*np.pi*np.fGHz[None,:] /0.3
+            usmall = self.theta<=1e-1
+            Ft  = (np.cos((k*l/2)*np.cos(self.theta[:,None]))-np.cos(k*l/2))/np.sin(self.theta[:,None])
+            Ft[usmall,:,:] = -(k*l/4)*self.theta[usmall][:,None,None]*np.sin(k*l/2)
+            # Nd x Nf
+
+        Fp  = np.zeros(Ft.shape)
+
+        return Ft,Fp
 
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
@@ -1324,6 +1357,10 @@ class Pattern(PyLayers):
 
     def __pHertz(self,**kwargs):
         """ Hertz dipole
+        
+        param = {'param':{'le':np.array([0,0,1])}}
+        le unit vector defining the dipole orientation 
+
         """
         defaults = {'param':{'le':np.array([0,0,1])}}
 

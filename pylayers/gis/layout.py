@@ -40,7 +40,6 @@ Layout Class
     Layout.check
     Layout.check2
     ssayout.check_Gi
-    Layout.chgmss
     Layout.cleanup
     Layout.clip
     Layout.closest_edge
@@ -2431,7 +2430,7 @@ class Layout(pro.PyLayers):
                 for ns in iso:
                     ziso.append(self.Gs.node[ns]['z'])
                 # get the complementary intervals
-                if self.typ=='outdoor':
+                if self.typ == 'outdoor':
                     zmin = 1e6
                     zmax = -1e6
                     for iz in ziso:
@@ -3517,68 +3516,6 @@ class Layout(pro.PyLayers):
         data = eag.multenterbox(message, title, (('x', 'y')),
                             ((str(pt[0]), str(pt[1]))))
         self.Gs.pos[np] = tuple(eval(data[0]), eval(data[1]))
-
-    def chgmss(self, ns, ss_name=[], ss_z=[], ss_offset=[], g2npy=True):
-        """ change multi subsegments properties
-
-        Parameters
-        ----------
-
-        ns : int
-            segment number
-
-        ss_name : list of Nss  string
-            name of the different constitutive SLAB of the multi-segments
-
-        ss_z : list of Nss tuple (zmin,zmax)
-
-        ss_offset : list of subsegment offsets
-
-        Examples
-        --------
-
-        See Also
-        --------
-
-        pylayers.gis.layout.g2npy
-
-        """
-
-        #
-        # Check slabname in ss_name
-        #
-        #  update self.sl with new slab values
-
-        SDB = sb.SlabDB()
-        for sname in ss_name:
-            if sname not in self.sl.keys():
-                if sname not in SDB.keys():
-                    print('')
-                else:
-                    slab = SDB[sname]
-                    self.sl[slab['name']] = slab
-
-        if ss_z != []:
-            assert len(ss_name) == len(
-                ss_z), 'Error incompatible size in chgmss'
-        if ss_offset != []:
-            assert len(ss_z) == len(
-                ss_offset), 'Error incompatible size in chgmss'
-
-        if ns in self.Gs.node.keys():
-            if self.Gs.node[ns].has_key('ss_name'):
-                if ss_name != []:
-                    self.Gs.node[ns]['ss_name'] = ss_name
-                if ss_z != []:
-                    self.Gs.node[ns]['ss_z'] = ss_z
-                if ss_offset != []:
-                    self.Gs.node[ns]['ss_offset'] = ss_offset
-                else:
-                    self.Gs.node[ns]['ss_offset'] = [0] * len(ss_name)
-
-                # update Layout information
-                if g2npy:
-                    self.g2npy()
 
     def edit_segment(self, e1, gui=True, outdata={}):
         """ edit segment WITH EasyGUI

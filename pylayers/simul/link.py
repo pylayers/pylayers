@@ -2055,6 +2055,7 @@ class DLink(Link):
                    'width':1,
                    'alpha':1,
                    'col':'k',
+                   'radius':90,
                    'dB':False,
                    'labels':False,
                    'aw':False,
@@ -2140,8 +2141,8 @@ class DLink(Link):
             # limitation of the vizualization zone around the center of the link 
             #
             pm = (self.a+self.b)/2.
-            ax.set_xlim(pm[0]-90,pm[0]+90)
-            ax.set_ylim(pm[1]-90,pm[1]+90)
+            ax.set_xlim(pm[0]-kwargs['radius'],pm[0]+kwargs['radius'])
+            ax.set_ylim(pm[1]-kwargs['radius'],pm[1]+kwargs['radius'])
 
             for ir  in lr:
                 if kwargs['dB']:
@@ -2438,6 +2439,8 @@ class DLink(Link):
                     'Nf':1000,
                     'rays':True,
                     'fspl':True,
+                    'vmin':-120,
+                    'vmax':-40
                     }
 
         for key, value in defaults.items():
@@ -2458,8 +2461,12 @@ class DLink(Link):
 
         Nf = np.maximum(kwargs['Nf'],taumax*BWGHz).astype(int)
         # getcir is a Tchannel method 
+
         ir = self.H.getcir(BWGHz =BWGHz,Nf=Nf)
         ir.plot(fig=fig,ax=ax)
+        plt.ylim(kwargs['vmin'],kwargs['vmax'])
+
+
         delay = ir.x 
         dist = delay*0.3
         FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist) 
