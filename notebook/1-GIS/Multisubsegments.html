@@ -181,21 +181,20 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="code python highlight-none"><div class="highlight"><pre><span></span>!date
+  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>mardi 30 aot 2016, 16:13:03 (UTC+0200)
+<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 22:35:49 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="effect-of-modifying-the-nature-of-sub-segments">
 <h1>Effect of Modifying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modifying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
-<p>This notebook illustrates a simple ray tracing simulation. The
-environement is a building with 2 rooms. At the interface betweebn the
-two rooms there is a segment with 3 sub-segment whose material
-properties are changed in the simulation. The notebook illustrates in
-details the different steps of the simulation. First we need to import
-several specialized modules.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>from pylayers.simul.link import *
+<p>This illustrates a simple ray tracing simulation. The environement is a
+building with 2 rooms. At the interface betweebn the two rooms there is
+a segment with 3 sub-segment whose material properties are changed in
+the simulation. The notebook illustrates in details the different steps
+of the simulation. First we need to import several specialized modules.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.simul.link import *
 from pylayers.antprop.rays import *
 from pylayers.antprop.aarray import *
 from pylayers.antprop.channel import *
@@ -203,7 +202,6 @@ from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
 import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf
-from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt
 %matplotlib inline
 </pre></div>
@@ -211,22 +209,25 @@ import matplotlib.pyplot as plt
 <p>Let&#8217;s start by loading a simple layout with 2 single rooms. The multi
 subsegment appears in the middle with the red vertical lines. Each
 subsegment is materialized by a segment.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;defstr.ini&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>L=Layout(&#39;defstr.lay&#39;)
 f,a=L.showG(&#39;s&#39;,subseg=True,figsize=(10,10))
 </pre></div>
 </div>
 <img alt="../../_images/Multisubsegments_4_0.png" src="../../_images/Multisubsegments_4_0.png" />
 <p>The studied configuration is composed of a simple 2 rooms building
-separated by a subsegment which has a multi subsegment attribute. The
-attribute of the subsegment can be changed with the method
-<code class="docutils literal"><span class="pre">`chgmss</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/%20pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html">http://pylayers.github.io/%20pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html</a>&gt;`__
-(change multisubsegment). In the example WOOD in the lower part then
-10cm of AIR then wood again until the ceiling.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L.chgmss(1,ss_name=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;WOOD&#39;],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
+separated by an iso segment</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>print L.Gs.node[1]
+print L.Gs.node[2]
+print L.Gs.node[3]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{&#39;name&#39;: &#39;WOOD&#39;, &#39;transition&#39;: False, &#39;ncycles&#39;: [], &#39;iso&#39;: [3, 2, 1], &#39;connect&#39;: [-8, -7], &#39;offset&#39;: 0, &#39;z&#39;: (0.0, 2.7), &#39;norm&#39;: array([ 1., -0.,  0.])}
+{&#39;name&#39;: &#39;AIR&#39;, &#39;transition&#39;: False, &#39;ncycles&#39;: [], &#39;iso&#39;: [1, 3], &#39;connect&#39;: [-8, -7], &#39;offset&#39;: 0, &#39;z&#39;: (2.7, 2.8), &#39;norm&#39;: array([ 1., -0.,  0.])}
+{&#39;name&#39;: &#39;WOOD&#39;, &#39;transition&#39;: False, &#39;ncycles&#39;: [], &#39;iso&#39;: [1, 2], &#39;connect&#39;: [-8, -7], &#39;offset&#39;: 0, &#39;z&#39;: (2.8, 3), &#39;norm&#39;: array([ 1., -0.,  0.])}
 </pre></div>
 </div>
 <p>The <span class="math">\(\mathcal{G}_s\)</span> graph dictionary has the following structure</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>L.Gs.node
+<div class="code highlight-none"><div class="highlight"><pre><span></span>L.Gs.node
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>{-12: {},
@@ -242,237 +243,292 @@ attribute of the subsegment can be changed with the method
  -2: {},
  -1: {},
  1: {&#39;connect&#39;: [-8, -7],
-  &#39;name&#39;: &#39;PARTITION&#39;,
+  &#39;iso&#39;: [3, 2, 1],
+  &#39;name&#39;: &#39;WOOD&#39;,
   &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([-1.,  0.,  0.]),
+  &#39;norm&#39;: array([ 1., -0.,  0.]),
   &#39;offset&#39;: 0,
-  &#39;ss_name&#39;: [&#39;WOOD&#39;, &#39;AIR&#39;, &#39;WOOD&#39;],
-  &#39;ss_offset&#39;: [0, 0, 0],
-  &#39;ss_z&#39;: [(0.0, 2.7), (2.7, 2.8), (2.8, 3)],
-  &#39;transition&#39;: True,
-  &#39;z&#39;: (0.0, 3.0)},
- 2: {&#39;connect&#39;: [-8, -2],
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (0.0, 2.7)},
+ 2: {&#39;connect&#39;: [-8, -7],
+  &#39;iso&#39;: [1, 3],
+  &#39;name&#39;: &#39;AIR&#39;,
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([ 1., -0.,  0.]),
+  &#39;offset&#39;: 0,
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (2.7, 2.8)},
+ 3: {&#39;connect&#39;: [-8, -7],
+  &#39;iso&#39;: [1, 2],
+  &#39;name&#39;: &#39;WOOD&#39;,
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([ 1., -0.,  0.]),
+  &#39;offset&#39;: 0,
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (2.8, 3)},
+ 4: {&#39;connect&#39;: [-7, -5],
+  &#39;iso&#39;: [4],
   &#39;name&#39;: &#39;WALL&#39;,
   &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([ 1.,  0.,  0.]),
+  &#39;norm&#39;: array([ 1., -0.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: False,
   &#39;z&#39;: (0.0, 3.0)},
- 3: {&#39;connect&#39;: [-7, -5],
+ 5: {&#39;connect&#39;: [-8, -2],
+  &#39;iso&#39;: [5],
   &#39;name&#39;: &#39;WALL&#39;,
   &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([-1.,  0.,  0.]),
+  &#39;norm&#39;: array([-1., -0.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: False,
   &#39;z&#39;: (0.0, 3.0)},
- 4: {&#39;connect&#39;: [-6, -1],
-  &#39;name&#39;: &#39;WALL&#39;,
-  &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([ 1.,  0.,  0.]),
-  &#39;offset&#39;: 0,
-  &#39;transition&#39;: False,
-  &#39;z&#39;: (0.0, 3.0)},
- 5: {&#39;connect&#39;: [-6, -5],
-  &#39;name&#39;: &#39;WALL&#39;,
-  &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([ 0.,  1.,  0.]),
-  &#39;offset&#39;: 0,
-  &#39;transition&#39;: False,
-  &#39;z&#39;: (0.0, 3.0)},
- 6: {&#39;connect&#39;: [-5, -4],
-  &#39;name&#39;: &#39;WALL&#39;,
-  &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([ 0.,  1.,  0.]),
-  &#39;offset&#39;: 0,
-  &#39;transition&#39;: False,
-  &#39;z&#39;: (0.0, 3.0)},
- 7: {&#39;connect&#39;: [-4, -3],
-  &#39;name&#39;: &#39;WALL&#39;,
-  &#39;ncycles&#39;: [],
-  &#39;norm&#39;: array([ 1.,  0.,  0.]),
-  &#39;offset&#39;: 0,
-  &#39;transition&#39;: False,
-  &#39;z&#39;: (0.0, 3.0)},
- 8: {&#39;connect&#39;: [-3, -2],
+ 6: {&#39;connect&#39;: [-6, -5],
+  &#39;iso&#39;: [6],
   &#39;name&#39;: &#39;WALL&#39;,
   &#39;ncycles&#39;: [],
   &#39;norm&#39;: array([ 0., -1.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: False,
   &#39;z&#39;: (0.0, 3.0)},
- 9: {&#39;connect&#39;: [-2, -1],
+ 7: {&#39;connect&#39;: [-6, -1],
+  &#39;iso&#39;: [7],
+  &#39;name&#39;: &#39;WALL&#39;,
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([-1., -0.,  0.]),
+  &#39;offset&#39;: 0,
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (0.0, 3.0)},
+ 8: {&#39;connect&#39;: [-4, -3],
+  &#39;iso&#39;: [8],
+  &#39;name&#39;: &#39;WALL&#39;,
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([-1., -0.,  0.]),
+  &#39;offset&#39;: 0,
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (0.0, 3.0)},
+ 9: {&#39;connect&#39;: [-5, -4],
+  &#39;iso&#39;: [9],
+  &#39;name&#39;: &#39;WALL&#39;,
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([ 0., -1.,  0.]),
+  &#39;offset&#39;: 0,
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (0.0, 3.0)},
+ 10: {&#39;connect&#39;: [-2, -1],
+  &#39;iso&#39;: [10],
   &#39;name&#39;: &#39;WALL&#39;,
   &#39;ncycles&#39;: [],
   &#39;norm&#39;: array([ 0.,  1.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: False,
   &#39;z&#39;: (0.0, 3.0)},
- 10: {&#39;connect&#39;: [-9, -10],
+ 11: {&#39;connect&#39;: [-3, -2],
+  &#39;iso&#39;: [11],
+  &#39;name&#39;: &#39;WALL&#39;,
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([ 0.,  1.,  0.]),
+  &#39;offset&#39;: 0,
+  &#39;transition&#39;: False,
+  &#39;z&#39;: (0.0, 3.0)},
+ 12: {&#39;connect&#39;: [-9, -10],
+  &#39;iso&#39;: [],
   &#39;name&#39;: &#39;_AIR&#39;,
+  &#39;ncycles&#39;: [],
   &#39;norm&#39;: array([ 0., -1.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: True,
-  &#39;z&#39;: [0.0, 3.0]},
- 11: {&#39;connect&#39;: [-10, -11],
+  &#39;z&#39;: (0.0, 40000000)},
+ 13: {&#39;connect&#39;: [-10, -11],
+  &#39;iso&#39;: [],
   &#39;name&#39;: &#39;_AIR&#39;,
-  &#39;norm&#39;: array([ 1.,  0.,  0.]),
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([ 1., -0.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: True,
-  &#39;z&#39;: [0.0, 3.0]},
- 12: {&#39;connect&#39;: [-11, -12],
+  &#39;z&#39;: (0.0, 40000000)},
+ 14: {&#39;connect&#39;: [-11, -12],
+  &#39;iso&#39;: [],
   &#39;name&#39;: &#39;_AIR&#39;,
+  &#39;ncycles&#39;: [],
   &#39;norm&#39;: array([ 0.,  1.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: True,
-  &#39;z&#39;: [0.0, 3.0]},
- 13: {&#39;connect&#39;: [-12, -9],
+  &#39;z&#39;: (0.0, 40000000)},
+ 15: {&#39;connect&#39;: [-12, -9],
+  &#39;iso&#39;: [],
   &#39;name&#39;: &#39;_AIR&#39;,
-  &#39;norm&#39;: array([ 1.,  0.,  0.]),
+  &#39;ncycles&#39;: [],
+  &#39;norm&#39;: array([-1., -0.,  0.]),
   &#39;offset&#39;: 0,
   &#39;transition&#39;: True,
-  &#39;z&#39;: [0.0, 3.0]}}
+  &#39;z&#39;: (0.0, 40000000)}}
 </pre></div>
 </div>
 <p>We define now, the position of the transmitter and the receiver, the two
-points which are always the termination of a radio link.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>#tx=np.array([759,1114,1.5])
+termination of a radio link.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>#tx=np.array([759,1114,1.5])
 #rx=np.array([767,1114,1.5])
-tx=np.array([759,1114,1.5])
-rx=np.array([767,1114,1.5])
+tx=np.array([2,3,1.5])
+rx=np.array([8,4,1.6])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz=np.linspace(1,11,100)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fGHz=np.linspace(1,11,100)
 #Aa = Antenna(&#39;S1R1.vsh3&#39;)
 #Ab = Antenna(&#39;S1R1.vsh3&#39;)
 Aa = Antenna(&#39;Gauss&#39;,fGHz=fGHz)
 Ab = Antenna(&#39;Gauss&#39;,fGHz=fGHz)
-Ab.eval()
-Aa.eval()
 #Aa = AntArray(N=[8,1,1],fGHz=fGHz)
 #Ab = AntArray(N=[4,1,1],fGHz=fGHz)
-Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=fGHz,cutoff=5)
-ak,tauk=Lk.eval(force=True,verbose=False)
+Lk = DLink(L=L,
+       a=tx,
+           b=rx,
+           Aa=Aa,
+           Ab=Ab,
+           fGHz=fGHz,
+       cutoff=5)
+Lk.eval(force=True,verbose=False)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>This is the first time the Layout is used. Graphs have to be built. Please Wait
-building Layout ...
-check len(ncycles) == 2 passed
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 2150.16it/s]
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ak.shape
+<div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout Graph loaded
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(140, 1, 100)
-</pre></div>
-</div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>plt.stem(tauk,ak[:,0,0])
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;Container object of 3 artists&gt;
-</pre></div>
-</div>
-<img alt="../../_images/Multisubsegments_13_1.png" src="../../_images/Multisubsegments_13_1.png" />
-<p>A link is the set of a layout and 2 termination points.</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Aa.eval()
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Aa.eval()
 Aa.plotG()
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_15_0.png" src="../../_images/Multisubsegments_15_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc76c072bd0&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7fc7090b74d0&gt;)
+<img alt="../../_images/Multisubsegments_12_0.png" src="../../_images/Multisubsegments_12_0.png" />
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb5c3bf38d0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fb65488fe10&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.C.Ctt
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.C.Ctt
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>FUsignal :  (100,)  (140, 100)
+<div class="highlight-none"><div class="highlight"><pre><span></span>FUsignal :  (100,)  (25, 100)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.eval(force=True,a=tx,b=rx,applywav=True)
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.C
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 2145.87it/s]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1243: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1358: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  x_new = self.x[imin:imax]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1363: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  y_new = self.y[..., imin:imax]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py:4326: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  rir  = np.zeros((shy[0],N))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Ctilde : Ray Propagation Channel Matrices
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.C
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Ctilde : Ray Propagation Channel Tensor (2x2xrxf)
 ---------
-(140, 100)
-Nray : 140
+between antennas local frames
+Nray : 25
+Nfreq : 100
 fmin(GHz) : 1.0
 fmax(GHz): 11.0
-Nfreq : 100
+---1st ray 1st freq ---
+global angles (th,ph) degrees :
+[ 89.1   9.5]
+[  90.9 -170.5]
+local angles (th,ph) degrees :
+[ 89.1   9.5]
+[  90.9 -170.5]
+    | (0.110598827081-0.0932603392219j)   (7.67365332983e-05-9.12653903417e-05j) |
+    | (7.67365332983e-05-9.12653903417e-05j)   (0.10982834-0.0923439725161j) |
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(10,10))
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f = plt.figure(figsize=(10,10))
 f,a=Lk.C.show(cmap=&#39;jet&#39;,fig=f,typ=&#39;l20&#39;,vmin=-120,vmax=-10)
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_19_0.png" src="../../_images/Multisubsegments_19_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>fGHz=np.arange(2,6,0.1)
+<img alt="../../_images/Multisubsegments_16_0.png" src="../../_images/Multisubsegments_16_0.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>fGHz=np.arange(2,6,0.1)
 wav = wvf.Waveform(fcGHz=4,bandGHz=1.5)
 wav.show()
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_20_0.png" src="../../_images/Multisubsegments_20_0.png" />
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk = DLink(L=L,a=tx,b=rx,fGHz=fGHz)
+<img alt="../../_images/Multisubsegments_17_0.png" src="../../_images/Multisubsegments_17_0.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Lk = DLink(L=L,a=tx,b=rx,fGHz=fGHz)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>This is the first time the Layout is used. Graphs have to be built. Please Wait
-building Layout ...
-check len(ncycles) == 2 passed
+<div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout Graph loaded
 </pre></div>
 </div>
 <p>Position of the transmitter</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.a
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.a
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([  759. ,  1114. ,     1.5])
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 2. ,  3. ,  1.5])
 </pre></div>
 </div>
 <p>Position of the receiver</p>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>Lk.b
+<div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.b
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>array([  767. ,  1114. ,     1.5])
+<div class="highlight-none"><div class="highlight"><pre><span></span>array([ 8. ,  4. ,  1.6])
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>cir = Lk.H.applywavB(wav.sf)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>cir = Lk.H.applywavB(wav.sf)
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav
 </pre></div>
 </div>
-<div class="code python highlight-none"><div class="highlight"><pre><span></span>layer = [&#39;AIR&#39;,&#39;AIR&#39;,&#39;AIR&#39;]
-Lk.L.chgmss(1,ss_name=layer)
-Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
-#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)
-#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)
-ak,tauk=Lk.eval(force=True,verbose=0,fGHz=fGHz)
-plt.stem(Lk.H.taud,Lk.H.ak[:,0,20])
-plt.title(str(layer))
-plt.figure()
-layer = [&#39;METAL&#39;,&#39;METAL&#39;,&#39;METAL&#39;]
-Lk.L.chgmss(1,ss_name=layer)
-Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
-ak,tauk=Lk.eval(force=True,verbose=0,fGHz=fGHz)
-plt.stem(Lk.H.taud,Lk.H.ak[:,0,20])
-plt.title(str(layer))
-#plt.stem(Lk.H.taud,Lk.H.ak[:,0,50])
-plt.figure()
-layer = [&#39;WOOD&#39;,&#39;AIR&#39;,&#39;WOOD&#39;]
-Lk.L.chgmss(1,ss_name=layer)
-Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
-ak,tauk=Lk.eval(force=True,verbose=0,fGHz=fGHz)
-plt.title(str(layer))
-plt.stem(Lk.H.taud,Lk.H.ak[:,0,20])
+<div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1230: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
+  pstop1 = pstart1 + np.where(u1.x[pstart1:dim1]==xnew[-1])[0]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;Container object of 3 artists&gt;
+<div class="code highlight-none"><div class="highlight"><pre><span></span>L.Gs.node[1][&#39;name&#39;]=&#39;AIR&#39;
+L.Gs.node[2][&#39;name&#39;]=&#39;AIR&#39;
+L.Gs.node[3][&#39;name&#39;]=&#39;AIR&#39;
+#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)
+#Ab = Antenna(&#39;Omni&#39;,fGHz=fGHz)
+Lk.eval(force=True,verbose=0,fGHz=fGHz)
+Lk.plt_cir()
+plt.title(&#39;AIR/AIR/AIR&#39;)
+plt.figure()
+L.Gs.node[1][&#39;name&#39;]=&#39;METAL&#39;
+L.Gs.node[2][&#39;name&#39;]=&#39;METAL&#39;
+L.Gs.node[3][&#39;name&#39;]=&#39;METAL&#39;
+Lk.eval(force=True,verbose=0,fGHz=fGHz)
+Lk.plt_cir()
+plt.title(&#39;METAL/METAL/METAL&#39;)
+plt.figure()
+L.Gs.node[1][&#39;name&#39;]=&#39;WOOD&#39;
+L.Gs.node[2][&#39;name&#39;]=&#39;AIR&#39;
+L.Gs.node[3][&#39;name&#39;]=&#39;WOOD&#39;
+Lk.eval(force=True,verbose=0,fGHz=fGHz)
+Lk.plt_cir()
+plt.title(&#39;WOOD/AIR/WOOD&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_27_1.png" src="../../_images/Multisubsegments_27_1.png" />
-<img alt="../../_images/Multisubsegments_27_2.png" src="../../_images/Multisubsegments_27_2.png" />
-<img alt="../../_images/Multisubsegments_27_3.png" src="../../_images/Multisubsegments_27_3.png" />
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 1113.20it/s]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.py:2472: RuntimeWarning: divide by zero encountered in log10
+  FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
+Signatures: 100.0it [00:00, 4164.07it/s]
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.py:2489: RuntimeWarning: divide by zero encountered in log10
+  ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap=&#39;hot&#39;)
+Signatures: 100.0it [00:00, 2246.28it/s]
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fb5c1897750&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Multisubsegments_24_2.png" src="../../_images/Multisubsegments_24_2.png" />
+<img alt="../../_images/Multisubsegments_24_3.png" src="../../_images/Multisubsegments_24_3.png" />
+<img alt="../../_images/Multisubsegments_24_4.png" src="../../_images/Multisubsegments_24_4.png" />
 <p>We have modified successively the nature of the 3 surfaces in the sub
 segment placed in the separation partition. The first was AIR, the
 second WOOD and the third METAL. As the subsegment is placed on the LOS

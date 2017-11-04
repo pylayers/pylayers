@@ -185,7 +185,6 @@
 <span class="sd">    Layout.check</span>
 <span class="sd">    Layout.check2</span>
 <span class="sd">    ssayout.check_Gi</span>
-<span class="sd">    Layout.chgmss</span>
 <span class="sd">    Layout.cleanup</span>
 <span class="sd">    Layout.clip</span>
 <span class="sd">    Layout.closest_edge</span>
@@ -2576,7 +2575,7 @@
                 <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">iso</span><span class="p">:</span>
                     <span class="n">ziso</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">])</span>
                 <span class="c1"># get the complementary intervals</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;outdoor&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;outdoor&#39;</span><span class="p">:</span>
                     <span class="n">zmin</span> <span class="o">=</span> <span class="mf">1e6</span>
                     <span class="n">zmax</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1e6</span>
                     <span class="k">for</span> <span class="n">iz</span> <span class="ow">in</span> <span class="n">ziso</span><span class="p">:</span>
@@ -3662,68 +3661,6 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">eag</span><span class="o">.</span><span class="n">multenterbox</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="p">((</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)),</span>
                             <span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]))))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">np</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></div>
-
-<div class="viewcode-block" id="Layout.chgmss"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.chgmss.html#pylayers.gis.layout.Layout.chgmss">[docs]</a>    <span class="k">def</span> <span class="nf">chgmss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">ss_name</span><span class="o">=</span><span class="p">[],</span> <span class="n">ss_z</span><span class="o">=</span><span class="p">[],</span> <span class="n">ss_offset</span><span class="o">=</span><span class="p">[],</span> <span class="n">g2npy</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; change multi subsegments properties</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        ns : int</span>
-<span class="sd">            segment number</span>
-
-<span class="sd">        ss_name : list of Nss  string</span>
-<span class="sd">            name of the different constitutive SLAB of the multi-segments</span>
-
-<span class="sd">        ss_z : list of Nss tuple (zmin,zmax)</span>
-
-<span class="sd">        ss_offset : list of subsegment offsets</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        pylayers.gis.layout.g2npy</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1">#</span>
-        <span class="c1"># Check slabname in ss_name</span>
-        <span class="c1">#</span>
-        <span class="c1">#  update self.sl with new slab values</span>
-
-        <span class="n">SDB</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">SlabDB</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">sname</span> <span class="ow">in</span> <span class="n">ss_name</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">sname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SDB</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">slab</span> <span class="o">=</span> <span class="n">SDB</span><span class="p">[</span><span class="n">sname</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slab</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">slab</span>
-
-        <span class="k">if</span> <span class="n">ss_z</span> <span class="o">!=</span> <span class="p">[]:</span>
-            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_name</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
-                <span class="n">ss_z</span><span class="p">),</span> <span class="s1">&#39;Error incompatible size in chgmss&#39;</span>
-        <span class="k">if</span> <span class="n">ss_offset</span> <span class="o">!=</span> <span class="p">[]:</span>
-            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_z</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
-                <span class="n">ss_offset</span><span class="p">),</span> <span class="s1">&#39;Error incompatible size in chgmss&#39;</span>
-
-        <span class="k">if</span> <span class="n">ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_name&#39;</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">ss_name</span> <span class="o">!=</span> <span class="p">[]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s1">&#39;ss_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss_name</span>
-                <span class="k">if</span> <span class="n">ss_z</span> <span class="o">!=</span> <span class="p">[]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss_z</span>
-                <span class="k">if</span> <span class="n">ss_offset</span> <span class="o">!=</span> <span class="p">[]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s1">&#39;ss_offset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss_offset</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s1">&#39;ss_offset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_name</span><span class="p">)</span>
-
-                <span class="c1"># update Layout information</span>
-                <span class="k">if</span> <span class="n">g2npy</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Layout.edit_segment"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.edit_segment.html#pylayers.gis.layout.Layout.edit_segment">[docs]</a>    <span class="k">def</span> <span class="nf">edit_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">outdata</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot; edit segment WITH EasyGUI</span>

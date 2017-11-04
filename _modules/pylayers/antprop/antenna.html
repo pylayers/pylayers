@@ -180,6 +180,7 @@
 <span class="sd">    Pattern.eval</span>
 <span class="sd">    Pattern.gain</span>
 <span class="sd">    Pattern.radF</span>
+<span class="sd">    Pattern._pdipole</span>
 
 <span class="sd">Pattern Functions</span>
 <span class="sd">=================</span>
@@ -497,6 +498,38 @@
     <span class="k">def</span> <span class="nf">ssh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">89</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
             <span class="n">ssh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">dsf</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__pdipole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; dipole antenna along z axis </span>
+
+<span class="sd">        From Balanis (Formula 4.62(a)) </span>
+<span class="sd">        </span>
+<span class="sd">        .. math:: F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;param&#39;</span> <span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;l&#39;</span> <span class="p">:</span> <span class="mf">0.25</span> <span class="p">}</span> <span class="p">}</span>
+
+        <span class="k">if</span> <span class="s1">&#39;param&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">{}:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">]</span>
+        
+        <span class="n">l</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;l&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
+            <span class="c1"># Nth x Nphx Nf</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">/</span><span class="mf">0.3</span>
+            <span class="n">usmall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">&lt;=</span><span class="mf">1e-1</span>
+            <span class="n">Ft</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">))[</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]))</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">])</span>
+            <span class="n">Ft</span><span class="p">[</span><span class="n">usmall</span><span class="p">,:,:]</span>   <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">usmall</span><span class="p">][:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span> <span class="o">/</span><span class="mf">0.3</span>
+            <span class="n">usmall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">&lt;=</span><span class="mf">1e-1</span>
+            <span class="n">Ft</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]))</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="bp">None</span><span class="p">])</span>
+            <span class="n">Ft</span><span class="p">[</span><span class="n">usmall</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">usmall</span><span class="p">][:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="c1"># Nd x Nf</span>
+
+        <span class="n">Fp</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Ft</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Ft</span><span class="p">,</span><span class="n">Fp</span>
 
     <span class="k">def</span> <span class="nf">__pOmni</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  omnidirectional pattern</span>
@@ -1469,6 +1502,10 @@
 
     <span class="k">def</span> <span class="nf">__pHertz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Hertz dipole</span>
+<span class="sd">        </span>
+<span class="sd">        param = {&#39;param&#39;:{&#39;le&#39;:np.array([0,0,1])}}</span>
+<span class="sd">        le unit vector defining the dipole orientation </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;param&#39;</span><span class="p">:{</span><span class="s1">&#39;le&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])}}</span>
 

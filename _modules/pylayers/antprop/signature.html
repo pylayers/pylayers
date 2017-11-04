@@ -155,6 +155,7 @@
 <span class="sd">    Signatures.__repr__</span>
 <span class="sd">    Signatures.__len__</span>
 <span class="sd">    Signatures.num</span>
+<span class="sd">    Signatures.compl</span>
 <span class="sd">    Signatures.info</span>
 <span class="sd">    Signatures.saveh5</span>
 <span class="sd">    Signatures.loadh5</span>
@@ -1281,7 +1282,7 @@
 
 
 <div class="viewcode-block" id="Signatures.run"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
+        <span class="sd">&quot;&quot;&quot; evaluate signatures between cycle of tx and cycle of rx</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1296,19 +1297,19 @@
 <span class="sd">            activate diffraction </span>
 <span class="sd">        threshold : float </span>
 <span class="sd">            for reducing calculation time</span>
+<span class="sd">        animations :  boolean </span>
+<span class="sd">        nD : int </span>
+<span class="sd">            maximum number of diffraction </span>
+<span class="sd">        nR : int </span>
+<span class="sd">            maximum number of reflection  </span>
+<span class="sd">        nT : int </span>
+<span class="sd">            maximum number of transmission   </span>
 
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        siglist :  numpy.ndarray</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
 <span class="sd">        pylayers.simul.link.Dlink.eval</span>
-<span class="sd">        pylayers.antprop.signature.Signatures.propath2</span>
-<span class="sd">        pylayers.antprop.signature.Signatures.procone2</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cutoff&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> 
