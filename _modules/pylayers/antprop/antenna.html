@@ -1093,7 +1093,7 @@
         <span class="k">return</span> <span class="n">Ft</span><span class="p">,</span><span class="n">Fp</span>
 
     <span class="k">def</span> <span class="nf">__p3gpp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; 3GPP pattern</span>
+        <span class="sd">&quot;&quot;&quot; 3GPP antenna pattern</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1143,8 +1143,8 @@
         <span class="n">pol</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="o">=</span> <span class="n">pol</span>
-        <span class="c1"># convert radian to degree</span>
 
+        <span class="c1"># convert radian to degree</span>
         <span class="n">phi</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="mi">180</span>
         <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="mi">90</span>
 
@@ -1759,19 +1759,23 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
             <span class="n">Fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
-                <span class="n">Ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">Ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))[</span><span class="bp">None</span><span class="p">,:]</span>
+            <span class="n">Ft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Fp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="c1">#if len(self.sqG.shape)==3:</span>
+            <span class="c1">#    Ft = np.array([0])*np.ones(len(self.fGHz))[None,None,:]</span>
+            <span class="c1">#else:</span>
+            <span class="c1">#    Ft = np.array([0])*np.ones(len(self.fGHz))[None,:]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="o">==</span><span class="s1">&#39;t&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
-                <span class="n">Fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">Fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))[</span><span class="bp">None</span><span class="p">,:]</span>
+            <span class="c1">#if len(self.sqG.shape)==3:</span>
+            <span class="c1">#    Fp = np.array([0])*np.ones(len(self.fGHz))[None,None,:]</span>
+            <span class="c1">#else:</span>
+            <span class="c1">#    Fp = np.array([0])*np.ones(len(self.fGHz))[None,:]</span>
             <span class="n">Ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span>
+            <span class="n">Fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Ft</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pol</span><span class="o">==</span><span class="s1">&#39;c&#39;</span><span class="p">:</span>
             <span class="n">Fp</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sqG</span>
             <span class="n">Ft</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1j</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sqG</span>
@@ -1828,6 +1832,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sl</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
             <span class="n">uth</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> 
             <span class="n">uph</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> 
+
             <span class="n">el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">umax</span><span class="p">)]</span><span class="o">*</span><span class="n">uth</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">umax</span><span class="p">)]</span><span class="o">*</span><span class="n">uph</span>
             <span class="n">eln</span> <span class="o">=</span> <span class="n">el</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eln</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
@@ -2261,17 +2266,17 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">ext</span><span class="o">=</span><span class="s1">&#39;hfss&#39;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">loadhfss</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nph</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">=</span><span class="n">typ</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;vsh3&#39;</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># not from file </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="n">typ</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;vsh3&#39;</span><span class="p">:</span>  
                 <span class="bp">self</span><span class="o">.</span><span class="n">initvsh</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Antenna.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__repr__.html#pylayers.antprop.antenna.Antenna.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;Antenna type : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;type : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;------------------------</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">if</span> <span class="s1">&#39;param&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">:</span>
