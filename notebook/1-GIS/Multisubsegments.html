@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Effect of Modifying the Nature of Sub-Segments &mdash; Python 1 documentation</title>
+    <title>Modifying the segment nature &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -167,7 +167,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">Effect of Modifying the Nature of Sub-Segments</a></li>
+<li><a class="reference internal" href="#">Modifying the segment nature</a></li>
 </ul>
 
     
@@ -184,11 +184,11 @@
   <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 22:35:49 (UTC+0100)
+<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 22:45:11 (UTC+0100)
 </pre></div>
 </div>
-<div class="section" id="effect-of-modifying-the-nature-of-sub-segments">
-<h1>Effect of Modifying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modifying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="modifying-the-segment-nature">
+<h1>Modifying the segment nature<a class="headerlink" href="#modifying-the-segment-nature" title="Permalink to this headline">¶</a></h1>
 <p>This illustrates a simple ray tracing simulation. The environement is a
 building with 2 rooms. At the interface betweebn the two rooms there is
 a segment with 3 sub-segment whose material properties are changed in
@@ -389,7 +389,7 @@ Lk = DLink(L=L,
 Lk.eval(force=True,verbose=False)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 2150.16it/s]
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 2243.10it/s]
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
@@ -402,8 +402,8 @@ Aa.plotG()
 </pre></div>
 </div>
 <img alt="../../_images/Multisubsegments_12_0.png" src="../../_images/Multisubsegments_12_0.png" />
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb5c3bf38d0&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7fb65488fe10&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7f5d3a73d150&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7f5d3a71a450&gt;)
 </pre></div>
 </div>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.C.Ctt
@@ -415,7 +415,7 @@ Aa.plotG()
 <div class="code highlight-none"><div class="highlight"><pre><span></span>Lk.eval(force=True,a=tx,b=rx,applywav=True)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 2145.87it/s]
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 2166.43it/s]
 /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1243: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
   pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
 /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py:1358: VisibleDeprecationWarning: converting an array with ndim &gt; 0 to an index will result in an error in the future
@@ -514,16 +514,16 @@ Lk.plt_cir()
 plt.title(&#39;WOOD/AIR/WOOD&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 1113.20it/s]
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100.0it [00:00, 1103.39it/s]
 /home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.py:2472: RuntimeWarning: divide by zero encountered in log10
   FSPL0 = -32.4- 20*np.log10(self.fGHz[0])-20*np.log10(dist)
-Signatures: 100.0it [00:00, 4164.07it/s]
+Signatures: 100.0it [00:00, 4348.01it/s]
 /home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.py:2489: RuntimeWarning: divide by zero encountered in log10
   ax.scatter(self.H.taud[uER],20*np.log10(np.abs(self.H.y[uER,0,0,0])),c=colors,cmap=&#39;hot&#39;)
-Signatures: 100.0it [00:00, 2246.28it/s]
+Signatures: 100.0it [00:00, 2218.53it/s]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7fb5c1897750&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x7f5d383c8750&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Multisubsegments_24_2.png" src="../../_images/Multisubsegments_24_2.png" />

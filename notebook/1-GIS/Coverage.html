@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; Python 1 documentation</title>
+    <title>Outdoor Coverage Knife-Edge Model &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -166,7 +166,8 @@
     <p>If you use the software, please consider
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
-	<ul class="simple">
+	<ul>
+<li><a class="reference internal" href="#">Outdoor Coverage Knife-Edge Model</a></li>
 </ul>
 
     
@@ -180,7 +181,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.gis.ezone import *
+  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>samedi 4 novembre 2017, 22:47:17 (UTC+0100)
+</pre></div>
+</div>
+<div class="section" id="outdoor-coverage-knife-edge-model">
+<h1>Outdoor Coverage Knife-Edge Model<a class="headerlink" href="#outdoor-coverage-knife-edge-model" title="Permalink to this headline">¶</a></h1>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.gis.ezone import *
 import matplotlib.tri as tri
 %matplotlib inline
 </pre></div>
@@ -266,10 +275,10 @@ Y0=expand(pc[1]*np.ones((Nphi,Nr)))
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(R[0,8,:],&#39;or&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc4e3878650&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12d07c5790&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_16_1.png" src="../../_images/Coverage_16_1.png" />
+<img alt="../../_images/Coverage_18_1.png" src="../../_images/Coverage_18_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>r
 </pre></div>
 </div>
@@ -295,10 +304,10 @@ Y0=expand(pc[1]*np.ones((Nphi,Nr)))
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e3725ed0&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d3d8af10&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_19_1.png" src="../../_images/Coverage_19_1.png" />
+<img alt="../../_images/Coverage_21_1.png" src="../../_images/Coverage_21_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>h_earth=(R*B)/(2*K*6375e3)
 </pre></div>
 </div>
@@ -306,10 +315,10 @@ plt.colorbar()
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e35a6410&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d04f7510&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_21_1.png" src="../../_images/Coverage_21_1.png" />
+<img alt="../../_images/Coverage_23_1.png" src="../../_images/Coverage_23_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span># ground height + antenna height
 Ha = expand((Ht + z.hgts[ry[0,0],rx[0,0]])*np.ones((Nphi,Nr)))
 Hb = expand(Hr + dem)
@@ -329,10 +338,10 @@ LOS  = Ha+(Hb-Ha)*R/r.T[None,1:]
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e347d510&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d0350510&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_25_1.png" src="../../_images/Coverage_25_1.png" />
+<img alt="../../_images/Coverage_27_1.png" src="../../_images/Coverage_27_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>diff = expand(dem)+h_earth-LOS
 </pre></div>
 </div>
@@ -340,10 +349,10 @@ plt.colorbar()
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e32d8a10&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d0229b10&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_27_1.png" src="../../_images/Coverage_27_1.png" />
+<img alt="../../_images/Coverage_29_1.png" src="../../_images/Coverage_29_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>fac  = np.sqrt(2*r.T[None,1:]/(lmbda*R*B))
 nu   = diff*fac
 #num,ind  = maxloc(nu)
@@ -397,10 +406,10 @@ Ltot = LFS+L
 plt.imshow(dem,cmap=plt.cm.jet)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fc4e321a910&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7f12d016aad0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_32_1.png" src="../../_images/Coverage_32_1.png" />
+<img alt="../../_images/Coverage_34_1.png" src="../../_images/Coverage_34_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(15,8))
 plt.imshow(Ltot,cmap=plt.cm.jet)
 plt.colorbar()
@@ -410,7 +419,7 @@ plt.axis(&#39;auto&#39;)
 <div class="highlight-none"><div class="highlight"><pre><span></span>(-10.0, 50.0, 50.0, -10.0)
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_33_1.png" src="../../_images/Coverage_33_1.png" />
+<img alt="../../_images/Coverage_35_1.png" src="../../_images/Coverage_35_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>u=np.argmax(nu,axis=2)
 </pre></div>
 </div>
@@ -418,10 +427,10 @@ plt.axis(&#39;auto&#39;)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e351a750&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12d048f650&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_35_1.png" src="../../_images/Coverage_35_1.png" />
+<img alt="../../_images/Coverage_37_1.png" src="../../_images/Coverage_37_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>#plt.plot(h_earth[0,30,:])
 #plt.plot(LOS[0,30,:])
 #plt.plot(diff[0,30,:])
@@ -452,10 +461,10 @@ plt.colorbar()
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e1786c10&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce6d6c50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_41_1.png" src="../../_images/Coverage_41_1.png" />
+<img alt="../../_images/Coverage_43_1.png" src="../../_images/Coverage_43_1.png" />
 <p>imax indique le point d&#8217;engagement maximum</p>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>imax=np.nanargmax(nu,axis=2)
 </pre></div>
@@ -476,10 +485,10 @@ plt.colorbar()
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e16543d0&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce5a34d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_45_1.png" src="../../_images/Coverage_45_1.png" />
+<img alt="../../_images/Coverage_47_1.png" src="../../_images/Coverage_47_1.png" />
 <p>Recherche des coordonn??es du point diffractant pour toutes les
 directions et pour tous les ranges.</p>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>imax.shape
@@ -496,10 +505,10 @@ it = np.arange(0,Nr-1)[None,:]
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e152cb50&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce47cc50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_49_1.png" src="../../_images/Coverage_49_1.png" />
+<img alt="../../_images/Coverage_51_1.png" src="../../_images/Coverage_51_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>for k in range(2,Nphi-1):
     for l in range(1,Nr-1):
         if imax[k,l]!=0:
@@ -522,18 +531,18 @@ YM = y[iphi,imax[iphi,it]]
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e1398050&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce2e8150&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_53_1.png" src="../../_images/Coverage_53_1.png" />
+<img alt="../../_images/Coverage_55_1.png" src="../../_images/Coverage_55_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(YM,cmap=plt.cm.jet)
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4e126c890&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12ce1bd990&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_54_1.png" src="../../_images/Coverage_54_1.png" />
+<img alt="../../_images/Coverage_56_1.png" src="../../_images/Coverage_56_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.figure(figsize=(20,20))
 ik = 3
 #plt.tripcolor(triang,dem.flatten())
@@ -543,31 +552,31 @@ a.plot(x[:,ik],y[:,ik],&#39;.b&#39;)
 #plt.axis(&#39;equal&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc4e11298d0&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12ce0799d0&gt;]
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fc4e174f050&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7f12ce6540d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_55_2.png" src="../../_images/Coverage_55_2.png" />
+<img alt="../../_images/Coverage_57_2.png" src="../../_images/Coverage_57_2.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>RF=np.sqrt((XM[...,None]-x[:,None,:])**2+(YM[...,None]-y[:,None,:])**2)
 </pre></div>
 </div>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.imshow(RF[0,:,:],cmap=plt.cm.jet)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7fc4e0f65310&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x7f12cdec30d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_57_1.png" src="../../_images/Coverage_57_1.png" />
+<img alt="../../_images/Coverage_59_1.png" src="../../_images/Coverage_59_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(x[0,:],y[0,:])
 plt.plot(XM[0,:],YM[0,:],&#39;or&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc4e0ec10d0&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12cde5cf50&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_58_1.png" src="../../_images/Coverage_58_1.png" />
+<img alt="../../_images/Coverage_60_1.png" src="../../_images/Coverage_60_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>RF.shape
 </pre></div>
 </div>
@@ -616,16 +625,16 @@ toc=time.time()
 print toc-tic
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>0.394115924835
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.395106077194
 </pre></div>
 </div>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(RF[0,4,:])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc4d88a9390&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12c57eb950&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_62_1.png" src="../../_images/Coverage_62_1.png" />
+<img alt="../../_images/Coverage_64_1.png" src="../../_images/Coverage_64_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>UL=np.zeros(RF.shape)
 UR=np.zeros(RF.shape)
 UL[(u[0,:],u[1,:],u[2,:])]=RF[(u[0,:],u[1,:],u[2,:])]
@@ -636,10 +645,10 @@ UR[(v[0,:],v[1,:],v[2,:])]=RF[(v[0,:],v[1,:],v[2,:])]
 plt.plot(UR[0,4,:],&#39;r&#39;)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc4d883f990&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f12cde65490&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_64_1.png" src="../../_images/Coverage_64_1.png" />
+<img alt="../../_images/Coverage_66_1.png" src="../../_images/Coverage_66_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>import numpy as np
 import time
 import pdb
@@ -679,7 +688,7 @@ toc=time.time()
 print toc-tic
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>0.279639959335
+<div class="highlight-none"><div class="highlight"><pre><span></span>0.28248000145
 </pre></div>
 </div>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>import numpy as np
@@ -749,10 +758,10 @@ print toc-tic
 <div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/ipykernel_launcher.py:20: RuntimeWarning: invalid value encountered in divide
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>2.28229808807
+<div class="highlight-none"><div class="highlight"><pre><span></span>2.30528688431
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_67_3.png" src="../../_images/Coverage_67_3.png" />
+<img alt="../../_images/Coverage_69_3.png" src="../../_images/Coverage_69_3.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>x
 </pre></div>
 </div>
@@ -775,10 +784,11 @@ print toc-tic
 plt.colorbar()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fc4d1a48810&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7f12be98b610&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_69_1.png" src="../../_images/Coverage_69_1.png" />
+<img alt="../../_images/Coverage_71_1.png" src="../../_images/Coverage_71_1.png" />
+</div>
 
 
           </div>
