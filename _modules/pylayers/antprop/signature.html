@@ -1313,6 +1313,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cutoff&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> 
                     <span class="s1">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
+                    <span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">:</span><span class="mi">400</span><span class="p">,</span>
                     <span class="s1">&#39;nD&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s1">&#39;nR&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
                     <span class="s1">&#39;nT&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
@@ -1339,6 +1340,10 @@
         <span class="n">progress</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;progress&#39;</span><span class="p">]</span> 
         <span class="n">diffraction</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">]</span>
         <span class="n">animation</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;animation&#39;</span><span class="p">]</span> 
+        <span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">]</span>
+        <span class="n">dist_excess_max</span> <span class="o">=</span> <span class="n">delay_excess_max_ns</span><span class="o">*</span><span class="mf">0.3</span>
+        
+
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;.sig&#39;</span>
         <span class="c1">#</span>
@@ -1361,8 +1366,10 @@
         <span class="k">else</span><span class="p">:</span>
            <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span>
 
-
-        <span class="c1">#pdb.set_trace()</span>
+        <span class="n">pt_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span>
+        <span class="n">pt_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">][</span><span class="s1">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span>
+        <span class="n">d_source_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pt_source</span> <span class="o">-</span> <span class="n">pt_target</span><span class="p">)</span>
+        
         <span class="c1">#print &quot;source,lis :&quot;,self.source,lis</span>
         <span class="c1">#print &quot;target,lit :&quot;,self.target,lit</span>
         <span class="c1"># for u in lit: </span>
@@ -1600,6 +1607,12 @@
                         <span class="n">ik</span> <span class="o">=</span> <span class="mi">1</span>
                         <span class="n">r</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">-</span><span class="n">ik</span><span class="p">]</span>
                         <span class="c1">#</span>
+                        <span class="c1"># dtarget :  distance between th and target</span>
+                        <span class="c1">#</span>
+                        <span class="n">pt_th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+                        <span class="n">d_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pt_target</span><span class="o">-</span><span class="n">pt_th</span><span class="p">)</span>
+                        
+                        <span class="c1">#</span>
                         <span class="c1"># mirroring th until the previous point  </span>
                         <span class="c1"># </span>
                         <span class="n">th_mirror</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
@@ -1608,6 +1621,9 @@
                             <span class="n">ik</span> <span class="o">=</span> <span class="n">ik</span> <span class="o">+</span> <span class="mi">1</span>
                             <span class="n">r</span>  <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="o">-</span><span class="n">ik</span><span class="p">]</span>
 
+                        <span class="n">pt_mirror</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">th_mirror</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+                        <span class="n">d_source</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pt_source</span><span class="o">-</span><span class="n">pt_mirror</span><span class="p">)</span>
+                        <span class="n">d_excess</span> <span class="o">=</span> <span class="n">d_source</span> <span class="o">+</span> <span class="n">d_target</span> <span class="o">-</span> <span class="n">d_source_target</span>
                         <span class="c1"># if at least 2 interactions</span>
                         <span class="c1"># or previous point is a diffraction </span>
 
@@ -1735,25 +1751,25 @@
                                 <span class="n">vrdotvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vr_n</span><span class="p">,</span><span class="n">vl_n</span><span class="p">)</span>
                                 <span class="c1"># cone angle </span>
                                 <span class="n">angle_cone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">vrdotvl</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span><span class="o">-</span><span class="mf">1.</span><span class="p">))</span>
-                            <span class="c1">#</span>
-                            <span class="c1"># NEW </span>
+                           
+                        
                             <span class="c1">#   </span>
                             <span class="c1"># the illuminating cone is defined</span>
                             <span class="c1"># the th_mirror to be tested with this cone are known </span>
                             <span class="c1"># </span>
-                            <span class="c1"># The illuminating ratio is calculated here</span>
-                            <span class="c1">#print (apex,vl_n),(apex,vr_n),(th_mirror[0],th_mirror[1])</span>
-                            <span class="c1"># if self.cpt==866:</span>
-                            <span class="c1">#     pdb.set_trace()</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span><span class="o">==</span><span class="mi">571</span><span class="p">:</span>
-                                <span class="n">seg</span><span class="p">,</span><span class="n">ratio2</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_cone_seg</span><span class="p">((</span><span class="n">apex</span><span class="p">,</span><span class="n">vl_n</span><span class="p">),(</span><span class="n">apex</span><span class="p">,</span><span class="n">vr_n</span><span class="p">),(</span><span class="n">th_mirror</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">th_mirror</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">bvis</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-                            <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">angle_cone</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">)</span>
+                             <span class="ow">and</span> <span class="p">(</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">angle_cone</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="p">)</span> <span class="p">:</span> 
                                 <span class="n">seg</span><span class="p">,</span><span class="n">ratio2</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect_cone_seg</span><span class="p">((</span><span class="n">apex</span><span class="p">,</span><span class="n">vl_n</span><span class="p">),(</span><span class="n">apex</span><span class="p">,</span><span class="n">vr_n</span><span class="p">),(</span><span class="n">th_mirror</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">th_mirror</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">bvis</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="p">(</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">angle_cone</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">):</span>
+                                <span class="n">ratio2</span> <span class="o">=</span> <span class="mi">1</span>           
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">ratio2</span> <span class="o">=</span> <span class="mi">0</span> 
                             <span class="c1">#print ratio</span>
                             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
                                 <span class="n">th_mirror</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="k">pass</span>
+
                             <span class="n">al</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">vl_n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">vl_n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                             <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">vr_n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">vr_n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">th_mirror</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">apex</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">th_mirror</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">apex</span><span class="p">):</span>
@@ -1848,16 +1864,18 @@
                     <span class="c1">#    th = np.array([th,th])</span>
                     <span class="c1">#    ratio = 1</span>
                         <span class="c1">#print self.cpt,ratio,ratio2</span>
-                        <span class="c1"># if (ratio&gt;0.1) and (ratio2==0):</span>
-                        <span class="c1">#     pdb.set_trace()</span>
-                        <span class="k">if</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span><span class="o">&gt;</span><span class="mf">0.1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ratio2</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                             <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+                        <span class="c1">#print d_excess,dist_excess_max</span>
+                        <span class="c1">#if (ratio2 &gt; self.threshold) and (d_excess&lt;dist_excess_max):</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">d_excess</span><span class="o">&lt;</span><span class="n">dist_excess_max</span><span class="p">):</span>
+                        <span class="c1">#if (ratio &gt; self.threshold):</span>
                             <span class="c1">#</span>
                             <span class="c1"># Update sequence of mirrored points</span>
                             <span class="c1">#</span>
                             <span class="k">if</span> <span class="n">nstr</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
                                 <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
-
                                 <span class="n">tahe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">th_mirror</span><span class="p">)</span>
                             
                             <span class="c1"># </span>
@@ -3711,15 +3729,6 @@
                 <span class="n">xk</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">yk</span><span class="p">)</span>
                 <span class="n">pkm1</span> <span class="o">=</span> <span class="n">xk</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">gk</span> <span class="o">=</span> <span class="n">xk</span><span class="p">[</span><span class="mi">2</span><span class="p">::]</span>
-                <span class="n">alpha</span> <span class="o">=</span> <span class="n">gk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">beta</span> <span class="o">=</span> <span class="n">gk</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="c1">#print k,alpha,beta</span>
-                <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y</span><span class="p">,</span> <span class="n">pkm1</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># dummy necessary for the test below</span>
-                <span class="c1"># fixing #210</span>
-                <span class="c1">#Y = np.hstack((Y, pa[:, k].reshape((2, 1))))</span>
-                <span class="c1">#pkm1 = pa[:, k].reshape((2, 1))</span>
                 <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y</span><span class="p">,</span> <span class="n">pa</span><span class="p">[:,</span> <span class="n">N</span><span class="o">-</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
                 <span class="n">pkm1</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[:,</span> <span class="n">N</span><span class="o">-</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
             <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
@@ -3793,7 +3802,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 25, 2017.
+      Last updated on Nov 04, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

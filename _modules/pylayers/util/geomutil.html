@@ -409,11 +409,10 @@
 <span class="k">def</span> <span class="nf">ptconvex</span><span class="p">(</span><span class="n">poly</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Determine convex / concave points in the Polygon</span>
 
-
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">        poly : shaeply.Polygon</span>
+<span class="sd">        poly : shapely.Polygon</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -3497,100 +3496,399 @@
     <span class="k">return</span><span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">&gt;</span>
            <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span></div>
 
-<span class="k">def</span> <span class="nf">intersect_cone_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span><span class="n">line1</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span><span class="n">bvis</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    
-    <span class="n">x0</span><span class="p">,</span><span class="n">p0</span> <span class="o">=</span> <span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
-    <span class="n">x1</span><span class="p">,</span><span class="n">p1</span> <span class="o">=</span> <span class="n">intersect_line_seg</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
-    <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">p0</span>
-    <span class="n">nv2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">nv2</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
-        <span class="c1"># a above</span>
-        <span class="c1"># b below </span>
-        <span class="c1"># i in</span>
-        <span class="n">bx0a</span> <span class="o">=</span> <span class="n">x0</span><span class="o">&gt;</span><span class="mi">1</span>
-        <span class="n">bx0b</span> <span class="o">=</span> <span class="n">x0</span><span class="o">&lt;</span><span class="mi">0</span>
-        <span class="n">bx0i</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx0a</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx0b</span><span class="p">)</span> 
-        <span class="n">bx1a</span> <span class="o">=</span> <span class="n">x1</span><span class="o">&gt;</span><span class="mi">1</span>
-        <span class="n">bx1b</span> <span class="o">=</span> <span class="n">x1</span><span class="o">&lt;</span><span class="mi">0</span>
-        <span class="n">bx1i</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx1a</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx1b</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">are_points_inside_cone_old</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; determine if a set of points are inside a cone </span>
 
-        <span class="n">baa</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1a</span> <span class="c1"># </span>
-        <span class="n">bab</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1b</span> <span class="c1">#</span>
-        <span class="n">bai</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1i</span> 
-        <span class="n">bba</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1a</span> <span class="c1">#</span>
-        <span class="n">bbb</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1b</span> <span class="c1"># </span>
-        <span class="n">bbi</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1i</span> 
-        <span class="n">bia</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1a</span> 
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------</span>
 
-        <span class="n">bib</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1b</span> 
-        <span class="n">bii</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1i</span> <span class="c1">#</span>
-        
-        <span class="k">if</span> <span class="n">baa</span> <span class="ow">or</span> <span class="n">bbb</span><span class="p">:</span>  <span class="c1"># above and or below and below -&gt;segment is out </span>
-            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="c1">#print &quot;baa or bbb&quot; </span>
-        <span class="k">elif</span> <span class="n">bab</span> <span class="ow">or</span> <span class="n">bba</span><span class="p">:</span>  <span class="c1"># segement is fully inside the cone take seg        </span>
-            <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
-            <span class="c1">#print &quot;bab or bba&quot; </span>
-        <span class="k">elif</span> <span class="n">bii</span><span class="p">:</span>
-            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">]</span> 
-            <span class="c1">#print &quot;bii&quot; </span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">p0seg0</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">p0</span>
-            <span class="n">dp0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">p0seg0</span><span class="p">)</span><span class="o">/</span><span class="n">nv2</span>
-            <span class="n">bdp0o</span> <span class="o">=</span> <span class="p">(</span><span class="n">dp0</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dp0</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">bdb0i</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">bdp0o</span>
-            
-            <span class="k">if</span> <span class="n">bai</span> <span class="ow">or</span> <span class="n">bbi</span> <span class="p">:</span>
-                <span class="c1">#print &quot;bai or bbi&quot;</span>
-                <span class="k">if</span> <span class="n">bdb0i</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span> 
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                       <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                       <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">bia</span> <span class="ow">or</span> <span class="n">bib</span><span class="p">:</span>   
-                <span class="c1">#print &quot;bia or bib&quot;</span>
-                <span class="k">if</span> <span class="n">bdb0i</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span>
+<span class="sd">    points : np.array (Noints x Ndim ) </span>
+<span class="sd">    apex : (Ndim x 1)</span>
+<span class="sd">    v    : (Ndim x Nvec)</span>
+<span class="sd">    radius : float</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">nw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
-            <span class="n">ratio</span> <span class="o">=</span> <span class="n">nw</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nv2</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># points (N,2) </span>
+    <span class="c1"># apex   (,2)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">points</span> <span class="o">-</span> <span class="n">apex</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span>  
+    <span class="n">Nvec</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># vcone  : cone axis </span>
+    <span class="n">vcone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># cliping half space </span>
+    <span class="n">bhs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">vcone</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span>
+    <span class="c1"># cliping distance </span>
+    <span class="n">brad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">radius</span>
+
+    <span class="n">Npoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">brad</span><span class="p">)</span>
+    <span class="n">Ndim</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">Ndim</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">cw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">Nvec</span><span class="p">,</span><span class="n">Npoints</span><span class="p">,</span><span class="n">Ndim</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nvec</span><span class="p">):</span>
+            <span class="n">cw</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:][</span><span class="n">brad</span><span class="p">,:],</span><span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">pcw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">cw</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">bcone</span>  <span class="o">=</span> <span class="p">(</span><span class="n">pcw</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> 
     <span class="k">else</span><span class="p">:</span>
+        <span class="n">cw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">Nvec</span><span class="p">,</span><span class="n">Npoints</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nvec</span><span class="p">):</span>
+            <span class="n">cw</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:][</span><span class="n">brad</span><span class="p">,:],</span><span class="n">v</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">pcw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">cw</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#bcone = (cw[0,:]&lt;0) &amp; (cw[1,:]&gt;0) </span>
+    <span class="c1">#cwv = np.cross(w,v)</span>
+    <span class="c1">#bb  = (cwu&lt;0) &amp; (cwv&gt;0) &amp; (rad&lt;radius)</span>
+    <span class="c1">#&quot;brad_ = np.zeros(len(bhs),dtype=bool)</span>
+    <span class="c1">#brad_[bhs] = brad </span>
+    <span class="c1">#</span>
+    <span class="c1"># be careful the unbitable part is below (avoid np.where) </span>
+    <span class="c1">#</span>
+    <span class="n">bcone_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">brad</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">bcone__</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bhs</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">bcone_</span><span class="p">[</span><span class="n">brad</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcone</span>
+    <span class="n">bcone__</span><span class="p">[</span><span class="n">bhs</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcone_</span>
+    <span class="k">return</span> <span class="n">bcone__</span> 
+
+
+<span class="k">def</span> <span class="nf">are_points_inside_cone1</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; determine if a set of points are inside a cone </span>
+
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    points : np.array (Noints x Ndim ) </span>
+<span class="sd">    apex : (Ndim x 1)</span>
+<span class="sd">    v    : (Ndim x Nvec)</span>
+<span class="sd">    radius : float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># points (N,2) </span>
+    <span class="c1"># apex   (,2)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">points</span> <span class="o">-</span> <span class="n">apex</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span>  
+    <span class="n">Nvec</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># vcone  : cone axis </span>
+    <span class="n">v_n</span>   <span class="o">=</span> <span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vcone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v_n</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># cliping half space </span>
+    <span class="n">bhs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">vcone</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span>
+    <span class="c1">#return(bhs)</span>
+    <span class="c1"># cliping distance </span>
+    <span class="n">brad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">radius</span>
+
+    <span class="n">Npoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">brad</span><span class="p">)</span>
+    <span class="n">Ndim</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># desactivate clipping (to be commented)</span>
+    <span class="c1">#bhs  = np.ones(len(bhs),dtype=bool)</span>
+    <span class="c1">#brad = np.ones(len(brad),dtype=bool)</span>
+
+    <span class="n">tk</span> <span class="o">=</span> <span class="p">[</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">Nvec</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span> <span class="p">]</span> 
+    <span class="n">bcw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">tk</span><span class="p">),</span><span class="n">Npoints</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="c1">#print &quot;w : &quot;,w </span>
+    <span class="c1">#print &quot;v :&quot;,v</span>
+    <span class="n">w_vec</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:][</span><span class="n">brad</span><span class="p">,:]</span> 
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tk</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">Ndim</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">zk1k2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">v_n</span><span class="p">[:,</span><span class="n">k1</span><span class="p">],</span><span class="n">v_n</span><span class="p">[:,</span><span class="n">k2</span><span class="p">])</span>
+            <span class="n">zk1k2_n</span> <span class="o">=</span> <span class="n">zk1k2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">zk1k2</span><span class="p">)</span>
+            <span class="n">w_proj</span> <span class="o">=</span> <span class="n">w_vec</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_vec</span><span class="p">,</span><span class="n">zk1k2_n</span><span class="p">)[:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">zk1k2_n</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span> 
+            <span class="c1">#w_proj = w_proj/np.linalg.norm(w_proj,axis=1)[:,None]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">w_proj</span> <span class="o">=</span> <span class="n">w_vec</span>
+        <span class="n">pvec1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">w_proj</span><span class="p">,</span><span class="n">v_n</span><span class="p">[:,</span><span class="n">k1</span><span class="p">])</span>
+        <span class="n">pvec2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">w_proj</span><span class="p">,</span><span class="n">v_n</span><span class="p">[:,</span><span class="n">k2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">Ndim</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pvec1</span><span class="o">*</span><span class="n">zk1k2_n</span><span class="p">[</span><span class="bp">None</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pvec2</span><span class="o">*</span><span class="n">zk1k2_n</span><span class="p">[</span><span class="bp">None</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">dp1p2</span> <span class="o">=</span> <span class="n">u1</span><span class="o">*</span><span class="n">u2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dp1p2</span> <span class="o">=</span>  <span class="n">pvec1</span><span class="o">*</span><span class="n">pvec2</span>
+        <span class="n">bcw</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp1p2</span> <span class="o">&lt;</span> <span class="mi">0</span> 
+    <span class="c1">#</span>
+    <span class="c1"># be careful the unbitable part is below (avoid np.where) </span>
+    <span class="c1">#</span>
+    <span class="n">bcone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">bcw</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">bcone_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">brad</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">bcone__</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bhs</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">bcone_</span><span class="p">[</span><span class="n">brad</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcone</span>
+    <span class="n">bcone__</span><span class="p">[</span><span class="n">bhs</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcone_</span>
+    <span class="k">return</span> <span class="n">bcone__</span> 
+
+<span class="k">def</span> <span class="nf">are_points_inside_cone</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; determine if a set of points are inside a cone </span>
+
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    points : np.array (Noints x Ndim ) </span>
+<span class="sd">    apex : (Ndim x 1)</span>
+<span class="sd">    v    : (Ndim x Nvec)</span>
+<span class="sd">    radius : float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="n">points</span> <span class="o">-</span> <span class="n">apex</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span>  
+    <span class="n">Nvec</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># vcone  : cone axis </span>
+    <span class="n">v_n</span>  <span class="o">=</span> <span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vcone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v_n</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># cliping half space </span>
+    <span class="n">bhs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">vcone</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span>
+    <span class="c1"># cliping distance </span>
+    <span class="n">brad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">radius</span>
+
+    <span class="n">w_vec</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">bhs</span><span class="p">,:][</span><span class="n">brad</span><span class="p">,:]</span> 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">v_n</span><span class="p">,</span><span class="n">w_vec</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+    <span class="n">bx</span> <span class="o">=</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span>
+
+    <span class="n">bcone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">bcone_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">brad</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">bcone__</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bhs</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">bcone_</span><span class="p">[</span><span class="n">brad</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcone</span>
+    <span class="n">bcone__</span><span class="p">[</span><span class="n">bhs</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcone_</span>
+    <span class="k">return</span> <span class="n">bcone__</span> 
+
+<span class="k">def</span> <span class="nf">intersect_cone_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span><span class="n">line1</span><span class="p">,</span><span class="n">seg</span><span class="p">,</span><span class="n">bvis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">bbool</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    line0</span>
+<span class="sd">    line1</span>
+<span class="sd">    seg</span>
+<span class="sd">    bvis </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span> 
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">apex</span> <span class="o">=</span> <span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">line0</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">line1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span>
+         <span class="p">(</span><span class="n">line0</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">line1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>   <span class="p">):</span>
+         <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span> 
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">line0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">line1</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">are_points_inside_cone</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+    <span class="n">x0</span><span class="p">,</span><span class="n">p0</span> <span class="o">=</span> <span class="n">intersect_halfline_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">,</span><span class="n">p1</span> <span class="o">=</span> <span class="n">intersect_halfline_seg</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="c1"># termination of segment fully inside the cone</span>
         <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
-        <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>   
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">p0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="o">~</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="c1"># termination segment fully outside the cone </span>
+        <span class="k">if</span> <span class="p">((</span> <span class="p">(</span> <span class="p">(</span><span class="n">x1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">x1</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="p">)</span> <span class="ow">and</span> 
+            <span class="p">(</span> <span class="p">(</span> <span class="p">(</span><span class="n">x0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">x0</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="p">)</span> <span class="p">):</span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">]</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span> 
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="c1"># seg0 inside seg1 outside </span>
+        <span class="k">if</span> <span class="p">((</span> <span class="p">(</span><span class="n">x1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">x1</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="p">):</span> 
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">((</span> <span class="p">(</span><span class="n">x0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">x0</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="p">):</span> 
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p0</span><span class="p">]</span> 
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">p0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="o">~</span><span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">bb</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="c1"># seg0 outside seg1 inside </span>
+        <span class="k">if</span> <span class="p">((</span> <span class="p">(</span><span class="n">x0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">x0</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="p">):</span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">p0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">((</span> <span class="p">(</span><span class="n">x1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">x1</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="p">):</span> 
+            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">p1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="p">):</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">p0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">bvis</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">line0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">line1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">line1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">line1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#if bdp0i:</span>
+        <span class="c1">#    ax.scatter(seg[0][0],seg[0][1],s=100,color=&#39;green&#39;)</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    ax.scatter(seg[0][0],seg[0][1],s=100,color=&#39;red&#39;)</span>
+        <span class="c1">#if bdp1i:</span>
+        <span class="c1">#    ax.scatter(seg[1][0],seg[1][1],s=100,color=&#39;green&#39;)</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    ax.scatter(seg[1][0],seg[1][1],s=100,color=&#39;red&#39;)</span>
+        <span class="c1">#if len(tahe)==2:</span>
+        <span class="c1">#    linet(ax,tahe[0],tahe[1],color=&#39;green&#39;,al=1,linewidth=2)</span>
+        <span class="c1">#plt.show()    </span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">tahe</span><span class="p">,</span><span class="n">ratio</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">intersect_cone_seg_old</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span><span class="n">line1</span><span class="p">,</span><span class="n">seg</span><span class="p">,</span><span class="n">bvis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">bbool</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    line0</span>
+<span class="sd">    line1</span>
+<span class="sd">    seg</span>
+<span class="sd">    bvis </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+     
+    <span class="n">x0</span><span class="p">,</span><span class="n">p0</span> <span class="o">=</span> <span class="n">intersect_halfline_seg</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">,</span><span class="n">p1</span> <span class="o">=</span> <span class="n">intersect_halfline_seg</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">seg</span><span class="p">)</span>
+    <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># non degenerated case</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>  <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">p0</span>
+        <span class="n">nv2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">nv2</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># a above</span>
+            <span class="c1"># b below </span>
+            <span class="c1"># i in</span>
+            <span class="n">bx0a</span> <span class="o">=</span> <span class="n">x0</span><span class="o">&gt;</span><span class="mi">1</span>
+            <span class="n">bx0b</span> <span class="o">=</span> <span class="n">x0</span><span class="o">&lt;</span><span class="mi">0</span>
+            <span class="n">bx0i</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx0a</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx0b</span><span class="p">)</span> 
+            <span class="n">bx1a</span> <span class="o">=</span> <span class="n">x1</span><span class="o">&gt;</span><span class="mi">1</span>
+            <span class="n">bx1b</span> <span class="o">=</span> <span class="n">x1</span><span class="o">&lt;</span><span class="mi">0</span>
+            <span class="n">bx1i</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx1a</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">bx1b</span><span class="p">)</span>
+
+            <span class="n">baa</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1a</span> <span class="c1"># </span>
+            <span class="n">bab</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1b</span> <span class="c1">#</span>
+            <span class="n">bai</span> <span class="o">=</span> <span class="n">bx0a</span> <span class="ow">and</span> <span class="n">bx1i</span> 
+            <span class="n">bba</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1a</span> <span class="c1">#</span>
+            <span class="n">bbb</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1b</span> <span class="c1"># </span>
+            <span class="n">bbi</span> <span class="o">=</span> <span class="n">bx0b</span> <span class="ow">and</span> <span class="n">bx1i</span> 
+            <span class="n">bia</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1a</span> 
+            <span class="n">bib</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1b</span> 
+            <span class="n">bii</span> <span class="o">=</span> <span class="n">bx0i</span> <span class="ow">and</span> <span class="n">bx1i</span> <span class="c1">#</span>
+            
+            <span class="k">if</span> <span class="n">bbool</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s2">&quot;baa &quot;</span><span class="p">,</span><span class="n">baa</span>
+                <span class="k">print</span> <span class="s2">&quot;bab &quot;</span><span class="p">,</span><span class="n">bab</span>
+                <span class="k">print</span> <span class="s2">&quot;bai &quot;</span><span class="p">,</span><span class="n">bai</span>
+                <span class="k">print</span> <span class="s2">&quot;bba &quot;</span><span class="p">,</span><span class="n">bba</span>
+                <span class="k">print</span> <span class="s2">&quot;bbb &quot;</span><span class="p">,</span><span class="n">bbb</span>
+                <span class="k">print</span> <span class="s2">&quot;bbi &quot;</span><span class="p">,</span><span class="n">bbi</span>
+                <span class="k">print</span> <span class="s2">&quot;bia &quot;</span><span class="p">,</span><span class="n">bia</span>
+                <span class="k">print</span> <span class="s2">&quot;bib &quot;</span><span class="p">,</span><span class="n">bib</span>
+                <span class="k">print</span> <span class="s2">&quot;bii &quot;</span><span class="p">,</span><span class="n">bii</span>
+            <span class="k">if</span> <span class="n">baa</span> <span class="ow">or</span> <span class="n">bbb</span><span class="p">:</span>  <span class="c1"># above and above or below and below -&gt;segment is out </span>
+                <span class="n">tahe</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">bdp0i</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">bdp1i</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="c1">#print &quot;baa or bbb&quot; </span>
+            <span class="k">elif</span> <span class="n">bab</span> <span class="ow">or</span> <span class="n">bba</span><span class="p">:</span>  <span class="c1"># segment is fully inside the cone take seg        </span>
+                <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
+                <span class="n">bdp0i</span> <span class="o">=</span> <span class="bp">True</span> 
+                <span class="n">bdp1i</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="c1">#print &quot;bab or bba&quot; </span>
+            <span class="k">elif</span> <span class="n">bii</span><span class="p">:</span>
+                <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">]</span> 
+                <span class="n">bdp0i</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">bdp1i</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="c1">#print &quot;bii&quot; </span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># reference point is chosen</span>
+                <span class="c1"># as the point p0 or p1 which is</span>
+                <span class="c1"># the farest from both segment termination </span>
+                <span class="c1"># this is to avoid having null vector </span>
+                <span class="n">d0seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">d1seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">d0seg</span><span class="o">&gt;</span><span class="n">d1seg</span><span class="p">:</span>
+                    <span class="n">pref</span> <span class="o">=</span> <span class="n">p0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="o">-</span><span class="n">v</span> 
+                    <span class="n">pref</span> <span class="o">=</span> <span class="n">p1</span>
+
+                <span class="n">pseg0</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">pref</span>
+                <span class="n">dp0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">pseg0</span><span class="p">)</span><span class="o">/</span><span class="n">nv2</span>
+                <span class="c1"># seg0 is out cone</span>
+                <span class="n">bdp0o</span> <span class="o">=</span> <span class="p">(</span><span class="n">dp0</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dp0</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c1"># seg0 is in cone </span>
+                <span class="n">bdp0i</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">bdp0o</span>
+                <span class="n">pseg1</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">pref</span>
+                <span class="n">dp1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span><span class="o">/</span><span class="n">nv2</span>
+                <span class="c1"># seg0 is out </span>
+                <span class="n">bdp1o</span> <span class="o">=</span> <span class="p">(</span><span class="n">dp1</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dp1</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c1"># seg0 is in  </span>
+                <span class="n">bdp1i</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">bdp1o</span>
+                <span class="k">if</span> <span class="n">bbool</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s2">&quot;bdp0i :&quot;</span><span class="p">,</span><span class="n">bdp0i</span>
+                    <span class="k">print</span> <span class="s2">&quot;bdp1i :&quot;</span><span class="p">,</span><span class="n">bdp1i</span>
+                
+                <span class="k">if</span> <span class="n">bai</span> <span class="ow">or</span> <span class="n">bbi</span> <span class="p">:</span>
+                    <span class="c1">#print &quot;bai or bbi&quot;</span>
+                    <span class="k">if</span> <span class="n">bdp0i</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span> 
+                    <span class="k">if</span> <span class="n">bdp1i</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                           <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                        <span class="k">elif</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>
+                           <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">bia</span> <span class="ow">or</span> <span class="n">bib</span><span class="p">:</span>   
+                    <span class="c1">#print &quot;bia or bib&quot;</span>
+                    <span class="k">if</span> <span class="n">bdp0i</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">bdp1i</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                        <span class="k">elif</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>
+                            <span class="n">tahe</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">nw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+                <span class="n">ratio</span> <span class="o">=</span> <span class="n">nw</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nv2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ratio</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="mi">1</span>   
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">pt</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+        <span class="n">ph</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ph</span> <span class="o">=</span> <span class="n">ph</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span>
+        <span class="n">tahe</span> <span class="o">=</span> <span class="n">seg</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="mf">1.</span>
     
     <span class="k">if</span> <span class="n">bvis</span><span class="p">:</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">apex</span><span class="o">+</span><span class="n">vl_n</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
-        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">apex</span><span class="p">,</span><span class="n">apex</span><span class="o">+</span><span class="n">vr_n</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
-        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">line0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">line0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">line1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">line1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">line1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bdp0i</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bdp1i</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tahe</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
-            <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+            <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    
 
 
 
     <span class="k">return</span><span class="p">(</span><span class="n">tahe</span><span class="p">,</span><span class="n">ratio</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">intersect_line_seg</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">seg</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; intersect a line and a segment</span>
+<span class="k">def</span> <span class="nf">intersect_halfline_seg</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">seg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; intersect a half line and a segment</span>
 
 <span class="sd">    Parameters </span>
 <span class="sd">    ----------</span>
@@ -3618,9 +3916,13 @@
     <span class="n">detA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">detA</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
         <span class="n">x</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
-        <span class="n">P</span>  <span class="o">=</span> <span class="n">pta</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">v</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">P</span>  <span class="o">=</span> <span class="n">pta</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">v</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">None</span><span class="p">],[</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]])</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">None</span><span class="p">],[</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]])</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
     <span class="c1"># xht = phe[0] - pta[0]-v[]</span>
     <span class="c1"># yth = pta[1] - phe[1]</span>
@@ -3635,7 +3937,7 @@
     <span class="c1">#     k = np.inf * si</span>
     <span class="c1">#     M = pta + 2 * vseg</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">P</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">intersect3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">pg</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span><span class="n">binter</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -4762,9 +5064,10 @@
 <span class="sd">    1.0</span>
 
 
-<span class="sd">    Authors</span>
+<span class="sd">    Author</span>
 <span class="sd">    -------</span>
 <span class="sd">    Bernard.uguen@univ-rennes1.fr</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">x1</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pw</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
@@ -5404,6 +5707,8 @@
         <span class="n">tp</span> <span class="o">=</span> <span class="n">intersect3c</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="n">aplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:],</span><span class="n">pplane</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
 
     <span class="k">return</span> <span class="n">tp</span>
+
+
 <span class="k">def</span> <span class="nf">mirror3</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">aplane</span><span class="p">,</span> <span class="n">pplane</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; compute recursively the image of p wrt the list of facet </span>
 <span class="sd">    </span>
@@ -6039,7 +6344,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 25, 2017.
+      Last updated on Nov 04, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

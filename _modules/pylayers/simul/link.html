@@ -518,6 +518,7 @@
                    <span class="s1">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
                    <span class="s1">&#39;cutoff&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
                    <span class="s1">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span>
+                   <span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span>
                    <span class="s1">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s1">&#39;sig&#39;</span><span class="p">,</span><span class="s1">&#39;ray2&#39;</span><span class="p">,</span><span class="s1">&#39;ray&#39;</span><span class="p">,</span><span class="s1">&#39;Ct&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
                    <span class="s1">&#39;save_idx&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                    <span class="s1">&#39;force_create&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
@@ -698,6 +699,10 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutoff</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">delay_excess_max_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delay_excess_max_ns</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -897,6 +902,17 @@
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;ca&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;cb&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span>
 
+    <span class="nd">@delay_excess_max_ns.setter</span>
+    <span class="k">def</span> <span class="nf">delay_excess_max_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">delay_excess_max_ns</span><span class="p">):</span>
+
+        <span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">delay_excess_max_ns</span><span class="p">,</span><span class="mf">0.</span><span class="p">)</span>
+       
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delay_excess_max_ns</span> <span class="o">=</span> <span class="n">delay_excess_max_ns</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;ca&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;cb&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span>
+
+
     <span class="nd">@fGHz.setter</span>
     <span class="k">def</span> <span class="nf">fGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
@@ -1001,6 +1017,8 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;----------------------------- </span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;cutoff : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;threshold :&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;delay_excess_max : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; ns </span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;dist_excess_max : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; m </span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;No Layout specified&#39;</span>
         <span class="k">return</span> <span class="n">s</span></div>
@@ -1727,6 +1745,11 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
+        <span class="k">if</span> <span class="s1">&#39;delay_excess_max_ns&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="s1">&#39;cutoff&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1786,9 +1809,11 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="c1">## 1 is the default signature determination algorithm</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                
                 <span class="n">Si</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">],</span>
+                        <span class="n">delay_excess_max_ns</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;delay_excess_max_ns&#39;</span><span class="p">],</span>
                         <span class="n">nD</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nD&#39;</span><span class="p">],</span>
                         <span class="n">nR</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nR&#39;</span><span class="p">],</span>
                         <span class="n">nT</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nT&#39;</span><span class="p">],</span>
@@ -2162,10 +2187,12 @@
                    <span class="s1">&#39;axis&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                    <span class="s1">&#39;lr&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s1">&#39;ls&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s1">&#39;fig&#39;</span><span class="p">:[],</span>
+                   <span class="s1">&#39;ax&#39;</span><span class="p">:[],</span>
                    <span class="s1">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
                    <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span>
-                   <span class="s1">&#39;rays&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="s1">&#39;bsig&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s1">&#39;rays&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s1">&#39;bsig&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s1">&#39;laddr&#39;</span><span class="p">:[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)],</span>
                    <span class="s1">&#39;cmap&#39;</span><span class="p">:</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
                    <span class="s1">&#39;pol&#39;</span><span class="p">:</span><span class="s1">&#39;tot&#39;</span><span class="p">,</span>
@@ -2182,10 +2209,27 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span> 
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
+
         <span class="c1">#</span>
         <span class="c1"># Layout</span>
         <span class="c1">#</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span><span class="n">aw</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;aw&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">])</span>
+       
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                              <span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                              <span class="n">fig</span> <span class="o">=</span> <span class="n">fig</span><span class="p">,</span>
+                              <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span>
+                              <span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span>
+                              <span class="n">aw</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;aw&#39;</span><span class="p">],</span>
+                              <span class="n">axis</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">])</span>
         <span class="c1">#</span>
         <span class="c1"># Point A</span>
         <span class="c1">#</span>
@@ -2204,21 +2248,22 @@
         <span class="c1"># Plot Rays</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rays&#39;</span><span class="p">]:</span>
-            <span class="n">ECtt</span><span class="p">,</span><span class="n">ECpp</span><span class="p">,</span><span class="n">ECtp</span><span class="p">,</span><span class="n">ECpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;tt&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;pp&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECpp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;tp&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;pt&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECpt</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;tot&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span><span class="o">+</span><span class="n">ECpp</span><span class="o">+</span><span class="n">ECpt</span><span class="o">+</span><span class="n">ECtp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;co&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span><span class="o">+</span><span class="n">ECpp</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;cross&#39;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtp</span><span class="o">+</span><span class="n">ECpt</span>
+            <span class="c1">#ECtt,ECpp,ECtp,ECpt = self.C.energy()</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tt&#39;:</span>
+            <span class="c1">#    val = ECtt</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;pp&#39;:</span>
+            <span class="c1">#    val = ECpp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tp&#39;:</span>
+            <span class="c1">#    val = ECtp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;pt&#39;:</span>
+            <span class="c1">#    val = ECpt</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;tot&#39;:</span>
+            <span class="c1">#    val = ECtt+ECpp+ECpt+ECtp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;co&#39;:</span>
+            <span class="c1">#    val = ECtt+ECpp</span>
+            <span class="c1">#if kwargs[&#39;pol&#39;]==&#39;cross&#39;:</span>
+            <span class="c1">#&quot;    val = ECtp+ECpt</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">energy</span><span class="p">()[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> 
 
             <span class="n">clm</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span>
             <span class="c1">#</span>
@@ -2232,18 +2277,27 @@
             <span class="n">vmin</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
             <span class="n">vmax</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> 
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]:</span>
-                <span class="n">vmin</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
-                <span class="n">vmax</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+                <span class="n">vmin</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
+                <span class="n">vmax</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+            
+            
+            <span class="c1">#</span>
+            <span class="c1"># limitation of the vizualization zone around the center of the link </span>
+            <span class="c1">#</span>
+            <span class="n">pm</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">90</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">90</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">ir</span>  <span class="ow">in</span> <span class="n">lr</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]:</span>
-                    <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]</span>
+                    <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dyn&#39;</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">RayEnergy</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;cmap&#39;</span><span class="p">:</span>
                     <span class="n">col</span> <span class="o">=</span> <span class="n">clm</span><span class="p">(</span><span class="n">RayEnergy</span><span class="p">)</span>
-                    <span class="n">width</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">RayEnergy</span>
+                    <span class="c1">#width = 10*RayEnergy</span>
+                    <span class="n">width</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> 
                     <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">col</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">]</span>
@@ -2263,7 +2317,7 @@
                 <span class="n">sm</span><span class="o">.</span><span class="n">_A</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">)</span>
         <span class="c1">#</span>
-        <span class="c1"># Plot Rays</span>
+        <span class="c1"># Plot signature</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bsig&#39;</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;laddr&#39;</span><span class="p">]:</span> 
@@ -2739,7 +2793,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 25, 2017.
+      Last updated on Nov 04, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

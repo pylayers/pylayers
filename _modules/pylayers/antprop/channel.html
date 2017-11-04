@@ -684,6 +684,7 @@
                     <span class="s1">&#39;imax&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s1">&#39;dB&#39;</span> <span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
                     <span class="s1">&#39;fonts&#39;</span><span class="p">:</span><span class="mi">18</span><span class="p">,</span>
+                    <span class="s1">&#39;colorbar&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s1">&#39;fig&#39;</span> <span class="p">:[],</span>
                     <span class="s1">&#39;ax&#39;</span> <span class="p">:</span> <span class="p">[],</span>
                     <span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -706,6 +707,7 @@
         <span class="n">label</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">)</span>
         <span class="n">blos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;blos&#39;</span><span class="p">)</span>
         <span class="n">orientation</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span>
+        <span class="n">bcolorbar</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;colorbar&#39;</span><span class="p">)</span>
         <span class="n">ang_offset</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ang_offset&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
@@ -719,33 +721,41 @@
         <span class="c1">#extent = (self.az[0]*rd2deg,</span>
         <span class="c1">#          self.az[-1]*rd2deg,</span>
         <span class="c1">#          self.x[imin],self.x[imax])</span>
+
         <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">270</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">imin</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">imax</span><span class="p">])</span>
         <span class="n">padp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)[:,</span><span class="n">imin</span><span class="p">:</span><span class="n">imax</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
             <span class="n">padp</span>  <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">padp</span><span class="p">)</span>
+	    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">padp</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
 
-	<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">padp</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">blos</span><span class="p">:</span>
             <span class="n">a1</span> <span class="o">=</span> <span class="n">ang_offset</span> <span class="o">+</span> <span class="n">orientation</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">angpeak_est</span>
             <span class="n">a2</span> <span class="o">=</span> <span class="n">ang_offset</span> <span class="o">+</span> <span class="n">orientation</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">anglos_geo</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">taupeak_est</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">taulos_geo</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 
-	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
-	<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-            <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39; dB&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39; linear&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">bcolorbar</span><span class="p">:</span>
+    	    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
-            <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fonts</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
+                <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39; dB&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39; linear&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
 
-	<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Propagation delay [ns]&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
-	<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Angle[deg]&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fonts</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Propagation delay [ns]&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Angle[deg]&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
+
 	<span class="c1">#ax.title(&#39;PADP&#39;,fontsize=fonts)</span>
-	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
-	<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fonts</span><span class="p">)</span>
+	
+        <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
+            <span class="n">tick</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fonts</span><span class="p">)</span> 
+        <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
+            <span class="n">tick</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fonts</span><span class="p">)</span> 
+
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
 <div class="viewcode-block" id="ADPchannel.clean"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.ADPchannel.clean.html#pylayers.antprop.channel.ADPchannel.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold_dB</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
@@ -769,13 +779,38 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">+</span><span class="mi">0j</span></div>
 
-    <span class="k">def</span> <span class="nf">pap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">xlabel</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">fcGHz</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+            <span class="n">Gmax</span><span class="o">=</span><span class="mf">22.68</span><span class="p">,</span>
+            <span class="n">Gmin</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span>
+            <span class="n">threshdB</span><span class="o">=-</span><span class="mi">95</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+            <span class="n">fig</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">ax</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">xlabel</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">ylabel</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate Power Angular Profile </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        fcGHz : float</span>
+<span class="sd">        fontsize : int </span>
+<span class="sd">        figsize : tuple</span>
+<span class="sd">        fig : </span>
+<span class="sd">        ax  : </span>
+<span class="sd">        xlabel : boolean  </span>
+<span class="sd">        ylabel : boolean </span>
+<span class="sd">        legen : boolean</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        fig,ax</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -783,8 +818,17 @@
         <span class="n">Na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># integration over frequency </span>
         <span class="c1"># adp (angle) </span>
-        <span class="n">adp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">adp</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">adp</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Gtyp</span> <span class="o">=</span> <span class="p">(</span><span class="n">Gmax</span><span class="o">+</span><span class="n">Gmin</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">Py</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">pdp0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Py</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">pdp0dB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdp0</span><span class="p">)</span>
+        <span class="n">u</span>    <span class="o">=</span> <span class="n">pdp0dB</span><span class="o">&gt;</span><span class="n">threshdB</span>
+        <span class="n">adp</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Py</span><span class="p">[:,</span><span class="n">u</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#mPya = np.median(Py,axis=0)</span>
+        <span class="c1">#mPya = np.mean(Py,axis=0)</span>
+        <span class="c1">#sPy = Py-mPya[None,:]</span>
+        <span class="c1">#adp = np.sum(Pyz,axis=1)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">adp</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">adp</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -793,14 +837,22 @@
             <span class="n">ax</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">az</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">adp</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+        <span class="c1">#ax.plot(self.az*180/np.pi,10*np.log10(adp),color=&#39;r&#39;,label=r&#39;$10\log_{10}(\sum_{\tau} PADP(\phi,\tau))$&#39;,linewidth=1.5)</span>
+        <span class="n">ag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">260</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">adp</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ag</span><span class="p">,</span> <span class="c1">#360self.az*180/np.pi,</span>
+                <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">adp</span><span class="p">)</span><span class="o">-</span><span class="n">Gtyp</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
         <span class="c1">#ax.vlines(self.tau,ymin=-130,ymax=-40,linestyles=&#39;dashed&#39;,color=&#39;blue&#39;)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="n">xmin</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">260</span><span class="p">,</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+        <span class="c1">#ax.set_ylim(-80,-60)</span>
         <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Angle (degrees)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span> 
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Angle [deg]&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span> 
         <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;level (dB)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span> 
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+
+        <span class="c1">#ax.set_title(self._filename,fontsize=fontsize)</span>
         <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span> 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
@@ -822,6 +874,177 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">FS</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">u</span>
+
+    <span class="k">def</span> <span class="nf">pdp_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculate and plot Power Delay Profile</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fcGHz : float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+                     <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">18</span><span class="p">,</span>
+                     <span class="s1">&#39;fig&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+                     <span class="s1">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                     <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;legend&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;losdelay&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;freespace&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;desembeded&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;noisefloor&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;typic&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;semilogx&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;bcir&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;Gmax&#39;</span><span class="p">:</span><span class="mf">22.68</span><span class="p">,</span>
+                     <span class="s1">&#39;Gmin&#39;</span><span class="p">:</span><span class="mi">19</span><span class="p">,</span>
+                     <span class="s1">&#39;threshdB&#39;</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span>
+                     <span class="s1">&#39;imax&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="s1">&#39;Tilt&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
+                     <span class="s1">&#39;HPBW&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
+                     <span class="s1">&#39;dphi&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="s1">&#39;marker&#39;</span><span class="p">:</span><span class="s1">&#39;*&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;label&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span><span class="mi">1</span>
+                    <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        
+        <span class="n">Gmax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;Gmax&#39;</span><span class="p">)</span>
+        <span class="n">Gmin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;Gmin&#39;</span><span class="p">)</span>
+        <span class="n">imax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;imax&#39;</span><span class="p">)</span>
+        <span class="n">threshdB</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;threshdB&#39;</span><span class="p">)</span>
+        <span class="n">Gtyp</span> <span class="o">=</span> <span class="p">(</span><span class="n">Gmax</span><span class="o">+</span><span class="n">Gmin</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="c1"># get peak value of the PADP</span>
+        <span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak</span><span class="p">()</span>
+        <span class="n">Na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># pdp : power delay profie </span>
+        <span class="n">Py</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">pap0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Py</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pap0dB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pap0</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">pap0dB</span><span class="o">&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">pap0dB</span><span class="p">,</span><span class="n">threshdB</span><span class="p">)</span>
+        <span class="n">pdp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Py</span><span class="p">[</span><span class="n">u</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">pdp</span> <span class="o">=</span> <span class="n">pdp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">imax</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">imax</span><span class="p">]</span>
+        <span class="c1"># spdp : square root of power delay profie </span>
+        <span class="n">spdp</span> <span class="o">=</span> <span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pdp</span><span class="p">))</span>
+        <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pdp</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">pdp</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">FS</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span><span class="p">))</span>
+        <span class="n">AttmaxdB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="c1">#Gmax = AttmaxdB-FS[u] </span>
+        <span class="c1">#Gmax_r = np.round(Gmax[0]*100)/100.</span>
+        <span class="c1">#</span>
+        <span class="c1"># The -3dB is specific to the Aalto measurement and desembeding (1/2)</span>
+        <span class="c1">#</span>
+        <span class="n">pdp_min</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdp</span><span class="p">)</span><span class="o">-</span><span class="n">Gmax</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">pdp_max</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdp</span><span class="p">)</span><span class="o">-</span><span class="n">Gmin</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">pdp_typ</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdp</span><span class="p">)</span><span class="o">-</span><span class="n">Gtyp</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">uflashing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pdp_typ</span><span class="o">&gt;</span><span class="n">FS</span><span class="p">)</span>
+
+        <span class="n">umin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pdp_min</span><span class="o">&gt;-</span><span class="mi">118</span><span class="p">)</span>
+        <span class="n">pdp_min_thr</span> <span class="o">=</span> <span class="n">pdp_min</span><span class="p">[</span><span class="n">umin</span><span class="p">]</span> 
+        <span class="n">umax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pdp_max</span><span class="o">&gt;-</span><span class="mi">118</span><span class="p">)</span>
+        <span class="n">pdp_max_thr</span> <span class="o">=</span> <span class="n">pdp_max</span><span class="p">[</span><span class="n">umax</span><span class="p">]</span> 
+        <span class="n">PL</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">pdp_min_thr</span><span class="o">/</span><span class="mf">10.</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span> 
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">ax</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;semilogx&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdp</span><span class="p">),</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="c1">#ax.semilogx(np.array([tau]),np.array([AttmaxdB]),color=&#39;k&#39;)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;desembeded&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">pdp_min</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Gmax</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">pdp_max</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Gmin</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typic&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">pdp_typ</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">pdp_typ</span><span class="p">[</span><span class="n">uflashing</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">uflashing</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;freespace&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typic&#39;</span><span class="p">]:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">FS</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Free Space path profile&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">FS</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Free Space path profile&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;losdelay&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taupeak_est</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">130</span><span class="p">,</span><span class="n">xmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taulos_geo</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">130</span><span class="p">,</span><span class="n">xmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;noisefloor&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="o">-</span><span class="mi">130</span><span class="p">,</span><span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+            <span class="c1">#ax.set_xlim(10,1000)</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;xlabel&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Delay (ns) log scale&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span> 
+            
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bcir&#39;</span><span class="p">]:</span>
+                <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angpeak_est</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+                <span class="n">dang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">az</span> <span class="o">-</span> <span class="n">phi</span><span class="p">)</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dang</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dang</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span><span class="o">-</span><span class="n">Gmax</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span><span class="o">-</span><span class="n">Gmin</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdp</span><span class="p">),</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi))$&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">AttmaxdB</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">tau</span><span class="p">]),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;desembeded&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pdp_min</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Gmax</span><span class="p">))</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pdp_max</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$10\log_{10}(\sum_{\phi} PADP(\phi)) - $&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Gmin</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typic&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pdp_typ</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">pdp_typ</span><span class="p">[</span><span class="n">uflashing</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">uflashing</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;freespace&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typic&#39;</span><span class="p">]:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">FS</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Free Space path profile&#39;</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">FS</span><span class="o">-</span><span class="p">(</span><span class="n">Gmax</span><span class="o">-</span><span class="n">Gmin</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Free Space path profile&#39;</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">FS</span><span class="o">+</span><span class="p">(</span><span class="n">Gmax</span><span class="o">-</span><span class="n">Gmin</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Free Space path profile&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">FS</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Free Space path profile&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;losdelay&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taupeak_est</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">130</span><span class="p">,</span><span class="n">xmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taulos_geo</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">130</span><span class="p">,</span><span class="n">xmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;noisefloor&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="o">-</span><span class="mi">130</span><span class="p">,</span><span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+            <span class="c1">#ax.set_xlim(0,1000)</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;xlabel&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Delay (ns)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span> 
+            
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bcir&#39;</span><span class="p">]:</span>
+                <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angpeak_est</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+                <span class="n">dang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">az</span> <span class="o">-</span> <span class="n">phi</span><span class="p">)</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dang</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dang</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span><span class="o">-</span><span class="n">Gmax</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span><span class="o">-</span><span class="n">Gmin</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ylabel&#39;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;level (dB)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">])</span> 
+        <span class="c1">#ax.set_title(self._filename+&#39; &#39;+str(PL))</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;legend&#39;</span><span class="p">]:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span> 
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
 <div class="viewcode-block" id="ADPchannel.pdp"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.ADPchannel.pdp.html#pylayers.antprop.channel.ADPchannel.pdp">[docs]</a>    <span class="k">def</span> <span class="nf">pdp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate and plot Power Delay Profile</span>
@@ -868,7 +1091,9 @@
         <span class="c1"># get peak value of the PADP</span>
         <span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak</span><span class="p">()</span>
         <span class="n">Na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># pdp : power delay profie </span>
         <span class="n">pdp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c1"># spdp : square root of power delay profie </span>
         <span class="n">spdp</span> <span class="o">=</span> <span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pdp</span><span class="p">))</span>
         <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pdp</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">pdp</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">FS</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span><span class="p">))</span>
@@ -976,6 +1201,24 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        L : Layout</span>
+<span class="sd">        xmin : 10 </span>
+<span class="sd">        xmax : 400</span>
+<span class="sd">        ymin : 10</span>
+<span class="sd">        ymax : 400,</span>
+<span class="sd">        Nx  :3000,</span>
+<span class="sd">        Ny  :3000,</span>
+<span class="sd">        &#39;cmap&#39;:&#39;jet&#39;,</span>
+<span class="sd">        &#39;mode&#39;:&#39;image&#39;,</span>
+<span class="sd">        &#39;excess&#39;:&#39;los&#39;,</span>
+<span class="sd">        &#39;figsize&#39;:(20,20),</span>
+<span class="sd">        &#39;thmindB&#39;:-110,</span>
+<span class="sd">        &#39;thmaxdB&#39;:-108,</span>
+<span class="sd">        &#39;vmindB&#39;:-110,</span>
+<span class="sd">        &#39;vmaxdB&#39;:-60,</span>
+<span class="sd">        &#39;offset&#39;:0,</span>
+<span class="sd">        &#39;display&#39;:True,</span>
+<span class="sd">        &#39;compensated&#39;:True,</span>
+<span class="sd">        &#39;tauns_excess&#39;:0</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -986,7 +1229,7 @@
                     <span class="s1">&#39;Nx&#39;</span><span class="p">:</span><span class="mi">3000</span><span class="p">,</span>
                     <span class="s1">&#39;Ny&#39;</span><span class="p">:</span><span class="mi">3000</span><span class="p">,</span>
                     <span class="s1">&#39;cmap&#39;</span><span class="p">:</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="s1">&#39;image&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="s1">&#39;sbounce&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;excess&#39;</span><span class="p">:</span><span class="s1">&#39;los&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span>
                     <span class="s1">&#39;thmindB&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">110</span><span class="p">,</span>
@@ -995,7 +1238,7 @@
                     <span class="s1">&#39;vmaxdB&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span>
                     <span class="s1">&#39;offset&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                     <span class="s1">&#39;display&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;compensated&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;compensated&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s1">&#39;tauns_excess&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -1019,6 +1262,10 @@
         <span class="n">compensated</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;compensated&#39;</span><span class="p">)</span>
         <span class="n">tauns_excess</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tauns_excess&#39;</span><span class="p">)</span>
         <span class="n">figsize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;figsize&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span> 
         
         <span class="c1">#</span>
         <span class="c1"># Prepare the array for spatial information in horizontal plane x,y</span>
@@ -1066,7 +1313,10 @@
         <span class="n">taumax</span> <span class="o">=</span> <span class="n">dmax</span><span class="o">/</span><span class="mf">0.3</span>
 
         <span class="c1"># determine index of maximal distance </span>
-        <span class="n">itaumax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">&gt;</span><span class="n">taumax</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&gt;</span><span class="n">taumax</span><span class="p">:</span>
+            <span class="n">itaumax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">&gt;</span><span class="n">taumax</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">itaumax</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
         <span class="c1"># convert maximal distance into maximal delay (self.x is delay) </span>
         <span class="n">taumax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">itaumax</span><span class="p">]</span>
         <span class="c1"># determine coefficient  between delay and index ( ns --&gt; integer) </span>
@@ -1135,6 +1385,7 @@
         <span class="c1"># back to matrix form</span>
         <span class="c1">#</span>
         <span class="n">Z</span> <span class="o">=</span> <span class="n">rz</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nx</span><span class="p">,</span><span class="n">Ny</span><span class="p">)</span>
+        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
         <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">fcGHz</span>
         <span class="n">sqG</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="n">Z_compensated</span> <span class="o">=</span> <span class="n">Z</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">dtx_rx</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">sqG</span><span class="o">*</span><span class="n">lmbda</span><span class="p">)</span>
@@ -1152,23 +1403,24 @@
         <span class="c1"># constructing figure</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-            <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1">#fig=plt.figure(figsize=figsize)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ZdB</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">xr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">xr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">yr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">yr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ZdB</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">xr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">xr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">yr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">yr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
                     <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
                     <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
                     <span class="n">vmin</span><span class="o">=</span><span class="n">ZdBmax</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span>
                     <span class="n">vmax</span><span class="o">=</span><span class="n">ZdBmax</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span>
             <span class="c1">#plt.imshow(mzdB,alpha=0.9,origin=&#39;lower&#39;)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;ob&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;ob&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+            <span class="c1">#plt.savefig(self._filename+&#39;.png&#39;)</span>
 
-        <span class="k">return</span> <span class="n">Z</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">xr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">Nx</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">yr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">yr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">Ny</span><span class="p">)</span></div>
+        <span class="c1">#return Z,np.linspace(xr[0],xr[-1],Nx),np.linspace(yr[0],yr[-1],Ny)</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
 
 <div class="viewcode-block" id="ADPchannel.polarplot"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.ADPchannel.polarplot.html#pylayers.antprop.channel.ADPchannel.polarplot">[docs]</a>    <span class="k">def</span> <span class="nf">polarplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  polar plot of PADP </span>
@@ -5765,7 +6017,7 @@
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Oct 25, 2017.
+      Last updated on Nov 04, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
