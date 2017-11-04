@@ -39,7 +39,7 @@ Layout Class
     Layout.buildGw
     Layout.check
     Layout.check2
-    Layout.check_Gi
+    ssayout.check_Gi
     Layout.chgmss
     Layout.cleanup
     Layout.clip
@@ -423,6 +423,7 @@ class Layout(pro.PyLayers):
         self.Np = 0
         self.Ns = 0
         self.Nss = 0
+        self.lsss = []
 
         #
         # Initializing graphs

@@ -757,7 +757,7 @@ class ADPchannel(bs.TUsignal):
                      'raw': False,
                      'Gmax':22.68,
                      'Gmin':19,
-                     'threshdB':-82.5,
+                     'threshdB':75,
                      'imax':-1,
                      'Tilt':10,
                      'HPBW':10,
@@ -784,7 +784,7 @@ class ADPchannel(bs.TUsignal):
         Py = np.real(self.y*np.conj(self.y))
         pap0 = np.sum(Py,axis=1)
         pap0dB = 10*np.log10(pap0)
-        u = pap0dB>threshdB
+        u = pap0dB>np.percentile(pap0dB,threshdB)
         pdp = np.sum(Py[u,:],axis=0)
         pdp = pdp[0:imax]
         x = self.x[0:imax]
@@ -842,7 +842,7 @@ class ADPchannel(bs.TUsignal):
                 ax.hlines(self.taulos_geo,xmin=-130,xmax=-40,linestyles='dashed',color='red')
 
             if kwargs['noisefloor']:
-                ax.vlines(-120,ymin=0,ymax=x[-1],linestyles='dashed',color='black')
+                ax.vlines(-130,ymin=0,ymax=x[-1],linestyles='dashed',color='black')
 
             #ax.set_xlim(10,1000)
             if kwargs['xlabel']:
@@ -879,6 +879,8 @@ class ADPchannel(bs.TUsignal):
                 ax.hlines(self.taupeak_est,xmin=-130,xmax=-40,linestyles='dashed',color='blue')
                 ax.hlines(self.taulos_geo,xmin=-130,xmax=-40,linestyles='dashed',color='red')
 
+            if kwargs['noisefloor']:
+                ax.vlines(-130,ymin=0,ymax=x[-1],linestyles='dashed',color='red')
             #ax.set_xlim(0,1000)
             if kwargs['xlabel']:
                 ax.set_ylabel('Delay (ns)',fontsize=kwargs['fontsize']) 
