@@ -948,7 +948,7 @@ class Pattern(PyLayers):
         return Ft,Fp
 
     def __p3gpp(self,**kwargs):
-        """ 3GPP pattern
+        """ 3GPP antenna pattern
 
         Parameters
         ----------
@@ -998,8 +998,8 @@ class Pattern(PyLayers):
         pol    = self.param['pol']
 
         self.pol = pol
-        # convert radian to degree
 
+        # convert radian to degree
         phi   = self.phi*180/np.pi-180
         theta = self.theta*180/np.pi-90
 
@@ -1614,19 +1614,23 @@ class Pattern(PyLayers):
 
         """
         assert self.pol in ['t','p','c']
+
         if self.pol=='p':
             Fp = self.sqG
-            if len(self.sqG.shape)==3:
-                Ft = np.array([0])*np.ones(len(self.fGHz))[None,None,:]
-            else:
-                Ft = np.array([0])*np.ones(len(self.fGHz))[None,:]
+            Ft = np.zeros(Fp.shape)
+            #if len(self.sqG.shape)==3:
+            #    Ft = np.array([0])*np.ones(len(self.fGHz))[None,None,:]
+            #else:
+            #    Ft = np.array([0])*np.ones(len(self.fGHz))[None,:]
 
         if self.pol=='t':
-            if len(self.sqG.shape)==3:
-                Fp = np.array([0])*np.ones(len(self.fGHz))[None,None,:]
-            else:
-                Fp = np.array([0])*np.ones(len(self.fGHz))[None,:]
+            #if len(self.sqG.shape)==3:
+            #    Fp = np.array([0])*np.ones(len(self.fGHz))[None,None,:]
+            #else:
+            #    Fp = np.array([0])*np.ones(len(self.fGHz))[None,:]
             Ft = self.sqG
+            Fp = np.zeros(Ft.shape)
+
         if self.pol=='c':
             Fp = (1./np.sqrt(2))*self.sqG
             Ft = (1j/np.sqrt(2))*self.sqG
@@ -1683,6 +1687,7 @@ class Pattern(PyLayers):
             self.sl = M[:,2].squeeze()
             uth = M[:,0] 
             uph = M[:,1] 
+
             el = self.Ft[tuple(self.umax)]*uth + self.Fp[tuple(self.umax)]*uph
             eln = el/np.linalg.norm(el)
             self.el = np.abs(eln.squeeze())
@@ -2116,17 +2121,17 @@ class Antenna(Pattern):
                 self.ext='hfss'
                 self.loadhfss(typ, self.nth, self.nph)
 
-        else:
-            self.typ=typ
-            self._filename=typ
-            if self.typ=='vsh3':
+        else: # not from file 
+            self.typ = typ
+            self._filename = typ
+            if self.typ=='vsh3':  
                 self.initvsh()
             else:
                 self.eval()
 
     def __repr__(self):
         st = ''
-        st = st + 'Antenna type : ' + self.typ +'\n'
+        st = st + 'type : ' + self.typ +'\n'
         st = st+'------------------------\n'
         if 'param' in self.__dict__:
             for k in self.param:
