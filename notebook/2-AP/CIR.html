@@ -182,7 +182,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="sorting-and-cutting">
+  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>dimanche 5 novembre 2017, 17:55:56 (UTC+0100)
+</pre></div>
+</div>
+<div class="section" id="sorting-and-cutting">
 <h1>Sorting and Cutting<a class="headerlink" href="#sorting-and-cutting" title="Permalink to this headline">¶</a></h1>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>import mayavi.mlab as mlab
 from pylayers.simul.link import *
@@ -222,15 +228,15 @@ Warning Unable to read graph Gw
 Layout Graph loaded
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures:  33%|????????????      | 33.3333333333/100 [00:06&lt;00:12,  5.52it/s]/home/uguen/Documents/rch/devel/pylayers/pylayers/util/geomutil.py:3553: RuntimeWarning: invalid value encountered in double_scalars
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures:  33%|????????????      | 33.3333333333/100 [00:06&lt;00:12,  5.41it/s]/home/uguen/Documents/rch/devel/pylayers/pylayers/util/geomutil.py:3553: RuntimeWarning: invalid value encountered in double_scalars
   ratio = np.linalg.norm(tahe[1]-tahe[0])/np.linalg.norm(p1-p0)
-Signatures: 100.0it [00:12, 11.03it/s]
+Signatures: 100.0it [00:12, 10.72it/s]
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>Warning : IntR class implemented for mat with only 1 layer
 </pre></div>
 </div>
-<img alt="../../_images/CIR_2_4.png" src="../../_images/CIR_2_4.png" />
+<img alt="../../_images/CIR_3_4.png" src="../../_images/CIR_3_4.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>S.wav
 </pre></div>
 </div>
@@ -263,12 +269,12 @@ Signatures: 100.0it [00:12, 11.03it/s]
 S.H.show(fig=fig)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e35e95d0&gt;,
- [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e35e9550&gt;,
-  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e358fa50&gt;])
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65f14e950&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65f14e590&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65f0ad5d0&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/CIR_8_1.png" src="../../_images/CIR_8_1.png" />
+<img alt="../../_images/CIR_9_1.png" src="../../_images/CIR_9_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>u = S.H.sort(typ=&#39;tau&#39;)
 </pre></div>
 </div>
@@ -303,12 +309,12 @@ S.H.show(fig=fig)
 S.H.show(fig=fig)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e3305510&gt;,
- [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e3305350&gt;,
-  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e3468a90&gt;])
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65f0f5a10&gt;,
+ [&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65f0f5890&gt;,
+  &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65ee8e0d0&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/CIR_11_1.png" src="../../_images/CIR_11_1.png" />
+<img alt="../../_images/CIR_12_1.png" src="../../_images/CIR_12_1.png" />
 <p>Let sort the <span class="math">\(H\)</span> channel by energy</p>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>#u = S.H.sort(typ=&#39;energy&#39;)
 </pre></div>
@@ -321,7 +327,7 @@ S.H.show(fig=fig)
 wav.show()
 </pre></div>
 </div>
-<img alt="../../_images/CIR_15_0.png" src="../../_images/CIR_15_0.png" />
+<img alt="../../_images/CIR_16_0.png" src="../../_images/CIR_16_0.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>h  = S.H.totime()
 # applyu waveform
 </pre></div>
@@ -494,10 +500,10 @@ print h.y.shape
 plt.plot(h.taud,abs(Ehf[:,0,0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc1e1eeca50&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fb65da4f990&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/CIR_24_1.png" src="../../_images/CIR_24_1.png" />
+<img alt="../../_images/CIR_25_1.png" src="../../_images/CIR_25_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>Eh = np.sum(np.abs(h.y),axis=-1)
 </pre></div>
 </div>
@@ -510,10 +516,10 @@ plt.plot(h.taud,abs(Ehf[:,0,0]))
 <div class="code highlight-none"><div class="highlight"><pre><span></span>plt.plot(h.taud,abs(Eh[:,0,0]))
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fc1e1e23fd0&gt;]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fb65d98af10&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/CIR_27_1.png" src="../../_images/CIR_27_1.png" />
+<img alt="../../_images/CIR_28_1.png" src="../../_images/CIR_28_1.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>hw = S.H.applywav(wav.sfg)
 </pre></div>
 </div>
@@ -551,27 +557,27 @@ for k in range(Nray):
   return array(a, dtype, copy=False, order=order)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fc1e1c76150&gt;
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fb65d7d8210&gt;
 </pre></div>
 </div>
 <div class="highlight-none"><div class="highlight"><pre><span></span>/home/uguen/anaconda2/lib/python2.7/site-packages/matplotlib/backends/backend_agg.py:166: ComplexWarning: Casting complex values to real discards the imaginary part
   self._renderer.draw_path(gc, path, transform, rgbFace)
 </pre></div>
 </div>
-<img alt="../../_images/CIR_29_3.png" src="../../_images/CIR_29_3.png" />
-<img alt="../../_images/CIR_29_4.png" src="../../_images/CIR_29_4.png" />
+<img alt="../../_images/CIR_30_3.png" src="../../_images/CIR_30_3.png" />
+<img alt="../../_images/CIR_30_4.png" src="../../_images/CIR_30_4.png" />
 </div>
 <div class="section" id="ray-visuzalization">
 <h1>Ray visuzalization<a class="headerlink" href="#ray-visuzalization" title="Permalink to this headline">¶</a></h1>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[10:20])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e0b5eb50&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e0aae310&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c6c3b90&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c613210&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/CIR_31_1.png" src="../../_images/CIR_31_1.png" />
-<img alt="../../_images/CIR_31_2.png" src="../../_images/CIR_31_2.png" />
+<img alt="../../_images/CIR_32_1.png" src="../../_images/CIR_32_1.png" />
+<img alt="../../_images/CIR_32_2.png" src="../../_images/CIR_32_2.png" />
 <div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.keys()
 </pre></div>
 </div>
@@ -618,39 +624,39 @@ pRx : [ 26.03317253   0.50907312   1.2       ]
 <div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[0:10])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e0914e50&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e0927750&gt;)
-</pre></div>
-</div>
-<img alt="../../_images/CIR_34_1.png" src="../../_images/CIR_34_1.png" />
-<img alt="../../_images/CIR_34_2.png" src="../../_images/CIR_34_2.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
-</pre></div>
-</div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e0752890&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e075f190&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c478d90&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c48a690&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_35_1.png" src="../../_images/CIR_35_1.png" />
 <img alt="../../_images/CIR_35_2.png" src="../../_images/CIR_35_2.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[20:30])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e058e1d0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e058ea90&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c2b57d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c2c40d0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_36_1.png" src="../../_images/CIR_36_1.png" />
 <img alt="../../_images/CIR_36_2.png" src="../../_images/CIR_36_2.png" />
-<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[40:50])
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fc1e043ead0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc1e03d03d0&gt;)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65c0f1110&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65c0f19d0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/CIR_37_1.png" src="../../_images/CIR_37_1.png" />
 <img alt="../../_images/CIR_37_2.png" src="../../_images/CIR_37_2.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S.R.show(L=S.L,rlist=u[50:60])
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fb65bfa2a10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb65bf35310&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/CIR_38_1.png" src="../../_images/CIR_38_1.png" />
+<img alt="../../_images/CIR_38_2.png" src="../../_images/CIR_38_2.png" />
 </div>
 
 
