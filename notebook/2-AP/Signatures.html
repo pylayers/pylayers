@@ -184,7 +184,7 @@
   <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>dimanche 5 novembre 2017, 18:18:33 (UTC+0100)
+<div class="highlight-none"><div class="highlight"><pre><span></span>dimanche 5 novembre 2017, 19:55:10 (UTC+0100)
 </pre></div>
 </div>
 <div class="section" id="ray-signatures">
@@ -216,14 +216,18 @@ plt.axis(&#39;off&#39;)
 </div>
 <img alt="../../_images/Signatures_6_1.png" src="../../_images/Signatures_6_1.png" />
 <p>The graph of interactions is shown below :</p>
-<div class="code highlight-none"><div class="highlight"><pre><span></span>L.showG(&#39;si&#39;,figsize=(10,5))
-plt.axis(&#39;off&#39;)
+<div class="code highlight-none"><div class="highlight"><pre><span></span>L._showGi()
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>(-2.0, 12.0, -1.0, 6.0)
+<div class="highlight-none"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x7fe6ec03d850&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x7fe6ec22b250&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Signatures_8_1.png" src="../../_images/Signatures_8_1.png" />
+<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x7fe6ec03d850&gt;
+</pre></div>
+</div>
+<p>The node of Gi are interactions. A transmission is noted</p>
 <div class="code highlight-none"><div class="highlight"><pre><span></span>L.Gi.node
 </pre></div>
 </div>
@@ -314,7 +318,7 @@ The mitigation of graph exploration depth is done in setting a
 <div class="code highlight-none"><div class="highlight"><pre><span></span>Si.run(cutoff=5,diffraction=False)
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100%|??????????????????????????????| 100.0/100 [00:08&lt;00:00, 11.99it/s]
+<div class="highlight-none"><div class="highlight"><pre><span></span>Signatures: 100%|??????????????????????????????| 100.0/100 [00:08&lt;00:00, 12.41it/s]
 </pre></div>
 </div>
 <p>The representation method of a signature gives informations about the
@@ -336,8 +340,8 @@ print ptx
 print prx
 </pre></div>
 </div>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[-0.310738    3.38642646]
-[ 2.97298436  3.0913993 ]
+<div class="highlight-none"><div class="highlight"><pre><span></span>[-0.09171178  3.49732285]
+[ 2.67234051  2.63713575]
 </pre></div>
 </div>
 </div>
