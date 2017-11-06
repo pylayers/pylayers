@@ -1161,18 +1161,34 @@
 <div class="viewcode-block" id="Layout.g2npy"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.html#pylayers.gis.layout.Layout.g2npy">[docs]</a>    <span class="k">def</span> <span class="nf">g2npy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; conversion from graphs to numpy arrays</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        verbose : boolean </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        This function updates the following arrays:</span>
 
-<span class="sd">        self.pt   (2xNp)</span>
-<span class="sd">        self.tahe (2xNs)</span>
-<span class="sd">        self.tgs</span>
-<span class="sd">        self.dca  : dictionnary of cycle with an airwall</span>
-<span class="sd">        self.lsss : list of subsegments</span>
+<span class="sd">        + self.pt   (2xNp)</span>
+<span class="sd">        + self.pg   center of gravity </span>
+<span class="sd">        + self.tahe (2xNs)</span>
+<span class="sd">        + self.tgs  : graph to segment </span>
+<span class="sd">        + self.tsg  : segment to graph</span>
+<span class="sd">        + self.dca  : dictionnary of cycle with an airwall</span>
+<span class="sd">        + self.s2pu : sparse_lil_matrx </span>
+<span class="sd">        + self.s2pc : sparse_lil_matrx </span>
+<span class="sd">        + self.lsss : list of iso segments</span>
+<span class="sd">        + self.maxheight : </span>
+<span class="sd">        + self.normal :</span>
 
 <span class="sd">        assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        extrseg</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 

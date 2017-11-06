@@ -35,8 +35,7 @@
         <link rel="author" title="About these documents"
               href="../about.html"/>
     <link rel="top" title="Python 1 documentation" href="../index.html"/>
-        <link rel="up" title="PyLayers Modules Reference" href="pylayers.html"/>
-        <link rel="prev" title="pylayers.simul.simultraj.Simul.update_pos" href="generated/pylayers.simul.simultraj.Simul.update_pos.html"/> 
+        <link rel="up" title="PyLayers Modules Reference" href="pylayers.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -88,7 +87,7 @@
           
             
             
-                <ul class="current">
+                <ul>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html">1&nbsp;&nbsp;&nbsp;Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#radio-propagation-simulation">2&nbsp;&nbsp;&nbsp;Radio Propagation Simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#handling-agent-mobility">3&nbsp;&nbsp;&nbsp;Handling Agent Mobility</a></li>
@@ -98,32 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#measurements-tools">7&nbsp;&nbsp;&nbsp;Measurements Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#pylayers-tools">8&nbsp;&nbsp;&nbsp;PyLayers Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebook/TOC.html#references">9&nbsp;&nbsp;&nbsp;References</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="pylayers.html">PyLayers Modules Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#simulations">Simulations</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="pylayers.html#antenna-and-propagation">Antenna and Propagation</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="pylayers.html#antenna">Antenna</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">pylayers.antprop.antenna</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.antssh.html">pylayers.antprop.antssh</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.antvsh.html">pylayers.antprop.antvsh</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.spharm.html">pylayers.antprop.spharm</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pylayers.antprop.aarray.html">pylayers.antprop.aarray</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.html#materials-and-slabs">Materials and Slabs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.html#channel">Channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.html#ray-tracing">Ray Tracing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pylayers.html#path-loss">Path Loss</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#geographical-information">Geographical Information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#localization-algorithms">Localization Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#measurement-data">Measurement Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#agents-and-bodies-mobility">Agents and Bodies Mobility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#networks">Networks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#physical-layer">Physical Layer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pylayers.html#utility-classes-and-functions">Utility classes and functions</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="pylayers.html">PyLayers Modules Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout1.html">Loading an outdoor layout from its address</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_antenna.html">Antenna Pattern for an H plane sectoral antenna &#64; 32GHz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_exLayout2.html">Building graphs of a Layout</a></li>
@@ -458,7 +432,7 @@ if False  direction    : ndir x nf</p>
 <blockquote>
 <div><p>From Balanis (Formula 4.62(a))</p>
 <div class="math">
-\[F_{   heta}(  heta,\phi) = \left[  \]</div>
+\[F_{ heta}(  heta,\phi) = \left[  \]</div>
 </div></blockquote>
 <p>rac{cosleft(
 rac{kl}{2}cos     heta
@@ -635,43 +609,9 @@ values are append at the end of sqG.</p>
 <dt id="pylayers.antprop.antenna.Pattern.gain">
 <code class="descname">gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Pattern.gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Pattern.gain" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates antenna gain</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self.G</strong> : np.array(Nt,Np,Nf) dtype:float</p>
-<blockquote class="last">
-<div><blockquote>
-<div><dl class="docutils">
-<dt>linear gain </dt>
-<dd><p class="first last">or np.array(Nr,Nf)</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="docutils">
-<dt>self.sqG</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">np.array(Nt,Np,Nf) dtype:float </span><dd><dl class="first last docutils">
-<dt>linear sqare root of gain </dt>
-<dd><p class="first last">or np.array(Nr,Nf)</p>
-</dd>
-</dl>
-</dd>
-<dt>self.efficiency</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtype:float </span><dd><p class="first last">efficiency</p>
-</dd>
-<dt>self.hpster</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtype:float</span><dd><p class="first last">half power solid angle :  1 ~ 4pi steradian</p>
-</dd>
-<dt>self.ehpbw</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">np.array (,Nf) dtyp:float </span><dd><p class="first last">equivalent half power beamwidth (radians)</p>
-</dd>
-</dl>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p>(</p>
+<p class="rubric">Notes</p>
+<div class="math">
+\[G(\theta,phi) = |F_{\theta}|^2 + |F_{\phi}|^2\]</div>
 </dd></dl>
 
 <dl class="method">
@@ -1092,9 +1032,9 @@ on the phase of diagram math::<code class="docutils literal"><span class="pre">F
 <p class="rubric">Notes</p>
 <div class="math">
 \[ \begin{align}\begin{aligned}\epsilon_r^{\theta} =
-\frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta)(\phi)|^2}
+\frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta,\phi)|^2}
      {|F_{\theta}(\theta,\phi)|^2}\\\epsilon_r^{\phi} =
-\frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta)(\phi)|^2}
+\frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta,\phi)|^2}
      {|F_{\theta}(\theta,\phi)|^2}\end{aligned}\end{align} \]</div>
 </dd></dl>
 
@@ -1608,13 +1548,6 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="generated/pylayers.simul.simultraj.Simul.update_pos.html" class="btn btn-neutral" title="pylayers.simul.simultraj.Simul.update_pos" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

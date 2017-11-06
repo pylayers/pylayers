@@ -1549,13 +1549,33 @@ nodelist : input nodelist</p>
 <dt id="pylayers.gis.layout.Layout.g2npy">
 <code class="descname">g2npy</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.g2npy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.g2npy" title="Permalink to this definition">¶</a></dt>
 <dd><p>conversion from graphs to numpy arrays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> : boolean</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylayers.gis.layout.Layout.extrseg" title="pylayers.gis.layout.Layout.extrseg"><code class="xref py py-obj docutils literal"><span class="pre">extrseg</span></code></a></p>
+</div>
 <p class="rubric">Notes</p>
 <p>This function updates the following arrays:</p>
-<p>self.pt   (2xNp)
-self.tahe (2xNs)
-self.tgs
-self.dca  : dictionnary of cycle with an airwall
-self.lsss : list of subsegments</p>
+<ul class="simple">
+<li>self.pt   (2xNp)</li>
+<li>self.pg   center of gravity</li>
+<li>self.tahe (2xNs)</li>
+<li>self.tgs  : graph to segment</li>
+<li>self.tsg  : segment to graph</li>
+<li>self.dca  : dictionnary of cycle with an airwall</li>
+<li>self.s2pu : sparse_lil_matrx</li>
+<li>self.s2pc : sparse_lil_matrx</li>
+<li>self.lsss : list of iso segments</li>
+<li>self.maxheight :</li>
+<li>self.normal :</li>
+</ul>
 <p>assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</p>
 </dd></dl>
 

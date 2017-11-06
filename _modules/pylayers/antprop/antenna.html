@@ -399,22 +399,24 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Ft</span><span class="p">,</span><span class="n">Fp</span></div>
         
-<div class="viewcode-block" id="Pattern.vsh"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.vsh">[docs]</a>    <span class="k">def</span> <span class="nf">vsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">vsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
             <span class="n">vsh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Pattern.ssh"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.ssh">[docs]</a>    <span class="k">def</span> <span class="nf">ssh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">89</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">ssh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">89</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
-            <span class="n">ssh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">dsf</span><span class="p">)</span></div>
+            <span class="n">ssh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">dsf</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__pdipole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; dipole antenna along z axis </span>
 
 <span class="sd">        From Balanis (Formula 4.62(a)) </span>
 <span class="sd">        </span>
-<span class="sd">        .. math:: F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] </span>
+<span class="sd">        .. math:: </span>
+<span class="sd">        </span>
+<span class="sd">            F_{\theta}(\theta,\phi) = \left[  \frac{\cos\left(\frac{kl}{2}\cos\theta\right)- \cos\left(\frac{kl}{2}\right)}{\sin \theta} \right] </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;param&#39;</span> <span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;l&#39;</span> <span class="p">:</span> <span class="mf">0.25</span> <span class="p">}</span> <span class="p">}</span>
@@ -1732,27 +1734,29 @@
 <div class="viewcode-block" id="Pattern.gain"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.Pattern.gain">[docs]</a>    <span class="k">def</span> <span class="nf">gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  calculates antenna gain</span>
 <span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
+<span class="sd">        Info</span>
+<span class="sd">        ----</span>
 
-<span class="sd">        self.G  : np.array(Nt,Np,Nf) dtype:float</span>
+<span class="sd">        This function updates the following attributes</span>
+
+<span class="sd">        + self.G  : np.array(Nt,Np,Nf) dtype:float</span>
 <span class="sd">            linear gain </span>
 <span class="sd">                  or np.array(Nr,Nf)</span>
-<span class="sd">        self.sqG : np.array(Nt,Np,Nf) dtype:float </span>
+<span class="sd">        + self.sqG : np.array(Nt,Np,Nf) dtype:float </span>
 <span class="sd">            linear sqare root of gain </span>
 <span class="sd">                  or np.array(Nr,Nf)</span>
-<span class="sd">        self.efficiency : np.array (,Nf) dtype:float </span>
+<span class="sd">        + self.efficiency : np.array (,Nf) dtype:float </span>
 <span class="sd">            efficiency </span>
-<span class="sd">        self.hpster : np.array (,Nf) dtype:float</span>
+<span class="sd">        + self.hpster : np.array (,Nf) dtype:float</span>
 <span class="sd">            half power solid angle :  1 ~ 4pi steradian </span>
-<span class="sd">        self.ehpbw : np.array (,Nf) dtyp:float </span>
+<span class="sd">        + self.ehpbw : np.array (,Nf) dtyp:float </span>
 <span class="sd">            equivalent half power beamwidth (radians)</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        .. math:: G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2</span>
-<span class="sd">(</span>
+<span class="sd">        .. math:: G(\\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Fp</span><span class="p">)</span>
                        <span class="o">+</span>  <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ft</span><span class="p">)</span> <span class="p">)</span>
@@ -2095,7 +2099,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Antenna.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__init__.html#pylayers.antprop.antenna.Antenna.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Omni&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -2219,9 +2223,9 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;vsh3&#39;</span><span class="p">:</span>  
                 <span class="bp">self</span><span class="o">.</span><span class="n">initvsh</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Antenna.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__repr__.html#pylayers.antprop.antenna.Antenna.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;type : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39;------------------------</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -2332,7 +2336,7 @@
 <span class="c1">#            st = st + &#39;Gain linear :&#39; + str(self.G ) + &#39;\n&#39;</span>
 <span class="c1">#            st = st + &#39;sqrt G :&#39; + str(self.sqG) + &#39;\n&#39;</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Antenna.initvsh"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.Antenna.initvsh">[docs]</a>    <span class="k">def</span> <span class="nf">initvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lmax</span><span class="o">=</span><span class="mi">45</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Initialize a void vsh structure</span>
@@ -2837,11 +2841,11 @@
 <span class="sd">        .. math::</span>
 
 <span class="sd">            \epsilon_r^{\\theta} =</span>
-<span class="sd">            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta)(\phi)|^2}</span>
+<span class="sd">            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta,\phi)|^2}</span>
 <span class="sd">                 {|F_{\\theta}(\\theta,\phi)|^2}</span>
 
 <span class="sd">            \epsilon_r^{\phi} =</span>
-<span class="sd">            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta)(\phi)|^2}</span>
+<span class="sd">            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta,\phi)|^2}</span>
 <span class="sd">                 {|F_{\\theta}(\\theta,\phi)|^2}</span>
 
 
@@ -3223,7 +3227,7 @@
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;No vsh coefficient calculated yet&quot;</span><span class="p">)</span></div>
 
     <span class="c1">#@mlab.show</span>
-<div class="viewcode-block" id="Antenna._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna._show3.html#pylayers.antprop.antenna.Antenna._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bnewfig</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bnewfig</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
                     <span class="n">bcolorbar</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="p">[],</span>
                     <span class="n">binteract</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -3326,7 +3330,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_is_selected</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_outline</span><span class="o">.</span><span class="n">visible</span>
             <span class="n">picker</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">on_mouse_pick</span><span class="p">(</span><span class="n">picker_callback</span><span class="p">)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 
 
@@ -4873,7 +4877,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ft</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fp</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fph</span></div></div>
 
-<div class="viewcode-block" id="forcesympol"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.forcesympol">[docs]</a><span class="k">def</span> <span class="nf">forcesympol</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">forcesympol</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot VSH transform vsh basis in 3D plot</span>
 
 <span class="sd">    Parameters</span>
@@ -5091,9 +5095,9 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Error: m&gt;n!!!&quot;</span><span class="p">)</span></div>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Error: m&gt;n!!!&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="compdiag"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.compdiag">[docs]</a><span class="k">def</span> <span class="nf">compdiag</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">Fthr</span><span class="p">,</span> <span class="n">Fphr</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;modulus&#39;</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">compdiag</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">Fthr</span><span class="p">,</span> <span class="n">Fphr</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;modulus&#39;</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; makes comparison between original pattern and reconstructed pattern</span>
 
 <span class="sd">    Parameters</span>
@@ -5332,9 +5336,9 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
     <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span></div>
+        <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BeamGauss"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.BeamGauss">[docs]</a><span class="k">def</span> <span class="nf">BeamGauss</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">Gmax</span><span class="o">=</span><span class="mf">19.77</span><span class="p">,</span><span class="n">HPBW_az</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">HPBW_el</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">Tilt</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">BeamGauss</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">Gmax</span><span class="o">=</span><span class="mf">19.77</span><span class="p">,</span><span class="n">HPBW_az</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">HPBW_el</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">Tilt</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Beam with a Gaussian shape</span>
 
 <span class="sd">    Parameters</span>
@@ -5359,9 +5363,9 @@
     <span class="n">taz</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">az</span><span class="o">/</span><span class="p">(</span><span class="n">HPBW_az</span><span class="o">*</span><span class="n">c</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">tel</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">el</span><span class="o">/</span><span class="p">(</span><span class="n">HPBW_el</span><span class="o">*</span><span class="n">c</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">Gmax</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">taz</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tel</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">gain</span><span class="p">)</span></div>
+    <span class="k">return</span><span class="p">(</span><span class="n">gain</span><span class="p">)</span>
 
-<div class="viewcode-block" id="show3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.show3D">[docs]</a><span class="k">def</span> <span class="nf">show3D</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">show3D</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; show 3D matplotlib diagram</span>
 
 <span class="sd">    Parameters</span>
@@ -5431,9 +5435,9 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">col</span><span class="p">):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot3D</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Z</span><span class="p">))</span></div>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot3D</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Z</span><span class="p">))</span>
 
-<div class="viewcode-block" id="AntPosRot"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.AntPosRot">[docs]</a><span class="k">class</span> <span class="nc">AntPosRot</span><span class="p">(</span><span class="n">Antenna</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AntPosRot</span><span class="p">(</span><span class="n">Antenna</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Antenna + position + Rotation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">T</span><span class="p">):</span>
@@ -5443,7 +5447,7 @@
     <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">Antenna</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">interact</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AntPosRot.field"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.AntPosRot.field">[docs]</a>    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -5470,7 +5474,7 @@
         <span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ft</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="mi">2</span><span class="p">][</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Fp</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][</span><span class="bp">None</span><span class="p">,:,</span><span class="bp">None</span><span class="p">])</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">dist</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span><span class="o">/</span><span class="mf">0.3</span><span class="p">)</span><span class="o">/</span><span class="n">dist</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
         <span class="n">EP</span> <span class="o">=</span> <span class="n">E</span><span class="o">*</span><span class="n">P</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">EP</span><span class="p">)</span></div></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">EP</span><span class="p">)</span>
         <span class="c1">#Rr, rangl = geu.BTB_rx(rang, self.Tr)</span>
 
 <span class="k">def</span> <span class="nf">_gain</span><span class="p">(</span><span class="n">Ft</span><span class="p">,</span><span class="n">Fp</span><span class="p">):</span>
@@ -5495,7 +5499,9 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 
-<span class="sd">    .. math:: G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2</span>
+<span class="sd">    .. math:: </span>
+<span class="sd">    </span>
+<span class="sd">        G(\theta,phi) = |F_{\\theta}|^2 + |F_{\\phi}|^2</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span> <span class="n">Fp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Fp</span><span class="p">)</span>
@@ -5603,7 +5609,7 @@
     <span class="n">hl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span><span class="n">el</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">GdBmax</span><span class="p">,</span><span class="n">theta_max</span><span class="p">,</span><span class="n">phi_max</span><span class="p">,(</span><span class="n">hl</span><span class="p">,</span><span class="n">sl</span><span class="p">,</span><span class="n">el</span><span class="p">)</span>
 
-<div class="viewcode-block" id="F0"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.F0">[docs]</a><span class="k">def</span> <span class="nf">F0</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">F0</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; F0 function for horn antenna pattern </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -5632,9 +5638,9 @@
     <span class="n">Fm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="n">sm</span>
 
     <span class="n">F</span> <span class="o">=</span> <span class="n">sf</span><span class="o">*</span><span class="n">expf</span><span class="o">*</span><span class="p">(</span><span class="n">Fp</span> <span class="o">-</span><span class="n">Fm</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">F</span> </div>
+    <span class="k">return</span> <span class="n">F</span> 
 
-<div class="viewcode-block" id="F1"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antenna.html#pylayers.antprop.antenna.F1">[docs]</a><span class="k">def</span> <span class="nf">F1</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">F1</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; F1 function for horn antenna pattern </span>
 <span class="sd">   </span>
 <span class="sd">    http://www.ece.rutgers.edu/~orfanidi/ewa/ch18.pdf</span>
@@ -5643,7 +5649,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">F</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">F0</span><span class="p">(</span><span class="n">nu</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span><span class="o">+</span><span class="n">F0</span><span class="p">(</span><span class="n">nu</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="n">sigma</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">F</span></div>
+    <span class="k">return</span> <span class="n">F</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
