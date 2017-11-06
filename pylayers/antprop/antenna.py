@@ -29,114 +29,15 @@ Examples
 Pattern Class
 -------------
 
-.. autosummary::
-    :toctree: generated/
-
-    Pattern.eval
-    Pattern.gain
-    Pattern.radF
-    Pattern._pdipole
-
-Pattern Functions
-=================
-
-    Pattern.__pOmni
-    Pattern.__pGauss
-    Pattern.__p3gpp
-    Pattern.__p3gpp
-
-Pattern from SH coeff
-=====================
-
-    Pattern.__pvsh3
-    Pattern.__psh3
-
+.. autoclass:: Pattern
+    :members:
+    :private-members:
 
 Antenna Class
 -------------
 
-.. autosummary::
-    :toctree: generated/
-
-
-Utility Functions
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    Antenna.__init__
-    Antenna.__repr__
-    Antenna.ls
-
-    Antenna.errel
-    Antenna.checkpole
-    Antenna.info
-
-
-    Antenna.pol2cart
-    Antenna.cart2pol
-    Antenna.minsh3
-    Antenna.mse
-    Antenna.getdelay
-    Antenna.elec_delay
-
-Synthesis Functions
-===================
-
-.. autosummary::
-    :toctree: generated/
-
-    Antenna.Fsynth
-    Antenna.Fsynth1
-    Antenna.Fsynth2s
-    Antenna.Fsynth2b
-    Antenna.Fsynth2
-    Antenna.Fsynth3
-
-Visualization functions
-=======================
-
-.. autosummary::
-    :toctree: generated/
-
-    Antenna.pattern
-    Antenna.plotG
-    Antenna._show3
-    Antenna.show3
-    Antenna.plot3d
-    Antenna.pol3d
-    Antenna.load_trx
-    Antenna.movie_vsh
-
-Loading and Saving
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-    Antenna.loadhfss
-    Antenna.loadtrx
-    Antenna.loadmat
-    Antenna.savevsh3
-    Antenna.savesh2
-    Antenna.savesh3
-    Antenna.loadvsh3
-    Antenna.loadsh3
-    Antenna.savevsh2
-    Antenna.loadsh2
-    Antenna.loadvsh2
-
-Miscellaneous  functions
-========================
-
-
-.. autosummary::
-    :toctree: generated/
-
-    forcesympol
-    compdiag
-    show3D
+.. autoclass:: Antenna
+    :members:
 
 
 """

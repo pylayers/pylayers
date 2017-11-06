@@ -17,14 +17,15 @@ Array class
 ===========
 
 .. autosummary::
+    :members:
     :toctree: generated/
 
-    Array.show
 
 ULAarray class
 ==============
 
 .. autosummary::
+    :members:
     :toctree: generated/
 
     set_position 
@@ -33,18 +34,15 @@ UCAarray
 ========
 
 .. autosummary::
+    :members:
     :toctree: generated/
 
 AntArray class
 ==============
 
 .. autosummary::
+    :members:
     :toctree: generated/
-
-    AntArray.steervec
-    AntArray.k2xyz
-    AntArray.xyztok
-    AntArray.weights
 
 
 """

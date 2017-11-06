@@ -4,13 +4,9 @@ Class Coverage
 ==============
 
 .. autosummary::
+    :members:
     :toctree: generated/
 
-    Coverage.creategrid
-    Coverage.cover
-    Coverage.sinr
-    Coverage.best
-    Coverage.show
 
 """
 from pylayers.util.project import *

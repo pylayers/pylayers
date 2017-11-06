@@ -8,15 +8,12 @@ r"""
 TBchannel class
 ===============
 
+.. autoclass::
+    TBchannel
+
 .. autosummary::
     :toctree: generated/
-
-    TBchannel.tau_Emax
-    TBchannel.tau_moy
-    TBchannel.tau_rms
-    TBchannel.delays
-    TBchannel.toFD
-    TBchannel.SalehValenzuela
+    :members:
 
 TUchannel class
 ===============
@@ -102,6 +99,8 @@ AFPchannel
 ==========
 
 Angular Frequency Profile Channel 
+
+.. autoclass:: AFPChannel 
 
 .. autosummary::
     :toctree: generated/
