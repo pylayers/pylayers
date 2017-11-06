@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.channel.ADPchannel.pdp &mdash; Python 1 documentation</title>
+    <title>pylayers.util.geomutil.MATP &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -30,9 +30,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
-    <link rel="next" title="pylayers.antprop.channel.ADPchannel.app" href="pylayers.antprop.channel.ADPchannel.app.html" />
-    <link rel="prev" title="pylayers.antprop.channel.ADPchannel.clean" href="pylayers.antprop.channel.ADPchannel.clean.html" />
+    <link rel="up" title="pylayers.util.geomutil" href="../pylayers.util.geomutil.html" />
+    <link rel="next" title="pylayers.util.geomutil.MEulerAngle" href="pylayers.util.geomutil.MEulerAngle.html" />
+    <link rel="prev" title="pylayers.util.geomutil.MRot3" href="pylayers.util.geomutil.MRot3.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -93,14 +93,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.channel.ADPchannel.clean.html" title="pylayers.antprop.channel.ADPchannel.clean"
+	<a href="pylayers.util.geomutil.MRot3.html" title="pylayers.util.geomutil.MRot3"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antp...
+	    pylayers.util...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.ADPchannel.clean
+	    pylayers.util.geomutil.MRot3
 	    </span>
 	    
 	    </a>
@@ -110,14 +110,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="pylayers.antprop.channel.ADPchannel.app.html" title="pylayers.antprop.channel.ADPchannel.app"
+	<a href="pylayers.util.geomutil.MEulerAngle.html" title="pylayers.util.geomutil.MEulerAngle"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antp...
+	    pylayers.util...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.ADPchannel.app
+	    pylayers.util.geomutil.MEulerAngle
 	    </span>
 	    
 	    </a>
@@ -144,14 +144,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="../pylayers.antprop.channel.html" title="pylayers.antprop.channel" >
+	<a href="../pylayers.util.geomutil.html" title="pylayers.util.geomutil" >
 	Up
 	<br>
 	<span class="smallrellink">
-	pylayers.antp...
+	pylayers.util...
 	</span>
 	<span class="hiddenrellink">
-	pylayers.antprop.channel
+	pylayers.util.geomutil
 	</span>
 	
 	</a>
@@ -167,7 +167,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.channel.ADPchannel.pdp</a></li>
+<li><a class="reference internal" href="#">pylayers.util.geomutil.MATP</a></li>
 </ul>
 
     
@@ -181,17 +181,28 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pylayers-antprop-channel-adpchannel-pdp">
-<h1>pylayers.antprop.channel.ADPchannel.pdp<a class="headerlink" href="#pylayers-antprop-channel-adpchannel-pdp" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.channel.ADPchannel.pdp">
-<code class="descclassname">ADPchannel.</code><code class="descname">pdp</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#ADPchannel.pdp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ADPchannel.pdp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate and plot Power Delay Profile</p>
+  <div class="section" id="pylayers-util-geomutil-matp">
+<h1>pylayers.util.geomutil.MATP<a class="headerlink" href="#pylayers-util-geomutil-matp" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.util.geomutil.MATP">
+<code class="descclassname">pylayers.util.geomutil.</code><code class="descname">MATP</code><span class="sig-paren">(</span><em>sl</em>, <em>el</em>, <em>phi</em>, <em>tilt</em>, <em>pol</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#MATP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.MATP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a rotation matrix for antenna pointing and orientation control</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fcGHz</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sl</strong> : np.array (,3) unitary</p>
+<blockquote>
+<div><p>main radiation direction in antenna local frame</p>
+</div></blockquote>
+<p><strong>el</strong> : np.array(,3) unitary</p>
+<blockquote>
+<div><p>main direction in the E field plane</p>
+</div></blockquote>
+<p><strong>phi</strong> : float 0&lt;phi&lt;2*pi</p>
+<p><strong>tilt</strong> : float -pi/2&lt;tilt&lt;pi/2</p>
+<p class="last"><strong>pol</strong> : string &#8216;H&#8217; (Horizontal) or &#8216;V&#8217; (Vertical)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -213,19 +224,19 @@
       Last updated on Nov 06, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.channel.ADPchannel.pdp.rst.txt"
+    <a href="../../_sources/modules/generated/pylayers.util.geomutil.MATP.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.channel.ADPchannel.clean.html">
+      <a href="pylayers.util.geomutil.MRot3.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.antprop.channel.ADPchannel.app.html">
+      <a href="pylayers.util.geomutil.MEulerAngle.html">
         Next
       </a>  
     </div>
