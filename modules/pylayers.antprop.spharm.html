@@ -35,8 +35,7 @@
         <link rel="author" title="About these documents"
               href="../about.html"/>
     <link rel="top" title="Python 1 documentation" href="../index.html"/>
-        <link rel="up" title="PyLayers Modules Reference" href="pylayers.html"/>
-        <link rel="next" title="pylayers.antprop.spharm.VectorCoeff.__init__" href="generated/pylayers.antprop.spharm.VectorCoeff.__init__.html"/> 
+        <link rel="up" title="PyLayers Modules Reference" href="pylayers.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -186,181 +185,586 @@
 <p>This module handles Scalar and Vector Spherical Harmonics in PyLayers</p>
 <div class="section" id="class-vectorcoeff">
 <h2>Class VectorCoeff<a class="headerlink" href="#class-vectorcoeff" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.__init__.html#pylayers.antprop.spharm.VectorCoeff.__init__" title="pylayers.antprop.spharm.VectorCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">VectorCoeff.__init__</span></code></a>(typ[,&nbsp;fmin,&nbsp;fmax,&nbsp;...])</td>
-<td>class constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VectorCoeff.inits1.html#pylayers.antprop.spharm.VectorCoeff.inits1" title="pylayers.antprop.spharm.VectorCoeff.inits1"><code class="xref py py-obj docutils literal"><span class="pre">VectorCoeff.inits1</span></code></a>(data,&nbsp;ind)</td>
-<td>init shape 1</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="class-sshcoeff">
 <h2>class SSHCoeff<a class="headerlink" href="#class-sshcoeff" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.antprop.spharm.SSHCoeff">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.spharm.</code><code class="descname">SSHCoeff</code><span class="sig-paren">(</span><em>Cx</em>, <em>Cy</em>, <em>Cz</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SSHCoeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SSHCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>scalar spherical harmonics</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Cx</td>
+<td>(coefficient for x axis)</td>
+</tr>
+<tr class="row-even"><td>Cy</td>
+<td>(coefficient for y axis)</td>
+</tr>
+<tr class="row-odd"><td>Cz</td>
+<td>(coefficient for z axis)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.__init__.html#pylayers.antprop.spharm.SSHCoeff.__init__" title="pylayers.antprop.spharm.SSHCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff.__init__</span></code></a>(Cx,&nbsp;Cy,&nbsp;Cz)</td>
-<td>class constructor</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.s2tos3.html#pylayers.antprop.spharm.SSHCoeff.s2tos3" title="pylayers.antprop.spharm.SSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff.s2tos3</span></code></a>([threshold])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.SSHCoeff.s2tos3" title="pylayers.antprop.spharm.SSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3</span></code></a>([threshold])</td>
 <td>convert scalar spherical coefficients from shape 2 to shape 3</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SSHCoeff.sets3.html#pylayers.antprop.spharm.SSHCoeff.sets3" title="pylayers.antprop.spharm.SSHCoeff.sets3"><code class="xref py py-obj docutils literal"><span class="pre">SSHCoeff.sets3</span></code></a>(Cx,&nbsp;Cy,&nbsp;Cz)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.SSHCoeff.sets3" title="pylayers.antprop.spharm.SSHCoeff.sets3"><code class="xref py py-obj docutils literal"><span class="pre">sets3</span></code></a>(Cx,&nbsp;Cy,&nbsp;Cz)</td>
 <td>set shape 3</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SSHCoeff.s2tos3">
+<code class="descname">s2tos3</code><span class="sig-paren">(</span><em>threshold=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SSHCoeff.s2tos3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SSHCoeff.s2tos3" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert scalar spherical coefficients from shape 2 to shape 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>threshold</strong> : float</p>
+<blockquote class="last">
+<div><p>default 1e-5</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>s3 corresponds to energy thresholded coefficients</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SSHCoeff.sets3">
+<code class="descname">sets3</code><span class="sig-paren">(</span><em>Cx</em>, <em>Cy</em>, <em>Cz</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SSHCoeff.sets3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SSHCoeff.sets3" title="Permalink to this definition">¶</a></dt>
+<dd><p>set shape 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Cx</strong> : SCoeff</p>
+<p><strong>Cy</strong> : SCoeff</p>
+<p class="last"><strong>Cz</strong> : SCoeff</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="class-scoeff">
 <h2>class SCoeff<a class="headerlink" href="#class-scoeff" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.antprop.spharm.SCoeff">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.spharm.</code><code class="descname">SCoeff</code><span class="sig-paren">(</span><em>typ='s2'</em>, <em>fmin=0.6</em>, <em>fmax=6</em>, <em>lmax=20</em>, <em>data=array([]</em>, <em>dtype=float64)</em>, <em>ind=array([]</em>, <em>dtype=float64)</em>, <em>k=array([]</em>, <em>dtype=float64)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>scalar Spherical Harmonics coefficients</p>
+<p>d = np.array [Nf,N+1,M+1]</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="82%" />
+<col width="18%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>s2  shape 2   np.array [ Nf x (N+1)*(M+1)   ]</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>s3  shape 3   np.array [ Nf x K     ]</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>ind [ K x 2]</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__init__.html#pylayers.antprop.spharm.SCoeff.__init__" title="pylayers.antprop.spharm.SCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.__init__</span></code></a>([typ,&nbsp;fmin,&nbsp;fmax,&nbsp;lmax,&nbsp;...])</td>
-<td>init VCoeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.__repr__.html#pylayers.antprop.spharm.SCoeff.__repr__" title="pylayers.antprop.spharm.SCoeff.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits2.html#pylayers.antprop.spharm.SCoeff.inits2" title="pylayers.antprop.spharm.SCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.inits2</span></code></a>(data,&nbsp;ind)</td>
-<td>initialize shape 2 format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.inits3.html#pylayers.antprop.spharm.SCoeff.inits3" title="pylayers.antprop.spharm.SCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
-<td>initialize shape 3 format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete.html#pylayers.antprop.spharm.SCoeff.delete" title="pylayers.antprop.spharm.SCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.delete</span></code></a>(ind,&nbsp;typ)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.delete" title="pylayers.antprop.spharm.SCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">delete</span></code></a>(ind,&nbsp;typ)</td>
 <td>delete coeff</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put.html#pylayers.antprop.spharm.SCoeff.put" title="pylayers.antprop.spharm.SCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.put</span></code></a>(typ)</td>
-<td>recover last deleted coeff</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.delete3.html#pylayers.antprop.spharm.SCoeff.delete3" title="pylayers.antprop.spharm.SCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.delete3</span></code></a>(ind)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.delete3" title="pylayers.antprop.spharm.SCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">delete3</span></code></a>(ind)</td>
 <td>delete coeff.s3</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.put3.html#pylayers.antprop.spharm.SCoeff.put3" title="pylayers.antprop.spharm.SCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.put3</span></code></a>(i,&nbsp;i3)</td>
-<td>function put3</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">help</span></code>([letter,&nbsp;typ])</td>
+<td>generic help</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.s3tos2.html#pylayers.antprop.spharm.SCoeff.s3tos2" title="pylayers.antprop.spharm.SCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.s3tos2</span></code></a>()</td>
-<td>transform shape3 to shape 2</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.inits2" title="pylayers.antprop.spharm.SCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">inits2</span></code></a>(data,&nbsp;ind)</td>
+<td>initialize shape 2 format</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.plot.html#pylayers.antprop.spharm.SCoeff.plot" title="pylayers.antprop.spharm.SCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.inits3" title="pylayers.antprop.spharm.SCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
+<td>initialize shape 3 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.plot" title="pylayers.antprop.spharm.SCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;color])</td>
 <td>plot coeff</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.SCoeff.show.html#pylayers.antprop.spharm.SCoeff.show" title="pylayers.antprop.spharm.SCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">SCoeff.show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.put" title="pylayers.antprop.spharm.SCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">put</span></code></a>(typ)</td>
+<td>recover last deleted coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.put3" title="pylayers.antprop.spharm.SCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
+<td>function put3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.s3tos2" title="pylayers.antprop.spharm.SCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></code></a>()</td>
+<td>transform shape3 to shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.SCoeff.show" title="pylayers.antprop.spharm.SCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;titre,&nbsp;...])</td>
 <td>show coeff</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>ind</em>, <em>typ</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ind</strong> : int</p>
+<p><strong>typ</strong> : int</p>
+<blockquote class="last">
+<div><p>2  shape 2  (Nf , N*M   )
+3  shape 3  (Nf , K )  T ( K x 2 )</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.delete3">
+<code class="descname">delete3</code><span class="sig-paren">(</span><em>ind</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.delete3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.delete3" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete coeff.s3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ind</strong> : int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.inits2">
+<code class="descname">inits2</code><span class="sig-paren">(</span><em>data</em>, <em>ind</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.inits2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.inits2" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize shape 2 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : shape 2 data</p>
+<p><strong>ind</strong> : np.array</p>
+<blockquote class="last">
+<div><p>index for shape 2</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.inits3">
+<code class="descname">inits3</code><span class="sig-paren">(</span><em>data</em>, <em>ind</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.inits3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.inits3" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize shape 3 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : shape 3 data</p>
+<p><strong>ind</strong> : shape 3 indexing</p>
+<p class="last"><strong>k</strong> : k</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>typ='s3'</em>, <em>title=''</em>, <em>xl=False</em>, <em>yl=False</em>, <em>log=False</em>, <em>stem=True</em>, <em>color='b'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;s3&#8217;</p>
+</div></blockquote>
+<p><strong>title</strong></p>
+<p><strong>xl</strong></p>
+<p><strong>yl</strong></p>
+<p><strong>log</strong></p>
+<p><strong>stem: boolean</strong></p>
+<p class="last"><strong>color</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>typ</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>recover last deleted coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
+<blockquote class="last">
+<div><p>2 : shape 2  (Nf , N*M   )
+3 : shape 3  (Nf , K )  T ( K x 2 )</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.put3">
+<code class="descname">put3</code><span class="sig-paren">(</span><em>i</em>, <em>i3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.put3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.put3" title="Permalink to this definition">¶</a></dt>
+<dd><p>function put3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int</p>
+<p class="last"><strong>i3</strong> : int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.s3tos2">
+<code class="descname">s3tos2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.s3tos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.s3tos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform shape3 to shape 2</p>
+<p>s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+s3  shape 3   array [ Nf x K     ] ind [ K x 2]</p>
+<p class="rubric">Notes</p>
+<p>The shape of s2 is (Lmax+1)*(Lmax+2)/2</p>
+<p>k2  : is the list of conserved indices in shape 3
+ind3 : np.array (K3, 2) are the conserved (l,m) indices</p>
+<p>ind3 and k2 have one common dimension</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.SCoeff.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>typ='s1'</em>, <em>k=0</em>, <em>L=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>titre='SHC'</em>, <em>xl=True</em>, <em>yl=True</em>, <em>fontsize=14</em>, <em>dB=True</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;</em>, <em>anim=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#SCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.SCoeff.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> :  string</p>
+<blockquote>
+<div><p>default (&#8216;s1&#8217;)
+&#8216;s1&#8217;  shape 1  (Nf , L , M )
+&#8216;s2&#8217;  shape 2  (Nf , L*M )
+&#8216;s3&#8217;  shape 3  (Nf , K )  and  ( K x 2 )</p>
+</div></blockquote>
+<p><strong>k</strong> : integer</p>
+<blockquote>
+<div><p>frequency index default 0</p>
+</div></blockquote>
+<p><strong>N, M = maximal value for degree, mode respectively</strong></p>
+<p class="last"><strong>(not to be defined if &#8216;s2&#8217; or &#8216;s3&#8217;)</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="class-vcoeff">
 <h2>class VCoeff<a class="headerlink" href="#class-vcoeff" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__init__.html#pylayers.antprop.spharm.VCoeff.__init__" title="pylayers.antprop.spharm.VCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.__init__</span></code></a>(typ[,&nbsp;fmin,&nbsp;fmax,&nbsp;data,&nbsp;...])</td>
-<td>init VCoeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.__repr__.html#pylayers.antprop.spharm.VCoeff.__repr__" title="pylayers.antprop.spharm.VCoeff.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits1.html#pylayers.antprop.spharm.VCoeff.inits1" title="pylayers.antprop.spharm.VCoeff.inits1"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.inits1</span></code></a>(data)</td>
-<td>initialize shape 1 format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits2.html#pylayers.antprop.spharm.VCoeff.inits2" title="pylayers.antprop.spharm.VCoeff.inits2"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.inits2</span></code></a>(data)</td>
-<td>initialize shape 2 format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.inits3.html#pylayers.antprop.spharm.VCoeff.inits3" title="pylayers.antprop.spharm.VCoeff.inits3"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.inits3</span></code></a>(data,&nbsp;ind,&nbsp;k)</td>
-<td>initialize shape 3 format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s1tos2.html#pylayers.antprop.spharm.VCoeff.s1tos2" title="pylayers.antprop.spharm.VCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.s1tos2</span></code></a>([L2])</td>
-<td>convert shape 1 &#8211;&gt; shape 2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete.html#pylayers.antprop.spharm.VCoeff.delete" title="pylayers.antprop.spharm.VCoeff.delete"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.delete</span></code></a>(ind,&nbsp;typ)</td>
-<td>delete coeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put.html#pylayers.antprop.spharm.VCoeff.put" title="pylayers.antprop.spharm.VCoeff.put"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.put</span></code></a>(typ)</td>
-<td>recover last deleted coeff</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.delete3.html#pylayers.antprop.spharm.VCoeff.delete3" title="pylayers.antprop.spharm.VCoeff.delete3"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.delete3</span></code></a>(ind)</td>
-<td>delete coeff.s3</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.put3.html#pylayers.antprop.spharm.VCoeff.put3" title="pylayers.antprop.spharm.VCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.put3</span></code></a>(i,&nbsp;i3)</td>
-<td>function put 3</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.s3tos2.html#pylayers.antprop.spharm.VCoeff.s3tos2" title="pylayers.antprop.spharm.VCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.s3tos2</span></code></a>()</td>
-<td>transform shape3 to shape 2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.plot.html#pylayers.antprop.spharm.VCoeff.plot" title="pylayers.antprop.spharm.VCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.plot</span></code></a>([typ,&nbsp;title,&nbsp;xl,&nbsp;yl,&nbsp;log,&nbsp;stem,&nbsp;...])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VCoeff.show.html#pylayers.antprop.spharm.VCoeff.show" title="pylayers.antprop.spharm.VCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">VCoeff.show</span></code></a>([typ,&nbsp;k,&nbsp;L,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;...])</td>
-<td>show coeff</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="class-vshcoeff">
 <h2>class VSHCoeff<a class="headerlink" href="#class-vshcoeff" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.antprop.spharm.VSHCoeff">
+<em class="property">class </em><code class="descclassname">pylayers.antprop.spharm.</code><code class="descname">VSHCoeff</code><span class="sig-paren">(</span><em>Br</em>, <em>Bi</em>, <em>Cr</em>, <em>Ci</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector Spherical Harmonics Coefficients class</p>
+<p class="rubric">Notes</p>
+<p>Br = VCoeff(br)
+Bi = VCoeff(bi)
+Cr = VCoeff(cr)
+Ci = VCoeff(ci)</p>
+<p>C  = VSHCoeff(Br,Bi,Cr,Ci)</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Bi</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>Br</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>Ci</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>Cr</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__init__.html#pylayers.antprop.spharm.VSHCoeff.__init__" title="pylayers.antprop.spharm.VSHCoeff.__init__"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.__init__</span></code></a>(Br,&nbsp;Bi,&nbsp;Cr,&nbsp;Ci)</td>
-<td>Init  VSHCoeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.__repr__.html#pylayers.antprop.spharm.VSHCoeff.__repr__" title="pylayers.antprop.spharm.VSHCoeff.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.__repr__</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.plot.html#pylayers.antprop.spharm.VSHCoeff.plot" title="pylayers.antprop.spharm.VSHCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.plot</span></code></a>([typ,&nbsp;titre,&nbsp;log,&nbsp;stem,&nbsp;subp])</td>
-<td>plot coeff</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.show.html#pylayers.antprop.spharm.VSHCoeff.show" title="pylayers.antprop.spharm.VSHCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.show</span></code></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;...])</td>
-<td>show VSH coeff</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s1tos2.html#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="pylayers.antprop.spharm.VSHCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s1tos2</span></code></a>([L2])</td>
-<td>convert shape 1 to shape 2</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3_new.html#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="pylayers.antprop.spharm.VSHCoeff.s2tos3_new"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s2tos3_new</span></code></a>(k)</td>
-<td>convert vector spherical coefficient from shape 2 to shape 3</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s2tos3.html#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="pylayers.antprop.spharm.VSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s2tos3</span></code></a>([threshold])</td>
-<td>convert vector spherical coefficients from shape 2 to shape 3</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.s3tos2.html#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="pylayers.antprop.spharm.VSHCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.s3tos2</span></code></a>()</td>
-<td>shape 3 to shape 2</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.strip3.html#pylayers.antprop.spharm.VSHCoeff.strip3" title="pylayers.antprop.spharm.VSHCoeff.strip3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.strip3</span></code></a>()</td>
-<td>Thresholded coefficient conversion</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.ens3</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.drag3.html#pylayers.antprop.spharm.VSHCoeff.drag3" title="pylayers.antprop.spharm.VSHCoeff.drag3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.drag3</span></code></a>(Emin)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.drag3" title="pylayers.antprop.spharm.VSHCoeff.drag3"><code class="xref py py-obj docutils literal"><span class="pre">drag3</span></code></a>(Emin)</td>
 <td>thresholded coefficient conversion</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.spharm.VSHCoeff.put3.html#pylayers.antprop.spharm.VSHCoeff.put3" title="pylayers.antprop.spharm.VSHCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">VSHCoeff.put3</span></code></a>(i,&nbsp;i3)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.energy" title="pylayers.antprop.spharm.VSHCoeff.energy"><code class="xref py py-obj docutils literal"><span class="pre">energy</span></code></a>([typ])</td>
+<td>returns aggregated energy over all coefficients</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.plot" title="pylayers.antprop.spharm.VSHCoeff.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>([typ,&nbsp;titre,&nbsp;log,&nbsp;stem,&nbsp;subp])</td>
+<td>plot coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.put3" title="pylayers.antprop.spharm.VSHCoeff.put3"><code class="xref py py-obj docutils literal"><span class="pre">put3</span></code></a>(i,&nbsp;i3)</td>
 <td>put 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="pylayers.antprop.spharm.VSHCoeff.s1tos2"><code class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></code></a>([L2])</td>
+<td>convert shape 1 to shape 2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="pylayers.antprop.spharm.VSHCoeff.s2tos3"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3</span></code></a>([threshold])</td>
+<td>convert vector spherical coefficients from shape 2 to shape 3</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="pylayers.antprop.spharm.VSHCoeff.s2tos3_new"><code class="xref py py-obj docutils literal"><span class="pre">s2tos3_new</span></code></a>(k)</td>
+<td>convert vector spherical coefficient from shape 2 to shape 3</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="pylayers.antprop.spharm.VSHCoeff.s3tos2"><code class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></code></a>()</td>
+<td>shape 3 to shape 2</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.show" title="pylayers.antprop.spharm.VSHCoeff.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;kmax,&nbsp;seuildb,&nbsp;animate,&nbsp;...])</td>
+<td>show VSH coeff</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.spharm.VSHCoeff.strip3" title="pylayers.antprop.spharm.VSHCoeff.strip3"><code class="xref py py-obj docutils literal"><span class="pre">strip3</span></code></a>()</td>
+<td>Thresholded coefficient conversion</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.drag3">
+<code class="descname">drag3</code><span class="sig-paren">(</span><em>Emin</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.drag3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.drag3" title="Permalink to this definition">¶</a></dt>
+<dd><p>thresholded coefficient conversion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Emin</strong> : Minimum energy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.energy">
+<code class="descname">energy</code><span class="sig-paren">(</span><em>typ='s1'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns aggregated energy over all coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>{&#8216;s1&#8217;|&#8217;s2&#8217;|&#8217;s3&#8217;}</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>E</strong> : np.array in the same shape as typ</p>
+<blockquote class="last">
+<div><p>s1 : (f,l,m)
+s2 : (f,l*m)
+s3 : (f,ncoeff&lt;lm)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>typ='s3'</em>, <em>titre='titre'</em>, <em>log=False</em>, <em>stem=True</em>, <em>subp=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong></p>
+<p><strong>titre</strong></p>
+<p><strong>log</strong></p>
+<p><strong>stem</strong></p>
+<p class="last"><strong>subp</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.put3">
+<code class="descname">put3</code><span class="sig-paren">(</span><em>i</em>, <em>i3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.put3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.put3" title="Permalink to this definition">¶</a></dt>
+<dd><p>put 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int</p>
+<p class="last"><strong>i3</strong> : int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.s1tos2">
+<code class="descname">s1tos2</code><span class="sig-paren">(</span><em>L2=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.s1tos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.s1tos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert shape 1 to shape 2</p>
+<p>shape 1   array [ Nf x (L+1) x (M+1) ]
+shape 2   array [ Nf x (L+1)*(M+1)   ]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L2</strong> : max level</p>
+<blockquote class="last">
+<div><p>default (-1 means all values)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.s2tos3">
+<code class="descname">s2tos3</code><span class="sig-paren">(</span><em>threshold=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.s2tos3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert vector spherical coefficients from shape 2 to shape 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>threshold</strong> : float</p>
+<blockquote>
+<div><p>default 1e-20</p>
+</div></blockquote>
+<p class="last"><strong>Energy thresholded coefficients</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.s2tos3_new">
+<code class="descname">s2tos3_new</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.s2tos3_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.s2tos3_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert vector spherical coefficient from shape 2 to shape 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>k</strong> : number of coeff</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.s3tos2">
+<code class="descname">s3tos2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.s3tos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.s3tos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>shape 3 to shape 2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>typ='s1'</em>, <em>k=1</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>animate=False</em>, <em>titre=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show VSH coeff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : str</p>
+<blockquote>
+<div><p>{&#8216;s1&#8217;,&#8217;s2&#8217;,&#8217;s3&#8217;}</p>
+</div></blockquote>
+<p><strong>k</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+<p><strong>kmax</strong> : int</p>
+<blockquote>
+<div><p>maximum of the unfolded coefficient axes</p>
+</div></blockquote>
+<p><strong>N</strong> : int</p>
+<p><strong>M</strong> : int</p>
+<p><strong>seuildB</strong> : float</p>
+<p><strong>animate</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.spharm.VSHCoeff.strip3">
+<code class="descname">strip3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/antprop/spharm.html#VSHCoeff.strip3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VSHCoeff.strip3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thresholded coefficient conversion</p>
+<p>The s3 minimum energy coefficient is deleted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ind</strong> : int</p>
+<p class="last"><strong>ind3</strong> : int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="utility-functions">
 <h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
@@ -409,13 +813,6 @@
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="generated/pylayers.antprop.spharm.VectorCoeff.__init__.html" class="btn btn-neutral float-right" title="pylayers.antprop.spharm.VectorCoeff.__init__" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
   
 
   <hr/>

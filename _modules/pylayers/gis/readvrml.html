@@ -158,34 +158,15 @@
 <span class="sd">Utility Functions</span>
 <span class="sd">=================</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
+<span class="sd">.. automodule::</span>
+<span class="sd">    :members:</span>
 
-<span class="sd">    savestr2</span>
-<span class="sd">    stretch</span>
-<span class="sd">    segsplit</span>
-<span class="sd">    extract</span>
-<span class="sd">    inbracket</span>
-<span class="sd">    incrochet</span>
-<span class="sd">    geomLine</span>
-<span class="sd">    geomFace</span>
-<span class="sd">    ParseDirectionalLight</span>
-<span class="sd">    ParseMaterial</span>
-<span class="sd">    show</span>
-<span class="sd">    parsevrml</span>
-<span class="sd">    vrml2sha</span>
-<span class="sd">    vrml2geom</span>
 
 <span class="sd">VLayout Class</span>
 <span class="sd">=============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    Vlayout.load</span>
-<span class="sd">    Vlayout.show</span>
-<span class="sd">    Vlayout.wallanalysis</span>
-<span class="sd">    Vlayout.show3entity</span>
+<span class="sd">.. autoclass:: Vlayout</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -718,8 +699,8 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="VLayout"><a class="viewcode-back" href="../../../modules/pylayers.gis.readvrml.html#pylayers.gis.readvrml.VLayout">[docs]</a><span class="k">class</span> <span class="nc">VLayout</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
-<div class="viewcode-block" id="VLayout.load"><a class="viewcode-back" href="../../../modules/pylayers.gis.readvrml.html#pylayers.gis.readvrml.VLayout.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">VLayout</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -822,12 +803,12 @@
                         <span class="n">tp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;c2d&#39;</span><span class="p">][</span><span class="n">ip</span><span class="p">][</span><span class="s1">&#39;coord&#39;</span><span class="p">])</span>
                     <span class="n">poly</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
                     <span class="n">dp</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="o">=</span> <span class="n">poly</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;poly&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;poly&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span>
     <span class="c1">#</span>
     <span class="c1">#</span>
     <span class="c1">#</span>
 
-<div class="viewcode-block" id="VLayout.show"><a class="viewcode-back" href="../../../modules/pylayers.gis.readvrml.html#pylayers.gis.readvrml.VLayout.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show entities</span>
 
 <span class="sd">        Parameters</span>
@@ -856,9 +837,9 @@
 
                     <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s1">&#39;poly&#39;</span><span class="p">][</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colrand</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a</span></div>
+        <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a</span>
 
-<div class="viewcode-block" id="VLayout.wallanalysis"><a class="viewcode-back" href="../../../modules/pylayers.gis.readvrml.html#pylayers.gis.readvrml.VLayout.wallanalysis">[docs]</a>    <span class="k">def</span> <span class="nf">wallanalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wallanalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; walls analysis</span>
 
 <span class="sd">        get height</span>
@@ -915,9 +896,9 @@
             <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">length</span>
             <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;seg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seg</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">dwall</span><span class="p">)</span></div>
+        <span class="k">return</span><span class="p">(</span><span class="n">dwall</span><span class="p">)</span>
 
-<div class="viewcode-block" id="VLayout.show3entity"><a class="viewcode-back" href="../../../modules/pylayers.gis.readvrml.html#pylayers.gis.readvrml.VLayout.show3entity">[docs]</a>    <span class="k">def</span> <span class="nf">show3entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">IDs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show3entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">IDs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview vizualisation of entity</span>
 
 <span class="sd">        Parameters</span>
@@ -945,7 +926,7 @@
             <span class="c1"># build a geomview list of polygons</span>
             <span class="k">print</span> <span class="n">ltt</span>
             <span class="n">G</span><span class="o">.</span><span class="n">polygons</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ltt</span><span class="p">)</span>
-        <span class="n">GL</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span></div></div>
+        <span class="n">GL</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>

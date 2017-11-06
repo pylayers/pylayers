@@ -160,79 +160,33 @@
 <span class="sd">Class VectorCoeff</span>
 <span class="sd">==================</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    VectorCoeff.__init__</span>
-<span class="sd">    VectorCoeff.inits1</span>
+<span class="sd">.. autoclass::</span>
+<span class="sd">    :members</span>
 
 <span class="sd">class SSHCoeff</span>
 <span class="sd">==============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     SSHCoeff.__init__</span>
-<span class="sd">     SSHCoeff.s2tos3</span>
-<span class="sd">     SSHCoeff.sets3</span>
-
+<span class="sd">.. autoclass:: SSHCoeff</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">class SCoeff</span>
 <span class="sd">============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     SCoeff.__init__</span>
-<span class="sd">     SCoeff.__repr__</span>
-<span class="sd">     SCoeff.inits2</span>
-<span class="sd">     SCoeff.inits3</span>
-<span class="sd">     SCoeff.delete</span>
-<span class="sd">     SCoeff.put</span>
-<span class="sd">     SCoeff.delete3</span>
-<span class="sd">     SCoeff.put3</span>
-<span class="sd">     SCoeff.s3tos2</span>
-<span class="sd">     SCoeff.plot</span>
-<span class="sd">     SCoeff.show</span>
+<span class="sd">.. autoclass:: SCoeff</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">class VCoeff</span>
 <span class="sd">============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
+<span class="sd">.. autoclass: VCoeff</span>
+<span class="sd">    :members:</span>
 
-<span class="sd">     VCoeff.__init__</span>
-<span class="sd">     VCoeff.__repr__</span>
-<span class="sd">     VCoeff.inits1</span>
-<span class="sd">     VCoeff.inits2</span>
-<span class="sd">     VCoeff.inits3</span>
-<span class="sd">     VCoeff.s1tos2</span>
-<span class="sd">     VCoeff.delete</span>
-<span class="sd">     VCoeff.put</span>
-<span class="sd">     VCoeff.delete3</span>
-<span class="sd">     VCoeff.put3</span>
-<span class="sd">     VCoeff.s3tos2</span>
-<span class="sd">     VCoeff.plot</span>
-<span class="sd">     VCoeff.show</span>
 
 <span class="sd">class VSHCoeff</span>
 <span class="sd">==============</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">     VSHCoeff.__init__</span>
-<span class="sd">     VSHCoeff.__repr__</span>
-<span class="sd">     VSHCoeff.plot</span>
-<span class="sd">     VSHCoeff.show</span>
-<span class="sd">     VSHCoeff.s1tos2</span>
-<span class="sd">     VSHCoeff.s2tos3_new</span>
-<span class="sd">     VSHCoeff.s2tos3</span>
-<span class="sd">     VSHCoeff.s3tos2</span>
-<span class="sd">     VSHCoeff.strip3</span>
-<span class="sd">     VSHCoeff.ens3</span>
-<span class="sd">     VSHCoeff.drag3</span>
-<span class="sd">     VSHCoeff.put3</span>
+<span class="sd">.. autoclass:: VSHCoeff</span>
+<span class="sd">    :members:</span>
 
 
 <span class="sd">Utility Functions</span>
@@ -409,7 +363,7 @@
     <span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">t</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VectorCoeff"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VectorCoeff">[docs]</a><span class="k">class</span> <span class="nc">VectorCoeff</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">VectorCoeff</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  class vector spherical harmonics</span>
 
 
@@ -464,7 +418,7 @@
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s1</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ind_s1</span> <span class="o">=</span> <span class="n">ind</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="SSHCoeff"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SSHCoeff">[docs]</a><span class="k">class</span> <span class="nc">SSHCoeff</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; scalar spherical harmonics</span>
@@ -502,7 +456,7 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SSHCoeff.s2tos3.html#pylayers.antprop.spharm.SSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="SSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert scalar spherical coefficients from shape 2 to shape 3</span>
 
 <span class="sd">        Parameters</span>
@@ -553,7 +507,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s2</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">ind2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="SSHCoeff.sets3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SSHCoeff.sets3.html#pylayers.antprop.spharm.SSHCoeff.sets3">[docs]</a>    <span class="k">def</span> <span class="nf">sets3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
+<div class="viewcode-block" id="SSHCoeff.sets3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SSHCoeff.sets3">[docs]</a>    <span class="k">def</span> <span class="nf">sets3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set shape 3</span>
 
 <span class="sd">        Parameters</span>
@@ -651,7 +605,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SCoeff.inits2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.inits2.html#pylayers.antprop.spharm.SCoeff.inits2">[docs]</a>    <span class="k">def</span> <span class="nf">inits2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span><span class="n">ind</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.inits2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.inits2">[docs]</a>    <span class="k">def</span> <span class="nf">inits2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span><span class="n">ind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize shape 2 format</span>
 
 <span class="sd">        Parameters</span>
@@ -673,7 +627,7 @@
         <span class="c1">#self.ind2 = indexssh(lmax)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ind2</span> <span class="o">=</span> <span class="n">ind</span></div>
 
-<div class="viewcode-block" id="SCoeff.inits3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.inits3.html#pylayers.antprop.spharm.SCoeff.inits3">[docs]</a>    <span class="k">def</span> <span class="nf">inits3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.inits3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.inits3">[docs]</a>    <span class="k">def</span> <span class="nf">inits3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize shape 3 format</span>
 
 <span class="sd">        Parameters</span>
@@ -691,7 +645,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ind3</span> <span class="o">=</span> <span class="n">ind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">k</span></div>
 
-<div class="viewcode-block" id="SCoeff.delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.delete.html#pylayers.antprop.spharm.SCoeff.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.delete"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete coeff</span>
 
 <span class="sd">        Parameters</span>
@@ -726,7 +680,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">b</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">c</span></div>
 
-<div class="viewcode-block" id="SCoeff.put"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.put.html#pylayers.antprop.spharm.SCoeff.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.put"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; recover last deleted coeff</span>
 
 <span class="sd">        Parameters</span>
@@ -777,7 +731,7 @@
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_ind</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_s3</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SCoeff.delete3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.delete3.html#pylayers.antprop.spharm.SCoeff.delete3">[docs]</a>    <span class="k">def</span> <span class="nf">delete3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.delete3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.delete3">[docs]</a>    <span class="k">def</span> <span class="nf">delete3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete coeff.s3</span>
 
 <span class="sd">        Parameters</span>
@@ -793,7 +747,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">c</span></div>
 
-<div class="viewcode-block" id="SCoeff.put3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.put3.html#pylayers.antprop.spharm.SCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.put3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; function put3</span>
 
 <span class="sd">        Parameters</span>
@@ -815,7 +769,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">c</span></div>
 
-<div class="viewcode-block" id="SCoeff.s3tos2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.s3tos2.html#pylayers.antprop.spharm.SCoeff.s3tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s3tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.s3tos2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.s3tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s3tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform shape3 to shape 2</span>
 
 <span class="sd">        s2  shape 2   array [ Nf x (L+1)*(M+1) ]</span>
@@ -844,7 +798,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">M2</span> <span class="o">=</span> <span class="n">Lmax</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ind2</span> <span class="o">=</span> <span class="n">indexvsh</span><span class="p">(</span><span class="n">Lmax</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SCoeff.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.plot.html#pylayers.antprop.spharm.SCoeff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s3&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">xl</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">yl</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SCoeff.plot"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s3&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">xl</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">yl</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot coeff</span>
 
 <span class="sd">        Parameters</span>
@@ -882,7 +836,7 @@
             <span class="k">if</span> <span class="n">yl</span><span class="p">:</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Integrated Module of coeff&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SCoeff.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.show.html#pylayers.antprop.spharm.SCoeff.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="SCoeff.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
              <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span>
              <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
              <span class="n">L</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
@@ -1004,7 +958,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">titre</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="VCoeff"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VCoeff">[docs]</a><span class="k">class</span> <span class="nc">VCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">VCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Spherical Harmonics Coefficient</span>
 
 <span class="sd">    d = np.array [Nf,N+1,M+1]</span>
@@ -1454,7 +1408,7 @@
                 <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">titre</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span></div></div>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">titre</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="VSHCoeff"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff">[docs]</a><span class="k">class</span> <span class="nc">VSHCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Vector Spherical Harmonics Coefficients class</span>
@@ -1514,7 +1468,7 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> </div>
 
-<div class="viewcode-block" id="VSHCoeff.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.plot.html#pylayers.antprop.spharm.VSHCoeff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s3&#39;</span><span class="p">,</span><span class="n">titre</span><span class="o">=</span><span class="s1">&#39;titre&#39;</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subp</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.plot"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s3&#39;</span><span class="p">,</span><span class="n">titre</span><span class="o">=</span><span class="s1">&#39;titre&#39;</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subp</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot coeff</span>
 
 <span class="sd">        Parameters</span>
@@ -1560,7 +1514,7 @@
                         <span class="s1">&#39;$\sum_f \sum_m |Cr_{l}^{(m)}(f)|$&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;$\sum_f \sum_m |Ci_{l}^{(m)}(f)|$&#39;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="VSHCoeff.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.show.html#pylayers.antprop.spharm.VSHCoeff.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">kmax</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">seuildb</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<div class="viewcode-block" id="VSHCoeff.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">kmax</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">seuildb</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
              <span class="n">animate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">titre</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show VSH coeff</span>
 
@@ -1611,7 +1565,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">titre</span> <span class="o">=</span> <span class="n">titre</span> <span class="p">,</span> <span class="n">xl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">yl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></div>
     <span class="c1">#    show()</span>
 
-<div class="viewcode-block" id="VSHCoeff.s1tos2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.s1tos2.html#pylayers.antprop.spharm.VSHCoeff.s1tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s1tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L2</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.s1tos2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.s1tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s1tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L2</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert shape 1 to shape 2</span>
 
 <span class="sd">        shape 1   array [ Nf x (L+1) x (M+1) ]</span>
@@ -1629,7 +1583,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="n">L2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="n">L2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VSHCoeff.s2tos3_new"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.s2tos3_new.html#pylayers.antprop.spharm.VSHCoeff.s2tos3_new">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.s2tos3_new"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.s2tos3_new">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert vector spherical coefficient from shape 2 to shape 3</span>
 
 <span class="sd">        Parameters</span>
@@ -1670,7 +1624,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">ib</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">E</span><span class="p">[</span><span class="n">ib</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span></div>
 
-<div class="viewcode-block" id="VSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.s2tos3.html#pylayers.antprop.spharm.VSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert vector spherical coefficients from shape 2 to shape 3</span>
 
 <span class="sd">        Parameters</span>
@@ -1729,7 +1683,7 @@
 
 
 
-<div class="viewcode-block" id="VSHCoeff.s3tos2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.s3tos2.html#pylayers.antprop.spharm.VSHCoeff.s3tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s3tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.s3tos2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.s3tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s3tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; shape 3 to shape 2</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1738,7 +1692,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span><span class="o">.</span><span class="n">s3tos2</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s3tos2</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="VSHCoeff.strip3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.strip3.html#pylayers.antprop.spharm.VSHCoeff.strip3">[docs]</a>    <span class="k">def</span> <span class="nf">strip3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.strip3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.strip3">[docs]</a>    <span class="k">def</span> <span class="nf">strip3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Thresholded coefficient conversion</span>
 
 <span class="sd">        The s3 minimum energy coefficient is deleted</span>
@@ -1804,7 +1758,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">E</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="VSHCoeff.drag3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.drag3.html#pylayers.antprop.spharm.VSHCoeff.drag3">[docs]</a>    <span class="k">def</span> <span class="nf">drag3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Emin</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.drag3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.drag3">[docs]</a>    <span class="k">def</span> <span class="nf">drag3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Emin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; thresholded coefficient conversion</span>
 
 <span class="sd">        Parameters</span>
@@ -1829,7 +1783,7 @@
 
         <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">ind3</span></div>
 
-<div class="viewcode-block" id="VSHCoeff.put3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.put3.html#pylayers.antprop.spharm.VSHCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.put3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  put 3</span>
 
 <span class="sd">        Parameters</span>
