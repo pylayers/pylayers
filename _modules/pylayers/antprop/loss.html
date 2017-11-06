@@ -158,21 +158,27 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    PL0</span>
-<span class="sd">    PL</span>
+<span class="sd">    cdf</span>
+<span class="sd">    cost231</span>
+<span class="sd">    cost259</span>
+<span class="sd">    cost2100</span>
+<span class="sd">    calnu</span>
+<span class="sd">    Dgrid_points</span>
+<span class="sd">    Dgrid_zone</span>
+<span class="sd">    FMetisShad2</span>
+<span class="sd">    FMetisShad</span>
+<span class="sd">    gaspl</span>
+<span class="sd">    hata</span>
+<span class="sd">    LossMetisShadowing</span>
+<span class="sd">    LossMetisShadowing2</span>
 <span class="sd">    Losst</span>
 <span class="sd">    Loss0_v2</span>
 <span class="sd">    Loss0</span>
 <span class="sd">    Loss_diff</span>
 <span class="sd">    OneSlopeMdl</span>
-<span class="sd">    cost231</span>
-<span class="sd">    cost259</span>
-<span class="sd">    cost2100</span>
-<span class="sd">    Dgrid_points&lt;</span>
-<span class="sd">    Dgrid_zone</span>
-<span class="sd">    calnu</span>
+<span class="sd">    PL0</span>
+<span class="sd">    PL</span>
 <span class="sd">    visuPts</span>
-<span class="sd">    cdf</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -791,13 +797,8 @@
 <span class="sd">    pBS : np.array (position of Base station)</span>
 <span class="sd">    fMHz : float</span>
 
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-
-<span class="sd">    http://</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">dm</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">pBS</span><span class="o">-</span><span class="n">pMS</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">pBS</span><span class="o">-</span><span class="n">pMS</span><span class="p">))</span>
     <span class="n">lmbd</span> <span class="o">=</span> <span class="mi">300</span><span class="o">/</span><span class="n">fMHz</span>
     <span class="n">pl</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="mf">2.6</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lmbd</span><span class="p">)</span>
