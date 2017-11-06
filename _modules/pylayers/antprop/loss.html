@@ -164,30 +164,8 @@
 <span class="sd">This module implements path loss models for various situations.</span>
 
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    cdf</span>
-<span class="sd">    cost231</span>
-<span class="sd">    cost259</span>
-<span class="sd">    cost2100</span>
-<span class="sd">    calnu</span>
-<span class="sd">    Dgrid_points</span>
-<span class="sd">    Dgrid_zone</span>
-<span class="sd">    FMetisShad2</span>
-<span class="sd">    FMetisShad</span>
-<span class="sd">    gaspl</span>
-<span class="sd">    hata</span>
-<span class="sd">    LossMetisShadowing</span>
-<span class="sd">    LossMetisShadowing2</span>
-<span class="sd">    Losst</span>
-<span class="sd">    Loss0_v2</span>
-<span class="sd">    Loss0</span>
-<span class="sd">    Loss_diff</span>
-<span class="sd">    OneSlopeMdl</span>
-<span class="sd">    PL0</span>
-<span class="sd">    PL</span>
-<span class="sd">    visuPts</span>
+<span class="sd">.. automodule:: </span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -1408,7 +1386,7 @@
 
 
 
-<div class="viewcode-block" id="showfurniture"><a class="viewcode-back" href="../../../modules/pylayers.antprop.loss.html#pylayers.antprop.loss.showfurniture">[docs]</a><span class="k">def</span> <span class="nf">showfurniture</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">showfurniture</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; show furniture (not the good module) </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#R1_A.show(fig,ax)</span>
@@ -1466,9 +1444,9 @@
     <span class="n">R9_E2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_F</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
     <span class="n">R9_G</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span></div>
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;scaled&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="two_rays_flatearth"><a class="viewcode-back" href="../../../modules/pylayers.antprop.loss.html#pylayers.antprop.loss.two_rays_flatearth">[docs]</a><span class="k">def</span> <span class="nf">two_rays_flatearth</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">two_rays_flatearth</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1647,9 +1625,9 @@
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]</span> <span class="p">:</span>
         <span class="k">return</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">P</span></div>
+        <span class="k">return</span> <span class="n">P</span>
 
-<div class="viewcode-block" id="lossref_compute"><a class="viewcode-back" href="../../../modules/pylayers.antprop.loss.html#pylayers.antprop.loss.lossref_compute">[docs]</a><span class="k">def</span> <span class="nf">lossref_compute</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span> <span class="p">:</span>
+<span class="k">def</span> <span class="nf">lossref_compute</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    compute loss and reflection rays on curved earth</span>
 
@@ -1757,9 +1735,9 @@
     <span class="n">dloss</span> <span class="o">=</span> <span class="n">Rd</span>
     <span class="n">dref</span> <span class="o">=</span> <span class="n">R1</span><span class="o">+</span><span class="n">R2</span>
 
-    <span class="k">return</span> <span class="n">psy</span><span class="p">,</span><span class="n">dloss</span><span class="p">,</span><span class="n">dref</span></div>
+    <span class="k">return</span> <span class="n">psy</span><span class="p">,</span><span class="n">dloss</span><span class="p">,</span><span class="n">dref</span>
 
-<div class="viewcode-block" id="two_rays_curvedearthold"><a class="viewcode-back" href="../../../modules/pylayers.antprop.loss.html#pylayers.antprop.loss.two_rays_curvedearthold">[docs]</a><span class="k">def</span> <span class="nf">two_rays_curvedearthold</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">two_rays_curvedearthold</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">h0</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -1899,7 +1877,7 @@
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dB&#39;</span><span class="p">]</span> <span class="p">:</span>
         <span class="k">return</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">P</span></div>
+        <span class="k">return</span> <span class="n">P</span>
 
 
 <div class="viewcode-block" id="visuPts"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.visuPts.html#pylayers.antprop.loss.visuPts">[docs]</a><span class="k">def</span> <span class="nf">visuPts</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">nd</span><span class="p">,</span><span class="n">Pts</span><span class="p">,</span><span class="n">Values</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">sp</span><span class="o">=</span><span class="p">[],</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">tit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span><span class="n">colbar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">xticks</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -2005,6 +1983,9 @@
 <span class="sd">    --------</span>
 
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">    &gt;&gt;&gt; x = np.random.randn(10000)</span>
+<span class="sd">    &gt;&gt;&gt; cdf(x)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">20</span>
