@@ -149,9 +149,7 @@
 
 <span class="sd">.. currentmodule:: pylayers.simul.link</span>
 
-
 <span class="sd">=======</span>
-<span class="sd">This module runs the electromagnetic simulation at the link level.</span>
 
 <span class="sd">This module runs the electromagnetic simulation for a link.</span>
 <span class="sd">A deterministic link has two termination points and an associated Layout</span>
@@ -170,10 +168,9 @@
 <span class="sd">A common factor of both statistical (SLink) and deterministic channel (DLink)</span>
 <span class="sd">is the exitence of :math:`\alpha_k` and :math:`\tau_k`</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
+<span class="sd">.. autoclass:: Link</span>
+<span class="sd">    :members:</span>
 
-<span class="sd">    Link.__add__</span>
 
 
 <span class="sd">SLink Class</span>
@@ -181,10 +178,8 @@
 
 <span class="sd">Slink is for statistical links.</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    SLink.onbody</span>
+<span class="sd">.. autoclass:: SLink</span>
+<span class="sd">    :members: </span>
 
 <span class="sd">DLink Class</span>
 <span class="sd">===========</span>
@@ -193,59 +188,14 @@
 
 <span class="sd">&gt;&gt;&gt; from pylayers.simul.link import *</span>
 <span class="sd">&gt;&gt;&gt; L = DLink(verbose=False)</span>
-<span class="sd">&gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">&gt;&gt;&gt; L.eval()</span>
+<span class="sd">&gt;&gt;&gt; L.pltcir()</span>
 
 <span class="sd">DLink simulation</span>
 <span class="sd">----------------</span>
 
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DLink.eval</span>
-<span class="sd">    DLink.afp</span>
-<span class="sd">    DLink.adp</span>
-<span class="sd">    DLink._show3</span>
-
-
-<span class="sd">DLink init</span>
-<span class="sd">----------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DLink.__init__</span>
-<span class="sd">    DLink.__repr__</span>
-<span class="sd">    DLink.reset_config</span>
-<span class="sd">    DLink.check_grpname</span>
-
-
-<span class="sd">search in hdf5 file</span>
-<span class="sd">-------------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-<span class="sd">    DLink.checkh5</span>
-<span class="sd">    DLink.array_exist</span>
-<span class="sd">    DLink.get_grpname</span>
-<span class="sd">    DLink.get_idx</span>
-
-
-<span class="sd">Modify hdf5 file</span>
-<span class="sd">----------------</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree: generated/</span>
-
-
-<span class="sd">    DLink.save_init</span>
-<span class="sd">    DLink.save</span>
-<span class="sd">    DLink.load</span>
-<span class="sd">    DLink.stack</span>
-<span class="sd">    DLink._delete</span>
-
-
-
+<span class="sd">.. autoclass:: DLink</span>
+<span class="sd">    :members:</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
