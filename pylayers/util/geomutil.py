@@ -98,6 +98,7 @@ Utility Functions
     :toctree: generated/
 
      angular
+     vecang
      SignedArea
      Centroid
      Lr2n
@@ -112,6 +113,10 @@ Utility Functions
      dptseg
      linet
      ccw
+     are_points_inside_cone
+     intersect_cone_seg
+     intersect_halfline_seg
+     intersect3
      intersect
      is_aligned3
      is_aligned4
@@ -120,9 +125,11 @@ Utility Functions
      affine
      cylmap
      MRot3
+     MATP
      MEulerAngle
      SphericalBasis
      angledir
+     Bthph
      BTB
 
      plot_coords
@@ -704,8 +711,8 @@ class Polygon(pro.PyLayers, shg.Polygon):
 
         pylayers.layout.Layout.ispoint
 
-        vnodes is a list of point and segments of the polygon. 
-        If there are isosegments the sequence of iso segments is repeated between the termination points. 
+        vnodes is a list of points and segments of the polygon. 
+        If there are iso-segments the sequence of iso segments is repeated between the termination points. 
         L.numseg has been adapted in order to return either the first segment (default)
         or the list of all segments
 
@@ -2644,7 +2651,7 @@ class Geomoff(Geomview):
 
 
 def angular(p1, p2):
-    """ determine angle between p1 and p2 in [0 2pi]
+    """ determine angle between p1 and p2 in inerval [0 2pi]
 
     Parameters
     ----------
@@ -2679,6 +2686,11 @@ def angular(p1, p2):
     >>> a6  = angular(p26,p1)
     >>> a7  = angular(p27,p1)
     >>> a8  = angular(p28,p1)
+
+    See Also
+    --------
+
+    vecang
 
 
     """
@@ -2729,20 +2741,24 @@ def vecang(v1, v2):
 
 
 def SignedArea(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
-    """
-        Calculate the signed area of a sequence of points in a  plane
+    """ Calculate the signed area of a sequence of points in a  plane
 
-        Parameters
-        ----------
-        p : array 2 x Np
+    Parameters
+    ----------
+    p : array 2 x Np
 
-        Examples
-        --------
+    Returns
+    -------
+    A : float
+        signed area of the sequence of points 
 
-        >>> from pylayers.util.geomutil import *
-        >>> p = np.array([[0,10,10,0],[0,0,-2,-2]])
-        >>> A = SignedArea(p)
-        >>> assert(A+20<1e-15)
+    Examples
+    --------
+
+    >>> from pylayers.util.geomutil import *
+    >>> p = np.array([[0,10,10,0],[0,0,-2,-2]])
+    >>> A = SignedArea(p)
+    >>> assert(A+20<1e-15)
 
     """
     return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
@@ -2753,15 +2769,19 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
 
     References
     ----------
+
     http://en.wikipedia.org/wiki/Centroid
 
     Parameters
     ----------
-        p : np array polygon (2xNp)
+
+    p : np array 
+        polygon (2xNp)
 
     Returns
     -------
-        pc = Centroid()
+
+    pc = Centroid()
 
     Examples
     --------
@@ -2785,7 +2805,7 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
 
 
 def Lr2n(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]]), closed=True):
-    """  Linear Ring to normal
+    """  Linear ring to normal
 
         Parameters
         ----------
@@ -3141,7 +3161,7 @@ def ellipse(fd, p, vth, vph, Eth, Eph, N):
 
 
 def normalize(vec):
-    """ normalize an array of N ndim  vectors
+    """ normalize an array of N ndim vectors
 
     Parameters
     ----------

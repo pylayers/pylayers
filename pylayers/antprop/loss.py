@@ -13,21 +13,27 @@ This module implements path loss models for various situations.
 .. autosummary::
     :toctree: generated/
 
-    PL0
-    PL
+    cdf
+    cost231
+    cost259
+    cost2100
+    calnu
+    Dgrid_points
+    Dgrid_zone
+    FMetisShad2
+    FMetisShad
+    gaspl
+    hata
+    LossMetisShadowing
+    LossMetisShadowing2
     Losst
     Loss0_v2
     Loss0
     Loss_diff
     OneSlopeMdl
-    cost231
-    cost259
-    cost2100
-    Dgrid_points<
-    Dgrid_zone
-    calnu
+    PL0
+    PL
     visuPts
-    cdf
 
 """
 
@@ -646,13 +652,8 @@ def cost259(pMS,pBS,fMHz):
     pBS : np.array (position of Base station)
     fMHz : float
 
-
-    Notes
-    -----
-
-    http://
-
     """
+
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
     lmbd = 300/fMHz
     pl = 10*2.6*np.log10(dm)+20*log10(4*np.pi/lmbd)
