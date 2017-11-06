@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,15 +19,20 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="1   Overview" href="../TOC.html" />
+    <link rel="next" title="Handling Body Description and Mobility" href="Body.html" />
+    <link rel="prev" title="Sorting and Cutting" href="../2-AP/CIR.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -42,7 +48,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -82,11 +88,74 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="../2-AP/CIR.html" title="Sorting and Cutting"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    Sorting and Cutting
+	    </span>
+	    <span class="hiddenrellink">
+	    Sorting and Cutting
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="Body.html" title="Handling Body Description and Mobility"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    Handling Body...
+	    </span>
+	    <span class="hiddenrellink">
+	    Handling Body Description and Mobility
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../TOC.html" title="1   Overview" >
+	Up
+	<br>
+	<span class="smallrellink">
+	1   Overview
+	</span>
+	<span class="hiddenrellink">
+	1   Overview
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -98,7 +167,10 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">Trajectory and Network simulation</a></li>
+<li><a class="reference internal" href="#">Trajectory and Network simulation</a><ul>
+<li><a class="reference internal" href="#trajectory">Trajectory</a></li>
+</ul>
+</li>
 </ul>
 
     
@@ -110,313 +182,171 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="trajectory-and-network-simulation">
+  <div class="code highlight-none"><div class="highlight"><pre><span></span>!date
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>lundi 6 novembre 2017, 10:11:00 (UTC+0100)
+</pre></div>
+</div>
+<div class="section" id="trajectory-and-network-simulation">
 <h1>Trajectory and Network simulation<a class="headerlink" href="#trajectory-and-network-simulation" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Latex</span><span class="p">,</span> <span class="n">YouTubeVideo</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">as</span> <span class="nn">traj</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.ban.body</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="go">WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from IPython.display import Image, HTML, Latex, YouTubeVideo
+import numpy as np
+import pylayers.mobility.trajectory as traj
+from pylayers.mobility.ban.body import *
+from pylayers.gis.layout import *
+%matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-1-bb0a780283ed&gt;&quot;, line 7
-    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
-           ^
-SyntaxError: invalid syntax
+<div class="code highlight-none"><div class="highlight"><pre><span></span>YouTubeVideo(&#39;1Qa6xLpU5-M&#39;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">YouTubeVideo</span><span class="p">(</span><span class="s">&#39;1Qa6xLpU5-M&#39;</span><span class="p">)</span>
-<span class="go">&lt;IPython.lib.display.YouTubeVideo at 0x7fed001a1290&gt;</span>
+<iframe
+    width="400"
+    height="300"
+    src="https://www.youtube.com/embed/1Qa6xLpU5-M"
+    frameborder="0"
+    allowfullscreen
+></iframe><p>Trajectories can be generated using simulnet.</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.simul.simulnet import *
+S=Simul()
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-2-ed349a37f586&gt;&quot;, line 2
-    &lt;IPython.lib.display.YouTubeVideo at 0x7fed001a1290&gt;
-    ^
-SyntaxError: invalid syntax
+<div class="highlight-none"><div class="highlight"><pre><span></span>Warning Unable to read graph Gr
+Warning Unable to read graph Gw
+Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
 </pre></div>
 </div>
-<p>Trajectories can be generated using simulnet.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">Simul</span><span class="p">()</span>
-<span class="go">Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span># set simulation duration
+S.sim_opt[&#39;duration&#39;]=&#39;100&#39;
+S.meca_opt[&#39;mecanic_update_time&#39;]=0.1
+# turn on network simulation
+S.net_opt[&#39;network&#39;]=True
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-3-c5137fc259aa&gt;&quot;, line 3
-    Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
-                ^
-SyntaxError: invalid syntax
+<div class="code highlight-none"><div class="highlight"><pre><span></span># run mechanical simulation
+S.runsimul()
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># set simulation duration</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;100&#39;</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.1</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># turn on network simulation</span>
-<span class="gp">... </span><span class="n">S</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-4-337fc0e8c2bc&gt; in &lt;module&gt;()
-      1 # set simulation duration
-      2
-----&gt; 3 S.sim_opt[&#39;duration&#39;]=&#39;100&#39;
-      4
-      5 S.meca_opt[&#39;mecanic_update_time&#39;]=0.1
-
-
-NameError: name &#39;S&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># run mechanical simulation</span>
-<span class="gp">... </span><span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-5-7089a9703d5d&gt; in &lt;module&gt;()
-      1 # run mechanical simulation
-----&gt; 2 S.runsimul()
-
-
-NameError: name &#39;S&#39; is not defined
-</pre></div>
-</div>
+<div class="section" id="trajectory">
+<h2>Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
 <p>trajectories can be imported from a simulnet simulation with the
-<tt class="docutils literal"><span class="pre">importh5</span></tt> method</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+<code class="docutils literal"><span class="pre">importh5</span></code> method</p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>from pylayers.mobility.trajectory import *
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">str1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">str2</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># the save filename is composed of simulation filename and layout filename</span>
-<span class="gp">... </span><span class="n">save_filename</span> <span class="o">=</span> <span class="n">str1</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">str2</span> <span class="o">+</span><span class="s">&#39;.h5&#39;</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">list_traj</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">traj</span>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>str1 = eval(S.sim_opt[&#39;filename&#39;])
+str2 = S.L._filename.split(&#39;.&#39;)[0]
+save_filename = str1 + &#39;_&#39; + str2 +&#39;.h5&#39;
+
+list_traj = S.traj
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-7-22d9e4180458&gt; in &lt;module&gt;()
-----&gt; 1 str1 = eval(S.sim_opt[&#39;filename&#39;])
-      2 str2 = S.L.filename.split(&#39;.&#39;)[0]
-      3 # the save filename is composed of simulation filename and layout filename
-      4 save_filename = str1 + &#39;_&#39; + str2 +&#39;.h5&#39;
-      5
-
-
-NameError: name &#39;S&#39; is not defined
+<div class="code highlight-none"><div class="highlight"><pre><span></span>list_traj
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">list_traj</span>
-<span class="go">Trajectories performed in Layout : TA-Office.ini</span>
+<pre class="literal-block">
+Trajectories performed in Layout : TA-Office.lay
 
-<span class="go">Trajectory of agent John with ID 1</span>
-<span class="go">----------------------------------</span>
-<span class="go">t (s) : 0.00 : 0.20 : 99.80</span>
-<span class="go">dtot (m) : 321.22</span>
-<span class="go">Vmoy (m/s) : 3.22</span>
-<span class="go">                                 x         y        vx        vy        ax  \</span>
-<span class="go">t</span>
-<span class="go">1970-01-01 00:00:00.000  18.907750  2.528547  0.038749  0.155237  0.193744</span>
-<span class="go">1970-01-01 00:00:00.200  18.921699  2.584433  0.069748  0.279427  0.154995</span>
+Trajectory of agent John with ID 1
+----------------------------------
+t (s) : 0.00 : 0.20 : 99.80
+dtot (m) : 371.86
+Vmoy (m/s) : 3.73
+                                x         y        vx        vy        ax  t
+1970-01-01 00:00:00.000  2.704137  2.529231  0.020684  0.158657  0.103419
+1970-01-01 00:00:00.200  2.711583  2.586348  0.037231  0.285583  0.082735
 
-<span class="go">                               ay      s</span>
-<span class="go">t</span>
-<span class="go">1970-01-01 00:00:00.000  0.776185  0.160</span>
-<span class="go">1970-01-01 00:00:00.200  0.620948  0.448</span>
+                               ay      s
+t
+1970-01-01 00:00:00.000  0.793287  0.160
+1970-01-01 00:00:00.200  0.634630  0.448
 
-<span class="go">Trajectory of agent Alex with ID 2</span>
-<span class="go">----------------------------------</span>
-<span class="go">t (s) : 0.00 : 0.20 : 99.80</span>
-<span class="go">dtot (m) : 372.85</span>
-<span class="go">Vmoy (m/s) : 3.74</span>
-<span class="go">                                 x          y        vx        vy        ax  \</span>
-<span class="go">t</span>
-<span class="go">1970-01-01 00:00:00.000  24.306132  12.467593  0.030661 -0.157035  0.153303</span>
-<span class="go">1970-01-01 00:00:00.200  24.317170  12.411061  0.055189 -0.282663  0.122642</span>
+Trajectory of agent Alex with ID 2
+----------------------------------
+t (s) : 0.00 : 0.20 : 99.80
+dtot (m) : 144.40
+Vmoy (m/s) : 1.45
+                                 x         y        vx        vy        ax  t
+1970-01-01 00:00:00.000  38.907408  2.071490 -0.059739  0.148429 -0.298696
+1970-01-01 00:00:00.200  38.885901  2.124925 -0.107531  0.267172 -0.238957
 
-<span class="go">                               ay      s</span>
-<span class="go">t</span>
-<span class="go">1970-01-01 00:00:00.000 -0.785174  0.160</span>
-<span class="go">1970-01-01 00:00:00.200 -0.628139  0.448</span>
+                               ay      s
+t
+1970-01-01 00:00:00.000  0.742146  0.160
+1970-01-01 00:00:00.200  0.593717  0.448
 
-<span class="go">Access point Router with ID 6</span>
-<span class="go">-----------------------------</span>
-<span class="go">t (s) : 0.00</span>
-<span class="go">Vmoy (m/s) : 0.0</span>
-<span class="go">              x  y    z  vx  vy  ax  ay  s</span>
-<span class="go">t</span>
-<span class="go">1970-01-01  0.5  2  2.5   0   0   0   0  0</span>
+Access point Router with ID 6
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+              x    y    z   vx   vy   ax   ay    s
+t
+1970-01-01  0.5  2.0  2.5  0.0  0.0  0.0  0.0  0.0
 
-<span class="go">Access point Router with ID 7</span>
-<span class="go">-----------------------------</span>
-<span class="go">t (s) : 0.00</span>
-<span class="go">Vmoy (m/s) : 0.0</span>
-<span class="go">              x   y    z  vx  vy  ax  ay  s</span>
-<span class="go">t</span>
-<span class="go">1970-01-01  0.7  14  2.5   0   0   0   0  0</span>
+Access point Router with ID 7
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+              x     y    z   vx   vy   ax   ay    s
+t
+1970-01-01  0.7  14.0  2.5  0.0  0.0  0.0  0.0  0.0
 
-<span class="go">Access point Router with ID 8</span>
-<span class="go">-----------------------------</span>
-<span class="go">t (s) : 0.00</span>
-<span class="go">Vmoy (m/s) : 0.0</span>
-<span class="go">             x   y    z  vx  vy  ax  ay  s</span>
-<span class="go">t</span>
-<span class="go">1970-01-01  39  13  2.5   0   0   0   0  0</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-8-e0b20eaf528d&gt;&quot;, line 2
-    Trajectories performed in Layout : TA-Office.ini
-                         ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
+Access point Router with ID 8
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+               x     y    z   vx   vy   ax   ay    s
+t
+1970-01-01  39.0  13.0  2.5  0.0  0.0  0.0  0.0  0.0
+</pre>
 <p>The 2 following trajectories have been calculated with
-<tt class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<code class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></code></p>
+<div class="code highlight-none"><div class="highlight"><pre><span></span>t=S.traj.resample(10)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-9-8e2814167818&gt; in &lt;module&gt;()
-----&gt; 1 t=S.traj.resample(10)
-
-
-NameError: name &#39;S&#39; is not defined
+<div class="code highlight-none"><div class="highlight"><pre><span></span>f=plt.figure(figsize=(20,20))
+f,a = S.L.showG(&#39;s&#39;,fig=f)
+for k,nodes in enumerate(t):
+    f,a = nodes.plot(fig=f,ax=a)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<img alt="../../_images/Mobility_14_0.png" src="../../_images/Mobility_14_0.png" />
+<div class="code highlight-none"><div class="highlight"><pre><span></span>S
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
+<div class="highlight-none"><div class="highlight"><pre><span></span>Simulation information
+----------------------
+Layout: TA-Office.lay
+Simulation duration: 100
+Random seed: 1
+Save simulation: False
 
-&lt;ipython-input-10-670e16babe19&gt; in &lt;module&gt;()
-----&gt; 1 t[5]
+Update times
+-------------
+Mechanical update: 0.1
+Network update: 0.1
+Localization update: &#39;autonomous&#39;
 
+Agents =&gt; self.lAg[i]
+------
+Number of agents :5
+Agents IDs: [&#39;1&#39;, &#39;2&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;]
+Agents names: [&#39;John&#39;, &#39;Alex&#39;, &#39;Router&#39;, &#39;Router&#39;, &#39;Router&#39;]
+Destination of chosen agents: &#39;random&#39;
 
-NameError: name &#39;t&#39; is not defined
+Network
+-------
+Nodes per wstd: {}
+
+Localization
+------------
+Localization enable: False
+Postion estimation methods: [&#39;geo&#39;]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">nodes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-11-33f09bd8acd5&gt; in &lt;module&gt;()
-      1 f=plt.figure(figsize=(20,20))
-----&gt; 2 f,a = S.L.showG(&#39;s&#39;,fig=f)
-      3 for k,nodes in enumerate(t):
-      4     f,a = nodes.plot(fig=f,ax=a)
-
-
-NameError: name &#39;S&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
-<span class="go">4989</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-12-4a86d1b2da30&gt; in &lt;module&gt;()
-----&gt; 1 len(t.t)
-      2 4989
-
-
-NameError: name &#39;t&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span>
-<span class="go">Simulation information</span>
-<span class="go">----------------------</span>
-<span class="go">Layout: TA-Office.ini</span>
-<span class="go">Simulation duration: 100</span>
-<span class="go">Random seed: 1</span>
-<span class="go">Save simulation: True</span>
-
-<span class="go">Update times</span>
-<span class="go">-------------</span>
-<span class="go">Mechanical update: 0.1</span>
-<span class="go">Network update: 0.1</span>
-<span class="go">Localization update: &#39;autonomous&#39;</span>
-
-<span class="go">Agents =&gt; self.lAg[i]</span>
-<span class="go">------</span>
-<span class="go">Number of agents :5</span>
-<span class="go">Agents IDs: [&#39;1&#39;, &#39;2&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;]</span>
-<span class="go">Agents names: [&#39;John&#39;, &#39;Alex&#39;, &#39;Router&#39;, &#39;Router&#39;, &#39;Router&#39;]</span>
-<span class="go">Destination of chosen agents: &#39;random&#39;</span>
-
-<span class="go">Network</span>
-<span class="go">-------</span>
-<span class="go">Nodes per wstd: {&#39;rat1&#39;: [&#39;1&#39;, &#39;8&#39;, &#39;2&#39;, &#39;7&#39;, &#39;6&#39;]}</span>
-
-<span class="go">Localization</span>
-<span class="go">------------</span>
-<span class="go">Localization enable: False</span>
-<span class="go">Postion estimation methods: [&#39;geo&#39;]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>  File &quot;&lt;ipython-input-13-e1ff75ec48a8&gt;&quot;, line 2
-    Simulation information
-                         ^
-SyntaxError: invalid syntax
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">t</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-14-ff7a53ed71f5&gt; in &lt;module&gt;()
-----&gt; 1 S.traj.t
-
-
-NameError: name &#39;S&#39; is not defined
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss18</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;8&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss12</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss17</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;7&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss16</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;6&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss28</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;8&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss27</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;7&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Rss26</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;6&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss18</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-8&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss12</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-2&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss17</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-7&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss16</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-6&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss28</span><span class="p">,</span><span class="s">&#39;b--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-8&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss27</span><span class="p">,</span><span class="s">&#39;g--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-7&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss26</span><span class="p">,</span><span class="s">&#39;c--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-6&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (s)&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;RSS (dBm)&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>NameErrorTraceback (most recent call last)
-
-&lt;ipython-input-15-aa0b0dfa69b7&gt; in &lt;module&gt;()
-      1 plt.figure(figsize=(20,10))
-----&gt; 2 Rss18 = S.save.save[&#39;1&#39;][&#39;8&#39;][&#39;rat1&#39;][&#39;Pr&#39;][:,0]
-      3 Rss12 = S.save.save[&#39;1&#39;][&#39;2&#39;][&#39;rat1&#39;][&#39;Pr&#39;][:,0]
-      4 Rss17 = S.save.save[&#39;1&#39;][&#39;7&#39;][&#39;rat1&#39;][&#39;Pr&#39;][:,0]
-      5 Rss16 = S.save.save[&#39;1&#39;][&#39;6&#39;][&#39;rat1&#39;][&#39;Pr&#39;][:,0]
-
-
-NameError: name &#39;S&#39; is not defined
-</pre></div>
 </div>
 </div>
 
@@ -431,15 +361,30 @@ NameError: name &#39;S&#39; is not defined
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Jun 25, 2016.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on Nov 06, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/notebook/4-MOB/Mobility.txt"
+    <a href="../../_sources/notebook/4-MOB/Mobility.rst.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="../2-AP/CIR.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="Body.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
     
      </div>
      <script type="text/javascript">
