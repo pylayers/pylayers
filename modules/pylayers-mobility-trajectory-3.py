@@ -1,4 +1,4 @@
 from pylayers.mobility.trajectory import *
-traj = Trajectory()
-traj.generate()
-traj.plot()
+T=Trajectories()
+T.loadh5()
+T.ishow()

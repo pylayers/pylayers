@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt
 from pylayers.antprop.antenna import *
+import numpy as np
+import matplotlib.pylab as plt
 A = Antenna('defant.vsh3')
-fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
-fig,ax = A.plotG(fGHz=[2,3,4],plan='phi',angdeg=90)
+F = A.eval(grid=True)
