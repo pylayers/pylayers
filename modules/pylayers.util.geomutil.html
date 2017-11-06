@@ -30,7 +30,7 @@
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
+    <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
     <link rel="next" title="pylayers.util.geomutil.Geomlist.__init__" href="generated/pylayers.util.geomutil.Geomlist.__init__.html" />
     <link rel="prev" title="pylayers.util.cone" href="pylayers.util.cone.html" />
 <script type="text/javascript">
@@ -144,14 +144,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="pylayers.html" title="PyLayers" >
+	<a href="pylayers.html" title="PyLayers Modules Reference" >
 	Up
 	<br>
 	<span class="smallrellink">
-	PyLayers
+	PyLayers Modu...
 	</span>
 	<span class="hiddenrellink">
-	PyLayers
+	PyLayers Modules Reference
 	</span>
 	
 	</a>
@@ -380,73 +380,99 @@ Geomview.show3</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.angular.html#pylayers.util.geomutil.angular" title="pylayers.util.geomutil.angular"><code class="xref py py-obj docutils literal"><span class="pre">angular</span></code></a>(p1,&nbsp;p2)</td>
-<td>determine angle between p1 and p2 in [0 2pi]</td>
+<td>determine angle between p1 and p2 in inerval [0 2pi]</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.SignedArea.html#pylayers.util.geomutil.SignedArea" title="pylayers.util.geomutil.SignedArea"><code class="xref py py-obj docutils literal"><span class="pre">SignedArea</span></code></a>([p])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">vecang</span></code>(v1,&nbsp;v2)</td>
+<td>angle between v1 and v2 , result in [0,2*pi]</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.SignedArea.html#pylayers.util.geomutil.SignedArea" title="pylayers.util.geomutil.SignedArea"><code class="xref py py-obj docutils literal"><span class="pre">SignedArea</span></code></a>([p])</td>
 <td>Calculate the signed area of a sequence of points in a  plane</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Centroid.html#pylayers.util.geomutil.Centroid" title="pylayers.util.geomutil.Centroid"><code class="xref py py-obj docutils literal"><span class="pre">Centroid</span></code></a>([p])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Centroid.html#pylayers.util.geomutil.Centroid" title="pylayers.util.geomutil.Centroid"><code class="xref py py-obj docutils literal"><span class="pre">Centroid</span></code></a>([p])</td>
 <td>Determine the centroid of the polygon defined by a sequence of points in a plane</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Lr2n.html#pylayers.util.geomutil.Lr2n" title="pylayers.util.geomutil.Lr2n"><code class="xref py py-obj docutils literal"><span class="pre">Lr2n</span></code></a>([p,&nbsp;closed])</td>
-<td>Linear Ring to normal</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Lr2n.html#pylayers.util.geomutil.Lr2n" title="pylayers.util.geomutil.Lr2n"><code class="xref py py-obj docutils literal"><span class="pre">Lr2n</span></code></a>([p,&nbsp;closed])</td>
+<td>Linear ring to normal</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isBetween.html#pylayers.util.geomutil.isBetween" title="pylayers.util.geomutil.isBetween"><code class="xref py py-obj docutils literal"><span class="pre">isBetween</span></code></a>(p1,&nbsp;p2,&nbsp;p[,&nbsp;epsilon])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isBetween.html#pylayers.util.geomutil.isBetween" title="pylayers.util.geomutil.isBetween"><code class="xref py py-obj docutils literal"><span class="pre">isBetween</span></code></a>(p1,&nbsp;p2,&nbsp;p[,&nbsp;epsilon])</td>
 <td>test if p is between p1 and p2</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.pvec.html#pylayers.util.geomutil.pvec" title="pylayers.util.geomutil.pvec"><code class="xref py py-obj docutils literal"><span class="pre">pvec</span></code></a>(v1,&nbsp;v2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.pvec.html#pylayers.util.geomutil.pvec" title="pylayers.util.geomutil.pvec"><code class="xref py py-obj docutils literal"><span class="pre">pvec</span></code></a>(v1,&nbsp;v2)</td>
 <td>cross product between v1 and v2</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.pvecn.html#pylayers.util.geomutil.pvecn" title="pylayers.util.geomutil.pvecn"><code class="xref py py-obj docutils literal"><span class="pre">pvecn</span></code></a>(v1,&nbsp;v2)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.pvecn.html#pylayers.util.geomutil.pvecn" title="pylayers.util.geomutil.pvecn"><code class="xref py py-obj docutils literal"><span class="pre">pvecn</span></code></a>(v1,&nbsp;v2)</td>
 <td>cross product and normalization</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.onb.html#pylayers.util.geomutil.onb" title="pylayers.util.geomutil.onb"><code class="xref py py-obj docutils literal"><span class="pre">onb</span></code></a>(A,&nbsp;B,&nbsp;v)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.onb.html#pylayers.util.geomutil.onb" title="pylayers.util.geomutil.onb"><code class="xref py py-obj docutils literal"><span class="pre">onb</span></code></a>(A,&nbsp;B,&nbsp;v)</td>
 <td>orthonormal basis from 2 points defining an axe and a vector</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.vec_sph.html#pylayers.util.geomutil.vec_sph" title="pylayers.util.geomutil.vec_sph"><code class="xref py py-obj docutils literal"><span class="pre">vec_sph</span></code></a>(th,ph)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.vec_sph.html#pylayers.util.geomutil.vec_sph" title="pylayers.util.geomutil.vec_sph"><code class="xref py py-obj docutils literal"><span class="pre">vec_sph</span></code></a>(th,ph)</td>
 <td>return Spherical orthonormal frame</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ellipse.html#pylayers.util.geomutil.ellipse" title="pylayers.util.geomutil.ellipse"><code class="xref py py-obj docutils literal"><span class="pre">ellipse</span></code></a>(fd,&nbsp;p,&nbsp;vth,&nbsp;vph,&nbsp;Eth,&nbsp;Eph,&nbsp;N)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ellipse.html#pylayers.util.geomutil.ellipse" title="pylayers.util.geomutil.ellipse"><code class="xref py py-obj docutils literal"><span class="pre">ellipse</span></code></a>(fd,&nbsp;p,&nbsp;vth,&nbsp;vph,&nbsp;Eth,&nbsp;Eph,&nbsp;N)</td>
 <td>build a geomview file of an ellipse</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.normalize.html#pylayers.util.geomutil.normalize" title="pylayers.util.geomutil.normalize"><code class="xref py py-obj docutils literal"><span class="pre">normalize</span></code></a>(vec)</td>
-<td>normalize an array of N ndim  vectors</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.normalize.html#pylayers.util.geomutil.normalize" title="pylayers.util.geomutil.normalize"><code class="xref py py-obj docutils literal"><span class="pre">normalize</span></code></a>(vec)</td>
+<td>normalize an array of N ndim vectors</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ptonseg.html#pylayers.util.geomutil.ptonseg" title="pylayers.util.geomutil.ptonseg"><code class="xref py py-obj docutils literal"><span class="pre">ptonseg</span></code></a>(pta,&nbsp;phe,&nbsp;pt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ptonseg.html#pylayers.util.geomutil.ptonseg" title="pylayers.util.geomutil.ptonseg"><code class="xref py py-obj docutils literal"><span class="pre">ptonseg</span></code></a>(pta,&nbsp;phe,&nbsp;pt)</td>
 <td>return a point on the segment (pta,pte)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.dptseg.html#pylayers.util.geomutil.dptseg" title="pylayers.util.geomutil.dptseg"><code class="xref py py-obj docutils literal"><span class="pre">dptseg</span></code></a>(p,&nbsp;pt,&nbsp;ph)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.dptseg.html#pylayers.util.geomutil.dptseg" title="pylayers.util.geomutil.dptseg"><code class="xref py py-obj docutils literal"><span class="pre">dptseg</span></code></a>(p,&nbsp;pt,&nbsp;ph)</td>
 <td>distance between a set of points and a segment</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.linet.html#pylayers.util.geomutil.linet" title="pylayers.util.geomutil.linet"><code class="xref py py-obj docutils literal"><span class="pre">linet</span></code></a>(ax,&nbsp;p1,&nbsp;p2[,&nbsp;al,&nbsp;color,&nbsp;linewidth])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.linet.html#pylayers.util.geomutil.linet" title="pylayers.util.geomutil.linet"><code class="xref py py-obj docutils literal"><span class="pre">linet</span></code></a>(ax,&nbsp;p1,&nbsp;p2[,&nbsp;al,&nbsp;color,&nbsp;linewidth])</td>
 <td>draw a short line segment</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ccw.html#pylayers.util.geomutil.ccw" title="pylayers.util.geomutil.ccw"><code class="xref py py-obj docutils literal"><span class="pre">ccw</span></code></a>(a,&nbsp;b,&nbsp;c)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ccw.html#pylayers.util.geomutil.ccw" title="pylayers.util.geomutil.ccw"><code class="xref py py-obj docutils literal"><span class="pre">ccw</span></code></a>(a,&nbsp;b,&nbsp;c)</td>
 <td>counter clock wise order</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.intersect.html#pylayers.util.geomutil.intersect" title="pylayers.util.geomutil.intersect"><code class="xref py py-obj docutils literal"><span class="pre">intersect</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">are_points_inside_cone</span></code>(points,&nbsp;apex,&nbsp;v[,&nbsp;radius])</td>
+<td>determine if a set of points are inside a cone</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">intersect_cone_seg</span></code>(line0,&nbsp;line1,&nbsp;seg[,&nbsp;...])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">intersect_halfline_seg</span></code>(line,&nbsp;seg)</td>
+<td>intersect a half line and a segment</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">intersect3</span></code>(a,&nbsp;b,&nbsp;pg,&nbsp;u1,&nbsp;u2,&nbsp;l1,&nbsp;l2[,&nbsp;binter])</td>
+<td>Intersection of a line and a 3D rectangle screen</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.intersect.html#pylayers.util.geomutil.intersect" title="pylayers.util.geomutil.intersect"><code class="xref py py-obj docutils literal"><span class="pre">intersect</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d)</td>
 <td>check if segment AB intersects segment CD in 2D</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.is_aligned3.html#pylayers.util.geomutil.is_aligned3" title="pylayers.util.geomutil.is_aligned3"><code class="xref py py-obj docutils literal"><span class="pre">is_aligned3</span></code></a>(a,&nbsp;b,&nbsp;c[,&nbsp;tol])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.is_aligned3.html#pylayers.util.geomutil.is_aligned3" title="pylayers.util.geomutil.is_aligned3"><code class="xref py py-obj docutils literal"><span class="pre">is_aligned3</span></code></a>(a,&nbsp;b,&nbsp;c[,&nbsp;tol])</td>
 <td>test aligment of 3 points</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.is_aligned4.html#pylayers.util.geomutil.is_aligned4" title="pylayers.util.geomutil.is_aligned4"><code class="xref py py-obj docutils literal"><span class="pre">is_aligned4</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d[,&nbsp;tol])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.is_aligned4.html#pylayers.util.geomutil.is_aligned4" title="pylayers.util.geomutil.is_aligned4"><code class="xref py py-obj docutils literal"><span class="pre">is_aligned4</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d[,&nbsp;tol])</td>
 <td>test aligment of 4 points</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isleft.html#pylayers.util.geomutil.isleft" title="pylayers.util.geomutil.isleft"><code class="xref py py-obj docutils literal"><span class="pre">isleft</span></code></a>(a,&nbsp;b,&nbsp;c[,&nbsp;tol])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isleft.html#pylayers.util.geomutil.isleft" title="pylayers.util.geomutil.isleft"><code class="xref py py-obj docutils literal"><span class="pre">isleft</span></code></a>(a,&nbsp;b,&nbsp;c[,&nbsp;tol])</td>
 <td>Test point c is at left of the vector a&#8211;&gt;b</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isleftorequal.html#pylayers.util.geomutil.isleftorequal" title="pylayers.util.geomutil.isleftorequal"><code class="xref py py-obj docutils literal"><span class="pre">isleftorequal</span></code></a>(a,&nbsp;b,&nbsp;c)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isleftorequal.html#pylayers.util.geomutil.isleftorequal" title="pylayers.util.geomutil.isleftorequal"><code class="xref py py-obj docutils literal"><span class="pre">isleftorequal</span></code></a>(a,&nbsp;b,&nbsp;c)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.affine.html#pylayers.util.geomutil.affine" title="pylayers.util.geomutil.affine"><code class="xref py py-obj docutils literal"><span class="pre">affine</span></code></a>(X,&nbsp;Y)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.affine.html#pylayers.util.geomutil.affine" title="pylayers.util.geomutil.affine"><code class="xref py py-obj docutils literal"><span class="pre">affine</span></code></a>(X,&nbsp;Y)</td>
 <td>find affine transformation</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.cylmap.html#pylayers.util.geomutil.cylmap" title="pylayers.util.geomutil.cylmap"><code class="xref py py-obj docutils literal"><span class="pre">cylmap</span></code></a>(Y[,&nbsp;r,&nbsp;l])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.cylmap.html#pylayers.util.geomutil.cylmap" title="pylayers.util.geomutil.cylmap"><code class="xref py py-obj docutils literal"><span class="pre">cylmap</span></code></a>(Y[,&nbsp;r,&nbsp;l])</td>
 <td>find affine transformation for a specific cylinder</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.MRot3.html#pylayers.util.geomutil.MRot3" title="pylayers.util.geomutil.MRot3"><code class="xref py py-obj docutils literal"><span class="pre">MRot3</span></code></a>(a,&nbsp;axe)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.MRot3.html#pylayers.util.geomutil.MRot3" title="pylayers.util.geomutil.MRot3"><code class="xref py py-obj docutils literal"><span class="pre">MRot3</span></code></a>(a,&nbsp;axe)</td>
 <td>Return a 3D rotation matrix along axe 0|1|2</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">MATP</span></code>(sl,&nbsp;el,&nbsp;phi,&nbsp;tilt,&nbsp;pol)</td>
+<td>Calculate a rotation matrix for antenna pointing and orientation control</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.MEulerAngle.html#pylayers.util.geomutil.MEulerAngle" title="pylayers.util.geomutil.MEulerAngle"><code class="xref py py-obj docutils literal"><span class="pre">MEulerAngle</span></code></a>(alpha,&nbsp;beta,&nbsp;gamma)</td>
 <td>Calculate a rotation matrix from 3 Euler angles</td>
@@ -457,76 +483,79 @@ Geomview.show3</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.angledir.html#pylayers.util.geomutil.angledir" title="pylayers.util.geomutil.angledir"><code class="xref py py-obj docutils literal"><span class="pre">angledir</span></code></a>(s)</td>
 <td>evaluate (theta,phi) from direction vector</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.BTB.html#pylayers.util.geomutil.BTB" title="pylayers.util.geomutil.BTB"><code class="xref py py-obj docutils literal"><span class="pre">BTB</span></code></a>(a_g,&nbsp;T)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Bthph</span></code>(th,&nbsp;ph,&nbsp;M)</td>
+<td>Return theta and phi tranformed from a rotation matrix M</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.BTB.html#pylayers.util.geomutil.BTB" title="pylayers.util.geomutil.BTB"><code class="xref py py-obj docutils literal"><span class="pre">BTB</span></code></a>(a_g,&nbsp;T)</td>
 <td>Produce a set of rotation matrices for passage between global and local frame</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_coords.html#pylayers.util.geomutil.plot_coords" title="pylayers.util.geomutil.plot_coords"><code class="xref py py-obj docutils literal"><span class="pre">plot_coords</span></code></a>(ax,&nbsp;ob[,&nbsp;color])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_coords.html#pylayers.util.geomutil.plot_coords" title="pylayers.util.geomutil.plot_coords"><code class="xref py py-obj docutils literal"><span class="pre">plot_coords</span></code></a>(ax,&nbsp;ob[,&nbsp;color])</td>
 <td>plotting coord of a <cite>shapely</cite> object</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_bounds.html#pylayers.util.geomutil.plot_bounds" title="pylayers.util.geomutil.plot_bounds"><code class="xref py py-obj docutils literal"><span class="pre">plot_bounds</span></code></a>(ax,&nbsp;ob[,&nbsp;color])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_bounds.html#pylayers.util.geomutil.plot_bounds" title="pylayers.util.geomutil.plot_bounds"><code class="xref py py-obj docutils literal"><span class="pre">plot_bounds</span></code></a>(ax,&nbsp;ob[,&nbsp;color])</td>
 <td>plot bounds</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_line.html#pylayers.util.geomutil.plot_line" title="pylayers.util.geomutil.plot_line"><code class="xref py py-obj docutils literal"><span class="pre">plot_line</span></code></a>(ax,&nbsp;ob[,&nbsp;color])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_line.html#pylayers.util.geomutil.plot_line" title="pylayers.util.geomutil.plot_line"><code class="xref py py-obj docutils literal"><span class="pre">plot_line</span></code></a>(ax,&nbsp;ob[,&nbsp;color])</td>
 <td>plot line</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.v_color.html#pylayers.util.geomutil.v_color" title="pylayers.util.geomutil.v_color"><code class="xref py py-obj docutils literal"><span class="pre">v_color</span></code></a>(ob)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.v_color.html#pylayers.util.geomutil.v_color" title="pylayers.util.geomutil.v_color"><code class="xref py py-obj docutils literal"><span class="pre">v_color</span></code></a>(ob)</td>
 <td>return color</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plotPolygon.html#pylayers.util.geomutil.plotPolygon" title="pylayers.util.geomutil.plotPolygon"><code class="xref py py-obj docutils literal"><span class="pre">plotPolygon</span></code></a>(poly[,&nbsp;color,&nbsp;alpha])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plotPolygon.html#pylayers.util.geomutil.plotPolygon" title="pylayers.util.geomutil.plotPolygon"><code class="xref py py-obj docutils literal"><span class="pre">plotPolygon</span></code></a>(poly[,&nbsp;color,&nbsp;alpha])</td>
 <td>plot a shapely Polygon</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.shrinkPolygon.html#pylayers.util.geomutil.shrinkPolygon" title="pylayers.util.geomutil.shrinkPolygon"><code class="xref py py-obj docutils literal"><span class="pre">shrinkPolygon</span></code></a>(poly[,&nbsp;d])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.shrinkPolygon.html#pylayers.util.geomutil.shrinkPolygon" title="pylayers.util.geomutil.shrinkPolygon"><code class="xref py py-obj docutils literal"><span class="pre">shrinkPolygon</span></code></a>(poly[,&nbsp;d])</td>
 <td>shrink polygon</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.shrinkPolygon2.html#pylayers.util.geomutil.shrinkPolygon2" title="pylayers.util.geomutil.shrinkPolygon2"><code class="xref py py-obj docutils literal"><span class="pre">shrinkPolygon2</span></code></a>(poly1[,&nbsp;d])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.shrinkPolygon2.html#pylayers.util.geomutil.shrinkPolygon2" title="pylayers.util.geomutil.shrinkPolygon2"><code class="xref py py-obj docutils literal"><span class="pre">shrinkPolygon2</span></code></a>(poly1[,&nbsp;d])</td>
 <td>shrink Polygon</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.simplifyPolygon.html#pylayers.util.geomutil.simplifyPolygon" title="pylayers.util.geomutil.simplifyPolygon"><code class="xref py py-obj docutils literal"><span class="pre">simplifyPolygon</span></code></a>(poly1)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.simplifyPolygon.html#pylayers.util.geomutil.simplifyPolygon" title="pylayers.util.geomutil.simplifyPolygon"><code class="xref py py-obj docutils literal"><span class="pre">simplifyPolygon</span></code></a>(poly1)</td>
 <td>Simplify polygon : suppress adjacent colinear segments</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.wall_delta.html#pylayers.util.geomutil.wall_delta" title="pylayers.util.geomutil.wall_delta"><code class="xref py py-obj docutils literal"><span class="pre">wall_delta</span></code></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2[,&nbsp;delta])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.wall_delta.html#pylayers.util.geomutil.wall_delta" title="pylayers.util.geomutil.wall_delta"><code class="xref py py-obj docutils literal"><span class="pre">wall_delta</span></code></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2[,&nbsp;delta])</td>
 <td>Identification of new points</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_coords2.html#pylayers.util.geomutil.plot_coords2" title="pylayers.util.geomutil.plot_coords2"><code class="xref py py-obj docutils literal"><span class="pre">plot_coords2</span></code></a>(ax,&nbsp;ob)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_coords2.html#pylayers.util.geomutil.plot_coords2" title="pylayers.util.geomutil.plot_coords2"><code class="xref py py-obj docutils literal"><span class="pre">plot_coords2</span></code></a>(ax,&nbsp;ob)</td>
 <td>plot point from coordinates</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_bounds2.html#pylayers.util.geomutil.plot_bounds2" title="pylayers.util.geomutil.plot_bounds2"><code class="xref py py-obj docutils literal"><span class="pre">plot_bounds2</span></code></a>(ax,&nbsp;ob)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_bounds2.html#pylayers.util.geomutil.plot_bounds2" title="pylayers.util.geomutil.plot_bounds2"><code class="xref py py-obj docutils literal"><span class="pre">plot_bounds2</span></code></a>(ax,&nbsp;ob)</td>
 <td>plot bounds v2</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_line2.html#pylayers.util.geomutil.plot_line2" title="pylayers.util.geomutil.plot_line2"><code class="xref py py-obj docutils literal"><span class="pre">plot_line2</span></code></a>(ax,&nbsp;ob)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_line2.html#pylayers.util.geomutil.plot_line2" title="pylayers.util.geomutil.plot_line2"><code class="xref py py-obj docutils literal"><span class="pre">plot_line2</span></code></a>(ax,&nbsp;ob)</td>
 <td>plot line v2</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_coords3.html#pylayers.util.geomutil.plot_coords3" title="pylayers.util.geomutil.plot_coords3"><code class="xref py py-obj docutils literal"><span class="pre">plot_coords3</span></code></a>(ax,&nbsp;ob,&nbsp;color)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_coords3.html#pylayers.util.geomutil.plot_coords3" title="pylayers.util.geomutil.plot_coords3"><code class="xref py py-obj docutils literal"><span class="pre">plot_coords3</span></code></a>(ax,&nbsp;ob,&nbsp;color)</td>
 <td>plot coors v3</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_bounds3.html#pylayers.util.geomutil.plot_bounds3" title="pylayers.util.geomutil.plot_bounds3"><code class="xref py py-obj docutils literal"><span class="pre">plot_bounds3</span></code></a>(ax,&nbsp;ob,&nbsp;color)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_bounds3.html#pylayers.util.geomutil.plot_bounds3" title="pylayers.util.geomutil.plot_bounds3"><code class="xref py py-obj docutils literal"><span class="pre">plot_bounds3</span></code></a>(ax,&nbsp;ob,&nbsp;color)</td>
 <td>plot bounds v3</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_line3.html#pylayers.util.geomutil.plot_line3" title="pylayers.util.geomutil.plot_line3"><code class="xref py py-obj docutils literal"><span class="pre">plot_line3</span></code></a>(ax,&nbsp;ob,&nbsp;color)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.plot_line3.html#pylayers.util.geomutil.plot_line3" title="pylayers.util.geomutil.plot_line3"><code class="xref py py-obj docutils literal"><span class="pre">plot_line3</span></code></a>(ax,&nbsp;ob,&nbsp;color)</td>
 <td>plot lines v3</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.valid_wedge.html#pylayers.util.geomutil.valid_wedge" title="pylayers.util.geomutil.valid_wedge"><code class="xref py py-obj docutils literal"><span class="pre">valid_wedge</span></code></a>(ps,&nbsp;pw,&nbsp;p1,&nbsp;p2,&nbsp;grazing)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.valid_wedge.html#pylayers.util.geomutil.valid_wedge" title="pylayers.util.geomutil.valid_wedge"><code class="xref py py-obj docutils literal"><span class="pre">valid_wedge</span></code></a>(ps,&nbsp;pw,&nbsp;p1,&nbsp;p2,&nbsp;grazing)</td>
 <td>check set of N wedge sector validity for point ps</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.sector.html#pylayers.util.geomutil.sector" title="pylayers.util.geomutil.sector"><code class="xref py py-obj docutils literal"><span class="pre">sector</span></code></a>(p1,&nbsp;p2,&nbsp;pt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.sector.html#pylayers.util.geomutil.sector" title="pylayers.util.geomutil.sector"><code class="xref py py-obj docutils literal"><span class="pre">sector</span></code></a>(p1,&nbsp;p2,&nbsp;pt)</td>
 <td>non signed angular sector  between</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.dist.html#pylayers.util.geomutil.dist" title="pylayers.util.geomutil.dist"><code class="xref py py-obj docutils literal"><span class="pre">dist</span></code></a>(x,&nbsp;y,&nbsp;ax)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.dist.html#pylayers.util.geomutil.dist" title="pylayers.util.geomutil.dist"><code class="xref py py-obj docutils literal"><span class="pre">dist</span></code></a>(x,&nbsp;y,&nbsp;ax)</td>
 <td>calculates distance between two arrays along a given axis</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.line_intersection.html#pylayers.util.geomutil.line_intersection" title="pylayers.util.geomutil.line_intersection"><code class="xref py py-obj docutils literal"><span class="pre">line_intersection</span></code></a>(l1,&nbsp;l2)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.line_intersection.html#pylayers.util.geomutil.line_intersection" title="pylayers.util.geomutil.line_intersection"><code class="xref py py-obj docutils literal"><span class="pre">line_intersection</span></code></a>(l1,&nbsp;l2)</td>
 <td>intersection between two 2D lines using shapely</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.linepoly_intersection.html#pylayers.util.geomutil.linepoly_intersection" title="pylayers.util.geomutil.linepoly_intersection"><code class="xref py py-obj docutils literal"><span class="pre">linepoly_intersection</span></code></a>(l,&nbsp;poly)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.linepoly_intersection.html#pylayers.util.geomutil.linepoly_intersection" title="pylayers.util.geomutil.linepoly_intersection"><code class="xref py py-obj docutils literal"><span class="pre">linepoly_intersection</span></code></a>(l,&nbsp;poly)</td>
 <td>intersection between a 2D line and a 2D polygon using shapely</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.mirror.html#pylayers.util.geomutil.mirror" title="pylayers.util.geomutil.mirror"><code class="xref py py-obj docutils literal"><span class="pre">mirror</span></code></a>(p,&nbsp;pa,&nbsp;pb)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.mirror.html#pylayers.util.geomutil.mirror" title="pylayers.util.geomutil.mirror"><code class="xref py py-obj docutils literal"><span class="pre">mirror</span></code></a>(p,&nbsp;pa,&nbsp;pb)</td>
 <td>compute the image of p wrt the segment (pa,pb)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.distseg.html#pylayers.util.geomutil.distseg" title="pylayers.util.geomutil.distseg"><code class="xref py py-obj docutils literal"><span class="pre">distseg</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;alpha,&nbsp;beta)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.distseg.html#pylayers.util.geomutil.distseg" title="pylayers.util.geomutil.distseg"><code class="xref py py-obj docutils literal"><span class="pre">distseg</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;alpha,&nbsp;beta)</td>
 <td>distance to segments</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.dmin3d.html#pylayers.util.geomutil.dmin3d" title="pylayers.util.geomutil.dmin3d"><code class="xref py py-obj docutils literal"><span class="pre">dmin3d</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.dmin3d.html#pylayers.util.geomutil.dmin3d" title="pylayers.util.geomutil.dmin3d"><code class="xref py py-obj docutils literal"><span class="pre">dmin3d</span></code></a>(a,&nbsp;b,&nbsp;c,&nbsp;d)</td>
 <td>evaluate the minimal distance between 2 set of segments</td>
 </tr>
 </tbody>
@@ -545,7 +574,7 @@ Geomview.show3</p>
 
     <div class="footer">
         &copy; 2016, PyLayers developer team.
-      Last updated on Nov 04, 2017.
+      Last updated on Nov 06, 2017.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.util.geomutil.rst.txt"

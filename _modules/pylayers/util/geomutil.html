@@ -243,6 +243,7 @@
 <span class="sd">    :toctree: generated/</span>
 
 <span class="sd">     angular</span>
+<span class="sd">     vecang</span>
 <span class="sd">     SignedArea</span>
 <span class="sd">     Centroid</span>
 <span class="sd">     Lr2n</span>
@@ -257,6 +258,10 @@
 <span class="sd">     dptseg</span>
 <span class="sd">     linet</span>
 <span class="sd">     ccw</span>
+<span class="sd">     are_points_inside_cone</span>
+<span class="sd">     intersect_cone_seg</span>
+<span class="sd">     intersect_halfline_seg</span>
+<span class="sd">     intersect3</span>
 <span class="sd">     intersect</span>
 <span class="sd">     is_aligned3</span>
 <span class="sd">     is_aligned4</span>
@@ -265,9 +270,11 @@
 <span class="sd">     affine</span>
 <span class="sd">     cylmap</span>
 <span class="sd">     MRot3</span>
+<span class="sd">     MATP</span>
 <span class="sd">     MEulerAngle</span>
 <span class="sd">     SphericalBasis</span>
 <span class="sd">     angledir</span>
+<span class="sd">     Bthph</span>
 <span class="sd">     BTB</span>
 
 <span class="sd">     plot_coords</span>
@@ -849,8 +856,8 @@
 
 <span class="sd">        pylayers.layout.Layout.ispoint</span>
 
-<span class="sd">        vnodes is a list of point and segments of the polygon. </span>
-<span class="sd">        If there are isosegments the sequence of iso segments is repeated between the termination points. </span>
+<span class="sd">        vnodes is a list of points and segments of the polygon. </span>
+<span class="sd">        If there are iso-segments the sequence of iso segments is repeated between the termination points. </span>
 <span class="sd">        L.numseg has been adapted in order to return either the first segment (default)</span>
 <span class="sd">        or the list of all segments</span>
 
@@ -2789,7 +2796,7 @@
 
 
 <div class="viewcode-block" id="angular"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.angular.html#pylayers.util.geomutil.angular">[docs]</a><span class="k">def</span> <span class="nf">angular</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; determine angle between p1 and p2 in [0 2pi]</span>
+    <span class="sd">&quot;&quot;&quot; determine angle between p1 and p2 in inerval [0 2pi]</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2824,6 +2831,11 @@
 <span class="sd">    &gt;&gt;&gt; a6  = angular(p26,p1)</span>
 <span class="sd">    &gt;&gt;&gt; a7  = angular(p27,p1)</span>
 <span class="sd">    &gt;&gt;&gt; a8  = angular(p28,p1)</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    vecang</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2874,20 +2886,24 @@
 
 
 <div class="viewcode-block" id="SignedArea"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.SignedArea.html#pylayers.util.geomutil.SignedArea">[docs]</a><span class="k">def</span> <span class="nf">SignedArea</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]])):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the signed area of a sequence of points in a  plane</span>
+    <span class="sd">&quot;&quot;&quot; Calculate the signed area of a sequence of points in a  plane</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        p : array 2 x Np</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p : array 2 x Np</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A : float</span>
+<span class="sd">        signed area of the sequence of points </span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
-<span class="sd">        &gt;&gt;&gt; p = np.array([[0,10,10,0],[0,0,-2,-2]])</span>
-<span class="sd">        &gt;&gt;&gt; A = SignedArea(p)</span>
-<span class="sd">        &gt;&gt;&gt; assert(A+20&lt;1e-15)</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
+<span class="sd">    &gt;&gt;&gt; p = np.array([[0,10,10,0],[0,0,-2,-2]])</span>
+<span class="sd">    &gt;&gt;&gt; A = SignedArea(p)</span>
+<span class="sd">    &gt;&gt;&gt; assert(A+20&lt;1e-15)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">::],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]))</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">::],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]))</span> <span class="o">/</span> <span class="mf">2.</span></div>
@@ -2898,15 +2914,19 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    http://en.wikipedia.org/wiki/Centroid</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        p : np array polygon (2xNp)</span>
+
+<span class="sd">    p : np array </span>
+<span class="sd">        polygon (2xNp)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        pc = Centroid()</span>
+
+<span class="sd">    pc = Centroid()</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -2930,7 +2950,7 @@
 
 
 <div class="viewcode-block" id="Lr2n"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Lr2n.html#pylayers.util.geomutil.Lr2n">[docs]</a><span class="k">def</span> <span class="nf">Lr2n</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]]),</span> <span class="n">closed</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;  Linear Ring to normal</span>
+    <span class="sd">&quot;&quot;&quot;  Linear ring to normal</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3286,7 +3306,7 @@
 
 
 <div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.normalize.html#pylayers.util.geomutil.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; normalize an array of N ndim  vectors</span>
+    <span class="sd">&quot;&quot;&quot; normalize an array of N ndim vectors</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
