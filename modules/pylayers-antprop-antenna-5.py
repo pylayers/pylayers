@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 from pylayers.antprop.antenna import *
-A = Antenna('defant.vsh3')
-fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
-fig,ax = A.plotG(fGHz=[2,3,4],plan='phi',angdeg=90)
+A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
+f,a = A.plotG(plan='theta',angdeg=0)
+f,a = A.plotG(plan='phi',angdeg=90,fig=f,ax=a)
+txt = plt.title('S1R1 antenna : st loadmat')
+plt.show()

@@ -1,5 +1,5 @@
 from pylayers.antprop.antenna import *
-A = Antenna('S2R2.sh3')
-A.eval()
-tau = A.getdelay()
-A.elec_delay(tau)
+import numpy as np
+import matplotlib.pylab as plt
+A = Antenna('defant.vsh3')
+F = A.eval(grid=True)
