@@ -183,6 +183,80 @@
             
   <div class="section" id="module-pylayers.util.save">
 <span id="pylayers-util-save"></span><h1>pylayers.util.save<a class="headerlink" href="#module-pylayers.util.save" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.util.save.Save">
+<em class="property">class </em><code class="descclassname">pylayers.util.save.</code><code class="descname">Save</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/save.html#Save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save all variables of a simulnet simulation.
+Save process can be setup with the save.ini file from /&lt;project&gt;/ini</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>net</td>
+<td>(pylayers.network.network())</td>
+</tr>
+<tr class="row-even"><td>sim</td>
+<td>(SimPy.SimulationRT())</td>
+</tr>
+<tr class="row-odd"><td>savemat</td>
+<td>(dictionnary with all the saved results from a simulation) ( obtained after self.export() )</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>run ():</td>
+<td>save the current simulation every k steps (setup into save.ini)</td>
+</tr>
+<tr class="row-even"><td>load():</td>
+<td>Load saved results of a simulation. file extension  .pck</td>
+</tr>
+<tr class="row-odd"><td>export(etype) :</td>
+<td>export the results into the etype format. available format : - &#8216;python&#8217; - &#8216;matlab&#8217;</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.util.save.Save.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>filename=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a saved trace simulation</p>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.save import *
+&gt;&gt;&gt; S=Save()
+&gt;&gt;&gt; S.load()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.save.Save.mat_export">
+<code class="descname">mat_export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.mat_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.mat_export" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>export save simulation to a matlab file</div></blockquote>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.util.save import *
+&gt;&gt;&gt; S=Save()
+&gt;&gt;&gt; S.mat_export()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.save.Save.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the save Result process</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

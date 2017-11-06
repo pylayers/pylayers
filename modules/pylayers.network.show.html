@@ -31,8 +31,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
-    <link rel="next" title="pylayers.network.wsn" href="pylayers.network.wsn.html" />
-    <link rel="prev" title="pylayers.network.network.PNetwork.run" href="generated/pylayers.network.network.PNetwork.run.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -93,40 +91,6 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.network.network.PNetwork.run.html" title="pylayers.network.network.PNetwork.run"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.netw...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.network.network.PNetwork.run
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.network.wsn.html" title="pylayers.network.wsn"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.network.wsn
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.network.wsn
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -167,7 +131,9 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.network.show</a></li>
+<li><a class="reference internal" href="#">pylayers.network.show</a><ul>
+</ul>
+</li>
 </ul>
 
     
@@ -183,6 +149,127 @@
             
   <div class="section" id="module-pylayers.network.show">
 <span id="pylayers-network-show"></span><h1>pylayers.network.show<a class="headerlink" href="#module-pylayers.network.show" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.network.show.ShowNet">
+<em class="property">class </em><code class="descclassname">pylayers.network.show.</code><code class="descname">ShowNet</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/show.html#ShowNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.show.ShowNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show network process</p>
+<p>Process which update the plot from the dynamic information from the network</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">acquired</span></code>(res)</td>
+<td>Multi - functional test for reneging for &#8216;request&#8217; and &#8216;get&#8217;: (1)If res of type Resource:     Tests whether resource res was acquired when proces reactivated.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">active</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">attrnames</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cancel</span></code>(victim)</td>
+<td>Application function to cancel all event notices for this Process instance;(should be all event notices for the _generator_).</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupt</span></code>(victim)</td>
+<td>Application function to interrupt active processes</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">interruptReset</span></code>()</td>
+<td>Application function for an interrupt victim to get out of &#8216;interrupted&#8217; state.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupted</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">passive</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">queuing</span></code>(resource)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.show.ShowNet.run" title="pylayers.network.show.ShowNet.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>()</td>
+<td>Display the network</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">start</span></code>([pem,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
+<td>Activates PEM of this Process.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stored</span></code>(buffer)</td>
+<td>Test for reneging for &#8216;yield put .</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">terminated</span></code>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.network.show.ShowNet.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/show.html#ShowNet.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.show.ShowNet.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the network</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.network.show.ShowTable">
+<em class="property">class </em><code class="descclassname">pylayers.network.show.</code><code class="descname">ShowTable</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/show.html#ShowTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.show.ShowTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show table process</p>
+<p>Process which update the table from the dynamic information from the network</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">acquired</span></code>(res)</td>
+<td>Multi - functional test for reneging for &#8216;request&#8217; and &#8216;get&#8217;: (1)If res of type Resource:     Tests whether resource res was acquired when proces reactivated.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">active</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">attrnames</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cancel</span></code>(victim)</td>
+<td>Application function to cancel all event notices for this Process instance;(should be all event notices for the _generator_).</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupt</span></code>(victim)</td>
+<td>Application function to interrupt active processes</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">interruptReset</span></code>()</td>
+<td>Application function for an interrupt victim to get out of &#8216;interrupted&#8217; state.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupted</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">passive</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">queuing</span></code>(resource)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.network.show.ShowTable.run" title="pylayers.network.show.ShowTable.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">start</span></code>([pem,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
+<td>Activates PEM of this Process.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stored</span></code>(buffer)</td>
+<td>Test for reneging for &#8216;yield put .</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">terminated</span></code>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.network.show.ShowTable.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/network/show.html#ShowTable.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.show.ShowTable.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -205,16 +292,6 @@
     </div>
      <div class="rel">
     
-    <div class="buttonPrevious">
-      <a href="generated/pylayers.network.network.PNetwork.run.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.network.wsn.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../py-modindex.html">
         Previous

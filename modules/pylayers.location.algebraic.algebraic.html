@@ -31,7 +31,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="pylayers.location.algebraic package" href="pylayers.location.algebraic.html" />
-    <link rel="next" title="pylayers.location.geometric.constraints.cla" href="pylayers.location.geometric.constraints.cla.html" />
     <link rel="prev" title="pylayers.location.algebraic package" href="pylayers.location.algebraic.html" />
 <script type="text/javascript">
 
@@ -110,23 +109,6 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="pylayers.location.geometric.constraints.cla.html" title="pylayers.location.geometric.constraints.cla"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.loca...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.location.geometric.constraints.cla
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -167,7 +149,9 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.location.algebraic.algebraic</a></li>
+<li><a class="reference internal" href="#">pylayers.location.algebraic.algebraic</a><ul>
+</ul>
+</li>
 </ul>
 
     
@@ -191,6 +175,449 @@
 <tbody valign="top">
 </tbody>
 </table>
+<dl class="class">
+<dt id="pylayers.location.algebraic.algebraic.algloc">
+<em class="property">class </em><code class="descclassname">pylayers.location.algebraic.algebraic.</code><code class="descname">algloc</code><span class="sig-paren">(</span><em>nodes={}</em>, <em>ldp={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</dt>
+<dd>This class gathers algebraic localization algorithms</dd>
+</dl>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>nodes</td>
+<td>(dictionnary) ldp : dictionnary</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>This class regroups algebraic localization algorithms All nodes positions are gatherred in nodes dictionnary All location dependent parameters are gathered in ldp dictionnary</td>
+</tr>
+<tr class="row-odd"><td>&gt;&gt;&gt;&gt;&gt;&gt;&gt; 95d88122037bbe1e5d26beff4fd79e7448eb3dd8</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.algebraic.algebraic.algloc.ls_locate" title="pylayers.location.algebraic.algebraic.algloc.ls_locate"><code class="xref py py-obj docutils literal"><span class="pre">ls_locate</span></code></a>([rss,&nbsp;toa,&nbsp;tdoa,&nbsp;Rest])</td>
+<td>This method applies least squares (LS) approximation to get position P.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.crb">
+<code class="descname">crb</code><span class="sig-paren">(</span><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.crb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.crb" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method compute the cramer rao bound (CRB) at position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>rss : boolean
+toa : boolean
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>CRB</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; crb_rss = S.crb(BN, 1, 0, 0)
+&gt;&gt;&gt; crb_toa = S.crb(BN, 0, 1, 0)
+&gt;&gt;&gt; crb_tdoa = S.crb(BN, 0, 0, 1)
+&gt;&gt;&gt; crb_rsstoa = S.crb(BN, 1, 1, 0)
+&gt;&gt;&gt; crb_rsstdoa = S.crb(BN, 1, 0, 1)
+&gt;&gt;&gt; crb_toatdoa = S.crb(BN, 0, 1, 1)
+&gt;&gt;&gt; crb_rsstoatdoa = S.crb(BN, 1, 1, 1)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-1.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.fim">
+<code class="descname">fim</code><span class="sig-paren">(</span><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.fim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.fim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the fisher information matrix in P for the given
+Parameters
+&#8212;&#8212;&#8212;-</p>
+<blockquote>
+<div>P : numpy.ndarray
+rss : boolean
+toa : boolean
+tdoa : boolean</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>FIM</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.get_range">
+<code class="descname">get_range</code><span class="sig-paren">(</span><em>Rest='mode'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.get_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.get_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the range from RSS using the &#8220;Rest&#8221; estimator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Rest</strong> : string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>rg</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; r_mode = S.get_range(&#39;mode&#39;)
+&gt;&gt;&gt; r_median = S.get_range(&#39;median&#39;)
+&gt;&gt;&gt; r_mean = S.get_range(&#39;mean&#39;)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-2.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.get_range_std">
+<code class="descname">get_range_std</code><span class="sig-paren">(</span><em>Rest='mode'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.get_range_std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.get_range_std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the RSS range standard deviation using the &#8220;Rest&#8221;         estimator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Rest</strong> : string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>rg_std</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; rs_mode = S.get_range_std(&#39;mode&#39;)
+&gt;&gt;&gt; rs_median = S.get_range_std(&#39;median&#39;)
+&gt;&gt;&gt; rs_mean = S.get_range_std(&#39;mean&#39;)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-3.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.ls_locate">
+<code class="descname">ls_locate</code><span class="sig-paren">(</span><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em>, <em>Rest='mode'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ls_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ls_locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method applies least squares (LS) approximation to get
+position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<p><strong>toa</strong> : boolean</p>
+<p><strong>tdoa</strong> : boolean</p>
+<p><strong>Rest</strong> : string</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; P_rss = S.ls_locate(1, 0, 0, &#39;mode&#39;)
+&gt;&gt;&gt; P_toa = S.ls_locate(0, 1, 0, &#39;mode&#39;)
+&gt;&gt;&gt; P_tdoa = S.ls_locate(0, 0, 1, &#39;mode&#39;)
+&gt;&gt;&gt; P_rsstoa = S.ls_locate(1, 1, 0, &#39;mode&#39;)
+&gt;&gt;&gt; P_rsstdoa = S.ls_locate(1, 0, 1, &#39;mode&#39;)
+&gt;&gt;&gt; P_toatdoa = S.ls_locate(0, 1, 1, &#39;mode&#39;)
+&gt;&gt;&gt; P_rsstoatdoa = S.ls_locate(1, 1, 1, &#39;mode&#39;)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-4.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.ml_function">
+<code class="descname">ml_function</code><span class="sig-paren">(</span><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ml_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ml_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>This defines the ML function to be minimized if ML estimator
+is used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>rss : boolean
+toa : boolean
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ML</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.ml_locate">
+<code class="descname">ml_locate</code><span class="sig-paren">(</span><em>P0</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ml_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ml_locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This applies ML estimator to compute position P</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P0</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>rss : boolean
+toa : boolean
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; P_rss = S.ml_locate(BN0, 1, 0, 0)
+&gt;&gt;&gt; P_toa = S.ml_locate(BN0, 0, 1, 0)
+&gt;&gt;&gt; P_tdoa = S.ml_locate(BN0, 0, 0, 1)
+&gt;&gt;&gt; P_rsstoa = S.ml_locate(BN0, 1, 1, 0)
+&gt;&gt;&gt; P_rsstdoa = S.ml_locate(BN0, 1, 0, 1)
+&gt;&gt;&gt; P_toatdoa = S.ml_locate(BN0, 0, 1, 1)
+&gt;&gt;&gt; P_rsstoatdoa = S.ml_locate(BN0, 1, 1, 1)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-5.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot scenario</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>toa</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>tdoa</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show scenario</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>toa</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>tdoa</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; S.show(1,1,1)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-6.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.wls_locate">
+<code class="descname">wls_locate</code><span class="sig-paren">(</span><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em>, <em>Rest='mode'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.wls_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.wls_locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method applies weighted least squares (WLS) approximation
+to get position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<blockquote>
+<div><p>toa : boolean
+tdoa : boolean
+Rest : string</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes, ldp, BN0 = scenario()
+&gt;&gt;&gt; S = algloc(nodes, ldp)
+&gt;&gt;&gt; P_rss = S.wls_locate(1, 0, 0, &#39;mode&#39;)
+&gt;&gt;&gt; P_toa = S.wls_locate(0, 1, 0, &#39;mode&#39;)
+&gt;&gt;&gt; P_tdoa = S.wls_locate(0, 0, 1, &#39;mode&#39;)
+&gt;&gt;&gt; P_rsstoa = S.wls_locate(1, 1, 0, &#39;mode&#39;)
+&gt;&gt;&gt; P_rsstdoa = S.wls_locate(1, 0, 1, &#39;mode&#39;)
+&gt;&gt;&gt; P_toatdoa = S.wls_locate(0, 1, 1, &#39;mode&#39;)
+&gt;&gt;&gt; P_rsstoatdoa = S.wls_locate(1, 1, 1, &#39;mode&#39;)
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-7.py">Source code</a>)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.location.algebraic.algebraic.scenario">
+<code class="descclassname">pylayers.location.algebraic.algebraic.</code><code class="descname">scenario</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.scenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is not a class member, it defines a sample scenario.
+Defines a sample scenario for testing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>nodes</strong> : dictionnary</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>&#8216;BN&#8217; 
+&#8216;RN_RSS&#8217;
+&#8216;RN_TDOA&#8217;
+&#8216;RN_TOA&#8217;
+&#8216;RNr_TDOA&#8217;</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>ldp</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">all ldps of bn0</span><dd><p class="first last">&#8216;PL0&#8217;
+&#8216;RSS&#8217;
+&#8216;RSS_np&#8217;
+&#8216;RSS_std&#8217;
+&#8216;TDOA&#8217;
+&#8216;TDOA_std&#8217;
+&#8216;TOA&#8217;
+&#8216;TOA_std&#8217;</p>
+</dd>
+</dl>
+<p>bn0   : The true position of blind node</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.location.algebraic.algebraic.algloc import *
+&gt;&gt;&gt; import scipy as sp
+&gt;&gt;&gt; from pylayers.util.geomutil import dist
+&gt;&gt;&gt; nRN = 4
+&gt;&gt;&gt; dim = 3 # 2 for 2D, 3 for 3D
+&gt;&gt;&gt; L = 20.
+&gt;&gt;&gt; c = 0.3
+&gt;&gt;&gt; BN = L*sp.rand(dim,1)
+&gt;&gt;&gt; BN0 = L*sp.rand(dim,1)
+&gt;&gt;&gt; RN_TOA = L*sp.rand(dim,nRN)
+&gt;&gt;&gt; RN_RSS = L*sp.rand(dim,nRN)
+&gt;&gt;&gt; RN_TDOA = L*sp.rand(dim,nRN)
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; d_TOA = dist(RN_TOA,BN,0) # actual distances
+&gt;&gt;&gt; TOF = d_TOA/c # actual TOA
+&gt;&gt;&gt; TOA_std = 0.001/c*np.ones(np.shape(TOF))
+&gt;&gt;&gt; TOA = TOF + TOA_std
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; rss_std = 0.001 * np.ones(nRN)
+&gt;&gt;&gt; rss_np = 2.645 * np.ones(nRN)
+&gt;&gt;&gt; pl0 = 34.7*np.ones(nRN)
+&gt;&gt;&gt; d0 = 1.
+&gt;&gt;&gt; d_RSS = dist(RN_RSS,BN,0) # actual distances
+&gt;&gt;&gt; X = rss_std * np.random.randn(np.shape(pl0)[0])
+&gt;&gt;&gt; rss_db = pl0-10*rss_np*np.log10(d_RSS/d0)+X
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
+&gt;&gt;&gt; d = dist(RN_TDOA,BN,0)
+&gt;&gt;&gt; dr = dist(RNr_TDOA,BN,0)
+&gt;&gt;&gt; TDOF = (d-dr)/c # actual TDOA
+&gt;&gt;&gt; TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
+&gt;&gt;&gt; TDOA = TDOF + TDOA_std
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; nodes={}
+&gt;&gt;&gt; nodes[&#39;BN&#39;]= BN
+&gt;&gt;&gt; nodes[&#39;RN_RSS&#39;]= RN_RSS
+&gt;&gt;&gt; nodes[&#39;RN_TOA&#39;]= RN_TOA
+&gt;&gt;&gt; nodes[&#39;RN_TDOA&#39;]= RN_TDOA
+&gt;&gt;&gt; nodes[&#39;RNr_TDOA&#39;]= RNr_TDOA
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ldp={}
+&gt;&gt;&gt; ldp[&#39;RSS&#39;] = rss_db
+&gt;&gt;&gt; ldp[&#39;RSS_std&#39;] = rss_std
+&gt;&gt;&gt; ldp[&#39;RSS_np&#39;] = rss_np
+&gt;&gt;&gt; ldp[&#39;d0&#39;] = d0
+&gt;&gt;&gt; ldp[&#39;PL0&#39;] = pl0
+&gt;&gt;&gt; ldp[&#39;TOA&#39;] = TOA
+&gt;&gt;&gt; ldp[&#39;TOA_std&#39;] = TOA_std
+&gt;&gt;&gt; ldp[&#39;TDOA&#39;] = TDOA
+&gt;&gt;&gt; ldp[&#39;TDOA_std&#39;] = TDOA_std
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; print &#39;Nodes&#39;
+&gt;&gt;&gt; print nodes
+&gt;&gt;&gt; print &#39;LDPs&#39;
+&gt;&gt;&gt; print ldp
+&gt;&gt;&gt; print &#39;BN0:initial guess for ML estimator&#39;
+&gt;&gt;&gt; print BN0
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-8.py">Source code</a>)</p>
+</dd></dl>
+
 </div>
 
 
@@ -219,13 +646,8 @@
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.location.geometric.constraints.cla.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

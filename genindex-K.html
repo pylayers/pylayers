@@ -12,6 +12,7 @@
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -19,12 +20,14 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="Python 1 documentation" href="index.html" />
@@ -60,18 +63,21 @@
 <div class="search_form">
 
 <div id="cse" style="width: 100%;"></div>
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript">
-  google.load('search', '1', {language : 'en'});
-  google.setOnLoadCallback(function() {
-    var customSearchControl = new google.search.CustomSearchControl('016639176250731907682:tjtqbvtvij0');
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    var options = new google.search.DrawOptions();
-    options.setAutoComplete(true);
-    customSearchControl.draw('cse', options);
-  }, true);
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
 </script>
-
+<gcse:search></gcse:search>
 </div>
 </div> <!-- end navbar --></div>
     </div>
@@ -89,7 +95,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module...
+	    Python Module Index
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -126,7 +132,13 @@
 <table style="width: 100%" class="indextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="modules/generated/pylayers.location.learning.loclearn.knn_learn.html#pylayers.location.learning.loclearn.knn_learn">knn_learn() (in module pylayers.location.learning.loclearn)</a>
+  <dt><a href="modules/pylayers.antprop.aarray.html#pylayers.antprop.aarray.k2xyz">k2xyz() (in module pylayers.antprop.aarray)</a>, <a href="modules/pylayers.gis.lireifc.html#pylayers.antprop.aarray.k2xyz">[1]</a>, <a href="modules/pylayers.gis.lireifc2.html#pylayers.antprop.aarray.k2xyz">[2]</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="modules/pylayers.antprop.channel.html#pylayers.antprop.channel.TBchannel.Kfactor">Kfactor() (pylayers.antprop.channel.TBchannel method)</a>, <a href="modules/pylayers.antprop.channel.html#pylayers.antprop.channel.TBchannel.Kfactor">[1]</a>
   </dt>
 
   </dl></td>
@@ -142,9 +154,9 @@
   
 
     <div class="footer">
-        &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Nov 06, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel rellarge">
     

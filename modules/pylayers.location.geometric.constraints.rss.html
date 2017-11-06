@@ -32,7 +32,6 @@
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
     <link rel="next" title="pylayers.location.geometric.constraints.tdoa" href="pylayers.location.geometric.constraints.tdoa.html" />
-    <link rel="prev" title="pylayers.location.geometric.constraints.exclude" href="pylayers.location.geometric.constraints.exclude.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,23 +91,6 @@
 	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.location.geometric.constraints.exclude.html" title="pylayers.location.geometric.constraints.exclude"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.loca...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.location.geometric.constraints.exclude
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
 	<div class="rellink">
 	<a href="pylayers.location.geometric.constraints.tdoa.html" title="pylayers.location.geometric.constraints.tdoa"
 	    accesskey="N">Next
@@ -183,6 +165,247 @@
             
   <div class="section" id="module-pylayers.location.geometric.constraints.rss">
 <span id="pylayers-location-geometric-constraints-rss"></span><h1>pylayers.location.geometric.constraints.rss<a class="headerlink" href="#module-pylayers.location.geometric.constraints.rss" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.constraints.rss.RSS">
+<em class="property">class </em><code class="descclassname">pylayers.location.geometric.constraints.rss.</code><code class="descname">RSS</code><span class="sig-paren">(</span><em>id='0'</em>, <em>value=array([0])</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array([]</em>, <em>dtype=float64)</em>, <em>model={}</em>, <em>origin={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS" title="Permalink to this definition">¶</a></dt>
+<dd><p>RSS Constraint</p>
+<p>Description and evaluation of RSS constraints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Constraint value in dB. Default = 40</p>
+</div></blockquote>
+<p><strong>std</strong> : float</p>
+<blockquote>
+<div><p>Value standard deviation in dB. default = 1.0</p>
+</div></blockquote>
+<p><strong>vcw</strong> : float</p>
+<blockquote>
+<div><p>scale factor. Default = 1.0</p>
+</div></blockquote>
+<p><strong>model</strong> : pylayers.network.model.PLSmodel</p>
+<p><strong>p</strong> : np.array 1 x ndim</p>
+<blockquote class="last">
+<div><p>constraint center</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.location.geometric.constraints.Constraint</span></code></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>range</td>
+<td>(distance conversion from time self.value.)</td>
+</tr>
+<tr class="row-even"><td>sstd</td>
+<td>(distance conversion from time self.std)</td>
+</tr>
+<tr class="row-odd"><td>runable</td>
+<td>(True NOT USED)</td>
+</tr>
+<tr class="row-even"><td>evaluated :False NOT USED</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>self.id</td>
+<td>(Constraint ID)</td>
+</tr>
+<tr class="row-even"><td>from annulus bound:</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>min</td>
+<td>(minimum value of observable)</td>
+</tr>
+<tr class="row-even"><td>max</td>
+<td>(maximum value of observable)</td>
+</tr>
+<tr class="row-odd"><td>mean</td>
+<td>(mean value of observable)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>annulus_bound(self)</td>
+<td>(Compute the minimum and maximum distance of the enclosing annulus of the constraint)</td>
+</tr>
+<tr class="row-even"><td>rescale(self,vcw)</td>
+<td>(rescale contraint boundary with a given scale factor &#8216;vcw&#8217;)</td>
+</tr>
+<tr class="row-odd"><td>inclusive(self,b)</td>
+<td>(Is constraint center is inside a box ?)</td>
+</tr>
+<tr class="row-even"><td>valid(self,b)</td>
+<td>(Test if Lbox is compatible with the constraint)</td>
+</tr>
+<tr class="row-odd"><td>valid_v(self,lv)</td>
+<td>(Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.bd2coordinates())</td>
+</tr>
+<tr class="row-even"><td>estvol(self)</td>
+<td>(Constraint Volume estimation)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.annulus_bound">
+<code class="descname">annulus_bound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>annulus_bound():
+Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing but update cmin, cmax</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.estvol">
+<code class="descname">estvol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.estvol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.estvol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraint Volume estimation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.inclusive">
+<code class="descname">inclusive</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.inclusive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is constraint center is inside a box ?
+Parameters
+&#8212;&#8212;&#8212;-</p>
+<p>b       : LBoxN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.rescale">
+<code class="descname">rescale</code><span class="sig-paren">(</span><em>vcw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescale bounds of the constraint with vcw factor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>vcw</strong> : float</p>
+<blockquote class="last">
+<div><p>scale factor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraint inforamtion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.valid">
+<code class="descname">valid</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if a box is valid for the given constraint</p>
+<p>DEPRECATED
+Parameters
+&#8212;&#8212;&#8212;-
+b       : LBoxN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> : if box is enclosed</p>
+<p><strong>False</strong> : if the box is ambiguous</p>
+<p class="last"><strong>&#8216;Out&#8217;</strong> : if the box is out</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.valid_v">
+<code class="descname">valid_v</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if a list of vertexes from a box is compatible with the constraint.</p>
+<p>vertices are obtained with LBoxN.bd2coordinates()</p>
+<p>valid_v(v) : check if a set of vertices are valid for the given constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>v</strong> : np.arrays</p>
+<blockquote>
+<div><p>a vertexes arrays</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>DDbound</strong> : np.array 2 x vertexes containing boolean</p>
+<blockquote>
+<div><p>Test Lboxn boundaries  with contraint</p>
+</div></blockquote>
+<p><strong>TB</strong> : np.array 4 v vertexes</p>
+<blockquote>
+<div><p>Multiple test for error checker in Lboxn boundaries  with contraint</p>
+</div></blockquote>
+<p>DDbound = list[[tested vertex DD&gt;self.cmin],[tested vertex DD&lt;self.cmax]]</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>nb box</p>
+</div></blockquote>
+<p>&lt;&#8212;&#8212;&#8212;&#8212;&#8211;&gt;</p>
+</div></blockquote>
+<p>pmin&lt;cmin       |
+pmin&lt;cmax       |</p>
+</div></blockquote>
+<p>TB =    pmax&lt;cmin       |</p>
+<blockquote>
+<div><p>pmin&lt;cmax       |</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>nb vertexes</p>
+</div></blockquote>
+<p>&lt;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-&gt;</p>
+</div></blockquote>
+<p>pmin&lt;Dmin       |
+pmin&lt;Dmax       |</p>
+</div></blockquote>
+</div></blockquote>
+<p>DDbound =       pmax&lt;Dmin       |</p>
+<blockquote class="last">
+<div><p>pmin&lt;Dmax       |</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -206,18 +429,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.location.geometric.constraints.exclude.html">
+      <a href="pylayers.location.geometric.constraints.tdoa.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.location.geometric.constraints.tdoa.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

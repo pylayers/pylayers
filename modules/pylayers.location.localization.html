@@ -31,7 +31,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
-    <link rel="next" title="pylayers.location.locarule" href="pylayers.location.locarule.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -92,23 +91,6 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.location.locarule.html" title="pylayers.location.locarule"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.loca...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.location.locarule
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -149,7 +131,9 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.location.localization</a></li>
+<li><a class="reference internal" href="#">pylayers.location.localization</a><ul>
+</ul>
+</li>
 </ul>
 
     
@@ -165,6 +149,170 @@
             
   <div class="section" id="module-pylayers.location.localization">
 <span id="pylayers-location-localization"></span><h1>pylayers.location.localization<a class="headerlink" href="#module-pylayers.location.localization" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.localization.Localization">
+<em class="property">class </em><code class="descclassname">pylayers.location.localization.</code><code class="descname">Localization</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle localization engine of agents</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="63%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>args</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>config</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>cla</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>algloc</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>idx</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.localization.Localization.compute_alg" title="pylayers.location.localization.Localization.compute_alg"><code class="xref py py-obj docutils literal"><span class="pre">compute_alg</span></code></a>([wstd,&nbsp;ldp,&nbsp;now,&nbsp;pe])</td>
+<td>Compute position with the algebraic algorithm</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.location.localization.Localization.compute_geo" title="pylayers.location.localization.Localization.compute_geo"><code class="xref py py-obj docutils literal"><span class="pre">compute_geo</span></code></a>([wstd,&nbsp;ldp,&nbsp;now,&nbsp;pe])</td>
+<td>Compute position with the geometric algorithm</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.localization.Localization.fill_cla" title="pylayers.location.localization.Localization.fill_cla"><code class="xref py py-obj docutils literal"><span class="pre">fill_cla</span></code></a>()</td>
+<td>fill the constraint layer array</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.location.localization.Localization.savep" title="pylayers.location.localization.Localization.savep"><code class="xref py py-obj docutils literal"><span class="pre">savep</span></code></a>(value[,&nbsp;now,&nbsp;name])</td>
+<td>write an estimated position into self.net</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.localization.Localization.update" title="pylayers.location.localization.Localization.update"><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></a>([wstd,&nbsp;ldp])</td>
+<td>update constraints information (anchor position, value and std)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.compute_alg">
+<code class="descname">compute_alg</code><span class="sig-paren">(</span><em>wstd='all'</em>, <em>ldp='all'</em>, <em>now=0.0</em>, <em>pe=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.compute_alg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.compute_alg" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Compute position with the algebraic algorithm</div></blockquote>
+<blockquote>
+<div>True if estimatited position has been computed</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.compute_geo">
+<code class="descname">compute_geo</code><span class="sig-paren">(</span><em>wstd='all'</em>, <em>ldp='all'</em>, <em>now=0.0</em>, <em>pe=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.compute_geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.compute_geo" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Compute position with the geometric algorithm</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if estimated position has been computed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.fill_cla">
+<code class="descname">fill_cla</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.fill_cla"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.fill_cla" title="Permalink to this definition">¶</a></dt>
+<dd><p>fill the constraint layer array</p>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>loop on edges</dt>
+<dd><dl class="first last docutils">
+<dt>loop on wstd</dt>
+<dd>append cla with available LDP among (RSS,TOA)</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.savep">
+<code class="descname">savep</code><span class="sig-paren">(</span><em>value</em>, <em>now=0.0</em>, <em>name='pe'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.savep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.savep" title="Permalink to this definition">¶</a></dt>
+<dd><p>write an estimated position into self.net</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>wstd='all'</em>, <em>ldp='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraints information (anchor position, value and std)
+from the network graph</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.location.localization.PLocalization">
+<em class="property">class </em><code class="descclassname">pylayers.location.localization.</code><code class="descname">PLocalization</code><span class="sig-paren">(</span><em>loc=Localization information *************************  Node ID: 0 Localization methods: ['geo'</em>, <em>'alg']   CLA: node | peer   |type | wstd | p              | value    | std  | runable| usable|  position evaluated by the CLA []</em>, <em>tx=&lt; Instance of TX</em>, <em>id 140070917927632: 	.eventsFired=[] 	.lcst=[] 	.cmdrq=&lt; Instance of SimEvent</em>, <em>id 140070917927824: 		.name=RQ0 		.waits=[] 		.queues=[] 		.signalparam=None 		.occurred=False 		.sim=&lt;SimPy.SimulationRT.SimulationRT object&gt; 	&gt; 	.gcom= 	.net= 	.PN= 	.sim=&lt;SimPy.SimulationRT.SimulationRT object&gt; 	.args={'lcst': []</em>, <em>'gcom': &lt;pylayers.network.communication.Gcom object&gt;</em>, <em>'devt': {}</em>, <em>'net': Network information ******************* number of nodes: 0 ID      | name            |group   | type | position (x</em>, <em>y</em>, <em>z)  | antenna    |  wstd        -----------------------------------------------------------------------------------------</em>, <em>'dec': {}</em>, <em>'ID': 0</em>, <em>'sim': None} 	.ID=0 	.name=Tx0 	.devt={} 	.dec={} &gt;</em>, <em>loc_updt_time=0.5</em>, <em>sim=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#PLocalization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.PLocalization" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">acquired</span></code>(res)</td>
+<td>Multi - functional test for reneging for &#8216;request&#8217; and &#8216;get&#8217;: (1)If res of type Resource:     Tests whether resource res was acquired when proces reactivated.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">active</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">attrnames</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cancel</span></code>(victim)</td>
+<td>Application function to cancel all event notices for this Process instance;(should be all event notices for the _generator_).</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupt</span></code>(victim)</td>
+<td>Application function to interrupt active processes</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">interruptReset</span></code>()</td>
+<td>Application function for an interrupt victim to get out of &#8216;interrupted&#8217; state.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">interrupted</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">passive</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">queuing</span></code>(resource)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.location.localization.PLocalization.run" title="pylayers.location.localization.PLocalization.run"><code class="xref py py-obj docutils literal"><span class="pre">run</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">start</span></code>([pem,&nbsp;at,&nbsp;delay,&nbsp;prior])</td>
+<td>Activates PEM of this Process.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stored</span></code>(buffer)</td>
+<td>Test for reneging for &#8216;yield put .</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">terminated</span></code>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.localization.PLocalization.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/localization.html#PLocalization.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.PLocalization.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -188,13 +336,8 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.location.locarule.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
       <a href="../py-modindex.html">
-        Next
+        Previous
       </a>  
     </div>
     

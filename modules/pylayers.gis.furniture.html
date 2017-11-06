@@ -131,6 +131,211 @@
   <div class="section" id="module-pylayers.gis.furniture">
 <span id="pylayers-gis-furniture"></span><h1>pylayers.gis.furniture<a class="headerlink" href="#module-pylayers.gis.furniture" title="Permalink to this headline">¶</a></h1>
 <p>Handle Furnitures</p>
+<dl class="class">
+<dt id="pylayers.gis.furniture.Furniture">
+<em class="property">class </em><code class="descclassname">pylayers.gis.furniture.</code><code class="descname">Furniture</code><span class="sig-paren">(</span><em>name=''</em>, <em>desc=''</em>, <em>origin=array([0</em>, <em>0])</em>, <em>angle=0</em>, <em>H=1.0</em>, <em>L=1.0</em>, <em>W=1</em>, <em>T=0</em>, <em>Matname='METAL'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class Furniture</p>
+<p class="rubric">Notes</p>
+<p>This class handle the description of furnitures.
+Until now furnitures are limited to rectangular objects.
+A possible evolution would be to authorize any polygon as a furniture element</p>
+<p>Furniture are stored in an ini file of dirstruc.</p>
+<p>from pylayers.gis.layout import *
+import matplotlib.pylab as plt
+L = Layout()
+L.loadstr(&#8216;where1.ini&#8217;)
+L.showGs()
+L.loadfur(&#8216;Furw1.ini&#8217;)
+fig = plt.gcf()
+ax  = fig.get_axes()[0]
+for fur in L.lfur:</p>
+<blockquote>
+<div>fur.show(fig,ax)</div></blockquote>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>name</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>desc</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>origin</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>height</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>length</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>width</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>thichness</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>Matname</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.furniture.Furniture.info" title="pylayers.gis.furniture.Furniture.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td>display furniture information</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.furniture.Furniture.load" title="pylayers.gis.furniture.Furniture.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(_filename,&nbsp;name)</td>
+<td>load furniture from file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.furniture.Furniture.position" title="pylayers.gis.furniture.Furniture.position"><code class="xref py py-obj docutils literal"><span class="pre">position</span></code></a>()</td>
+<td>Calculate the coordinate of the furniture</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.furniture.Furniture.save" title="pylayers.gis.furniture.Furniture.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>(_filename)</td>
+<td>save furniture file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.furniture.Furniture.set_position" title="pylayers.gis.furniture.Furniture.set_position"><code class="xref py py-obj docutils literal"><span class="pre">set_position</span></code></a>([p,&nbsp;angle])</td>
+<td>set position</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.gis.furniture.Furniture.show" title="pylayers.gis.furniture.Furniture.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fig,&nbsp;ax,&nbsp;offx,&nbsp;offy])</td>
+<td>show furnitures using shapely</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.gis.furniture.Furniture.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display furniture information</p>
+<p>Provides info about Furniture object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.furniture.Furniture.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>_filename</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load furniture from file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong></p>
+<blockquote>
+<div><p>file of furnitures</p>
+</div></blockquote>
+<p><strong>name</strong></p>
+<blockquote class="last">
+<div><p>furniture id</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.gis.furniture import *
+&gt;&gt;&gt; import matplotlib.pylab as plt
+&gt;&gt;&gt; F = Furniture()
+&gt;&gt;&gt; F.load(&#39;Furw1.ini&#39;,&#39;R1_A&#39;)
+&gt;&gt;&gt; fig,ax = F.show()
+&gt;&gt;&gt; axis = plt.axis(&#39;scaled&#39;)
+&gt;&gt;&gt; plt.show()
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-gis-furniture-1.py">Source code</a>, <a class="reference external" href="../modules/pylayers-gis-furniture-1.png">png</a>, <a class="reference external" href="../modules/pylayers-gis-furniture-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-gis-furniture-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/pylayers-gis-furniture-1.png" src="../_images/pylayers-gis-furniture-1.png" />
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.furniture.Furniture.position">
+<code class="descname">position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture.position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the coordinate of the furniture</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>position</strong> : a list of points</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.furniture.Furniture.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>_filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save furniture file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<p><strong>Furniture files are stored in  the struc directory of the current</strong></p>
+<p><strong>project</strong></p>
+<p><strong>.. todo::</strong></p>
+<blockquote class="last">
+<div><p>save a furniture file (struc)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.furniture.Furniture.set_position">
+<code class="descname">set_position</code><span class="sig-paren">(</span><em>p=[]</em>, <em>angle=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture.set_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture.set_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>set position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> : ndarray (1x2)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.furniture.Furniture.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>fig=[]</em>, <em>ax=[]</em>, <em>offx=0</em>, <em>offy=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show furnitures using shapely</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong></p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>figure</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>ax</dt>
+<dd><p class="first last">axes</p>
+</dd>
+<dt>offx</dt>
+<dd><p class="first last">offset x (0)</p>
+</dd>
+<dt>offy</dt>
+<dd><p class="first last">offset y  (10)</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

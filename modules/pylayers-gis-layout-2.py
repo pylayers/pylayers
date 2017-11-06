@@ -1,0 +1,18 @@
+from pylayers.gis.layout import  *
+import matplotlib.pyplot as plt
+L = Layout('TA-Office.ini')
+L.dumpr()
+fig = plt.figure(figsize=(10,10))
+ax = fig.add_subplot(221)
+fig,ax = L.showG('s',fig=fig,ax=ax)
+tis = plt.title("Gs")
+ax = fig.add_subplot(222)
+fig,ax = L.showG('t',fig=fig,ax=ax)
+tit = plt.title("Gt")
+ax = fig.add_subplot(223)
+fig,ax = L.showG('r',fig=fig,ax=ax)
+tic = plt.title("Gr")
+ax = fig.add_subplot(224)
+fig,ax = L.showG('v',fig=fig,ax=ax)
+tiv = plt.title("Gv")
+plt.show()

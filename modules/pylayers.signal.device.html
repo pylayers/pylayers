@@ -32,7 +32,6 @@
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
     <link rel="next" title="pylayers.signal.device.Device.__init__" href="generated/pylayers.signal.device.Device.__init__.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.Noise.gating" href="generated/pylayers.signal.bsignal.Noise.gating.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -93,23 +92,6 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.signal.bsignal.Noise.gating.html" title="pylayers.signal.bsignal.Noise.gating"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.sign...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.signal.bsignal.Noise.gating
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="generated/pylayers.signal.device.Device.__init__.html" title="pylayers.signal.device.Device.__init__"
 	    accesskey="N">Next
 	    <br>
@@ -168,7 +150,9 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">pylayers.signal.devices</a><ul>
-<li><a class="reference internal" href="#device-class">Device Class</a></li>
+<li><a class="reference internal" href="#device-class">Device Class</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -200,6 +184,76 @@
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="pylayers.signal.device.Device">
+<em class="property">class </em><code class="descclassname">pylayers.signal.device.</code><code class="descname">Device</code><span class="sig-paren">(</span><em>devname='Telephone'</em>, <em>ID=0</em>, <em>owner=''</em>, <em>typ='ap'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/device.html#Device"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.device.Device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Device Class</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.device.Device.load" title="pylayers.signal.device.Device.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(devname)</td>
+<td>load a device</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.device.Device.setchan" title="pylayers.signal.device.Device.setchan"><code class="xref py py-obj docutils literal"><span class="pre">setchan</span></code></a>(wstd,&nbsp;channel)</td>
+<td>set channel for a given wstd</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.signal.device.Device.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>devname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/device.html#Device.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.device.Device.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a device</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>devname</strong> : string</p>
+<blockquote class="last">
+<div><p>Name of the device to be loaded</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.device.Device.setchan">
+<code class="descname">setchan</code><span class="sig-paren">(</span><em>wstd</em>, <em>channel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/device.html#Device.setchan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.device.Device.setchan" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>set channel for a given wstd</dt>
+<dd>and update information about the channel</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>wstd</strong> : string</p>
+<blockquote>
+<div><p>worerless standard</p>
+</div></blockquote>
+<p><strong>channel</strong> : int</p>
+<blockquote class="last">
+<div><p>channel numbern</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.signal.device.devicels">
+<code class="descclassname">pylayers.signal.device.</code><code class="descname">devicels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/device.html#devicels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.device.devicels" title="Permalink to this definition">¶</a></dt>
+<dd><p>list available devices in project directory</p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -224,18 +278,13 @@
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="generated/pylayers.signal.bsignal.Noise.gating.html">
+      <a href="generated/pylayers.signal.device.Device.__init__.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.signal.device.Device.__init__.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

@@ -31,7 +31,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
-    <link rel="next" title="pylayers.location.geometric.util.scene" href="pylayers.location.geometric.util.scene.html" />
     <link rel="prev" title="pylayers.location.geometric.util.geomview" href="pylayers.location.geometric.util.geomview.html" />
 <script type="text/javascript">
 
@@ -110,23 +109,6 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="pylayers.location.geometric.util.scene.html" title="pylayers.location.geometric.util.scene"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.loca...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.location.geometric.util.scene
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -183,6 +165,103 @@
             
   <div class="section" id="module-pylayers.location.geometric.util.model">
 <span id="pylayers-location-geometric-util-model"></span><h1>pylayers.location.geometric.util.model<a class="headerlink" href="#module-pylayers.location.geometric.util.model" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.util.model.Model">
+<em class="property">class </em><code class="descclassname">pylayers.location.geometric.util.model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>f=3.0</em>, <em>n=2.64</em>, <em>d0=1.0</em>, <em>method='OneSlope'</em>, <em>d=array([]</em>, <em>dtype=float64)</em>, <em>PL=array([]</em>, <em>dtype=float64)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>RSS model</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>f</td>
+<td>(frequency in GHz)</td>
+</tr>
+<tr class="row-even"><td>n</td>
+<td>(path loss exponent)</td>
+</tr>
+<tr class="row-odd"><td>method</td>
+<td>(used model)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.geometric.util.model.Model.OneSlope" title="pylayers.location.geometric.util.model.Model.OneSlope"><code class="xref py py-obj docutils literal"><span class="pre">OneSlope</span></code></a>(d)</td>
+<td>OneSlope model : give Power Level from distance  with OneSlope method</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.location.geometric.util.model.Model.PL0_c" title="pylayers.location.geometric.util.model.Model.PL0_c"><code class="xref py py-obj docutils literal"><span class="pre">PL0_c</span></code></a>([Gt,&nbsp;Gr])</td>
+<td>PL0_c : PL0 compute</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.geometric.util.model.Model.get_PL" title="pylayers.location.geometric.util.model.Model.get_PL"><code class="xref py py-obj docutils literal"><span class="pre">get_PL</span></code></a>(d)</td>
+<td>Get Power Level from a given distance</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.location.geometric.util.model.Model.get_d" title="pylayers.location.geometric.util.model.Model.get_d"><code class="xref py py-obj docutils literal"><span class="pre">get_d</span></code></a>(PL)</td>
+<td>Get  distance from a given Power Level</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.location.geometric.util.model.Model.iOneSlope" title="pylayers.location.geometric.util.model.Model.iOneSlope"><code class="xref py py-obj docutils literal"><span class="pre">iOneSlope</span></code></a>(PL)</td>
+<td>inverse OneSlope model : give distance from Power Level with OneSlope method</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.location.geometric.util.model.Model.info" title="pylayers.location.geometric.util.model.Model.info"><code class="xref py py-obj docutils literal"><span class="pre">info</span></code></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.OneSlope">
+<code class="descname">OneSlope</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.OneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.OneSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>OneSlope model : give Power Level from distance  with OneSlope method</p>
+<p>f : frequency  GHz
+n : path loss exponent
+D : Distance array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.PL0_c">
+<code class="descname">PL0_c</code><span class="sig-paren">(</span><em>Gt=0</em>, <em>Gr=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.PL0_c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.PL0_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>PL0_c : PL0 compute
+f  : frequency GHz
+Gt : transmitting antenna gain dB (default 0 dB)
+Gr : receiving antenna gain dB (default 0 dB)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.get_PL">
+<code class="descname">get_PL</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.get_PL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.get_PL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Power Level from a given distance</p>
+<p>d : distance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.get_d">
+<code class="descname">get_d</code><span class="sig-paren">(</span><em>PL</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.get_d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.get_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get  distance from a given Power Level</p>
+<p>d : distance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.iOneSlope">
+<code class="descname">iOneSlope</code><span class="sig-paren">(</span><em>PL</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.iOneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.iOneSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>inverse OneSlope model : give distance from Power Level with OneSlope method</p>
+<p>f : frequency  GHz
+n : path loss exponent
+D : Distance array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -211,13 +290,8 @@
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.location.geometric.util.scene.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

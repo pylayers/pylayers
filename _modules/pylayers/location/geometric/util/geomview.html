@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +7,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.location.geometric.util.geomview &mdash; PyLayers</title>
+    <title>pylayers.location.geometric.util.geomview &mdash; Python 1 documentation</title>
     
-    <link rel="stylesheet" href="../../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -17,89 +19,153 @@
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../../../../index.html" />
-    <link rel="up" title="Module code" href="../../../../index.html" /> 
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../../../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
   </head>
-  <body>
-<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
-    PyLayers
-<!--
-<a href="../../../../../index.html"><img src="../../../../../_static/logo.png" height="200" border="0"
-    alt="pylayers"/></a>
--->
+  <body role="document">
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../../../../index.html">
+            <img src="../../../../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../../../../download.html">Download</a></li>
+            <li><a href="../../../../../notebook/TOC.html">User Guide</a></li>
+            <li><a href="../../../../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script>
+  (function() {
+       var cx = '004820205189002234612:sa15qzuf2ca';
+           var gcse = document.createElement('script');
+               gcse.type = 'text/javascript';
+                   gcse.async = true;
+                       gcse.src = (document.location.protocol == 'https:' ?
+                           'https:' : 'http:') +
+                               '//cse.google.com/cse.js?cx=' + cx;
+                                   var s =
+                                   document.getElementsByTagName('script')[0];
+                                       s.parentNode.insertBefore(gcse, s);
+                                         })();
+</script>
+<gcse:search></gcse:search>
 </div>
-
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
+</div> <!-- end navbar --></div>
     </div>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    <div class="content-wrapper">
 
-    <div class="document">
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	  <div class="rel">
+	   
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="../../../../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module Index
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../../../../index.html" title="Module code" >
+	Up
+	<br>
+	<span class="smallrellink">
+	Module code
+	</span>
+	<span class="hiddenrellink">
+	Module code
+	</span>
+	
+	</a>
+	</div>
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../../../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for pylayers.location.geometric.util.geomview</h1><div class="highlight"><pre>
-<span class="c"># -*- coding:Utf-8 -*-</span>
-<span class="c">#####################################################################</span>
-<span class="c">#This file is part of RGPA.</span>
+<span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
+<span class="c1">#####################################################################</span>
+<span class="c1">#This file is part of RGPA.</span>
 
-<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
-<span class="c">#it under the terms of the GNU General Public License as published by</span>
-<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
-<span class="c">#(at your option) any later version.</span>
+<span class="c1">#Foobar is free software: you can redistribute it and/or modify</span>
+<span class="c1">#it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#(at your option) any later version.</span>
 
-<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
-<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#GNU General Public License for more details.</span>
+<span class="c1">#Foobar is distributed in the hope that it will be useful,</span>
+<span class="c1">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#GNU General Public License for more details.</span>
 
-<span class="c">#You should have received a copy of the GNU General Public License</span>
-<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#You should have received a copy of the GNU General Public License</span>
+<span class="c1">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
-<span class="c">#-------------------------------------------------------------------</span>
-<span class="c">#authors :</span>
-<span class="c">#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr</span>
-<span class="c">#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr</span>
-<span class="c">#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr</span>
-<span class="c">#####################################################################</span>
+<span class="c1">#-------------------------------------------------------------------</span>
+<span class="c1">#authors :</span>
+<span class="c1">#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr</span>
+<span class="c1">#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr</span>
+<span class="c1">#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr</span>
+<span class="c1">#####################################################################</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span> 
@@ -107,7 +173,7 @@
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 
-<div class="viewcode-block" id="cloud"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.geomview.html#pylayers.location.geometric.util.geomview.cloud">[docs]</a><span class="k">def</span> <span class="nf">cloud</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">dice</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s">&#39;new&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="cloud"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.geomview.html#pylayers.location.geometric.util.geomview.cloud">[docs]</a><span class="k">def</span> <span class="nf">cloud</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">dice</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s1">&#39;new&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    cloud(p,filename,display,color) : display cloud of points p</span>
 
@@ -118,54 +184,54 @@
 <span class="sd">    R            : sphere radius   (0.5)</span>
 <span class="sd">    access       : &#39;new&#39; create a new file append mode neither</span>
 
-<span class="sd">	&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span>
     <span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;/geom/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.list&#39;</span>
-    <span class="k">if</span> <span class="n">access</span> <span class="o">==</span> <span class="s">&#39;new&#39;</span><span class="p">:</span>
-        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;LIST</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;/geom/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.list&#39;</span>
+    <span class="k">if</span> <span class="n">access</span> <span class="o">==</span> <span class="s1">&#39;new&#39;</span><span class="p">:</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;LIST</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">)</span>
-    <span class="n">sdice</span> <span class="o">=</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dice</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dice</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">R</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span>
-    <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;r&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0 0 &quot;</span>
-    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;b&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 0 1 &quot;</span>
-    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;m&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0 1 &quot;</span>
-    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 1 0 &quot;</span>
-    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;c&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 1 1 &quot;</span>
-    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;g&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 1 0 &quot;</span>
-    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s">&#39;k&#39;</span><span class="p">:</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 0 0 &quot;</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="n">sdice</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dice</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dice</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">R</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 1 0 0 &quot;</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 0 0 1 &quot;</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 1 0 1 &quot;</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 1 1 0 &quot;</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 0 1 1 &quot;</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 0 1 0 &quot;</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot; 0 0 0 &quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">col</span> <span class="o">=</span> <span class="n">color</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">c1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">c1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;{appearance {-edge patchdice&quot;</span> <span class="o">+</span> <span class="n">sdice</span> <span class="o">+</span> <span class="s">&quot;material { diffuse &quot;</span> <span class="o">+</span> <span class="n">col</span> <span class="o">+</span> <span class="s">&quot;}}{SPHERE&quot;</span> <span class="o">+</span> <span class="n">radius</span> <span class="o">+</span> <span class="n">c1</span> <span class="o">+</span> <span class="s">&quot; }}</span><span class="se">\n</span><span class="s">&quot;</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">chaine</span> <span class="o">=</span> <span class="s2">&quot;{appearance {-edge patchdice&quot;</span> <span class="o">+</span> <span class="n">sdice</span> <span class="o">+</span> <span class="s2">&quot;material { diffuse &quot;</span> <span class="o">+</span> <span class="n">col</span> <span class="o">+</span> <span class="s2">&quot;}}{SPHERE&quot;</span> <span class="o">+</span> <span class="n">radius</span> <span class="o">+</span> <span class="n">c1</span> <span class="o">+</span> <span class="s2">&quot; }}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
     <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-        
-        <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview  -nopanel  -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
+
+        <span class="n">chaine</span> <span class="o">=</span> <span class="s2">&quot;geomview  -nopanel  -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">p</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
     <span class="n">cloud</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
@@ -173,43 +239,34 @@
           </div>
         </div>
       </div>
-      <div class="clearer"></div>
+        <div class="clearer"></div>
+      </div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
-      </ul>
-    </div>
+  
 
     <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+        &copy; 2016, PyLayers developer team.
+      Last updated on Nov 06, 2017.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5a0. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
+     <div class="rel">
+    
+    <div class="buttonPrevious">
+      <a href="../../../../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
   </body>
 </html>

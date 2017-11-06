@@ -214,7 +214,7 @@
 <span class="c1">#__docformat__ = &#39;reStructuredText&#39;</span>
 
 
-<span class="k">class</span> <span class="nc">CLA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA">[docs]</a><span class="k">class</span> <span class="nc">CLA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  Constraint Layer Array class</span>
 <span class="sd">    The Constraint Layer Array gather all constraints and process them.</span>
 
@@ -357,14 +357,14 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;position evaluated by the CLA</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="CLA.info"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.info.html#pylayers.location.geometric.constraints.cla.CLA.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.info"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get information about constraint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">info</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="CLA.update"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.update.html#pylayers.location.geometric.constraints.cla.CLA.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.update"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;update</span>
 <span class="sd">                update all constraints of the CLA</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -374,7 +374,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">visible</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">usable</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">usable</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="CLA.compute"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.compute.html#pylayers.location.geometric.constraints.cla.CLA.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">mergeRSS</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">refineRSS</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">NBOXMAX</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">VOLMIN</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">HT</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">forceamb</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.compute"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">mergeRSS</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">refineRSS</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">NBOXMAX</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">VOLMIN</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">HT</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">forceamb</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Compute the cla to estimate the postion</span>
 
@@ -444,7 +444,7 @@
 <span class="c1">#        self.Nc=len(np.where(self.usable)[0])</span>
 <span class="c1">#        return True</span>
 
-<div class="viewcode-block" id="CLA.rescale"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.rescale.html#pylayers.location.geometric.constraints.cla.CLA.rescale">[docs]</a>    <span class="k">def</span> <span class="nf">rescale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_vcw</span><span class="p">,</span> <span class="n">cid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.rescale"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.rescale">[docs]</a>    <span class="k">def</span> <span class="nf">rescale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_vcw</span><span class="p">,</span> <span class="n">cid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;idem setvcw but update current vcw with a multiplier factor</span>
 
 <span class="sd">        change vcw for all constraints of the CLA</span>
@@ -469,7 +469,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">f_vcw</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">vcw</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">Id</span> <span class="ow">in</span> <span class="n">cid</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="CLA.annulus_bound"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.annulus_bound.html#pylayers.location.geometric.constraints.cla.CLA.annulus_bound">[docs]</a>    <span class="k">def</span> <span class="nf">annulus_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.annulus_bound"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.annulus_bound">[docs]</a>    <span class="k">def</span> <span class="nf">annulus_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; adapt cmin and cmax of constraints</span>
 
 <span class="sd">        Update cmin and cmax of constraints for a given self.vcw</span>
@@ -489,7 +489,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">annulus_bound</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">Id</span> <span class="ow">in</span> <span class="n">cid</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="CLA.append"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.append.html#pylayers.location.geometric.constraints.cla.CLA.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.append"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;add a constraint into the CLA</span>
 
 <span class="sd">        add a constraint into the CLA</span>
@@ -526,7 +526,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">std</span><span class="p">)</span> <span class="o">/</span> <span class="n">sumstd</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">lbox</span><span class="o">.</span><span class="n">ndim</span></div>
 
-<div class="viewcode-block" id="CLA.remove"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.remove.html#pylayers.location.geometric.constraints.cla.CLA.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.remove"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;OBSOLETE/ TO BE DEVELOPPED</span>
 
 
@@ -544,7 +544,7 @@
         <span class="n">sumstd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">std</span><span class="p">)[</span><span class="n">u</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">std</span><span class="p">)</span> <span class="o">/</span> <span class="n">sumstd</span></div>
 
-<div class="viewcode-block" id="CLA.setvcw"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.setvcw.html#pylayers.location.geometric.constraints.cla.CLA.setvcw">[docs]</a>    <span class="k">def</span> <span class="nf">setvcw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vcw</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.setvcw"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.setvcw">[docs]</a>    <span class="k">def</span> <span class="nf">setvcw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vcw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;update scale factor of all constraint</span>
 
 <span class="sd">        rescale all the constraints&#39;s boxes according to the given vcw</span>
@@ -567,7 +567,7 @@
             <span class="n">c</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">vcw</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CLA.merge2"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.merge2.html#pylayers.location.geometric.constraints.cla.CLA.merge2">[docs]</a>    <span class="k">def</span> <span class="nf">merge2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vcw_init</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">RSS</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.merge2"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.merge2">[docs]</a>    <span class="k">def</span> <span class="nf">merge2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vcw_init</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">RSS</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Merge all constraints from the CLA2_reduc2</span>
 
 <span class="sd">        Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.</span>
@@ -671,7 +671,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">Nc</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">LBoxN</span><span class="p">([]),</span> <span class="n">tlb</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">Nc</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">volume</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CLA.valid_v"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.valid_v.html#pylayers.location.geometric.constraints.cla.CLA.valid_v">[docs]</a>    <span class="k">def</span> <span class="nf">valid_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lv</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">RSS</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.valid_v"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.valid_v">[docs]</a>    <span class="k">def</span> <span class="nf">valid_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lv</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">RSS</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;test a vertex list with constraints</span>
 
 <span class="sd">        Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)</span>
@@ -751,7 +751,7 @@
             <span class="n">AB</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">AB</span><span class="p">,</span><span class="n">ABt</span><span class="p">)))</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">EB</span><span class="p">,</span> <span class="n">AB</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CLA.refine"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.refine.html#pylayers.location.geometric.constraints.cla.CLA.refine">[docs]</a>    <span class="k">def</span> <span class="nf">refine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">NBOXMAX</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">VOLMIN</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">RSS</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.refine"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.refine">[docs]</a>    <span class="k">def</span> <span class="nf">refine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">NBOXMAX</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">VOLMIN</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">RSS</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot;refine the l layer of the CLA</span>
 
@@ -957,7 +957,7 @@
                     <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">Id</span><span class="o">=</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 <span class="c1">#</span>
 
-<div class="viewcode-block" id="CLA.show3"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.show3.html#pylayers.location.geometric.constraints.cla.CLA.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sc</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.show3"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sc</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display constraints and theirs boxes through geomview.</span>
 
 
@@ -1082,7 +1082,7 @@
 
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CLA.prob"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.prob.html#pylayers.location.geometric.constraints.cla.CLA.prob">[docs]</a>    <span class="k">def</span> <span class="nf">prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.prob"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.prob">[docs]</a>    <span class="k">def</span> <span class="nf">prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; determine probability of list of vertex</span>
 
 <span class="sd">        Return the probability of each vertex from an array in regard of the constraint origin, standard deviation and vcw</span>
@@ -1186,7 +1186,7 @@
 <span class="c1">#        return clust, axis</span>
 
 
-<div class="viewcode-block" id="CLA.gapdetect"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect">[docs]</a>    <span class="k">def</span> <span class="nf">gapdetect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">dlindx</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.gapdetect"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect">[docs]</a>    <span class="k">def</span> <span class="nf">gapdetect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">dlindx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;basic gap detection</span>
 
 <span class="sd">        Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.</span>
@@ -1291,7 +1291,7 @@
         <span class="k">return</span> <span class="n">clust</span><span class="p">,</span><span class="n">axis</span></div>
 
 
-<div class="viewcode-block" id="CLA.gapdetect2"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect2.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect2">[docs]</a>    <span class="k">def</span> <span class="nf">gapdetect2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">dlindx</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.gapdetect2"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect2">[docs]</a>    <span class="k">def</span> <span class="nf">gapdetect2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">dlindx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;basic gap detection</span>
 
 <span class="sd">        Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.</span>
@@ -1378,7 +1378,7 @@
         <span class="k">return</span> <span class="n">clust</span><span class="p">,</span><span class="n">axis</span></div>
 
 
-<div class="viewcode-block" id="CLA.min_dist"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.min_dist.html#pylayers.location.geometric.constraints.cla.CLA.min_dist">[docs]</a>    <span class="k">def</span> <span class="nf">min_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.min_dist"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.min_dist">[docs]</a>    <span class="k">def</span> <span class="nf">min_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        OBSOLETE</span>
 
@@ -1391,7 +1391,7 @@
         <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">d2b</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">d2b</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">indx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="CLA.estpos"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.estpos.html#pylayers.location.geometric.constraints.cla.CLA.estpos">[docs]</a>    <span class="k">def</span> <span class="nf">estpos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.estpos"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.estpos">[docs]</a>    <span class="k">def</span> <span class="nf">estpos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        DEPRECATED !</span>
@@ -1424,7 +1424,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">PP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveP</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CLA.estpos2"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.estpos2.html#pylayers.location.geometric.constraints.cla.CLA.estpos2">[docs]</a>    <span class="k">def</span> <span class="nf">estpos2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">HT</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CLA.estpos2"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.constraints.cla.html#pylayers.location.geometric.constraints.cla.CLA.estpos2">[docs]</a>    <span class="k">def</span> <span class="nf">estpos2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">amb</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">HT</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Position estimation</span>
 
 <span class="sd">        estimate position from the enclosed or/and ambibuous boxes</span>
@@ -1688,7 +1688,7 @@
             <span class="n">pestdmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">dlindx</span><span class="p">]</span><span class="o">.</span><span class="n">bd</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">pestdmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">dlindx</span><span class="p">]</span><span class="o">.</span><span class="n">bd</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pestd</span> <span class="o">=</span> <span class="n">pestdmax</span> <span class="o">-</span> <span class="n">pestdmin</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pecluster</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">]</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pecluster</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">]</span></div></div>
 
 </pre></div>
 

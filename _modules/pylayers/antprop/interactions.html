@@ -232,7 +232,7 @@
 
 
 
-<span class="k">class</span> <span class="nc">Inter</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
+<div class="viewcode-block" id="Inter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Inter">[docs]</a><span class="k">class</span> <span class="nc">Inter</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Interactions</span>
 
 <span class="sd">    Meta class of interactions ( Interactions, IntB/IntL/IntT/intR/intD)</span>
@@ -306,7 +306,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;I not yet evaluated&#39;</span></div>
 
-<div class="viewcode-block" id="Inter.create_dusl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Inter.create_dusl.html#pylayers.antprop.interactions.Inter.create_dusl">[docs]</a>    <span class="k">def</span> <span class="nf">create_dusl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
+<div class="viewcode-block" id="Inter.create_dusl"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Inter.create_dusl">[docs]</a>    <span class="k">def</span> <span class="nf">create_dusl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create dictionnary of used slab.</span>
 
 <span class="sd">        Parameters</span>
@@ -321,7 +321,7 @@
 
 
 
-<div class="viewcode-block" id="Inter.sinsout"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Inter.sinsout.html#pylayers.antprop.interactions.Inter.sinsout">[docs]</a>    <span class="k">def</span> <span class="nf">sinsout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Inter.sinsout"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Inter.sinsout">[docs]</a>    <span class="k">def</span> <span class="nf">sinsout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate sin sout of the interaction</span>
 
 <span class="sd">        Notes</span>
@@ -355,7 +355,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># B</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])))</span></div>
 
-<div class="viewcode-block" id="Inter.stack"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Inter.stack.html#pylayers.antprop.interactions.Inter.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">isdata</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Inter.stack"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Inter.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">isdata</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stack data and the associated idx</span>
 
 <span class="sd">        Parameters</span>
@@ -410,7 +410,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">data</span><span class="p">))</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="n">data</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div></div>
 
 <span class="c1">#            for ii, idx in enumerate(idx):</span>
 <span class="c1">#                if isdata:</span>
@@ -421,7 +421,7 @@
 <span class="c1">#                self.idx.append(idx)</span>
 
 
-<span class="k">class</span> <span class="nc">Interactions</span><span class="p">(</span><span class="n">Inter</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Interactions"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Interactions">[docs]</a><span class="k">class</span> <span class="nc">Interactions</span><span class="p">(</span><span class="n">Inter</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Interaction parameters</span>
 
 <span class="sd">        gather all type of interactions (IntB/L/R/T)</span>
@@ -457,7 +457,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nimax</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Interactions.add"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Interactions.add.html#pylayers.antprop.interactions.Interactions.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">li</span><span class="p">):</span>
+<div class="viewcode-block" id="Interactions.add"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Interactions.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">li</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a list of interactions</span>
 
 <span class="sd">        Parameters</span>
@@ -475,7 +475,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">addi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Interactions.addi"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Interactions.addi.html#pylayers.antprop.interactions.Interactions.addi">[docs]</a>    <span class="k">def</span> <span class="nf">addi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<div class="viewcode-block" id="Interactions.addi"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Interactions.addi">[docs]</a>    <span class="k">def</span> <span class="nf">addi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add interactions into Interactions class</span>
 
 <span class="sd">        Parameters</span>
@@ -508,7 +508,7 @@
             <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">idx</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;T&#39;</span></div>
 
-<div class="viewcode-block" id="Interactions.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Interactions.eval.html#pylayers.antprop.interactions.Interactions.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="Interactions.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Interactions.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluate all the interactions</span>
 
 <span class="sd">        Parameters</span>
@@ -604,11 +604,11 @@
             <span class="c1">#    print Warning(&#39;Warning Interaction.eval: No D interaction Evaluated,\ whereas Diffraction rays found&#39;)</span>
             <span class="c1">#    pdb.set_trace()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span></div></div>
 
 
 
-<span class="k">class</span> <span class="nc">IntB</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
+<div class="viewcode-block" id="IntB"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntB">[docs]</a><span class="k">class</span> <span class="nc">IntB</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Local Basis interaction class</span>
 
 <span class="sd">        Basis interactions</span>
@@ -639,7 +639,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of B basis :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">s</span>    </div>
 
-<div class="viewcode-block" id="IntB.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntB.eval.html#pylayers.antprop.interactions.IntB.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="IntB.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntB.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluation of B interactions</span>
 
 <span class="sd">        Parameters</span>
@@ -686,7 +686,7 @@
             <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s1">&#39;no B interactions to evaluate&#39;</span>
-            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span></div>
+            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span></div></div>
 
 <span class="c1">#####Interaction Loss in not used for speed purpose</span>
 <span class="c1">#the loss interaction is computed and added after the global computation</span>
@@ -757,7 +757,7 @@
 <span class="c1">#             return(self.data[:, None, None, None])</span>
 
 
-<span class="k">class</span> <span class="nc">IntR</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
+<div class="viewcode-block" id="IntR"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntR">[docs]</a><span class="k">class</span> <span class="nc">IntR</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Reflexion interaction class</span>
 
 
@@ -781,7 +781,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of R interactions :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">s</span>    </div>
 
-<div class="viewcode-block" id="IntR.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntR.eval.html#pylayers.antprop.interactions.IntR.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="IntR.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntR.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluation of reflexion interactions</span>
 
 <span class="sd">        Parameters</span>
@@ -881,10 +881,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span>
             <span class="c1"># print &#39;no R interaction to evaluate&#39;</span>
-            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span></div>
+            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">IntT</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
+<div class="viewcode-block" id="IntT"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntT">[docs]</a><span class="k">class</span> <span class="nc">IntT</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Transmission  interaction class</span>
 
 <span class="sd">        Attributes</span>
@@ -910,7 +910,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of T interaction :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="IntT.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntT.eval.html#pylayers.antprop.interactions.IntT.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="IntT.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntT.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluate transmission</span>
 
 <span class="sd">        Examples</span>
@@ -1008,10 +1008,10 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1">#print &#39;no T interaction to evaluate&#39;</span>
-            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span></div>
+            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span></div></div>
 
 
-<span class="k">class</span> <span class="nc">IntD</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
+<div class="viewcode-block" id="IntD"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntD">[docs]</a><span class="k">class</span> <span class="nc">IntD</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; diffraction interaction class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="IntD.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntD.__init__.html#pylayers.antprop.interactions.IntD.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span><span class="n">slab</span><span class="o">=</span><span class="p">{}):</span>
@@ -1022,7 +1022,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;number of D interaction :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="IntD.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntD.eval.html#pylayers.antprop.interactions.IntD.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="IntD.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntD.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluate diffraction interaction</span>
 
 <span class="sd">        Parameters</span>
@@ -1084,7 +1084,7 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s1">&#39;not yet implemented&#39;</span></div>
+            <span class="k">print</span> <span class="s1">&#39;not yet implemented&#39;</span></div></div>
         <span class="c1"># else:</span>
         <span class="c1">#     self.A = self.data[:, None, None, None]</span>
         <span class="c1">#     print &#39;no D interaction to evaluate&#39;</span>

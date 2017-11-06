@@ -31,8 +31,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers Modules Reference" href="pylayers.html" />
-    <link rel="next" title="pylayers.util.CDF" href="pylayers.util.CDF.html" />
-    <link rel="prev" title="pylayers.signal.ED.ED.plot" href="generated/pylayers.signal.ED.ED.plot.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -93,40 +91,6 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="generated/pylayers.signal.ED.ED.plot.html" title="pylayers.signal.ED.ED.plot"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.sign...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.signal.ED.ED.plot
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.util.CDF.html" title="pylayers.util.CDF"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.util.CDF
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.util.CDF
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -183,6 +147,190 @@
             
   <div class="section" id="module-pylayers.signal.waveform">
 <span id="pylayers-signal-waveform"></span><h1>pylayers.signal.waveform<a class="headerlink" href="#module-pylayers.signal.waveform" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.signal.waveform.Waveform">
+<em class="property">class </em><code class="descclassname">pylayers.signal.waveform.</code><code class="descname">Waveform</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>st</td>
+<td>(time domain)</td>
+</tr>
+<tr class="row-even"><td>sf</td>
+<td>(frequency domain)</td>
+</tr>
+<tr class="row-odd"><td>sfg</td>
+<td>(frequency domain integrated)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.eval" title="pylayers.signal.waveform.Waveform.eval"><code class="xref py py-obj docutils literal"><span class="pre">eval</span></code></a>()</td>
+<td>evaluate waveform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.showpsd" title="pylayers.signal.waveform.Waveform.showpsd"><code class="xref py py-obj docutils literal"><span class="pre">showpsd</span></code></a>([Tpns])</td>
+<td>show psd</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.ip_generic" title="pylayers.signal.waveform.Waveform.ip_generic"><code class="xref py py-obj docutils literal"><span class="pre">ip_generic</span></code></a>()</td>
+<td>Create an energy normalized Gaussian impulse (Usignal)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.fromfile" title="pylayers.signal.waveform.Waveform.fromfile"><code class="xref py py-obj docutils literal"><span class="pre">fromfile</span></code></a>()</td>
+<td>get the measurement waveform from WHERE1 measurement campaign</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.fromfile2" title="pylayers.signal.waveform.Waveform.fromfile2"><code class="xref py py-obj docutils literal"><span class="pre">fromfile2</span></code></a>()</td>
+<td>get the measurement waveform from WHERE1 measurement campaign</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.read" title="pylayers.signal.waveform.Waveform.read"><code class="xref py py-obj docutils literal"><span class="pre">read</span></code></a>(config)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.gui" title="pylayers.signal.waveform.Waveform.gui"><code class="xref py py-obj docutils literal"><span class="pre">gui</span></code></a>()</td>
+<td>Get the Waveform parameter</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.signal.waveform.Waveform.show" title="pylayers.signal.waveform.Waveform.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>([fig])</td>
+<td>show waveform in time and frequency domain</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.bandwidth">
+<code class="descname">bandwidth</code><span class="sig-paren">(</span><em>th_ratio=10000</em>, <em>Npt=100</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.bandwidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.bandwidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine effective bandwidth of the waveform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>th_ratio</strong> : float</p>
+<blockquote>
+<div><p>threshold ratio 
+threshold = max(abs())/th_ratio</p>
+</div></blockquote>
+<p class="last"><strong>Npt</strong> : Number of points</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.eval">
+<code class="descname">eval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate waveform</p>
+<p>The <span class="math">\(\lambda/4*\pi\)</span> factor which is necessary to get the proper budget
+link ( from the Friis formula) is introduced in this function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.fromfile">
+<code class="descname">fromfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.fromfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.fromfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the measurement waveform from WHERE1 measurement campaign</p>
+<p>This function is not yet generic</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.waveform import *
+&gt;&gt;&gt; wav = Waveform(typ=&#39;W1compensate&#39;)
+&gt;&gt;&gt; wav.show()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.fromfile2">
+<code class="descname">fromfile2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.fromfile2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.fromfile2" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the measurement waveform from WHERE1 measurement campaign</p>
+<p>This function is not yet generic</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pylayers.signal.waveform import *
+&gt;&gt;&gt; wav = Waveform(typ=&#39;W1offset&#39;)
+&gt;&gt;&gt; wav.show()
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.gui">
+<code class="descname">gui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.gui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.gui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Waveform parameter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display information about waveform</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.ip_generic">
+<code class="descname">ip_generic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.ip_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.ip_generic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an energy normalized Gaussian impulse (Usignal)</p>
+<p>ip_generic(self,parameters)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.read" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> : ConfigParser object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>w</strong> : waveform</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.ref156">
+<code class="descname">ref156</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.ref156"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.ref156" title="Permalink to this definition">¶</a></dt>
+<dd><p>reference pulse of IEEE 802.15.6 UWB standard</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>fig=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show waveform in time and frequency domain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fig</strong> : figure</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.waveform.Waveform.showpsd">
+<code class="descname">showpsd</code><span class="sig-paren">(</span><em>Tpns=1000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.showpsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.showpsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>show psd</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Tpns</strong> : float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -205,16 +353,6 @@
     </div>
      <div class="rel">
     
-    <div class="buttonPrevious">
-      <a href="generated/pylayers.signal.ED.ED.plot.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.util.CDF.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../py-modindex.html">
         Previous

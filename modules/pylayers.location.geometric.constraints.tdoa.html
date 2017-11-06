@@ -183,6 +183,173 @@
             
   <div class="section" id="module-pylayers.location.geometric.constraints.tdoa">
 <span id="pylayers-location-geometric-constraints-tdoa"></span><h1>pylayers.location.geometric.constraints.tdoa<a class="headerlink" href="#module-pylayers.location.geometric.constraints.tdoa" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA">
+<em class="property">class </em><code class="descclassname">pylayers.location.geometric.constraints.tdoa.</code><code class="descname">TDOA</code><span class="sig-paren">(</span><em>id='0', value=array([45]), std=array(4.0), vcw=3, p=array([[ 0,  0,  0],        [10, 10, 10]]), origin={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA" title="Permalink to this definition">¶</a></dt>
+<dd><p>TDOA Constraint</p>
+<p>Description and evaluation of TDOA constraints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Constraint value in ns.</p>
+</div></blockquote>
+<p><strong>std</strong> : np.array</p>
+<blockquote>
+<div><p>Value standard deviation in ns.</p>
+</div></blockquote>
+<p><strong>vcw</strong> : float</p>
+<blockquote>
+<div><p>scale factor.</p>
+</div></blockquote>
+<p><strong>p</strong> : np.array 2 x ndim</p>
+<blockquote class="last">
+<div><p>constraint centers</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.location.geometric.constraints.Constraint</span></code></p>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>drange</td>
+<td>(difference of distance conversion from time self.value.)</td>
+</tr>
+<tr class="row-even"><td>sstd</td>
+<td>(difference of distance conversion from time self.std)</td>
+</tr>
+<tr class="row-odd"><td>runable</td>
+<td>(True NOT USED)</td>
+</tr>
+<tr class="row-even"><td>evaluated :False NOT USED</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>self.Id</td>
+<td>(Constraint ID)</td>
+</tr>
+<tr class="row-even"><td>from annulus bound:</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>min</td>
+<td>(minimum value of observable)</td>
+</tr>
+<tr class="row-even"><td>max</td>
+<td>(maximum value of observable)</td>
+</tr>
+<tr class="row-odd"><td>mean</td>
+<td>(mean value of observable)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>annulus_bound(self)</td>
+<td>(Compute the minimum and maximum distance of the enclosing annulus of the constraint)</td>
+</tr>
+<tr class="row-even"><td>tdoa_box(vcw)</td>
+<td>(find the enclosing box of TDOA constraint for a given vcw)</td>
+</tr>
+<tr class="row-odd"><td>rescale(self,vcw)</td>
+<td>(rescale contraint boundary with a given scale factor &#8216;vcw&#8217;)</td>
+</tr>
+<tr class="row-even"><td>inclusive(self,b)</td>
+<td>(Is constraint center is inside a box ?)</td>
+</tr>
+<tr class="row-odd"><td>valid(self,b)</td>
+<td>(Test if Lbox is compatible with the constraint)</td>
+</tr>
+<tr class="row-even"><td>valid_v(self,lv)</td>
+<td>(Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.)</td>
+</tr>
+<tr class="row-odd"><td>bd2coordinates()</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>estvol(self)</td>
+<td>(Constraint Volume estimation)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound">
+<code class="descname">annulus_bound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.inclusive">
+<code class="descname">inclusive</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.inclusive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>A box b is inclusive for the constraint if self.p is included in the box</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.repart">
+<code class="descname">repart</code><span class="sig-paren">(</span><em>DD</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.repart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.repart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.rescale">
+<code class="descname">rescale</code><span class="sig-paren">(</span><em>vcw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescale(vcw) :  rescale constraint with vcw factor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes">
+<code class="descname">tdoa_axes</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.tdoa_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>triedre [vn,wn,tn], support of the contraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box">
+<code class="descname">tdoa_box</code><span class="sig-paren">(</span><em>vcw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.tdoa_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the inclusive box for a given vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraint information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.valid">
+<code class="descname">valid</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>valid(b) : check if box b is valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.valid_v">
+<code class="descname">valid_v</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if vertex are valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

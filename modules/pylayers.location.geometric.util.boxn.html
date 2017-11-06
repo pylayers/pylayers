@@ -183,6 +183,432 @@
             
   <div class="section" id="module-pylayers.location.geometric.util.boxn">
 <span id="pylayers-location-geometric-util-boxn"></span><h1>pylayers.location.geometric.util.boxn<a class="headerlink" href="#module-pylayers.location.geometric.util.boxn" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.util.boxn.BoxN">
+<em class="property">class </em><code class="descclassname">pylayers.location.geometric.util.boxn.</code><code class="descname">BoxN</code><span class="sig-paren">(</span><em>bd=None</em>, <em>ndim=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN" title="Permalink to this definition">¶</a></dt>
+<dd><p>BoxN Class</p>
+<p>A box is determined by its boundary interval along each dimension</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>bd</td>
+<td>(numpy array 2 x ndim) box boundary</td>
+</tr>
+<tr class="row-even"><td>ndim</td>
+<td>(int) dimension of the box (2D, 3D,...)</td>
+</tr>
+<tr class="row-odd"><td>self.parmsh</td>
+<td>(dictionnary) display dictionnary for show 3 method TO BE CHANGE !!! keys    :[&#8216;display&#8217;]=True [&#8216;interactive&#8217;]=False</td>
+</tr>
+<tr class="row-even"><td>OBTAIN FROM mesure()</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>self.mes</td>
+<td>(array 1 x ndim) size of intervals of each dimension</td>
+</tr>
+<tr class="row-even"><td>self.ctr</td>
+<td>(array 1 x ndim) center of intervals of each dimension</td>
+</tr>
+<tr class="row-odd"><td>self.vol</td>
+<td>(float) Volume of box</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>info()</td>
+<td>(info about class)</td>
+</tr>
+<tr class="row-even"><td>def mesure(self):</td>
+<td>measure intervals of box</td>
+</tr>
+<tr class="row-odd"><td>volume()</td>
+<td>(evaluate volume)</td>
+</tr>
+<tr class="row-even"><td>inbox(p)</td>
+<td>(is p in box ?)</td>
+</tr>
+<tr class="row-odd"><td>intersect(box)</td>
+<td>(intersection of two boxes)</td>
+</tr>
+<tr class="row-even"><td>show3()</td>
+<td>(geomview vizualization)</td>
+</tr>
+<tr class="row-odd"><td>cut()</td>
+<td>(cut a box along given direction)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.bd2coord">
+<code class="descname">bd2coord</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.bd2coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.bd2coord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boundary to coordinates</p>
+<p>Return an array containing of vertex from a box</p>
+<p>3D case :
+in :
+[xmin ymin zmin]
+[xmax ymax zmax]</p>
+<p>out :</p>
+<p>[xmin ymin zmin]
+[xmin ymax zmin]
+[xmax ymin zmin]
+[xmax ymax zmin]
+[xmin ymin zmax]
+[xmin ymax zmax]
+[xmax ymin zmax]
+[xmax ymax zmax]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : array 2^ndim x ndim</p>
+<blockquote class="last">
+<div><p>coordinates of box vertex</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.bdiff">
+<code class="descname">bdiff</code><span class="sig-paren">(</span><em>box</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.bdiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.bdiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>OBSOLETE</p>
+<p>USE self.intersect instead !!!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.coord2bd">
+<code class="descname">coord2bd</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.coord2bd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.coord2bd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coordinates to boundary
+update boundary array from numpy array  of coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array 2^ndim x ndim</p>
+<blockquote>
+<div><p>vertexes coordinates of a boxN</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing but fills self.bd</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information on BoxN</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.intersect">
+<code class="descname">intersect</code><span class="sig-paren">(</span><em>box</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find intersection between current box and a given one</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>box</strong> : BoxN</p>
+<blockquote>
+<div><p>a BoxN object</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new_box</strong> : BoxN</p>
+<blockquote class="last">
+<div><p>a BoxN object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.mesure">
+<code class="descname">mesure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.mesure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.mesure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Measure BoxN
+Obtain measure of :
+- size of each interval from each dimension 
+- center of each interval from each dimension 
+- Volume of the BoxN</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.octant">
+<code class="descname">octant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.octant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.octant" title="Permalink to this definition">¶</a></dt>
+<dd><p>quadtree on boxes OBSOLETE</p>
+<p>Divide boxes into 2^ndim equal parts
+aka Split each interval from each dimension into 2 equal part</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.setbd">
+<code class="descname">setbd</code><span class="sig-paren">(</span><em>vmin</em>, <em>vmax</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.setbd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.setbd" title="Permalink to this definition">¶</a></dt>
+<dd><p>setbd : set boundary value on axis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.show3">
+<code class="descname">show3</code><span class="sig-paren">(</span><em>dim=(0, 1, 2), col='r', Id=[0], H_Id=0, alpha=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show box into geomview</p>
+<p>generate a geomview file which allow to represent a box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dim</strong> : tuple</p>
+<blockquote>
+<div><p>chose dimension to display. default : (0,1,2)</p>
+</div></blockquote>
+<p><strong>col</strong> : string</p>
+<blockquote>
+<div><p>choose box color. compliant with matplotlib colorConverter. default &#8216;r&#8217;</p>
+</div></blockquote>
+<p><strong>Id</strong> : list</p>
+<blockquote>
+<div><p>Identity of boxes to show.Default : [0]</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>set transparency. Default 0.2</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fname</strong> : string</p>
+<blockquote class="last">
+<div><p>name of the generated file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.BoxN.void">
+<code class="descname">void</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#BoxN.void"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.BoxN.void" title="Permalink to this definition">¶</a></dt>
+<dd><p>return True if box is void</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN">
+<em class="property">class </em><code class="descclassname">pylayers.location.geometric.util.boxn.</code><code class="descname">LBoxN</code><span class="sig-paren">(</span><em>Lb=None</em>, <em>ndim=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN" title="Permalink to this definition">¶</a></dt>
+<dd><p>class LBoxN 
+List of BoxN</p>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>mesure(self):</td>
+<td>measure intervals of box</td>
+</tr>
+<tr class="row-even"><td>append(self,b):</td>
+<td>append a box &#8216;b&#8217; to a Lbox</td>
+</tr>
+<tr class="row-odd"><td>append_l(self,lb):</td>
+<td>append a lbox &#8216;lb&#8217; to a lbox</td>
+</tr>
+<tr class="row-even"><td>info(self):</td>
+<td>display LBoxN information</td>
+</tr>
+<tr class="row-odd"><td>bd2coord(self,Mapping = False):</td>
+<td>convert boundaries of Lbox to their vertexes coordintates</td>
+</tr>
+<tr class="row-even"><td>octant(self):</td>
+<td>quadtree on Lboxes</td>
+</tr>
+<tr class="row-odd"><td>volume(self):</td>
+<td>estimate volume of LBoxes</td>
+</tr>
+<tr class="row-even"><td>intersect(self,lb):</td>
+<td>EXPERIMENTAL find the intersection of LBoxN</td>
+</tr>
+<tr class="row-odd"><td>show3(self,col=&#8217;b&#8217;,Id=0):</td>
+<td>required file generation for geomview display</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>append : Append a box to LboxN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>b</strong> : BoxN</p>
+<blockquote>
+<div><p>box to added</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing but update self.box status</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.append_l">
+<code class="descname">append_l</code><span class="sig-paren">(</span><em>lb</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.append_l"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.append_l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append  LBoxN to LBoxN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lb</strong> : LBoxN</p>
+<blockquote>
+<div><p>lbox to be added</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing but update self.box status</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.bd2coord">
+<code class="descname">bd2coord</code><span class="sig-paren">(</span><em>Mapping=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.bd2coord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.bd2coord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boundaru to coordinates</p>
+<p>Convert boundaries of Lbox to their vertexes coordintates</p>
+<p>in :
+[xmin ymin zmin]       
+[xmax ymax zmax]</p>
+<p>out :</p>
+<p>[xmin ymin zmin]
+[xmin ymax zmin]
+[xmax ymin zmin]
+[xmax ymax zmin]
+[xmin ymin zmax]
+[xmin ymax zmax]
+[xmax ymin zmax]
+[xmax ymax zmax]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Mapping</strong> : Boolean</p>
+<blockquote>
+<div><p>return a mapping of the vertex in regards of Lbox. Default = False</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : array 2^ndim x ndim</p>
+<blockquote class="last">
+<div><p>coordinates of box vertex</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display LBoxN information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.intersect">
+<code class="descname">intersect</code><span class="sig-paren">(</span><em>lb</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>EXPERIMENTAL</p>
+<p>Intersection of 2 LBOXN</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.mesure">
+<code class="descname">mesure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.mesure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.mesure" title="Permalink to this definition">¶</a></dt>
+<dd><p>LMeasure BoxN</p>
+<p>Obtain measure of :
+- size of each interval from each dimension for each boxes
+- center of each interval from each dimension for each boxes
+-  Volume of the BoxN for each boxes (NOT WORKING)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.octant">
+<code class="descname">octant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.octant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.octant" title="Permalink to this definition">¶</a></dt>
+<dd><p>quadtree on boxes</p>
+<p>Divide each Lboxes into 2^ndim equal parts
+aka Split each interval from each dimension into 2 equal part</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lb</strong> : LBoxN 2^ndim*self.box x ndim</p>
+<blockquote class="last">
+<div><p>return theLBoxn from quadtree process</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.show3">
+<code class="descname">show3</code><span class="sig-paren">(</span><em>col='b'</em>, <em>Id=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show box into geomview</p>
+<p>generate a geomview file which allow to represent a box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>col</strong> : string</p>
+<blockquote>
+<div><p>choose box color. compliant with matplotlib colorConverter. default &#8216;r&#8217;</p>
+</div></blockquote>
+<p><strong>Id</strong> : list</p>
+<blockquote>
+<div><p>Identity of boxes to show.Default : [0]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>name of the generated file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.boxn.LBoxN.volume">
+<code class="descname">volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pylayers/location/geometric/util/boxn.html#LBoxN.volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.boxn.LBoxN.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate Boxes volume</p>
+<p>Compute the volume on each LBoxes</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
