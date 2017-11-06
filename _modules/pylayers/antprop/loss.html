@@ -258,7 +258,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">D</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="FMetisShad2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.FMetisShad2.html#pylayers.antprop.loss.FMetisShad2">[docs]</a><span class="k">def</span> <span class="nf">FMetisShad2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; F Metis shadowing function</span>
 
 <span class="sd">    Parameters</span>
@@ -295,8 +295,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lamda</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">,:]</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">sign</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lamda</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">D</span><span class="p">[:,:,</span><span class="bp">None</span><span class="p">]</span><span class="o">-</span><span class="n">r</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]))))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span></div>
+<div class="viewcode-block" id="FMetisShad"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.FMetisShad.html#pylayers.antprop.loss.FMetisShad">[docs]</a><span class="k">def</span> <span class="nf">FMetisShad</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; F Metis shadowing function</span>
 
 <span class="sd">    Parameters</span>
@@ -328,9 +328,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lamda</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">sign</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">lamda</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">D</span><span class="o">-</span><span class="n">r</span><span class="p">))))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">LossMetisShadowing</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">uw</span><span class="p">,</span><span class="n">uh</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
+<div class="viewcode-block" id="LossMetisShadowing"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.LossMetisShadowing.html#pylayers.antprop.loss.LossMetisShadowing">[docs]</a><span class="k">def</span> <span class="nf">LossMetisShadowing</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">uw</span><span class="p">,</span><span class="n">uh</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Calculate the Loss from </span>
 
 <span class="sd">    Parameters</span>
@@ -459,9 +459,9 @@
     <span class="n">Lsh</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tmp</span><span class="p">)</span>
 
     <span class="c1">#return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">Lsh</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Lsh</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">LossMetisShadowing2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">uw</span><span class="p">,</span><span class="n">uh</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
+<div class="viewcode-block" id="LossMetisShadowing2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.LossMetisShadowing2.html#pylayers.antprop.loss.LossMetisShadowing2">[docs]</a><span class="k">def</span> <span class="nf">LossMetisShadowing2</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">pg</span><span class="p">,</span><span class="n">uw</span><span class="p">,</span><span class="n">uh</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Calculate the Loss from </span>
 
 <span class="sd">    Parameters</span>
@@ -608,7 +608,7 @@
     <span class="n">Lsh</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">tmp</span><span class="p">)</span>
 
     <span class="c1">#return(Lsh,shad,tmp,Fw1,Fh1,Fw2,Fh2,condh,condw)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">Lsh</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Lsh</span><span class="p">)</span></div>
 <div class="viewcode-block" id="Dgrid_zone"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Dgrid_zone.html#pylayers.antprop.loss.Dgrid_zone">[docs]</a><span class="k">def</span> <span class="nf">Dgrid_zone</span><span class="p">(</span><span class="n">zone</span><span class="p">,</span><span class="n">Px</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Distance point to zone</span>
 
@@ -807,7 +807,7 @@
         <span class="n">pl</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">pl</span><span class="o">/</span><span class="mf">20.</span><span class="p">);</span>
     <span class="k">return</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">hata</span><span class="p">(</span><span class="n">pMS</span><span class="p">,</span><span class="n">pBS</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">hMS</span><span class="p">,</span><span class="n">hBS</span><span class="p">,</span><span class="n">typ</span><span class="p">):</span>
+<div class="viewcode-block" id="hata"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.hata.html#pylayers.antprop.loss.hata">[docs]</a><span class="k">def</span> <span class="nf">hata</span><span class="p">(</span><span class="n">pMS</span><span class="p">,</span><span class="n">pBS</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">hMS</span><span class="p">,</span><span class="n">hBS</span><span class="p">,</span><span class="n">typ</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Hata Path loss model</span>
 
 <span class="sd">    Parameters</span>
@@ -859,7 +859,7 @@
 
     <span class="n">L</span> <span class="o">=</span> <span class="mf">69.55</span><span class="o">+</span><span class="mf">26.16</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fGHz</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">-</span><span class="mf">13.82</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">hBS</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="mf">44.9</span><span class="o">-</span><span class="mf">6.55</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">hBS</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">dm</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span><span class="o">-</span><span class="n">CH</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">L</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="cost2100"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.cost2100.html#pylayers.antprop.loss.cost2100">[docs]</a><span class="k">def</span> <span class="nf">cost2100</span><span class="p">(</span><span class="n">pMS</span><span class="p">,</span><span class="n">pBS</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">nfloor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; cost 2100 model</span>
@@ -1135,7 +1135,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">LossWallo</span><span class="p">,</span><span class="n">LossWallp</span><span class="p">,</span><span class="n">EdWallo</span><span class="p">,</span><span class="n">EdWallp</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">gaspl</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">PhPa</span><span class="p">,</span><span class="n">wvden</span><span class="p">):</span>
+<div class="viewcode-block" id="gaspl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.gaspl.html#pylayers.antprop.loss.gaspl">[docs]</a><span class="k">def</span> <span class="nf">gaspl</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">PhPa</span><span class="p">,</span><span class="n">wvden</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; attenuation due to atmospheric gases</span>
 
 <span class="sd">    Parameters </span>
@@ -1325,7 +1325,7 @@
     <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.1820</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">Npp</span> 
     <span class="n">LgasdB</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">*</span><span class="n">dkm</span> 
 
-    <span class="k">return</span><span class="p">(</span><span class="n">LgasdB</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">LgasdB</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Loss0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.loss.Loss0.html#pylayers.antprop.loss.Loss0">[docs]</a><span class="k">def</span> <span class="nf">Loss0</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">ry</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>

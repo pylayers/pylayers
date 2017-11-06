@@ -1981,7 +1981,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="nf">adp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">imax</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.adp"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.adp.html#pylayers.simul.link.DLink.adp">[docs]</a>    <span class="k">def</span> <span class="nf">adp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">imax</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; construct the angular delay profile</span>
 
 <span class="sd">        Parameters</span>
@@ -1991,9 +1991,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">adpmes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afpmes</span><span class="o">.</span><span class="n">toadp</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adpmes</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">imax</span><span class="o">=</span><span class="n">imax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">toadp</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">imax</span><span class="o">=</span><span class="n">imax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adprt</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">imax</span><span class="o">=</span><span class="n">imax</span><span class="p">)</span></div>
         
-    <span class="k">def</span> <span class="nf">afp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.afp"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.afp.html#pylayers.simul.link.DLink.afp">[docs]</a>    <span class="k">def</span> <span class="nf">afp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate angular frequency profile </span>
 
 <span class="sd">        Parameters</span>
@@ -2107,7 +2107,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">afprt</span><span class="o">.</span><span class="n">fcGHz</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">dpdp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dpap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dpap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpadp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
         <span class="c1">#return(afp)</span>
 
 
